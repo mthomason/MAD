@@ -10,7 +10,7 @@
 
 @implementation NSLayoutConstraint (Designer)
 
-+ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
++ (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
     NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: ruler
                                                                    attribute: NSLayoutAttributeHeight
                                                                    relatedBy: NSLayoutRelationEqual
@@ -30,7 +30,7 @@
     return @[constraint1, constraint2];
 }
 
-+ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer sideMargin:(CGFloat)sideMargin {
++ (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer sideMargin:(CGFloat)sideMargin {
     NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem: ruler
                                                                    attribute: NSLayoutAttributeLeft
                                                                    relatedBy: NSLayoutRelationEqual

@@ -246,15 +246,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         NSMutableDictionary *borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
-        NSMutableArray *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelHeightContainer = layoutConstraintSectionLabelHeightContainer;
-        
-        NSMutableArray *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] init];
-        self.layoutConstraintsSectionsSidesBorder = layoutConstraintsSectionsSidesBorder;
-        
-        NSMutableArray *layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] init];
-        self.layoutConstraintsSectionsVerticalBuffer = layoutConstraintsSectionsVerticalBuffer;
-        
         MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
         
@@ -415,8 +406,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSMutableArray *constraintsScroller = [NSMutableArray new];
-    NSMutableArray *constraintsContainer = [NSMutableArray new];
     
     [self addObservers];
     
@@ -427,46 +416,46 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
     
     NSInteger sectionCounter = 0;
-    NSUInteger numberOfSections = [sectionEnumerator count];
-    
-    NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-
-    self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
-    self.sectionViewsDictionary = dictionarySections;
-    self.sectionControlViewsDictionary = dictionarySectionControls;
+    NSUInteger numberOfSections = sectionEnumerator.count;
     
     [self.scroller.container addSubview:self.ruler];
     
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
     
-    NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
-    NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
+    NSArray <__kindof NSLayoutConstraint *> *rulerConstraints = [NSLayoutConstraint constraintForRuler: self.ruler designer: self.scroller.container marginTop: MTReportDesignerBorderPaddingVertical heigh: MTReportDesignerRulerHeight];
+    NSArray <__kindof NSLayoutConstraint *> *rulerSideConstraints = [NSLayoutConstraint constraintForRuler: self.ruler designer: self.scroller.container sideMargin: MTReportDesignerBorderPaddingSides];
     
-    NSArray *rulerConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.container marginTop: MTReportDesignerBorderPaddingVertical heigh: MTReportDesignerRulerHeight];
+    NSMutableArray <__kindof NSString *> *reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    NSMutableArray <__kindof NSLayoutConstraint *> *scrollerLayoutConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 6];
+
+    NSMutableArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 5];
     
-    NSArray *rulerSideConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.container sideMargin: MTReportDesignerBorderPaddingSides];
+    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 2];
+    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    NSMutableArray <__kindof MADDesignerSectionView *> *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+
+    NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+    NSMutableDictionary <__kindof NSString *, __kindof MADDesignerSectionView *> *sectionViewsDictionary = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+    NSMutableDictionary <__kindof NSString *, __kindof MADDesignerSectionLabel *> *sectionControlViewsDictionary = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+
+    NSMutableSet <__kindof MADDesignerSectionView *> *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:numberOfSections];
+
+    [layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
-    [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
-    
-    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:rulerConstraints];
-    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:rulerSideConstraints];
-    [constraintsScroller addObjectsFromArray:rulerConstraints];
-    [constraintsScroller addObjectsFromArray:rulerSideConstraints];
+    [scrollerLayoutConstraints addObjectsFromArray:rulerConstraints];
+    [scrollerLayoutConstraints addObjectsFromArray:rulerSideConstraints];
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
-    NSMutableArray *reportSectionKeyTracker = [[NSMutableArray alloc] init];
-    NSMutableArray *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    
-    NSMutableSet *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:sectionEnumerator.count];
     
     CGFloat borderWidthThin = [UIView borderWidthThin];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         @autoreleasepool {
             
+            NSString *reportSectionKey = [reportSection sectionKey];
+
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
             
             MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection delegate: self];
@@ -474,6 +463,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
             sectionView.layer.borderWidth = borderWidthThin;
+            sectionView.showsVerticalScrollIndicator = YES;
             
             ((MTReportDesignerSectionViewLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
             
@@ -485,53 +475,36 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
             
             sectionViewLabel.tag = sectionCounter;
+            
             NSString *lastKey = reportSectionKeyTracker.lastObject;
-            id constraintItem =  sectionCounter == 0 ? self.ruler : self.sectionViewsDictionary[lastKey];
-            
-            sectionView.showsVerticalScrollIndicator = YES;
-            
+            UIView *constraintItem =  sectionCounter == 0 ? self.ruler : sectionViewsDictionary[lastKey];
+            NSString *key = [sectionView.objectIdTag key];
             NSLayoutConstraint *lc1a = [NSLayoutConstraint viewTop: constraintItem viewBottom: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            [self.layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
-            [constraintsContainer addObject:lc1a];
-            [viewDidAppearDesignerContentViewConstraints addObject:lc1a];
-            
             NSLayoutConstraint *lc1b = [NSLayoutConstraint view: sectionView height: reportSection.height.floatValue];
-            NSManagedObjectID *objectId = [sectionView objectIdTag];
-            NSString *key = [objectId key];
-            self.layoutConstraintsReportSectionHeight[key] = lc1b;
-            
-            [constraintsContainer addObject:lc1b];
-            [viewDidAppearDesignerContentViewConstraints addObject:lc1b];
-            
             NSLayoutConstraint *lc1c = [NSLayoutConstraint labelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
-            [constraintsContainer addObject:lc1c];
-            [viewDidAppearDesignerContentViewConstraints addObject:lc1c];
-            
             NSLayoutConstraint *lc1d = [NSLayoutConstraint labelBottom:sectionViewLabel container: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            [constraintsContainer addObject:lc1d];
-            [viewDidAppearDesignerContentViewConstraints addObject:lc1d];
-            
             NSLayoutConstraint *lc1e = [NSLayoutConstraint label: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
-            [self.layoutConstraintSectionLabelHeightContainer addObject:lc1e];
-            [constraintsContainer addObject:lc1e];
-            [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
-            
             NSLayoutConstraint *lc1 = [NSLayoutConstraint viewLeft:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
             NSLayoutConstraint *lc2 = [NSLayoutConstraint viewRight:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
             NSArray *collectionViewConstraints = @[lc1, lc2];
-            
-            [constraintsScroller addObjectsFromArray:collectionViewConstraints];
-            [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
-            
-            [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:collectionViewConstraints];
-            
-            [sectionViewsArray addObject:sectionView];
+            NSArray *sectionViewLabelConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
 
-            NSString *collectionViewKey = [reportSection sectionKey];
-            [self.sectionViewsDictionary setValue:sectionView forKey:collectionViewKey];
-            [self.sectionControlViewsDictionary setValue:sectionViewLabel forKey:collectionViewKey];
+            [viewDidAppearDesignerContentViewConstraints addObjectsFromArray:sectionViewLabelConstraints];
             
-            [reportSectionKeyTracker addObject:collectionViewKey];
+
+            [layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
+            [layoutConstraintSectionLabelHeightContainer addObject:lc1e];
+            
+            [layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
+
+            [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
+
+            [layoutConstraintsReportSectionHeight setObject:lc1b forKey:key];
+            [sectionViewsDictionary setObject:sectionView forKey:reportSectionKey];
+            [sectionControlViewsDictionary setObject:sectionViewLabel forKey:reportSectionKey];
+            
+            [reportSectionKeyTracker addObject:reportSectionKey];
+            [sectionViewsArray addObject:sectionView];
             
             sectionCounter++;
             
@@ -542,34 +515,41 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
     }
     
-    self.passthroughContainers = passthroughContainers;
+    [reportSectionKeyTracker removeAllObjects];
     
+    self.layoutConstraintsSectionsVerticalBuffer = layoutConstraintsSectionsVerticalBuffer;
+
+    self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
+    self.sectionViewsDictionary = sectionViewsDictionary;
+    self.sectionControlViewsDictionary = sectionControlViewsDictionary;
+
+    self.layoutConstraintsSectionsSidesBorder = layoutConstraintsSectionsSidesBorder;
+    self.layoutConstraintSectionLabelHeightContainer = layoutConstraintSectionLabelHeightContainer;
+    self.passthroughContainers = passthroughContainers;
     self.sectionViewsArray = sectionViewsArray;
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.container
-                                                                                                             height: sectionHeights];
-    [constraintsScroller addObject:layoutConstraintDesignerContentViewHeight];
-    [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintDesignerContentViewHeight];
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.container height: sectionHeights];
+
+    [scrollerLayoutConstraints addObject:layoutConstraintDesignerContentViewHeight];
+
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
     
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint view: self.scroller.container
-                                                                                                containerBottom: self.scroller];
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint view: self.scroller.container containerBottom: self.scroller];
     
-    [constraintsScroller addObject:layoutConstraintContentToScollerBottom];
-    [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintContentToScollerBottom];
-    
-    self.viewDidAppearDesignerScrollViewConstraints = viewDidAppearDesignerScrollViewConstraints;
-    self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
+    [scrollerLayoutConstraints addObject:layoutConstraintContentToScollerBottom];
     
     [self.tabBarController enableTabBarItems];
     
-    [self.scroller addConstraints: constraintsScroller];
-    [self.scroller.container addConstraints: constraintsContainer];
+    [self.scroller addConstraints: scrollerLayoutConstraints];
+    [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
     
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonAddReportObject animated:NO];
+    
+    self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
+    self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
 
 }
 
@@ -612,9 +592,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }
     
     [self.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
-    [self.scroller removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
+    [self.scroller.container removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
+    
+    [self.viewDidAppearDesignerContentViewConstraints removeAllObjects];
+    [self.viewDidAppearDesignerScrollViewConstraints removeAllObjects];
     [self.layoutConstraintsSectionsSidesBorder removeAllObjects];
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
+    [self.layoutConstraintsReportSectionHeight removeAllObjects];
     
     self.shownAndHidden = true;
     [self.document saveContext];
@@ -2817,7 +2801,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         self.borderAppliedToView[key] = @NO;
         result = YES;
         view.layer.borderColor = [UIColor blackColor].CGColor;
-        view.layer.borderWidth = 0.0000f;
+        view.layer.borderWidth = 0;
         view.enableResizing = NO;
     } else {
         result = NO;
