@@ -316,7 +316,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.contentOffsetInital = CGPointZero;
     pageAttributes.contentScaleFactor = 0.0;
     
-    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
+    MADReportPageViewController *pageOne = [MADReportPageViewController newReportPageViewControllerWithDocument: document
                                                                                         pageAttributes: pageAttributes frame: self.view.bounds andDelegate: self];
     
     NSArray *viewControllers = @[pageOne];
@@ -755,7 +755,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
  
-        MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document pageAttributes: pageAttributes
+        MADReportPageViewController *pageOne = [MADReportPageViewController newReportPageViewControllerWithDocument: document pageAttributes: pageAttributes
                                                                                                      frame: self.view.bounds andDelegate: self];
         
         NSArray *viewControllers = @[pageOne];
