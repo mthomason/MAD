@@ -17,9 +17,8 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
 
-    - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
-              newPageAfter:(BOOL)newPageAfter;
+    - (void)sectionLayoutDidUpdateVisibility:(bool)isVisible;
+    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(bool)newPageAfter;
 @optional
     - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
     - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
@@ -29,16 +28,16 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 @interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
-+ (instancetype)toolboxSettings;
+    + (instancetype)toolboxSettings;
 
-@property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
+    @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 
-@property (nonatomic, assign) double initalHeightValue;
-@property (nonatomic, assign) BOOL initalVisibility;
-@property (nonatomic, assign) BOOL initalFormFeedEnabled;
-@property (nonatomic, assign) NSUInteger initalNumberOfRows;
+    @property (nonatomic, assign) double initalHeightValue;
+    @property (nonatomic, assign) BOOL initalVisibility;
+    @property (nonatomic, assign) BOOL initalFormFeedEnabled;
+    @property (nonatomic, assign) NSUInteger initalNumberOfRows;
 
-- (void)updateDisplay;
+    - (void)updateDisplay;
 
 @end
 

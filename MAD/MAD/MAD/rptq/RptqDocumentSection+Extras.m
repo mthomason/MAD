@@ -102,9 +102,7 @@
 }
 
 - (void)setProducesFormFeed:(BOOL)producesFormFeed {
-    NSNumber *wrappingStyle = @(producesFormFeed ?
-                                    RptqDocumentSectionWrappingStyleNewPageAfter :
-                                    RptqDocumentSectionWrappingStyleStandard);
+    NSNumber *wrappingStyle = [[NSNumber alloc] initWithShort: producesFormFeed ? RptqDocumentSectionWrappingStyleNewPageAfter : RptqDocumentSectionWrappingStyleStandard];
     self.wrappingStyle = wrappingStyle;
 }
 
@@ -117,8 +115,8 @@
 }
 
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
-    if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasRows] addObject:value];
+    if ([self.hasRows isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)self.hasRows addObject:value];
     } else {
         NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet addObject:value];
@@ -127,8 +125,8 @@
 }
 
 - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value {
-    if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasRows] removeObject:value];
+    if ([self.hasRows isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)self.hasRows removeObject:value];
     } else {
         NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet removeObject:value];
@@ -256,7 +254,7 @@
 - (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
     if ([[self visibility] boolValue]) {
-        for (RptqDocumentSectionRows *row in [self hasRows]) {
+        for (RptqDocumentSectionRows *row in self.hasRows) {
             for (RptqDocumentObject *element in [row hasObjects]) {
                 
                 CGFloat originPointX        = [element.dropPointX floatValue];
@@ -298,35 +296,44 @@
 }
 
 - (MNSDocumentSectionType)getDocumentSectionType {
-    return self.type.unsignedIntegerValue;
+    return self.type.shortValue;
 }
 
 - (NSString *)localizedDisplayName {
     NSString *result = nil;
-    switch ([[self type] integerValue]) {
+    switch (self.type.shortValue) {
+    
         case MNSDocumentSectionTypeReportHeader:
             result = NSLocalizedString(@"Report Header", @"Report Header");
             break;
+
         case MNSDocumentSectionTypePageHeader:
             result = NSLocalizedString(@"Page Header", @"Page Header");
             break;
+
         case MNSDocumentSectionTypeBody:
             result = NSLocalizedString(@"Report Detail", @" Report Detail");
             break;
+
         case MNSDocumentSectionTypePageFooter:
             result = NSLocalizedString(@"Page Footer", @"Page Footer");
             break;
+
         case MNSDocumentSectionTypeReportFooter:
             result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
+
         case MNSDocumentSectionTypeGroupHeader:
             result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [[self inGroup] fieldNameQuery]];
             break;
+
         case MNSDocumentSectionTypeGroupFooter:
             result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [[self inGroup] fieldNameQuery]];
             break;
+
         default:
             break;
+
     }
     return result;
 }
@@ -336,9 +343,9 @@
     NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: managedObjectContext];
 
     RptqDocumentSection *section = [[self alloc] initWithEntity: entityDescriptionDocumentSection insertIntoManagedObjectContext: managedObjectContext];
-    NSNumber *sectionType = @(type);
-    section.type = sectionType;
+    NSNumber *sectionType = [[NSNumber alloc] initWithShort:type];
     section.visibility = @YES;
+    section.type = sectionType;
     
     return section;
 }

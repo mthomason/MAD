@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MAD/MADReportTextRepresentation.h>
 
-typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
+typedef NS_ENUM(short, MNSDocumentSectionType) {
     MNSDocumentSectionTypeReportHeader = 1,
     MNSDocumentSectionTypeReportFooter = 2,
     MNSDocumentSectionTypePageHeader = 3,

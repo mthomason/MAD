@@ -150,7 +150,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
     @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
 
-
     @property (nonatomic, assign) NSInteger lastSelectedSectionControlPanel;
 
     @property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
@@ -381,6 +380,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
     
     self.layoutConstraintContainerWidth = constraintWidth;
+    
     
     MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
@@ -893,7 +893,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self hideToolbox];
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(bool)newPageAfter {
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -903,8 +903,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
-        RptqDocumentSection *section = [query documentSectionForSelectedIndex: selectedSectionNumber];
-        [section setProducesFormFeed:newPageAfter];
+        RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
+        [section setProducesFormFeed: newPageAfter ? YES : NO];
         
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -913,7 +913,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
 }
 
-- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
+- (void)sectionLayoutDidUpdateVisibility:(bool)isVisible {
     
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -925,7 +925,10 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
-        RptqDocumentSection *section = [query documentSectionForSelectedIndex: selectedSectionNumber];
+        RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
+        NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible ? YES : NO];
+        section.visibility = visibility;
+        
         NSString *key = section.sectionKey;
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -944,7 +947,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = [database.hasQueries anyObject];
-    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel];
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
@@ -1748,21 +1751,21 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark - Gesture Recognizer Delegate
 
 /*
- Simultaneously    Require       Should be required      Delays Touches
- recognize    failure of ___    to fail by ___
- --------------------------------------------------------------------------------------------------------------------------------------
- Pan Backgournd              -   Scroll designer -   Vertical        - YES
- Pan Section View            -   Scroll section  -   Horizontal      - YES
- Pan Element View            -   Move element                        -  NO
+    Simultaneously    Require       Should be required      Delays Touches
+    recognize    failure of ___    to fail by ___
+    --------------------------------------------------------------------------------------------------------------------------------------
+    Pan Backgournd              -   Scroll designer -   Vertical        - YES
+    Pan Section View            -   Scroll section  -   Horizontal      - YES
+    Pan Element View            -   Move element                        -  NO
  
- Single Tap Background       -   Tap away                            -  NO                       (...everything else)
- Single Tap Section View     -   Tap away                            -  NO                       (...everything else)
- Single Tap Element View     -   Select element, deselect sections   -  NO                       (pan element view)
- Single Tap Section Label    -   Select section, deselect elements   -  NO
+    Single Tap Background       -   Tap away                            -  NO                       (...everything else)
+    Single Tap Section View     -   Tap away                            -  NO                       (...everything else)
+    Single Tap Element View     -   Select element, deselect sections   -  NO                       (pan element view)
+    Single Tap Section Label    -   Select section, deselect elements   -  NO
  
- Double Tap Background       -   Zoom                                -  NO
- Pinch Background            -   Zoom                                -  NO
- Pinch Element View          -   Resize                              -  NO
+    Double Tap Background       -   Zoom                                -  NO
+    Pinch Background            -   Zoom                                -  NO
+    Pinch Element View          -   Resize                              -  NO
  
  */
 
@@ -1816,8 +1819,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     //[objectContext save:nil];
 }
 
-- (MADSectionLayoutAttributes *)collectionView: (MADDesignerSectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout
-            layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (MADSectionLayoutAttributes *)collectionView: (MADDesignerSectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     __block MADSectionLayoutAttributes *item;
@@ -3053,10 +3055,9 @@ static const inline CGSize sizePopoverFonts() {
     
     if (self.sectionSettingsVisible == false) {
         self.sectionSettingsVisible = true;
-        [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES
-                         completion: ^{
-                             [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
-                         }];
+        [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
+            [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+        }];
     } else {
         [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
     }

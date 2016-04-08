@@ -14,7 +14,7 @@
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADReportSectionRepresentation.h>
 
-typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
+typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,
     RptqDocumentSectionWrappingStyleNewPageAfter = 2,
 };

@@ -21,12 +21,12 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
-@property (nonatomic, weak) IBOutlet UILabel *labelVisible;
-@property (nonatomic, weak) IBOutlet UILabel *labelFormFeed;
-@property (nonatomic, weak) IBOutlet UISwitch *switchFormFeed;
-@property (nonatomic, weak) IBOutlet UISwitch *switchVisibility;
-@property (nonatomic, weak) IBOutlet UITableViewCell *cellVisibility;
-@property (nonatomic, weak) IBOutlet UITableViewCell *cellFormFeed;
+    @property (nonatomic, weak) IBOutlet UILabel *labelVisible;
+    @property (nonatomic, weak) IBOutlet UILabel *labelFormFeed;
+    @property (nonatomic, weak) IBOutlet UISwitch *switchFormFeed;
+    @property (nonatomic, weak) IBOutlet UISwitch *switchVisibility;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *cellVisibility;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *cellFormFeed;
 
 @end
 
@@ -62,10 +62,8 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorBlue];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
-                                                            self.tableView.scrollIndicatorInsets.left,
-                                                            CGSizeZero.height,
-                                                            self.tableView.scrollIndicatorInsets.right);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top, self.tableView.scrollIndicatorInsets.left,
+                                                            CGSizeZero.height, self.tableView.scrollIndicatorInsets.right);
     [self updateDisplay];
 }
 
