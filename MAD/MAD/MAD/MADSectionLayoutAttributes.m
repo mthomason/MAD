@@ -27,11 +27,11 @@
     return instance;
 }
 
-- (bool)intersectsAnItemInArray:(NSArray *)items {
+- (bool)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
     return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
 }
 
-+ (bool)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray *)items {
++ (bool)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
     bool intersects = false;
     for (MADSectionLayoutAttributes *existingItem in items) {
         if (item.objectID != existingItem.objectID) {
@@ -61,11 +61,11 @@
     return moved;
 }
 
-- (void)placeItemGivenAttributes:(NSArray *)layoutAttributes {
+- (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes {
     [MADSectionLayoutAttributes movePlacedItem:self intersectingItems:layoutAttributes];
 }
 
-+ (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem intersectingItems:(NSArray *)allItems {
++ (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
     CGPoint dropPoint = CGPointZero;
     CGFloat distance = CGDistance(placedItem.frame.origin, dropPoint), tmpDistance;
     for (MADSectionLayoutAttributes *item in allItems) {
@@ -82,37 +82,43 @@
     placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
-- (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
+- (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+
     bool valid = true;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
-    
         if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
             valid = false;
             break;
         }
-    
     }
     return valid;
 }
 
-- (NSArray *)dropPoints {
+- (NSArray <__kindof NSValue *> *)dropPoints {
     return [MADSectionLayoutAttributes dropPointsOnAttribute:self];
 }
 
-- (NSArray *)dropPointsHorizontal {
+- (NSArray <__kindof NSValue *> *)dropPointsHorizontal {
     return [MADSectionLayoutAttributes dropPointsHorizontalOnAttribute:self];
 }
 
-+ (NSArray *)dropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
++ (NSArray <__kindof NSValue *> *)dropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
     MTCorners corners = MTCornersMake(item.frame);
-    NSArray *cornersArray = @[[NSValue valueWithCGPoint:corners.bottomRight] ,[NSValue valueWithCGPoint:corners.topRight]];
+    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
+    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
+    NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
     return cornersArray;
 }
 
-+ (NSArray *)dropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
++ (NSArray <__kindof NSValue *> *)dropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
     MTCorners corners = MTCornersMake(item.frame);
-    NSArray *cornersArray = @[[NSValue valueWithCGPoint:corners.bottomLeft], [NSValue valueWithCGPoint:corners.topLeft], [NSValue valueWithCGPoint:corners.bottomRight] ,[NSValue valueWithCGPoint:corners.topRight]];
-    return cornersArray;
+    
+    NSValue *topLeft = [[NSValue alloc] initWithBytes:&corners.topLeft objCType:@encode(CGPoint)];
+    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
+    NSValue *bottomLeft = [[NSValue alloc] initWithBytes:&corners.bottomLeft objCType:@encode(CGPoint)];
+    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
+    NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight, bottomLeft, bottomRight, nil];
+    return result;
 }
 
 - (id)debugQuickLookObject {
