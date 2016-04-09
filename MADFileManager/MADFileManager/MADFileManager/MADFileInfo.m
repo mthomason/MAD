@@ -11,11 +11,9 @@
 #import <Foundation/NSURL.h>
 #import <dispatch/dispatch.h>
 
-#define AAPLListColorUndefined ((AAPLListColor)-1)
-
 @interface MADFileInfo ()
 
-@property (nonatomic, strong) dispatch_queue_t fetchQueue;
+    @property (nonatomic, strong) dispatch_queue_t fetchQueue;
 
 @end
 
@@ -24,11 +22,10 @@
 #pragma mark - Initialization
 
 - (instancetype)initWithURL:(NSURL *)URL {
-    self = [super init];
     
-    if (self) {
+    if (self = [super init]) {
         _fetchQueue = dispatch_queue_create("com.everydayapps.mad.fileinfo", DISPATCH_QUEUE_SERIAL);
-        _URL = URL;
+        _URL = URL.copy;
     }
     
     return self;
@@ -47,18 +44,16 @@
 
 - (NSString *)name {
     NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
-    
     return displayName.stringByDeletingPathExtension;
 }
 
 #pragma mark - NSObject
 
 - (BOOL)isEqual:(id)object {
-    if (![object isKindOfClass:[MADFileInfo class]]) {
-        return NO;
-    }
-    
-    return [self.URL isEqual:[object URL]];
+
+    if (![object isKindOfClass:[MADFileInfo class]]) return NO;
+    return [self.URL isEqual:((MADFileInfo *)object).URL];
+
 }
 
 @end

@@ -13,13 +13,11 @@
 
 @interface MADFileInfo : NSObject
 
-- (instancetype)initWithURL:(NSURL *)URL;
+    @property (nonatomic, copy, readonly) NSURL *URL;
+    @property (readonly) NSString *name;
 
-@property (nonatomic, strong, readonly) NSURL *URL;
-
-@property (nonatomic, copy, readonly) NSString *name;
-
-- (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler;
+    - (instancetype)initWithURL:(NSURL *)URL;
+    - (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler;
 
 @end
 

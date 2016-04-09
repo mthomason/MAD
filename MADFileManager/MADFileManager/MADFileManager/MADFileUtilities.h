@@ -16,27 +16,27 @@
 
 @interface MADFileUtilities : NSObject
 
-+ (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
+    + (NSURL *)sharedApplicationGroupContainer:(NSString *)groupIdentifier;
 
-+ (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID extension:(NSString *)extension;
+    + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
 
-+ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler;
+    + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID extension:(NSString *)extension;
 
-+ (void)createFile:(MADFile *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
+    + (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler;
 
-+ (void)duplicateFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
+    + (void)createFile:(MADFile *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
 
-+ (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
+    + (void)duplicateFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
 
-+ (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler;
+    + (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
 
-+ (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
+    + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler;
 
-+ (NSURL *)uniqueURLForURL:(NSURL *)url;;
+    + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
 
-+ (NSURL *)uniqueUrlInDirectory: (NSURL *)directory
-              withDesiredHandle: (NSString *)desiredFileHandle
-                   andExtension: (NSString *)extension;
+    + (NSURL *)uniqueURLForURL:(NSURL *)url;
+
+    + (NSURL *)uniqueUrlInDirectory: (NSURL *)directory withDesiredHandle: (NSString *)desiredFileHandle andExtension: (NSString *)extension;
 
 @end
 

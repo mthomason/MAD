@@ -15,7 +15,7 @@
 
 @interface MADMetaData : NSObject
 
-    + (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
+    + (NSArray <MADMetaData *> *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
 
     - (instancetype)initWithURL:(NSURL *)url;
     - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
@@ -61,7 +61,6 @@
 
     @property (readonly) NSError *ubiquitousItemDownloadingError;                 // The error when downloading the item from iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h
     @property (readonly) NSError *ubiquitousItemUploadingError;                   // The error when uploading the item to iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h
-
 
     @property (readonly) NSString *ubiquitousItemContainerDisplayName;
     @property (readonly) NSURL *ubiquitousItemURLInLocalContainer;

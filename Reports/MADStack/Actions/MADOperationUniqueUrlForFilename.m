@@ -44,8 +44,7 @@
 
 - (void)execute {
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory:self.documentsDirectory
-                                            withDesiredHandle:self.desiredFilename andExtension:self.pathExtension];
+    NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory:self.documentsDirectory withDesiredHandle:self.desiredFilename andExtension:self.pathExtension];
     if (uniqueUrl != nil) {
         self.uniqueUrl = uniqueUrl;
         [self finish];

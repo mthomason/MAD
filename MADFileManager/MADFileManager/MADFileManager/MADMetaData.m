@@ -41,11 +41,11 @@
 }
 
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
-    if (self = [super init]) {
 
+    if (self = [super init]) {
         self.metadataItem = item;
         
-        NSURL *url = [item valueForAttribute: NSMetadataItemURLKey];
+        NSURL * __weak url = [item valueForAttribute: NSMetadataItemURLKey];
         self.URL = url.copy;
         
     }
@@ -151,7 +151,7 @@
     return self.isUbiquitous && (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }
 
-+ (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems {
++ (NSArray <MADMetaData *> *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
     NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
     for (NSMetadataItem *metadataItem in metadataItems) {
         MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
@@ -160,26 +160,17 @@
     return madMetaDataItems;
 }
 
-- (BOOL)samePercentages:(MADMetaData *)unknown {
-    return self.ubiquitousItemPercentDownloaded == unknown.ubiquitousItemPercentDownloaded &&
-            self.ubiquitousItemPercentUploaded == unknown.ubiquitousItemPercentUploaded;
-}
-
-- (double)samePercentageHash {
-    return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
-}
-
 - (unsigned long long)fileSystemFileNumber {
     NSError *error = nil;
     NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
-    NSNumber *fsfn = [attributes objectForKey:NSFileSystemFileNumber];
+    NSNumber * __weak fsfn = [attributes objectForKey:NSFileSystemFileNumber];
     return fsfn.unsignedLongLongValue;
 }
 
 - (unsigned long long)fileSystemNumber {
     NSError *error = nil;
     NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
-    NSNumber *fsf = [attributes objectForKey:NSFileSystemNumber];
+    NSNumber * __weak fsf = [attributes objectForKey:NSFileSystemNumber];
     return fsf.unsignedLongLongValue;
 }
 

@@ -403,8 +403,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (nullable MADReportPageViewController *)visiblePageViewController { return self.viewControllers.count > 0 ? self.viewControllers[0] : nil; }
 
-- (BOOL)moveToPageAtIndex:(NSUInteger)index {
-    BOOL result = NO;
+- (bool)moveToPageAtIndex:(NSUInteger)index {
+    bool result = false;
     if ((unsigned long)index != self.currentPageIndex && index != NSNotFound) {
         
         MADReportPageViewController *visiblePageViewController = [self visiblePageViewController];
@@ -438,7 +438,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             }
 
         }];
-        result = YES;
+        result = true;
     }
     return result;
 }
@@ -1003,13 +1003,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         MADViewerController * __weak weakself2 = weakself;
-                        void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
-                        ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                        void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             weakself2.toolbarSlider.enabled = YES;
                             [weakself2.tabBarController enableTabBarItems];
                         };
-                        [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
-                                                 completionHandler:completionHandler];
+                        [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES completionHandler:completionHandler];
                     }
                 });
             });
@@ -1019,43 +1017,30 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - UIPopoverControllerDelegate
 
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return YES;
-}
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController { return YES; }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self.tabBarController enableTabBarItems];
 }
 
-- (UIViewController *)activeViewController {
-    return self;
-}
-/*
-static UIImageView *captureSnapshotOfView (UIView *targetView);
-static UIImageView *captureSnapshotOfView (UIView *targetView) {
-    UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, YES, 0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [targetView.layer renderInContext:context];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
-    snapshotView.frame = targetView.frame;
-    return snapshotView;
-}*/
+- (UIViewController *)activeViewController { return self; }
 
 #pragma mark - UIAccessibility
 
 - (BOOL)accessibilityScroll:(UIAccessibilityScrollDirection)direction {
+
     switch (direction) {
+
         case UIAccessibilityScrollDirectionNext:
         case UIAccessibilityScrollDirectionRight:
-            return [self moveToPageAtIndex:self.currentPageIndex + 1];
+            return [self moveToPageAtIndex: self.currentPageIndex + 1 ] ? YES : NO;
             break;
+            
         case UIAccessibilityScrollDirectionPrevious:
         case UIAccessibilityScrollDirectionLeft:
-            return [self moveToPageAtIndex:self.currentPageIndex - 1];
+            return [self moveToPageAtIndex: self.currentPageIndex - 1 ] ? YES : NO;
             break;
+            
         default:
             return NO;
             break;

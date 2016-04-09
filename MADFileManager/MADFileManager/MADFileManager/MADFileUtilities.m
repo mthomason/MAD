@@ -13,15 +13,12 @@
 
 + (NSURL *)sharedApplicationGroupContainer:(NSString *)groupIdentifier {
     NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
-    
     NSAssert(containerURL != nil, @"The shared application group container is unavailable. Check your entitlements and provisioning profiles for this target. Details on proper setup can be found in the PDFs referenced from the README.");
-    
     return containerURL;
 }
 
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId {
-    NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension
-                                                                       subdirectory: @""];
+    NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension subdirectory: @""];
     
     for (NSURL *url in defaultListURLs) {
         [self copyURLToDocumentsDirectory:url groupId:groupId];
@@ -206,9 +203,7 @@
                          andExtension: url.lastPathComponent.pathExtension];
 }
 
-+ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
-              withDesiredHandle:(NSString *)desiredFileHandle
-                   andExtension:(NSString *)extension {
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
     
     NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
     NSURL *fileUrl = extension.length > 0 ?
