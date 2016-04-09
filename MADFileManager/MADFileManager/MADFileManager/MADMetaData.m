@@ -16,20 +16,20 @@
 
 @interface MADMetaData ()
 
-@property (nonatomic, strong, readwrite) NSURL *URL;
-@property (nonatomic, strong, readwrite) NSString  *fileSystemName;
-@property (nonatomic, strong, readwrite) NSString  *name;
+    @property (nonatomic, strong, readwrite) NSURL *URL;
+    @property (nonatomic, strong, readwrite) NSString  *fileSystemName;
+    @property (nonatomic, strong, readwrite) NSString  *name;
 
-@property (nonatomic, strong) NSMetadataItem *metadataItem;
-@property (nonatomic, strong) NSDictionary *attributes;
+    @property (nonatomic, strong) NSMetadataItem *metadataItem;
+    @property (nonatomic, strong) NSDictionary *attributes;
 
 @end
 
 @implementation MADMetaData
 
 - (instancetype)initWithURL:(NSURL *)url {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
         NSError *__autoreleasing error = nil;
 
@@ -44,12 +44,11 @@
 }
 
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
 
         self.metadataItem = item;
         
-        NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
+        NSURL *url = [item valueForAttribute: NSMetadataItemURLKey];
         self.URL = url.copy;
         
     }

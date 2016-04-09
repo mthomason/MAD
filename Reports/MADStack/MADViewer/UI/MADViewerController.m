@@ -133,7 +133,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 [self setDisplayActive];
                 [self removeObserverDidReadRowsFromDatabase:self.document.database];
 
-
             }];
         }
     }

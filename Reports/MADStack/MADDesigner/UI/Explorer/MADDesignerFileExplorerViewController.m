@@ -60,22 +60,22 @@ NSString * const MADUtiType                                     = @"com.everyday
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate>
 
-@property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonItemLicensing;
+    @property (nonatomic, strong)   MADQueryBuilderSplitViewController *splitViewController;
 
-@property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
-@property (nonatomic, strong) UIPopoverController *licensingPopoverController;
+    @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
+    @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemLicensing;
 
-@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
+    @property (nonatomic, strong)   UIPopoverController *openDocumentPopoverController;
+    @property (nonatomic, strong)   UIPopoverController *licensingPopoverController;
 
-@property (nonatomic, strong)   MADQueryBuilderSplitViewController *splitViewController;
+    @property (nonatomic, weak)     UIPopoverPresentationController *infoPopoverPresentationController;
+    @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
+    @property (nonatomic, weak)     UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-@property (nonatomic, assign)   BOOL shouldShowAddDocumentPopover;
-@property (atomic, assign)      BOOL aboutViewControllerOnScreen;
+    @property (nonatomic, assign)   bool shouldShowAddDocumentPopover;
+    @property (nonatomic, assign)   bool aboutViewControllerOnScreen;
 
-@property (nonatomic, weak) MADTabBarController *tabController;
+    @property (nonatomic, weak)     MADTabBarController *tabController;
 
 @end
 
@@ -83,19 +83,13 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - MADFileLocationManagerDelegate
 
-- (NSString *)groupIdentifier {
-    return MADIdentifierGroup;
-}
+- (NSString *)groupIdentifier { return MADIdentifierGroup; }
 
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
-}
+- (NSString *)ubiquityIdentifier { return MADUbiquityIdentifier; }
 
-- (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }
+- (NSString *)fileExtention { return MADFileExtentionMobleApplicationDocument; }
 
-- (void)didConfigureFilesController:(MADFilesController *)filesController {
-    filesController.delegate = self;
-}
+- (void)didConfigureFilesController:(MADFilesController *)filesController { filesController.delegate = self; }
 
 - (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
                                           cloud:(void (^)())handlerCloud {
@@ -108,13 +102,9 @@ NSString * const MADUtiType                                     = @"com.everyday
     return alert;
 }
 
-- (void)startLongRunningActivity {
-    
-}
+- (void)startLongRunningActivity { }
 
-- (void)completedLongRunningActivity {
-    
-}
+- (void)completedLongRunningActivity { }
 
 #pragma mark -
 
@@ -126,7 +116,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         self.filesCoordnator.delegate = self;
-        self.shouldShowAddDocumentPopover = YES;
+        self.shouldShowAddDocumentPopover = true;
     }
     return self;
 }
@@ -147,7 +137,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.collectionView.backgroundView = watermarkView;
 
     self.openFileDelegate = self;
-    self.aboutViewControllerOnScreen = NO;
+    self.aboutViewControllerOnScreen = false;
 
     self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
     self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
@@ -159,7 +149,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    self.aboutViewControllerOnScreen = NO;
+    self.aboutViewControllerOnScreen = false;
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -168,7 +158,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
-            self.shouldShowAddDocumentPopover = NO;
+            self.shouldShowAddDocumentPopover = false;
             self.barButtonItemAddNewDocument.enabled = NO;
         }
     } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
@@ -260,14 +250,14 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    self.shouldShowAddDocumentPopover = YES;
+    self.shouldShowAddDocumentPopover = true;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 #pragma mark - MTViewControllerProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
-    self.shouldShowAddDocumentPopover = YES;
+    self.shouldShowAddDocumentPopover = true;
     
     MADOpenFileViewController * __weak weakself = self;
     [self closeDocument:self.traitCollection completion:^(BOOL success) {
@@ -276,7 +266,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     }];
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    self.shouldShowAddDocumentPopover = YES;
+    self.shouldShowAddDocumentPopover = true;
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
 }
@@ -284,7 +274,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    self.shouldShowAddDocumentPopover = YES;
+    self.shouldShowAddDocumentPopover = true;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
@@ -429,12 +419,10 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (IBAction)about:(id)sender {
     if (self.aboutViewControllerOnScreen) {
-        self.aboutViewControllerOnScreen = NO;
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
+        self.aboutViewControllerOnScreen = false;
+        [self dismissViewControllerAnimated:YES completion:^{ }];
     } else {
-        self.aboutViewControllerOnScreen = YES;
+        self.aboutViewControllerOnScreen = true;
         
         UITableViewController *aboutViewController = [UITableViewController About];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
@@ -453,7 +441,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     NSIndexPath *indexPath;
     NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
     for (indexPath in selectedItems) {
-        metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
+        metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
         [metadataItems addObject:metadata];
     }
     
@@ -499,7 +487,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController { return YES; }
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
-    self.aboutViewControllerOnScreen = NO;
+    self.aboutViewControllerOnScreen = false;
 }
 
 - (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view { }
