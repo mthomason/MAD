@@ -1,5 +1,5 @@
 //
-//  MTTableLayout.m
+//  MADTableLayout.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/18/14.

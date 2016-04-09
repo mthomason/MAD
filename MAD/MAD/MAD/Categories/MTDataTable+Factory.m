@@ -13,7 +13,7 @@
 
 @implementation MTDataTable (Factory)
 
-+ (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED {
++ (instancetype)newDataTableWithDefinition:(NSDictionary *)parameters {
 
     NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
     NSNumber *keyDataTableObjectId = @(MTDataTableObjectId);
@@ -36,23 +36,23 @@
         objectId = [dataTableObjectId unsignedIntegerValue];
     }
     if (objectIdSet) {
-        return [MTDataTable dataTableOfType:type withObjectId:objectId];
+        return [MTDataTable newDataTableOfType:type withObjectID:objectId];
     } else {
         NSAssert(false, @"Not implemented.");
         return nil;
     }
 }
 
-+ (instancetype)dataTableOfType:(MTDataTableType)type withObjectId:(NSUInteger)objectId  NS_RETURNS_RETAINED {
++ (instancetype)newDataTableOfType:(MTDataTableType)type withObjectID:(NSUInteger)objectID {
     
     id result = nil;
     switch (type) {
         case MTDataTableTypeVirtual: {
-            result = [[MTDataTableVirtual alloc] initWithId:objectId];
+            result = [[MTDataTableVirtual alloc] initWithId:objectID];
             break;
         }
         case MTDataTableTypePhysical: {
-            result = [[MTDataTableFast alloc] initWithId:objectId];
+            result = [[MTDataTableFast alloc] initWithId:objectID];
             break;
         }
         default:
@@ -63,13 +63,13 @@
     
 }
 
-+ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED {
++ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
     NSUInteger hash = [identifier hash];
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSNumber *objectIdV =  @(hash);
-    return [MTDataTable dataTableFactory:@{
+    return [MTDataTable newDataTableWithDefinition:@{
                                            typeKey : type,
                                            objectIdKey : objectIdV}];
 }

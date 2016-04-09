@@ -76,7 +76,7 @@
     NSNumber *objectIdV =  @(hash);
     NSDictionary *options = @{typeKey : type,
                               objectIdKey : objectIdV};
-    MTDataTable *dataTable = [MTDataTable dataTableFactory:options];
+    MTDataTable *dataTable = [MTDataTable newDataTableWithDefinition:options];
     return dataTable;
 }
 

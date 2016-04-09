@@ -46,7 +46,7 @@
     NSNumber *objectIdV =  @(filename.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     
-    MTDataTableFast *datatable = [MTDataTableFast dataTableFactory:parameters];
+    MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
     datatable.cacheDelegate = document;
     [datatable loadFromCacheWithUrl:document.urlDataTableCache];
     document.mainDataTable = datatable;
