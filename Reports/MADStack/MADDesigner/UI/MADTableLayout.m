@@ -10,12 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTTableLayout.h"
+#import "MADTableLayout.h"
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
 
-@interface MTTableLayout ()
+@interface MADTableLayout ()
     <UICollectionViewDelegate>
 
 
@@ -31,7 +31,7 @@ typedef struct _ColumnWidth {
 
 @end
 
-@implementation MTTableLayout
+@implementation MADTableLayout
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -75,12 +75,12 @@ typedef struct _ColumnWidth {
     for (NSUInteger i=0; i<self.columnCount; i++) {
         ColumnWidth lastColumnWidth = { .width = CGSizeZero.width, .originX = CGPointZero.x };
         if (i > 0) {
-            [[columnWidths lastObject] getValue:&lastColumnWidth];
+            [columnWidths.lastObject getValue:&lastColumnWidth];
         }
         ColumnWidth columnWidth;
         columnWidth.originX = lastColumnWidth.originX + lastColumnWidth.width;
-        columnWidth.width = [self.delegate collectionView:self.collectionView layout:self widthRequiredColumn:i];
-        NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];;
+        columnWidth.width = [self.delegate collectionView:self.collectionView layout:self widthRequiredColumn:(NSInteger)i];
+        NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];
         [columnWidths addObject:columnWidthEncoding];
     }
 
@@ -102,7 +102,7 @@ typedef struct _ColumnWidth {
                                                                      atIndexPath:(NSIndexPath *)indexPath {
 
     UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" withIndexPath:indexPath];
-    NSUInteger column = indexPath.row;
+    NSUInteger column = (NSUInteger)indexPath.row;
     CGRect frame = [self locationOfHeaderAtColumn:column];
     [supplementalAttributes setFrame:frame];
     [supplementalAttributes setHidden:NO];
@@ -112,10 +112,10 @@ typedef struct _ColumnWidth {
 }
 
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row % [self columnCount];
+    return (NSUInteger)indexPath.row % [self columnCount];
 }
 - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row / [self columnCount];
+    return (NSUInteger)indexPath.row / [self columnCount];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -144,7 +144,7 @@ typedef struct _ColumnWidth {
     NSUInteger columnsToDisplay = 0;    //Columns are calculated.
     NSUInteger columnCounter = 0;
     BOOL foundFirstColumn = NO;
-    for (NSValue *v in [self columnWidth]) {
+    for (NSValue *v in self.columnWidth) {
         ColumnWidth cw;
         [v getValue:&cw];
         if (foundFirstColumn == NO) {
@@ -168,7 +168,7 @@ typedef struct _ColumnWidth {
     
     if (columnsToDisplay == 0 &&
         [self originXColumnLast] <= rect.origin.x + rect.size.width) {
-        columnsToDisplay = [[self columnWidth] count];
+        columnsToDisplay = self.columnWidth.count;
     }
     
     
@@ -185,7 +185,7 @@ typedef struct _ColumnWidth {
     NSUInteger lastColumn = columnsToDisplay + firstColumn;
     if (lastColumn > self.columnCount) lastColumn = self.columnCount;
     for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:colCounter inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)colCounter inSection:0];
         UICollectionViewLayoutAttributes *supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" atIndexPath:indexPath];
         [layoutAttributes addObject:supplementalAttributes];
     }
@@ -264,7 +264,7 @@ typedef struct _ColumnWidth {
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:(CGRect)frame {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(row*self.columnCount)+column
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger) ((row*self.columnCount)+column)
                                                  inSection:0];
     UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     layoutAttributes.frame = frame;

@@ -19,7 +19,7 @@ typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *s
 
 @end
 
-@interface MTTableLayout : UICollectionViewLayout
+@interface MADTableLayout : UICollectionViewLayout
 
 - (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
