@@ -410,11 +410,9 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
             for (RptqDocumentObject *item in items) {
                 @autoreleasepool {
                     id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
-                    
-                    CGRect elementCanvasRect = CGRectMake(item.originx.floatValue + sectionRect.origin.x + item.spacingLeft,
-                                                          item.originy.floatValue + sectionRect.origin.y + item.spacingTop,
-                                                          item.sizewidth.floatValue + item.spacingRight,
-                                                          item.sizeheight.floatValue + item.spacingBottom);
+                    CGRect elementCanvasRect = item.frame;
+                    elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
+                    elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
                     
                     if ([drawingObject isKindOfClass:[NSString class]]) {
                         @autoreleasepool {
@@ -560,18 +558,16 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 }
 
 - (void)displayDrawingObject:(id)drawingObject forItem:(RptqDocumentObject *)item inSectionRect:(CGRect)sectionRect {
-    CGRect elementCanvasRect = CGRectMake(item.originx.floatValue + sectionRect.origin.x + item.spacingLeft,
-                                          item.originy.floatValue + sectionRect.origin.y + item.spacingTop,
-                                          item.sizewidth.floatValue + item.spacingRight,
-                                          item.sizeheight.floatValue + item.spacingBottom);
+    CGRect elementCanvasRect = item.frame;
+    elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
+    elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
     
     if ([drawingObject isKindOfClass:[NSString class]]) {
         
         NSDictionary *attributes = [item attributesForDrawingText];
         [drawingObject drawWithRect: elementCanvasRect
                             options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
-                         attributes: attributes
-                            context: nil];
+                         attributes: attributes context: nil];
         attributes = nil;
         
     } else {

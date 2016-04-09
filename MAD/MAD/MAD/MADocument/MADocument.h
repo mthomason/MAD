@@ -23,7 +23,7 @@
 
 
 extern NSString * const MADMimeType;
-extern NSString * const MTDocumentInfoKeyThumbnail;
+extern NSString * const MADDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class NSManagedObjectID, UIImage, UIPrintPageRenderer, MADErrorContainer;
@@ -46,7 +46,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
         MTCacheProtocol, MADDataProtocol>
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
-
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
     @property (readwrite)                       MTDatabase *database;
     @property (nonatomic, strong)               MADActivityIndicator *statusLabel;
@@ -56,9 +55,10 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
 
     @property (nonatomic, copy)                 NSManagedObjectID *documentObjectID;
-    @property (readonly)                        RptqDocument *activeDocumentModel;
 
     @property (nonatomic, strong)               NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutManager *> *sectionLayoutManagers;
+
+    @property (readonly)                        RptqDocument *activeDocumentModel;
     @property (readonly)                        NSString *filename;
     @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
 
@@ -74,20 +74,22 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     + (BOOL)isRetnaDisplay;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
+
+    - (NSString *)mimetype;
+
     - (void)saveContext;
-    - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
     - (void)regenThumbnail;
 
-    - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
-    - (UIImage *)fullyRenderedThumbnail;
-
+    - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
     - (void)initalizeMainDataTable;
     - (void)initalizeMainQuery:(RptqDocument *)document;
+
     - (void)prepareForQuery;
 
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
+
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 
@@ -95,16 +97,14 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
     - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
-
     - (void)removeGroup:(RptqQueryGroup *)group fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
-
+    - (UIImage *)fullyRenderedThumbnail;
     - (NSDictionary *)layoutHeightsBySectionKey;
 
+    - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
+    - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
     - (void)removeGuts; //Cleans any cache that may exist.
-
-    - (NSString *)mimetype;
 
 @end
 

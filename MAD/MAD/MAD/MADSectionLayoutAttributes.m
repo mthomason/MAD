@@ -27,16 +27,16 @@
     return instance;
 }
 
-- (BOOL)intersectsAnItemInArray:(NSArray *)items {
+- (bool)intersectsAnItemInArray:(NSArray *)items {
     return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
 }
 
-+ (BOOL)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray *)items {
-    BOOL intersects = NO;
++ (bool)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray *)items {
+    bool intersects = false;
     for (MADSectionLayoutAttributes *existingItem in items) {
         if (item.objectID != existingItem.objectID) {
             if (CGRectIntersectsRect(item.frame, existingItem.frame)) {
-                intersects = YES;
+                intersects = true;
                 break;
             }
         }
@@ -44,19 +44,19 @@
     return intersects;
 }
 
-- (BOOL)moveOnScreen {
+- (bool)moveOnScreen {
     return [MADSectionLayoutAttributes moveItemOnScreen:self];
 }
 
-+ (BOOL)moveItemOnScreen:(MADSectionLayoutAttributes *)item {
-    BOOL moved = NO;
++ (bool)moveItemOnScreen:(MADSectionLayoutAttributes *)item {
+    bool moved = false;
     if (CGRectIsOffScreenWest(item.frame)) {
         item.frame = CGRectFlushLeft(item.frame);
-        moved = YES;
+        moved = true;
     }
     if (CGRectIsOffScreenNorth(item.frame)) {
         item.frame = CGRectFlushTop(item.frame);
-        moved = YES;
+        moved = true;
     }
     return moved;
 }
@@ -82,12 +82,12 @@
     placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
-- (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
-    BOOL valid = YES;
+- (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
+    bool valid = true;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
     
         if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
-            valid = NO;
+            valid = false;
             break;
         }
     

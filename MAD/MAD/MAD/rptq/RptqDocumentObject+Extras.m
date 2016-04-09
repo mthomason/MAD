@@ -49,7 +49,84 @@ NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefination
 
 static NSNumberFormatter *currencyNumberFormatter;
 
+//
+//             Box model refresher
+//
+//  ..............................................
+//  :                Margin                      :
+//  :    ------------Border------------------    :
+//  :    |           Padding                |    :
+//  :    |                                  |    :
+//  :    |                                  |    :
+//  :    |                                  |    :
+//  :    |                                  |    :
+//  :    |           Padding                |    :
+//  :    ------------Border------------------    :
+//  :                Margin                      :
+//  :.............................................
+//
+//
+
 @implementation RptqDocumentObject (Extras)
+
+#pragma mark - Static Helpers
+
++ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
+    RptqDocumentObject *result = nil;
+    
+    if ([managedObject isKindOfClass:[RptqDocumentObject class]]) {
+        result = (RptqDocumentObject *)managedObject;
+        
+    } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
+        result = [(RptqDocumentObjectGroupKey *)managedObject parentObject];
+        
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
+        result = [(RptqDocumentObjectLabel *)managedObject parentObjectLabel];
+        
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
+        result = [(RptqDocumentObjectBarcode *)managedObject parentObjectBarcode];
+        
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
+        result = [(RptqDocumentObjectLabelDataField *)managedObject parentObjectLabelDataField];
+        
+    }
+    return result;
+}
+
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromParentSection:(RptqDocumentSection *)section withLayoutManager:(MADSectionLayoutManager *)layoutManager {
+    
+    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+    
+    NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
+    NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: documentObject.inSectionRow.hasObjects];
+    [hasObjects removeObjectAtIndex:deleteIndex];
+    
+    [layoutManager removeItemWithID:documentObject.objectID];
+    [layoutManager layout];
+    
+    
+    sectionRow.hasObjects = hasObjects;
+    documentObject.inSectionRow = nil;
+    
+    CGFloat h = layoutManager.size.height;
+    
+    CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
+    section.height = (__bridge NSNumber *)(height);
+    CFRelease(height);
+    
+}
+
+static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight);
+static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight) {
+    return paddingTop.floatValue + paddingBottom.floatValue + sizeHeight.floatValue;
+}
+
+static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
+static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth) {
+    return paddingLeft.floatValue + paddingRight.floatValue + sizeWidth.floatValue;
+}
 
 #pragma mark - Overrides
 
@@ -183,7 +260,12 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
 }
 
-
+- (void)setOrigin:(CGPoint)origin {
+    NSNumber *x = [[NSNumber alloc] initWithFloat: origin.x];
+    NSNumber *y = [[NSNumber alloc] initWithFloat: origin.y];
+    self.originx = x;
+    self.originy = y;
+}
 
 - (CGFloat)spacingLeft {
     return self.marginLeft.floatValue + self.borderWidthLeft.floatValue + self.paddingLeft.floatValue;
@@ -224,15 +306,15 @@ static NSNumberFormatter *currencyNumberFormatter;
     return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }
 
+- (CGRect)paddingViewBounds {
+    return CGRectMake(CGPointZero.x, CGPointZero.y,
+                      paddingViewBoundsSizeWidth(self.paddingLeft, self.paddingRight, self.sizewidth),
+                      paddingViewBoundsSizeHeight(self.paddingTop, self.paddingBottom, self.sizeheight));
+}
+
 - (CGRect)paddingViewFrame {
-    CGFloat paddingBoundsSizeWidth = self.paddingLeft.floatValue + self.paddingRight.floatValue + self.sizewidth.floatValue;
-    CGFloat paddingBoundsSizeHeight = self.paddingTop.floatValue + self.paddingBottom.floatValue + self.sizeheight.floatValue;
-    CGRect paddingViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
-    CGFloat originX = CGPointZero.x + self.marginLeft.floatValue;
-    CGFloat originY = CGPointZero.y + self.marginTop.floatValue;
-    CGFloat sizeWidth = paddingViewBounds.size.width;
-    CGFloat sizeHeight = paddingViewBounds.size.height;
-    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+    CGRect paddingViewBounds = [self paddingViewBounds];
+    return CGRectMake(CGPointZero.x + self.marginLeft.floatValue, CGPointZero.y + self.marginTop.floatValue, paddingViewBounds.size.width, paddingViewBounds.size.height);
 }
 
 - (CGRect)elementViewBounds {
@@ -244,36 +326,9 @@ static NSNumberFormatter *currencyNumberFormatter;
     return CGRectMake(CGPointZero.x + self.paddingLeft.floatValue, CGPointZero.y + self.paddingTop.floatValue, elementViewBounds.size.width, elementViewBounds.size.height);
 }
 
-- (void)setOrigin:(CGPoint)origin {
-    NSNumber *x = [[NSNumber alloc] initWithFloat: origin.x];
-    NSNumber *y = [[NSNumber alloc] initWithFloat: origin.y];
-    self.originx = x;
-    self.originy = y;
-}
-
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromParentSection:(RptqDocumentSection *)section withLayoutManager:(MADSectionLayoutManager *)layoutManager {
-    
-    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
-    
-    NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
-    NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
-    
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: documentObject.inSectionRow.hasObjects];
-    [hasObjects removeObjectAtIndex:deleteIndex];
-    
-    [layoutManager removeItemWithID:documentObject.objectID];
-    [layoutManager layout];
-    
-    
-    sectionRow.hasObjects = hasObjects;
-    documentObject.inSectionRow = nil;
-    
-    CGFloat h = layoutManager.size.height;
-    
-    CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
-    section.height = (__bridge NSNumber *)(height);
-    CFRelease(height);
-    
+- (CGRect)frame {
+    return CGRectMake(self.originx.floatValue + self.spacingLeft, self.originy.floatValue + self.spacingTop,
+                      self.sizewidth.floatValue + self.spacingRight, self.sizeheight.floatValue + self.spacingBottom);
 }
 
 #pragma mark - Member
@@ -343,7 +398,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     self.sizewidth = sizeWidth;
     self.sizeheight = sizeHeight;
 }
-
 
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
     
@@ -468,28 +522,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
     if (result == nil) {
         result = @"";
-    }
-    return result;
-}
-
-+ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
-    RptqDocumentObject *result = nil;
-
-    if ([managedObject isKindOfClass:[RptqDocumentObject class]]) {
-        result = (RptqDocumentObject *)managedObject;
-
-    } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
-        result = [(RptqDocumentObjectGroupKey *)managedObject parentObject];
-
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
-        result = [(RptqDocumentObjectLabel *)managedObject parentObjectLabel];
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
-        result = [(RptqDocumentObjectBarcode *)managedObject parentObjectBarcode];
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
-        result = [(RptqDocumentObjectLabelDataField *)managedObject parentObjectLabelDataField];
-        
     }
     return result;
 }

@@ -39,7 +39,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;
 
     @property (readonly) MTDocumentObjectType getType;
-
+    @property (readonly) CGRect frame;
+    
     - (CGSize)size;
     - (NSString *)designerRepresentationText;
     - (CGRect)paddingViewFrame;
