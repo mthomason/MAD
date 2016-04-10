@@ -50,7 +50,7 @@
 #import "RptqQueryPredicate+Extras.h"
 
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 
 #import "MTDatabaseDataBinding.h"
 
@@ -291,7 +291,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
         
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
-            MTDataColumn *dataColumn = nil;
+            MADDataColumn *dataColumn = nil;
             if (self.columns) {
                 dataColumn = self.columns[[sortDescriptor key]];
             }
@@ -321,7 +321,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
+    return [[(MADDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {

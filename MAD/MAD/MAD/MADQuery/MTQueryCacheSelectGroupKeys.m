@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryCacheSelectGroupKeys.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 #import "MTDatabaseSqlite3.h"
@@ -66,7 +66,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         
         NSNumber *keyColumns = @(MTQuerySelectColumns);
         NSDictionary * __weak columns = object[keyColumns];
-        MTDataColumn * __weak dataColumn = columns[columnName];
+        MADDataColumn * __weak dataColumn = columns[columnName];
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 

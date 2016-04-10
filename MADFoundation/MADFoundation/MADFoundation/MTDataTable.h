@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
     MTDataTableNumberOfColumns,
 };
 
-@class MTDataColumn;
+@class MADDataColumn;
 @class NSMutableArray, NSMutableDictionary;
 
 @interface MTDataTable : NSObject
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
     - (void)loadWithPlist:(id)plist;
     - (void)loadFromCacheWithUrl:(NSURL *)url;
 
-    - (void)addColumn:(MTDataColumn *)column;
+    - (void)addColumn:(MADDataColumn *)column;
     - (void)addRow:(NSArray *)row;
     - (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
 

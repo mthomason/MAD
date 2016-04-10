@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDataColumn_h
-#define Reports_MTDataColumn_h
+#ifndef Reports_MADDataColumn_h
+#define Reports_MADDataColumn_h
 
 #import <Foundation/NSObject.h>
 
