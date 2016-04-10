@@ -171,10 +171,8 @@ static NSString * const StringEmpty = @"";
     }
     NSPropertyListFormat format;
     NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream
-                                                           options: 0
-                                                            format: &format
-                                                             error: &error];
+    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
+                                                            format: &format error: &error];
     if (plist) {
         [self loadWithPlist:plist];
     }
@@ -185,10 +183,8 @@ static NSString * const StringEmpty = @"";
     NSDictionary *plist = [self plist];
 
     NSError *error = nil;
-    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
-                                                               format: NSPropertyListBinaryFormat_v1_0
-                                                              options: 0
-                                                                error: &error];
+    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist format: NSPropertyListBinaryFormat_v1_0
+                                                              options: 0 error: &error];
     bool success = false;
     if (url) {
         success = [cache writeToURL: url

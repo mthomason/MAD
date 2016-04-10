@@ -30,56 +30,56 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
 
-@property (nonatomic, strong, readwrite) NSString *name;
-@property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
-@property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
-@property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
-@property (nonatomic, assign, readwrite) NSUInteger rowCounter;
-@property (nonatomic, assign) NSUInteger tag;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
+    @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
+    @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
+    @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
+    @property (nonatomic, assign) NSUInteger tag;
 
-- (instancetype)initWithId:(NSUInteger)objectId;
-- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
-- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
+    - (instancetype)initWithId:(NSUInteger)objectId;
+    - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
+    - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
-- (bool)cacheWithUrl:(NSURL *)url;
+    - (bool)cacheWithUrl:(NSURL *)url;
 
-- (NSDictionary *)plist;
-- (void)loadWithPlist:(id)plist;
-- (void)loadFromCacheWithUrl:(NSURL *)url;
+    - (NSDictionary *)plist;
+    - (void)loadWithPlist:(id)plist;
+    - (void)loadFromCacheWithUrl:(NSURL *)url;
 
-- (void)addColumn:(MTDataColumn *)column;
-- (void)addRow:(NSArray *)row;
-- (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
+    - (void)addColumn:(MTDataColumn *)column;
+    - (void)addRow:(NSArray *)row;
+    - (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
 
-- (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
+    - (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
 
-- (void)removeAllObjects;
+    - (void)removeAllObjects;
 
-- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
-- (id)objectAtRow:(NSUInteger)row;
+    - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
+    - (id)objectAtRow:(NSUInteger)row;
 
-- (NSEnumerator *)columnsEnumerator;
-- (NSEnumerator *)objectEnumerator;
+    - (NSEnumerator *)columnsEnumerator;
+    - (NSEnumerator *)objectEnumerator;
 
-- (void)beginBulkInsert;
-- (void)endBulkInsert;
+    - (void)beginBulkInsert;
+    - (void)endBulkInsert;
 
-- (NSArray *)allObjects;
-- (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
-- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys;
+    - (NSArray *)allObjects;
+    - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
+    - (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys;
 
-- (NSUInteger)count;
-- (NSUInteger)numberOfColumns;
-- (NSUInteger)numberOfRows;
+    - (NSUInteger)count;
+    - (NSUInteger)numberOfColumns;
+    - (NSUInteger)numberOfRows;
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending;
-- (NSEnumerator *)enumeratorForAllObjectsSorted;
-- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
-- (NSEnumerator *)enumeratorForKeyObjectsSorted;
+    - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending;
+    - (NSEnumerator *)enumeratorForAllObjectsSorted;
+    - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
+    - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
-- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
+    - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
 
-- (NSString *)filenameMDCache;
+    - (NSString *)filenameMDCache;
 
 @end
 
