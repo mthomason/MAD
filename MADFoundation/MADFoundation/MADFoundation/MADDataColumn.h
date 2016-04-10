@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MTDataColumn : NSObject
+@interface MADDataColumn : NSObject
     <NSCoding>
 
     @property (nonatomic, copy, readonly) NSString *identifier;
