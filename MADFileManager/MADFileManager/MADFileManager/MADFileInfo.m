@@ -9,6 +9,7 @@
 #import "MADFileInfo.h"
 #import "MADFileUtilities.h"
 #import <Foundation/NSURL.h>
+#import <Foundation/NSFileManager.h>
 #import <dispatch/dispatch.h>
 
 @interface MADFileInfo ()

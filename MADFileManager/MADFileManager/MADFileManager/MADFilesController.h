@@ -10,7 +10,6 @@
 #define MADDesigner_MADFilesController_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/NSFileManager+Common.h>
 
 @class MADFilesController, MADMetaData, MADFile;
 @class NSOperationQueue;

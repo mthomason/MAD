@@ -40,10 +40,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         self.documentsDirectoryQueue = documentsDirectoryQueue;
         
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-        metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope,
-                                       //NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
-                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
-                                       NSMetadataQueryUbiquitousDocumentsScope];
+        metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope, NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope, NSMetadataQueryUbiquitousDocumentsScope];
         metadataQuery.notificationBatchingInterval = 0.5000;
         metadataQuery.predicate = predicate;
 
@@ -51,8 +49,10 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         self.metadataQuery = metadataQuery;
         
         dispatch_barrier_async(self.documentsDirectoryQueue, ^{
-            NSURL *cloudContainerURL = [[NSFileManager defaultManager] cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
+        
+            NSURL *cloudContainerURL = [MADFileUtilities cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
             _documentsDirectory = cloudContainerURL;
+        
         });
         
     }

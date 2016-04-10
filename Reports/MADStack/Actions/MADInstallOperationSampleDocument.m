@@ -28,16 +28,16 @@
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
     if (self = [super init]) {
         
-        NSString * __autoreleasing fn = [[NSString alloc] initWithString:filename];
+        NSString *fn = [[NSString alloc] initWithString:filename];
         self.filename = fn;
         
-        NSString * __autoreleasing fe = [[NSString alloc] initWithString:fileExtension];
+        NSString *fe = [[NSString alloc] initWithString:fileExtension];
         self.fileExtension = fe;
         
-        NSString * __autoreleasing gi = [[NSString alloc] initWithString:groupIdentifier];
+        NSString *gi = [[NSString alloc] initWithString:groupIdentifier];
         self.groupIdentifier = gi;
         
-        NSString * __autoreleasing ii = [[NSString alloc] initWithString:installFlag];
+        NSString *ii = [[NSString alloc] initWithString:installFlag];
         self.installFlag = ii;
         
     }
@@ -48,7 +48,7 @@
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:self.installFlag];
     if (!installed) {
         
-        NSURL *destinationDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:self.groupIdentifier];
+        NSURL *destinationDirectory = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.groupIdentifier];
         NSURL *destination = [destinationDirectory URLByAppendingPathComponent: self.filename isDirectory: NO];
         
         // !!!: Do an extra check to hanle the case of upgrades.

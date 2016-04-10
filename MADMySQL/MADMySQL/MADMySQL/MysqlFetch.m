@@ -14,6 +14,7 @@
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
 #import <Foundation/NSError.h>
+#import <Foundation/NSArray.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSet.h>
 #import <Foundation/NSData.h>

@@ -10,7 +10,8 @@
 #define Reports_MTDataTable_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/NSFileManager+Common.h>
+#import <Foundation/NSEnumerator.h>
+
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -24,6 +25,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 };
 
 @class MTDataColumn;
+@class NSMutableArray, NSMutableDictionary;
 
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
