@@ -816,11 +816,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
                               @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : self.sortDescriptors,
                               };
+
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
     NSURL *urlFastCache = [self urlFastCache];
+
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+
     MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-    [rowid setColumnType:@(MTDataTypeInteger)];
+    rowid.columnType = @(MTDataTypeInteger);
     
     NSDictionary *columns = @{MADIdentifierROWID : rowid};
     NSArray *columnKeys = @[MADIdentifierROWID];

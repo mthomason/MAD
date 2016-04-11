@@ -19,10 +19,11 @@
 
     @property (nonatomic, copy) NSString *caption;
     @property (nonatomic, copy) NSString *fieldName;
-    @property (nonatomic, strong) NSNumber *columnType;
-    @property (nonatomic, strong) NSNumber *nativeColumnType;
-    @property (nonatomic, strong) NSNumber *dataLength;
-    @property (nonatomic, strong) NSNumber *dataPercision;
+    @property (nonatomic, copy) NSNumber *columnType;
+    @property (nonatomic, copy) NSNumber *nativeColumnType;
+    @property (nonatomic, copy) NSNumber *dataLength;
+    @property (nonatomic, copy) NSNumber *dataPercision;
+    
     @property (nonatomic, assign, getter = isPrimaryKey) bool primaryKey;
     @property (nonatomic, assign, getter = isNotNull) bool notNull;
     @property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;
