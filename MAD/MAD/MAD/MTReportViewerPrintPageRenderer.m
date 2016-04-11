@@ -585,7 +585,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     if (rowData != nil) {
         NSString *tableFieldKey = [database safeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                   andTable: item.referencesQueryField.inQueryTable.queryAlias];
-        NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.unsignedIntegerValue
+        NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.shortValue
                                       forValue:rowData[tableFieldKey]];
         drawingObject = [NSString stringWithString:text];
         if ([drawingObject isEqualToString:MTNullIdentifier]) {
@@ -618,7 +618,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 }
 
 - (NSString *)inputForField:(RptqQueryField *)field forDocumentObject:(RptqDocumentObject *)item value:(id)value {
-    NSString *input1 = [item formattedString:field.databaseSchemaField.dataType.unsignedIntegerValue
+    NSString *input1 = [item formattedString:field.databaseSchemaField.dataType.shortValue
                                                         forValue:value];
     if ([input1 isEqualToString:MTNullIdentifier]) {
         return @"";
@@ -646,7 +646,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                 groupKeys = [groupLevelKeys subarrayWithRange: NSMakeRange(0, item.isAggregate.groupNumber.unsignedIntegerValue + 1)];
             }
             
-            MTDataType aggregateType = item.isAggregate.aggregateField.databaseSchemaField.dataType.unsignedIntegerValue;
+            MTDataType aggregateType = item.isAggregate.aggregateField.databaseSchemaField.dataType.shortValue;
             
             BOOL calculateInMemory = item.isAggregate.function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||
                                      item.isAggregate.function.unsignedIntegerValue == MTAggregateFunctionTypeLast;

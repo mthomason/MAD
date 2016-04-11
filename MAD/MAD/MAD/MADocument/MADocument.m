@@ -856,11 +856,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = managedObjectContext;
+    NSManagedObjectID *groupID = group.objectID;
 
-    void (^removeRptqGroup)(RptqQueryGroup *group);
-    removeRptqGroup = ^(RptqQueryGroup *group) {
-
+    [private performBlockAndWait:^{
         if (group) {
+            RptqQueryGroup *group = [private objectWithID:groupID];
             RptqQuery *query = group.inQuery;
             
             NSArray *sections = group.hasSection.allObjects;
@@ -887,14 +887,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                 group.weight = counterWrapper;
                 counter++;
             }
-
+            
             NSError * __autoreleasing * error = NULL;
             [private save:error];
-
+            
         }
-    };
-    
-    [private performBlockAndWait:removeRptqGroup];
+        
+    }];
     
 
 }

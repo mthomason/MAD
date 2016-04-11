@@ -417,14 +417,14 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         
                         
                         
-                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
+                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnType];
                         
                         MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:columnNameString];
                         dataColumn.fieldName = columnNameString;
-                        dataColumn.nativeColumnType = columnTypeNumber;
-                        dataColumn.dataLength = columnLen;
-                        dataColumn.dataPercision = columPercision;
-                        dataColumn.columnType = @(fieldTypeCalculated);
+                        dataColumn.nativeColumnType = (NSInteger)columnType;
+                        dataColumn.dataLength = (NSUInteger)columnLength;
+                        dataColumn.dataPercision = NSNotFound;
+                        dataColumn.columnType = fieldTypeCalculated;
                         
                         [datatable addColumn:dataColumn];
                         
@@ -578,7 +578,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             case SYBCHAR:
                             {
                                 int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                size_t size = sizeof(char) * (unsigned long)columnLengthPlusOne;
                                 sybCharBind[columnIndexOfType] = malloc( size );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
@@ -587,7 +587,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             case SYBVARCHAR:
                             {
                                 int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                size_t size = sizeof(char) * (unsigned long)columnLengthPlusOne;
                                 sybVarCharBind[columnIndexOfType] = malloc( size );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybVarCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
@@ -596,7 +596,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             case SYBTEXT:
                             {
                                 int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                size_t size = sizeof(char) * (unsigned long)columnLengthPlusOne;
                                 sybTextBind[columnIndexOfType] = malloc( size );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybTextBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
@@ -605,7 +605,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             case SYBNTEXT:
                             {
                                 int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                size_t size = sizeof(char) * (unsigned long)columnLengthPlusOne;
                                 sybnTextBind[columnIndexOfType] = malloc( size );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnTextBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybnTextBindNull[columnIndexOfType]);
@@ -614,7 +614,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             case SYBNVARCHAR:
                             {
                                 int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                size_t size = sizeof(char) * (unsigned long)columnLengthPlusOne;
                                 sybnVarCharBind[columnIndexOfType] = malloc( size );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnVarCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
@@ -680,7 +680,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                  dbbind(dbconn, columnOffsetNumber, NUMERICBIND, s, (BYTE *)sybNumericBind[columnIndexOfType]);
                                  */
                                 
-                                sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                                sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * (unsigned long)( columnLength + 1 ) );
                                 dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybNumericBindChar[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
                                 break;
@@ -738,19 +738,19 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     /* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
                     NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:[colmunHolder count]];
-                    for (NSInteger i = 0; i<[colmunHolder count]; i++) {
+                    for (NSUInteger i = 0; i<colmunHolder.count; i++) {
                         NSNumber *negOne = @-1;
                         [columnPercision addObject: negOne];
                     }
                     
                     
-                    NSInteger rowCounter = 0;
+                    NSUInteger rowCounter = 0;
                     while (dbnextrow(dbconn) != NO_MORE_ROWS) {
                         /* do RowByAgonizingRow processing */
                         
-                        NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+                        NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
                         
-                        NSInteger columnCounter = 0;
+                        NSUInteger columnCounter = 0;
                         for (NSDictionary *columnMetaData in colmunHolder) {
                             
                             int indexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
@@ -769,7 +769,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                         NSString *objectStr = [[NSString alloc] initWithCString: sybNumericBindChar[indexOfType]
                                                                                        encoding: NSStringEncodingConversionAllowLossy];
                                         
-                                        NSInteger cp = [columnPercision[columnCounter] integerValue];;
+                                        NSNumber * __weak cPercision = columnPercision[columnCounter];
+                                        NSInteger cp = cPercision.integerValue;
                                         
                                         NSString *decimalSeperatorSqlServer2 = nil;
                                         if (cp == -1 && tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved == NO) {
@@ -828,14 +829,14 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                 }
                                 case SYBREAL: {
                                     if (sybRealBindNull[indexOfType] != -1) {
-                                        NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
+                                        NSNumber *object = [[NSNumber alloc] initWithDouble:sybRealBind[indexOfType]];
                                         resultsForRow[fieldName] = object;
                                     }
                                     break;
                                 }
                                 case SYBFLTN: {
                                     if (sybFltNBindNull[indexOfType] != -1) {
-                                        NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
+                                        NSNumber *object = [[NSNumber alloc] initWithDouble:sybRealBind[indexOfType]];
                                         resultsForRow[fieldName] = object;
                                     }
                                     break;
@@ -1145,18 +1146,18 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
             dbclose(dbconn);
             
         } else {
-            NSString *title = NSLocalizedString(@"Bad Process", @"Bad Process");
-            NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-            NSError *error = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
+            //NSString *title = NSLocalizedString(@"Bad Process", @"Bad Process");
+            //NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
+            //NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
+            //NSError *error = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
             rsuccess = false;
         }
         
     } else {
-        NSString *title = NSLocalizedString(@"Bad Query", @"Bad Query");
-        NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
-        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-        NSError *error = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
+        //NSString *title = NSLocalizedString(@"Bad Query", @"Bad Query");
+        //NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
+        //NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
+        //NSError *error = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
         rsuccess = false;
     }
     return rsuccess;

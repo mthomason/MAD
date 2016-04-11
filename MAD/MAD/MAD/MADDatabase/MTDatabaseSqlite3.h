@@ -9,16 +9,20 @@
 #ifndef Reports_MTDatabaseSqlite3_h
 #define Reports_MTDatabaseSqlite3_h
 
-#import "MTDatabaseCache.h"
 #import <MADSqlite3/sqlite3.h>
+#import <MADFoundation/MADDataType.h>
+#import <MAD/MTDatabase.h>
 
 @class MTDatabaseDataBinding;
 
 typedef struct sqlite3_stmt sqlite3_stmt;
 
-@interface MTDatabaseSqlite3 : MTDatabaseCache
+@interface MTDatabaseSqlite3 : MTDatabase
 
-@property (nonatomic, readwrite, assign) sqlite3 *database;
+    @property (nonatomic, readwrite, assign) sqlite3 *database;
+
+    int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
+    int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
     - (void *)databaseHandle;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
@@ -35,20 +39,21 @@ typedef struct sqlite3_stmt sqlite3_stmt;
     - (void)openDatabase;
     - (void)openDatabaseWithFlags:(int)flags;
 
-    int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
-    int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
-
-    + (NSString *)nativeTypeForDataType:(MTDataType)dataType;
+    + (NSString *)columnAffinityForDataType:(MTDataType)dataType;
     + (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending;
 
     + (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber;
     + (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type;
 
-    + (void)executeQueryWithSql:(NSString *)queryString
-                       database:(sqlite3 *)_database
-            queryBinaryBindings:(NSArray *)queryBinaryBindings
-                 queryFieldKeys:(NSArray *)queryFieldKeys
-      queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;
+    + (void)executeQueryWithSql:(NSString *)queryString database:(sqlite3 *)_database
+            queryBinaryBindings:(NSArray *)queryBinaryBindings queryFieldKeys:(NSArray *)queryFieldKeys queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;
+
+    - (BOOL)tableExist:(NSString *)tablename;
+    - (void)beginBulkInsert;
+    - (void)endBulkInsert;
+
+    - (NSString *)columnAffinityForDataType:(MTDataType)dataType;
+
 
 @end
 

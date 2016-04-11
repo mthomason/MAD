@@ -91,21 +91,12 @@
     
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     
-    NSInteger ftype = myField.type;
-    NSNumber *fieldType = @(ftype);
-    NSNumber *fieldLength = @(myField.length);
-    NSNumber *fieldPercision = @(myField.decimals);
-    NSNumber *fieldTypeMad = @(0);
-    
     dataColumn.fieldName = fieldName;
-    dataColumn.nativeColumnType = fieldType;
-    dataColumn.dataLength = fieldLength;
-    dataColumn.dataPercision = fieldPercision;
-    dataColumn.columnType = fieldTypeMad;
-    dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? YES : NO;
-    
-    NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
-    [dataColumn setColumnType:cType];
+    dataColumn.nativeColumnType = myField.type;
+    dataColumn.dataLength = myField.length;
+    dataColumn.dataPercision = myField.decimals;
+    dataColumn.primaryKey = IS_PRI_KEY(myField.flags);
+    dataColumn.columnType = [MTDataTypeMySQL dataTypeForNativeType:myField.type];
 
     return dataColumn;
 }
@@ -429,9 +420,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                                 
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                
-                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
-                                                column.columnType = columnTypeString;
+                                                column.columnType = MTDataTypeString;
                                             
                                             }
                                             
@@ -450,8 +439,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                             
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeInteger];
-                                                column.columnType = columnTypeString;
+                                                column.columnType = MTDataTypeInteger;
                                                 
                                             }
                                             

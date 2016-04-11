@@ -344,13 +344,13 @@
             for (MADDataColumn *dataColumn in columnsEnumerator) {
                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                 
-                NSInteger nativeColumnType = dataColumn.nativeColumnType.integerValue;
+                NSInteger nativeColumnType = dataColumn.nativeColumnType;
                 databaseField.fieldTypeNative = nativeColumnType;
                 
                 MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
                 databaseField.fieldType = fieldType;
-                databaseField.width = dataColumn.dataLength.unsignedIntegerValue;
-                databaseField.decimals = dataColumn.dataPercision.unsignedIntegerValue;
+                databaseField.width = dataColumn.dataLength;
+                databaseField.decimals = dataColumn.dataPercision;
                 databaseField.primaryKey = dataColumn.isPrimaryKey ? YES : NO;
             }
         }

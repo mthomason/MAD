@@ -175,8 +175,6 @@
 		4C401E071BAE3CAD00BAE5FC /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E001BAE3CAD00BAE5FC /* MTReportFormatterPageDefinition.m */; };
 		4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E241BAE3DCB00BAE5FC /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */; };
-		4C401E251BAE3DCB00BAE5FC /* MTDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C401E261BAE3DCB00BAE5FC /* MTDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */; };
 		4C401E271BAE3DCB00BAE5FC /* MTDatabaseConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0D1BAE3DCB00BAE5FC /* MTDatabaseConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E281BAE3DCB00BAE5FC /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E0E1BAE3DCB00BAE5FC /* MTDatabaseConnection.m */; };
 		4C401E291BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */; };
@@ -564,8 +562,6 @@
 		4C401E001BAE3CAD00BAE5FC /* MTReportFormatterPageDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTReportFormatterPageDefinition.m; path = MAD/MADReportFormatter/MTReportFormatterPageDefinition.m; sourceTree = "<group>"; };
 		4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabase.h; path = MAD/MADDatabase/MTDatabase.h; sourceTree = "<group>"; };
 		4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabase.m; path = MAD/MADDatabase/MTDatabase.m; sourceTree = "<group>"; };
-		4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseCache.h; path = MAD/MADDatabase/MTDatabaseCache.h; sourceTree = "<group>"; };
-		4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseCache.m; path = MAD/MADDatabase/MTDatabaseCache.m; sourceTree = "<group>"; };
 		4C401E0D1BAE3DCB00BAE5FC /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnection.h; path = MAD/MADDatabase/MTDatabaseConnection.h; sourceTree = "<group>"; };
 		4C401E0E1BAE3DCB00BAE5FC /* MTDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseConnection.m; path = MAD/MADDatabase/MTDatabaseConnection.m; sourceTree = "<group>"; };
 		4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnectionMySql.h; path = MAD/MADDatabase/MTDatabaseConnectionMySql.h; sourceTree = "<group>"; };
@@ -1030,8 +1026,6 @@
 				4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */,
 				4C401E171BAE3DCB00BAE5FC /* MTDatabaseField.h */,
 				4C401E181BAE3DCB00BAE5FC /* MTDatabaseField.m */,
-				4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */,
-				4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */,
 				4C401E151BAE3DCB00BAE5FC /* MTDatabaseDataBinding.h */,
 				4C401E161BAE3DCB00BAE5FC /* MTDatabaseDataBinding.m */,
 			);
@@ -1388,7 +1382,6 @@
 				4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */,
 				4C401E311BAE3DCB00BAE5FC /* MTDatabaseField.h in Headers */,
 				4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */,
-				4C401E251BAE3DCB00BAE5FC /* MTDatabaseCache.h in Headers */,
 				4CC282421BADE81A00775B72 /* MADSectionLayoutManager.h in Headers */,
 				4C0590CF1C7B6F3C00A1EC4A /* MTReportFormatterState.h in Headers */,
 				4C401E011BAE3CAD00BAE5FC /* MTReportFormatter.h in Headers */,
@@ -1729,7 +1722,6 @@
 				4C401DE41BAE3BD800BAE5FC /* MTQueryDefinitionGroup.m in Sources */,
 				4CC284161BADE94500775B72 /* RptqDocumentObjectLabel.m in Sources */,
 				4C401D351BAE3AF800BAE5FC /* MTPaperA7.m in Sources */,
-				4C401E261BAE3DCB00BAE5FC /* MTDatabaseCache.m in Sources */,
 				4C401D431BAE3AF800BAE5FC /* MTPaperB3.m in Sources */,
 				4CC284321BADE97000775B72 /* RptqUserCredentals.m in Sources */,
 				4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */,

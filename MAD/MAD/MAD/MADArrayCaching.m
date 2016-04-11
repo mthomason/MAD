@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADArrayCaching.h"
+#import <MAD/MADArrayCaching.h>
 #import <MADDataStructures/MADIndex.h>
 #import <MAD/MADConstants.h>
 #import <MADSqlite3/MADSqlite3.h>
 #import <MADFoundation/MADDataColumn.h>
-#import "MTQuery.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseCache.h"
-#import "MTQueryCacheAddColumn.h"
+#import <MAD/MTQuery.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDatabaseSqlite3.h>
+#import <MAD/MTQueryCacheAddColumn.h>
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -28,17 +28,17 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 @interface MADArrayCaching ()
 
-@property (nonatomic, strong, readwrite) NSString *identifier;
-@property (nonatomic, strong) MTDatabaseCache *database;
+    @property (nonatomic, strong, readwrite) NSString *identifier;
+    @property (nonatomic, strong) MTDatabaseSqlite3 *database;
 
-@property (nonatomic, assign) int numberOrRows;
-@property (nonatomic, assign) sqlite3_stmt *statementInsert;
-@property (nonatomic, assign) sqlite3_stmt *statementSelect;
-@property (nonatomic, assign) sqlite3_stmt *statementCount;
-@property (nonatomic, assign) sqlite3_stmt *statementEnumer;
+    @property (nonatomic, assign) int numberOrRows;
+    @property (nonatomic, assign) sqlite3_stmt *statementInsert;
+    @property (nonatomic, assign) sqlite3_stmt *statementSelect;
+    @property (nonatomic, assign) sqlite3_stmt *statementCount;
+    @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
-@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
-@property (nonatomic, strong) MADIndex *lastObjectSelected;
+    @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
+    @property (nonatomic, strong) MADIndex *lastObjectSelected;
 
 @end
 
@@ -107,7 +107,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
-    MTDatabaseCache *database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
+    MTDatabaseSqlite3 *database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
 #ifdef MAD_MTArrayCached_DEBUG
     sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
 #endif
@@ -225,20 +225,18 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (MADDataColumn *)columnKey {
     MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
-    NSNumber *columnType = @(MTDataTypeInteger);
-    column.columnType = columnType;
-    column.primaryKey = YES;
-    column.notNull = YES;
+    column.columnType = MTDataTypeInteger;
+    column.primaryKey = true;
+    column.notNull = true;
     column.autoIncrement = false;
     return column;
 }
 
 + (MADDataColumn *)columnValue {
     MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
-    NSNumber *columnType = @(MTDataTypeBlob);
-    column.columnType = columnType;
-    column.primaryKey = NO;
-    column.notNull = YES;
+    column.columnType = MTDataTypeBlob;
+    column.primaryKey = false;
+    column.notNull = true;
     column.autoIncrement = false;
     return column;
 }

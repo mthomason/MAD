@@ -10,13 +10,13 @@
 #define Reports_MTQueryCache_h
 
 #import "MTQuery.h"
-#import "MTDatabaseCache.h"
+#import "MTDatabaseSqlite3.h"
 
-@class MTDatabaseCache;
+@class MTDatabaseSqlite3;
 
 @interface MTQueryCache : MTQuery
 
-@property (nonatomic, weak, readwrite) MTDatabaseCache *database;
+    @property (nonatomic, weak, readwrite) MTDatabaseSqlite3 *database;
 
 @end
 

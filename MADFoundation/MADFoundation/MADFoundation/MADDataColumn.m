@@ -17,6 +17,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSCoder.h>
+#import <CoreFoundation/CFNumber.h>
 
 @interface MADDataColumn ()
 
@@ -29,16 +30,18 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
-    
+    [encoder encodeValueOfObjCType:@encode(MTDataType)      at:&_columnType];
+    [encoder encodeValueOfObjCType:@encode(NSUInteger)      at:&_dataLength];
+    [encoder encodeValueOfObjCType:@encode(NSUInteger)      at:&_dataPercision];
+
     [encoder encodeObject: self.fieldName                   forKey: [MADDataColumn keyFieldName]];
     [encoder encodeObject: self.identifier                  forKey: [MADDataColumn keyIdentifier]];
     [encoder encodeObject: self.column                      forKey: [MADDataColumn keyColumn]];
     [encoder encodeObject: self.defaultValue                forKey: [MADDataColumn keyDefaultValue]];
     [encoder encodeObject: self.caption                     forKey: [MADDataColumn keyCaption]];
-    [encoder encodeObject: self.columnType                  forKey: [MADDataColumn keyColumnType]];
-    [encoder encodeObject: self.nativeColumnType            forKey: [MADDataColumn keyNativeColumnType]];
-    [encoder encodeObject: self.dataLength                  forKey: [MADDataColumn keyDataLength]];
-    [encoder encodeObject: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
+
+    [encoder encodeInteger: self.nativeColumnType           forKey: [MADDataColumn keyNativeColumnType]];
+    
     [encoder encodeBool: self.isPrimaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
     [encoder encodeBool: self.isNotNull ? YES : NO          forKey: [MADDataColumn keyIsNotNull]];
     [encoder encodeBool: self.isAutoIncrement ? YES : NO    forKey: [MADDataColumn keyIsAutoIncrement]];
@@ -47,58 +50,32 @@
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
 
-    if (self = [super init]) {
+    MTDataType datat;
+    NSUInteger datav;
 
-        self.fieldName =        [decoder decodeObjectForKey: [MADDataColumn keyFieldName]];
-        self.identifier =       [decoder decodeObjectForKey: [MADDataColumn keyIdentifier]];
-        self.column =           [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
-        self.defaultValue =     [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
-        self.caption =          [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
-        self.columnType =       [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
-        self.nativeColumnType = [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
-        self.dataLength =       [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
-        self.dataPercision =    [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
-        self.primaryKey =       [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
-
-    }
-    return self;
-}
-/*
-- (instancetype)initWithIdentifier:(NSString *)identifier {
+    [decoder decodeValueOfObjCType:@encode(MTDataType) at:&datat];
+    self.columnType = datat;
     
-    if (self = [super init]) {
-        
-        NSString *identifierW = [[NSString alloc] initWithString:identifier];
-        self.identifier = identifierW;
-        
-        NSString *caption = [[NSString alloc] initWithString:identifier];
-        self.caption = caption;
-        
-        NSMutableArray *column = [[NSMutableArray alloc] init];
-        self.column = column;
-        
-        _defaultValue = [NSNull null];
-        
-        NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
-        self.columnType = columnType;
-        
-        NSNumber *nativeColumnType = [[NSNumber alloc] initWithInteger:0];
-        self.nativeColumnType = nativeColumnType;
-        
-        NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
-        self.dataLength = dataLength;
-        
-        NSNumber *dataPercision = [[NSNumber alloc] initWithInteger:0];
-        self.dataPercision = dataPercision;
-        
-        _primaryKey = NO;
-        _notNull = NO;
-        _autoIncrement = NO;
-        
-    }
+    [decoder decodeValueOfObjCType: @encode(NSUInteger) at:&datav];
+    self.dataLength = datav;
+    
+    [decoder decodeValueOfObjCType: @encode(NSUInteger) at:&datav];
+    self.dataPercision =    datav;
+
+    self.fieldName =        [decoder decodeObjectForKey:    [MADDataColumn keyFieldName]];
+    self.identifier =       [decoder decodeObjectForKey:    [MADDataColumn keyIdentifier]];
+    self.column =           [decoder decodeObjectForKey:    [MADDataColumn keyColumn]];
+    self.defaultValue =     [decoder decodeObjectForKey:    [MADDataColumn keyDefaultValue]];
+    self.caption =          [decoder decodeObjectForKey:    [MADDataColumn keyCaption]];
+    
+    self.nativeColumnType = [decoder decodeIntegerForKey:   [MADDataColumn keyNativeColumnType]];
+    
+    self.primaryKey =       [decoder decodeBoolForKey:      [MADDataColumn keyIsPrimaryKey]]        ? true : false;
+    self.notNull =          [decoder decodeBoolForKey:      [MADDataColumn keyIsNotNull]]           ? true : false;
+    self.autoIncrement =    [decoder decodeBoolForKey:      [MADDataColumn keyIsAutoIncrement]]     ? true : false;
+
     return self;
 }
-*/
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
 
@@ -115,21 +92,14 @@
 
         _defaultValue = [NSNull null];
         
-        NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
-        self.columnType = columnType;
+        self.columnType = 0;
+        self.nativeColumnType = 0;
+        self.dataLength = 0;
+        self.dataPercision = 0;
 
-        NSNumber *nativeColumnType = [[NSNumber alloc] initWithInteger:0];
-        self.nativeColumnType = nativeColumnType;
-
-        NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
-        self.dataLength = dataLength;
-
-        NSNumber *dataPercision = [[NSNumber alloc] initWithInteger:0];
-        self.dataPercision = dataPercision;
-
-        _primaryKey = NO;
-        _notNull = NO;
-        _autoIncrement = NO;
+        _primaryKey     = false;
+        _notNull        = false;
+        _autoIncrement  = false;
         
     }
     return self;
@@ -156,16 +126,16 @@
         _caption = caption.copy;
 
         NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
-        _columnType = columnType.copy;
+        _columnType = columnType.shortValue;
 
         NSNumber *nativeColumnType = plist[[MADDataColumn keyNativeColumnType]];
-        _nativeColumnType = nativeColumnType.copy;
+        _nativeColumnType = nativeColumnType.integerValue;
 
         NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
-        _dataLength = dataLength.copy;
+        _dataLength = dataLength.unsignedIntegerValue;
 
         NSNumber *dataPercision = plist[[MADDataColumn keyDataPercision]];
-        _dataPercision = dataPercision.copy;
+        _dataPercision = dataPercision.unsignedIntegerValue;
         
         NSNumber *isPrimaryKey = plist[[MADDataColumn keyIsPrimaryKey]];
         _primaryKey = isPrimaryKey.boolValue ? true : false;
@@ -226,10 +196,19 @@
     plist[keyColumn] = self.column;
     plist[keyDefaultValue] = defaultValue;
     plist[keyCaption] = self.caption;
-    plist[keyColumnType] = self.columnType;
-    plist[keyNativeColumnType] = self.nativeColumnType;
-    plist[keyDataLength] = self.dataLength;
-    plist[keyDataPercision] = self.dataPercision;
+    
+    NSNumber *columnType = [[NSNumber alloc] initWithShort:self.columnType];
+    plist[keyColumnType] = columnType;
+    
+    NSNumber *nativeColumnType = [[NSNumber alloc] initWithUnsignedInteger:self.columnType];
+    plist[keyNativeColumnType] = nativeColumnType;
+
+    NSNumber *dataLength = [[NSNumber alloc] initWithUnsignedInteger:self.dataLength];
+    plist[keyDataLength] = dataLength;
+
+    NSNumber *dataPercision = [[NSNumber alloc] initWithUnsignedInteger:self.dataPercision];
+    plist[keyDataPercision] = dataPercision;
+
     plist[keyIsPrimaryKey] = primaryKey;
     plist[keyIsNotNull] = notNull;
     plist[keyIsAutoIncrement] = autoIncrement;

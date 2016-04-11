@@ -979,7 +979,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     for (NSNumber *section in sections) {
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            MTQuerySections updateSection = section.unsignedIntegerValue;
+            MTQuerySections updateSection = section.shortValue;
             switch(type) {
                 case NSFetchedResultsChangeInsert: {
                     NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
@@ -1013,7 +1013,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
-        MTQuerySections updateSection = section.unsignedIntegerValue;
+        MTQuerySections updateSection = section.shortValue;
         
         NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                inSection: updateSection];
@@ -1623,9 +1623,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [hasQueryTables removeObject:objectToDelete];
         rptqQuery.hasQueryTables = hasQueryTables.copy;
         
-//        NSMutableSet *queryTablesToRemove = [[NSMutableSet alloc] initWithCapacity:];
-        
-        //[rptqQuery removeHasQueryTablesObject:table];
         numberOfTables--;
     
         __block short ctr = 0;

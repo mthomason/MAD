@@ -234,7 +234,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.unsignedIntegerValue];
+            SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.shortValue];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: sortAscending selector: sel];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
         }

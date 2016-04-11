@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-typedef NS_ENUM(NSUInteger, MTDataType) {
+typedef NS_ENUM(short, MTDataType) {
     MTDataTypeBit           = 0,
     MTDataTypeBlob          = 1,
     MTDataTypeDate          = 2,

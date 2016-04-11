@@ -116,7 +116,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MADDataType selectorForSorting:self.dataType.unsignedIntegerValue];
+    return [MADDataType selectorForSorting:self.dataType.shortValue];
 }
 
 #pragma mark - MTProtocolLog

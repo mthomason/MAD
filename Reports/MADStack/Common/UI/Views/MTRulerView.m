@@ -13,7 +13,7 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 
 @interface MTRulerView ()
 
-static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints);
+static inline double xPoint(NSInteger i, double offsetInPoints);
 static inline double cmInPoints();
 static inline double eigthInchInPoints();
 
@@ -23,30 +23,28 @@ static inline double eigthInchInPoints();
 
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         [self commonInit];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         [self commonInit];
     }
     return self;
 }
 
 static inline double eigthInchInPoints() {
-    return 72.0000f / 8.0000f;
+    return 72.0 / 8.0;
 }
 
 static inline double cmInPoints() {
     return (72.0000f / 1.0000f) / 2.5400f;
 }
 
-static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
+static inline double xPoint(NSInteger i, double offsetInPoints) {
     return i * offsetInPoints;
 }
 
@@ -83,7 +81,7 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
         @autoreleasepool {
             length = 0.0000f;
             if ((i % 8) == 0) {
-                CGRect locationRect = CGRectMake(xPoint(i, eigthInchInPoints()) - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
+                CGRect locationRect = CGRectMake((CGFloat)(xPoint(i, eigthInchInPoints()) - 5.0), rect.size.height - 8.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 8];
                 [s drawInRect:locationRect withAttributes:attributes];
                 length = 1.0000f;
@@ -98,8 +96,8 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
                 length = 2.0000f;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             }
-            CGPathMoveToPoint(pathInchMarks, NULL, xPoint(i, eigthInchInPoints()), rect.size.height);
-            CGPathAddLineToPoint(pathInchMarks, NULL, xPoint(i, eigthInchInPoints()), rect.size.height - length);
+            CGPathMoveToPoint(pathInchMarks, NULL, (CGFloat)xPoint(i, eigthInchInPoints()), rect.size.height);
+            CGPathAddLineToPoint(pathInchMarks, NULL, (CGFloat)xPoint(i, eigthInchInPoints()), rect.size.height - length);
         }
     }
     
@@ -114,7 +112,7 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
         @autoreleasepool {
             length = 0.0000f;
             if ((i % 10) == 0) {
-                CGRect locationRect = CGRectMake(xPoint(i, cmInPoints() / 10.0000f) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
+                CGRect locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 10];
                 [s drawInRect:locationRect withAttributes:attributesMetric];
                 length = 2.0000f;
@@ -126,8 +124,8 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
                 length = 3.0000f;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             }
-            CGPathMoveToPoint(pathCmMarks, NULL, xPoint(i, offsetInPoints), CGPointZero.y);
-            CGPathAddLineToPoint(pathCmMarks, NULL, xPoint(i, offsetInPoints), CGPointZero.y + length);
+            CGPathMoveToPoint(pathCmMarks, NULL, (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y);
+            CGPathAddLineToPoint(pathCmMarks, NULL, (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y + length);
         }
     }
     
@@ -147,8 +145,6 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
     return CGSizeMake(self.bounds.size.width, MTReportDesignerRulerHeight);
 }
 
-- (BOOL)isAccessibilityElement {
-    return NO;
-}
+- (BOOL)isAccessibilityElement { return NO; }
 
 @end

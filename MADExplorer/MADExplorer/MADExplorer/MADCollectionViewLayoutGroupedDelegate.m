@@ -185,7 +185,7 @@ static inline CGRect rectCellLabel() {
     NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
                                                                               attributes: attributesCaption2];
     CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub contentScaleFactor: collectionView.contentScaleFactor font: [MTCollectionViewCellDocument CaptionFont2]];
-    return CGSizeMake(140.0000f, 128.0000f + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0000f);
+    return CGSizeMake(140.0000f, 128.0000f + ceilf(sizeLabelHeight) + ceilf(sizeLabelSubHeight) + 20.0000f);
 }
 
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {

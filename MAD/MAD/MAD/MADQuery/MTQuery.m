@@ -296,7 +296,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
                 dataColumn = self.columns[[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.unsignedIntegerValue
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType
                                                                      ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
@@ -320,8 +320,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MADDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
+- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
+    MADDataColumn * __weak column = self.columns[columnHandle];
+    return column.columnType;
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {

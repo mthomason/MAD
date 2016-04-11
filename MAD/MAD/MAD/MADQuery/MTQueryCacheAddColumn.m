@@ -19,11 +19,11 @@
 
 @interface MTQueryCacheAddColumn ()
 
-@property (nonatomic, copy) NSString *tableName;
-@property (nonatomic, copy) NSString *columnName;
-@property (nonatomic, strong) MADDataColumn *column;
-@property (nonatomic, assign) bool createTable;
-@property (nonatomic, assign) bool uniqueColumnHack;
+    @property (nonatomic, copy) NSString *tableName;
+    @property (nonatomic, copy) NSString *columnName;
+    @property (nonatomic, strong) MADDataColumn *column;
+    @property (nonatomic, assign) bool createTable;
+    @property (nonatomic, assign) bool uniqueColumnHack;
 
 @end
 
@@ -87,16 +87,14 @@
     NSString *tableName = [self tableName];
     NSString *columnName = [self columnName];
     
-    MTDatabaseCache *database = [self database];
-    MTDataType datatype = [[[self column] columnType] unsignedIntegerValue];
-    NSString *columnAffinity = [database nativeTypeForDataType:datatype];
-
+    MTDatabaseSqlite3 *database = [self database];
+    MTDataType datatype = self.column.columnType;
+    NSString *columnAffinity = [database columnAffinityForDataType:datatype];
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     
-    
     NSString *unique = self.uniqueColumnHack ? @"UNIQUE" : @"";
-    if ([[self column] isPrimaryKey]) {
+    if ([self.column isPrimaryKey]) {
         unique = @"PRIMARY KEY";
     }
     NSString *sql = [self createTable] ?

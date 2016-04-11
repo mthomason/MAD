@@ -532,16 +532,16 @@ CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
 	if (p1.y < p2.y) movingUp = YES;
         else movingUp = NO;
             
-            CGFloat x = p2.x;
-            CGFloat y = p2.y;
+            double x = p2.x;
+            double y = p2.y;
             
             if (d >= 0) {		
-                CGFloat mPow2 = pow(m, 2);
-                CGFloat bPow2 = pow(b, 2);
-                CGFloat dPow2 = pow(d, 2);
+                double mPow2 = pow(m, 2);
+                double bPow2 = pow(b, 2);
+                double dPow2 = pow(d, 2);
                 CGFloat u = p2.x;
                 CGFloat v = p2.y;
-                CGFloat sqrtPart = 0.0;
+                double sqrtPart = 0.0;
                 sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
                 if (!isnan(sqrtPart)) {
                     if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
@@ -550,8 +550,8 @@ CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
                             x=(y-b)/m;
                             }
                 if (!isnan(x) && !isnan(y)) {
-                    returnVal.x = x;
-                    returnVal.y = y;
+                    returnVal.x = (CGFloat)x;
+                    returnVal.y = (CGFloat)y;
                 } else {
                     returnVal.x = p2.x;
                     returnVal.y = p2.y;			

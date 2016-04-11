@@ -29,8 +29,8 @@
 
 @interface MTDataTableFast ()
 
-@property (nonatomic, strong) MTDatabaseCache *databaseForInserts;
-@property (nonatomic, strong, readwrite) MTDatabaseCache *databaseForSelects;
+@property (nonatomic, strong) MTDatabaseSqlite3 *databaseForInserts;
+@property (nonatomic, strong, readwrite) MTDatabaseSqlite3 *databaseForSelects;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
 
@@ -247,12 +247,12 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (void)reopenDbConnection {
     MTDatabaseConnection *connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:[self urlFastCache]];
     
-    MTDatabaseCache *database = [[MTDatabaseSqlite3 alloc] init];
+    MTDatabaseSqlite3 *database = [[MTDatabaseSqlite3 alloc] init];
     database.databaseConnection = connection;
     [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX];
     self.databaseForInserts = database;
     
-    MTDatabaseCache *database2 = [MTDatabaseCache newDatabaseWithConnection:connection];
+    MTDatabaseSqlite3 *database2 = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
     self.databaseForSelects = database2;
 }
 
@@ -417,11 +417,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                     @autoreleasepool {
                         MADDataColumn * __weak column = self.columns[columnKey];
                         if ([column.fieldName isEqualToString:sortDescriptor.key]) {
-                            SEL sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
+                            SEL sortAlgo = [MADDataType selectorForSorting:column.columnType];
                             
-                            NSSortDescriptor *newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
-                                                                                                ascending:sortDescriptor.ascending
-                                                                                                 selector:sortAlgo];
+                            NSSortDescriptor *newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey ascending:sortDescriptor.ascending selector:sortAlgo];
                             [newSortDescriptors addObject:newSortDescriptor];
                             
                             NSNumber *groupKey = @(i);
@@ -823,7 +821,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
 
     MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-    rowid.columnType = @(MTDataTypeInteger);
+    rowid.columnType = MTDataTypeInteger;
     
     NSDictionary *columns = @{MADIdentifierROWID : rowid};
     NSArray *columnKeys = @[MADIdentifierROWID];

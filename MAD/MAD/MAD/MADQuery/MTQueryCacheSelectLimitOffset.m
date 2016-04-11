@@ -106,20 +106,19 @@
         }
     }
     
-    if ([[self sortDesc] count] > 0) {
+    if ([self.sortDesc count] > 0) {
         NSUInteger sortCounter = 0;
         [sql appendString:@" ORDER BY "];
-        for (NSSortDescriptor *sortDescriptor in [self sortDesc]) {
+        for (NSSortDescriptor *sortDescriptor in self.sortDesc) {
             if (sortCounter != 0) [sql appendString:@", "];
             
             MADDataColumn *dataColumn = nil;
             if ([self columns]) {
                 dataColumn = [self columns][[sortDescriptor key]];
             }
-            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.unsignedIntegerValue
-                                                                       ascending: sortDescriptor.ascending];
+            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType ascending: sortDescriptor.ascending];
             
-            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDescription];
+            [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
             sortCounter++;
         }
     }

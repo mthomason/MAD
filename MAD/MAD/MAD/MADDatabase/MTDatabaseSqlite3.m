@@ -231,7 +231,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 + (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending {
     NSString *sortDescription = nil;
-    if ([[MTDatabaseSqlite3 nativeTypeForDataType:columnType] isEqualToString:@"TEXT"]) {
+    if ([[MTDatabaseSqlite3 columnAffinityForDataType:columnType] isEqualToString:@"TEXT"]) {
         sortDescription = ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
     } else {
         sortDescription = ascending ? @"ASC" : @"DESC";;
@@ -286,7 +286,7 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-+ (NSString *)nativeTypeForDataType:(MTDataType)dataType {
++ (NSString *)columnAffinityForDataType:(MTDataType)dataType {
     NSString *columnAffinity;
     switch (dataType) {
         case MTDataTypeBit:
@@ -330,8 +330,8 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
-    return [MTDatabaseSqlite3 nativeTypeForDataType:dataType];
+- (NSString *)columnAffinityForDataType:(MTDataType)dataType {
+    return [MTDatabaseSqlite3 columnAffinityForDataType:dataType];
 }
 
 - (sqlite3_stmt *)statementForQueryInTransactionSet:(bool)partOfTransactionSet andStatement:(sqlite3_stmt *)statement {
@@ -506,10 +506,9 @@ void sqliteLog(void *foo, const char* statement) {
                             NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
                             
                             MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
-                            
-                            int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-                            NSNumber *nativeColumnType = @(affentyType);
-                            
+                            dataColumn.nativeColumnType = (NSInteger)sqlite3_column_type(statement, (int)columnCounter);
+                            dataColumn.columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:dataColumn.nativeColumnType];
+
                             const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
                             const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
                             const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
@@ -525,9 +524,6 @@ void sqliteLog(void *foo, const char* statement) {
                             }
                             
                             [dataColumn setFieldName: fieldName];
-                            [dataColumn setNativeColumnType:nativeColumnType];
-                            NSNumber *columnType = @([MTDatabaseSqlite3 dataTypeForAffentyType:affentyType]);
-                            dataColumn.columnType = columnType;
                             
                             dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
                             dataColumn.autoIncrement = (pAutoinc == NULL) ? false : *pAutoinc;
@@ -635,7 +631,7 @@ void sqliteLog(void *foo, const char* statement) {
             const void *blob = sqlite3_column_blob(statement, columnNumber);
             if (blob != NULL) {
                 int numBytes = sqlite3_column_bytes16(statement, columnNumber);
-                value = [NSData dataWithBytes:blob length:numBytes];
+                value = [NSData dataWithBytes:blob length:(NSUInteger)numBytes];
             }
             break;
         }
@@ -676,12 +672,12 @@ void sqliteLog(void *foo, const char* statement) {
             columnValue = @(sqlite3_column_int64(statement, columnCounter));
             break;
         case MTDataTypeShort:
-            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
+            columnValue = [NSNumber numberWithInt:sqlite3_column_int(statement, columnCounter)];
             break;
         case MTDataTypeImage:
         case MTDataTypeBlob:
             columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
-                                         length: sqlite3_column_bytes(statement, columnCounter)];
+                                         length: (NSUInteger)sqlite3_column_bytes(statement, columnCounter)];
             break;
         case MTDataTypeFloat:
             columnValue = @(sqlite3_column_double(statement, columnCounter));

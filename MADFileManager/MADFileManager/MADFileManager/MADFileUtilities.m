@@ -477,7 +477,7 @@ static NSString * const MADPathComponentData       = @"Data";
     BOOL isDirectory;
     if (![[NSFileManager defaultManager] fileExistsAtPath:cacheURL.path isDirectory:&isDirectory]) {
         
-        NSError * __autoreleasing *error;
+        NSError * __autoreleasing *error = NULL;
         isDirectory = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL withIntermediateDirectories: YES attributes: nil error: error];
         
     }

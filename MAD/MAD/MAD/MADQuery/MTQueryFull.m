@@ -229,7 +229,7 @@
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             
-            MTDataType dataType = queryPredicate.hasLeftField.databaseSchemaField.dataType.unsignedIntegerValue;
+            MTDataType dataType = queryPredicate.hasLeftField.databaseSchemaField.dataType.shortValue;
             BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
             
             if (isNumeric == NO) {
