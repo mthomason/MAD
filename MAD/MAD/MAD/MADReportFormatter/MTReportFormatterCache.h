@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+// The origional purpose of this is to keep a cache for different layout sizes.
+//      In some views, layout size can change by device and orientation.
+
 #ifndef MAD_MTReportFormatterCache_h
 #define MAD_MTReportFormatterCache_h
 

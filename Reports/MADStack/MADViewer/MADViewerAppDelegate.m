@@ -333,8 +333,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 
-- (BOOL)isFirstLaunch {
-    BOOL firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
+- (bool)isFirstLaunch {
+    bool firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
     if (firstLaunch) {
         dispatch_async(self.appDelegateQueueSerial, ^{
             NSUUID *uuid = [NSUUID UUID];

@@ -44,7 +44,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Static helpers
 
-+ (BOOL)isCloudAvailable {
++ (bool)isCloudAvailable {
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 

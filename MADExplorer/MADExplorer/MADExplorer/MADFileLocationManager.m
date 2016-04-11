@@ -17,7 +17,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     @property (nonatomic, strong, readwrite) MADFilesController *filesController;
     @property (nonatomic, assign) MTReportState reportState;
     @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
-    @property (readonly) BOOL isFirstLaunch;
+    @property (readonly) bool isFirstLaunch;
     @property (readonly) NSString *ubiquityIdentifier;
     @property (readonly) NSString *groupIdentifier;
     @property (readonly) NSString *fileExtention;
@@ -42,10 +42,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 #pragma mark - Ubiquity Identity Token Handling (Account Change Info)
 
-- (BOOL)hasUbiquityIdentityChanged {
+- (bool)hasUbiquityIdentityChanged {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
-    BOOL hasChanged = NO;
+    bool hasChanged = false;
     
     id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
     id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
@@ -56,7 +56,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     
     if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
         [self persistAccount];
-        hasChanged = YES;
+        hasChanged = true;
     }
     
     return hasChanged;
@@ -110,8 +110,8 @@ static NSString * const MADFirstLaunch                                     = @"M
     return storageState;
 }
 
-- (BOOL)isFirstLaunch {
-    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch];
+- (bool)isFirstLaunch {
+    bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ? true : false;
     if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
         [[NSUserDefaults standardUserDefaults] synchronize];
