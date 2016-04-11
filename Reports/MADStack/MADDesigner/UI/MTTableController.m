@@ -113,66 +113,36 @@
     UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
-    MADTableController * __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         
-        MADTableController *strongself = weakSelf;
-        MADTableController * __weak weakSelf2 = strongself;
-        NSError * __autoreleasing error = NULL;
+        NSError * __autoreleasing *error = NULL;
         
-        /*    NSError * __autoreleasing qerror = NULL;
-         bool success = [self.database executeQuery:self withError:&qerror];
-         if (!success && error == NULL) {
-         *error = qerror;
-         }
-         return success;
-*/
+        bool success = [self.tableFormatter.query performQueryWithError:error];
         
-        bool success = [strongself.tableFormatter.query performQueryWithError:&error];
-        
-        MADTableController *strongself2 = weakSelf2;
-        
-        [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:) withObject: strongself2.navigationItem.rightBarButtonItem
-                                                  waitUntilDone: NO];
+        [self.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:) withObject: self.navigationItem.rightBarButtonItem
+                                           waitUntilDone: NO];
         
         [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
         
         if (!success && error) {
             
-            if ([NSThread isMainThread]) {
 
-                __strong MADTableController *weakself4 = strongself2;
-                
-                [NSError presentError: error onViewController: strongself2 completion:^(BOOL displayErrorSuccess) {
-                    NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                    [[MTKeyChain sharedObject] deleteKey:key];
-                }];
-                
-            } else {
-                
-                NSError *serror = error;
-                MADTableController * __weak weakself4 = strongself2;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    MADTableController *strongself3 = weakself4;
-                    MADTableController * __weak weakself5 = strongself3;
-                    
-                    [NSError presentError: serror onViewController: strongself3 completion:^(BOOL displayErrorSuccess) {
-                        NSString *key = [NSString stringWithString:weakself5.query.database.databaseConnection.connectionString];
-                        [[MTKeyChain sharedObject] deleteKey:key];
-                    }];
-                    
-                });
-                
-            }
             
         }
-        [strongself2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:strongself2 waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
         
         
     });
 }
+
+/*    NSError * __autoreleasing qerror = NULL;
+ bool success = [self.database executeQuery:self withError:&qerror];
+ if (!success && error == NULL) {
+ *error = qerror;
+ }
+ return success; */
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
