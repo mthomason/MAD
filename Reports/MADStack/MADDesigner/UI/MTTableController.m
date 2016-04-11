@@ -48,12 +48,23 @@
 
 @implementation MADTableController
 
+static inline CGRect NavigationControllerNavigationBarFrame(UINavigationController *navigationController, UIViewController *parentViewController);
+static inline CGRect NavigationControllerNavigationBarFrame(UINavigationController *navigationController, UIViewController *parentViewController) {
+    return CGRectMake(navigationController.navigationBar.frame.origin.x, parentViewController.navigationController.navigationBar.frame.origin.y + parentViewController.navigationController.navigationBar.frame.size.height,
+                      navigationController.navigationBar.frame.size.width, navigationController.navigationBar.frame.size.height);
+}
+
+static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLayoutGuide, id <UILayoutSupport>bottomLayoutGuide);
+static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLayoutGuide, id <UILayoutSupport>bottomLayoutGuide) {
+    return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
+}
+
 - (void)dealloc {
     [_query database].delegate = nil;
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self datatable];
+    return self.datatable;
 }
 
 - (instancetype)initWithQuery:(MTQuery *)query {
@@ -85,16 +96,15 @@
     self.collectionView.alwaysBounceVertical = YES;
     
     self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
-    
-    self.toolbarItems = nil;
     self.navigationController.toolbarHidden = YES;
+    self.toolbarItems = nil;
 }
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(objectID.URIRepresentation.absoluteString.hash);
+    NSNumber *type = [[NSNumber alloc] initWithUnsignedInteger: MTDataTableTypeVirtual];
+    NSNumber *objectIdV =  [[NSNumber alloc] initWithUnsignedInteger: objectID.URIRepresentation.absoluteString.hash];
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     return [MTDataTable newDataTableWithDefinition:parameters];
 }
@@ -117,21 +127,24 @@
     dispatch_async(queue, ^{
         
         NSError * __autoreleasing *error = NULL;
+        MTQuery *query = self.tableFormatter.query;
+        bool success = [query.database executeQuery:query withError:error];
+
         
-        bool success = [self.tableFormatter.query performQueryWithError:error];
+        //bool success = [self.tableFormatter.query performQueryWithError:error];
         
-        [self.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:) withObject: self.navigationItem.rightBarButtonItem
-                                           waitUntilDone: NO];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [activityIndicator stopAnimating];
+            [self invalidateLayout];
+        }];
         
-        [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
         
         if (!success && error) {
             
-
+            
             
         }
-        [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
-        
+
         
     });
 }
@@ -165,27 +178,15 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    UIViewController *parentViewController = self.navigationController.parentViewController;
-    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
-                                                               (parentViewController.navigationController.navigationBar.frame.origin.y +
-                                                                parentViewController.navigationController.navigationBar.frame.size.height),
-                                                               self.navigationController.navigationBar.frame.size.width,
-                                                               self.navigationController.navigationBar.frame.size.height);
-    
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                                                 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-    
-    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                                        self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
+    self.navigationController.navigationBar.frame = NavigationControllerNavigationBarFrame(self.navigationController, self.navigationController.parentViewController);
+    self.collectionView.scrollIndicatorInsets =     CollectionViewContentInsets(self.topLayoutGuide, self.navigationController.bottomLayoutGuide);
+    self.collectionView.contentInset =              CollectionViewContentInsets(self.topLayoutGuide, self.navigationController.bottomLayoutGuide);
     [self.navigationItem.titleView setNeedsLayout];
 }
 
 - (void)viewDidLayoutSubviews {
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                                                 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-    
-    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                                        self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
+    self.collectionView.scrollIndicatorInsets = CollectionViewContentInsets(self.topLayoutGuide, self.navigationController.bottomLayoutGuide);
+    self.collectionView.contentInset =          CollectionViewContentInsets(self.topLayoutGuide, self.navigationController.bottomLayoutGuide);
     [super viewDidLayoutSubviews];
 }
 
@@ -195,8 +196,7 @@
 - (void)invalidateLayout {
     UICollectionView *collectionView = self.collectionView;
     [collectionView reloadData];
-    [(MADTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
-                                                     andRowCount:self.rowCount];
+    [(MADTableLayout *)self.collectionViewLayout setColumnCount:self.columnCount andRowCount:self.rowCount];
     
     for (NSUInteger i=0; i<self.columnCount; i++) {
 
@@ -208,7 +208,6 @@
         __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
         NSString *reuseIdHeader = [self reuseIdSupplementForColumn:(NSInteger)i];
         [self.collectionView registerClass: classCollectionViewCellHeader forSupplementaryViewOfKind: @"MTTableCellHeader" withReuseIdentifier: reuseIdHeader];
-
     }
 
 }
@@ -274,7 +273,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
-    NSUInteger row = [(MADTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
+    NSUInteger row = [(MADTableLayout *)self.collectionViewLayout rowForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];

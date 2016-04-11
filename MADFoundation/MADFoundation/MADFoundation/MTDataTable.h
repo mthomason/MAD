@@ -19,9 +19,9 @@ typedef NS_ENUM(NSUInteger, MTDataTableType) {
 };
 
 typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
-    MTDataTableTypeOfTable,
-	MTDataTableObjectId,
-    MTDataTableNumberOfColumns,
+    MTDataTableTypeOfTable = 2,
+	MTDataTableObjectId = 3,
+    MTDataTableNumberOfColumns = 4,
 };
 
 @class MADDataColumn;
