@@ -293,10 +293,10 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             if (sortCounter != 0) [sql appendString:@", "];
             MADDataColumn *dataColumn = nil;
             if (self.columns) {
-                dataColumn = self.columns[[sortDescriptor key]];
+                dataColumn = self.columns[sortDescriptor.key];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.columnType
                                                                      ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;

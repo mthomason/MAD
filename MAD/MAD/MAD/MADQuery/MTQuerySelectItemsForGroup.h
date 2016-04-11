@@ -13,6 +13,9 @@
 
 @interface MTQuerySelectItemsForGroup : MTQuery
 
+    - (instancetype)initWithTableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors
+                           columnKeys:(NSArray *)columnKeys whereClause:(NSArray *)whereClause columns:(NSDictionary *)columns;
+
 @end
 
 #endif

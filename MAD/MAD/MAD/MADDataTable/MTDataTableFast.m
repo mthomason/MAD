@@ -658,23 +658,15 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
     [self initalizeGroupKeys];
 
-    NSMutableArray * results = [[NSMutableArray alloc] init];
+    NSMutableArray *results = [[NSMutableArray alloc] init];
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName];
-    NSArray *sortDescriptors = self.sortDescriptors;
-    NSDictionary *columns = self.columns;
-    NSArray *columnKeys = self.columnKeys;
-    NSDictionary *querySelect = @{
-                                  @(MTQuerySelectFieldKeys) : columnKeys,
-                                  @(MTQuerySelectTableName) : tableName,
-                                  @(MTQuerySelectPredicates) : whereClause,
-                                  @(MTQuerySelectSortDescriptors) : sortDescriptors,
-                                  @(MTQuerySelectFieldDescriptors) : columns
-                                  
-                                  };
     
-    //MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
-    MTQuerySelectItemsForGroup *query = [[MTQuerySelectItemsForGroup alloc] initWithObject:querySelect];
+    MTQuerySelectItemsForGroup *query = [[MTQuerySelectItemsForGroup alloc] initWithTableName:tableName
+                                                                              sortDescriptors:self.sortDescriptors
+                                                                                   columnKeys:self.columnKeys
+                                                                                  whereClause:whereClause
+                                                                                      columns:self.columns];
     
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
@@ -694,7 +686,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     if (success) {
         while (sqlite3_step(statement) == SQLITE_ROW) {
             @autoreleasepool {
-                NSDictionary *result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
+                NSDictionary * __weak currentObject = [self currentObject:statement];
+                NSDictionary *result = [[NSDictionary alloc] initWithDictionary:currentObject];
                 [results addObject:result];
             }
         }

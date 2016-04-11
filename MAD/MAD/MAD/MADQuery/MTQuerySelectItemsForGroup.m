@@ -25,12 +25,18 @@
 @implementation MTQuerySelectItemsForGroup
 
 - (instancetype)initWithTableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors
-                       columnKeys:(NSArray *)columnKeys whereClause:(NSArray *)whereClause {
+                       columnKeys:(NSArray *)columnKeys whereClause:(NSArray *)whereClause columns:(NSDictionary *)columns {
     if (self = [super init]) {
         _tableName = tableName.copy;
         _sortDescriptors = sortDescriptors;
-        _columnKeys = columnKeys;
+        
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] initWithArray:columnKeys];
+        [fieldKeys addObject:MADIdentifierROWID];
+        _columnKeys = fieldKeys;
+
         _whereClause = whereClause;
+        
+        self.columns = columns;
     }
     return self;
 }
@@ -43,21 +49,18 @@
         NSString * __weak tableName = object[@(MTQuerySelectTableName)];
         _tableName = tableName.copy;
         
-        NSArray * __weak sd = object[@(MTQuerySelectSortDescriptors)];
-        NSArray *sortDescriptors = [[NSArray alloc] initWithArray:sd copyItems:YES];
-        self.sortDescriptors = sortDescriptors;
+        self.sortDescriptors = object[@(MTQuerySelectSortDescriptors)];
         
-        NSArray * __weak fieldKeys = object[@(MTQuerySelectFieldKeys)];
-        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:fieldKeys copyItems:YES];
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:object[@(MTQuerySelectFieldKeys)]];
         [columnKeys addObject:MADIdentifierROWID];
         self.columnKeys = columnKeys;
         
         NSArray * __weak wc = object[@(MTQuerySelectPredicates)];
-        NSArray *whereClause = [[NSArray alloc] initWithArray:wc copyItems:YES];
+        NSArray *whereClause = [[NSArray alloc] initWithArray:wc];
         [self setWhereClause:whereClause];
         
         NSDictionary * __weak cols = object[@(MTQuerySelectFieldDescriptors)];
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithDictionary:cols copyItems:YES];
+        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithDictionary:cols];
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         rowid.columnType = MTDataTypeInteger;
         columns[MADIdentifierROWID] = rowid;
@@ -72,7 +75,8 @@
     NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];
     NSUInteger columnCounter = 0;
     
-    for (NSString *key in [self columnKeys]) {
+    NSArray *columnKeys = self.columnKeys;
+    for (NSString *key in columnKeys) {
         
         if (columnCounter != 0) {
             [sql appendString:@", "];
