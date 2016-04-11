@@ -28,8 +28,11 @@
 #import <MAD/MTKeyChain.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import "MADOperationQueue.h"
+#import "MADGetCredentialsOperation.h"
+
 @interface MADTableController ()
-    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
+    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol, MADOperationObserver> {
     bool _firstTimeViewDidAppear;
 }
 
@@ -38,6 +41,8 @@
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
     @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
     @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
+
+    @property (nonatomic, strong) MADOperationQueue *credentialQueue;
 
 @end
 
@@ -115,12 +120,20 @@
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
         NSError * __autoreleasing error = NULL;
+        
+        /*    NSError * __autoreleasing qerror = NULL;
+         bool success = [self.database executeQuery:self withError:&qerror];
+         if (!success && error == NULL) {
+         *error = qerror;
+         }
+         return success;
+*/
+        
         bool success = [strongself.tableFormatter.query performQueryWithError:&error];
         
         MADTableController *strongself2 = weakSelf2;
         
-        [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
-                                                     withObject: strongself2.navigationItem.rightBarButtonItem
+        [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:) withObject: strongself2.navigationItem.rightBarButtonItem
                                                   waitUntilDone: NO];
         
         [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
@@ -128,15 +141,13 @@
         if (!success && error) {
             
             if ([NSThread isMainThread]) {
-                //__strong MTTableController *strongself3 = weakSelf3;
+
                 __strong MADTableController *weakself4 = strongself2;
                 
-                [NSError presentError: error
-                     onViewController: strongself2
-                           completion:^(BOOL displayErrorSuccess) {
-                               NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                               [[MTKeyChain sharedObject] deleteKey:key];
-                           }];
+                [NSError presentError: error onViewController: strongself2 completion:^(BOOL displayErrorSuccess) {
+                    NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                    [[MTKeyChain sharedObject] deleteKey:key];
+                }];
                 
             } else {
                 
@@ -147,12 +158,10 @@
                     MADTableController *strongself3 = weakself4;
                     MADTableController * __weak weakself5 = strongself3;
                     
-                    [NSError presentError: serror
-                         onViewController: strongself3
-                               completion:^(BOOL displayErrorSuccess) {
-                                   NSString *key = [NSString stringWithString:weakself5.query.database.databaseConnection.connectionString];
-                                   [[MTKeyChain sharedObject] deleteKey:key];
-                               }];
+                    [NSError presentError: serror onViewController: strongself3 completion:^(BOOL displayErrorSuccess) {
+                        NSString *key = [NSString stringWithString:weakself5.query.database.databaseConnection.connectionString];
+                        [[MTKeyChain sharedObject] deleteKey:key];
+                    }];
                     
                 });
                 
@@ -277,7 +286,12 @@
 }
 #pragma mark - Delegates
 
-#pragma mark - Collection View Datasource
+#pragma mark MTDatabaseProtocol
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+    
+}
+
+#pragma mark Collection View Datasource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -340,6 +354,35 @@
     NSDictionary *attributes = @{NSFontAttributeName: bodyFont};
     CGSize size = [s sizeWithAttributes:attributes];
     return size.width < 75.0000f ? 75.0000f : (size.width > 280.0000f) ? 280.0000f : size.width;
+}
+
+#pragma mark - MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation { }
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        //[self removeObserverFromObjectForProgress:operation];
+        //[self.delegate viewControllerDidFinish: self];
+        //self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+        //[self enableTextFields];
+    }];
+}
+
+- (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+    
+    // Operation: Get credentials.
+    // ---------------------------------------------------
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                          viewController: self];
+    [getCredentialsOperation addObserver:self];
+    
+    [self.credentialQueue addOperation: getCredentialsOperation];
+    
+    //self.getCredentialsOperation = getCredentialsOperation;
+    //return nil;
 }
 
 @end

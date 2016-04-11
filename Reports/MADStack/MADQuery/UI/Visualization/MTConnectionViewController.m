@@ -349,12 +349,10 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     if (errorContainer && [errorContainer count] > 0) {
         NSString *errorText = [errorContainer errorLogCompact];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd"
-                                                                       message: errorText
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd" message: errorText
                                                                 preferredStyle: UIAlertControllerStyleAlert];
         
-        UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
-                                                     style: UIAlertActionStyleDefault
+        UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue" style: UIAlertActionStyleDefault
                                                    handler: nil];
         [alert addAction:ok];
         [self presentViewController:alert

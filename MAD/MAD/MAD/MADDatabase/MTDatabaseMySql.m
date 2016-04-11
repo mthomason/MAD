@@ -213,17 +213,16 @@
 
 #pragma mark - Reading Tables
 
-- (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+static NSString * const TextSqlShowTables = @"SHOW TABLES;";
+
+- (void)enumerateTablesFromConnection:(id)dbconn usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     NSError *error = nil;
     MysqlConnection *connection = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-                                             dataTable: &dataTableVirtual
-                                          onConnection: connection
-                                                 error: &error];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: TextSqlShowTables dataTable: &dataTableVirtual
+                                          onConnection: connection error: &error];
     
     
     NSMutableArray *results = nil;
@@ -258,11 +257,8 @@
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-                                             dataTable: &dataTableVirtual
-                                          onConnection: conn
-                                         extendedNames: YES
-                                                 error: &error];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: TextSqlShowTables dataTable: &dataTableVirtual
+                                          onConnection: conn extendedNames: YES error: &error];
     NSMutableArray *results = nil;
     if (error == nil) {
         NSUInteger resultsCount = [dataTable count];
@@ -285,11 +281,8 @@
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-                                             dataTable: &dataTableVirtual
-                                          onConnection: conn
-                                         extendedNames: YES
-                                                 error: &errorFetch];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: TextSqlShowTables dataTable: &dataTableVirtual
+                                          onConnection: conn extendedNames: YES error: &errorFetch];
     if (outError == nil && errorFetch != nil) {
         NSDictionary *userInfo = @{NSUnderlyingErrorKey: errorFetch};
         NSString *domain = NSStringFromClass(self.class);
