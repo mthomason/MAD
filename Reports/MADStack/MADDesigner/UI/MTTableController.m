@@ -130,9 +130,7 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
         MTQuery *query = self.tableFormatter.query;
         bool success = [query.database executeQuery:query withError:error];
 
-        
-        //bool success = [self.tableFormatter.query performQueryWithError:error];
-        
+                
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [activityIndicator stopAnimating];
             [self invalidateLayout];

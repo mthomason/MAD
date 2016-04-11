@@ -69,7 +69,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
 
-@property (nonatomic, assign, readwrite) MTQueryType type;
+    @property (nonatomic, assign, readwrite) MTQueryType type;
 
 @end
 

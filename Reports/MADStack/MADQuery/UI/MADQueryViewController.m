@@ -17,6 +17,7 @@
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 #import <MAD/MTQuery.h>
+#import <MAD/MTQuerySampleDataTable.h>
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
@@ -1378,20 +1379,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return result;
 }
 
-- (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
-    RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
-    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
-    MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
-    
-    MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-
-    sampleDataTitleView.text = schemaTable.name;
-    
-    tableController.navigationItem.title = schemaTable.name;
-    tableController.navigationItem.titleView = sampleDataTitleView;
-    return tableController;
-}
-
 - (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
     
     NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
@@ -1421,7 +1408,19 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
     RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: indexPathUpdate];
-    MADTableController *tableController = [self tableControllerForTable:table];
+    RptqDatabaseSchemaTable *schemaTable = table.databaseSchemaTable;
+
+    MTQuerySampleDataTable *rquery = [[MTQuerySampleDataTable alloc] initWithObject:schemaTable];
+    
+    MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
+    
+    MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    
+    sampleDataTitleView.text = schemaTable.name;
+    
+    tableController.navigationItem.title = schemaTable.name;
+    tableController.navigationItem.titleView = sampleDataTitleView;
+    
     [self.navigationController pushViewController: tableController animated: YES];
 
 }

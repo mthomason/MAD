@@ -50,6 +50,21 @@
     return self;
 }
 
+- (instancetype)initWithDatabaseSchemaTable:(RptqDatabaseSchemaTable *)object {
+
+    if (self = [super initWithObject:object]) {
+                
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
+        self.database = db;
+        self.dataTableMaxFieldLength = dataTable;
+        self.queryObject = object;
+        
+    }
+    return self;
+}
+
 - (NSString *)getSqlWithError:(NSError **)error {
     NSError *sqlError = nil;
     [super getSqlWithError:&sqlError];
@@ -59,16 +74,14 @@
     NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
     RptqDatabaseSchemaTable *table = self.queryObject;
     
-    [sql appendString:[MTQuerySampleDataTable sqlAllFieldsInTable: table
-                                                    usingDatabase: self.database]];
+    [sql appendString:[MTQuerySampleDataTable sqlAllFieldsInTable: table usingDatabase: self.database]];
     
     NSString *safeTableName = [self.database tableAliasForTable:table.toString];
 
     if (self.fieldKeys.count <= 0) {
         for (RptqDatabaseSchemaField *field in table.hasFields) {
             MTDatabaseField *dbField = [field databaseFieldWrapper];
-            NSString *fieldAlias = [self.database fieldAliasForField:field.name
-                                                   withSafeTableName:safeTableName];
+            NSString *fieldAlias = [self.database fieldAliasForField:field.name withSafeTableName:safeTableName];
             self.fields[fieldAlias] = dbField;
             [self.fieldKeys addObject:fieldAlias];
         }

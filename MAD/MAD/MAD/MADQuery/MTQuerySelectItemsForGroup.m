@@ -15,41 +15,53 @@
 
 @interface MTQuerySelectItemsForGroup ()
 
-    @property (nonatomic, strong) NSString *tableName;
-    @property (nonatomic, strong) NSString *columnName;
-    @property (nonatomic, strong) NSArray *sortDescriptors;
-    @property (nonatomic, strong) NSArray *columnKeys;
-    @property (nonatomic, strong) NSArray *whereClause;
+    @property (nonatomic, copy) NSString *tableName;
+    @property (nonatomic, weak) NSArray *sortDescriptors;
+    @property (nonatomic, weak) NSArray *columnKeys;
+    @property (nonatomic, weak) NSArray *whereClause;
 
 @end
 
 @implementation MTQuerySelectItemsForGroup
 
+- (instancetype)initWithTableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors
+                       columnKeys:(NSArray *)columnKeys whereClause:(NSArray *)whereClause {
+    if (self = [super init]) {
+        _tableName = tableName.copy;
+        _sortDescriptors = sortDescriptors;
+        _columnKeys = columnKeys;
+        _whereClause = whereClause;
+    }
+    return self;
+}
+
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSString *tableName = [NSString stringWithString:object[@(MTQuerySelectTableName)]];
-        [self setTableName:tableName];
+        NSString * __weak tableName = object[@(MTQuerySelectTableName)];
+        _tableName = tableName.copy;
         
-        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
-        [self setSortDescriptors:sortDescriptors];
+        NSArray * __weak sd = object[@(MTQuerySelectSortDescriptors)];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithArray:sd copyItems:YES];
+        self.sortDescriptors = sortDescriptors;
         
-        NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:object[@(MTQuerySelectFieldKeys)]];
+        NSArray * __weak fieldKeys = object[@(MTQuerySelectFieldKeys)];
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:fieldKeys copyItems:YES];
         [columnKeys addObject:MADIdentifierROWID];
-        [self setColumnKeys:columnKeys];
+        self.columnKeys = columnKeys;
         
-        NSArray *whereClause = [NSArray arrayWithArray:object[@(MTQuerySelectPredicates)]];
+        NSArray * __weak wc = object[@(MTQuerySelectPredicates)];
+        NSArray *whereClause = [[NSArray alloc] initWithArray:wc copyItems:YES];
         [self setWhereClause:whereClause];
         
-        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
-        
+        NSDictionary * __weak cols = object[@(MTQuerySelectFieldDescriptors)];
+        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithDictionary:cols copyItems:YES];
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         rowid.columnType = MTDataTypeInteger;
         columns[MADIdentifierROWID] = rowid;
-        [self setColumns:columns];
+        self.columns = columns;
   
     }
     return self;
@@ -68,9 +80,13 @@
         [sql appendFormat:@"\"%@\"", key];
         columnCounter++;
     }
-    [sql appendFormat:@" FROM %@", [self tableName]];
-    [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
-    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
+    [sql appendFormat:@" FROM %@", self.tableName];
+    
+    NSString * __weak whereClauseWithParameters = [self whereClauseWithParameters:self.whereClause];
+    [sql appendString:whereClauseWithParameters];
+    
+    NSString * __weak orderByClauseWithSortDescriptors = [self orderByClauseWithSortDescriptors:self.sortDescriptors];
+    [sql appendString:orderByClauseWithSortDescriptors];
 
     return sql;
 }

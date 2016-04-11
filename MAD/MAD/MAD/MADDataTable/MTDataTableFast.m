@@ -14,18 +14,21 @@
 
 #import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MADDataColumn.h>
-#import "MADConstants.h"
 
-#import "MTDataTableFastObjectEnumerator.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseConnectionSqlite3.h"
-#import "MTQuery.h"
-#import "MTQueryCacheAddRow.h"
-#import "MTQueryCacheIndexDrop.h"
-#import "MTQueryCacheAddColumn.h"
-#import "MTQueryCacheVacuum.h"
-#import "MTQueryCacheDropTable.h"
-#import "MTQueryCacheDeleteAllFromTable.h"
+
+#import <MAD/MADConstants.h>
+
+#import <MAD/MTDataTableFastObjectEnumerator.h>
+#import <MAD/MTDatabaseSqlite3.h>
+#import <MAD/MTDatabaseConnectionSqlite3.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTQueryCacheAddRow.h>
+#import <MAD/MTQueryCacheIndexDrop.h>
+#import <MAD/MTQueryCacheAddColumn.h>
+#import <MAD/MTQueryCacheVacuum.h>
+#import <MAD/MTQueryCacheDropTable.h>
+#import <MAD/MTQueryCacheDeleteAllFromTable.h>
+#import <MAD/MTQuerySelectItemsForGroup.h>
 
 @interface MTDataTableFast ()
 
@@ -669,7 +672,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                   @(MTQuerySelectFieldDescriptors) : columns
                                   
                                   };
-    MTQuery * query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
+    
+    //MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
+    MTQuerySelectItemsForGroup *query = [[MTQuerySelectItemsForGroup alloc] initWithObject:querySelect];
+    
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];

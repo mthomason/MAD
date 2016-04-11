@@ -161,7 +161,7 @@
 		4C401DF01BAE3BD900BAE5FC /* MTQueryMaxFieldLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */; };
 		4C401DF11BAE3BD900BAE5FC /* MTQuerySampleDataField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DAD1BAE3BD500BAE5FC /* MTQuerySampleDataField.h */; };
 		4C401DF21BAE3BD900BAE5FC /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DAE1BAE3BD500BAE5FC /* MTQuerySampleDataField.m */; };
-		4C401DF31BAE3BD900BAE5FC /* MTQuerySampleDataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DAF1BAE3BD500BAE5FC /* MTQuerySampleDataTable.h */; };
+		4C401DF31BAE3BD900BAE5FC /* MTQuerySampleDataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DAF1BAE3BD500BAE5FC /* MTQuerySampleDataTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401DF41BAE3BD900BAE5FC /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DB01BAE3BD500BAE5FC /* MTQuerySampleDataTable.m */; };
 		4C401DF51BAE3BD900BAE5FC /* MTQuerySelectItemsForGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DB11BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.h */; };
 		4C401DF61BAE3BDA00BAE5FC /* MTQuerySelectItemsForGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DB21BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.m */; };
