@@ -15,23 +15,35 @@
 #import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectLimitOffset ()
-
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *columnKeys;
-@property (nonatomic, strong) NSArray *sortDesc;
-
-@property (nonatomic, strong) NSArray *whereClause;
-
-@property (nonatomic, assign) NSUInteger limit;
-@property (nonatomic, assign) NSUInteger offset;
-
-@property (nonatomic, assign) bool droprowid;
-
+    @property (nonatomic, strong, readwrite) NSString *sql;
 @end
 
 @implementation MTQueryCacheSelectLimitOffset
 
+- (instancetype)initWithLimit:(NSUInteger)limit offset:(NSUInteger)offset tableName:(NSString *)tableName dropRowID:(bool)dropRowID columnKeys:(NSArray *)columnKeys
+              sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns whereClause:(NSArray *)whereClause {
+    
+    if (self = [super initWithObject:nil]) {
+    
+        NSString *sqlResult = nil;
+        if (limit == NSUIntegerMax && offset == NSUIntegerMax) {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithTableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        } else if (offset == NSUIntegerMax) {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithLimit:limit tableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        } else {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithLimit:limit offset:offset tableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        }
+        
+        NSString *sql = [[NSString alloc] initWithString:sqlResult];
+        self.sql = sql;
+    
+    }
+    return self;
+
+}
+
 - (instancetype)initWithObject:(id)object {
+
     if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
@@ -39,113 +51,134 @@
         NSNumber *limitO = object[@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
         NSNumber *offsetO = object[@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
 
-        _limit = limitO ? limitO.unsignedIntegerValue : NSNotFound;     // Careful not to fuck this up!
-        _offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
+        NSUInteger limit = limitO ? limitO.unsignedIntegerValue : NSNotFound;     // Careful not to fuck this up!
+        NSUInteger offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
         
         NSNumber *keyTableNames = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
         NSString *tableName = object[keyTableNames];
-        _tableName = [[NSString alloc] initWithString: tableName];
-        
+
         NSArray *columnKeys = object[@(MTQueryCacheSelectLimitOffsetParamatersColumnKeys)];
-        _columnKeys = [[NSArray alloc] initWithArray:columnKeys];
-        
-        NSArray *sortDesc = object[@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
-        _sortDesc = [[NSArray alloc] initWithArray: sortDesc];
-        
+        NSArray *sortDescriptors = object[@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
         NSArray *whereClause = object[@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
-        _whereClause = [[NSArray alloc] initWithArray: whereClause];
         
         NSDictionary *columns = object[@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
-        NSDictionary *c = [[NSDictionary alloc] initWithDictionary: columns];
-        self.columns = c;
         
         NSNumber *dropRowid = object[@(MTQueryCacheSelectLimitOffsetParamatersDropRowid)];
-        self.droprowid = dropRowid != nil ? dropRowid.boolValue : NO;
+        bool dropRowID = dropRowid != false ? (dropRowid.boolValue ? YES:NO) : false;
+        
+        NSString *sqlResult = nil;
+        if (limit == NSUIntegerMax && offset == NSUIntegerMax) {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithTableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        } else if (offset == NSUIntegerMax) {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithLimit:limit tableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        } else {
+            sqlResult = [MTQueryCacheSelectLimitOffset sqlQueryWithLimit:limit offset:offset tableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+        }
+        
+        NSString *sql = [[NSString alloc] initWithString:sqlResult];
+        self.sql = sql;
+        
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    [super getSqlWithError:error];
-    NSString *result = nil;
-    
-    
-    if (self.limit == NSNotFound && self.offset == NSNotFound) {
-        result = [self sqlQuery];
-    } else if (self.offset == NSNotFound) {
-        result = [self sqlQueryWithLimit:self.limit];
-    } else {
-        result = [self sqlQueryWithLimit:self.limit offset:self.offset];
-    }
-    return result;
+    return self.sql;
 }
 
 - (BOOL)returnsResults {
     return YES;
 }
 
-- (NSString *)sqlQuery {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
-        
-    if ([[self columnKeys] count] == 0) {
-        [sql appendFormat:@" rowid FROM %@", [self tableName]];
-    } else {
++ (NSString *)sqlQueryWithTableName:(NSString *)tableName dropRowID:(bool)dropRowID columnKeys:(NSArray *)columnKeys
+                    sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns whereClause:(NSArray *)whereClause {
+    
+    NSString *sqlSelect = [MTQueryCacheSelectLimitOffset SelectClauseForTableName:tableName dropRowID:dropRowID columnKeys:columnKeys];
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:sqlSelect];
+    
+    NSString *sortClause = [MTQueryCacheSelectLimitOffset SortDescriptionFoSortDescriptionDefination:sortDescriptors columns:columns];
+    [sql appendString:sortClause];
+    
+    NSString *whereClauseDef = [MTQueryCacheSelectLimitOffset WhereClauseForWhereClauseDefination:whereClause];
+    [sql appendString:whereClauseDef];
+    
+    return sql;
+    
+}
 
++ (NSString *)sqlQueryWithLimit:(NSUInteger)limit tableName:(NSString *)tableName dropRowID:(bool)dropRowID columnKeys:(NSArray *)columnKeys
+                sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns whereClause:(NSArray *)whereClause {
+    NSString *sqlQuery = [MTQueryCacheSelectLimitOffset sqlQueryWithTableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+    return [sqlQuery stringByAppendingFormat:@" LIMIT %ld ", (unsigned long)limit];
+}
+
++ (NSString *)sqlQueryWithLimit:(NSUInteger)limit offset:(NSUInteger)offset tableName:(NSString *)tableName dropRowID:(bool)dropRowID columnKeys:(NSArray *)columnKeys
+                sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns whereClause:(NSArray *)whereClause {
+    NSString *sqlQuery = [MTQueryCacheSelectLimitOffset sqlQueryWithLimit:limit tableName:tableName dropRowID:dropRowID columnKeys:columnKeys sortDescriptors:sortDescriptors columns:columns whereClause:whereClause];
+    return [sqlQuery stringByAppendingFormat:@" OFFSET %ld ", (unsigned long)offset];
+}
+
++ (NSString *)SelectClauseForTableName:(NSString *)tableName dropRowID:(bool)droprowid columnKeys:(NSArray *)columnKeys {
+    if (columnKeys.count == 0) {
+        return [NSString stringWithFormat:@" rowid FROM %@", tableName];
+    } else {
+        NSMutableString *sql = [[NSMutableString alloc] init];
         NSUInteger columnCounter = 0;
-        for (NSString *key in [self columnKeys]) {
+        for (NSString *key in columnKeys) {
             if (columnCounter != 0) {
                 [sql appendString:@", "];
             }
             [sql appendFormat:@"\"%@\"", key];
             columnCounter++;
         }
-        if (self.droprowid) {
-            [sql appendFormat:@" FROM %@", [self tableName]];
+        if (droprowid) {
+            [sql appendFormat:@" FROM %@", tableName];
         } else {
-            [sql appendFormat:@", rowid FROM %@", [self tableName]];
+            [sql appendFormat:@", rowid FROM %@", tableName];
         }
+        return sql;
     }
     
-    if ([self.sortDesc count] > 0) {
+}
+
++ (NSString *)SortDescriptionFoSortDescriptionDefination:(NSArray <__kindof NSSortDescriptor *> *)sortDescription columns:(NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *)columns {
+    if (sortDescription.count > 0) {
         NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        for (NSSortDescriptor *sortDescriptor in self.sortDesc) {
+        NSMutableString *sql = [[NSMutableString alloc] initWithString:@" ORDER BY "];
+        for (NSSortDescriptor *sortDescriptor in sortDescription) {
             if (sortCounter != 0) [sql appendString:@", "];
             
             MADDataColumn *dataColumn = nil;
-            if ([self columns]) {
-                dataColumn = [self columns][[sortDescriptor key]];
+            if (columns) {
+                dataColumn = columns[sortDescriptor.key];
             }
             NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.columnType ascending: sortDescriptor.ascending];
             
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
             sortCounter++;
         }
+        return sql;
+    } else {
+        return @"";
     }
-    
+}
+
++ (NSString *)WhereClauseForWhereClauseDefination:(NSArray <__kindof NSDictionary *> *)whereClause {
     // FIXME: Right now only handles equal case.
-    if ([[self whereClause] count] > 0) {
-        [sql appendString:@" WHERE "];
+    if ([whereClause count] > 0) {
+        NSMutableString *sql = [[NSMutableString alloc] initWithString:@" WHERE "];
         NSUInteger counter = 0;
-        for (NSDictionary *condition in [self whereClause]) {
+        for (NSDictionary *condition in whereClause) {
             if (counter > 0) [sql appendString:@" AND "];
             NSString *columnHandle = condition[MTQueryKeyPredicateColumn];
             NSString *columnValue = condition[MTQueryKeyPredicateValue];
             [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
             counter++;
         }
+        return sql;
+    } else {
+        return @"";
     }
-    
-    return sql;
-    
-}
-
-- (NSString *)sqlQueryWithLimit:(NSUInteger)limit {
-    return [[self sqlQuery] stringByAppendingFormat:@" LIMIT %ld ", (unsigned long)limit];
-}
-
-- (NSString *)sqlQueryWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
-    return [[self sqlQueryWithLimit:limit] stringByAppendingFormat:@" OFFSET %ld ", (unsigned long)offset];
 }
 
 @end

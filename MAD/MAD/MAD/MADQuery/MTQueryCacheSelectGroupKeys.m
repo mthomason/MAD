@@ -12,16 +12,12 @@
 #import <Foundation/NSException.h>
 #import "MTDatabaseSqlite3.h"
 
-static NSString * const JoinPredicateWhere = @" WHERE ";
+static NSString * const JoinPredicateWhere =    @" WHERE ";
+static NSString * const SqlAnd =                @" AND ";
 
 @interface MTQueryCacheSelectGroupKeys ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSString *columnName;
-@property (nonatomic, assign) BOOL accending;
-
-@property (nonatomic, strong) NSString *sqlSpeedSorting;
-@property (nonatomic, strong) NSString *sqlSpeedPredicate;
+    @property (nonatomic, strong) NSString *sql;
 
 @end
 
@@ -34,9 +30,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         NSNumber *keySelectTableName = @(MTQuerySelectTableName);
-        NSString *selectTableName = object[keySelectTableName];
-        NSString *tableName = [NSString stringWithString:selectTableName];
-        self.tableName = tableName;
+        NSString * __weak tableName = object[keySelectTableName];
         
         NSNumber *keySelectPredicates = @(MTQuerySelectPredicates);
         
@@ -48,21 +42,19 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
             NSString *left = predicate[MTQueryKeyPredicateColumn];
             NSString *right = predicate[MTQueryKeyPredicateValue];
             if (i > 0) {
-                [sqlPredicate appendString:@" AND "];
+                [sqlPredicate appendString:SqlAnd];
             }
             [sqlPredicate appendFormat:@"%@ = \"%@\"", left, right];
             i++;
         }
-        self.sqlSpeedPredicate = sqlPredicate;
         
         NSNumber *keySelectFieldNames = @(MTQuerySelectFieldKeys);
         NSArray *fieldNames = object[keySelectFieldNames];
         NSString *columnName = fieldNames.firstObject;
-        self.columnName = columnName;
         
         NSNumber *keySelectSortAccending = @(MTQuerySelectSortAccending);
         NSNumber *sortValue = object[keySelectSortAccending];
-        self.accending = sortValue.boolValue;
+        bool accending = sortValue.boolValue ? YES : NO;
         
         NSNumber *keyColumns = @(MTQuerySelectColumns);
         NSDictionary * __weak columns = object[keyColumns];
@@ -70,16 +62,15 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 
-        NSString *sqlSpeedSortingDescription = [MTDatabaseSqlite3 sortDescForColumnType:dataColumn.nativeColumnType ascending:self.accending];
+        NSString *sqlSpeedSortingDescription = [MTDatabaseSqlite3 sortDescForColumnType:dataColumn.columnType ascending:accending];
         NSString *sqlSpeedSort = [NSString stringWithString:sqlSpeedSortingDescription];
-        self.sqlSpeedSorting = sqlSpeedSort;
         
+        NSString *sql = [[NSString alloc] initWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@", columnName, tableName, sqlPredicate, columnName, sqlSpeedSort];
+        self.sql = sql;
     }
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@", self.columnName, self.tableName, self.sqlSpeedPredicate, self.columnName, self.sqlSpeedSorting];
-}
+- (NSString *)getSqlWithError:(NSError **)error { return self.sql; }
 
 @end

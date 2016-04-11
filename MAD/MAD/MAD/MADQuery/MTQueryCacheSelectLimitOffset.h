@@ -13,6 +13,9 @@
 
 @interface MTQueryCacheSelectLimitOffset : MTQuery
 
+- (instancetype)initWithLimit:(NSUInteger)limit offset:(NSUInteger)offset tableName:(NSString *)tableName dropRowID:(bool)dropRowID columnKeys:(NSArray *)columnKeys
+              sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns whereClause:(NSArray *)whereClause;
+              
 @end
 
 #endif
