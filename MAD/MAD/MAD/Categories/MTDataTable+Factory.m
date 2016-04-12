@@ -64,15 +64,8 @@
     
 }
 
-+ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
-    NSUInteger hash = [identifier hash];
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypeVirtual);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(hash);
-    NSDictionary *definition = @{typeKey : type,
-                                 objectIdKey : objectIdV};
-    return [MTDataTable newDataTableWithDefinition:definition];
++ (instancetype)newDataTableForIdentifier:(NSString *)identifier {
+    return [self newDataTableOfType:MTDataTableTypeVirtual withObjectID:identifier.hash];
 }
 
 @end

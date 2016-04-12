@@ -970,8 +970,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
-    [self.statusLabel.status performSelectorOnMainThread: @selector(setText:)
-                                              withObject: readRecords
+    [self.statusLabel.status performSelectorOnMainThread: @selector(setText:) withObject: readRecords
                                            waitUntilDone: NO];
 }
 
