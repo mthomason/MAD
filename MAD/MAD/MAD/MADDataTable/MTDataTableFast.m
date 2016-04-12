@@ -759,20 +759,23 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
     NSUInteger sortLevel;
     for (NSString *key in keys) {
-        sortLevel = groupLevel >= 1 ? groupLevel - 1 : 0;
-        NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:sortLevel],
-                                         @"v" : key};
-        [whereClause addObject:whereStatement];
+        @autoreleasepool {
+            sortLevel = groupLevel >= 1 ? groupLevel - 1 : 0;
+            NSString *idColumnKeyForGroupLocation = [self idColumnKeyForGroupLocation:sortLevel].copy;
+            NSString *keyPredicateValue = key.copy;
+            NSDictionary *whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys: idColumnKeyForGroupLocation, MTQueryKeyPredicateColumn, keyPredicateValue, MTQueryKeyPredicateValue, nil];
+            [whereClause addObject:whereStatement];
+        }
     }
     
     MTQuery *query = [[MTQueryCacheSelectGroupKeys alloc] initWithTableName:[self tableName] selectPredicates:whereClause fieldNames:columnKeys accending:accending ? true : false columns:self.columns];
 
     NSURL *urlFastCache = [self urlFastCache];
-    
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
-    
-    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection columns: self.columns
-                                                                                                           columnKeys: columnKeys query: query];
+    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                              columns: self.columns
+                                                                                                           columnKeys: columnKeys
+                                                                                                                query: query];
     enumerator.addRowId = NO;
     enumerator.singleColumnNoWrapper = YES;
     return enumerator;
