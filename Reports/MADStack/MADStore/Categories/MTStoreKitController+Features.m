@@ -11,12 +11,12 @@
 
 @implementation MTStoreKitController (Features)
 
-- (BOOL)isReportingLimited {
+- (bool)isReportingLimited {
     return !self.isReportingEnabledAndDesired;
 }
 
-- (BOOL)isReportingEnabledAndDesired {
-    return YES;
+- (bool)isReportingEnabledAndDesired {
+    return true;
     
     //[[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"] &&
     //        [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];

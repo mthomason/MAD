@@ -65,7 +65,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
     @property (nonatomic, strong)               MTPaper *paper;
     @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
-    @property (nonatomic, assign)               BOOL limitResultsDesignMode;
+    @property (nonatomic, assign)               bool limitResultsDesignMode;
 
     - (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
 
@@ -79,7 +79,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)saveContext;
 
     - (void)regenThumbnail;
-
 
     - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
     - (void)initalizeMainDataTable;

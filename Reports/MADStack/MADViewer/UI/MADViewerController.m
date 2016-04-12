@@ -292,7 +292,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     // MARK: Reporting feature (number of results in main query)
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-
     RptqDocument *activeDocumentModel = [document activeDocumentModel];
 
     [document initalizeMainQuery:activeDocumentModel];

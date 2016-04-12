@@ -445,9 +445,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (image != nil) {
 
             UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [MADocument isRetnaDisplay] ?
-                                    MADDocumentInfoKeyThumbnailRetna :
-                                    MADDocumentInfoKeyThumbnailStandard;
+            NSString *key = [MADocument isRetnaDisplay] ? MADDocumentInfoKeyThumbnailRetna :
+                                                          MADDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
 
         }
