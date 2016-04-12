@@ -72,7 +72,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @protocol MADDataTableAggregateResultesProtocol <NSObject>
 
-- (id)zAggregateType:(MTAggregateGroupByType)groupByType
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
                      function:(MTAggregateFunctionType)function
                      fieldKey:(NSString *)fieldKey
                     groupKeys:(NSArray *)groupKeys
@@ -83,24 +83,24 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @interface MTReportViewerPrintPageRenderer ()
 
-@property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
+    @property (nonatomic, strong) MTReportFormatter *reportFormatter;
+    @property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
 
-@property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
+    @property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
+    @property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
 
-@property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
-@property (nonatomic, assign) CGSize printableSize;
-@property (nonatomic, assign) CGSize cachedPageSize;
-@property (nonatomic, assign) CGRect cachedPageRect;
-@property (nonatomic, assign) bool showWaterMark;
+    @property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
 
-@property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
-@property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
-@property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
-@property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
+    @property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
+    @property (nonatomic, assign) CGSize printableSize;
+    @property (nonatomic, assign) CGSize cachedPageSize;
+    @property (nonatomic, assign) CGRect cachedPageRect;
+    @property (nonatomic, assign) bool showWaterMark;
 
-@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
-@property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
+    @property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
+    @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
+    @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
+    @property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
 @end
 
@@ -153,92 +153,46 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     return _textRepresentation;
 }
 
-- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size
-                    edgeEffect:(BOOL)edgeEffect
-                    zoomEffect:(BOOL)zoomEffect
-                  squareEffect:(BOOL)squareEffect
-                    cornerSize:(CGFloat)cornerSize
-                         scale:(CGFloat)scale {
+static inline CGFloat SizeWidthImage(CGFloat size, CGRect rect);
+static inline CGFloat SizeWidthImage(CGFloat size, CGRect rect) {
+    return (size * rect.size.width) / rect.size.height;
+}
+
+static inline CGRect RectZoomRect(CGFloat size, CGRect rect);
+static inline CGRect RectZoomRect(CGFloat size, CGRect rect) {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, SizeWidthImage(size, rect), size);
+}
+
+static inline CGRect RectPathRect(CGRect zoomRect, CGFloat scale);
+static inline CGRect RectPathRect(CGRect zoomRect, CGFloat scale) {
+    return CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
+}
+
+static inline CGFloat PointStartPointY(CGRect pathRect) {
+    return pathRect.origin.y + pathRect.size.height;
+}
+
+static inline CGFloat PointStartPointX(CGRect pathRect) {
+    return pathRect.origin.x + pathRect.size.width;
+}
+
+static inline CGPoint PointTopRight(CGRect pathRect) {
+    return CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
+}
+
+- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size edgeEffect:(bool)edgeEffect
+                    zoomEffect:(bool)zoomEffect squareEffect:(bool)squareEffect
+                    cornerSize:(CGFloat)cornerSize scale:(CGFloat)scale {
+    
     size = size * scale;
     cornerSize = cornerSize * scale;
-    CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
-    CGRect zoomRect = CGRectMake(CGPointZero.x, CGPointZero.y, imageSizeWidth, size);
-    CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
-    CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
-    CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
-    CGPoint topRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
-    CGPoint bottomRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, startPointY);
     
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    if (zoomEffect) {
-        CGMutablePathRef cornerPath = CGPathCreateMutable();
-        CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
-        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, cornerPath);
-        CGContextClosePath (context);
-        CGContextClip(context);
-        CGPathRelease(cornerPath);
-    }
-    
-    if (edgeEffect) {
-
-        CGMutablePathRef zigPath = CGPathCreateMutable();
-        CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
-
-        //zig
-        CGFloat zigDivisor = 4.0000f;
-        const unsigned int topRandNumber = 4;
-        
-        CGFloat numberOfZigs = pathRect.size.height / zigDivisor;
-        for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
-            NSUInteger zigNumber = madRandomNumberBetween(0, topRandNumber);
-            CGFloat zigReal = zigNumber / scale;
-            CGFloat zigDistance = (CGFloat)pow(zigNumber, 1.0001) + zigReal;
-            CGFloat zigX = topRightPoint.x - zigDistance;
-            CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
-            CGPoint zigPoint = CGPointMake(zigX, zigY);
-            CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
-        }
-        CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, zigPath);
-        CGContextClip(context);
-        CGPathRelease(zigPath);
-        
-        
-        CGMutablePathRef zagPath = CGPathCreateMutable();
-        CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
-        CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
-        
-        //zag
-        CGFloat zagDivisor = 4.0000f;
-        CGFloat numberOfZags = pathRect.size.height / zagDivisor;
-        for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
-            
-            NSUInteger zagNumber = madRandomNumberBetween(0, topRandNumber);
-            CGFloat zagReal = zagNumber / scale;
-            CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
-            CGFloat zagDistance = (CGFloat)pow(zagNumber, 1.0001) + zagReal;
-            CGFloat zagY = bottomRightPoint.y - zagDistance;
-            CGPoint zagPoint = CGPointMake(zagX, zagY);
-            CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
-        }
-        CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, zagPath);
-        CGContextClip(context);
-        CGPathRelease(zagPath);
-    }
-    
+    if (zoomEffect) { [self drawZoomEffectWithPathRect:RectPathRect(RectZoomRect(size, rect), scale) cornerSize:cornerSize context:context]; }
+    if (edgeEffect) { [self drawEdgeEffectWithPathRect:RectPathRect(RectZoomRect(size, rect), scale) scale:scale context:context]; }
 
     CGContextSaveGState(context);
     
@@ -247,27 +201,96 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     CGContextRestoreGState(context);
         
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *croppedImage;
-    
-    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
-    croppedImage = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    UIGraphicsEndImageContext();
-    
-    if (squareEffect) {
-        croppedImage = [MADImage imageMadeSquare:croppedImage];
+
+    if (zoomEffect) {
+        CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? RectZoomRect(size, rect) : rect);
+        image = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        UIGraphicsEndImageContext();
     }
     
-    return croppedImage;
+    if (squareEffect) { image = [MADImage imageMadeSquare:image]; }
+    
+    return image;
+}
+
+
+- (void)drawZoomEffectWithPathRect:(CGRect)pathRect cornerSize:(CGFloat)cornerSize context:(CGContextRef)context {
+    CGPoint startPoint = CGPointMake(pathRect.origin.x, PointStartPointY(pathRect));
+    CGPoint topRightPoint = PointTopRight(pathRect);
+    CGPoint bottomRightPoint = CGPointMake(PointStartPointX(pathRect), PointStartPointY(pathRect));
+    CGMutablePathRef cornerPath = CGPathCreateMutable();
+    CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
+    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+    CGContextAddPath(context, cornerPath);
+    CGContextClosePath (context);
+    CGContextClip(context);
+    CGPathRelease(cornerPath);
 
 }
 
+- (void)drawEdgeEffectWithPathRect:(CGRect)pathRect scale:(CGFloat)scale context:(CGContextRef)context {
+
+    CGPoint startPoint = CGPointMake(pathRect.origin.x, PointStartPointY(pathRect));
+    CGPoint topRightPoint = PointTopRight(pathRect);
+    CGPoint bottomRightPoint = CGPointMake(PointStartPointX(pathRect), PointStartPointY(pathRect));
+    CGMutablePathRef zigPath = CGPathCreateMutable();
+    CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
+    
+    //zig
+    CGFloat zigDivisor = 4.0000f;
+    const unsigned int topRandNumber = 4;
+    
+    CGFloat numberOfZigs = pathRect.size.height / zigDivisor;
+    for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
+        NSUInteger zigNumber = madRandomNumberBetween(0, topRandNumber);
+        CGFloat zigReal = zigNumber / scale;
+        CGFloat zigDistance = (CGFloat)pow(zigNumber, 1.0001) + zigReal;
+        CGFloat zigX = topRightPoint.x - zigDistance;
+        CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
+        CGPoint zigPoint = CGPointMake(zigX, zigY);
+        CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
+    }
+    CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+    CGContextAddPath(context, zigPath);
+    CGContextClip(context);
+    CGPathRelease(zigPath);
+    
+    
+    CGMutablePathRef zagPath = CGPathCreateMutable();
+    CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
+    CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
+    
+    //zag
+    CGFloat zagDivisor = 4.0000f;
+    CGFloat numberOfZags = pathRect.size.height / zagDivisor;
+    for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
+        
+        NSUInteger zagNumber = madRandomNumberBetween(0, topRandNumber);
+        CGFloat zagReal = zagNumber / scale;
+        CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
+        CGFloat zagDistance = (CGFloat)pow(zagNumber, 1.0001) + zagReal;
+        CGFloat zagY = bottomRightPoint.y - zagDistance;
+        CGPoint zagPoint = CGPointMake(zagX, zagY);
+        CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
+    }
+    CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+    CGContextAddPath(context, zagPath);
+    CGContextClip(context);
+    CGPathRelease(zagPath);
+}
+
 - (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
-    return [self thumbnailWithRect: [MTPaper rectLetter]
-                              size: MADFloat_1024
-                        edgeEffect: YES
-                        zoomEffect: YES
-                      squareEffect: NO
+    return [self thumbnailWithRect: [MTPaper rectLetter] size: MADFloat_1024 edgeEffect: true
+                        zoomEffect: true squareEffect: false
                         cornerSize: traits.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f
                              scale: traits.displayScale];
 }

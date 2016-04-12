@@ -933,9 +933,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: self
-                                                                             options: MTReportFormatterOptionsNone];
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithDocument: self options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.cachedDelegate = self;
     reportFormatter.datasource = self;
@@ -1027,15 +1025,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (MTReportViewerPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: self
-                                                                             options: MTReportFormatterOptionsMargin];
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithDocument: self options: MTReportFormatterOptionsMargin];
     reportFormatter.cachedDelegate = self;
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.datasource = self;
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                                              dataTable: self.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter dataTable: self.mainDataTable];
     self.printingReportFormatter = reportFormatter;
     return printPageRender;
     
@@ -1156,7 +1151,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                                                         (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
                                                                         (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
                                                        size: MADFloat_1024
-                                                 edgeEffect: NO zoomEffect: NO squareEffect: YES
+                                                 edgeEffect: false zoomEffect: false squareEffect: true
                                                  cornerSize: 0.0000f scale: 1.0000f];
     return thumbnail;
 }

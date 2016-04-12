@@ -16,9 +16,9 @@
 @interface MADNavigationController : UINavigationController
     <MADViewControllerDocumentProtocol, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) MADocument *document;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 

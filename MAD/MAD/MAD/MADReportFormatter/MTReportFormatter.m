@@ -47,6 +47,7 @@ NSString * const MTNullIdentifier = @"(null)";
 @interface MTReportFormatter ()
 
     @property (nonatomic, weak, readwrite) MADocument *layout;
+
     @property (nonatomic, assign) MTReportFormatterOptions options;
 
     @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
@@ -101,15 +102,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (instancetype)newReportFormatterWithDocument: (MADocument *)layout
-                                       options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
-    return result;
-}
-
-+ (instancetype)reportFormatterWithQuery: (MTQuery *)query
-                                  layout: (MADocument *)layout
-                                 options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
++ (instancetype)newReportFormatterWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
 }

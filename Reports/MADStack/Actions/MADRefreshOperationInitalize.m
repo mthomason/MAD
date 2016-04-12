@@ -104,9 +104,7 @@
         document.sectionLayoutManagers = sectionLayoutManagers;
         
         
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: document.mainQuery
-                                                                                  layout: document
-                                                                                 options: MTReportFormatterOptionsNone];
+        MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithDocument: document options: MTReportFormatterOptionsNone];
         reportFormatter.dataDelegate = document;
         reportFormatter.cachedDelegate = document;
         reportFormatter.datasource = document;

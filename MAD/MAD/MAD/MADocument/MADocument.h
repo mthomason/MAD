@@ -23,7 +23,6 @@
 
 
 extern NSString * const MADMimeType;
-extern NSString * const MADDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class NSManagedObjectID, UIImage, UIPrintPageRenderer, MADErrorContainer;
@@ -99,7 +98,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
     - (void)removeGroup:(RptqQueryGroup *)group fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (UIImage *)fullyRenderedThumbnail;
     - (NSDictionary *)layoutHeightsBySectionKey;
 
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
