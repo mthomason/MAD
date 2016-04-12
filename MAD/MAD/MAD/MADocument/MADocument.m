@@ -916,14 +916,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeMainDataTable {
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypePhysical);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSString *filename = self.filename;
-    NSNumber *objectIdV =  @(filename.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable newDataTableWithDefinition:parameters];
+    NSString *filename = [self filename];
+    NSLog(@"Filename:   %@ (%s)", filename, __func__);
+    
+    MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
     datatable.cacheDelegate = self;
+    
     NSString *cacheName = [datatable filenameMDCache];
     NSURL *cacheUrl = [self cacheUrlForFilename:cacheName];
     self.urlDataTableCache = cacheUrl;
