@@ -33,6 +33,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 @implementation MADLocalFileCoordinator
 
 @synthesize delegate = _delegate;
+@dynamic documentsDirectory;
 
 #pragma mark - Initialization
 
