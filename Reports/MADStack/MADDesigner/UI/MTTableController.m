@@ -106,7 +106,11 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     self.navigationController.toolbarHidden = YES;
     self.toolbarItems = nil;
     
-    [self getCredentialsForDatabaseConnection:self.query.databaseConnection];
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: self.query.databaseConnection
+                                                                                                          viewController: self];
+    [getCredentialsOperation addObserver:self];
+    
+    [self.credentialQueue addOperation: getCredentialsOperation];
 
 }
 
@@ -173,16 +177,15 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
 #pragma mark - Helpers
 
 - (void)invalidateLayout {
-    UICollectionView *collectionView = self.collectionView;
-    [collectionView reloadData];
+
+    [self.collectionView reloadData];
     [(MADTableLayout *)self.collectionViewLayout setColumnCount:self.columnCount andRowCount:self.rowCount];
     
     for (NSUInteger i=0; i<self.columnCount; i++) {
 
         __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
         NSString *reuseId = [self reuseIdForColumn:(NSInteger)i];
-        [self.collectionView registerClass: classCollectionViewCell
-                forCellWithReuseIdentifier: reuseId];
+        [self.collectionView registerClass: classCollectionViewCell forCellWithReuseIdentifier: reuseId];
         
         __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
         NSString *reuseIdHeader = [self reuseIdSupplementForColumn:(NSInteger)i];
@@ -225,11 +228,11 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
 }
 
 - (NSUInteger)rowCount {
-    return [[self datatable] numberOfRows];
+    return [self.datatable numberOfRows];
 }
 
 - (NSUInteger)columnCount {
-    return [[self datatable] numberOfColumns];
+    return [self.datatable numberOfColumns];
 
 }
 #pragma mark - Delegates
@@ -345,31 +348,11 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
                     
                     if (!success && error) {
                         
-                        
-                        
                     }
-                    
-                    
                 });
-                
             }];
-            
-            
         }
-        
     }
-}
-
-- (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
-    // Operation: Get credentials.
-    // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                          viewController: self];
-    [getCredentialsOperation addObserver:self];
-    
-    [self.credentialQueue addOperation: getCredentialsOperation];
-    
-    return nil;
 }
 
 @end
