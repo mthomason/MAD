@@ -1410,16 +1410,18 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: indexPathUpdate];
     RptqDatabaseSchemaTable *schemaTable = table.databaseSchemaTable;
 
-    MTQuerySampleDataTable *rquery = [[MTQuerySampleDataTable alloc] initWithObject:schemaTable];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:schemaTable.inDatabase.ownedByUser];
+
+    MTQuerySampleDataTable *querySampleDataTable = [[MTQuerySampleDataTable alloc] initWithDatabaseConnection: databaseConnection databaseSchemaTable: schemaTable];
     
-    MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
     
-    MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     
-    sampleDataTitleView.text = schemaTable.name;
-    
+    MADTableController *tableController = [[MADTableController alloc] initWithQuery:querySampleDataTable];
     tableController.navigationItem.title = schemaTable.name;
-    tableController.navigationItem.titleView = sampleDataTitleView;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = schemaTable.name;
+    tableController.navigationItem.titleView = titleView;
     
     [self.navigationController pushViewController: tableController animated: YES];
 

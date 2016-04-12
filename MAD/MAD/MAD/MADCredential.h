@@ -46,6 +46,7 @@ typedef NS_ENUM(short, MADCredentialSource) {
 
     - (MADCredential *)credentials;
     - (bool)gotCredentials;
+    - (bool)shortCircut;
 
 @end
 

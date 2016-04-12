@@ -11,9 +11,17 @@
 
 #import "MTQuery.h"
 
+@class MTDatabaseConnection;
+@class RptqDatabaseSchemaTable;
+
 @interface MTQuerySampleDataTable : MTQuery
 
-- (NSString *)getSqlWithError:(NSError **)error;
+
+    @property (nonatomic, copy, readonly) MTDatabaseConnection *databaseConnection;
+    - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection
+                           databaseSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable;
+
+    - (NSString *)getSqlWithError:(NSError **)error;
 
 @end
 

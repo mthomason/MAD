@@ -237,20 +237,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return progressView;
 }
 
-- (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
-    
-    // Operation: Get credentials.
-    // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                          viewController: self];
-    [getCredentialsOperation addObserver:self];
-    
-    [self.credentialQueue addOperation: getCredentialsOperation];
-
-    self.getCredentialsOperation = getCredentialsOperation;
-    return nil;
-}
-
 - (void)disableUserInteractionWithMessage:(NSString *)message {
     [self removeKeyboard];
     [self disableTextFields];

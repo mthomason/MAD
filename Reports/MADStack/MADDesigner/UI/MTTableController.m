@@ -24,6 +24,7 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
 #import <MAD/MTQuery.h>
+#import <MAD/MTQuerySampleDataTable.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -36,12 +37,13 @@
     bool _firstTimeViewDidAppear;
 }
 
-    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, strong) MTQuerySampleDataTable *query;
     @property (nonatomic, strong) MTDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
     @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
     @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
+    @property (nonatomic, copy) MADCredential *credentials;
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
 
 @end
@@ -67,7 +69,7 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuerySampleDataTable *)query {
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
@@ -76,12 +78,17 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     if (self = [super initWithCollectionViewLayout:tableLayout]) {
         _firstTimeViewDidAppear = true;
         [query database].delegate = self;
+        
         MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         tableLayout.delegate = self;
+        
         MADDataFormatter *tableFormatter = [[MADDataFormatter alloc] initWithQuery:query];
         self.tableFormatter = tableFormatter;
         self.query = query;
+        
+        MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
+        self.credentialQueue = credentialQueue;
         
     }
     return self;
@@ -98,6 +105,9 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
     self.navigationController.toolbarHidden = YES;
     self.toolbarItems = nil;
+    
+    [self getCredentialsForDatabaseConnection:self.query.databaseConnection];
+
 }
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
@@ -115,36 +125,7 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicator startAnimating];
-    activityIndicator.hidden = NO;
-    activityIndicator.hidesWhenStopped = YES;
-    
-    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        
-        NSError * __autoreleasing *error = NULL;
-        MTQuery *query = self.tableFormatter.query;
-        bool success = [query.database executeQuery:query withError:error];
 
-                
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [activityIndicator stopAnimating];
-            [self invalidateLayout];
-        }];
-        
-        
-        if (!success && error) {
-            
-            
-            
-        }
-
-        
-    });
 }
 
 /*    NSError * __autoreleasing qerror = NULL;
@@ -255,7 +236,7 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
 
 #pragma mark MTDatabaseProtocol
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    
+    return self.credentials;
 }
 
 #pragma mark Collection View Datasource
@@ -330,16 +311,56 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        //[self removeObserverFromObjectForProgress:operation];
-        //[self.delegate viewControllerDidFinish: self];
-        //self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
-        //[self enableTextFields];
-    }];
+    if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+    
+        if (((id <MADOperationHoldsCredentialsProtocol>)operation).gotCredentials || ((id <MADOperationHoldsCredentialsProtocol>)operation).shortCircut) {
+
+            if (((id <MADOperationHoldsCredentialsProtocol>)operation).credentials != nil) {
+                MADCredential *credentials = ((id <MADOperationHoldsCredentialsProtocol>)operation).credentials;
+                self.credentials = credentials.copy;
+            }
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+                [activityIndicator startAnimating];
+                activityIndicator.hidden = NO;
+                activityIndicator.hidesWhenStopped = YES;
+                
+                UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+                [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
+                
+                dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                dispatch_async(queue, ^{
+                    
+                    NSError * __autoreleasing *error = NULL;
+                    MTQuery *query = self.tableFormatter.query;
+                    bool success = [query.database executeQuery:query withError:error];
+                    
+                    
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        [activityIndicator stopAnimating];
+                        [self invalidateLayout];
+                    }];
+                    
+                    
+                    if (!success && error) {
+                        
+                        
+                        
+                    }
+                    
+                    
+                });
+                
+            }];
+            
+            
+        }
+        
+    }
 }
 
 - (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
-    
     // Operation: Get credentials.
     // ---------------------------------------------------
     MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
@@ -348,8 +369,7 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     
     [self.credentialQueue addOperation: getCredentialsOperation];
     
-    //self.getCredentialsOperation = getCredentialsOperation;
-    //return nil;
+    return nil;
 }
 
 @end

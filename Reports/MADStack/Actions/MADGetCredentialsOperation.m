@@ -36,7 +36,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     @property (nonatomic, assign) bool passwordSet;
     @property (nonatomic, assign) bool usernameSet;
 
-    @property (nonatomic, assign) bool shortCircut;
+    @property (nonatomic, assign, readwrite) bool shortCircut;
 
 @end
 

@@ -27,15 +27,33 @@
 @interface MTQuerySampleDataTable ()
     <MTDatabaseProtocol>
 
-@property (nonatomic, strong) MTDataTable *dataTableMaxFieldLength;
+    @property (nonatomic, strong) MTDataTable *dataTableMaxFieldLength;
+    @property (nonatomic, copy, readwrite) MTDatabaseConnection *databaseConnection;
 
 @end
 
 @implementation MTQuerySampleDataTable
 
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection
+                       databaseSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable {
+ 
+    if (self = [super initWithObject:nil]) {
+    
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: databaseSchemaTable.objectID.URIRepresentation.absoluteString];
+        self.database = db;
+        self.dataTableMaxFieldLength = dataTable;
+        self.queryObject = databaseSchemaTable;
+        self.databaseConnection = databaseConnection.copy;
+
+    }
+    return self;
+    
+}
+
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
@@ -45,7 +63,7 @@
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;
         self.queryObject = object;
-
+        self.databaseConnection = databaseConnection.copy;
     }
     return self;
 }

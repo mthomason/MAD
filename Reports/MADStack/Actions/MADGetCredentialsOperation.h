@@ -21,7 +21,8 @@
                                 viewController: (UIViewController *)viewController;
     @property (readonly) MADCredential *credentials;
     @property (readonly) bool gotCredentials;
-
+    @property (nonatomic, assign, readonly) bool shortCircut;
+    
 @end
 
 #endif
