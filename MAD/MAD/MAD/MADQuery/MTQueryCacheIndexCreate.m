@@ -70,7 +70,7 @@
                 
                 MADDataColumn *column = self.columns[sortDescriptor.key];
                 NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:column.nativeColumnType
+                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:column.columnType
                                                                          ascending:sortDescriptor.ascending];
                 [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
                 sortCounter++;

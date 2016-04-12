@@ -45,7 +45,7 @@ static NSString * const MADIdentifierReportObject       = @"o";
 }
 
 - (MNSDocumentSectionType)sectionType {
-    return ((NSNumber *)self[MTReportSectionType]).unsignedIntegerValue;
+    return ((NSNumber *)self[MTReportSectionType]).shortValue;
 }
 
 - (NSNumber *)detailRowId {

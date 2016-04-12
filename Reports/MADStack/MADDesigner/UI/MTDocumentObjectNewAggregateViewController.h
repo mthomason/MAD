@@ -38,7 +38,7 @@
 
     @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
     @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-    @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
+    @property (nonatomic, assign) NSUInteger groupTypeSectionNumber;
     @property (nonatomic, strong) NSManagedObjectID *fieldObjectId;
     @property (nonatomic, strong) RptqQueryField *fieldObject;
 

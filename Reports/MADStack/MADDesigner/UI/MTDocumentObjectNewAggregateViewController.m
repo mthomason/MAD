@@ -152,26 +152,26 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
                 NSUInteger group = [self groupTypeSectionNumber];
                 NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
                 break;
                 
             }
             case MTAggregateGroupByTypeReport: {
                 
                 NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
                 
                 NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
             }
             default:
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = @"";
                 break;
         }
         
@@ -313,9 +313,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject {
-    self.aggregateFunctionType = aggregateDocumentObject.function.integerValue;
-    self.aggregateGroupByType = aggregateDocumentObject.groupType.integerValue;
-    self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber.integerValue;
+    self.aggregateFunctionType = aggregateDocumentObject.function.shortValue;
+    self.aggregateGroupByType = aggregateDocumentObject.groupType.shortValue;
+    self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber.unsignedIntegerValue;
     self.fieldObjectId = aggregateDocumentObject.aggregateField.objectID;
     self.fieldObject = aggregateDocumentObject.aggregateField;
     self.editmode = YES;

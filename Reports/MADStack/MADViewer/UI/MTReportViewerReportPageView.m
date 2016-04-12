@@ -82,7 +82,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     if (!self.drawBlankPage) {
         id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
         MTReportViewerPrintPageRenderer *printPageRender = [delegatePage printPageRender];
-        [printPageRender drawPageAtIndex:delegatePage.pageNumber - 1 inRect:rect];
+        [printPageRender drawPageAtIndex:(NSInteger)delegatePage.pageNumber - 1 inRect:rect];
     }
 }
 
@@ -202,7 +202,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
         MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:lastCacheDate];
         timeSinceRefrehLabel.text = dateStringAndInterval.former;
-        MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
+        MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).shortValue;
         
         NSTimeInterval updateLabelInSeconds = [MADDateFromTimeFormatter timeIntervalForResolution:resolution];
         

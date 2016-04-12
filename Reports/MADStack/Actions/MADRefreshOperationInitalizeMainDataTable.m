@@ -51,7 +51,6 @@
     [datatable loadFromCacheWithUrl:document.urlDataTableCache];
     document.mainDataTable = datatable;
     
-    
     [self finish];
 }
 

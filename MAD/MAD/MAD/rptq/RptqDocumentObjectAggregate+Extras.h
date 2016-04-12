@@ -16,7 +16,7 @@ extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;
 
-typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
+typedef NS_ENUM(short, MTAggregateFunctionType) {
     MTAggregateFunctionTypeSum = 2,
     MTAggregateFunctionTypeMean = 3,
     MTAggregateFunctionTypeFirst = 5,
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     MTAggregateFunctionInputTypeFormula
 };
 
-typedef NS_ENUM(NSUInteger, MTAggregateGroupByType) {
+typedef NS_ENUM(short, MTAggregateGroupByType) {
     MTAggregateGroupByTypePage = 2,
     MTAggregateGroupByTypeReport = 3,
     MTAggregateGroupByTypeSection = 5,

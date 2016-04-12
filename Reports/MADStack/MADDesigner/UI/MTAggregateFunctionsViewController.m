@@ -17,8 +17,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @interface MTAggregateFunctionsViewController ()
 
-@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
-
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
 @end
 
@@ -30,7 +29,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     if ([segue.identifier isEqualToString:@"MTSegueSelectAggregateFunction"]) {
         UITableViewCell *tableViewCell = (UITableViewCell *)sender;
         [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-        [self setSelectedFunctionType: [tableViewCell tag]];
+        self.selectedFunctionType = (MTAggregateFunctionType)tableViewCell.tag;
     }
 }
 
@@ -44,6 +43,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     for (NSInteger sectionCtr = 0; sectionCtr < numberOfSections; sectionCtr++) {
         NSInteger numberOfRows = [self.tableView numberOfRowsInSection:sectionCtr];
         for (NSInteger rowCtr = 0; rowCtr < numberOfRows; rowCtr++) {
+        
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
             UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (tableViewCell.tag == [self selectedFunctionType]) {
@@ -110,11 +110,8 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     
     UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-    [self setSelectedFunctionType: [tableViewCell tag]];
-    
-    if (self.delegate != nil) {
-        [self.delegate didSelectFunction: [self selectedFunctionType]];
-    }
+    [self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
+    [self.delegate didSelectFunction: [self selectedFunctionType]];
 
 }
 

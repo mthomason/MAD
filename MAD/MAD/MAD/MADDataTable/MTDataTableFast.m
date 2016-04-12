@@ -34,23 +34,22 @@
 
 @interface MTDataTableFast ()
 
-@property (nonatomic, strong) MTDatabaseSqlite3 *databaseForInserts;
-@property (nonatomic, strong, readwrite) MTDatabaseSqlite3 *databaseForSelects;
+    @property (nonatomic, strong) MTDatabaseSqlite3 *databaseForInserts;
+    @property (nonatomic, strong, readwrite) MTDatabaseSqlite3 *databaseForSelects;
 
-@property (nonatomic, strong) NSURL *urlFastCache;
+    @property (nonatomic, strong) NSURL *urlFastCache;
 
-@property (nonatomic, assign) bool bulkInsertLoop;
-@property (nonatomic, assign) bool sortDescriptorsSet;
+    @property (nonatomic, assign) bool bulkInsertLoop;
+    @property (nonatomic, assign) bool sortDescriptorsSet;
 
-@property (nonatomic, strong) NSMutableArray *groupKeys;
-@property (nonatomic, strong) NSArray *groupTableNames;
+    @property (nonatomic, strong) NSMutableArray *groupKeys;
+    @property (nonatomic, strong) NSArray *groupTableNames;
 
-@property (nonatomic, strong) MADIndex *lastDataForCacheId;
+    @property (nonatomic, strong) MADIndex *lastDataForCacheId;
 
-@property (nonatomic, strong) MTQueryCacheAddRow *bulkInsertQuery;
+    @property (nonatomic, strong) MTQueryCacheAddRow *bulkInsertQuery;
 
-@property (nonatomic, strong) dispatch_queue_t queueBulkAdd;
-
+    @property (nonatomic, strong) dispatch_queue_t queueBulkAdd;
 
 @end
 
