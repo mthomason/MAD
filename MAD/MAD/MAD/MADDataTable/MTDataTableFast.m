@@ -752,7 +752,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
-    NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
+    NSAssert(keys.count == groupLevel, @"Need a key for each previous group.");
     
     NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
@@ -764,28 +764,17 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                          @"v" : key};
         [whereClause addObject:whereStatement];
     }
+    
+    MTQuery *query = [[MTQueryCacheSelectGroupKeys alloc] initWithTableName:[self tableName] selectPredicates:whereClause fieldNames:columnKeys accending:accending ? true : false columns:self.columns];
 
-    NSDictionary *querySelect = @{
-                                  @(MTQuerySelectFieldKeys) : columnKeys,
-                                  @(MTQuerySelectTableName) : [self tableName],
-                                  @(MTQuerySelectSortAccending) : @(accending),
-                                  @(MTQuerySelectPredicates) : whereClause,
-                                  @(MTQuerySelectColumns) : self.columns
-                                  };
-    
-    MTQuery *query = [[MTQueryCacheSelectGroupKeys alloc] initWithObject:querySelect];
-    
     NSURL *urlFastCache = [self urlFastCache];
     
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
     
-    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                             columns: self.columns
-                                                                          columnKeys: columnKeys
-                                                                               query: query];
-    [enumerator setAddRowId:NO];
-    [enumerator setSingleColumnNoWrapper:YES];
-    
+    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection columns: self.columns
+                                                                                                           columnKeys: columnKeys query: query];
+    enumerator.addRowId = NO;
+    enumerator.singleColumnNoWrapper = YES;
     return enumerator;
 }
 

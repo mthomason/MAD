@@ -16,12 +16,41 @@ static NSString * const JoinPredicateWhere =    @" WHERE ";
 static NSString * const SqlAnd =                @" AND ";
 
 @interface MTQueryCacheSelectGroupKeys ()
-
     @property (nonatomic, strong) NSString *sql;
-
 @end
 
 @implementation MTQueryCacheSelectGroupKeys
+
+- (instancetype)initWithTableName:(NSString *)tableName selectPredicates:(NSArray *)selectPredicates fieldNames:(NSArray *)fieldNames accending:(bool)accending columns:(NSDictionary *)columns {
+
+    if (self = [super init]) {
+    
+        NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
+        int i = 0;
+        for (NSDictionary *predicate in selectPredicates) {
+            
+            NSString * __weak left = predicate[MTQueryKeyPredicateColumn];
+            NSString * __weak right = predicate[MTQueryKeyPredicateValue];
+            if (i > 0) {
+                [sqlPredicate appendString:SqlAnd];
+            }
+            [sqlPredicate appendFormat:@"%@ = \"%@\"", left, right];
+            i++;
+        }
+        
+        NSString *columnName = fieldNames.firstObject;
+        MADDataColumn * __weak dataColumn = columns[columnName];
+        
+        NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+        
+        NSString *sqlSpeedSortingDescription = [MTDatabaseSqlite3 sortDescForColumnType:dataColumn.columnType ascending:accending];
+        NSString *sqlSpeedSort = [NSString stringWithString:sqlSpeedSortingDescription];
+        NSString *sql = [[NSString alloc] initWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@", columnName, tableName, sqlPredicate, columnName, sqlSpeedSort];
+        self.sql = sql;
+    }
+    return self;
+
+}
 
 - (instancetype)initWithObject:(id)object {
 

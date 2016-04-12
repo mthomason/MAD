@@ -13,6 +13,8 @@
 
 @interface MTQueryCacheSelectGroupKeys : MTQuery
 
+    - (instancetype)initWithTableName:(NSString *)tableName selectPredicates:(NSArray *)selectPredicates fieldNames:(NSArray *)fieldNames accending:(bool)accending columns:(NSDictionary *)columns;
+
 @end
 
 #endif
