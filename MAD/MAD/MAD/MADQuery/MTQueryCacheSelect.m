@@ -18,15 +18,13 @@
 
 @interface MTQueryCacheSelect ()
 
-@property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *fieldKeys;
-@property (nonatomic, strong) NSArray *predicates;
-@property (nonatomic, strong) NSArray *sortDescriptors;
-@property (nonatomic, assign) NSUInteger offset;
-@property (nonatomic, assign) NSUInteger limit;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) NSString *tableName;
+    @property (nonatomic, strong) NSArray *fieldKeys;
+    @property (nonatomic, strong) NSArray *predicates;
+    @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, assign) NSUInteger offset;
+    @property (nonatomic, assign) NSUInteger limit;
 
 @end
 

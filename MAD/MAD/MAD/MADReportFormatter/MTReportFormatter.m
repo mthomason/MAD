@@ -322,9 +322,7 @@ NSString * const MTNullIdentifier = @"(null)";
     for (NSUInteger groupLevel = lastValues.count; groupLevel > 0; groupLevel--) {
         @autoreleasepool {
             NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel - 1];
-            NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel - 1]
-                                                          withValue: currentValues[groupLevel - 1]
-                                                      usingSelector: sortDesc.selector];
+            NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel - 1] withValue: currentValues[groupLevel - 1] usingSelector: sortDesc.selector];
             
             if (comparsonResult != NSOrderedSame) {
                 RptqQueryGroup *group = self.sortedQueryGroups[groupLevel - 1];
@@ -347,9 +345,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 id value2 = currentValues[groupLevel];
                 
                 NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
-                NSComparisonResult comparsonResult = [self compareValue:value
-                                                              withValue:value2
-                                                          usingSelector:sortDesc.selector];
+                NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:sortDesc.selector];
                 
                 newHeader = comparsonResult != NSOrderedSame;
             }

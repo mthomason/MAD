@@ -193,11 +193,7 @@
                     errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
                 } else {
                     
-                    [self fetchResultsFromConnection:connection
-                                       intoDataTable:dataTable
-                                       withStatement:myStatement
-                                               fetch:mf
-                                         andBindings:bindings];
+                    [self fetchResultsFromConnection:connection intoDataTable:dataTable withStatement:myStatement fetch:mf andBindings:bindings];
                     
                     for (NSUInteger x=0; x < myStatement->field_count;x++) {
                         free(bindings[x].buffer);

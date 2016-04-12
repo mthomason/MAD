@@ -336,23 +336,29 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     if (self.bulkInsertLoop) {
         @autoreleasepool {
-
+/*
             NSArray *rowData = [NSArray arrayWithArray: row];
             self.bulkInsertQuery.rowData = rowData;
-            
-            NSString * __strong sql = [[NSString alloc] initWithString:[self.bulkInsertQuery getSqlWithError:nil]];
-            NSArray * __strong binaryBindings = [[NSArray alloc] initWithArray:self.bulkInsertQuery.binaryBindings];
-            NSArray * __strong fieldKeys = [[NSArray alloc] initWithArray:self.bulkInsertQuery.fieldKeys];
+            NSString *sql = [[NSString alloc] initWithString:[self.bulkInsertQuery getSqlWithError:nil]];
+            NSArray *binaryBindings = [[NSArray alloc] initWithArray:self.bulkInsertQuery.binaryBindings];
+            NSArray *fieldKeys = [[NSArray alloc] initWithArray:self.bulkInsertQuery.fieldKeys];
             
             MTDatabaseSqlite3 * dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
             struct sqlite3 *db = dbForInserts.database;
+*/
 
-            [MTDatabaseSqlite3 executeQueryWithSql: sql
-                                          database: db
-                               queryBinaryBindings: binaryBindings
-                                    queryFieldKeys: fieldKeys
-                         queryPartOfTransactionSet: YES];
-       
+            NSArray *rowData = [NSArray arrayWithArray: row];
+            self.bulkInsertQuery.rowData = rowData;
+            NSString *sql = [self.bulkInsertQuery getSqlWithError:nil];
+            NSArray * __weak binaryBindings = self.bulkInsertQuery.binaryBindings;
+            NSArray * __weak fieldKeys = self.bulkInsertQuery.fieldKeys;
+
+            MTDataTableFast * __weak weakself = self;
+            dispatch_async(self.queueBulkAdd, ^{
+
+                [MTDatabaseSqlite3 executeQueryWithSql: sql database: ((MTDatabaseSqlite3 *)weakself.databaseForInserts).database
+                                   queryBinaryBindings: binaryBindings queryFieldKeys: fieldKeys queryPartOfTransactionSet: YES];
+            });
         }
         
     } else {
