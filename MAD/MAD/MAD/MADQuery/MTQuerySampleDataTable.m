@@ -40,6 +40,7 @@
     if (self = [super initWithObject:nil]) {
     
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        NSLog(@"Identifier: %@ (%s)", ((NSManagedObject *)databaseSchemaTable).objectID.URIRepresentation.absoluteString, __func__);
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: databaseSchemaTable.objectID.URIRepresentation.absoluteString];
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;
@@ -59,6 +60,7 @@
 
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        NSLog(@"Identifier: %@ (%s)", ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString, __func__);
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;
@@ -74,6 +76,7 @@
                 
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        NSLog(@"Identifier: %@ (%s)", ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString, __func__);
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;

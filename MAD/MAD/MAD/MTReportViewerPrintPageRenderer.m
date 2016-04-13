@@ -83,8 +83,8 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @interface MTReportViewerPrintPageRenderer ()
 
-    @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-    @property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
+    @property (nonatomic, weak) MTReportFormatter *reportFormatter;
+    @property (nonatomic, weak) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
 
     @property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
     @property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
@@ -106,8 +106,9 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @implementation MTReportViewerPrintPageRenderer
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable {
-    return [self initWithReportFormatter:reportFormatter dataTable:dataTable andPrintableAreaSize:[MTPaper sizeLetter]];
++ (instancetype)newReportViewerPrintPageRendererWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
+    id reportViewerPrintPageRenderer = [[self alloc] initWithReportFormatter:reportFormatter dataTable:dataTable andPrintableAreaSize:printableAreaSize];
+    return reportViewerPrintPageRenderer;
 }
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
@@ -116,7 +117,6 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
         self.dataTable = (MTDataTableFast<MADDataTableAggregateResultesProtocol> *)dataTable;
         self.printableSize = printableAreaSize;
         self.reportFormatter = reportFormatter;
-        
     }
     return self;
 }

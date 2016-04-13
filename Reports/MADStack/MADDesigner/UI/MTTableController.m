@@ -79,7 +79,8 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
         _firstTimeViewDidAppear = true;
         [query database].delegate = self;
         
-        MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
+        NSLog(@"Filename:   %@ (%s)", ((NSManagedObject *)query.queryObject).objectID.URIRepresentation.absoluteString, __func__);
+        MTDataTable *datatable = [MTDataTable newDataTableOfType:MTDataTableTypeVirtual withObjectID:((NSManagedObject *)query.queryObject).objectID.URIRepresentation.absoluteString.hash];
         self.datatable = datatable;
         tableLayout.delegate = self;
         
@@ -112,15 +113,6 @@ static inline UIEdgeInsets CollectionViewContentInsets(id <UILayoutSupport>topLa
     
     [self.credentialQueue addOperation: getCredentialsOperation];
 
-}
-
-+ (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *type = [[NSNumber alloc] initWithUnsignedInteger: MTDataTableTypeVirtual];
-    NSNumber *objectIdV =  [[NSNumber alloc] initWithUnsignedInteger: objectID.URIRepresentation.absoluteString.hash];
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    return [MTDataTable newDataTableWithDefinition:parameters];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

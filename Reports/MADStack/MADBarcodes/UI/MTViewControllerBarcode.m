@@ -193,7 +193,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 + (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    return [MTDataTable newDataTableForIdentifier:[[objectID URIRepresentation] absoluteString]];
+    return [MTDataTable newDataTableForIdentifier:objectID.URIRepresentation.absoluteString];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

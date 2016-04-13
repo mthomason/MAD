@@ -11,19 +11,19 @@
 #endif
 
 #import "MTQuerySampleDataField.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "MTDatabase.h"
-#import <MADFoundation/MTDataTable.h>
-#import "MTDataTable+Factory.h"
-#import "RptqDatabase.h"
-#import "MTDatabaseConnection.h"
 #import <CoreData/NSManagedObjectID.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDatabase.h>
+#import <MADFoundation/MTDataTable.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabase.h>
 
 @interface MTQuerySampleDataField ()
     <MTDatabaseProtocol>
 
-@property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong) MTDataTable *datatable;
 
 @end
 
@@ -31,8 +31,8 @@
 
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
@@ -41,8 +41,8 @@
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         db.delegate = self;
         
-        NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
-        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:identifier];
+        NSLog(@"Identifier: %@ (%s)", ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString, __func__);
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString];
         self.datatable = dataTable;
         self.database = db;
         self.queryObject = object;

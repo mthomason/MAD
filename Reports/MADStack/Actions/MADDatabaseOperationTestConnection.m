@@ -118,6 +118,8 @@
     
     MTDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
+    
+    NSLog(@"Identifier: %@ (%s)", databaseConnection, __func__);
     MTDataTable *datatable = [MTDataTable newDataTableOfType: MTDataTableTypeVirtual withObjectID: databaseConnection.hash];
     self.datatable = datatable;
     

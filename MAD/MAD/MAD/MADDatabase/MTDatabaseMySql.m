@@ -101,6 +101,7 @@
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
     if (dbconn) {
+    
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         myFetch.delegate = self;
         
@@ -113,10 +114,7 @@
             } else {
                 dataTable = [self dataTableForQuery:query];
             }
-            [myFetch fetchWithCommand: queryString
-                            dataTable: &dataTable
-                         onConnection: dbconn
-                                error: &sqlError];
+            [myFetch fetchWithCommand: queryString dataTable: &dataTable onConnection: dbconn error: &sqlError];
         }
         if (sqlError) {
             MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription andMessage:sqlError.localizedFailureReason];
@@ -159,8 +157,7 @@
         NSError *fetchError = nil;
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-        MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
-                                              onConnection: conn error: &fetchError];
+        MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual onConnection: conn error: &fetchError];
         NSMutableArray *results = nil;
         if (fetchError == nil) {
             NSUInteger resultsCount = [dataTable count];
@@ -221,8 +218,7 @@ static NSString * const TextSqlShowTables = @"SHOW TABLES;";
     MysqlConnection *connection = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: TextSqlShowTables dataTable: &dataTableVirtual
-                                          onConnection: connection error: &error];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: TextSqlShowTables dataTable: &dataTableVirtual onConnection: connection error: &error];
     
     
     NSMutableArray *results = nil;

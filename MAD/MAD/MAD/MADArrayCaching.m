@@ -71,6 +71,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
+
     if (self = [super init]) {
         
         _statementCount = NULL;
@@ -89,6 +90,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
+
     if (self = [super init]) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         [self setFastEnumerationObjects:fastEnumerationObjects];
@@ -117,12 +119,14 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 - (void)initializeDatabase {
     
     NSURL *url = [self url];
-    BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath:url.path];
+    BOOL databaseFileExist = [[NSFileManager defaultManager] fileExistsAtPath:url.path];
+    BOOL databaseFileDoesNotExist = !databaseFileExist;
     [self reopenDatabaseAtUrl:url];
-    if (!createDatabase) {
-        createDatabase = ![self.database tableExist:MTArrayCachedTableName];
+    BOOL tableExist = NO;
+    if (databaseFileExist) {
+        tableExist = [self.database tableExist:MTArrayCachedTableName];
     }
-    if (![self.database tableExist:MTArrayCachedTableName]) {
+    if (!tableExist) {
         MADDataColumn *columnKey = [MADArrayCaching columnKey];
         MADDataColumn *columnValue = [MADArrayCaching columnValue];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier createTable:YES unique:NO];

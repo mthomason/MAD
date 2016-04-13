@@ -15,14 +15,13 @@
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
-    - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable;
+    @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 
-@property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
-
-- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size
-                    edgeEffect:(bool)edgeEffect zoomEffect:(bool)zoomEffect
-                  squareEffect:(bool)squareEffect cornerSize:(CGFloat)cornerSize
-                         scale:(CGFloat)scale;
+    + (instancetype)newReportViewerPrintPageRendererWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize;
+    - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize;
+    
+    - (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size edgeEffect:(bool)edgeEffect zoomEffect:(bool)zoomEffect
+                      squareEffect:(bool)squareEffect cornerSize:(CGFloat)cornerSize scale:(CGFloat)scale;
 
 @end
 

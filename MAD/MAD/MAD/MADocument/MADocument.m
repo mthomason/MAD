@@ -1026,7 +1026,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.datasource = self;
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter dataTable: self.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter dataTable:self.mainDataTable andPrintableAreaSize:self.paper.paperSize];
     self.printingReportFormatter = reportFormatter;
     return printPageRender;
     
@@ -1140,7 +1140,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (UIImage *)fullyRenderedThumbnail {
     MTReportViewerPrintPageRenderer *printPageRender =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
+    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable andPrintableAreaSize:self.paper.paperSize];
     
     CGRect letterRect = [MTPaper rectLetter];
     UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y,

@@ -42,12 +42,6 @@
 #define BUFFER_SIZE_BLOB_MEDIUM  16777219       //128 MB
 #define BUFFER_SIZE_BLOB_LONG    42949667300    //~1/3 of a TB
 
-@interface MysqlFetch ()
-
-@property(strong, readwrite) NSArray *results;
-
-@end
-
 @implementation MysqlFetch
 
 /*
@@ -107,7 +101,7 @@
                     extendedNames: (BOOL)useExtendedNames
                             error: (NSError * __autoreleasing *)error {
 
-    MysqlFetch *mf = [[MysqlFetch alloc] init];
+    //MysqlFetch *mf = [[MysqlFetch alloc] init];
     NSError *errorFetch = nil;
     
     if (!connection) {
@@ -182,8 +176,8 @@
             }
             
             
-            [mf setFieldNames:fieldNameCollector];
-            [mf setFields:fieldCollector];
+            [self setFieldNames:fieldNameCollector];
+            [self setFields:fieldCollector];
             
             if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
                 errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
@@ -193,7 +187,7 @@
                     errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
                 } else {
                     
-                    [self fetchResultsFromConnection:connection intoDataTable:dataTable withStatement:myStatement fetch:mf andBindings:bindings];
+                    [self fetchResultsFromConnection:connection intoDataTable:dataTable withStatement:myStatement andBindings:bindings];
                     
                     for (NSUInteger x=0; x < myStatement->field_count;x++) {
                         free(bindings[x].buffer);
@@ -355,7 +349,10 @@ char *mySQLTypeForType(int type) {
     return result;
 }
 
-- (void)fetchResultsFromConnection:(MysqlConnection *)connection intoDataTable:(MTDataTable **)dataTable withStatement:(MYSQL_STMT *)statement fetch:(MysqlFetch *)mf andBindings:(MYSQL_BIND *)bindings  {
+- (void)fetchResultsFromConnection:(MysqlConnection *)connection intoDataTable:(MTDataTable **)dataTable withStatement:(MYSQL_STMT *)statement
+//                             fetch:(MysqlFetch *)mf
+                       andBindings:(MYSQL_BIND *)bindings  {
+    
     [*dataTable beginBulkInsert];
     int fetchResults;
     NSUInteger rowCounter = 0;
@@ -373,7 +370,7 @@ char *mySQLTypeForType(int type) {
             for (unsigned int x=0; x < statement->field_count;x++) {
                 
                 MYSQL_FIELD stmtFieldName = statement->fields[x];
-                NSString *key = [mf fieldNames][x];
+                NSString *key = [self fieldNames][x];
                 if (*bindings[x].is_null==1) {
                     dict[key] = [NSNull null];
                 } else {

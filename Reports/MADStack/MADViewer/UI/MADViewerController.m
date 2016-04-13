@@ -167,9 +167,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTPrintingProtocol
 
-- (MTReportViewerPrintPageRenderer *)printPageRender {
-    return self.printPageRendererReport;
-}
+- (MTReportViewerPrintPageRenderer *)printPageRender { return self.printPageRendererReport; }
 
 #pragma mark - UIStateRestore
 
@@ -209,12 +207,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)initalize {
     
-    self.activityExporting = false;
-    self.didRefreshBeforeReaload = false;
+    _activityExporting = false;
+    _didRefreshBeforeReaload = false;
     
-    
-    MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
-    self.dateTimeFormatter = dateTimeFormatter;
+    MADDateFromTimeFormatter *dateTimeFormatter = [[MADDateFromTimeFormatter alloc] init];
+    _dateTimeFormatter = dateTimeFormatter;
 
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 
@@ -301,7 +298,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
     MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                                                                               dataTable: document.mainDataTable];
+                                                                                                               dataTable: document.mainDataTable
+                                                                                                    andPrintableAreaSize: document.paper.paperSize];
     self.printPageRendererReport = printPageRender;
     
     [self uiUpdateNumberOfPages];
@@ -331,7 +329,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [document activeDocumentModel];
         
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                                                                                           dataTable: document.mainDataTable];
+                                                                                                                           dataTable: document.mainDataTable
+                                                                                                                           andPrintableAreaSize: document.paper.paperSize];
         self.printPageRendererReport = prtingPageRendererReport;
     }
     
@@ -731,7 +730,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = self.startedRefresh;
     [document.reportFormatter formatForSize:size contentChanged: self.startedRefresh];
     
-    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter dataTable: document.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter dataTable: document.mainDataTable andPrintableAreaSize: document.paper.paperSize];
     self.printPageRendererReport = printPageRender;
     [self ignoreFormatter: document.reportFormatter];
     
@@ -750,16 +749,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.zoomScaleInital = 1.0000f;
     pageAttributes.contentScaleFactor = 0.0;
     
-    
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
  
         MADReportPageViewController *pageOne = [MADReportPageViewController newReportPageViewControllerWithDocument: document pageAttributes: pageAttributes
-                                                                                                     frame: self.view.bounds andDelegate: self];
+                                                                                                              frame: self.view.bounds andDelegate: self];
         
-        NSArray *viewControllers = @[pageOne];
-        
-        [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion: nil];
+        NSArray <__kindof MADReportPageViewController *> *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
+        [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: nil];
         
     }];
     

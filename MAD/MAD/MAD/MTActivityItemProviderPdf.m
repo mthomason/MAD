@@ -113,7 +113,8 @@
                                                       object: rf];
         
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: rf
-                                                                                                                  dataTable: weakdoc.mainDataTable];
+                                                                                                                  dataTable: weakdoc.mainDataTable
+                                                                                                       andPrintableAreaSize: letterRect.size];
         NSUInteger numberOfPages = rf.numberOfPages;
         UIGraphicsBeginPDFContextToFile(filepath.path, letterRect, options);
         
