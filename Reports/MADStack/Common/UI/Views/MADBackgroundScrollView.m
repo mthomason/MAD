@@ -15,8 +15,6 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
 @interface MADBackgroundScrollView ()
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) NSArray *availableZoomScales;
-
 @end
 
 @implementation MADBackgroundScrollView
