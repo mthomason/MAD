@@ -283,7 +283,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
++ (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors andColumns:(NSDictionary *)dataColumns; {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     if ([sortDescriptors count] > 0) {
         NSUInteger sortCounter = 0;
@@ -292,12 +292,11 @@ NSString * const MADIdentifierROWID         = @"ROWID";
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
             MADDataColumn *dataColumn = nil;
-            if (self.columns) {
-                dataColumn = self.columns[sortDescriptor.key];
+            if (dataColumns) {
+                dataColumn = dataColumns[sortDescriptor.key];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.columnType
-                                                                     ascending: sortDescriptor.ascending];
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.columnType ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
         }
@@ -305,10 +304,10 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
++ (NSString *)whereClauseWithRowIds:(NSArray <__kindof NSNumber *> *)rowids {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     BOOL firstTime = YES;
-    if ([rowids count] > 0) {
+    if (rowids.count > 0) {
         for (NSNumber *rowido in rowids) {
             [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
             [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];

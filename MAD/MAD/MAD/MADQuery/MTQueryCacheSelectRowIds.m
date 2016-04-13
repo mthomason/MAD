@@ -13,43 +13,43 @@
 
 @interface MTQueryCacheSelectRowIds ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *rowids;
-@property (nonatomic, strong) NSArray *sortDescriptors;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+    @property (nonatomic, strong) NSString *tableName;
+    @property (nonatomic, strong) NSArray *rowids;
+    @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
 
 @implementation MTQueryCacheSelectRowIds
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+
+    if (self = [super initWithObject:object]) {
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        self.rowids = object[@(MTQuerySelectRowIds)];
-        
-        NSString *tableName = object[@(MTQuerySelectTableName)];
-        [self setTableName:tableName];
-        
-        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
-        [self setSortDescriptors:sortDescriptors];
-        
+        NSNumber *keyRowIDs = @(MTQuerySelectRowIds);
+        NSNumber *keySelectTableName = @(MTQuerySelectTableName);
+        NSNumber *keySortDescriptors = @(MTQuerySelectSortDescriptors);
         NSNumber *keyColumns = @(MTQuerySelectColumns);
+        
+        self.rowids = object[keyRowIDs];
+
+        NSString *tableName = object[keySelectTableName];
+        self.tableName = tableName;
+        
+        NSArray *sortDescriptors = [NSArray arrayWithArray:object[keySortDescriptors]];
+        self.sortDescriptors = sortDescriptors;
+        
         NSDictionary *columns = object[keyColumns];
-        [self setColumns:columns];
+        self.columns = columns;
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT *, ROWID FROM %@ ", self.tableName];
-
-    [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
-    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
-    
-    return sql;
+    NSString *whereClause = [MTQueryCacheSelectRowIds whereClauseWithRowIds:self.rowids];
+    NSString *orderByClause = [MTQueryCacheSelectRowIds orderByClauseWithSortDescriptors:self.sortDescriptors andColumns:self.columns];
+    NSString *result = [[NSString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ %@%@", self.tableName, whereClause, orderByClause];
+    return result;
 }
 
 @end

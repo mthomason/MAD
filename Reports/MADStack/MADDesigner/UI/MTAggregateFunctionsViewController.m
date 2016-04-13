@@ -17,7 +17,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @interface MTAggregateFunctionsViewController ()
 
-    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray <__kindof UITableViewCell *> *tableViewCells;
 
 @end
 
@@ -104,7 +104,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    for (UITableViewCell *tableViewCell in [self tableViewCells]) {
+    for (UITableViewCell *tableViewCell in self.tableViewCells) {
         [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
     }
     

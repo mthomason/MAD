@@ -20,23 +20,23 @@ typedef void (^MTCellConfigureBlock)(id cell, id item);
 
 @interface MTArrayDataSource : NSObject
 
-- (instancetype)initWithItems:(NSArray *)items
-               cellIdentifier:(NSString *)cellIdentifier
-           configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
-                      andType:(MTDataSourceType)type;
+    - (instancetype)initWithItems:(NSArray *)items
+                   cellIdentifier:(NSString *)cellIdentifier
+               configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
+                          andType:(MTDataSourceType)type;
 
 
-- (NSInteger)count;
+    - (NSInteger)count;
 
-- (id)itemAtIndex:(NSUInteger)index;
-- (id)itemAtIndexPath:(NSIndexPath *)indexPath;
+    - (id)itemAtIndex:(NSUInteger)index;
+    - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 
-- (void)removeObjectsInArray:(NSArray *)array;
-- (void)removeItemAtIndexPath:(NSIndexPath *)indexPath;
-- (void)removeItemAtIndex:(NSUInteger)index;
-- (void)removeItemsAtIndexes:(NSIndexSet *)indexes;
+    - (void)removeObjectsInArray:(NSArray *)array;
+    - (void)removeItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (void)removeItemAtIndex:(NSUInteger)index;
+    - (void)removeItemsAtIndexes:(NSIndexSet *)indexes;
 
-- (void)updateWithItems:(NSArray *)items;
+    - (void)updateWithItems:(NSArray *)items;
 
 @end
 

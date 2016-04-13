@@ -301,7 +301,7 @@ CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numField
 }
 
 - (void)updateSize {
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[self.openSectionIndex];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[(NSUInteger)self.openSectionIndex];
     self.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
 }
@@ -313,7 +313,7 @@ CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numField
 }
 
 - (NSInteger)accessibilityElementCount {
-    return self.sectionInfoArray.count;
+    return (NSInteger)self.sectionInfoArray.count;
 }
 
 - (NSArray *)accessibilityElements {

@@ -11,24 +11,24 @@
 
 @protocol MADVibrantTableViewCellDelegate <NSObject>
 
-- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell;
+    - (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell;
 
 @end
 
 @interface MADVibrantTableViewCellBase : UITableViewCell
 
-@property (nonatomic, weak) id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
+    @property (nonatomic, weak) id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
 
-@property (nonatomic, strong) UILabel *label;
-@property (nonatomic, weak) UIVisualEffectView *effectView;
-@property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
+    @property (nonatomic, strong) UILabel *label;
+    @property (nonatomic, weak) UIVisualEffectView *effectView;
+    @property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
 
-@property (nonatomic, strong) NSArray *layoutConstraints;
-@property (atomic, assign) BOOL updatingConstraints;
+    @property (nonatomic, strong) NSArray *layoutConstraints;
+    @property (atomic, assign) BOOL updatingConstraints;
 
-+ (UIBlurEffectStyle)blurEffectStyle;
+    + (UIBlurEffectStyle)blurEffectStyle;
 
-- (void)updateConstraints;
-- (void)initalize;
+    - (void)updateConstraints;
+    - (void)initalize;
 
 @end

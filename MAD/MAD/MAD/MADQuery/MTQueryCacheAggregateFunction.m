@@ -44,19 +44,19 @@
         
         NSNumber *keyGroupByType = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
         NSNumber *groupBy = object[keyGroupByType];
-        [self setGroupByType:[groupBy unsignedIntegerValue]];
+        self.groupByType = groupBy.shortValue;
         
         NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
         NSNumber *functionType = object[keyAggregateFunctionType];
-        [self setFunctionType:[functionType unsignedIntegerValue]];
+        self.functionType = functionType.shortValue;
         
         NSNumber *keyParametersFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
         NSString *columnKey = [NSString stringWithString:object[keyParametersFieldKey]];
-        [self setColumnKey:columnKey];
+        self.columnKey = columnKey;
         
         NSNumber *keyWhere = @(MTQueryCacheAggregateFunctionParamatersPredicates);
         NSArray *whereClause = [NSArray arrayWithArray:object[keyWhere]];
-        [self setWhereClause:whereClause];
+        self.whereClause = whereClause;
         
     }
     return self;
@@ -68,7 +68,7 @@
                             functionName([self functionType]), [self columnKey], [self tableName]];
 
     if ([self groupByType] == MTAggregateGroupByTypePage) {
-        [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
+        [sql appendString:[MTQueryCacheAggregateFunction whereClauseWithRowIds:[self rowids]]];
     } else {
         [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
     }

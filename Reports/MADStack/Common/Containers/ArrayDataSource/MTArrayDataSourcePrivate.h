@@ -11,9 +11,9 @@
 
 @interface MTArrayDataSource ()
 
-@property (nonatomic, strong) NSMutableArray *items;
-@property (nonatomic, copy) NSString *cellIdentifier;
-@property (nonatomic, copy) MTCellConfigureBlock configureCellBlock;
+    @property (nonatomic, strong) NSMutableArray *items;
+    @property (nonatomic, copy) NSString *cellIdentifier;
+    @property (nonatomic, copy) MTCellConfigureBlock configureCellBlock;
 
 @end
 

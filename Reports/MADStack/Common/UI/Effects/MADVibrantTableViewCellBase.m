@@ -10,7 +10,7 @@
 
 @interface MADVibrantTableViewCellBase ()
 
-@property (atomic, assign) BOOL initalSetupComplete;
+    @property (atomic, assign) BOOL initalSetupComplete;
 
 @end
 

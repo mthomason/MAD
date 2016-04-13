@@ -89,7 +89,7 @@
     NSString * __weak whereClauseWithParameters = [self whereClauseWithParameters:self.whereClause];
     [sql appendString:whereClauseWithParameters];
     
-    NSString * __weak orderByClauseWithSortDescriptors = [self orderByClauseWithSortDescriptors:self.sortDescriptors];
+    NSString * __weak orderByClauseWithSortDescriptors = [MTQuerySelectItemsForGroup orderByClauseWithSortDescriptors:self.sortDescriptors andColumns:self.columns];
     [sql appendString:orderByClauseWithSortDescriptors];
 
     return sql;

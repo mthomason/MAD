@@ -26,8 +26,8 @@
 
     @property (atomic, assign) sqlite3_stmt *statement;
     @property (atomic, assign) bool empty;
-    @property (nonatomic, strong) NSDictionary *columns;
-    @property (nonatomic, strong) NSArray *columnKeys;
+    @property (nonatomic, strong) NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
+    @property (nonatomic, strong) NSArray <__kindof NSString *> *columnKeys;
 
     @property (nonatomic, strong) MTDatabaseSqlite3 *databaseForQuery;
     @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
@@ -46,9 +46,9 @@ void sqliteCallback(void *foo, const char* statement) {
     _databaseForQuery = nil;
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
-    self = [super init];
-    if (self) {
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *)columns columnKeys:(NSArray <__kindof NSString *> *)columnKeys query:(MTQuery *)query {
+
+    if (self = [super init]) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;
@@ -145,8 +145,7 @@ void sqliteCallback(void *foo, const char* statement) {
 }
 
 - (id)currentObject {
-    NSMutableDictionary *currentObject = self.singleColumnNoWrapper ?
-                                            nil : [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
+    NSMutableDictionary *currentObject = self.singleColumnNoWrapper ? nil : [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     id columnValue;
     for (id key in self.columnKeys) {

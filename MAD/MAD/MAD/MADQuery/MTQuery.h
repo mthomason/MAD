@@ -141,7 +141,7 @@ extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery, NSMutableArray, NSMutableDictionary;
-@class NSManagedObjectContext;
+@class NSManagedObjectContext, MADDataColumn;
 
 @interface MTQuery : NSObject
 
@@ -170,23 +170,23 @@ extern NSString * const MADIdentifierROWID;
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
-- (instancetype)initWithObject:(id)object;
+    - (instancetype)initWithObject:(id)object;
 
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
+    + (NSString *)whereClauseWithRowIds:(NSArray <__kindof NSNumber *> *)rowids;
+    - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
+    + (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors andColumns:(NSDictionary *)dataColumns;  //For "cache" sqltie3
+    - (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
-- (NSString *)fieldKeyForIndex:(NSUInteger)index;
+    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
-- (BOOL)returnsResults;
-- (BOOL)partOfTransactionSet;
+    - (BOOL)returnsResults;
+    - (BOOL)partOfTransactionSet;
 
-+ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
-+ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-+ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
+    + (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
+    + (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
+    + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
+    + (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
+    + (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 
