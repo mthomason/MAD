@@ -19,8 +19,8 @@ static NSString * const Plist = @"plist";
 
 @interface MADFeatures ()
 
-@property (nonatomic, strong, readwrite) NSArray *features;
-@property (nonatomic, strong) NSPredicate *availablePredicate;
+    @property (nonatomic, strong, readwrite) NSArray <__kindof MADFeature *> *features;
+    @property (nonatomic, strong) NSPredicate *availablePredicate;
 
 @end
 
