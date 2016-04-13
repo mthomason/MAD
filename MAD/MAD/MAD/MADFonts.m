@@ -11,7 +11,7 @@
 
 @interface MADFonts ()
 
-@property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
+    @property (nonatomic, strong, readwrite) NSArray <__kindof NSString *> *familyNames;
 
 @end
 

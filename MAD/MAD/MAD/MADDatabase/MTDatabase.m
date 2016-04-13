@@ -33,11 +33,12 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 @implementation MTDatabase
 
 - (id)init {
-    if (self = [super init]) {
-        NSMutableArray *errors = [[NSMutableArray alloc] init];
-        self.errors = errors;
-    }
+    if (self = [super init]) { }
     return self;
+}
+
+- (NSArray *)errors {
+    return _errors == nil ? _errors = [[NSMutableArray alloc] init] : _errors;
 }
 
 + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
