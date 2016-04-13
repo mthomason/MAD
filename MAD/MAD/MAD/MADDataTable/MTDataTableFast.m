@@ -42,8 +42,7 @@
     @property (nonatomic, assign) bool bulkInsertLoop;
     @property (nonatomic, assign) bool sortDescriptorsSet;
 
-    @property (nonatomic, strong) NSMutableArray *groupKeys;
-    @property (nonatomic, strong) NSArray *groupTableNames;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSNumber *> *groupKeys;
 
     @property (nonatomic, strong) MADIndex *lastDataForCacheId;
 
@@ -117,10 +116,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
     NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
 
-    if ([self groupTableNames] != nil) {
-        NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
-        plist[keyGroupTableNames] = [self groupTableNames];
-    }
     if (self.groupKeys != nil) {
         plist[keyGroupKeys] = self.groupKeys;
     }
@@ -146,9 +141,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSArray *groupKeysArray = plist[[MTDataTableFast keyGroupKeys]];
     NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
     [self setGroupKeys:groupKeys];
-    
-    NSArray *groupTableNames = plist[[MTDataTableFast keyGroupTableNames]];
-    [self setGroupTableNames:groupTableNames];
     
     [self reopenDbConnection];
     
@@ -217,9 +209,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
         self.groupKeys = groupKeys;
         
-        NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
-        self.groupTableNames = groupTableNames;
-        
         [self reopenDbConnection];
     }
     return self;
@@ -280,21 +269,23 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (void)initalizeGroupKeys {
 
-    NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.sortDescriptors.count];
-    NSArray *sortDescriptors = self.sortDescriptors;
+    if (self.groupKeys == nil) {
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.sortDescriptors.count];
+        self.groupKeys = groupKeys;
+    } else {
+        [self.groupKeys removeAllObjects];
+    }
     
+    NSArray *sortDescriptors = self.sortDescriptors;
+    NSUInteger index = NSNotFound;
     for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
         @autoreleasepool {
-            NSUInteger index = [self.columnKeys indexOfObject: sortDescriptor.key];
-            if (index != NSNotFound) {
-                NSNumber *columnIndex = @(index);
-                [groupKeys addObject:columnIndex];
+            if (((index = [self.columnKeys indexOfObject: sortDescriptor.key])) != NSNotFound) {
+                NSNumber *columnIndex = [[NSNumber alloc] initWithUnsignedInteger:index];
+                [self.groupKeys addObject:columnIndex];
             }
         }
     }
-
-    self.groupKeys = groupKeys;
-    groupKeys = nil;
 }
 
 - (NSString *)idColumnKeyForGroupLocation:(NSUInteger)groupLevel {
@@ -328,7 +319,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (void)addRow:(NSArray *)row {
     self.rowCounter++;
     if (self.groupKeys == nil) {
-        [self.groupKeys removeAllObjects];
         [self initalizeGroupKeys];
     }
     
@@ -390,7 +380,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
 }
 
-// FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
 
     @autoreleasepool {
