@@ -41,13 +41,13 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
         UICollectionViewDataSource,
         UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-@property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
-@property (nonatomic, strong) NSArray *dataSource;
+    @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+    @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
+    @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
+    @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
+    @property (nonatomic, strong) NSArray *dataSource;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 
@@ -96,12 +96,12 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     self.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     
-    NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
-    NSNumber *labelDynamic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelDynamic];
-    NSNumber *labelStatic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelStatic];
-    NSNumber *aggregate = [NSNumber numberWithShort:MTDocumentObjectTypeAggregate];
-    NSNumber *image = [NSNumber numberWithShort:MTDocumentObjectTypeImage];
-    NSNumber *whitespace = [NSNumber numberWithShort:MTDocumentObjectTypeWhtiespace];
+    NSMutableArray *dataSource  = [[NSMutableArray alloc] initWithCapacity:6];
+    NSNumber *labelDynamic      = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
+    NSNumber *labelStatic       = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
+    NSNumber *aggregate         = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeAggregate];
+    NSNumber *image             = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
+    NSNumber *whitespace        = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeWhtiespace];
     NSArray *defaults = @[labelDynamic, labelStatic, aggregate, image, whitespace];
     [dataSource addObjectsFromArray:defaults];
     

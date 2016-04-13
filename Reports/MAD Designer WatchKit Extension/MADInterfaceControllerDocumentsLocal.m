@@ -12,14 +12,14 @@
 
 @interface MADInterfaceControllerDocumentsLocal()
 
-@property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupMiddle;
-@property (weak, nonatomic) IBOutlet WKInterfaceTable *tableMain;
+    @property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupMiddle;
+    @property (weak, nonatomic) IBOutlet WKInterfaceTable *tableMain;
 
-@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonInfo;
-@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonExport;
-@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonMad;
+    @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonInfo;
+    @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonExport;
+    @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonMad;
 
-@property (nonatomic, strong) NSArray *filesByURL;
+    @property (nonatomic, strong) NSArray *filesByURL;
 
 @end
 
