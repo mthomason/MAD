@@ -28,7 +28,6 @@ static NSString * const SqlFormat = @"SELECT %@ FROM %@ WHERE rowid = %ld";
         NSString * __weak columnName = columnKeys.count > 0 ? columnKeys.firstObject : WildCard;
         NSString *sql = [[NSString alloc] initWithFormat:SqlFormat, columnName, tableName, (long)rowID];
         self.sql = sql;
-        
     }
     return self;
 }

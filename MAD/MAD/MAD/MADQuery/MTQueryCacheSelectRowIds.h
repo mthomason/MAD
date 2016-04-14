@@ -13,6 +13,9 @@
 
 @interface MTQueryCacheSelectRowIds : MTQuery
 
+    - (instancetype)initWithTableName:(NSString *)tableName rowIDs:(NSArray *)rowIDs
+                      sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns;
+
 @end
 
 #endif

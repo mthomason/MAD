@@ -155,16 +155,10 @@ void sqliteCallback(void *foo, const char* statement) {
             MADDataColumn *dataColumn = self.columns[key];
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
-            if (sqlite3DataType == SQLITE_NULL) {
-                columnValue = [NSNull null];
-            } else {
-                columnValue = [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
-            }
+            columnValue = sqlite3DataType == SQLITE_NULL ? [NSNull null] : [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
             
-            if (columnValue == nil) {
-                columnValue = [NSNull null];
-            }
-            if (columnValue != nil && self.singleColumnNoWrapper == NO) {
+            if (columnValue == nil) { columnValue = [NSNull null]; }
+            if (self.singleColumnNoWrapper == NO) {
                 [currentObject setValue:columnValue forKey:dataColumn.identifier];
             }
             columnCounter++;
