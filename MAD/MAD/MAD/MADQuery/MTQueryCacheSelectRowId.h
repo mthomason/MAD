@@ -13,6 +13,8 @@
 
 @interface MTQueryCacheSelectRowId : MTQuery
 
+    - (instancetype)initWithTableName:(NSString *)tableName rowID:(NSUInteger)rowID columnKeys:(NSArray *)columnKeys;
+    
 @end
 
 #endif

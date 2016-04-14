@@ -148,12 +148,11 @@ void sqliteCallback(void *foo, const char* statement) {
     NSMutableDictionary *currentObject = self.singleColumnNoWrapper ? nil : [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     id columnValue;
+    
     for (id key in self.columnKeys) {
         
         @autoreleasepool {
-            
             MADDataColumn *dataColumn = self.columns[key];
-            
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
             columnValue = sqlite3DataType == SQLITE_NULL ? [NSNull null] : [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
             

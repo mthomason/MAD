@@ -677,8 +677,8 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
             id aggregateResult;
             if (calculateInMemory == NO) {
                 
-                aggregateResult = [self resultsForAggregateType: item.isAggregate.groupType.unsignedIntegerValue
-                                                                 function: item.isAggregate.function.unsignedIntegerValue
+                aggregateResult = [self resultsForAggregateType: item.isAggregate.groupType.shortValue
+                                                                 function: item.isAggregate.function.shortValue
                                                                  fieldKey: fieldKey
                                                                 groupKeys: groupKeys
                                                                    rowids: [self.reportFormatter rowidsForPage:pageIndex]];

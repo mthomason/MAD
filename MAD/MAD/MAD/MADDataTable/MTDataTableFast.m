@@ -592,6 +592,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 // FIXME: Return error handler... remove credentals
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
     
+    
     if (self.lastDataForCacheId != nil) {
         if (cacheId.unsignedIntegerValue == self.lastDataForCacheId.index) {
             NSDictionary *result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.object];
@@ -601,18 +602,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     NSDictionary * result = nil;
     
-    NSNumber *keyRowId = @(MTQuerySelectRowId);
-    NSNumber *keyFieldKey = @(MTQuerySelectFieldKeys);
-    NSNumber *keyTableNmae = @(MTQuerySelectTableName);
-    NSNumber *keyFieldDef = @(MTQuerySelectFieldDescriptors);
-    NSDictionary *options = @{
-                              keyRowId : cacheId,
-                              keyFieldKey : self.columnKeys,
-                              keyTableNmae : [self tableName],
-                              keyFieldDef : self.columns
-                              };
-    
-    MTQuery *query = [[MTQueryCacheSelectRowId alloc] initWithObject:options];
+    NSString *tableName = [self tableName];
+    MTQuery *query = [[MTQueryCacheSelectRowId alloc] initWithTableName:tableName rowID:cacheId.unsignedIntegerValue columnKeys:self.columnKeys];
     
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
@@ -651,11 +642,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     for (NSString *key in groupKeys) {
         @autoreleasepool {
             NSString *columnLevel = [self idColumnKeyForGroupLocation:groupLevel].copy;
-            NSString *gk = key.copy;
-            NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : columnLevel,
-                                             MTQueryKeyPredicateValue : gk};
-            [whereClause addObject:whereStatement];
-            groupLevel++;
+            NSAssert(columnLevel != nil, @"This can't be null.");
+            if (columnLevel != nil) {
+                NSString *gk = key.copy;
+                NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : columnLevel,
+                                                 MTQueryKeyPredicateValue : gk};
+                [whereClause addObject:whereStatement];
+                groupLevel++;
+            }
         }
     }
     return whereClause;
@@ -761,6 +755,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSAssert(keys.count == groupLevel, @"Need a key for each previous group.");
     
     NSString *idColumnKeyForGroupLocation = [self idColumnKeyForGroupLocation:groupLevel].copy;
+    NSAssert(idColumnKeyForGroupLocation != nil, @"This can't be nil (%s)", __PRETTY_FUNCTION__);
+    if (idColumnKeyForGroupLocation == nil) { return nil; }
+    
     NSArray <__kindof NSString *> *columnKeys = @[idColumnKeyForGroupLocation];
     
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:keys.count];
