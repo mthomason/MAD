@@ -31,6 +31,7 @@
 #import <MAD/MTQuerySelectItemsForGroup.h>
 #import <MAD/MTQueryCacheSelectLimitOffset.h>
 #import <MAD/MTQueryCacheSelectGroupKeys.h>
+#import <MAD/MTQueryCacheSelectRowId.h>
 
 @interface MTDataTableFast ()
 
@@ -79,7 +80,13 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
+    if (self = [super initWithId:objectId fromCache:YES]) {
+        self.bulkInsertLoop = false;
+        self.tag = objectId;
+        self.sortDescriptorsSet = false;
+        _queueBulkAdd = nil;
+    }
+    return self;
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
@@ -604,7 +611,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               keyFieldDef : self.columns
                               };
     
-    MTQuery * query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
+    MTQuery *query = [[MTQueryCacheSelectRowId alloc] initWithObject:options];
+    
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
@@ -614,15 +622,18 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     bool success = sqlite3_prepare_v2([self.databaseForSelects databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
     
     if (success) {  //Expect success to == NO in normal working conditions.
-        success = sqlite3_step(statement) == SQLITE_ROW;
-        if (success) {
-            result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
-            
-            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
-            self.lastDataForCacheId = lastDataForCacheId;
-            
-        } else {
-            result = @{};
+        switch (sqlite3_step(statement)) {
+            case SQLITE_OK:
+            case SQLITE_ROW:
+            case SQLITE_DONE: {
+                result = [[NSDictionary alloc] initWithDictionary:[self currentObject:statement]];
+                MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
+                self.lastDataForCacheId = lastDataForCacheId;
+                break;
+            }
+            default:
+                result = @{};
+                break;
         }
     }
     

@@ -17,6 +17,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSPropertyList.h>
 #import <Foundation/NSStream.h>
 #import <Foundation/NSURL.h>
@@ -88,20 +89,11 @@ static NSString * const StringEmpty = @"";
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)encoder {
-    
-    NSNumber *objid = @(self.tag);
-    [encoder encodeObject:  objid                   forKey: @"objid"];
-    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
-    [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
-    [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
-    [encoder encodeObject:  self.columns          forKey: [MTDataTable keyColumns]];
-    [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
-    
-}
-
 - (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
+    if (self = [super init]) {
+        [self initalizeWithObjectId:objectId fromCache:YES];
+    }
+    return self;
 }
 
 - (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
@@ -119,6 +111,18 @@ static NSString * const StringEmpty = @"";
     self.columns = columns;
     self.rowCounter = 0;
     self.tag = objectId;
+    
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    
+    NSNumber *objid = @(self.tag);
+    [encoder encodeObject:  objid                   forKey: @"objid"];
+    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
+    [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
+    [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
+    [encoder encodeObject:  self.columns          forKey: [MTDataTable keyColumns]];
+    [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
     
 }
 
@@ -157,7 +161,7 @@ static NSString * const StringEmpty = @"";
 
 - (NSString *)filenameMDCache {
     NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingString:@"mdcache"];
+    return [tag stringByAppendingPathExtension:@"mdcache"];
 }
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {

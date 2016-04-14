@@ -453,10 +453,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return self.refreshing == false && self.startedRefresh == false && self.activityExporting == false;
 }
 
-- (void)redrawWithFrame:(CGRect)frame {
+- (void)redrawWithSize:(CGSize)size {
     if ([self shouldReprocess]) {
         [self setDisplayActive];
-        [self reloadWithSize: self.document.paper.paperSize];
+        [self reloadWithSize: size];
     }
 }
 
@@ -473,7 +473,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
-    [self redrawWithFrame:self.view.frame];
+    [self redrawWithSize:self.document.paper.paperSize];
 }
 
 #pragma mark - Report Notifications
@@ -672,17 +672,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 
-- (IBAction)zoomToActualSize:(id)sender {
-    
-}
+- (IBAction)zoomToActualSize:(id)sender { }
 
-- (IBAction)zoomToFit:(id)sender {
-    
-}
+- (IBAction)zoomToFit:(id)sender { }
 
-- (IBAction)zoomToFullScreen:(id)sender {
-    
-}
+- (IBAction)zoomToFullScreen:(id)sender { }
 
 #pragma mark - Acivities
 
@@ -870,14 +864,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     return result;
 }
-
-/*- (NSInteger)presentationCountForPageViewController:(MADViewerController *)pageViewController {
-    return pageViewController.numberOfPages;
-}
-
-- (NSInteger)presentationIndexForPageViewController:(MADViewerController *)pageViewController {
-    return pageViewController.currentPageIndex;
-}*/
 
 #pragma mark - UIPageViewControllerDelegate
 

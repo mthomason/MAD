@@ -89,8 +89,7 @@ void sqliteLog(void *foo, const char* statement) {
         bool isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
-            sqlite3_create_collation(_database, "LSASC",
-                                        SQLITE_UTF8, _database,
+            sqlite3_create_collation(_database, "LSASC", SQLITE_UTF8, _database,
                                         compare_string_utf8_localized_asc_collation);
 #ifdef MAD_MTDatabaseSqlite3_DEBUG
             sqlite3_trace(_database, sqliteLog, NULL);
@@ -552,7 +551,7 @@ void sqliteLog(void *foo, const char* statement) {
                 rowCounter++;
             }
             NSLog(@"%@", queryString);
-            NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+            //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
 
             [dataTable endBulkInsert];
             
@@ -601,12 +600,7 @@ void sqliteLog(void *foo, const char* statement) {
     NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
     NSLog(@"SQL2: %@", queryString);
 
-    MTDataTable * dataTable;
-    if (query.dataTable) {
-        dataTable = query.dataTable;
-    } else {
-        dataTable = [self.delegate dataTableForQuery:query];
-    }
+    MTDataTable *dataTable = query.dataTable ? query.dataTable :  [self.delegate dataTableForQuery:query];
 
     return [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
             intoResultTable: dataTable partOfTransactionSet: [query partOfTransactionSet]
@@ -760,8 +754,7 @@ void sqliteLog(void *foo, const char* statement) {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
         for (MTDatabaseTable *table in tables) {
-            NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
-            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
+            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:table.name];
             NSError * __autoreleasing error = NULL;
             bool success = false;
             success = [self executeQuery:dropTable withError:&error];

@@ -354,11 +354,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return [self queryDefinitionSelect:queryDefinationSelect withLimit:limit andOffset:offset dropRowid:NO];
 }
 
-+ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table {
-    NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
-    return @{tableNameKey : table};
-}
-
 + (NSDictionary *)queryDefinitionFull:(RptqQuery *)query {
     NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
     return @{parameterSchema : query};

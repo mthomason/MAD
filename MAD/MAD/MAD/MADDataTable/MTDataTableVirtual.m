@@ -81,22 +81,20 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-
     if (self = [super initWithCoder:decoder]) {
+    
         NSString *key = [MTDataTableVirtual keySortIndex];
         NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
         self.sortIndex = sortIndex;
+        
     }
     return self;
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-
     if (self = [super initWithNumberOfColumns:numberOfColumns]) {
-        
         NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
         self.sortIndex = sortIndex;
-        
     }
     return self;
 }

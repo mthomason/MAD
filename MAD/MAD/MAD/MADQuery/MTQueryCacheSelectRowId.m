@@ -12,20 +12,26 @@
 #import <Foundation/NSException.h>
 
 static NSString * const WildCard = @"*";
-static NSString * const SqlDelimitor = @", ";
-static NSString * const SqlDelimitorObject = @", %@";
-static NSString * const SqlFormat = @", %@";
+static NSString * const SqlFormat = @"SELECT %@ FROM %@ WHERE rowid = %ld";
 
 @interface MTQueryCacheSelectRowId ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, copy) NSNumber *rowId;
-@property (nonatomic, strong) NSArray *columnKeys;
-@property (nonatomic, strong) NSString *columnNames;
+    @property (nonatomic, strong) NSString *sql;
 
 @end
 
 @implementation MTQueryCacheSelectRowId
+
+- (instancetype)initWithTableName:(NSString *)tableName rowID:(NSUInteger)rowID columnKeys:(NSArray *)columnKeys {
+
+    if (self = [super initWithObject:nil]) {
+        NSString * __weak columnName = columnKeys.count > 0 ? columnKeys.firstObject : WildCard;
+        NSString *sql = [[NSString alloc] initWithFormat:SqlFormat, columnName, tableName, (long)rowID];
+        self.sql = sql;
+        
+    }
+    return self;
+}
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
@@ -35,40 +41,21 @@ static NSString * const SqlFormat = @", %@";
         NSNumber *key = @(MTQuerySelectFieldKeys);
         NSNumber *keyRowId = @(MTQuerySelectRowId);
         NSNumber *keyTableName = @(MTQuerySelectTableName);
-        NSNumber *keyFieldDescriptors = @(MTQuerySelectFieldDescriptors);
         
         NSArray *columnKeys = object[key];
-        if (columnKeys) {
-            NSArray *ck = [[NSArray alloc] initWithArray:columnKeys];
-            self.columnKeys = ck;
-        }
-        
-        if (columnKeys.count > 0) {
-            NSString *firstKey = columnKeys.firstObject;
-            NSMutableString *columnNames = [[NSMutableString alloc] initWithString:firstKey];
-            NSArray *columnKeysMinusFirst = [columnKeys subarrayWithRange:NSMakeRange(1, columnKeys.count - 1)];
-            for (NSString *key in columnKeysMinusFirst) {
-                [columnNames appendFormat:SqlDelimitorObject, key];
-            }
-            self.columnNames = columnNames;
-        } else {
-            self.columnNames = WildCard;
-        }
- 
-        _rowId = ((NSNumber *)object[keyRowId]).copy;
-        
-        NSString *tableName = [[NSString alloc] initWithString: object[keyTableName]];
-        self.tableName = tableName;
-        
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithDictionary: object[keyFieldDescriptors]];
-        self.columns = columns;
+        NSString *tableName = object[keyTableName];
+        NSUInteger rowID = ((NSNumber *)object[keyRowId]).unsignedIntegerValue;
+
+        NSString * __weak columnName = columnKeys.count > 0 ? columnKeys.firstObject : WildCard;
+        NSString *sql = [[NSString alloc] initWithFormat:SqlFormat, columnName, tableName, (long)rowID];
+        self.sql = sql;
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld", self.columnNames, self.tableName, (long)self.rowId.integerValue];
+    return self.sql;
 }
 
 @end
