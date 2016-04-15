@@ -182,16 +182,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)urlDataTableCache {
-    NSString *filename = [self filename];
+    NSString *filename = [self.mainDataTable filenameMDCache];
     return [self cacheUrlForFilename:filename];
-}
-- (NSURL *)cachedFilesDirectory {
-    NSString *filename = [self filename];
-    return [MADocument cacheFilesDirectoryForFilename:filename];
 }
 
 - (NSURL *)cacheUrlForFilename:(NSString *)filename {
     return [self.cachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
+
+- (NSURL *)cachedFilesDirectory {
+    NSString *filename = [self filename];
+    return [MADocument cacheFilesDirectoryForFilename:filename];
 }
 
 #pragma mark - Property Overrides
@@ -430,8 +431,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return _madObjectModel;
 }
 
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
-
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError * _Nullable *)error {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, absoluteURL);
     NSError *readError = nil;
 
     NSData *imageData = nil;
@@ -472,7 +473,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return YES;
 }
 
-- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
+- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError * _Nullable *)error {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, absoluteURL);
 
     if (self.extraInformation == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
@@ -485,7 +487,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)writeAdditionalContent: (id)content toURL: (NSURL *)absoluteURL
-           originalContentsURL: (NSURL *)absoluteOriginalContentsURL error: (NSError **)error {
+           originalContentsURL: (NSURL *)absoluteOriginalContentsURL error: (NSError * _Nullable *)error {
     
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
 
@@ -921,6 +923,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
     datatable.cacheDelegate = self;
+    datatable.dataDelegate = self;
     
     NSString *cacheName = [datatable filenameMDCache];
     NSURL *cacheUrl = [self cacheUrlForFilename:cacheName];
@@ -956,7 +959,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"Cache Exist? %s: %s", [[NSFileManager defaultManager] fileExistsAtPath:self.urlDataTableCache.path] ? "YES" : "NO", __PRETTY_FUNCTION__);
     return [[NSFileManager defaultManager] fileExistsAtPath:self.urlDataTableCache.path];
 }
 
