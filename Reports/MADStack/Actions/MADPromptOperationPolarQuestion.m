@@ -57,7 +57,7 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = true;
         sself.alertDisplayed = true;
-        defer(^{
+        madDefer(^{
             [sself performSelectorInBackground:@selector(finish) withObject:nil];
         });
     }];
@@ -66,7 +66,7 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = false;
         sself.alertDisplayed = true;
-        defer(^{
+        madDefer(^{
             NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
             [sself performSelectorInBackground: @selector(finishWithError:) withObject: error];
         });

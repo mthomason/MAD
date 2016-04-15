@@ -112,7 +112,7 @@ static NSString * const TextYes = @"Dismiss";
         MADPromptOperationDisplayError * __strong sself = weakSelf;
         sself.result = true;
         sself.alertDisplayed = true;
-        defer(^{
+        madDefer(^{
             [sself performSelectorInBackground:@selector(finish) withObject:nil];
         });
     }];

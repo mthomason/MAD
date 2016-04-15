@@ -136,7 +136,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = password;
     self.gotPassword = true;
     self.result = true;
-    defer(^{
+    madDefer(^{
         [self performSelectorInBackground:@selector(finish) withObject:nil];
     });
 }
@@ -146,7 +146,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = nil;
     self.result = false;
     self.gotPassword = false;
-    defer(^{
+    madDefer(^{
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
         [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
     });

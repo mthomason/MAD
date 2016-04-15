@@ -164,9 +164,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    
     return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [self isRetnaDisplay]];
-    
 }
 
 + (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
@@ -183,10 +181,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSURL *)urlDataTableCache {
     NSString *filename = [self.mainDataTable filenameMDCache];
-    return [self cacheUrlForFilename:filename];
-}
-
-- (NSURL *)cacheUrlForFilename:(NSString *)filename {
     return [self.cachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
@@ -251,7 +245,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         self.persistentStoreOptions = options;
         
         NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
+        NSLog(@"Url Guts: %@", urlGuts);
+        
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
+        NSLog(@"Url Meta Playlist: %@", urlMetaPlaylist);
         
         _urlMetaPlaylist = urlMetaPlaylist.copy;
         _urlGuts = urlGuts.copy;
@@ -311,7 +308,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }];
 }
 
-- (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
+- (BOOL)readFromURL:(NSURL *)url error:(NSError * _Nullable *)outError {
 
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
     BOOL success = NO;
@@ -326,10 +323,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             originalContentsURL: url
                           error: outError];
         if (!success) {
-            success = [fileWrapper writeToURL: self.urlGuts
-                                      options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
-                          originalContentsURL: url
-                                        error: outError];
+            success = [fileWrapper writeToURL: self.urlGuts options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
+                          originalContentsURL: url error: outError];
         }
         NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
     }
@@ -341,7 +336,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes
           safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                error:(NSError **)outError {
+                error:(NSError * _Nullable *)outError {
     
     [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
@@ -926,7 +921,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     datatable.dataDelegate = self;
     
     NSString *cacheName = [datatable filenameMDCache];
-    NSURL *cacheUrl = [self cacheUrlForFilename:cacheName];
+    NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent:cacheName isDirectory:NO];
     self.urlDataTableCache = cacheUrl;
     [datatable loadFromCacheWithUrl:cacheUrl];
     self.mainDataTable = datatable;

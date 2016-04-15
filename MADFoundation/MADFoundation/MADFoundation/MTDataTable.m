@@ -126,6 +126,11 @@ static NSString * const StringEmpty = @"";
     
 }
 
+- (NSString *)filenameMDCache {
+    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
+    return [tag stringByAppendingPathExtension:@"mdcache"];
+}
+
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
@@ -158,11 +163,6 @@ static NSString * const StringEmpty = @"";
 }
 
 + (NSString *)keyUrl { return @"url"; }
-
-- (NSString *)filenameMDCache {
-    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingPathExtension:@"mdcache"];
-}
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {
     NSLog(@"Load from URL: %@\n(%s)", url, __PRETTY_FUNCTION__);

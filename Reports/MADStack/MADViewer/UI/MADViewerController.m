@@ -48,6 +48,8 @@
 #import "MADOperationQueue.h"
 #import "MADRefreshReloadOperation.h"
 
+#import "MADDefer.h"
+
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADTextNoCache = @"No Cache";
 
@@ -126,20 +128,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
 
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                
-                self.lastCacheDate = [NSDate date];
-                [self setDisplayActive];
-                [self reload];
-                [self timerDealloc];
-                [self uiUpdateTimeSinceLastRefresh: NULL];
-                [self setDisplayActive];
-                [self removeObserverDidReadRowsFromDatabase:self.document.database];
-
-            }];
         }
     }
+}
 
+- (void)reloadOperation {
+    
 }
 
 #pragma mark - Dealloc
@@ -702,7 +696,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
         self.refreshReloadOperation = refreshReloadOperation;
+        //[self.refreshQueue waitUntilAllOperationsAreFinished];
         
+    
+
+        [self.refreshQueue addOperationWithBlock:^{
+        
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                
+                self.lastCacheDate = [NSDate date];
+                [self setDisplayActive];
+                [self reload];
+                [self timerDealloc];
+                [self uiUpdateTimeSinceLastRefresh: NULL];
+                [self setDisplayActive];
+                [self removeObserverDidReadRowsFromDatabase:self.document.database];
+                
+            }];
+            
+        }];
     }
 }
 

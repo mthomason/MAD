@@ -29,7 +29,7 @@
 
 @end
 
-void defer(void (^block)()) {
+void madDefer(void (^block)()) {
     static MADDefer *d;
     d = [MADDefer defer:block];
 }
