@@ -27,7 +27,7 @@
                                              pageAttributes:(MADPageViewAttributes *)pageAttributes frame:(CGRect)frame
                                                 andDelegate:(id <MTPrintingProtocol>)delegate;
 
-        - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
+    - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
 
 @end
 

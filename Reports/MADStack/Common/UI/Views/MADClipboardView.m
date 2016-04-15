@@ -7,6 +7,7 @@
 //
 
 #import "MADClipboardView.h"
+#import <UIKit/UIGraphics.h>
 
 @implementation MADClipboardView
 

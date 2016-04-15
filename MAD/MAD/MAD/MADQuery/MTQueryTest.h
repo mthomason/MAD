@@ -16,9 +16,8 @@
 
 @interface MTQueryTest : MTQuery
 
-@property (nonatomic, weak) MTDatabase *database;
-
-- (instancetype)initWithObject:(MTDatabaseConnection *)object;
+    @property (nonatomic, weak) MTDatabase *database;
+    - (instancetype)initWithObject:(MTDatabaseConnection *)object;
 
 @end
 

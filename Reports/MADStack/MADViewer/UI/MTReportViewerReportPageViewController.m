@@ -88,7 +88,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark - Static Constructors
 
 + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document pageAttributes:(MADPageViewAttributes *)pageAttributes frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate {
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     MADReportPageViewController *pageViewController = [[self alloc] initWithDocument: document andPageAttributtes: pageAttributes];
     pageViewController.view.frame = frame;
     pageViewController.delegate = delegate;
@@ -101,6 +102,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (void)dealloc { }
 
 - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         _document = document;
         _initalLayout = true;
@@ -113,6 +115,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)loadView {
 
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADocument *document = self.document;
     
     MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:CGRectZero];
@@ -135,6 +138,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (void)viewDidLoad {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
@@ -143,25 +147,30 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewWillAppear:animated];
     [self.tabBarController.navigationController.view setNeedsLayout];   //Forces the top layout guide to set.
 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidAppear:animated];
     [self.documentScroller flashScrollIndicators];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidDisappear:animated];
 }
 
 - (void)viewWillLayoutSubviews {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewWillLayoutSubviews];
 }
 
 - (void)viewDidLayoutSubviews {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidLayoutSubviews];
     if (self.initalLayout) {
         self.initalLayout = false;
@@ -180,10 +189,12 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (UIScrollView *)documentScroller {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return ((UIScrollView *)self.view);
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     CGPoint currentContentOffset = self.documentScroller.contentOffset;
@@ -203,24 +214,29 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (CGFloat)zoomScale {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.documentScroller.zoomScale;
 }
 
 - (NSUInteger)pageNumber {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.pageViewAttributes.pageNumber;
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.documentView;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [MADReportPageViewController centerDocumentView:self.documentView insideScrollView:scrollView topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [MADReportPageViewController centerDocumentView:view insideScrollView:scrollView topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
     view.contentScaleFactor = scrollView.traitCollection.displayScale * scale;
     [view setNeedsDisplay];
@@ -245,6 +261,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark - MADReportPageViewProtocol
 
 - (NSDate * _Nullable)lastCacheDate {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.pageViewAttributes.reportLastCacheDate == nil) {
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: self.document.urlDataTableCache.path error: &error];
@@ -259,6 +276,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark - MTPrintingProtocol
 
 - (MTReportViewerPrintPageRenderer *)printPageRender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return [self.delegate printPageRender];
 }
 

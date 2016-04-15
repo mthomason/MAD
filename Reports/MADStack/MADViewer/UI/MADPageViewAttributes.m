@@ -19,6 +19,7 @@ static NSString * const keyContentScaleFactor   = @"f";
 @implementation MADPageViewAttributes
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (self = [super init]) {
         
@@ -46,6 +47,7 @@ static NSString * const keyContentScaleFactor   = @"f";
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSNumber *pageNumber = [[NSNumber alloc] initWithUnsignedInteger:_pageNumber];
     [coder encodeObject:pageNumber forKey:keyPageNumber];
@@ -65,6 +67,7 @@ static NSString * const keyContentScaleFactor   = @"f";
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADPageViewAttributes *result = [[[self class] allocWithZone:zone] init];
     result.contentScaleFactor = self.contentScaleFactor;

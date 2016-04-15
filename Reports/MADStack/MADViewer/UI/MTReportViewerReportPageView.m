@@ -49,21 +49,25 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (instancetype)init {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) { [self initalize]; }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) { [self initalize]; }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super initWithFrame:frame]) { [self initalize]; }
     return self;
 }
 
 - (void)layoutSubviews {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.firstTime) {
         MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
         self.dateTimeFormatter = dateTimeFormatter;
@@ -79,6 +83,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (void)drawRect:(CGRect)rect {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (!self.drawBlankPage) {
         id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
         MTReportViewerPrintPageRenderer *printPageRender = [delegatePage printPageRender];
@@ -89,6 +94,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 #pragma mark
 
 - (void)initalize {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.displaysCacheTimer = false;
     self.displaysPageCounter = false;
     self.drawBlankPage = false;
@@ -98,6 +104,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 #pragma mark - Page Counter
 
 - (void)displayPageCounterIndicator {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
     if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {

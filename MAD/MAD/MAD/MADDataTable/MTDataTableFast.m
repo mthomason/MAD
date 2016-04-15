@@ -224,7 +224,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (NSString *)filenameCacheMadDB {
     NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingString:@"maddb"];
+    return [tag stringByAppendingPathExtension:@"maddb"];
 }
 
 - (NSURL *)urlFastCache {

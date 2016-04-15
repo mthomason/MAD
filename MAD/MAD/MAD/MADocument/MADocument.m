@@ -956,6 +956,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     return [[NSFileManager defaultManager] fileExistsAtPath:self.urlDataTableCache.path];
 }
 
