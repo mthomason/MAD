@@ -108,6 +108,8 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
+    NSLog(@"Reopen database at url: %@\n(%s)", url, __PRETTY_FUNCTION__);
+
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
     MTDatabaseSqlite3 *database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
 #ifdef MAD_MTArrayCached_DEBUG
@@ -213,22 +215,21 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
     NSURL *cachedArrayDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:identifer];
-    NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
+    NSString *filename = [identifer stringByAppendingPathExtension:MTArrayCachedExtension];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (NSURL *)url {
     NSURL *result = nil;
-    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-                                        [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
-                                        [self.cachedDelegate cachedFilesDirectory];
-    NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
+    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ? [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+                                                                 [self.cachedDelegate cachedFilesDirectory];
+    NSString *filename = [self.identifier stringByAppendingPathExtension:MTArrayCachedExtension];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     return result;
 }
 
 + (MADDataColumn *)columnKey {
-    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
+    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier: MTArrayCachedColumnKey];
     column.columnType = MTDataTypeInteger;
     column.primaryKey = true;
     column.notNull = true;
@@ -237,7 +238,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 + (MADDataColumn *)columnValue {
-    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
+    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier: MTArrayCachedColumnValue];
     column.columnType = MTDataTypeBlob;
     column.primaryKey = false;
     column.notNull = true;
@@ -248,9 +249,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
       createTable:(BOOL)create unique:(BOOL)unique {
     
-    MTQueryCacheAddColumn *queryCacheAddColumn = [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
-                                                                                      createTable:create ? true : false
-                                                                                 uniqueColumnHack:unique ? true : false];
+    MTQueryCacheAddColumn *queryCacheAddColumn = [[MTQueryCacheAddColumn alloc] initWithTableName: table columnName: columnName column: column
+                                                                                      createTable: create ? true : false
+                                                                                 uniqueColumnHack: unique ? true : false];
     queryCacheAddColumn.database = self.database;
     bool success = false;
     NSError * __autoreleasing error = NULL;

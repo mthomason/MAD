@@ -73,7 +73,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)initalizeStateMachine {
     
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     
     NSArray *sd = [self.dataDelegate sortDescriptors];
     NSArray *sortDescriptors = [NSArray arrayWithArray:sd];
@@ -90,7 +90,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSArray *)keysForCachedID:(NSNumber *)rowid {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSDictionary *row = [self.datasource dataForCacheId: rowid];
     NSArray *keyValues = [self keyValuesForResultRow:row];
@@ -102,7 +102,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (instancetype)initWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options  {
     if (self = [super init]) {
 
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
 
         self.options = options;
         self.layout = layout;
@@ -113,7 +113,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 + (instancetype)newReportFormatterWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
@@ -121,7 +121,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSArray *)layoutForPage:(NSUInteger)page {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSArray *result = [NSArray arrayWithArray:self.reportLayout[page]];
     return (page < (NSUInteger)[self.reportLayout count]) ? result : nil;
@@ -129,7 +129,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSUInteger)layoutIdentifier {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     return self.overrideIdentifier == nil ?
                     self.layout.documentObjectID.URIRepresentation.absoluteString.hash :
@@ -138,7 +138,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSString *)nameCurrentReportIndexes {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", sizeString];
@@ -146,21 +146,21 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSString *)nameCurrentReportLayout {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
 }
 
 - (void)setCachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     _cachedDelegate = cachedDelegate;
     [self initalize];
 }
 
 - (void)initalize {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     
     MTReportFormatterPageDefinition *page = [MTReportFormatterPageDefinition new];
     self.page = page;
@@ -211,7 +211,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (BOOL)needsFormat {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"Needs format: %s (%s)", (self.didRefresh || [self cachedIndexesExist] == NO || [self.datasource cacheExist] == NO) ? "YES" : "NO", __PRETTY_FUNCTION__);
     NSAssert([self datasource] != nil, @"We need a datatable way before here");
     return (self.didRefresh || [self cachedIndexesExist] == NO || [self.datasource cacheExist] == NO) ? YES : NO;
 }

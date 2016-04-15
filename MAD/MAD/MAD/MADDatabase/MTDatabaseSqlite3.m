@@ -557,7 +557,7 @@ void sqliteLog(void *foo, const char* statement) {
             
         }
     } else {
-        NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+        //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
         // FIXME: Handle failures.
         sqlite3_step(statement);
     }

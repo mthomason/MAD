@@ -622,7 +622,9 @@ static NSString * const MADPathComponentData       = @"Data";
 
 
 + (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
-    NSError *error = nil;
+    NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
+
+   NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     NSURL *cachedDirectory = [MADFileUtilities localCachedDirectoryForFileUrl:documentUrl];
     NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL: cachedDirectory
@@ -635,6 +637,8 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl groupIdentifier:(NSString *)groupIdentifier {
+    NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
+
     NSURL *cachedDirectory = [MADFileUtilities localCacheDirectoryForGroupIdentifier: groupIdentifier fileURL: documentUrl];
     return [MADFileUtilities removeContentsOfDirectory:cachedDirectory];
 }

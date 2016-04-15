@@ -91,6 +91,9 @@ static const short errCache = 2;
         return;
     }
 
+
+    NSLog(@"Caching a url: %@\n(%s)", document.urlDataTableCache, __PRETTY_FUNCTION__);
+    
     success = [document.mainDataTable cacheWithUrl:document.urlDataTableCache];
     
     if (!success) {

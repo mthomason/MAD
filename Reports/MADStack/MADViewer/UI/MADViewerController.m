@@ -951,7 +951,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Status Label
 
 - (void)uiUpdateTimeSinceLastRefresh:(id)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADLabelStatus *labelStatus = self.labelStatus;
     MTDateResolution resolution;

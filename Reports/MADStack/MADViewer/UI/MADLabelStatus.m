@@ -50,7 +50,6 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 }
 
 - (void)updatePageStatus:(NSUInteger)numberOfPages currentPageIndex:(NSUInteger)currentPageIndex {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
     NSNumber *numberOfPagesNumber = @(numberOfPages);
     NSNumber *currentPageNumber = @(currentPageIndex + 1);
@@ -61,12 +60,10 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 }
 
 - (void)updateDisplay {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self updateStatusLabel: self.statusMessage1 recordsReadMessage: self.statusMessage2 andNumberOfPagesMessage: self.statusMessage3];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
@@ -74,7 +71,6 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 }
 
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
@@ -82,14 +78,12 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 }
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage2 = attributedString;
     [self updateDisplay];
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage3 = attributedString;
     [self updateDisplay];
@@ -104,7 +98,6 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 - (void)updateStatusLabel:(NSAttributedString *)timeMessage
        recordsReadMessage:(NSAttributedString *)recordsReadMessage
   andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
     if (recordsReadMessage.string.length > 0) {

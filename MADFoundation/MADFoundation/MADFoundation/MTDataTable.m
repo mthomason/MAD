@@ -165,24 +165,32 @@ static NSString * const StringEmpty = @"";
 }
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {
+    NSLog(@"Load from URL: %@\n(%s)", url, __PRETTY_FUNCTION__);
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: url.path];
     [inputStream open];
-    switch ([inputStream streamStatus]) {
+    switch (inputStream.streamStatus) {
         case NSStreamStatusError:
+            NSLog(@"Stream error: %@", inputStream.streamError);
             break;
         default:
             break;
     }
-    NSPropertyListFormat format;
-    NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
-                                                            format: &format error: &error];
-    if (plist) {
-        [self loadWithPlist:plist];
+    
+    if (inputStream.streamStatus == NSStreamStatusOpen) {
+
+        NSPropertyListFormat format;
+        NSError *error = nil;
+        id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
+                                                                format: &format error: &error];
+        if (plist) {
+            [self loadWithPlist:plist];
+        }
+        
     }
 }
 
 - (bool)cacheWithUrl:(NSURL *)url {
+    NSLog(@"Cache with URL: %@\n(%s)", url, __PRETTY_FUNCTION__);
 
     NSDictionary *plist = [self plist];
 
