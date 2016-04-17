@@ -1378,10 +1378,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return result;
 }
 
-- (MTTableController *)tableControllerForTable:(RptqQueryTable *)table {
+- (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
-    MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
+    MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
     
     MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
 
@@ -1421,7 +1421,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
     RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: indexPathUpdate];
-    MTTableController *tableController = [self tableControllerForTable:table];
+    MADTableController *tableController = [self tableControllerForTable:table];
     [self.navigationController pushViewController: tableController animated: YES];
 
 }

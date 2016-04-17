@@ -20,12 +20,9 @@
 
 @implementation MADRefreshOperationInitalizeMainDataTable
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithDocument:(MADocument *)document {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
         _success = false;
@@ -39,14 +36,10 @@
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     MADocument *document = self.document;
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypePhysical);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSString *filename = document.filename;
-    NSNumber *objectIdV =  @(filename.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    
-    MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
+    NSString *filename = [document filename];
+    NSLog(@"Filename:   %@ (%s)", filename, __func__);
+
+    MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
     datatable.cacheDelegate = document;
     [datatable loadFromCacheWithUrl:document.urlDataTableCache];
     document.mainDataTable = datatable;

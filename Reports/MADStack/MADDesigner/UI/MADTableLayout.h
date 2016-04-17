@@ -14,19 +14,17 @@
 typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *stop);
 
 @protocol MADTableLayoutDelegate <NSObject>
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section;
-
+    - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section;
 @end
 
 @interface MADTableLayout : UICollectionViewLayout
 
-- (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
-- (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
-- (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath;
-- (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath;
+    - (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
+    - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
+    - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath;
+    - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath;
 
-@property (nonatomic, weak) id delegate;
+    @property (nonatomic, weak) id delegate;
 
 @end
 

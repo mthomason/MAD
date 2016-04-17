@@ -28,20 +28,20 @@
 #import <MAD/MTKeyChain.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-@interface MTTableController ()
+@interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
     bool _firstTimeViewDidAppear;
 }
 
-@property (nonatomic, strong) MTQuery *query;
-@property (nonatomic, strong) MTDataTable *datatable;
-@property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
-@property (nonatomic, copy, readwrite) NSArray *fieldKeys;
-@property (nonatomic, copy, readwrite) NSArray *fieldSizes;
+    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
+    @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
+    @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
 @end
 
-@implementation MTTableController
+@implementation MADTableController
 
 - (void)dealloc {
     [_query database].delegate = nil;
@@ -57,11 +57,10 @@
     NSUInteger columnCount = 0;
     MADTableLayout *tableLayout = [[MADTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     
-    self = [super initWithCollectionViewLayout:tableLayout];
-    if (self) {
+    if (self = [super initWithCollectionViewLayout:tableLayout]) {
         _firstTimeViewDidAppear = true;
         [query database].delegate = self;
-        MTDataTable *datatable = [MTTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
+        MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         tableLayout.delegate = self;
         MADDataFormatter *tableFormatter = [[MADDataFormatter alloc] initWithQuery:query];
@@ -109,17 +108,16 @@
     UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
-    MTTableController * __weak weakSelf = self;
+    MADTableController * __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         
-        MTTableController *strongself = weakSelf;
-        MTTableController * __weak weakSelf2 = strongself;
+        MADTableController *strongself = weakSelf;
+        MADTableController * __weak weakSelf2 = strongself;
         NSError * __autoreleasing error = NULL;
         bool success = [strongself.tableFormatter.query performQueryWithError:&error];
         
-        MTTableController *strongself2 = weakSelf2;
-        
+        MADTableController *strongself2 = weakSelf2;
         
         [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
                                                      withObject: strongself2.navigationItem.rightBarButtonItem
@@ -131,7 +129,7 @@
             
             if ([NSThread isMainThread]) {
                 //__strong MTTableController *strongself3 = weakSelf3;
-                __strong MTTableController *weakself4 = strongself2;
+                __strong MADTableController *weakself4 = strongself2;
                 
                 [NSError presentError: error
                      onViewController: strongself2
@@ -143,11 +141,11 @@
             } else {
                 
                 NSError *serror = error;
-                MTTableController * __weak weakself4 = strongself2;
+                MADTableController * __weak weakself4 = strongself2;
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     
-                    MTTableController *strongself3 = weakself4;
-                    MTTableController * __weak weakself5 = strongself3;
+                    MADTableController *strongself3 = weakself4;
+                    MADTableController * __weak weakself5 = strongself3;
                     
                     [NSError presentError: serror
                          onViewController: strongself3
@@ -187,35 +185,28 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-
+    
+    UIViewController *parentViewController = self.navigationController.parentViewController;
     self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
-                                                               (self.navigationController.parentViewController.navigationController.navigationBar.frame.origin.y +
-                                                                    self.navigationController.parentViewController.navigationController.navigationBar.frame.size.height),
+                                                               (parentViewController.navigationController.navigationBar.frame.origin.y +
+                                                                parentViewController.navigationController.navigationBar.frame.size.height),
                                                                self.navigationController.navigationBar.frame.size.width,
                                                                self.navigationController.navigationBar.frame.size.height);
     
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                                 CGSizeZero.width,
-                                                                 self.navigationController.bottomLayoutGuide.length,
-                                                                 CGSizeZero.width);
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                                                 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                        CGSizeZero.width,
-                                                        self.navigationController.bottomLayoutGuide.length,
-                                                        CGSizeZero.width);
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                                        self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     [self.navigationItem.titleView setNeedsLayout];
 }
 
 - (void)viewDidLayoutSubviews {
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                                 CGSizeZero.width,
-                                                                 self.navigationController.bottomLayoutGuide.length,
-                                                                 CGSizeZero.width);
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                                                 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                        CGSizeZero.width,
-                                                        self.navigationController.bottomLayoutGuide.length,
-                                                        CGSizeZero.width);
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                                        self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     [super viewDidLayoutSubviews];
 }
 
@@ -231,15 +222,13 @@
     for (NSUInteger i=0; i<self.columnCount; i++) {
 
         __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
-        NSString *reuseId = [self reuseIdForColumn:i];
+        NSString *reuseId = [self reuseIdForColumn:(NSInteger)i];
         [self.collectionView registerClass: classCollectionViewCell
                 forCellWithReuseIdentifier: reuseId];
         
         __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
-        NSString *reuseIdHeader = [self reuseIdSupplementForColumn:i];
-        [self.collectionView registerClass: classCollectionViewCellHeader
-                forSupplementaryViewOfKind: @"MTTableCellHeader"
-                       withReuseIdentifier: reuseIdHeader];
+        NSString *reuseIdHeader = [self reuseIdSupplementForColumn:(NSInteger)i];
+        [self.collectionView registerClass: classCollectionViewCellHeader forSupplementaryViewOfKind: @"MTTableCellHeader" withReuseIdentifier: reuseIdHeader];
 
     }
 
@@ -295,36 +284,34 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger numberOfItems = [self rowCount] * [self columnCount];
-    return numberOfItems;
+    return (NSInteger)([self rowCount] * [self columnCount]);
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
     NSUInteger row = [(MADTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
-    NSString *reuseId = [self reuseIdForColumn:column];
+    NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
-    MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
-                                                                  forIndexPath:indexPath];
+    MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
     
-    NSDictionary *rowData = [[self datatable] objectAtRow:row];
-    NSString *fieldKey = [[self query] fieldKeyForIndex:column];
+    NSDictionary *rowData = [self.datatable objectAtRow:row];
+    NSString *fieldKey = [self.query fieldKeyForIndex:column];
+
     id fieldValue = rowData[fieldKey];
-    cell.label.text = [NSString stringWithFormat:@"%@", fieldValue];
+    NSString *text = [[NSString alloc] initWithFormat:@"%@", fieldValue];
+    cell.label.text = text;
+
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
-           viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
-    NSString *reuseId = [self reuseIdSupplementForColumn:column];
-    NSString *fieldKey = [[self query] fieldKeyForIndex:indexPath.row];
-    NSArray *components = [fieldKey componentsSeparatedByString:@"."];
-    NSString *safeFieldName = [components lastObject];
-    NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
+    NSString *reuseId = [self reuseIdSupplementForColumn:(NSInteger)column];
+    NSString *fieldKey = [self.query fieldKeyForIndex:(NSUInteger)indexPath.row];
+    NSArray <NSString *>  *components = [fieldKey componentsSeparatedByString:@"."];
+    NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\"" withString:@""];
     
     MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
     view.label.text = fieldName;
@@ -337,23 +324,21 @@
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
     
-    NSUInteger column =  section;
-    NSString *fieldKey = [[self query] fieldKeyForIndex:column];
-    MTDatabaseField *field = [[self query] fields][fieldKey];
-    NSInteger maxNumberOfCharacters = [field calculatedWidth];
+    NSUInteger column = (NSUInteger)section;
+    NSString *fieldKey = [self.query fieldKeyForIndex:column];
+    MTDatabaseField *field = self.query.fields[fieldKey];
+    NSUInteger maxNumberOfCharacters = [field calculatedWidth];
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;
     }
-    [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    
+
     UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
     CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
-    
     UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
     
     NSString *s = [@"" stringByPaddingToLength:maxNumberOfCharacters withString:@"X" startingAtIndex:0];
-    CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
-        
+    NSDictionary *attributes = @{NSFontAttributeName: bodyFont};
+    CGSize size = [s sizeWithAttributes:attributes];
     return size.width < 75.0000f ? 75.0000f : (size.width > 280.0000f) ? 280.0000f : size.width;
 }
 

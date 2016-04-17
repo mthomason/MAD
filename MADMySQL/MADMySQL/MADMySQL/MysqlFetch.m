@@ -50,7 +50,7 @@
 @implementation MysqlFetch
 
 /*
- dataTable = [MTDataTable dataTableFactory:@{
+ dataTable = [MTDataTable newDataTableWithDefinition:@{
  typeKey : type,
  numberOfColumnsKey : numberOfColumns}];
  */
