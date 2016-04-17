@@ -24,7 +24,6 @@
     - (void)removeItemWithID:(NSManagedObjectID *)objectID;
     - (CGSize)size;
     - (void)layout;
-
     - (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
 
 @end
