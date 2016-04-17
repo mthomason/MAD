@@ -118,8 +118,8 @@
     
     MTDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
-    MTDataTable *datatable = [MTDataTable dataTableOfType: MTDataTableTypeVirtual
-                                             withObjectId: databaseConnection.hash];
+    MTDataTable *datatable = [MTDataTable newDataTableOfType: MTDataTableTypeVirtual
+                                                withObjectID: databaseConnection.hash];
     
     self.datatable = datatable;
     

@@ -91,11 +91,8 @@
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSNumber *objectIdV =  @(objectID.URIRepresentation.absoluteString.hash);
-    NSDictionary *parameters = @{
-                                 typeKey : type,
-                                 objectIdKey : objectIdV
-                                 };
-    return [MTDataTable dataTableFactory:parameters];
+    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
+    return [MTDataTable newDataTableWithDefinition:parameters];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

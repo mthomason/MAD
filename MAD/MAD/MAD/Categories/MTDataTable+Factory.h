@@ -13,9 +13,9 @@
 
 @interface MTDataTable (Factory)
 
-+ (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED;
-+ (instancetype)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED;
-+ (instancetype)dataTableOfType:(MTDataTableType)type withObjectId:(NSUInteger)objectId  NS_RETURNS_RETAINED;
+    + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
+    + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
+    + (instancetype)newDataTableOfType:(MTDataTableType)type withObjectID:(NSUInteger)objectID;
 
 @end
 
