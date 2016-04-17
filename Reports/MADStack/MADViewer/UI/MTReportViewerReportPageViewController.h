@@ -19,15 +19,15 @@
 
     @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
-    @property (nonatomic, weak, readonly) UIView *documentView;
     @property (readonly) UIScrollView *documentScroller;
-    @property (nonatomic, strong, readonly) MADPageViewAttributes *pageViewAttributes;
+    @property (nonatomic, weak, readonly) UIView *documentView;
+    @property (nonatomic, copy, readonly) MADPageViewAttributes *pageViewAttributes;
 
-+ (instancetype)PageViewControllerWithDocument:(MADocument *)document
-                                pageAttributes:(MADPageViewAttributes *)pageAttributes
-                                         frame:(CGRect)frame
-                                   andDelegate:(id <MTPrintingProtocol>)delegate;
-- (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
+    + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
+                                             pageAttributes:(MADPageViewAttributes *)pageAttributes frame:(CGRect)frame
+                                                andDelegate:(id <MTPrintingProtocol>)delegate;
+
+        - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
 
 @end
 

@@ -25,7 +25,7 @@ static const CGFloat PageEdgeInsetMargin = 3.0000f;
     @property (nonatomic, weak, readwrite) UIView *documentView;
 
     @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, strong, readwrite) MADPageViewAttributes *pageViewAttributes;
+    @property (nonatomic, copy, readwrite) MADPageViewAttributes *pageViewAttributes;
     @property (nonatomic, assign) bool initalLayout;
 
 @end
@@ -40,6 +40,12 @@ static const CGFloat PageEdgeInsetMargin = 3.0000f;
     scrollView.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: scrollView insets: boundsInsets(topLayoutGuide, bottomLayoutGuide)];
 }
 
+static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id<UILayoutSupport> topLayoutGuide, id<UILayoutSupport> bottomLayoutGuide);
+static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id<UILayoutSupport> topLayoutGuide, id<UILayoutSupport> bottomLayoutGuide) {
+    return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
+}
+
+static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m);
 static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
     return 1 +  ( l2 - l1 - (m * 2) )  / l1;
 }
@@ -81,10 +87,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 #pragma mark - Static Constructors
 
-+ (instancetype)PageViewControllerWithDocument:(MADocument *)document
-                                pageAttributes:(MADPageViewAttributes *)pageAttributes
-                                         frame:(CGRect)frame
-                                   andDelegate:(id <MTPrintingProtocol>)delegate {
++ (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document pageAttributes:(MADPageViewAttributes *)pageAttributes frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate {
     
     MADReportPageViewController *pageViewController = [[self alloc] initWithDocument: document andPageAttributtes: pageAttributes];
     pageViewController.view.frame = frame;
@@ -95,13 +98,11 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 #pragma mark - NSObject
 
-- (void)dealloc {
-    _delegate = nil;
-}
+- (void)dealloc { }
 
 - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
     if (self = [super init]) {
-        self.document = document;
+        _document = document;
         _initalLayout = true;
         _pageViewAttributes = pageAttributes.copy;
     }
@@ -165,15 +166,14 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     if (self.initalLayout) {
         self.initalLayout = false;
         
-        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView:self.documentScroller
-                                                                                                              insets: UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width)];
+        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView:self.documentScroller insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         
-        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
-        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
+        MADocument *document = self.document;
+        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
+        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
         
 
         [self.documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
-        //self.documentScroller.contentOffset = self.pageViewAttributes.contentOffsetInital;
         self.documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
     }
     
@@ -190,8 +190,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     CGPoint nextContentOffset = CGPointMake( (size.width != self.documentScroller.contentSize.width)?(size.width - self.documentScroller.contentSize.width) / 2 : 0.0f, currentContentOffset.y);
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView:self.documentScroller
-                                                                                                              insets: UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width)];
+        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
+                                                                                                              insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         self.documentScroller.contentOffset = nextContentOffset;
         self.documentScroller.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -217,13 +217,11 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    [MADReportPageViewController centerDocumentView:self.documentView insideScrollView:scrollView
-                                     topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
+    [MADReportPageViewController centerDocumentView:self.documentView insideScrollView:scrollView topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
-    [MADReportPageViewController centerDocumentView:view insideScrollView:scrollView
-                                     topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
+    [MADReportPageViewController centerDocumentView:view insideScrollView:scrollView topLayoutGuide:self.topLayoutGuide bottomLayoutGuide:self.bottomLayoutGuide margin:PageEdgeInsetMargin];
     view.contentScaleFactor = scrollView.traitCollection.displayScale * scale;
     [view setNeedsDisplay];
 }
