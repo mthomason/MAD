@@ -96,43 +96,32 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
-NSString * const MTDocumentAdditionalContentKey         = @"additionalContent";
-NSString * const MTDocumentFileTypeKey                  = @"fileType";
-NSString * const MTDocumentParentContextKey             = @"parentContext";
+NSString * const MADMimeType                                = @"application/vnd.everydayapps.mad";
+NSString * const MADDocumentInfoKeyThumbnail                = @"thumbnail";
+NSString * const MTDocumentExtentionPoratableNetworkGraphic = @"png";
 
-NSString * const MTDocumentAdditionalContentFileName    = @"sup";
-NSString * const MTDocumentGeneratorFileName            = @"gen";
-NSString * const MTDocumentThumbnailFileName            = @"img";
-NSString * const MTDocumentVersionFileName              = @"ver";
-NSString * const MTDocumentTypenFileName                = @"typ";
-NSString * const MTDocumentParentContextName            = @"moc";
-NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
+static NSString * const MTDocumentAdditionalContentKey      = @"additionalContent";
+static NSString * const MTDocumentFileTypeKey               = @"fileType";
+static NSString * const MTDocumentParentContextKey          = @"parentContext";
 
-NSString * const MTDocumentInfoKeyThumbnail             = @"thumbnail";
-NSString * const MTDocumentInfoKeyThumbnailStandard     = @"thumbnail.png";
-NSString * const MTDocumentInfoKeyThumbnailRetna        = @"thumbnail@2x.png";
-NSString * const MTDocumentInfoKeyMeta                  = @"meta.plist";
-NSString * const MTDocumentInfoKeyVersion               = @"version";
-NSString * const MTDocumentInfoKeyGenerator             = @"generator";
+static NSString * const MADDocumentInfoKeyThumbnailStandard     = @"thumbnail.png";
+static NSString * const MADDocumentInfoKeyThumbnailRetna        = @"thumbnail@2x.png";
+static NSString * const MADDocumentInfoKeyMeta                  = @"meta.plist";
+static NSString * const MADDocumentInfoKeyVersion               = @"version";
+static NSString * const MADDocumentInfoKeyGenerator             = @"generator";
 
-NSString * const MTDocumentInfoKeyMetaEditor            = @"editor";
-NSString * const MTDocumentInfoKeyMetaFileVersion       = @"fileversion";
-NSString * const MTDocumentInfoKeyMetaDateCreated       = @"datacreated";
+static NSString * const MADFileNameMetaPlist                   = @"meta.plist";
 
-NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
+static NSString * const MADPersistentStoreAliasMad             = @"analyitics";
+static NSString * const MADDocumentTypeUtiMad                  = @"com.everydayapps.productivity.mad";
 
-NSString * const MADFileNameMetaPlist                   = @"meta.plist";
+static NSString * const MNSInterfaceMessageErrorFailedToCreateReport    = @"Failed to create report document.";
+static NSString * const MNSInterfaceTitleProblem                        = @"Problem";
 
-NSString * const MTPersistentStoreAliasMad              = @"analyitics";
-NSString * const MTDocumentTypeUtiMad                   = @"com.everydayapps.productivity.mad";
+static NSString * const MADManagedObjectModelName                       = @"MAD";
+static NSString * const MADManagedObjectModelExtention                  = @"momd";
 
-NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
-NSString * const MNSInterfaceTitleProblem                           = @"Problem";
-
-NSString * const MADManagedObjectModelName                  = @"MAD";
-NSString * const MADManagedObjectModelExtention             = @"momd";
-
-NSString * const MADDocumentErrorDomain = @"MADocument";
+static NSString * const MADDocumentErrorDomain                          = @"MADocument";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
@@ -457,16 +446,16 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
             UIImage *extraImage = [UIImage imageWithData:imageData];
             NSString *key = [MADocument isRetnaDisplay] ?
-                                    MTDocumentInfoKeyThumbnailRetna :
-                                    MTDocumentInfoKeyThumbnailStandard;
+                                    MADDocumentInfoKeyThumbnailRetna :
+                                    MADDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
 
         }
     }
     
     NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:self.urlMetaPlaylist];
-    NSString *lastGenerator = [NSString stringWithString: dicionary[MTDocumentInfoKeyGenerator]];
-    NSNumber *lastVersion = ((NSNumber *)dicionary[MTDocumentInfoKeyVersion]).copy;
+    NSString *lastGenerator = [NSString stringWithString: dicionary[MADDocumentInfoKeyGenerator]];
+    NSNumber *lastVersion = ((NSNumber *)dicionary[MADDocumentInfoKeyVersion]).copy;
     
     if (lastGenerator == nil) {
         NSString *generator = @"MAD Designer";
@@ -478,8 +467,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         lastVersion = lastDocVersoin;
     }
     
-    self.extraInformation[MTDocumentInfoKeyGenerator] = lastGenerator;
-    self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
+    self.extraInformation[MADDocumentInfoKeyGenerator] = lastGenerator;
+    self.extraInformation[MADDocumentInfoKeyVersion] = lastVersion;
     
     return YES;
 }
@@ -491,8 +480,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [self setExtraInformation:extraInfo];
     }
     NSNumber *dataVersion = @(1.0);
-    self.extraInformation[MTDocumentInfoKeyVersion] = dataVersion;
-    self.extraInformation[MTDocumentInfoKeyGenerator] = @"MAD Designer";
+    self.extraInformation[MADDocumentInfoKeyVersion] = dataVersion;
+    self.extraInformation[MADDocumentInfoKeyGenerator] = @"MAD Designer";
     return self.extraInformation;
 }
 
@@ -510,10 +499,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         writeAdditionalContent  = YES;
         
         NSURL *metaUrl = [self urlMetaPlaylist];
-        id version = content[MTDocumentInfoKeyVersion];
-        id generator = content[MTDocumentInfoKeyGenerator];
+        id version = content[MADDocumentInfoKeyVersion];
+        id generator = content[MADDocumentInfoKeyGenerator];
         
-        NSDictionary *additionalContent = @{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator};
+        NSDictionary *additionalContent = @{MADDocumentInfoKeyVersion:version, MADDocumentInfoKeyGenerator:generator};
         [additionalContent writeToURL:metaUrl atomically:NO];
         
     } else {
@@ -524,7 +513,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return writeAdditionalContent;
 }
 
-+ (NSString *)persistentStoreName { return MTPersistentStoreAliasMad; }
++ (NSString *)persistentStoreName { return MADPersistentStoreAliasMad; }
 
 #pragma mark - Reporting Functions
 #pragma mark Query Building
@@ -1070,7 +1059,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             NSArray *requestedKeys = @[NSURLIsDirectoryKey];
             NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: destinationUrl
                                                   includingPropertiesForKeys: requestedKeys
-                                                                     options: -1
+                                                                     options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                 errorHandler: ErrorHandler];
             for (NSURL *file in enumerator) {
                 NSError *error = nil;

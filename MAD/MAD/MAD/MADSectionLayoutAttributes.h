@@ -22,10 +22,10 @@
     + (instancetype)sectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID andRect:(CGRect)rect;
     @property (nonatomic, copy) NSManagedObjectID *objectID;
 
-    - (BOOL)intersectsAnItemInArray:(NSArray *)items;
-    - (BOOL)moveOnScreen;
+    - (bool)intersectsAnItemInArray:(NSArray *)items;
+    - (bool)moveOnScreen;
     - (void)placeItemGivenAttributes:(NSArray *)layoutAttributes;
-    - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
+    - (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
     - (NSArray *)dropPointsHorizontal;
     - (NSArray *)dropPoints;
 

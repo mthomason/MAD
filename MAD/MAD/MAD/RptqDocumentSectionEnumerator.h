@@ -11,16 +11,16 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class RptqDocument;
+@class NSManagedObjectID, RptqDocument;
 
 @interface RptqDocumentSectionEnumerator : NSEnumerator
 
-@property (atomic, assign) NSUInteger current;
+    @property (atomic, assign) NSUInteger current;
 
-- (id)initWithDocument:(RptqDocument *)document;
-- (NSArray *)allObjects;
-- (id)nextObject;
-- (NSUInteger)count;
+    - (id)initWithDocument:(RptqDocument *)document;
+    - (NSArray *)allObjects;
+    - (id)nextObject;
+    - (NSUInteger)count;
 
 @end
 

@@ -19,20 +19,20 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface RptqDocumentSectionEnumerator ()
 
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) NSManagedObjectID *documentObjectID;
+    @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, copy) NSManagedObjectID *documentObjectID;
 
 @end
 
 @implementation RptqDocumentSectionEnumerator
 
 - (id)initWithDocument:(RptqDocument *)document {
-    self = [super init];
-    if (self) {
-        self.documentObjectID = document.objectID;
+    if (self = [super init]) {
+        _documentObjectID = document.objectID.copy;
         self.managedObjectContext = document.managedObjectContext;
         self.current = 0;
     }
@@ -67,7 +67,7 @@
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
 
-    NSInteger current = self.current;
+    NSUInteger current = self.current;
     id result = [query documentSectionForSelectedIndex: current];
     current++;
     self.current = current;
