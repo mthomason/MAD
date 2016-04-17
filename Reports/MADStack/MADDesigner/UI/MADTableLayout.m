@@ -10,12 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTTableLayout.h"
+#import "MADTableLayout.h"
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
 
-@interface MTTableLayout ()
+@interface MADTableLayout ()
     <UICollectionViewDelegate>
 
 
@@ -31,7 +31,7 @@ typedef struct _ColumnWidth {
 
 @end
 
-@implementation MTTableLayout
+@implementation MADTableLayout
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
