@@ -28,13 +28,14 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
-@property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
-@property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
-@property (nonatomic, strong)   NSOperationQueue *delegateQueue;
+    @property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
+    @property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
+    @property (nonatomic, strong)   NSOperationQueue *delegateQueue;
 
 @end
 
 @implementation MADFilesController
+
 @synthesize fileCoordinator = _fileCoordinator;
 @synthesize delegateQueue = _delegateQueue;
 
@@ -44,18 +45,16 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
-+ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
-                                     groupIdentifier: (NSString *)groupIdentifier
-                                               delay: (void (^)())handleLongRunningCall
-                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
++ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier groupIdentifier: (NSString *)groupIdentifier
+                                               delay: (void (^)())handleLongRunningCall completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
 
     if ([self isCloudAvailable]) {
+        
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
-        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
-                                target: self
+        
+        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000 target: self
                               selector: @selector(handleLongRunningCloudUrlLookup:)
-                              userInfo: longRunningCallBlock
-                               repeats: NO];
+                              userInfo: longRunningCallBlock repeats: NO];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             
@@ -76,9 +75,11 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
             });
         });
     } else {
+    
         NSURL *documents = [[NSFileManager defaultManager] localDataDirectoryForGroupIdentifier:groupIdentifier];
         NSURL *data = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
         if (handleCompletion) handleCompletion(NO, documents, data);
+    
     }
     
 }
@@ -92,8 +93,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Initialization
 
-- (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
-                          delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
+- (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
 
     if (self = [super init]) {
         
@@ -123,12 +123,12 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Property Overrides
 
-- (NSUInteger)count {
-    return self.fileMetaDatum.count;
-}
+- (NSUInteger)count { return self.fileMetaDatum.count; }
 
 - (void)setFileCoordinator:(id<MADFileCoordinator>)fileCoordinator {
+
     if (![_fileCoordinator isEqual:fileCoordinator]) {
+
         id<MADFileCoordinator> oldFileCoordinator = _fileCoordinator;
         _fileCoordinator = fileCoordinator;
         
@@ -139,10 +139,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         dispatch_sync(self.fileMetaDataQueue, ^{
             allURLs = [self.fileMetaDatum valueForKey:@"URL"];
         });
-        [self processContentChangesWithInsertedMetaDatum:@[] removedMetaDatum:allURLs updatedMetaDatum:@[]
-                                              completion:^(BOOL success, NSError *error) {
-                                                  
-                                              }];
+        
+        [self processContentChangesWithInsertedMetaDatum:@[] removedMetaDatum:allURLs updatedMetaDatum:@[] completion:^(BOOL success, NSError *error) { }];
         
         _fileCoordinator.delegate = self;
         oldFileCoordinator.delegate = nil;
@@ -208,9 +206,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
             }
             
             if ([self.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
-                [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
-                    
-                }];
+                [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) { }];
             }
         }];
     });
@@ -224,19 +220,23 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     NSMutableArray *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count];
     NSMutableArray *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
     NSURL *URL;
+    
     MADMetaData *metadata;
     for (URL in insertedURLs) {
         metadata = [[MADMetaData alloc] initWithURL:URL];
         [insertedMetaDatum addObject:metadata];
     }
+    
     for (URL in removedURLs) {
         metadata = [[MADMetaData alloc] initWithURL:URL];
         [removedMetaDatum addObject:metadata];
     }
+
     for (URL in updatedURLs) {
         metadata = [[MADMetaData alloc] initWithURL:URL];
         [updatedMetaDatum addObject:metadata];
     }
+
     [self processContentChangesWithInsertedMetaDatum: insertedMetaDatum
                                     removedMetaDatum: removedMetaDatum
                                     updatedMetaDatum: updatedMetaDatum
@@ -261,9 +261,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
-    
     [self.delegateQueue addOperationWithBlock:^{
+        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
         if ([self.delegate respondsToSelector:@selector(filesController:didFailCreatingListInfo:withError:)]) {
             [self.delegate filesController:self didFailCreatingListInfo:listInfo withError:error];
         }
@@ -271,8 +270,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
+        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
         if ([self.delegate respondsToSelector:@selector(filesController:didFailDuplicatingListInfo:withError:)]) {
             [self.delegate filesController:self didFailDuplicatingListInfo:listInfo withError:error];
         }
@@ -280,8 +279,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
+        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
         if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
             [self.delegate filesController:self didFailRenamingListInfo:listInfo withError:error];
         }
@@ -289,8 +288,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
+        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
         if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
             [self.delegate filesController:self didFailRemovingListInfo:listInfo withError:error];
         }
@@ -312,6 +311,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
                                   removedMetaDatum:(NSArray *)removes
                                   updatedMetaDatum:(NSArray *)updates
                                         completion:(void (^)(BOOL success, NSError *error))completion {
+                                        
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
@@ -411,15 +411,14 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 #pragma mark - Convenience
 
 - (NSArray *)listInfosByMappingURLs:(NSArray *)URLs {
+
     NSMutableArray *fileMetaDatum = [NSMutableArray arrayWithCapacity:URLs.count];
-    
     for (NSURL *URL in URLs) {
         MADMetaData *fileMetaData = [[MADMetaData alloc] initWithURL:URL];
-        
         [fileMetaDatum addObject:fileMetaData];
     }
-    
     return fileMetaDatum;
+    
 }
 
 @end

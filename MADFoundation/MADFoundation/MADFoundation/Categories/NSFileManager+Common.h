@@ -13,30 +13,24 @@
 
 @interface NSFileManager (Common)
 
-+ (NSURL *)localTemporaryDirectory;
+    + (NSURL *)localTemporaryDirectory;
 
-+ (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
-- (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
+    + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
+    - (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
-- (NSArray *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension;
+    - (NSArray <__kindof NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier andExtention: (NSString *)extenstion;
+    - (NSArray <__kindof NSURL *> *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension;
+    - (NSArray <__kindof NSURL *> *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion;
 
-- (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
-- (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-- (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-- (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+    - (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
+    - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+    - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+    - (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+    - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+    - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier fileURL:(NSURL *)fileURL;
+    - (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
 
-- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-                                         fileURL:(NSURL *)fileURL;
-- (NSArray *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
-                                                andExtention: (NSString *)extenstion;
-
-- (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
-- (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
-                       groupIdentifier:(NSString *)groupIdentifier;
-
-- (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion;
-
+    - (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl groupIdentifier:(NSString *)groupIdentifier;
 
 @end
 

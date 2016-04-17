@@ -17,12 +17,11 @@
 @interface MADSectionLayoutManager : NSObject
 
     @property (nonatomic, strong, readonly) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
+    @property (readonly) CGSize size;
 
     - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
-
     - (void)addItem:(MADSectionLayoutAttributes *)item;
     - (void)removeItemWithID:(NSManagedObjectID *)objectID;
-    - (CGSize)size;
     - (void)layout;
     - (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
 

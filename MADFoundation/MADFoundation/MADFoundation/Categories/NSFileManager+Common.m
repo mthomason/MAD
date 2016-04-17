@@ -27,49 +27,44 @@ NSString * const MADPathComponentData       = @"Data";
 }
 
 - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: MADPathComponentDocuments
+    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentDocuments
                               alternativeSelector: @selector(localDocumentsDirectory)];
 }
 
 - (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: MADPathComponentData
+    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentData
                               alternativeSelector: @selector(localDataDirectory)];
 }
 
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: MADPathComponentCache
+    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentCache
                               alternativeSelector: @selector(localCacheDirectory)];
 }
 
 - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: MADPathComponentAppSupport
+    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentAppSupport
                               alternativeSelector: @selector(localApplicationSupportDirectory)];
 }
 
 - (NSURL *)localTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: MADPathComponentTemporary
+    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentTemporary
                               alternativeSelector: @selector(localTemporaryDirectory)];
 }
 
-- (NSURL *)localDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-                              pathComponent:(NSString *)pathComponent
+- (NSURL *)localDirectoryForGroupIdentifier:(NSString *)groupIdentifier pathComponent:(NSString *)pathComponent
                         alternativeSelector:(SEL)alternativeSelector {
+    
     NSAssert(groupIdentifier != nil, @"Need a group identifier... %s", __PRETTY_FUNCTION__);
     NSError *error;
     NSURL *groupUrl = [self containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
+    
     NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil for %@.  Maybe the fucking entitlment file is missing?!?!", groupIdentifier);
     NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent isDirectory: YES];
     BOOL isDirectory;
     BOOL success = [self fileExistsAtPath: cacheURL.path isDirectory: &isDirectory];
+    
     if (!success) {
-        isDirectory = [self createDirectoryAtURL: cacheURL
-                     withIntermediateDirectories: YES attributes: nil
-                                           error: &error];
+        isDirectory = [self createDirectoryAtURL: cacheURL withIntermediateDirectories: YES attributes: nil error: &error];
     }
 
     return isDirectory ? cacheURL : [self urlForURLSelector:alternativeSelector];
@@ -77,48 +72,46 @@ NSString * const MADPathComponentData       = @"Data";
 
 - (NSURL *)urlForURLSelector:(SEL)selector {
     IMP imp = [self methodForSelector:selector];
-    NSURL* (*func)(id, SEL) = (void *)imp;
+    NSURL *(*func)(id, SEL) = (void *)imp;
     return func(self, selector);
 }
 
-- (NSArray *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
-                                                andExtention: (NSString *)extenstion {
+- (NSArray <__kindof NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier andExtention: (NSString *)extenstion {
     NSURL *direcotry = [self localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
     return [self contentsOfDirectory:direcotry withPathExtension:extenstion];
 }
 
-- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-                                         fileURL:(NSURL *)fileURL {
+- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier fileURL:(NSURL *)fileURL {
     NSString *fileNameId = [NSString stringWithFormat:@"%lu", (unsigned long)fileURL.lastPathComponent.stringByDeletingPathExtension.hash];
     return [self localCacheDirectoryForGroupIdentifier:groupIdentifier handle:fileNameId];
 }
 
-- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-                                          handle:(NSString *)handle {
-    NSError *error;
+- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier handle:(NSString *)handle {
+
     NSURL *cacheDirectory = [self localCacheDirectoryForGroupIdentifier:groupIdentifier];
+
     NSURL *cacheURL = [cacheDirectory URLByAppendingPathComponent:handle isDirectory:YES];
+
     BOOL isDirectory;
-    BOOL success = [self fileExistsAtPath:cacheURL.path isDirectory:&isDirectory];
-    if (!success) {
-        isDirectory = [self createDirectoryAtURL: cacheURL
-                     withIntermediateDirectories: YES
-                                      attributes: nil
-                                           error: &error];
+    if (![self fileExistsAtPath:cacheURL.path isDirectory:&isDirectory]) {
+
+        NSError * __autoreleasing *error;
+        isDirectory = [self createDirectoryAtURL: cacheURL withIntermediateDirectories: YES attributes: nil error: error];
+        
     }
     return cacheURL;
 }
 
-- (NSArray *)contentOfDirectory:(NSURL *)directory withExtention:(NSString *)extenstion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
+- (NSArray <__kindof NSURL *> *)contentOfDirectory:(NSURL *)directory withExtention:(NSString *)extenstion {
+
+    NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
     NSArray *directoryContents = [self contentsOfDirectoryAtPath:directory.path error:&error];
     for (NSString *filename in directoryContents) {
         NSString *fullPath = [directory.path stringByAppendingPathComponent:filename];
         NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
         BOOL isDirectory;
-        if ([self fileExistsAtPath: fileURL.path
-                       isDirectory: &isDirectory]) {
+        if ([self fileExistsAtPath: fileURL.path isDirectory: &isDirectory]) {
             if ([fileURL.pathExtension isEqualToString:extenstion]) {
                 [result addObject:fileURL];
             }
@@ -128,9 +121,9 @@ NSString * const MADPathComponentData       = @"Data";
 }
 
 
-- (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    
+- (NSArray <__kindof NSURL *> *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
+
+    NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
     NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSArray *directoryContents = [self contentsOfDirectoryAtPath:docPaths.firstObject error:&error];
@@ -148,28 +141,24 @@ NSString * const MADPathComponentData       = @"Data";
 }
 
 - (NSURL *)localCacheDirectoryNamed:(NSString *)handle {
-    NSURL *cachedArrayDirectories = [[NSFileManager localCacheDirectory] URLByAppendingPathComponent: handle
-                                                                                         isDirectory: YES];
+
+    NSURL *cachedArrayDirectories = [[NSFileManager localCacheDirectory] URLByAppendingPathComponent: handle isDirectory: YES];
     BOOL exist, isDirectory;
-    exist = [self fileExistsAtPath: cachedArrayDirectories.path
-                       isDirectory: &isDirectory];
+    exist = [self fileExistsAtPath: cachedArrayDirectories.path isDirectory: &isDirectory];
     if (exist == NO || isDirectory == NO) {
         NSError *error = nil;
-        [self createDirectoryAtURL: cachedArrayDirectories withIntermediateDirectories: YES
-                        attributes: @{} error: &error];
+        [self createDirectoryAtURL: cachedArrayDirectories withIntermediateDirectories: YES attributes: nil error: &error];
         if (error) {
             error = nil;
-            [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES
-                            attributes:@{}
-                                 error:&error];
+            [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:nil error:&error];
         }
         NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
     }
     return cachedArrayDirectories;
 }
 
-- (NSArray *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
+- (NSArray <__kindof NSURL *> *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension {
+    NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
 	NSArray *directoryContents = [self contentsOfDirectoryAtPath:directory.path error:&error];
     for (NSString *filename in directoryContents) {
@@ -313,6 +302,5 @@ NSString * const MADPathComponentData       = @"Data";
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
-
 
 @end
