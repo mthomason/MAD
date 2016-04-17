@@ -29,7 +29,8 @@ typedef NS_ENUM(short, MNSDocumentSectionType) {
 
     @property (readonly) NSUInteger numberOfRows;
     @property (nonatomic, assign, getter=isVisibile) bool visibility;
-    @property (nonatomic, assign) MNSDocumentSectionType type;
+    @property (nonatomic, assign)                       MNSDocumentSectionType type;
+    @property (nonatomic, assign) NSUInteger groupLevel;
 
     - (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
     - (void)addRow:(nonnull MADReportSectionRowsRepresentation *)row;

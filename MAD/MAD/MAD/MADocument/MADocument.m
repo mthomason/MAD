@@ -239,8 +239,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         NSNumber *migratePersistentStoresAutomaticallyOption =  [[NSNumber alloc] initWithBool:YES];
         NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
-                                                                             migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
+        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                    inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
+                    migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
         
         self.persistentStoreOptions = options;
         
@@ -323,7 +324,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             originalContentsURL: url
                           error: outError];
         if (!success) {
-            success = [fileWrapper writeToURL: self.urlGuts options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
+            success = [fileWrapper writeToURL: self.urlGuts
+                                      options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
                           originalContentsURL: url error: outError];
         }
         NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
@@ -383,8 +385,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     //}
 }
 
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                                       error:(NSError **)outError {
+- (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
+                            forSaveOperation: (UIDocumentSaveOperation)saveOperation
+                                       error: (NSError **)outError {
     
     UIImage *thumbnail = [self fullyRenderedThumbnail];
     NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
@@ -399,9 +402,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     
     
-    return @{
-             NSURLThumbnailDictionaryKey : thumbnails
-             };
+    return @{ NSURLThumbnailDictionaryKey : thumbnails };
 }
 
 

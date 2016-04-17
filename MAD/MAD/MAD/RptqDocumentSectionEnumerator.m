@@ -51,7 +51,7 @@
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     NSUInteger current = self.current;
-    NSUInteger total = [self count];
+    NSUInteger total = [query sectionCount];
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - current)];
     for (; self.current<total; self.current++) {
         @autoreleasepool {

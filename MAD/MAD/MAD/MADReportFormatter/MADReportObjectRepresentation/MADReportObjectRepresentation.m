@@ -41,6 +41,23 @@ static NSString * const MADIdentifierReportObject       = @"o";
 }
 
 - (instancetype)initWithSectionType:(MNSDocumentSectionType)sectionType
+                                row:(NSNumber *)row {
+    
+    if (self = [super init]) {
+        
+        NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
+        NSNumber *rowID = row.copy;
+        NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                section,    MTReportSectionType,
+                                rowID,      MTReportDetailRowId, nil];
+        self.objectRepresentation = result;
+        
+    }
+    return self;
+    
+}
+
+- (instancetype)initWithSectionType:(MNSDocumentSectionType)sectionType
                          groupLevel:(NSUInteger)groupLevel
                                 row:(NSNumber *)row {
     
@@ -48,10 +65,11 @@ static NSString * const MADIdentifierReportObject       = @"o";
     
         NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
         NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger: groupLevel];
+        NSNumber *rowID = row.copy;
         NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
                                                             section,    MTReportSectionType,
                                                             level,      MTReportGroupLevel,
-                                                            row,        MTReportDetailRowId, nil];
+                                                            rowID,      MTReportDetailRowId, nil];
         self.objectRepresentation = result;
 
     }
@@ -62,8 +80,9 @@ static NSString * const MADIdentifierReportObject       = @"o";
 + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
                                             groupLevel:(NSUInteger)groupLevel
                                                    row:(NSNumber *)row {
-    id result = [[MADReportObjectRepresentation alloc] initWithSectionType:sectionType
-                                                                groupLevel:groupLevel row:row];
+    id result = [[MADReportObjectRepresentation alloc] initWithSectionType: sectionType
+                                                                groupLevel: groupLevel
+                                                                       row: row];
     return result;
     
 }
@@ -71,10 +90,8 @@ static NSString * const MADIdentifierReportObject       = @"o";
 + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
                                                    row:(NSNumber *)row {
     
-    NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
-    NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                section,    MTReportSectionType,
-                                                row,        MTReportDetailRowId, nil];
+    id result = [[MADReportObjectRepresentation alloc] initWithSectionType: sectionType
+                                                                       row: row];
     return result;
     
 }

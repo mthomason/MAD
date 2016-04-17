@@ -12,7 +12,7 @@
 
 @interface MADReportPageRepresentation ()
 
-    @property (nonatomic, strong, getter=hasSections) NSMutableArray <__kindof MADReportSectionRepresentation *> *sections;
+    @property (nonatomic, strong, getter=hasSections, readwrite) NSMutableArray <__kindof MADReportSectionRepresentation *> *sections;
 
 @end
 

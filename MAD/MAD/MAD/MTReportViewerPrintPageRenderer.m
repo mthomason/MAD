@@ -106,13 +106,19 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @implementation MTReportViewerPrintPageRenderer
 
-+ (instancetype)newReportViewerPrintPageRendererWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
++ (instancetype)newReportViewerPrintPageRendererWithReportFormatter:(MTReportFormatter *)reportFormatter
+                                                          dataTable:(MTDataTableFast *)dataTable
+                                               andPrintableAreaSize:(CGSize)printableAreaSize {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    id reportViewerPrintPageRenderer = [[self alloc] initWithReportFormatter:reportFormatter dataTable:dataTable andPrintableAreaSize:printableAreaSize];
+    id reportViewerPrintPageRenderer = [[self alloc] initWithReportFormatter: reportFormatter
+                                                                   dataTable: dataTable
+                                                        andPrintableAreaSize: printableAreaSize];
     return reportViewerPrintPageRenderer;
 }
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
+                              dataTable:(MTDataTableFast *)dataTable
+                   andPrintableAreaSize:(CGSize)printableAreaSize {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         [self initCommon];
@@ -169,7 +175,8 @@ static inline CGRect RectZoomRect(CGFloat size, CGRect rect) {
 
 static inline CGRect RectPathRect(CGRect zoomRect, CGFloat scale);
 static inline CGRect RectPathRect(CGRect zoomRect, CGFloat scale) {
-    return CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
+    return CGRectMake(zoomRect.origin.x, zoomRect.origin.y,
+                      zoomRect.size.width/scale, zoomRect.size.height/scale);
 }
 
 static inline CGFloat PointStartPointY(CGRect pathRect) {
@@ -184,7 +191,8 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
     return CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
 }
 
-- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size edgeEffect:(bool)edgeEffect zoomEffect:(bool)zoomEffect squareEffect:(bool)squareEffect
+- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size edgeEffect:(bool)edgeEffect
+                    zoomEffect:(bool)zoomEffect squareEffect:(bool)squareEffect
                     cornerSize:(CGFloat)cornerSize scale:(CGFloat)scale {
     
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -219,7 +227,8 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
 }
 
 
-- (void)drawZoomEffectWithPathRect:(CGRect)pathRect cornerSize:(CGFloat)cornerSize context:(CGContextRef)context {
+- (void)drawZoomEffectWithPathRect:(CGRect)pathRect cornerSize:(CGFloat)cornerSize
+                           context:(CGContextRef)context {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     CGPoint startPoint = CGPointMake(pathRect.origin.x, PointStartPointY(pathRect));
     CGPoint topRightPoint = PointTopRight(pathRect);
@@ -238,7 +247,8 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
 
 }
 
-- (void)drawEdgeEffectWithPathRect:(CGRect)pathRect scale:(CGFloat)scale context:(CGContextRef)context {
+- (void)drawEdgeEffectWithPathRect:(CGRect)pathRect scale:(CGFloat)scale
+                           context:(CGContextRef)context {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
     CGPoint startPoint = CGPointMake(pathRect.origin.x, PointStartPointY(pathRect));
@@ -295,6 +305,7 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
 }
 
 - (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
+
     NSLog(@"%s", __PRETTY_FUNCTION__);
     return [self thumbnailWithRect: [MTPaper rectLetter] size: MADFloat_1024 edgeEffect: true
                         zoomEffect: true squareEffect: false
@@ -311,7 +322,8 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
     CGPathRelease(path);
 }
 
-- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
+- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
+                       withTransparentBackground:(BOOL)transparentBackground {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -325,7 +337,8 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
 
 }
 
-- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection inRect:(CGRect)rect {
+- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
+                                      inRect:(CGRect)rect {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -365,7 +378,9 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
 
 }
 
-- (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+- (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx
+             inPageRect:(CGRect)pageRect {
+
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (pageIndex >= self.reportFormatter.numberOfPages) {
@@ -373,21 +388,27 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
     }
 
     NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
+    NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
+
+    CGFloat originY = pageRect.origin.y;
+
     RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
 
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
     MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
-    CGFloat originY = pageRect.origin.y;
-    NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
     
     NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
     NSArray <MADReportObjectRepresentation *> *pageSections = layoutEnumerator.allObjects;
+    
     MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
+    
     for (MADReportObjectRepresentation *pageSection in pageSections) {
         
-        RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
+        RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType
+                                                                       andLevel:pageSection.groupLevel];
+        
         CGRect sectionRect = [self sectionRectForDocumentSection:documentSection
                                                      pageSection:pageSection inDocument:document
                                                         pageRect:pageRect
@@ -396,14 +417,20 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
         
         [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
         
-        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
+        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter &&
+            pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
             readGroupCounter++;
         }
         
-        MADReportSectionRepresentation *sectionRepresentation = [self drawSection:documentSection pageRect:pageRect
-                                                                      pageSection:pageSection document:document
-                                                                           onPage:pageIndex withDatabase:database offset:&originY
-                                                                 offsetElement:&offsetElement offsetCharacter:&offsetCharacter];
+        MADReportSectionRepresentation *sectionRepresentation = [self drawSection:documentSection
+                                                                         pageRect:pageRect
+                                                                      pageSection:pageSection
+                                                                         document:document
+                                                                           onPage:pageIndex
+                                                                     withDatabase:database
+                                                                           offset:&originY
+                                                                    offsetElement:&offsetElement
+                                                                  offsetCharacter:&offsetCharacter];
         [pageRepresentation addSection:sectionRepresentation];
         
         if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
@@ -446,7 +473,10 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
                         
             for (RptqDocumentObject *item in items) {
                 @autoreleasepool {
-                    id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
+                    id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex
+                                                       groupLevelKeys:groupLevelKeys
+                                                          detailRowId:pageSection.detailRowId
+                                                              andItem:item];
                     CGRect elementCanvasRect = item.frame;
                     elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
                     elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
