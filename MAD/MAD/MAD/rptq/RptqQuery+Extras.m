@@ -13,17 +13,17 @@
 
 #import "RptqQuery+Extras.h"
 
-#import "MTDatabaseField.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabaseField.h>
+#import <MAD/MTDatabase.h>
 
 #import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument+Extras.h>
 
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
 
 #import "RptqQuery.h"
 
@@ -40,7 +40,7 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"

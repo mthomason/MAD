@@ -11,7 +11,7 @@
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocumentSection.h>
 #import "RptqDocumentSectionRows.h"
 #import <Foundation/NSIndexPath.h>
 #import <UIKit/UICollectionView.h>

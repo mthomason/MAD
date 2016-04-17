@@ -11,8 +11,8 @@
 #endif
 
 #import "MTQueryCacheIndexCreate.h"
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
 #import "MTDatabaseSqlite3.h"
 #import <MADFoundation/MADDataColumn.h>
 

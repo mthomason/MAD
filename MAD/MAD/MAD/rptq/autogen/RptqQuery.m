@@ -7,7 +7,7 @@
 //
 
 #import "RptqQuery.h"
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryCache.h"
 #import "RptqQueryGroup.h"

@@ -11,17 +11,17 @@
 #endif
 
 #import "MTQuerySampleDataTable.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabase.h>
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqUserCredentals.h"
-#import "RptqDatabase.h"
-#import "MTDatabaseField.h"
+#import <MAD/RptqDatabase.h>
+#import <MAD/MTDatabaseField.h>
 #import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 #import <CoreData/NSManagedObjectID.h>
 
 @interface MTQuerySampleDataTable ()

@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDatabase_Extras_h
 #define Reports_RptqDatabase_Extras_h
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 
 typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 	MNSDatabaseTypeUnknown              = 0,

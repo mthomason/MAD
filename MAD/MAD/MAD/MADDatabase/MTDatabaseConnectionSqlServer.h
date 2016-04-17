@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseConnectionSqlServer_h
 #define Reports_MTDatabaseConnectionSqlServer_h
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
     <NSCopying>

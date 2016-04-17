@@ -17,14 +17,14 @@
 
 #import "RptqDatabaseSchemaField.h"
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
 #import "RptqDocumentSectionRows.h"
 

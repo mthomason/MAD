@@ -11,12 +11,12 @@
 #endif
 
 #import "MTActivityItemProviderPdf.h"
-#import "MADocument.h"
+#import <MAD/MADocument.h>
 #import "MTReportFormatter.h"
-#import "MTReportViewerPrintPageRenderer.h"
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 #import "MADActivityIndicator.h"
 #import "MTPaper.h"
-#import "MTDataTableFast.h"
+#import <MAD/MTDataTableFast.h>
 #import "MADNotificationDidFormatPage.h"
 
 @interface  MTActivityItemProviderPdf ()

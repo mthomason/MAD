@@ -11,13 +11,13 @@
 #endif
 
 #import "RptqDocumentSectionEnumerator.h"
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDatabase.h>
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryGroup.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 

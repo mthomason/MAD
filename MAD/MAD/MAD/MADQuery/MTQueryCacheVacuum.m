@@ -11,8 +11,8 @@
 #endif
 
 #import "MTQueryCacheVacuum.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDatabase.h>
 
 @interface MTQueryCacheVacuum ()
 

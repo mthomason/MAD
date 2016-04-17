@@ -11,10 +11,10 @@
 #endif
 
 #import "MTQueryTest.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabase.h>
 #import "RptqUserCredentals.h"
 #import "MTDataTable+Factory.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTQueryTest ()
 

@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDocumentSection.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentSectionRows.h"
 #import "RptqQueryGroup.h"
 

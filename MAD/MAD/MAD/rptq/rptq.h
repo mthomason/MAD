@@ -9,10 +9,10 @@
 #ifndef MAD_rptq_h
 #define MAD_rptq_h
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectBarcode.h"
@@ -23,7 +23,7 @@
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelLink.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocumentSection.h>
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery.h"
 #import "RptqQueryCache.h"

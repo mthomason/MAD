@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataTableFast.h"
+#import <MAD/MTDataTableFast.h>
 
 #import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MADDataColumn.h>

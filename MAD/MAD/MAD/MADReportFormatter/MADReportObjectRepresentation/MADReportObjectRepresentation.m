@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSDictionary+MADReportObjectRepresentation.h"
+#import <MAD/MADReportObjectRepresentation.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
 

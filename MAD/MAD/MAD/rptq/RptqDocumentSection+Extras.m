@@ -10,13 +10,13 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection+Extras.h>
 #import <objc/runtime.h>
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument+Extras.h>
 #import "RptqDocumentSectionEnumerator.h"
 
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
 
 #import "RptqDatabaseSchemaTable.h"
 

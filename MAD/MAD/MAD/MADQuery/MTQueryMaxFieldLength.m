@@ -12,14 +12,14 @@
 
 #import "MTQueryMaxFieldLength.h"
 #import <MADFoundation/MTDataTable.h>
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
-#import "RptqDatabase.h"
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseField.h>
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTQueryMaxFieldLength ()
 

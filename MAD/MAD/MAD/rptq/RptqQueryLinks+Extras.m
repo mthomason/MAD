@@ -13,9 +13,9 @@
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQuery.h"
 #import "RptqQueryField.h"

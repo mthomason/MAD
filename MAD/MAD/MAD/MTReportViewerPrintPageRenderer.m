@@ -10,27 +10,27 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportViewerPrintPageRenderer.h"
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 
-#import "MADocument.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseField.h"
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDatabaseField.h>
 
 #import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument+Extras.h>
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "RptqQueryField.h"
 #import "RptqUserCredentals.h"
 
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
 #import "RptqDocumentSectionRows.h"
 
@@ -52,12 +52,12 @@
 
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabase.h>
 
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
 
-#import "NSDictionary+MADReportObjectRepresentation.h"
+#import <MAD/MADReportObjectRepresentation.h>
 
 #import "MADAccessibilityLine.h"
 #import "MADReportTextRepresentation.h"

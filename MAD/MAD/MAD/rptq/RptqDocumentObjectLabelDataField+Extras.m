@@ -11,10 +11,10 @@
 #endif
 
 #import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection+Extras.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>

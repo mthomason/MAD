@@ -11,10 +11,10 @@
 #endif
 
 #import "RptqDocumentObjectFormula+Extras.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocumentSection.h>
 #import "RptqDocumentSectionRows.h"
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

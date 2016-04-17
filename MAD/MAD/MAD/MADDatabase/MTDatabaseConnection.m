@@ -10,10 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 #import "MADConstants.h"
 #import "RptqUserCredentals.h"
-#import "MTDatabase.h"
+#import <MAD/MTDatabase.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"

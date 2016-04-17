@@ -13,7 +13,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import "MADCredential.h"
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 #import "MTDatabaseConnectionMySql.h"
 
 #import <MADMySQL/MysqlConnection.h>
@@ -24,7 +24,7 @@
 
 #import "MTQuery.h"
 
-#import "MTDatabaseField.h"
+#import <MAD/MTDatabaseField.h>
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"

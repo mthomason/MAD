@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADocument.h"
+#import <MAD/MADocument.h>
 
 #import <Foundation/NSException.h>
 #import <MADFoundation/NSURL+Document.h>
@@ -26,18 +26,18 @@
 
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 #import "MADNotificationDidFormatPage.h"
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
 
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
 #import "RptqDocumentSectionRows.h"
 #import "RptqDocumentSectionRows+Extras.h"
@@ -76,9 +76,9 @@
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
-#import "MTDataTableFast.h"
-#import "MTDatabase.h"
-#import "MTReportViewerPrintPageRenderer.h"
+#import <MAD/MTDataTableFast.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

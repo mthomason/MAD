@@ -11,11 +11,11 @@
 #endif
 
 #import "RptqUserCredentals+Extras.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDatabase+Extras.h>
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

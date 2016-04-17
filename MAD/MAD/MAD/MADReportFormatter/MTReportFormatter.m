@@ -13,23 +13,23 @@
 #import "MTReportFormatter.h"
 #import <CoreData/NSManagedObjectID.h>
 #import "MTReportFormatterState.h"
-#import "MADocument.h"
+#import <MAD/MADocument.h>
 #import "MTQueryFull.h"
 
 #import "RptqDocumentSectionEnumerator.h"
 
 #import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument+Extras.h>
 
 #import "RptqQueryGroup.h"
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
-#import "MTDatabaseField.h"
+#import <MAD/MTDatabaseField.h>
 
 #import "MTReportFormatterCache.h"
 
@@ -40,7 +40,7 @@
 
 #import "NSData+Comparson.h"
 
-#import "NSDictionary+MADReportObjectRepresentation.h"
+#import <MAD/MADReportObjectRepresentation.h>
 
 NSString * const MTNullIdentifier = @"(null)";
 

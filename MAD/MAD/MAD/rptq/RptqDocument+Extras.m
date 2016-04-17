@@ -10,19 +10,19 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocument+Extras.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/MTDatabaseConnection.h>
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 
 #import "RptqDocumentSectionRows.h"
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
 
 #import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"

@@ -11,7 +11,7 @@
 #endif
 
 #import "RptqDocumentObjectImage+Extras.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentObject+Extras.h"
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

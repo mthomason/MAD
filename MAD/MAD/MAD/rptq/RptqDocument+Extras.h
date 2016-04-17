@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocument_Extras_h
 #define Reports_RptqDocument_Extras_h
 
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 

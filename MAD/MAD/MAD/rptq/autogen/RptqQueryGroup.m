@@ -7,7 +7,7 @@
 //
 
 #import "RptqQueryGroup.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocumentSection.h>
 #import "RptqQuery.h"
 #import "RptqQueryField.h"
 

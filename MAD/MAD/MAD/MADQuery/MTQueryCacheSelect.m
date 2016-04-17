@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheSelect.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"

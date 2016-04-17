@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseConnectionMySql_h
 #define Reports_MTDatabaseConnectionMySql_h
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTDatabaseConnectionMySql : MTDatabaseConnection
     <NSCopying>

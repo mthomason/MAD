@@ -13,9 +13,9 @@
 #import "MTQueryFull.h"
 
 #import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
+#import <MAD/RptqDocument+Extras.h>
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
@@ -39,8 +39,8 @@
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqQueryGroup.h"
 
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseField.h>
 
 #import "MTQuerySampleDataField.h"
 
@@ -51,7 +51,7 @@
 #import <MADDataStructures/MTEdge.h>
 #import <MADDataStructures/MADAlgorithmElementProperties.h>
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

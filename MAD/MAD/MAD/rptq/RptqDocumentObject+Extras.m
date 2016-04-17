@@ -23,8 +23,8 @@
 #import "RptqDocumentObjectImage.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 #import "RptqDocumentSectionRows.h"
 #import <MADBarcodes/MTBarcode.h>
 #import <Foundation/NSNumberFormatter.h>

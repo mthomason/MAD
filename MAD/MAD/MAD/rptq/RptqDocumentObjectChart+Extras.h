@@ -7,7 +7,7 @@
 //
 /*
 #import "RptqDocumentObjectChart.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqDocumentObjectFactory.h"
 #import "RptqDocumentObject+Extras.h"
 

@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseConnectionSqlite3_h
 #define Reports_MTDatabaseConnectionSqlite3_h
 
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTDatabaseConnectionSqlite3 : MTDatabaseConnection
 

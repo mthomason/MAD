@@ -11,10 +11,10 @@
 #endif
 
 #import "RptqQueryPredicate+Extras.h"
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
 #import "RptqQuery.h"
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

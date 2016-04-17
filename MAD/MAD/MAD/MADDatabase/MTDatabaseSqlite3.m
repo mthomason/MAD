@@ -15,7 +15,7 @@
 #import "MADErrorUserInfo.h"
 #import "MTQuery.h"
 #import "MTDatabaseTable.h"
-#import "MTDatabaseField.h"
+#import <MAD/MTDatabaseField.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseDataBinding.h"

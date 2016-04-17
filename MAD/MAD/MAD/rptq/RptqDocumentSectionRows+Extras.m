@@ -11,7 +11,7 @@
 #endif
 
 #import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocumentSection.h>
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

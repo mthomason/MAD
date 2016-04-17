@@ -7,7 +7,7 @@
 //
 
 #import "RptqRelationship.h"
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaField.h"
 
 

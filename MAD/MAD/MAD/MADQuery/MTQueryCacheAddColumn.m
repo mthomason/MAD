@@ -12,7 +12,7 @@
 
 #import "MTQueryCacheAddColumn.h"
 #import <MADFoundation/MADDataColumn.h>
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabaseConnection.h>
 #import "MTDatabaseSqlite3.h"
 
 @class MTDatabaseSqlite3;

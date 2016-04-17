@@ -11,8 +11,8 @@
 #endif
 
 #import "MTQueryCacheEndTransaction.h"
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MTQueryCacheEndTransaction ()
 

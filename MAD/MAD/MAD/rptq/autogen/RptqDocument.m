@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqDocumentSection.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDocumentSection.h>
 
 
 @implementation RptqDocument

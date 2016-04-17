@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseField.h"
+#import <MAD/MTDatabaseField.h>
 #import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
 

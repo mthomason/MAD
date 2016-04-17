@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 #import "RptqDatabaseSchemaTable.h"
-#import "RptqDocument.h"
+#import <MAD/RptqDocument.h>
 #import "RptqQuery.h"
 #import "RptqUserCredentals.h"
 
