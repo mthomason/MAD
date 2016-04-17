@@ -69,9 +69,9 @@
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSNumber *objectIdV =  @(hash);
-    return [MTDataTable newDataTableWithDefinition:@{
-                                           typeKey : type,
-                                           objectIdKey : objectIdV}];
+    NSDictionary *definition = @{typeKey : type,
+                                 objectIdKey : objectIdV};
+    return [MTDataTable newDataTableWithDefinition:definition];
 }
 
 @end
