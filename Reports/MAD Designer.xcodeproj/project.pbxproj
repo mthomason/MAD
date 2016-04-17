@@ -200,7 +200,7 @@
 		4C26BA601BAF99F000456DC8 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA4B1BAF99F000456DC8 /* MTTableCell.m */; };
 		4C26BA611BAF99F000456DC8 /* MTTableCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA4D1BAF99F000456DC8 /* MTTableCellHeader.m */; };
 		4C26BA621BAF99F000456DC8 /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA4F1BAF99F000456DC8 /* MTTableController.m */; };
-		4C26BA631BAF99F000456DC8 /* MTTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA511BAF99F000456DC8 /* MTTableLayout.m */; };
+		4C26BA631BAF99F000456DC8 /* MADTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA511BAF99F000456DC8 /* MADTableLayout.m */; };
 		4C26BA641BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA541BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */; };
 		4C26BA6A1BAF9A2B00456DC8 /* MADToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADToolbox.storyboard */; };
@@ -1466,8 +1466,8 @@
 		4C26BA4D1BAF99F000456DC8 /* MTTableCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableCellHeader.m; sourceTree = "<group>"; };
 		4C26BA4E1BAF99F000456DC8 /* MTTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableController.h; sourceTree = "<group>"; };
 		4C26BA4F1BAF99F000456DC8 /* MTTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableController.m; sourceTree = "<group>"; };
-		4C26BA501BAF99F000456DC8 /* MTTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableLayout.h; sourceTree = "<group>"; };
-		4C26BA511BAF99F000456DC8 /* MTTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableLayout.m; sourceTree = "<group>"; };
+		4C26BA501BAF99F000456DC8 /* MADTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableLayout.h; sourceTree = "<group>"; };
+		4C26BA511BAF99F000456DC8 /* MADTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableLayout.m; sourceTree = "<group>"; };
 		4C26BA531BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewLayoutLiquidAttributes.h; sourceTree = "<group>"; };
 		4C26BA541BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewLayoutLiquidAttributes.m; sourceTree = "<group>"; };
 		4C26BA561BAF99F000456DC8 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
@@ -3414,8 +3414,8 @@
 				4C26BA4D1BAF99F000456DC8 /* MTTableCellHeader.m */,
 				4C26BA4E1BAF99F000456DC8 /* MTTableController.h */,
 				4C26BA4F1BAF99F000456DC8 /* MTTableController.m */,
-				4C26BA501BAF99F000456DC8 /* MTTableLayout.h */,
-				4C26BA511BAF99F000456DC8 /* MTTableLayout.m */,
+				4C26BA501BAF99F000456DC8 /* MADTableLayout.h */,
+				4C26BA511BAF99F000456DC8 /* MADTableLayout.m */,
 				4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */,
 				4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */,
@@ -6442,7 +6442,7 @@
 				4C26B9681BAF11C800456DC8 /* MADOperationArchiveData.m in Sources */,
 				4C26B9D01BAF123A00456DC8 /* MADToolboxTransitioner.m in Sources */,
 				4CC886131C7AADC0003E18D2 /* UIStoryboard+DocumentInformation.m in Sources */,
-				4C26BA631BAF99F000456DC8 /* MTTableLayout.m in Sources */,
+				4C26BA631BAF99F000456DC8 /* MADTableLayout.m in Sources */,
 				4C4020EE1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4C26B9C31BAF123A00456DC8 /* MADOpenFileViewController.m in Sources */,
 				4C0153E11C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m in Sources */,

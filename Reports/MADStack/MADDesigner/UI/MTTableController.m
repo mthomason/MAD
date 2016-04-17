@@ -16,7 +16,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MAD/MTDatabaseConnection.h>
 
-#import "MTTableLayout.h"
+#import "MADTableLayout.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
 #import <MAD/RptqQuery.h>
@@ -29,7 +29,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MTTableController ()
-    <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol> {
+    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
     bool _firstTimeViewDidAppear;
 }
 
@@ -55,7 +55,7 @@
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
-    MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
+    MADTableLayout *tableLayout = [[MADTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
@@ -228,7 +228,7 @@
 - (void)invalidateLayout {
     UICollectionView *collectionView = self.collectionView;
     [collectionView reloadData];
-    [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
+    [(MADTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
                                                      andRowCount:self.rowCount];
     
     for (NSUInteger i=0; i<self.columnCount; i++) {
@@ -305,8 +305,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
-    NSUInteger row = [(MTTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
+    NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
+    NSUInteger row = [(MADTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdForColumn:column];
     
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
@@ -322,7 +322,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
+    NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdSupplementForColumn:column];
     NSString *fieldKey = [[self query] fieldKeyForIndex:indexPath.row];
     NSArray *components = [fieldKey componentsSeparatedByString:@"."];
