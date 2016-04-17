@@ -17,46 +17,89 @@ NSString * const MTReportDetailRowId                    = @"d";
 
 static NSString * const MADIdentifierReportObject       = @"o";
 
-@implementation NSDictionary (MADReportObjectRepresentation)
+@interface MADReportObjectRepresentation ()
+    @property (nonatomic, strong) NSDictionary *objectRepresentation;
+@end
+
+@implementation MADReportObjectRepresentation
+
+- (instancetype)initWithSectionType:(MNSDocumentSectionType)sectionType
+                         groupLevel:(NSUInteger)groupLevel {
+    
+    if (self = [super init]) {
+        
+        NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
+        NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger: groupLevel];
+        NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                            section,    MTReportSectionType,
+                                                            level,      MTReportGroupLevel, nil];
+        self.objectRepresentation = result;
+        
+    }
+    return self;
+    
+}
+
+- (instancetype)initWithSectionType:(MNSDocumentSectionType)sectionType
+                         groupLevel:(NSUInteger)groupLevel
+                                row:(NSNumber *)row {
+    
+    if (self = [super init]) {
+    
+        NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
+        NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger: groupLevel];
+        NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                            section,    MTReportSectionType,
+                                                            level,      MTReportGroupLevel,
+                                                            row,        MTReportDetailRowId, nil];
+        self.objectRepresentation = result;
+
+    }
+    return self;
+
+}
 
 + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
                                             groupLevel:(NSUInteger)groupLevel
                                                    row:(NSNumber *)row {
-    NSNumber *section = @(sectionType);
-    NSNumber *level = @(groupLevel);
-    NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
-                            section,    MTReportSectionType,
-                            level,      MTReportGroupLevel,
-                            row,        MTReportDetailRowId, nil];
+    id result = [[MADReportObjectRepresentation alloc] initWithSectionType:sectionType
+                                                                groupLevel:groupLevel row:row];
     return result;
+    
 }
 
 + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
                                                    row:(NSNumber *)row {
-    NSNumber *section = @(sectionType);
+    
+    NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
     NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:
                                                 section,    MTReportSectionType,
                                                 row,        MTReportDetailRowId, nil];
     return result;
+    
 }
 
 - (NSUInteger)groupLevel {
-    return ((NSNumber *)self[MTReportGroupLevel]).unsignedIntegerValue;
+    return ((NSNumber *)self.objectRepresentation[MTReportGroupLevel]).unsignedIntegerValue;
 }
 
 - (MNSDocumentSectionType)sectionType {
-    return ((NSNumber *)self[MTReportSectionType]).shortValue;
+    return ((NSNumber *)self.objectRepresentation[MTReportSectionType]).shortValue;
 }
 
 - (NSNumber *)detailRowId {
-    return self[MTReportDetailRowId];
+    return self.objectRepresentation[MTReportDetailRowId];
 }
 
 - (id)debugQuickLookObject {
     NSMutableString *debugString = [[NSMutableString alloc] init];
-    [debugString appendFormat:@"S:\t%lu", (unsigned long)self.sectionType];
-    [debugString appendFormat:@"S:\t%lu", (unsigned long)self.groupLevel];
-    [debugString appendFormat:@"S:\t%@", self.detailRowId];
+    [debugString appendString:@"MADReportObjectRepresentation\n"];
+    [debugString appendString:@"-----------------------------\n"];
+    [debugString appendFormat:@"Row ID:       %lu\n", self.detailRowId.unsignedIntegerValue];
+    [debugString appendFormat:@"Section type: %lu\n", (unsigned long)self.sectionType];
+    [debugString appendFormat:@"Group level:  %lu\n", (unsigned long)self.groupLevel];
+    [debugString appendString:@"-----------------------------\n"];
+    [debugString appendString:@"\n"];
     return @"";
 }
 

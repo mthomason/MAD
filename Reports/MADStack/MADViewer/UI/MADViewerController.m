@@ -128,6 +128,46 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
 
+            MADViewerController * __weak weakViewerController = self;
+
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                
+                MADViewerController *viewerController = weakViewerController;
+                MADocument *document = viewerController.document;
+                
+                viewerController.lastCacheDate = [NSDate date];
+                [viewerController setDisplayActive];
+//                [self reload];
+
+
+                MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                                                                                           dataTable: document.mainDataTable
+                                                                                                                andPrintableAreaSize: document.paper.paperSize];
+                viewerController.printPageRendererReport = printPageRender;
+                [viewerController ignoreFormatter: document.reportFormatter];
+
+                MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
+                pageAttributes.pageNumber = 1;
+                pageAttributes.numberOfPages = document.reportFormatter.numberOfPages;
+                pageAttributes.contentSizeInital = document.paper.paperSize;
+                pageAttributes.zoomScaleInital = 1.0;
+                pageAttributes.contentScaleFactor = 0.0;
+                
+                MADReportPageViewController *pageOne = [MADReportPageViewController newReportPageViewControllerWithDocument: document pageAttributes: pageAttributes
+                                                                                                                      frame: viewerController.view.bounds andDelegate: viewerController];
+                
+                NSArray <__kindof MADReportPageViewController *> *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
+                [viewerController setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: nil];
+                
+
+                [viewerController timerDealloc];
+                [viewerController uiUpdateTimeSinceLastRefresh: NULL];
+                [viewerController setDisplayActive];
+                [viewerController removeObserverDidReadRowsFromDatabase:document.database];
+
+                
+            }];
+
         }
     }
 }
@@ -697,9 +737,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.refreshQueue addOperation:refreshReloadOperation];
         self.refreshReloadOperation = refreshReloadOperation;
         //[self.refreshQueue waitUntilAllOperationsAreFinished];
-        
-    
-
+/*
         [self.refreshQueue addOperationWithBlock:^{
         
             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -715,6 +753,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             }];
             
         }];
+        */
     }
 }
 
@@ -781,7 +820,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MADocument *document = self.document;
     [self watchFormatter: document.reportFormatter];
     
-    document.reportFormatter.didRefresh = self.startedRefresh;
+    document.reportFormatter.didRefresh = self.startedRefresh ? YES : NO;
     [document.reportFormatter formatForSize:size contentChanged: self.startedRefresh];
     
     MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter dataTable: document.mainDataTable andPrintableAreaSize: document.paper.paperSize];

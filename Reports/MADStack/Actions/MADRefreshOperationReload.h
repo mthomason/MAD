@@ -8,6 +8,14 @@
 
 #import "MADOperation.h"
 
+@class MADocument;
+@class MADPageViewAttributes;
+
 @interface MADRefreshOperationReload : MADOperation
+
+    - (instancetype)initWithDocument:(MADocument *)document;
+
+    @property (nonatomic, readonly, copy) MADPageViewAttributes *pageAttributes;
+    @property (nonatomic, readonly, assign) bool success;
 
 @end

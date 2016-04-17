@@ -12,11 +12,12 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabaseConnection.h>
 
+#import "MADOperationQueue.h"
 #import "MADGetCredentialsOperation.h"
 #import "MADRefreshOperationInitalizeMainDataTable.h"
 #import "MADRefreshOperationInitalize.h"
 #import "MADRefreshOperation.h"
-#import "MADOperationQueue.h"
+#import "MADRefreshOperationReload.h"
 
 @interface MADRefreshReloadOperation ()
 
@@ -81,7 +82,11 @@
     [refresh addDependency: self.getCredentials];
     [refresh addDependency: initalize];
     
-    NSArray <__kindof NSOperation *> *operations = @[self.getCredentials, initalizeMainDataTable, initalize, refresh];
+    MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument:document];
+    [reload addDependency:refresh];
+    
+    NSArray <__kindof NSOperation *> *operations = @[self.getCredentials, initalizeMainDataTable,
+                                                     initalize, refresh, reload];
         
     MADRefreshReloadOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -95,7 +100,7 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    //if ([operation isKindOfClass:[MADRefreshOperation class]]) {
+    //if ([operation isKindOfClass:[MADRefreshOperationReload class]]) {
     //    [self finish];
     //}
 }

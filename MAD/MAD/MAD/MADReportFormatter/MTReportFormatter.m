@@ -58,8 +58,8 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
     @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, strong) NSMutableArray <NSDictionary *> *pageLayoutTemporary;
-    @property (nonatomic, strong) NSMutableArray *pageIndexesTemporary;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSDictionary *> *pageLayoutTemporary;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSNumber *> *pageIndexesTemporary;
 
     @property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
     @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
@@ -683,7 +683,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *header = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypeGroupHeader
+    NSDictionary *header = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypeGroupHeader
                                                                      groupLevel: groupLevel
                                                                             row: self.machineState.detailRowId];
     if (groupLevel == [self numberOfGroups] - 1) {
@@ -694,21 +694,21 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addPageFooter {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *footer = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypePageFooter
+    NSDictionary *footer = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypePageFooter
                                                                             row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addReportFooter {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *footer = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypeReportFooter
+    NSDictionary *footer = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypeReportFooter
                                                                             row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *footer = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypeGroupFooter
+    NSDictionary *footer = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypeGroupFooter
                                                                      groupLevel: groupLevel
                                                                             row: self.machineState.detailRowId];
     
@@ -717,22 +717,23 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addDetail {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *detail = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypeBody
+    NSDictionary *detail = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypeBody
                                                                             row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: detail];
-    [self.pageIndexesTemporary addObject:self.machineState.detailRowId];
+    NSNumber *detailRowId = self.machineState.detailRowId.copy;
+    [self.pageIndexesTemporary addObject:detailRowId];
 }
 
 - (void)addReportHeader {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *obj = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypeReportHeader
+    NSDictionary *obj = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypeReportHeader
                                                                          row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: obj];
 }
 
 - (void)addPageHeader {
    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSDictionary *obj = [NSDictionary newObjectRepresentationWithSectionType: MNSDocumentSectionTypePageHeader
+    NSDictionary *obj = [MADReportObjectRepresentation newObjectRepresentationWithSectionType: MNSDocumentSectionTypePageHeader
                                                                          row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject:  obj];
 }
@@ -785,6 +786,19 @@ NSString * const MTNullIdentifier = @"(null)";
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 #endif
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *debugText = [[NSMutableString alloc] init];
+    [debugText appendString:@"Report Layout Array:\n"];
+    [debugText appendFormat:@"\Identifier:  %@\n", self.reportLayout.identifier];
+    [debugText appendFormat:@"\tURL:        %@\n", self.reportLayout.url.path];
+    [debugText appendFormat:@"\tCount:      %@\n", self.reportLayout.count];
+    [debugText appendString:@"Report Indexes Array:\n"];
+    [debugText appendFormat:@"\Identifier:  %@\n", self.reportIndexes.identifier];
+    [debugText appendFormat:@"\tURL:        %@\n", self.reportIndexes.url.path];
+    [debugText appendFormat:@"\tCount:      %@\n", self.reportIndexes.count];
+    return debugText;
 }
 
 @end

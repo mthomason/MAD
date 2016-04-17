@@ -383,14 +383,15 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
     NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
     
     NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
-    NSArray *pageSections = layoutEnumerator.allObjects;
+    NSArray <MADReportObjectRepresentation *> *pageSections = layoutEnumerator.allObjects;
     MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
-    for (NSDictionary *pageSection in pageSections) {
+    for (MADReportObjectRepresentation *pageSection in pageSections) {
         
         RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
-        
-        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document
-                                                        pageRect:pageRect numberOfPages:self.reportFormatter.numberOfPages
+        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection
+                                                     pageSection:pageSection inDocument:document
+                                                        pageRect:pageRect
+                                                   numberOfPages:self.reportFormatter.numberOfPages
                                                        pageIndex:pageIndex offset:&originY];
         
         [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
@@ -417,9 +418,15 @@ static inline CGPoint PointTopRight(CGRect pathRect) {
     
 }
 
-- (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection pageRect: (CGRect)pageRect pageSection: (NSDictionary *)pageSection
-                                       document: (RptqDocument *)document onPage: (NSUInteger)pageIndex withDatabase: (MTDatabase *)database
-                                         offset: (CGFloat *)originY offsetElement: (NSUInteger *)offsetElement offsetCharacter: (NSUInteger *)offsetCharacter {
+- (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection
+                                       pageRect: (CGRect)pageRect
+                                    pageSection: (MADReportObjectRepresentation *)pageSection
+                                       document: (RptqDocument *)document
+                                         onPage: (NSUInteger)pageIndex
+                                   withDatabase: (MTDatabase *)database
+                                         offset: (CGFloat *)originY
+                                  offsetElement: (NSUInteger *)offsetElement
+                                offsetCharacter: (NSUInteger *)offsetCharacter {
     
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSOrderedSet *rows = documentSection.hasRows;
@@ -559,13 +566,16 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     }
 }
 
-- (CGRect)sectionRectForDocumentSection:(RptqDocumentSection *)documentSection pageSection:(NSDictionary *)pageSection
+- (CGRect)sectionRectForDocumentSection:(RptqDocumentSection *)documentSection
+                            pageSection:(MADReportObjectRepresentation *)pageSection
                              inDocument:(RptqDocument *)document pageRect:(CGRect)pageRect
                           numberOfPages:(NSUInteger)numberOfPages pageIndex:(NSUInteger)pageIndex
                                  offset:(CGFloat *)originY {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    CGFloat sizeHeight = documentSection.visibility.boolValue ? [self.reportFormatter heightForSection:documentSection] : CGSizeZero.height;
+    CGFloat sizeHeight = documentSection.visibility.boolValue ?
+                                        [self.reportFormatter heightForSection:documentSection] :
+                                        CGSizeZero.height;
     switch (pageSection.sectionType) {
         case MNSDocumentSectionTypePageFooter:
             *originY = pageIndex == numberOfPages - 1 ?  // last page?
@@ -607,7 +617,8 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     return item.image;
 }
 
-- (NSString *)documentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
+- (NSString *)documentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item
+                                forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSString *drawingObject;
     NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
@@ -907,7 +918,8 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     return parameters;
 }
 
-- (NSDictionary *)parametersAggregateByReportWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+- (NSDictionary *)parametersAggregateByReportWithFieldKey:(NSString *)fieldKey
+                                          andFunctionType:(MTAggregateFunctionType)functionType {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     return [self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType];
 }
