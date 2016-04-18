@@ -45,8 +45,9 @@
         [self setWhereClause:whereClause];
         
         NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
+        
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-        [rowid setColumnType:@(MTDataTypeInteger)];
+        rowid.columnType = @(MTDataTypeInteger);
         columns[MADIdentifierROWID] = rowid;
         [self setColumns:columns];
   

@@ -95,7 +95,7 @@ static NSString * const StringEmpty = @"";
     [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
     [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
-    [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
+    [encoder encodeObject:  self.columns          forKey: [MTDataTable keyColumns]];
     [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
     
 }
@@ -238,7 +238,7 @@ static NSString * const StringEmpty = @"";
     for (NSString *key in [self columnKeys]) {
             NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
             MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
-            [self columns][key] = column;
+            self.columns[key] = column;
     }
     
     NSNumber *rowCounterObj = plist[[MTDataTable keyRowCounter]];
@@ -250,7 +250,7 @@ static NSString * const StringEmpty = @"";
     
     NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
     for (NSString *key in [self columnKeys]) {
-        MADDataColumn *dataColumn = [self columns][key];
+        MADDataColumn *dataColumn = self.columns[key];
         columnsPlist[key] = [dataColumn plist];
     }
     return columnsPlist;

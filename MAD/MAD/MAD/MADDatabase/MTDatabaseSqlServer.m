@@ -417,14 +417,14 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         
                         
                         
-                        NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
+                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
                         
                         MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:columnNameString];
-                        [dataColumn setFieldName:columnNameString];
-                        [dataColumn setNativeColumnType:columnTypeNumber];
-                        [dataColumn setDataLength:columnLen];
-                        [dataColumn setDataPercision:columPercision];
-                        [dataColumn setColumnType:@(fieldTypeCalculated)];
+                        dataColumn.fieldName = columnNameString;
+                        dataColumn.nativeColumnType = columnTypeNumber;
+                        dataColumn.dataLength = columnLen;
+                        dataColumn.dataPercision = columPercision;
+                        dataColumn.columnType = @(fieldTypeCalculated);
                         
                         [datatable addColumn:dataColumn];
                         
