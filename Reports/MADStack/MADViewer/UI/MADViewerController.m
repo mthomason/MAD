@@ -304,7 +304,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                                                                dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRender;
-    
+        
     [self uiUpdateNumberOfPages];
     
     MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
@@ -730,7 +730,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self watchFormatter: document.reportFormatter];
     
     document.reportFormatter.didRefresh = self.startedRefresh;
-    [document.reportFormatter formatForSize:size contentChanged: self.startedRefresh];
+    [document.reportFormatter formatForSize:size contentChanged: NO];
     
     MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRender;

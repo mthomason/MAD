@@ -12,28 +12,36 @@
 
 #import "MTQueryCacheDeleteAllFromTable.h"
 #import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
 #import "MTDatabase.h"
 
 @interface MTQueryCacheDeleteAllFromTable ()
 
-@property (nonatomic, copy) NSString *tableName;
+    @property (nonatomic, copy) NSString *tableName;
 
 @end
 
 @implementation MTQueryCacheDeleteAllFromTable
 
-- (instancetype)initWithObject:(id)object {
+- (instancetype)initWithTableName:(NSString *)tableName {
     if (self = [super init]) {
-        
-        NSString *tableName = object;
-        self.tableName = tableName;
+        _tableName = tableName.copy;
+    }
+    return self;
+}
+
+- (instancetype)initWithObject:(NSDictionary *)object {
+    if (self = [super init]) {
+        NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MTQueryCacheDeleteAllFromTableTableName);
+        NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
+        _tableName = tableName.copy;
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSString * __autoreleasing sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     return sql;
 }
 

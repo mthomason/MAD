@@ -39,10 +39,10 @@
     NSString *filename = [document filename];
     NSLog(@"Filename:   %@ (%s)", filename, __func__);
 
-    MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
-    datatable.cacheDelegate = document;
-    [datatable loadFromCacheWithUrl:document.urlDataTableCache];
-    document.mainDataTable = datatable;
+    //MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
+    //datatable.cacheDelegate = document;
+    //[datatable loadFromCacheWithUrl:document.urlDataTableCache];
+    //document.mainDataTable = datatable;
     
     [self finish];
 }

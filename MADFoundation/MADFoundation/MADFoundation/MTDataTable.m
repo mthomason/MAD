@@ -17,6 +17,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSPropertyList.h>
 #import <Foundation/NSStream.h>
 #import <Foundation/NSURL.h>
@@ -157,14 +158,15 @@ static NSString * const StringEmpty = @"";
 
 - (NSString *)filenameMDCache {
     NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingString:@"mdcache"];
+    return [tag stringByAppendingPathExtension:@"mdcache"];
 }
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: url.path];
     [inputStream open];
-    switch ([inputStream streamStatus]) {
+    switch (inputStream.streamStatus) {
         case NSStreamStatusError:
+            NSLog(@"Can't open %@\n%@", url, inputStream.streamError);
             break;
         default:
             break;
@@ -180,6 +182,8 @@ static NSString * const StringEmpty = @"";
 
 - (bool)cacheWithUrl:(NSURL *)url {
 
+    NSLog(@"Writing cache to url %@.", url);
+
     NSDictionary *plist = [self plist];
 
     NSError *error = nil;
@@ -194,6 +198,7 @@ static NSString * const StringEmpty = @"";
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
 
     }
+    
     return success;
 }
 

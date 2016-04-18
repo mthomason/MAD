@@ -182,8 +182,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)urlDataTableCache {
-    NSString *filename = [self filename];
-    return [self cacheUrlForFilename:filename];
+    NSString *cacheName = [self.mainDataTable filenameMDCache];
+    return [self cacheUrlForFilename:cacheName];
 }
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = [self filename];
@@ -918,6 +918,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeMainDataTable {
+//CACHEFIX
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypePhysical);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
@@ -938,8 +939,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                                                               layout: self
                                                                              options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
-    reportFormatter.cachedDelegate = self;
     reportFormatter.datasource = self;
+    reportFormatter.cachedDelegate = self;
     self.reportFormatter = reportFormatter;
 }
 
