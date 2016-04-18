@@ -415,23 +415,17 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                                      MTDatabaseColumnPrecision : columPercision             //Column percision
                                                      };
                         
-                        
-                        
-                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnType];
-                        
                         MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:columnNameString];
                         dataColumn.fieldName = columnNameString;
                         dataColumn.nativeType = columnType;
+                        dataColumn.type = [MTDatabaseSqlServer dataTypeForNativeType:columnType];
                         dataColumn.dataLength = columnLength;
                         dataColumn.dataPercision = -1;
-                        dataColumn.type = fieldTypeCalculated;
                         
                         [datatable addColumn:dataColumn];
                         
                         [colmunHolder addObject:dictionary];
-                        
-                        
-                        
+
                         columnIndexOfType++;
                         
                         NSNumber *n = @(columnIndexOfType);
@@ -1597,9 +1591,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     }
                     if (name != nil) {
                         MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
-                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
-                        databaseField.fieldTypeNative = fieldTypeCalculated;
-                        databaseField.fieldType = fieldTypeCalculated;
+                        databaseField.fieldTypeNative = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
+                        databaseField.fieldType = databaseField.fieldTypeNative;
                         databaseField.width = (NSUInteger)lengthBind;
                         databaseField.decimals = (NSUInteger)scaleBind;
                         databaseField.primaryKey = 0;
