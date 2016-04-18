@@ -88,7 +88,7 @@
     NSString *columnName = [self columnName];
     
     MTDatabaseCache *database = [self database];
-    MTDataType datatype = [[[self column] columnType] unsignedIntegerValue];
+    MTDataType datatype = self.column.type;
     NSString *columnAffinity = [database nativeTypeForDataType:datatype];
 
 

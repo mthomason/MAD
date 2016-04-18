@@ -11,6 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataProtocol.h>
+#import <MADFoundation/MADDataType.h>
 
 #pragma mark Types of queries
 
@@ -161,7 +162,9 @@ extern NSString * const MADIdentifierROWID;
     - (id)initWithQueryType:(MTQueryType)type object:(id)object;
 
     - (NSString *)getSqlWithError:(NSError **)error;
-    - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error;    //Only on MTQueryFull
+    - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
+                    managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                   error:(NSError **)error;    //Only on MTQueryFull
 
     - (bool)performQueryWithError:(NSError * __autoreleasing *)error;
 
@@ -174,7 +177,7 @@ extern NSString * const MADIdentifierROWID;
 - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
+- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 

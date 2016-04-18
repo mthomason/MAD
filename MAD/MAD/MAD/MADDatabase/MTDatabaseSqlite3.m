@@ -526,8 +526,8 @@ void sqliteLog(void *foo, const char* statement) {
                             
                             [dataColumn setFieldName: fieldName];
                             [dataColumn setNativeColumnType:nativeColumnType];
-                            NSNumber *columnType = @([MTDatabaseSqlite3 dataTypeForAffentyType:affentyType]);
-                            dataColumn.columnType = columnType;
+                            MTDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
+                            dataColumn.type = columnType;
                             
                             dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
                             dataColumn.autoIncrement = (pAutoinc == NULL) ? false : *pAutoinc;

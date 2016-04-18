@@ -424,7 +424,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         dataColumn.nativeColumnType = columnTypeNumber;
                         dataColumn.dataLength = columnLen;
                         dataColumn.dataPercision = columPercision;
-                        dataColumn.columnType = @(fieldTypeCalculated);
+                        dataColumn.type = fieldTypeCalculated;
                         
                         [datatable addColumn:dataColumn];
                         

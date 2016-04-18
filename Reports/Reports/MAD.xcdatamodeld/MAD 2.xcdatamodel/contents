@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="2.0" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="2.0" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
         <attribute name="databaseDriverType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="databaseDriverTypeEnum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -338,30 +338,30 @@
         <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RptqDatabase" positionX="-587" positionY="-477" width="128" height="150"/>
-        <element name="RptqDatabaseSchemaField" positionX="-630" positionY="-54" width="180" height="225"/>
-        <element name="RptqDatabaseSchemaTable" positionX="-666" positionY="-288" width="198" height="165"/>
-        <element name="RptqDocument" positionX="-594" positionY="-828" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="358" positionY="-450" width="128" height="913"/>
-        <element name="RptqDocumentObjectAggregate" positionX="117" positionY="903" width="198" height="150"/>
-        <element name="RptqDocumentObjectBarcode" positionX="594" positionY="954" width="290" height="433"/>
-        <element name="RptqDocumentObjectChart" positionX="567" positionY="510" width="200" height="75"/>
-        <element name="RptqDocumentObjectFormula" positionX="34" positionY="578" width="191" height="178"/>
-        <element name="RptqDocumentObjectGroupKey" positionX="585" positionY="828" width="173" height="90"/>
-        <element name="RptqDocumentObjectImage" positionX="522" positionY="621" width="189" height="90"/>
-        <element name="RptqDocumentObjectLabel" positionX="639" positionY="261" width="191" height="90"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="189" positionY="1098" width="218" height="135"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="628" positionY="390" width="191" height="105"/>
-        <element name="RptqDocumentSection" positionX="43" positionY="-828" width="128" height="390"/>
-        <element name="RptqDocumentSectionRows" positionX="-225" positionY="-786" width="189" height="120"/>
-        <element name="RptqQuery" positionX="-1163" positionY="-351" width="128" height="225"/>
-        <element name="RptqQueryCache" positionX="-1206" positionY="-90" width="128" height="120"/>
-        <element name="RptqQueryField" positionX="-1289" positionY="207" width="128" height="238"/>
-        <element name="RptqQueryGroup" positionX="-864" positionY="315" width="128" height="135"/>
-        <element name="RptqQueryLinks" positionX="-1244" positionY="486" width="128" height="270"/>
-        <element name="RptqQueryPredicate" positionX="-1467" positionY="-42" width="128" height="150"/>
-        <element name="RptqQuerySort" positionX="-1089" positionY="99" width="128" height="120"/>
-        <element name="RptqQueryTable" positionX="-893" positionY="990" width="128" height="210"/>
-        <element name="RptqUserCredentals" positionX="-387" positionY="-450" width="128" height="360"/>
+        <element name="RptqDatabase" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDatabaseSchemaField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDatabaseSchemaTable" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocument" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObject" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectAggregate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectBarcode" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectChart" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectGroupKey" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectImage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentSection" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentSectionRows" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQuery" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryCache" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryGroup" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryLinks" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryPredicate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQuerySort" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryTable" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqUserCredentals" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

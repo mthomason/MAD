@@ -136,9 +136,9 @@ static NSString * const SqlDelimitorObject = @", %@";
             }
             
             
-            MTDatabaseDataBinding * databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.columnType.unsignedIntegerValue
-                                                                                                       fieldIndex: columnCounter
-                                                                                                            value: object];
+            MTDatabaseDataBinding * databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.type
+                                                                                       fieldIndex: columnCounter
+                                                                                            value: object];
             [binaryBindings addObject:databinding];
             
             snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);

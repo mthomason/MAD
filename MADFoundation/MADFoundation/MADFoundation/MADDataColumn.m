@@ -35,7 +35,11 @@
     [encoder encodeObject: self.column                      forKey: [MADDataColumn keyColumn]];
     [encoder encodeObject: self.defaultValue                forKey: [MADDataColumn keyDefaultValue]];
     [encoder encodeObject: self.caption                     forKey: [MADDataColumn keyCaption]];
-    [encoder encodeObject: self.columnType                  forKey: [MADDataColumn keyColumnType]];
+    
+    NSNumber *type;
+    [encoder encodeObject: type                        forKey: [MADDataColumn keyColumnType]];
+    self.type = type.shortValue;
+    
     [encoder encodeObject: self.nativeColumnType            forKey: [MADDataColumn keyNativeColumnType]];
     [encoder encodeObject: self.dataLength                  forKey: [MADDataColumn keyDataLength]];
     [encoder encodeObject: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
@@ -54,7 +58,7 @@
         self.column =           [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
         self.defaultValue =     [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
         self.caption =          [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
-        self.columnType =       [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
+        self.type =       [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
         self.nativeColumnType = [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
         self.dataLength =       [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
         self.dataPercision =    [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
@@ -116,7 +120,7 @@
         _defaultValue = [NSNull null];
         
         NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
-        self.columnType = columnType;
+        self.type = columnType;
 
         NSNumber *nativeColumnType = [[NSNumber alloc] initWithInteger:0];
         self.nativeColumnType = nativeColumnType;
@@ -156,7 +160,7 @@
         _caption = caption.copy;
 
         NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
-        _columnType = columnType.copy;
+        _type = columnType.copy;
 
         NSNumber *nativeColumnType = plist[[MADDataColumn keyNativeColumnType]];
         _nativeColumnType = nativeColumnType.copy;
@@ -226,7 +230,8 @@
     plist[keyColumn] = self.column;
     plist[keyDefaultValue] = defaultValue;
     plist[keyCaption] = self.caption;
-    plist[keyColumnType] = self.columnType;
+    id type = [[NSNumber alloc] initWithShort:self.type];
+    plist[keyColumnType] = type;
     plist[keyNativeColumnType] = self.nativeColumnType;
     plist[keyDataLength] = self.dataLength;
     plist[keyDataPercision] = self.dataPercision;

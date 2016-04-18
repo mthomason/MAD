@@ -417,7 +417,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                     @autoreleasepool {
                         MADDataColumn * __weak column = self.columns[columnKey];
                         if ([column.fieldName isEqualToString:sortDescriptor.key]) {
-                            SEL sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
+                            SEL sortAlgo = [MADDataType selectorForSorting:column.type];
                             
                             NSSortDescriptor *newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
                                                                                                 ascending:sortDescriptor.ascending
@@ -823,7 +823,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
 
     MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-    rowid.columnType = @(MTDataTypeInteger);
+    rowid.type = MTDataTypeInteger;
     
     NSDictionary *columns = @{MADIdentifierROWID : rowid};
     NSArray *columnKeys = @[MADIdentifierROWID];

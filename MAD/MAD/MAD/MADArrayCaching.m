@@ -224,8 +224,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (MADDataColumn *)columnKey {
     MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
-    NSNumber *columnType = @(MTDataTypeInteger);
-    column.columnType = columnType;
+    column.type = MTDataTypeInteger;
     column.primaryKey = YES;
     column.notNull = YES;
     column.autoIncrement = false;
@@ -234,8 +233,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (MADDataColumn *)columnValue {
     MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
-    NSNumber *columnType = @(MTDataTypeBlob);
-    column.columnType = columnType;
+    column.type = MTDataTypeBlob;
     column.primaryKey = NO;
     column.notNull = YES;
     column.autoIncrement = false;

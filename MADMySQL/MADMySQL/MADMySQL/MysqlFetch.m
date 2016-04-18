@@ -95,17 +95,16 @@
     NSNumber *fieldType = @(ftype);
     NSNumber *fieldLength = @(myField.length);
     NSNumber *fieldPercision = @(myField.decimals);
-    NSNumber *fieldTypeMad = @(0);
     
     dataColumn.fieldName = fieldName;
     dataColumn.nativeColumnType = fieldType;
     dataColumn.dataLength = fieldLength;
     dataColumn.dataPercision = fieldPercision;
-    dataColumn.columnType = fieldTypeMad;
+    dataColumn.type = 0;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? YES : NO;
     
     NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
-    [dataColumn setColumnType:cType];
+    [dataColumn setType:cType];
 
     return dataColumn;
 }
@@ -429,9 +428,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                                 
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                
-                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
-                                                column.columnType = columnTypeString;
+                                                column.type = MTDataTypeString;
                                             
                                             }
                                             
@@ -450,8 +447,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                             
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeInteger];
-                                                column.columnType = columnTypeString;
+                                                column.type = MTDataTypeInteger;
                                                 
                                             }
                                             

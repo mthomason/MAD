@@ -320,8 +320,8 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MADDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
+- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
+    return [(MADDataColumn *)self.columns[columnHandle] type];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
