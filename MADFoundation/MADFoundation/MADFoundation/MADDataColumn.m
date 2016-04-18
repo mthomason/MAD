@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataColumn.h"
+#import "MADDataColumn.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSNull.h>
@@ -18,86 +18,86 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSCoder.h>
 
-@interface MTDataColumn ()
+@interface MADDataColumn ()
 
 @property (nonatomic, copy, readwrite) NSString *identifier;
 @property (nonatomic, strong) NSMutableArray *column;
 
 @end
 
-@implementation MTDataColumn
+@implementation MADDataColumn
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
     [encoder encodeObject: [self fieldName]
-                   forKey: [MTDataColumn keyFieldName]];
+                   forKey: [MADDataColumn keyFieldName]];
     
     [encoder encodeObject: [self identifier]
-                   forKey: [MTDataColumn keyIdentifier]];
+                   forKey: [MADDataColumn keyIdentifier]];
     
     [encoder encodeObject: self.column
-                   forKey: [MTDataColumn keyColumn]];
+                   forKey: [MADDataColumn keyColumn]];
     
     [encoder encodeObject: [self defaultValue]
-                   forKey: [MTDataColumn keyDefaultValue]];
+                   forKey: [MADDataColumn keyDefaultValue]];
     
     [encoder encodeObject: [self caption]
-                   forKey: [MTDataColumn keyCaption]];
+                   forKey: [MADDataColumn keyCaption]];
     
     [encoder encodeObject: [self columnType]
-                   forKey: [MTDataColumn keyColumnType]];
+                   forKey: [MADDataColumn keyColumnType]];
     
     [encoder encodeObject: [self nativeColumnType]
-                   forKey: [MTDataColumn keyNativeColumnType]];
+                   forKey: [MADDataColumn keyNativeColumnType]];
     
     [encoder encodeObject: [self dataLength]
-                   forKey: [MTDataColumn keyDataLength]];
+                   forKey: [MADDataColumn keyDataLength]];
 
     [encoder encodeObject: [self dataPercision]
-                   forKey: [MTDataColumn keyDataPercision]];
+                   forKey: [MADDataColumn keyDataPercision]];
     
     [encoder encodeBool: self.isPrimaryKey ? YES : NO
-                   forKey: [MTDataColumn keyIsPrimaryKey]];
+                   forKey: [MADDataColumn keyIsPrimaryKey]];
 
     [encoder encodeBool: self.isNotNull ? YES : NO
-                 forKey: [MTDataColumn keyIsNotNull]];
+                 forKey: [MADDataColumn keyIsNotNull]];
 
     [encoder encodeBool: self.isAutoIncrement ? YES : NO
-                 forKey: [MTDataColumn keyIsAutoIncrement]];
+                 forKey: [MADDataColumn keyIsAutoIncrement]];
 
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if( self = [super init]) {
 
-        NSString *fieldName = [decoder decodeObjectForKey: [MTDataColumn keyFieldName]];
+        NSString *fieldName = [decoder decodeObjectForKey: [MADDataColumn keyFieldName]];
         self.identifier = fieldName;
 
-        NSString *identifier = [decoder decodeObjectForKey: [MTDataColumn keyIdentifier]];
+        NSString *identifier = [decoder decodeObjectForKey: [MADDataColumn keyIdentifier]];
         self.identifier = identifier;
         
-        NSMutableArray *column = [decoder decodeObjectForKey: [MTDataColumn keyColumn]];
+        NSMutableArray *column = [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
         self.column = column;
         
-        id defaultValue = [decoder decodeObjectForKey: [MTDataColumn keyDefaultValue]];
+        id defaultValue = [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
         self.defaultValue = defaultValue;
         
-        NSString *caption = [decoder decodeObjectForKey: [MTDataColumn keyCaption]];
+        NSString *caption = [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
         self.caption = caption;
         
-        NSNumber *columnType = [decoder decodeObjectForKey: [MTDataColumn keyColumnType]];
+        NSNumber *columnType = [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
         self.columnType = columnType;
         
-        NSNumber *nativeColumnType = [decoder decodeObjectForKey: [MTDataColumn keyNativeColumnType]];
+        NSNumber *nativeColumnType = [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
         self.nativeColumnType = nativeColumnType;
         
-        NSNumber *dataLength = [decoder decodeObjectForKey: [MTDataColumn keyDataLength]];
+        NSNumber *dataLength = [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
         self.dataLength = dataLength;
         
-        NSNumber *dataPercision = [decoder decodeObjectForKey: [MTDataColumn keyDataPercision]];
+        NSNumber *dataPercision = [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
         self.dataPercision = dataPercision;
 
-        self.primaryKey = [decoder decodeBoolForKey: [MTDataColumn keyIsPrimaryKey]] ? true : false;
+        self.primaryKey = [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
 
     }
     return self;
@@ -129,22 +129,22 @@
     self = [super init];
     if(self) {
         
-        NSString *fieldName = plist[[MTDataColumn keyFieldName]];
-        NSString *identifier = plist[[MTDataColumn keyIdentifier]];
+        NSString *fieldName = plist[[MADDataColumn keyFieldName]];
+        NSString *identifier = plist[[MADDataColumn keyIdentifier]];
         
-        NSArray *columnImmutable = plist[[MTDataColumn keyColumn]];
+        NSArray *columnImmutable = plist[[MADDataColumn keyColumn]];
         NSMutableArray *column = [[NSMutableArray alloc] initWithArray: columnImmutable];
         
-        id defaultValue = plist[[MTDataColumn keyDefaultValue]];
-        NSString *caption = plist[[MTDataColumn keyCaption]];
-        NSNumber *columnType = plist[[MTDataColumn keyColumnType]];
-        NSNumber *nativeColumnType = plist[[MTDataColumn keyNativeColumnType]];
-        NSNumber *dataLength = plist[[MTDataColumn keyDataLength]];
-        NSNumber *dataPercision = plist[[MTDataColumn keyDataPercision]];
+        id defaultValue = plist[[MADDataColumn keyDefaultValue]];
+        NSString *caption = plist[[MADDataColumn keyCaption]];
+        NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
+        NSNumber *nativeColumnType = plist[[MADDataColumn keyNativeColumnType]];
+        NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
+        NSNumber *dataPercision = plist[[MADDataColumn keyDataPercision]];
         
-        BOOL isPrimaryKey = [plist[[MTDataColumn keyIsPrimaryKey]] boolValue];
-        BOOL isNotNull = [plist[[MTDataColumn keyIsNotNull]] boolValue];
-        BOOL isAutoIncrement = [plist[[MTDataColumn keyIsAutoIncrement]] boolValue];
+        BOOL isPrimaryKey = [plist[[MADDataColumn keyIsPrimaryKey]] boolValue];
+        BOOL isNotNull = [plist[[MADDataColumn keyIsNotNull]] boolValue];
+        BOOL isAutoIncrement = [plist[[MADDataColumn keyIsAutoIncrement]] boolValue];
         
         [self setFieldName:fieldName];
         [self setIdentifier: identifier];
@@ -182,18 +182,18 @@
 - (NSDictionary *)plist {
     
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity:8];
-    NSString *keyFieldName = [MTDataColumn keyFieldName];
-    NSString *keyIdentifier = [MTDataColumn keyIdentifier];
-    NSString *keyColumn = [MTDataColumn keyColumn];
-    NSString *keyDefaultValue = [MTDataColumn keyDefaultValue];
-    NSString *keyCaption = [MTDataColumn keyCaption];
-    NSString *keyColumnType = [MTDataColumn keyColumnType];
-    NSString *keyNativeColumnType = [MTDataColumn keyNativeColumnType];
-    NSString *keyDataLength = [MTDataColumn keyDataLength];
-    NSString *keyDataPercision = [MTDataColumn keyDataPercision];
-    NSString *keyIsPrimaryKey = [MTDataColumn keyIsPrimaryKey];
-    NSString *keyIsNotNull = [MTDataColumn keyIsNotNull];
-    NSString *keyIsAutoIncrement = [MTDataColumn keyIsAutoIncrement];
+    NSString *keyFieldName = [MADDataColumn keyFieldName];
+    NSString *keyIdentifier = [MADDataColumn keyIdentifier];
+    NSString *keyColumn = [MADDataColumn keyColumn];
+    NSString *keyDefaultValue = [MADDataColumn keyDefaultValue];
+    NSString *keyCaption = [MADDataColumn keyCaption];
+    NSString *keyColumnType = [MADDataColumn keyColumnType];
+    NSString *keyNativeColumnType = [MADDataColumn keyNativeColumnType];
+    NSString *keyDataLength = [MADDataColumn keyDataLength];
+    NSString *keyDataPercision = [MADDataColumn keyDataPercision];
+    NSString *keyIsPrimaryKey = [MADDataColumn keyIsPrimaryKey];
+    NSString *keyIsNotNull = [MADDataColumn keyIsNotNull];
+    NSString *keyIsAutoIncrement = [MADDataColumn keyIsAutoIncrement];
     
     NSNumber *primaryKey = @([self isPrimaryKey]);
     NSNumber *notNull = @([self isNotNull]);
