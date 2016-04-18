@@ -18,13 +18,14 @@
     @property (nonatomic, copy, readonly) NSString *identifier;
     @property (nonatomic, strong) id defaultValue;
 
-    @property (nonatomic, copy)     NSString    *caption;
-    @property (nonatomic, copy)     NSString    *fieldName;
     @property (nonatomic, assign)   MTDataType  type;
     @property (nonatomic, assign)   NSInteger   nativeType;
-    @property (nonatomic, copy)     NSNumber    *dataLength;
-    @property (nonatomic, copy)     NSNumber    *dataPercision;
+    @property (nonatomic, assign)   NSInteger   dataLength;
+    @property (nonatomic, assign)   NSInteger   dataPercision;
     
+    @property (nonatomic, copy)     NSString    *caption;
+    @property (nonatomic, copy)     NSString    *fieldName;
+
     @property (nonatomic, assign, getter = isPrimaryKey) bool primaryKey;
     @property (nonatomic, assign, getter = isNotNull) bool notNull;
     @property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;

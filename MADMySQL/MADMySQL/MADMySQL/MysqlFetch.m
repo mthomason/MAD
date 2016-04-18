@@ -90,15 +90,11 @@
 + (MADDataColumn *)dataColumnForFieldName:(NSString *)fieldName mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
     
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
-    
-    NSNumber *fieldLength = @(myField.length);
-    NSNumber *fieldPercision = @(myField.decimals);
-    
     dataColumn.fieldName = fieldName;
     dataColumn.nativeType = myField.type;
-    dataColumn.dataLength = fieldLength;
-    dataColumn.dataPercision = fieldPercision;
-    dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? YES : NO;
+    dataColumn.dataLength = myField.length;
+    dataColumn.dataPercision = myField.decimals;
+    dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? true : false;
     dataColumn.type = [MTDataTypeMySQL dataTypeForNativeType:myField.type];
 
     return dataColumn;

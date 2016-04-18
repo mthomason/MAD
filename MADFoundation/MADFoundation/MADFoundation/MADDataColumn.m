@@ -44,8 +44,15 @@
     [encoder encodeObject: nativeType                       forKey: [MADDataColumn keyNativeColumnType]];
     self.nativeType = nativeType.integerValue;
     
-    [encoder encodeObject: self.dataLength                  forKey: [MADDataColumn keyDataLength]];
-    [encoder encodeObject: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
+    NSNumber *dataLength;
+    [encoder encodeObject: dataLength                  forKey: [MADDataColumn keyDataLength]];
+    self.dataLength = dataLength.integerValue;
+    
+    NSNumber *dataPercision;
+    [encoder encodeObject: dataPercision               forKey: [MADDataColumn keyDataPercision]];
+    self.dataPercision = dataPercision.integerValue;
+    
+    
     [encoder encodeBool: self.isPrimaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
     [encoder encodeBool: self.isNotNull ? YES : NO          forKey: [MADDataColumn keyIsNotNull]];
     [encoder encodeBool: self.isAutoIncrement ? YES : NO    forKey: [MADDataColumn keyIsAutoIncrement]];
@@ -56,21 +63,25 @@
 
     if (self = [super init]) {
 
-        self.fieldName =        [decoder decodeObjectForKey: [MADDataColumn keyFieldName]];
-        self.identifier =       [decoder decodeObjectForKey: [MADDataColumn keyIdentifier]];
-        self.column =           [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
-        self.defaultValue =     [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
-        self.caption =          [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
+        self.fieldName =            [decoder decodeObjectForKey: [MADDataColumn keyFieldName]];
+        self.identifier =           [decoder decodeObjectForKey: [MADDataColumn keyIdentifier]];
+        self.column =               [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
+        self.defaultValue =         [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
+        self.caption =              [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
         
-        NSNumber *type =        [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
-        self.type =             type.shortValue;
+        NSNumber *type =            [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
+        self.type =                 type.shortValue;
         
-        NSNumber *nativeType =  [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
-        self.nativeType =       nativeType.integerValue;
+        NSNumber *nativeType =      [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
+        self.nativeType =           nativeType.integerValue;
         
-        self.dataLength =       [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
-        self.dataPercision =    [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
-        self.primaryKey =       [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
+        NSNumber *dataLength =      [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
+        self.dataLength =           dataLength.integerValue;
+
+        NSNumber *dataPercision =   [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
+        self.dataPercision =        dataPercision.integerValue;
+        
+        self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
 
     }
     return self;
@@ -128,12 +139,8 @@
         _defaultValue = [NSNull null];
         _type = 0;
         _nativeType = 0;
-
-        NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
-        self.dataLength = dataLength;
-
-        NSNumber *dataPercision = [[NSNumber alloc] initWithInteger:0];
-        self.dataPercision = dataPercision;
+        _dataLength = 0;
+        _dataPercision = 0;
 
         _primaryKey = NO;
         _notNull = NO;
@@ -170,10 +177,10 @@
         _nativeType = nativeType.integerValue;
 
         NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
-        _dataLength = dataLength.copy;
+        _dataLength = dataLength.integerValue;
 
         NSNumber *dataPercision = plist[[MADDataColumn keyDataPercision]];
-        _dataPercision = dataPercision.copy;
+        _dataPercision = dataPercision.integerValue;
         
         NSNumber *isPrimaryKey = plist[[MADDataColumn keyIsPrimaryKey]];
         _primaryKey = isPrimaryKey.boolValue ? true : false;
@@ -221,9 +228,9 @@
     NSString *keyIsNotNull = [MADDataColumn keyIsNotNull];
     NSString *keyIsAutoIncrement = [MADDataColumn keyIsAutoIncrement];
     
-    NSNumber *primaryKey = @([self isPrimaryKey]);
-    NSNumber *notNull = @([self isNotNull]);
-    NSNumber *autoIncrement = @([self isAutoIncrement]);
+    NSNumber *primaryKey = [[NSNumber alloc] initWithBool:self.isPrimaryKey];
+    NSNumber *notNull = [[NSNumber alloc] initWithBool:self.isNotNull];
+    NSNumber *autoIncrement = [[NSNumber alloc] initWithBool:self.isAutoIncrement];
 
     id defaultValue = self.defaultValue;
     if ([defaultValue isEqual:[NSNull null]]) {
@@ -241,8 +248,13 @@
     id nativeType = [[NSNumber alloc] initWithInteger:self.nativeType];
     plist[keyNativeColumnType] = nativeType;
     
-    plist[keyDataLength] = self.dataLength;
-    plist[keyDataPercision] = self.dataPercision;
+    id dataLength = [[NSNumber alloc] initWithInteger:self.dataLength];
+    plist[keyDataLength] = dataLength;
+    
+    id dataPercision = [[NSNumber alloc] initWithInteger:self.dataPercision];
+    plist[keyDataPercision] = dataPercision;
+    
+    
     plist[keyIsPrimaryKey] = primaryKey;
     plist[keyIsNotNull] = notNull;
     plist[keyIsAutoIncrement] = autoIncrement;

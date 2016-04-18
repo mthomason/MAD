@@ -348,8 +348,8 @@
                 
                 MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
                 databaseField.fieldType = fieldType;
-                databaseField.width = dataColumn.dataLength.unsignedIntegerValue;
-                databaseField.decimals = dataColumn.dataPercision.unsignedIntegerValue;
+                databaseField.width = dataColumn.dataLength;
+                databaseField.decimals = dataColumn.dataPercision;
                 databaseField.primaryKey = dataColumn.isPrimaryKey ? YES : NO;
             }
         }
