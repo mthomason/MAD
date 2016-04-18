@@ -8,10 +8,11 @@
 
 #import "MADInstallOperationSampleDatabase.h"
 #import <MAD/MADConstants.h>
+#import <MADFileManager/MADFileUtilities.h>
+#import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSUserDefaults.h>
-#import <MADFoundation/NSFileManager+Common.h>
 
 NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgradeInstalledSamplesLondon";
@@ -40,18 +41,15 @@ NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3"
                 [standardUserDefaults synchronize];
             }
         }
-        
     }
 }
 
 + (NSURL *)applicationBundleSampleDatabaseChinook {
-    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook
-                                   withExtension: MTDocumentExtentionSqlite3];
+    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook withExtension: MTDocumentExtentionSqlite3];
 }
 
-
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSURL *appSupportDirectory = [MADFileUtilities localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }

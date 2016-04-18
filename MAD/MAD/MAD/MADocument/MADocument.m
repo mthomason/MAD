@@ -154,13 +154,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 + (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
     NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
+    NSURL *destinationDirectoryUrl = [MADFileUtilities localTemporaryDirectory];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName isDirectory: YES];
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
     NSString *filenameId = [MADFilename newFilenameId:filename.hash];
-    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
+    return [MADFileUtilities localCacheDirectoryNamed:filenameId];
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
@@ -173,7 +173,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
     NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
-    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+    NSURL *cacheDirectory = [MADFileUtilities localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

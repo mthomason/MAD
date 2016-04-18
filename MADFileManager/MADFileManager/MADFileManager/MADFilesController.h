@@ -10,7 +10,6 @@
 #define MADDesigner_MADFilesController_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/NSFileManager+Common.h>
 
 @class MADFilesController, MADMetaData, MADFile;
 @class NSOperationQueue;
@@ -43,16 +42,17 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL 
 
     @property (nonatomic, weak) id<MADFilesControllerDelegate> delegate;
     @property (readonly) NSURL *documentDirectory;
-    @property (nonatomic, readonly) NSUInteger count;
-    @property (nonatomic, strong) id<MADFileCoordinator> fileCoordinator;
 
-    - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
-                              delegateQueue:(NSOperationQueue *)delegateQueue
+    @property (nonatomic, readonly) NSUInteger count;
+    @property (nonatomic, strong) id <MADFileCoordinator> fileCoordinator;
+
+    - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator delegateQueue:(NSOperationQueue *)delegateQueue
                              sortComparator:(NSComparisonResult (^)(MADMetaData *lhs, MADMetaData *rhs))sortComparator;
+
+    - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index;
 
     - (void)startSearching;
     - (void)stopSearching;
-    - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index;
     - (void)removeFileInfo:(MADMetaData *)listInfo;
     - (void)duplicateFileInfo:(MADMetaData *)listInfo;
     - (void)renameFileInfo:(MADMetaData *)listInfo toName:(NSString *)name;
@@ -60,12 +60,10 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL 
     - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo;
 
-    + (BOOL)isCloudAvailable;
+    + (bool)isCloudAvailable;
 
-    + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
-                                         groupIdentifier: (NSString *)groupIdentifier
-                                                   delay: (void (^)())handleLongRunningCall
-                                              completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
+    + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier groupIdentifier: (NSString *)groupIdentifier
+                                                   delay: (void (^)())handleLongRunningCall completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
 
 @end
 

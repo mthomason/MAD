@@ -12,12 +12,14 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
+#import <Foundation/NSArray.h>
 #import <Foundation/NSCoder.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSPropertyList.h>
 #import <Foundation/NSStream.h>
 #import <Foundation/NSURL.h>
-#import <Foundation/NSPropertyList.h>
-#import <Foundation/NSData.h>
-#import <Foundation/NSException.h>
 
 static NSString * const StringEmpty = @"";
 
@@ -29,6 +31,7 @@ static NSString * const StringEmpty = @"";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
+    
         NSString *name =                [decoder decodeObjectForKey: [MTDataTable keyName]];
         self.name = name;
         

@@ -16,6 +16,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSet.h>
+#import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSDecimalNumber.h>
 #import <Foundation/NSDateFormatter.h>

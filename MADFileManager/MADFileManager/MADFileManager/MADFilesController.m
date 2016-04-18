@@ -13,9 +13,12 @@
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSLocale.h>
+#import <Foundation/NSFileManager.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <dispatch/dispatch.h>
+
+#import "MADFileUtilities.h"
 
 NSInteger finderSortWithLocale(id string1, id string2, void *locale);
 NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
@@ -41,7 +44,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Static helpers
 
-+ (BOOL)isCloudAvailable {
++ (bool)isCloudAvailable {
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
@@ -52,8 +55,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         
-        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000 target: self
-                              selector: @selector(handleLongRunningCloudUrlLookup:)
+        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000 target: self selector: @selector(handleLongRunningCloudUrlLookup:)
                               userInfo: longRunningCallBlock repeats: NO];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -66,18 +68,20 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 
                 NSURL *documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
+                [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
+                
                 NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
-                [fileManager coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
-                [fileManager coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
+                [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
                 
                 if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
                 
             });
         });
+        
     } else {
     
-        NSURL *documents = [[NSFileManager defaultManager] localDataDirectoryForGroupIdentifier:groupIdentifier];
-        NSURL *data = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
+        NSURL *documents = [MADFileUtilities localDataDirectoryForGroupIdentifier:groupIdentifier];
+        NSURL *data = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
         if (handleCompletion) handleCompletion(NO, documents, data);
     
     }

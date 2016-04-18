@@ -229,8 +229,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSURL *)urlFastCache {
     NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                            [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
-                                [self.cacheDelegate cachedFilesDirectory];
+                    [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+                    [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

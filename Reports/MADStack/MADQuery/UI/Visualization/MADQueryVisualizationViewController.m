@@ -37,6 +37,7 @@
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADFileManager/MADFileUtilities.h>
 
 #import "UIGestureRecognizer+AnchorPoint.h"
 
@@ -458,7 +459,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (NSURL *)localCacheFileUrl {
     NSString *groupIdentifier = MADIdentifierGroup;
     
-    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:groupIdentifier];
+    NSURL *cachedFilesDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:groupIdentifier];
     NSString *cacheFileName = [self cacheFileName];
     return [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
 }

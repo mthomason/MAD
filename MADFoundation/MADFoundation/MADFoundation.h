@@ -23,6 +23,5 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MTCacheProtocol.h>
 
 #import <MADFoundation/NSURL+Document.h>
-#import <MADFoundation/NSFileManager+Common.h>
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/NSData+Comparson.h>

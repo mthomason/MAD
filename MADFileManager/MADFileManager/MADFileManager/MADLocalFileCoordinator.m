@@ -7,10 +7,10 @@
 //
 
 #import "MADLocalFileCoordinator.h"
-#import <MADFoundation/NSFileManager+Common.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSFileManager.h>
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
 #import <dispatch/queue.h>
@@ -33,6 +33,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 @implementation MADLocalFileCoordinator
 
 @synthesize delegate = _delegate;
+@dynamic documentsDirectory;
 
 #pragma mark - Initialization
 
@@ -43,7 +44,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         self.predicate = predicate;
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:fileGroup];
+        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:fileGroup];
         
         MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
         self.directoryMonitor = directoryMonitor;
@@ -159,7 +160,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (NSURL *)documentsDirectory {
-    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+    NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
     return url;
 }
 
@@ -169,10 +170,9 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     
     dispatch_async(defaultQueue, ^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        
-        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
-        NSArray *localDocumentURLs = [fileManager contentsOfDirectoryAtURL: url
+
+        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+        NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
                                                 includingPropertiesForKeys: nil
                                                                    options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                      error: nil];
@@ -205,7 +205,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:fileGroup];
+    NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:fileGroup];
     NSURL *documentURLWithoutExtension = [url URLByAppendingPathComponent:name];
     return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }

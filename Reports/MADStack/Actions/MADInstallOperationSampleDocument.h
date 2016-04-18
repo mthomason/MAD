@@ -13,7 +13,8 @@
 
 @interface MADInstallOperationSampleDocument : NSOperation
 
-- (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag;
+- (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension
+                 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag;
 
 @end
 

@@ -16,8 +16,6 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
-#import <MADFoundation/NSFileManager+Common.h>
-
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";
 static NSString * const keyTables                   = @"3";
