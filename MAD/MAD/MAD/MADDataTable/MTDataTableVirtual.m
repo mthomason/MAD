@@ -14,7 +14,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSSortDescriptor.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 @interface MTDataTableVirtual ()
@@ -134,7 +134,7 @@
     return plist;
 }
 
-- (void)addColumn:(MTDataColumn *)column {
+- (void)addColumn:(MADDataColumn *)column {
     NSString *identifier = [[NSString alloc] initWithString:[column identifier]];
     [self.columnKeys addObject:identifier];
     self.columns[identifier] = column;
@@ -151,7 +151,7 @@
 
 - (void)addColumnWithIdentifier:(NSString *)identifier andDefaultValue:(id)defaultValue {
     NSUInteger length = [self numberOfRows];
-    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:identifier];
+    MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:identifier];
     [dataColumn addRows:length];
     [self addColumn:dataColumn];
 }
@@ -198,7 +198,7 @@
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
     NSString *fieldKey = self.columnKeys[column];
-    MTDataColumn *dataInColumn = self.columns[fieldKey];
+    MADDataColumn *dataInColumn = self.columns[fieldKey];
     NSUInteger sortedIndex = [self sortedIndexForIndex:row];
     id objectForField = [dataInColumn objectAtIndex:sortedIndex];
     return objectForField;
@@ -224,7 +224,7 @@
     NSNumber *ogRowIndex = @(numberOfRows);
     for (id object in row) {
         NSString *key = self.columnKeys[index];
-        MTDataColumn *column = self.columns[key];
+        MADDataColumn *column = self.columns[key];
         [column addObject:object];
         indexedRow[key] = object;
         indexedRow[@"~rowid~"] = ogRowIndex;
@@ -237,7 +237,7 @@
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
     for (id key in self.columnKeys) {
-        MTDataColumn *column = self.columns[key];
+        MADDataColumn *column = self.columns[key];
         id obj = row[key];
         if (obj == nil) obj = @"";
         [column addObject:obj];
@@ -273,7 +273,7 @@
 }
 
 - (void)removeAllObjects {
-    for (MTDataColumn *column in [self.columns objectEnumerator]) {
+    for (MADDataColumn *column in [self.columns objectEnumerator]) {
         [column removeAllObjects];
     }
     [self.columns removeAllObjects];

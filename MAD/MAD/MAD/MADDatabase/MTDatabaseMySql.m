@@ -10,7 +10,7 @@
 
 #import "MADErrorUserInfo.h"
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MADCredential.h"
 
 #import "MTDatabaseConnection.h"
@@ -341,7 +341,7 @@
         MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
-            for (MTDataColumn *dataColumn in columnsEnumerator) {
+            for (MADDataColumn *dataColumn in columnsEnumerator) {
                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                 
                 NSInteger nativeColumnType = dataColumn.nativeColumnType.integerValue;

@@ -17,7 +17,7 @@
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"
@@ -505,7 +505,7 @@ void sqliteLog(void *foo, const char* statement) {
 
                             NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
                             
-                            MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+                            MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
                             
                             int affentyType = sqlite3_column_type(statement, (int)columnCounter);
                             NSNumber *nativeColumnType = @(affentyType);

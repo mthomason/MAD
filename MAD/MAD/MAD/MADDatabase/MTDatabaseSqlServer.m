@@ -28,7 +28,7 @@
 #import "MTDatabaseProcessSqlServer.h"
 
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 
 #import "MADCredential.h"
 
@@ -419,7 +419,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         
                         NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
                         
-                        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:columnNameString];
+                        MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:columnNameString];
                         [dataColumn setFieldName:columnNameString];
                         [dataColumn setNativeColumnType:columnTypeNumber];
                         [dataColumn setDataLength:columnLen];

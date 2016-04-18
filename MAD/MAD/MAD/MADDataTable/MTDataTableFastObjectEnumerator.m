@@ -11,7 +11,7 @@
 #endif
 
 #import "MTDataTableFastObjectEnumerator.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <MADCocoaExtensions/MTLog.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
@@ -153,7 +153,7 @@ void sqliteCallback(void *foo, const char* statement) {
         
         @autoreleasepool {
             
-            MTDataColumn *dataColumn = self.columns[key];
+            MADDataColumn *dataColumn = self.columns[key];
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
             if (sqlite3DataType == SQLITE_NULL) {

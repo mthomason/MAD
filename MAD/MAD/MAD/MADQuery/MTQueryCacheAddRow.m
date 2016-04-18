@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheAddRow.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseDataBinding.h"
 #import "MTDatabaseConnection.h"
 
@@ -129,7 +129,7 @@ static NSString * const SqlDelimitorObject = @", %@";
         @autoreleasepool {
             
             NSString * __weak fieldName = self.columnKeys[columnCounter];
-            MTDataColumn *  __weak column = self.columns[fieldName];
+            MADDataColumn *  __weak column = self.columns[fieldName];
             
             if (columnCounter > 0) {
                 [values appendString:SqlDelimitor];

@@ -11,7 +11,7 @@
 #endif
 
 #import "MTDataTable.h"
-#import "MTDataColumn.h"
+#import "MADDataColumn.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSData.h>
@@ -237,7 +237,7 @@ static NSString * const StringEmpty = @"";
 
     for (NSString *key in [self columnKeys]) {
             NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
-            MTDataColumn *column = [[MTDataColumn alloc] initWithPlist: columnPlist];
+            MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
             [self columns][key] = column;
     }
     
@@ -250,13 +250,13 @@ static NSString * const StringEmpty = @"";
     
     NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
     for (NSString *key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [self columns][key];
+        MADDataColumn *dataColumn = [self columns][key];
         columnsPlist[key] = [dataColumn plist];
     }
     return columnsPlist;
 }
 
-- (void)addColumn:(MTDataColumn *)column {}
+- (void)addColumn:(MADDataColumn *)column {}
 - (void)addRow:(NSArray *)row {}
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {}
 

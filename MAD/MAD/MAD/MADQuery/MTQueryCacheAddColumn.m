@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheAddColumn.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
 
@@ -21,7 +21,7 @@
 
 @property (nonatomic, copy) NSString *tableName;
 @property (nonatomic, copy) NSString *columnName;
-@property (nonatomic, strong) MTDataColumn *column;
+@property (nonatomic, strong) MADDataColumn *column;
 @property (nonatomic, assign) bool createTable;
 @property (nonatomic, assign) bool uniqueColumnHack;
 
@@ -41,7 +41,7 @@
         NSNumber *keyMTQueryCacheAddColumnColumnName = @(MTQueryCacheAddColumnColumnName);
         NSNumber *keyMTQueryCacheAddColumnCreateTable = @(MTQueryCacheAddColumnCreateTable);
 
-        MTDataColumn *column = object[keyMTQueryCacheAddColumnDataColumn];
+        MADDataColumn *column = object[keyMTQueryCacheAddColumnDataColumn];
         [self setColumn:column];
         
         NSString *tableName = object[keyMTQueryCacheAddColumnTableName];
@@ -66,7 +66,7 @@
     return self;
 }
 
-- (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName column:(MTDataColumn *)dataColumn createTable:(bool)createTable uniqueColumnHack:(bool)uniqueColumnHack {
+- (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName column:(MADDataColumn *)dataColumn createTable:(bool)createTable uniqueColumnHack:(bool)uniqueColumnHack {
     if (self = [super init]) {
         
         _createTable = createTable;

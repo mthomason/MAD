@@ -7,7 +7,7 @@
 //
 
 #import "MTQuerySelectItemsForGroup.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
@@ -45,7 +45,7 @@
         [self setWhereClause:whereClause];
         
         NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
-        MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
+        MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         [rowid setColumnType:@(MTDataTypeInteger)];
         columns[MADIdentifierROWID] = rowid;
         [self setColumns:columns];

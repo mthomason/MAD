@@ -153,7 +153,7 @@ extern NSString * const MADIdentifierROWID;
     @property (nonatomic, strong) NSMutableDictionary *fields;
     @property (nonatomic, strong) NSMutableArray *fieldKeys;
     @property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind NSData to insert statements
-    @property (nonatomic, strong) NSDictionary *columns;            //MTDataColumns by key
+    @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
 
     @property (nonatomic, assign, readonly) MTQueryType type;
 

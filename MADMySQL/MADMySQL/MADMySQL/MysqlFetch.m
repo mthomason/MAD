@@ -12,7 +12,7 @@
 
 #import "MysqlFetch.h"
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSet.h>
@@ -87,9 +87,9 @@
     return fieldName;
 }
 
-+ (MTDataColumn *)dataColumnForFieldName:(NSString *)fieldName mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
++ (MADDataColumn *)dataColumnForFieldName:(NSString *)fieldName mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
     
-    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+    MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     
     NSInteger ftype = myField.type;
     NSNumber *fieldType = @(ftype);
@@ -183,7 +183,7 @@
                 MysqlFetchField *field = [[MysqlFetchField alloc] initWithField:myStatement->fields[x] fieldName:fieldName];
                 [fieldCollector addObject:field];
                 
-                MTDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName:fieldName mySqlField:myStatement->fields[x]];
+                MADDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName:fieldName mySqlField:myStatement->fields[x]];
                 [*dataTable addColumn:dataColumn];
                 
                 bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
@@ -428,7 +428,7 @@ char *mySQLTypeForType(int type) {
                                             // FIXME: This is a hack.
                                             if (rowCounter == 0) {
                                                 
-                                                MTDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
+                                                MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
                                                 
                                                 NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
                                                 column.columnType = columnTypeString;
@@ -449,7 +449,7 @@ char *mySQLTypeForType(int type) {
                                             
                                             if (rowCounter == 0) {
                                             
-                                                MTDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
+                                                MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
                                                 NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeInteger];
                                                 column.columnType = columnTypeString;
                                                 

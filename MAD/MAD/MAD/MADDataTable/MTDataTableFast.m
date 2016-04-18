@@ -13,7 +13,7 @@
 #import "MTDataTableFast.h"
 
 #import <MADDataStructures/MADIndex.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MADConstants.h"
 
 #import "MTDataTableFastObjectEnumerator.h"
@@ -262,7 +262,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return @(buf);
 }
 
-- (void)addColumn:(MTDataColumn *)column {
+- (void)addColumn:(MADDataColumn *)column {
     NSUInteger columnId = [[column identifier] hash];
     BOOL createTable = [self.columnKeys count] == 0;
     char buf[19];
@@ -305,12 +305,12 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     }
 }
 
-- (MTDataColumn *)idDataColumnForGroupLevel:(NSUInteger)groupLevel {
+- (MADDataColumn *)idDataColumnForGroupLevel:(NSUInteger)groupLevel {
     NSString *key = [self idColumnKeyForGroupLocation:groupLevel];
     return self.columns[key];
 }
 
-- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
+- (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
     bool success = false;
     NSError * __autoreleasing errorQuery = NULL;
@@ -387,7 +387,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         
         NSMutableArray *rowData = [[NSMutableArray alloc] init];
         for (id columnDefKey in self.columnKeys) {
-            MTDataColumn *columnDef = self.columns[columnDefKey];
+            MADDataColumn *columnDef = self.columns[columnDefKey];
             id obj = row[columnDef.fieldName];
             if (obj == nil) obj = [NSNull null];
             [rowData addObject:obj];
@@ -415,7 +415,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                 for (NSString *columnKey in columnKeys) {
                     
                     @autoreleasepool {
-                        MTDataColumn * __weak column = self.columns[columnKey];
+                        MADDataColumn * __weak column = self.columns[columnKey];
                         if ([column.fieldName isEqualToString:sortDescriptor.key]) {
                             SEL sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
                             
@@ -566,7 +566,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     // FIXME: Query just this field.
     NSDictionary *objForRow = [self objectAtRow:row];
     NSString *key = self.columnKeys[0];
-    MTDataColumn *columnMetaData = self.columns[key];
+    MADDataColumn *columnMetaData = self.columns[key];
     NSString *fieldName = [columnMetaData fieldName];
     return objForRow[fieldName];
 }
@@ -819,7 +819,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
     NSURL *urlFastCache = [self urlFastCache];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
-    MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
+    MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     [rowid setColumnType:@(MTDataTypeInteger)];
     
     NSDictionary *columns = @{MADIdentifierROWID : rowid};
@@ -900,7 +900,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSString *)columnKeyForColumnName:(NSString *)columnName {
     NSString *key;
     for (NSString *columnKey in self.columnKeys) {
-        MTDataColumn *column = self.columns[columnKey];
+        MADDataColumn *column = self.columns[columnKey];
         if ([[column fieldName] isEqualToString:columnName]) {
             key = [NSString stringWithString: columnKey];
             break;
@@ -948,7 +948,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     for (NSString *key in self.columnKeys) {
-        MTDataColumn *dataColumn = self.columns[key];
+        MADDataColumn *dataColumn = self.columns[key];
         id columnValue = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnCounter];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];

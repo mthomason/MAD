@@ -10,7 +10,7 @@
 #import <MADDataStructures/MADIndex.h>
 #import <MAD/MADConstants.h>
 #import <MADSqlite3/MADSqlite3.h>
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTQuery.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
@@ -123,8 +123,8 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
         createDatabase = ![self.database tableExist:MTArrayCachedTableName];
     }
     if (![self.database tableExist:MTArrayCachedTableName]) {
-        MTDataColumn *columnKey = [MADArrayCaching columnKey];
-        MTDataColumn *columnValue = [MADArrayCaching columnValue];
+        MADDataColumn *columnKey = [MADArrayCaching columnKey];
+        MADDataColumn *columnValue = [MADArrayCaching columnValue];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier createTable:YES unique:NO];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnValue.identifier createTable:NO unique:NO];
 
@@ -222,8 +222,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
-+ (MTDataColumn *)columnKey {
-    MTDataColumn *column = [[MTDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
++ (MADDataColumn *)columnKey {
+    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
     NSNumber *columnType = @(MTDataTypeInteger);
     column.columnType = columnType;
     column.primaryKey = YES;
@@ -232,8 +232,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return column;
 }
 
-+ (MTDataColumn *)columnValue {
-    MTDataColumn *column = [[MTDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
++ (MADDataColumn *)columnValue {
+    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
     NSNumber *columnType = @(MTDataTypeBlob);
     column.columnType = columnType;
     column.primaryKey = NO;
@@ -242,7 +242,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return column;
 }
 
-- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
+- (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
       createTable:(BOOL)create unique:(BOOL)unique {
     
     MTQueryCacheAddColumn *queryCacheAddColumn = [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column

@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryCacheSelectLimitOffset.h"
-#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
@@ -112,7 +112,7 @@
         for (NSSortDescriptor *sortDescriptor in [self sortDesc]) {
             if (sortCounter != 0) [sql appendString:@", "];
             
-            MTDataColumn *dataColumn = nil;
+            MADDataColumn *dataColumn = nil;
             if ([self columns]) {
                 dataColumn = [self columns][[sortDescriptor key]];
             }
