@@ -21,7 +21,7 @@
     @property (nonatomic, copy)     NSString    *caption;
     @property (nonatomic, copy)     NSString    *fieldName;
     @property (nonatomic, assign)   MTDataType  type;
-    @property (nonatomic, copy)     NSNumber    *nativeColumnType;
+    @property (nonatomic, assign)   NSInteger   nativeType;
     @property (nonatomic, copy)     NSNumber    *dataLength;
     @property (nonatomic, copy)     NSNumber    *dataPercision;
     

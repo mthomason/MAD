@@ -116,7 +116,7 @@
             if ([self columns]) {
                 dataColumn = [self columns][[sortDescriptor key]];
             }
-            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.unsignedIntegerValue
+            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeType
                                                                        ascending: sortDescriptor.ascending];
             
             [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDescription];

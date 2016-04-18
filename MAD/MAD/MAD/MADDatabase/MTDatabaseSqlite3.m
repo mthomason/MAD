@@ -508,8 +508,7 @@ void sqliteLog(void *foo, const char* statement) {
                             MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
                             
                             int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-                            NSNumber *nativeColumnType = @(affentyType);
-                            
+
                             const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
                             const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
                             const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
@@ -525,7 +524,7 @@ void sqliteLog(void *foo, const char* statement) {
                             }
                             
                             [dataColumn setFieldName: fieldName];
-                            [dataColumn setNativeColumnType:nativeColumnType];
+                            dataColumn.nativeType = affentyType;
                             MTDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                             dataColumn.type = columnType;
                             

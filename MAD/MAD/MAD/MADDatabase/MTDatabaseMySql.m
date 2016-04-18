@@ -344,10 +344,9 @@
             for (MADDataColumn *dataColumn in columnsEnumerator) {
                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                 
-                NSInteger nativeColumnType = dataColumn.nativeColumnType.integerValue;
-                databaseField.fieldTypeNative = nativeColumnType;
+                databaseField.fieldTypeNative = dataColumn.nativeType;
                 
-                MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
+                MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
                 databaseField.fieldType = fieldType;
                 databaseField.width = dataColumn.dataLength.unsignedIntegerValue;
                 databaseField.decimals = dataColumn.dataPercision.unsignedIntegerValue;

@@ -37,10 +37,13 @@
     [encoder encodeObject: self.caption                     forKey: [MADDataColumn keyCaption]];
     
     NSNumber *type;
-    [encoder encodeObject: type                        forKey: [MADDataColumn keyColumnType]];
+    [encoder encodeObject: type                             forKey: [MADDataColumn keyColumnType]];
     self.type = type.shortValue;
     
-    [encoder encodeObject: self.nativeColumnType            forKey: [MADDataColumn keyNativeColumnType]];
+    NSNumber *nativeType;
+    [encoder encodeObject: nativeType                       forKey: [MADDataColumn keyNativeColumnType]];
+    self.nativeType = nativeType.integerValue;
+    
     [encoder encodeObject: self.dataLength                  forKey: [MADDataColumn keyDataLength]];
     [encoder encodeObject: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
     [encoder encodeBool: self.isPrimaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
@@ -58,8 +61,13 @@
         self.column =           [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
         self.defaultValue =     [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
         self.caption =          [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
-        self.type =       [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
-        self.nativeColumnType = [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
+        
+        NSNumber *type =        [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
+        self.type =             type.shortValue;
+        
+        NSNumber *nativeType =  [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
+        self.nativeType =       nativeType.integerValue;
+        
         self.dataLength =       [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
         self.dataPercision =    [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
         self.primaryKey =       [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
@@ -86,8 +94,8 @@
         NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
         self.columnType = columnType;
         
-        NSNumber *nativeColumnType = [[NSNumber alloc] initWithInteger:0];
-        self.nativeColumnType = nativeColumnType;
+        NSNumber *nativeType = [[NSNumber alloc] initWithInteger:0];
+        self.nativeType = nativeType;
         
         NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
         self.dataLength = dataLength;
@@ -118,12 +126,8 @@
         self.column = column;
 
         _defaultValue = [NSNull null];
-        
-        NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
-        self.type = columnType;
-
-        NSNumber *nativeColumnType = [[NSNumber alloc] initWithInteger:0];
-        self.nativeColumnType = nativeColumnType;
+        _type = 0;
+        _nativeType = 0;
 
         NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
         self.dataLength = dataLength;
@@ -160,10 +164,10 @@
         _caption = caption.copy;
 
         NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
-        _type = columnType.copy;
+        _type = columnType.shortValue;
 
-        NSNumber *nativeColumnType = plist[[MADDataColumn keyNativeColumnType]];
-        _nativeColumnType = nativeColumnType.copy;
+        NSNumber *nativeType = plist[[MADDataColumn keyNativeColumnType]];
+        _nativeType = nativeType.integerValue;
 
         NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
         _dataLength = dataLength.copy;
@@ -230,9 +234,13 @@
     plist[keyColumn] = self.column;
     plist[keyDefaultValue] = defaultValue;
     plist[keyCaption] = self.caption;
+    
     id type = [[NSNumber alloc] initWithShort:self.type];
     plist[keyColumnType] = type;
-    plist[keyNativeColumnType] = self.nativeColumnType;
+    
+    id nativeType = [[NSNumber alloc] initWithInteger:self.nativeType];
+    plist[keyNativeColumnType] = nativeType;
+    
     plist[keyDataLength] = self.dataLength;
     plist[keyDataPercision] = self.dataPercision;
     plist[keyIsPrimaryKey] = primaryKey;

@@ -91,20 +91,15 @@
     
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     
-    NSInteger ftype = myField.type;
-    NSNumber *fieldType = @(ftype);
     NSNumber *fieldLength = @(myField.length);
     NSNumber *fieldPercision = @(myField.decimals);
     
     dataColumn.fieldName = fieldName;
-    dataColumn.nativeColumnType = fieldType;
+    dataColumn.nativeType = myField.type;
     dataColumn.dataLength = fieldLength;
     dataColumn.dataPercision = fieldPercision;
-    dataColumn.type = 0;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? YES : NO;
-    
-    NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
-    [dataColumn setType:cType];
+    dataColumn.type = [MTDataTypeMySQL dataTypeForNativeType:myField.type];
 
     return dataColumn;
 }
