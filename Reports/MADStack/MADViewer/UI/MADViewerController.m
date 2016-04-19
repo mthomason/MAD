@@ -125,13 +125,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
                 
+                MADocument *document = self.document;
                 self.lastCacheDate = [NSDate date];
                 [self setDisplayActive];
-                [self reload];
+                [self reloadWithSize:document.paper.paperSize];
                 [self timerDealloc];
                 [self uiUpdateTimeSinceLastRefresh: NULL];
                 [self setDisplayActive];
-                [self removeObserverDidReadRowsFromDatabase:self.document.database];
+                [self removeObserverDidReadRowsFromDatabase:document.database];
 
             }];
         }
@@ -451,17 +452,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return index < self.viewControllers.count ? self.viewControllers[index] : self.viewControllers.lastObject;
 }
 
-- (BOOL)shouldReprocess {
-    return self.refreshing == false && self.startedRefresh == false && self.activityExporting == false;
-}
-
-- (void)redrawWithFrame:(CGRect)frame {
-    if ([self shouldReprocess]) {
-        [self setDisplayActive];
-        [self reloadWithSize: self.document.paper.paperSize];
-    }
-}
-
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
@@ -470,12 +460,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     
-    // FIXME: Delete preview
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
-    [self redrawWithFrame:self.view.frame];
+    BOOL success = [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    NSAssert(success, @"Failed to delete file.");
+    
 }
 
 #pragma mark - Report Notifications

@@ -1299,16 +1299,16 @@
 		4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentScroller.h; sourceTree = "<group>"; };
 		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		4C0B7EA41CC3ED4C00A14DCB /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADTdsClient.framework"; sourceTree = "<group>"; };
-		4C0B7EA61CC3ED5C00A14DCB /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADMySQL.framework"; sourceTree = "<group>"; };
-		4C0B7EA81CC3ED6F00A14DCB /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADSqlite3.framework"; sourceTree = "<group>"; };
-		4C0B7EAA1CC3ED8100A14DCB /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
-		4C0B7EAC1CC3EDA000A14DCB /* MADExplorer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADExplorer.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADExplorer.framework"; sourceTree = "<group>"; };
-		4C0B7EAE1CC3EDB800A14DCB /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADBarcodes.framework"; sourceTree = "<group>"; };
-		4C0B7EB01CC3EDCB00A14DCB /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADDataStructures.framework"; sourceTree = "<group>"; };
-		4C0B7EB21CC3EDD200A14DCB /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFileManager.framework"; sourceTree = "<group>"; };
-		4C0B7EB41CC3EDDE00A14DCB /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MAD.framework"; sourceTree = "<group>"; };
-		4C0B7EB61CC3EDEF00A14DCB /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
+		4C0B7EA41CC3ED4C00A14DCB /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADTdsClient.framework"; sourceTree = "<group>"; };
+		4C0B7EA61CC3ED5C00A14DCB /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADMySQL.framework"; sourceTree = "<group>"; };
+		4C0B7EA81CC3ED6F00A14DCB /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADSqlite3.framework"; sourceTree = "<group>"; };
+		4C0B7EAA1CC3ED8100A14DCB /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
+		4C0B7EAC1CC3EDA000A14DCB /* MADExplorer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADExplorer.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADExplorer.framework"; sourceTree = "<group>"; };
+		4C0B7EAE1CC3EDB800A14DCB /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADBarcodes.framework"; sourceTree = "<group>"; };
+		4C0B7EB01CC3EDCB00A14DCB /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADDataStructures.framework"; sourceTree = "<group>"; };
+		4C0B7EB21CC3EDD200A14DCB /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFileManager.framework"; sourceTree = "<group>"; };
+		4C0B7EB41CC3EDDE00A14DCB /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MAD.framework"; sourceTree = "<group>"; };
+		4C0B7EB61CC3EDEF00A14DCB /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
@@ -1321,7 +1321,7 @@
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C2213AD17D7947800BD36F5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
-		4C2480981C8B0FD60058E6B4 /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "../MAD/build/Debug-iphoneos/MAD.framework"; sourceTree = "<group>"; };
+		4C2480981C8B0FD60058E6B4 /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "MAD/build/Debug-iphoneos/MAD.framework"; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionHeaderViewDelegate.h; sourceTree = "<group>"; };
@@ -3153,17 +3153,6 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C0B7EB61CC3EDEF00A14DCB /* MADFoundation.framework */,
-				4C0B7EB41CC3EDDE00A14DCB /* MAD.framework */,
-				4C0B7EB21CC3EDD200A14DCB /* MADFileManager.framework */,
-				4C0B7EB01CC3EDCB00A14DCB /* MADDataStructures.framework */,
-				4C0B7EAE1CC3EDB800A14DCB /* MADBarcodes.framework */,
-				4C0B7EAC1CC3EDA000A14DCB /* MADExplorer.framework */,
-				4C0B7EAA1CC3ED8100A14DCB /* MADCocoaExtensions.framework */,
-				4C0B7EA81CC3ED6F00A14DCB /* MADSqlite3.framework */,
-				4C0B7EA61CC3ED5C00A14DCB /* MADMySQL.framework */,
-				4C0B7EA41CC3ED4C00A14DCB /* MADTdsClient.framework */,
-				4C2480981C8B0FD60058E6B4 /* MAD.framework */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
@@ -3174,6 +3163,7 @@
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
 				4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */,
 				4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */,
+				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -4429,6 +4419,25 @@
 				4C539C301CB5607D002E4CD5 /* MADQueryViewControllerLayout.m */,
 			);
 			name = Misc;
+			sourceTree = "<group>";
+		};
+		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C0B7EB61CC3EDEF00A14DCB /* MADFoundation.framework */,
+				4C0B7EB41CC3EDDE00A14DCB /* MAD.framework */,
+				4C0B7EB21CC3EDD200A14DCB /* MADFileManager.framework */,
+				4C0B7EB01CC3EDCB00A14DCB /* MADDataStructures.framework */,
+				4C0B7EAE1CC3EDB800A14DCB /* MADBarcodes.framework */,
+				4C0B7EAC1CC3EDA000A14DCB /* MADExplorer.framework */,
+				4C0B7EAA1CC3ED8100A14DCB /* MADCocoaExtensions.framework */,
+				4C0B7EA81CC3ED6F00A14DCB /* MADSqlite3.framework */,
+				4C0B7EA61CC3ED5C00A14DCB /* MADMySQL.framework */,
+				4C0B7EA41CC3ED4C00A14DCB /* MADTdsClient.framework */,
+				4C2480981C8B0FD60058E6B4 /* MAD.framework */,
+			);
+			name = Frameworks;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4CB56E581AC683CC00756775 /* atomic */ = {
