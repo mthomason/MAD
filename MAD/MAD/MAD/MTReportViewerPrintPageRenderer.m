@@ -48,7 +48,6 @@
 #import "RptqDocumentObjectImage.h"
 
 #import "MTPaper.h"
-#import "RptqQuery+Extras.h"
 
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
@@ -65,6 +64,7 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
+
 #import <MAD/MTDataTableFast.h>
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
@@ -72,49 +72,48 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 @protocol MADDataTableAggregateResultesProtocol <NSObject>
 
-- (id)zAggregateType:(MTAggregateGroupByType)groupByType
-                     function:(MTAggregateFunctionType)function
-                     fieldKey:(NSString *)fieldKey
-                    groupKeys:(NSArray *)groupKeys
-                       rowids:(NSArray *)rowids;
+    - (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                         function:(MTAggregateFunctionType)function
+                         fieldKey:(NSString *)fieldKey
+                        groupKeys:(NSArray *)groupKeys
+                           rowids:(NSArray *)rowids;
 
 @end
 
 
 @interface MTReportViewerPrintPageRenderer ()
 
-@property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
+    @property (nonatomic, weak) MTReportFormatter *reportFormatter;
+    @property (nonatomic, weak) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
 
-@property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
+    @property (nonatomic, assign) bool showWaterMark;
+    @property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
 
-@property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
-@property (nonatomic, assign) CGSize printableSize;
-@property (nonatomic, assign) CGSize cachedPageSize;
-@property (nonatomic, assign) CGRect cachedPageRect;
-@property (nonatomic, assign) bool showWaterMark;
+    @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
+    @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
+    @property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
-@property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
-@property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
-@property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
-@property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
-
-@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
-@property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
+    @property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
+    @property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
 
 @end
 
 @implementation MTReportViewerPrintPageRenderer
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable {
-    return [self initWithReportFormatter:reportFormatter dataTable:dataTable andPrintableAreaSize:[MTPaper sizeLetter]];
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
+                              dataTable:(MTDataTableFast *)dataTable {
+    
+    return [self initWithReportFormatter:reportFormatter dataTable:dataTable
+                    andPrintableAreaSize:[MTPaper sizeLetter]];
+    
 }
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
+                              dataTable:(MTDataTableFast *)dataTable
+                   andPrintableAreaSize:(CGSize)printableAreaSize {
     if (self = [super init]) {
         [self initCommon];
         self.dataTable = (MTDataTableFast<MADDataTableAggregateResultesProtocol> *)dataTable;
-        self.printableSize = printableAreaSize;
         self.reportFormatter = reportFormatter;
         
     }
@@ -129,9 +128,6 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     
     self.showWaterMark = false;
     self.accessibilityCacheNeedsUpdate = false;
-    
-    self.cachedPageSize = CGSizeZero;
-    self.cachedPageRect = CGRectZero;
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
 
@@ -403,6 +399,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
                                                        pageIndex:pageIndex offset:originY];
         
         NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
+        
         for (RptqDocumentSectionRows *row in rows) {
             NSOrderedSet *items = row.hasObjects;
             MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
@@ -522,6 +519,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     return accessibilityDrawingObjects;
 }
 */
+
 - (NSArray *)groupLevelKeysForDetailRow:(NSNumber *)detailRowID {
     if (self.reportFormatter.numberOfGroups > 0) {
         NSArray *keys = [self.reportFormatter keysForCachedID:detailRowID];

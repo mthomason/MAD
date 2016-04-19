@@ -200,10 +200,6 @@ NSString * const MTNullIdentifier = @"(null)";
     [self.page setLayoutSize:layoutSize];
 }
 
-- (void)reformatForSize:(CGSize)printableSize {
-    [self formatForSize:printableSize contentChanged:NO];
-}
-
 - (void)loadFromCacheWithSize:(CGSize)printableSize {
     [self setLayoutSize:printableSize];
     [self loadLayoutAndIndexesFromCache];
@@ -224,7 +220,7 @@ NSString * const MTNullIdentifier = @"(null)";
             }
         }
     } else {
-        [self reformatForSize:printableSize];
+        [self formatForSize:printableSize contentChanged:NO];
     }
 }
 
