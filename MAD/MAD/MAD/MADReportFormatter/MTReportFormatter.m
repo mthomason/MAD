@@ -54,16 +54,17 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportLayout;
 
-    @property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
+    //At some point add the ability to format one page at a time.
+    @property (nonatomic, strong) MTReportFormatterState *machineState;
     @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, strong) NSMutableArray <NSDictionary *> *pageLayoutTemporary;
-    @property (nonatomic, strong) NSMutableArray *pageIndexesTemporary;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSDictionary *>  *pageLayoutTemporary;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSArray *>       *pageIndexesTemporary;
+    @property (nonatomic, strong) NSArray        <__kindof id>              *lastComparsonValues;
 
-    @property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
-    @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
+    @property (nonatomic, strong) NSDictionary <__kindof NSString *, NSNumber *> *layoutHeightsBySectionKey;
 
-    @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
+    @property (nonatomic, strong, readwrite) NSArray <__kindof RptqQueryGroup *> *sortedQueryGroups;
 
 @end
 
@@ -305,7 +306,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)initReportLayoutContainers {
     [self.reportLayout removeAllObjects];
     [self.reportIndexes removeAllObjects];
-    [self setLastResultRowComparsonValues:nil];
+    self.lastComparsonValues = nil;
 }
 
 - (void)cleanupTemporaryReportIndexes {
@@ -497,18 +498,18 @@ NSString * const MTNullIdentifier = @"(null)";
             //Display new footers if needed.
             if (!firstRow) {
                 [self displayNewGroupFootersIfNeeded: keyValuesForComparson
-                                       andLastValues: self.lastResultRowComparsonValues];
+                                       andLastValues: self.lastComparsonValues];
             }
             
             //Display new group headers if needed.
             [self displayNewGroupHeadersIfNeeded: keyValuesForComparson
-                                   andLastValues: self.lastResultRowComparsonValues];
+                                   andLastValues: self.lastComparsonValues];
             
             [self addHeightFromDocumentSectionToReportLayout:detailSection];
             
             [self addDetail];
             
-            [self setLastResultRowComparsonValues: keyValuesForComparson];
+            self.lastComparsonValues = keyValuesForComparson;
             
             firstRow = NO;
             self.machineState.rowCounter++;
@@ -532,7 +533,7 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
-- (NSArray *)keyValuesForResultRow:(id)resultRow {
+- (NSArray <__kindof id> *)keyValuesForResultRow:(id)resultRow {
     NSArray *keyValues = nil;
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];

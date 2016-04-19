@@ -27,8 +27,10 @@
     <MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
     
     - (instancetype)initWithViewController:(UIViewController * __weak)viewController;
+
     - (instancetype)initWithDependencyTag:(NSUInteger)dependencyTag
                            viewController:(UIViewController * __weak)viewController;
+
     - (instancetype)initWithError:(NSError *)error
                    viewController:(UIViewController * __weak)viewController;
 

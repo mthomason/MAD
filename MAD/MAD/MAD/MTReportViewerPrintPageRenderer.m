@@ -115,7 +115,6 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
         [self initCommon];
         self.dataTable = (MTDataTableFast<MADDataTableAggregateResultesProtocol> *)dataTable;
         self.reportFormatter = reportFormatter;
-        
     }
     return self;
 }
