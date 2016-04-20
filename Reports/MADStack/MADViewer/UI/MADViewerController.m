@@ -375,10 +375,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super viewDidAppear:animated];
     [self uiUpdateTimeSinceLastRefresh:self];
     [self.toolbarSlider setNeedsLayout];
-    
-    
-
-}
+    }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];

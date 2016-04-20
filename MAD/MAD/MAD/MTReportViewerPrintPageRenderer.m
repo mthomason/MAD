@@ -163,7 +163,8 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     cornerSize = cornerSize * scale;
     CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
     CGRect zoomRect = CGRectMake(CGPointZero.x, CGPointZero.y, imageSizeWidth, size);
-    CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
+    CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y,
+                                 zoomRect.size.width/scale, zoomRect.size.height/scale);
     CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
     CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
     CGPoint topRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
