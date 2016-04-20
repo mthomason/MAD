@@ -70,6 +70,11 @@
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
+static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc);
+static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc) {
+    return sc == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f;
+}
+
 @protocol MADDataTableAggregateResultesProtocol <NSObject>
 
     - (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
@@ -263,7 +268,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
                         edgeEffect: YES
                         zoomEffect: YES
                       squareEffect: NO
-                        cornerSize: traits.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f
+                        cornerSize: cornerRadiusForHorizontalSizeClass(traits.horizontalSizeClass)
                              scale: traits.displayScale];
 }
 
@@ -275,7 +280,8 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     CGPathRelease(path);
 }
 
-- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
+- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
+                       withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     [self drawWhiteCanvas: ctx pageRect: pageRect];
