@@ -20,7 +20,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //[self.document reload];
+
 }
 
 @end
