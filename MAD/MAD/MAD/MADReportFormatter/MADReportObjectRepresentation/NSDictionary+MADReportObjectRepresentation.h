@@ -18,16 +18,16 @@ extern NSString * const MTReportGroupLevel;
 
 @interface NSDictionary (MADReportObjectRepresentation)
 
-+ (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
-                                            groupLevel:(NSUInteger)groupLevel
-                                                   row:(NSNumber *)row;
+    + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
+                                                groupLevel:(NSUInteger)groupLevel
+                                                       row:(NSNumber *)row;
 
-+ (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
-                                                   row:(NSNumber *)row;
+    + (instancetype)newObjectRepresentationWithSectionType:(MNSDocumentSectionType)sectionType
+                                                       row:(NSNumber *)row;
 
-- (NSUInteger)groupLevel;
-- (MNSDocumentSectionType)sectionType;
-- (NSNumber *)detailRowId;
+    - (NSUInteger)groupLevel;
+    - (MNSDocumentSectionType)sectionType;
+    - (NSNumber *)detailRowId;
 
 @end
 

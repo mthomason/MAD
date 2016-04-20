@@ -536,9 +536,12 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSArray <__kindof id> *)keyValuesForResultRow:(id)resultRow {
+
     NSArray *keyValues = nil;
+
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
+
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
             id predicateValue = resultRow[sortDesc.key];
             if (predicateValue != nil) {
@@ -548,6 +551,7 @@ NSString * const MTNullIdentifier = @"(null)";
             }
         }
         keyValues = [NSArray arrayWithArray:keyValuesForComparson];
+        
     } else {
         keyValues = @[];
     }
