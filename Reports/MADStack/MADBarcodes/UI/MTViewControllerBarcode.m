@@ -160,6 +160,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                 [self.optionsViewController.tableView reloadData];
             } else {
                 MTViewControllerBarcode * __weak weakself = self;
+                
                 [NSError presentError: error
                      onViewController: weakself
                            completion:^(BOOL presentErrorSuccess) {

@@ -48,6 +48,10 @@
 #import "MADOperationQueue.h"
 #import "MADRefreshReloadOperation.h"
 
+#import "MADPromptOperationDisplayError.h"
+#import "MADBlockOperation.h"
+
+
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADTextNoCache = @"No Cache";
 
@@ -136,6 +140,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
             }];
         }
+        
+        MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+        for (NSError *error in errors) {
+            MADPromptOperationDisplayError *operationErrorDisplay = [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+            [operationQueue addOperation:operationErrorDisplay];
+
+        }
+        
     }
 
 }
@@ -344,6 +356,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super viewDidAppear:animated];
     [self uiUpdateTimeSinceLastRefresh:self];
     [self.toolbarSlider setNeedsLayout];
+    
+    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

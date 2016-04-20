@@ -19,6 +19,10 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
+#import "MADOperationQueue.h"
+#import "MADPromptOperationDisplayError.h"
+#import "MADBlockOperation.h"
+
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
         UITableViewDelegate,
@@ -101,19 +105,18 @@
     [self.delegate viewControllerDidCancel: self];
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller
+- (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError*)error {
 
-    MADAboutTableViewController * __weak weakself = self;
-    [NSError presentError: error
-         onViewController: self
-               completion:^(BOOL success) {
-        if (success) {
-            [weakself dismissViewControllerAnimated:YES completion:nil];
-        }
+    MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+    MADPromptOperationDisplayError *operationErrorDisplay = [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+    MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }];
-
+    [operationErrorDisplay addDependency:finish];
+    [operationQueue addOperation:operationErrorDisplay];
+ 
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

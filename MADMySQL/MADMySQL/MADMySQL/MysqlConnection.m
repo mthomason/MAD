@@ -116,9 +116,9 @@
         }
         if (error != NULL) {
             NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorDescription};
-            *error = [NSError errorWithDomain:@"MTDatabaseMySql"
-                                         code:errorCode
-                                     userInfo:userInfo];
+            *error = [NSError errorWithDomain: @"MTDatabaseMySql"
+                                         code: errorCode
+                                     userInfo: userInfo];
         }
         return nil;
     }

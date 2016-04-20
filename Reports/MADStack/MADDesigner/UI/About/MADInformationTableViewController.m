@@ -14,6 +14,10 @@
 #import "UIButton+FollowTwitter.h"
 #import "NSAttributedString+Common.h"
 
+#import "MADOperationQueue.h"
+#import "MADPromptOperationDisplayError.h"
+#import "MADBlockOperation.h"
+
 @interface MADInformationTableViewController ()
     <MFMailComposeViewControllerDelegate>
 
@@ -22,14 +26,20 @@
 @implementation MADInformationTableViewController
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    if (error) {
-        UIAlertController *alertController = [UIAlertController error:error];
-        [self showViewController:alertController sender:self];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
+
+    if (error != nil) {
+        MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+        MADPromptOperationDisplayError *operationErrorDisplay = [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+        MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }];
         }];
+        [finish addDependency:operationErrorDisplay];
+        [operationQueue addOperation:operationErrorDisplay];
+        [operationQueue addOperation:finish];
     }
+
 }
 
 - (IBAction)cancel:(id)sender {

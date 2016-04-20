@@ -108,7 +108,9 @@ static NSString * const TextYes = @"Dismiss";
 
     MADPromptOperationDisplayError * __weak weakSelf = self;
     NSString *title = NSLocalizedString(TextYes, TextYes);
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
+    
+    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationDisplayError * __strong sself = weakSelf;
         sself.result = true;
         sself.alertDisplayed = true;
@@ -125,5 +127,6 @@ static NSString * const TextYes = @"Dismiss";
         [viewController presentViewController: alertController animated: YES completion: nil];
     }];
 }
+
 
 @end
