@@ -58,7 +58,7 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, strong) MTReportFormatterState *machineState;
     @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, strong) NSMutableArray <__kindof MADReportSectionRepresentation22 *>  *pageLayoutTemporary;
+    @property (nonatomic, strong) NSMutableArray <__kindof MADSectionPlist *>  *pageLayoutTemporary;
     @property (nonatomic, strong) NSMutableArray <__kindof NSArray *>       *pageIndexesTemporary;
     @property (nonatomic, strong) NSArray        <__kindof id>              *lastComparsonValues;
 
@@ -159,7 +159,7 @@ NSString * const MTNullIdentifier = @"(null)";
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
     self.reportFormatterCache = reportFormatterCache;
     
-    NSMutableArray <__kindof MADReportSectionRepresentation22 *> *temporaryLayoutForPage = [[NSMutableArray alloc] init];
+    NSMutableArray <__kindof MADSectionPlist *> *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     self.pageLayoutTemporary = temporaryLayoutForPage;
     
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
@@ -245,7 +245,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self addDetailToReportLayout];
     [self addReportFooterToReportLayout];
     
-    NSArray <__kindof MADReportSectionRepresentation22 *> *tlfp = [NSArray arrayWithArray:self.pageLayoutTemporary];
+    NSArray <__kindof MADSectionPlist *> *tlfp = [NSArray arrayWithArray:self.pageLayoutTemporary];
     [self.reportLayout addObject:tlfp];
     
     NSArray *tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];
@@ -629,7 +629,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
-    MADReportSectionRepresentation22 *header = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
+    MADSectionPlist *header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
                                                                                    groupLevel: groupLevel
                                                                                           row: self.machineState.detailRowId];
     if (groupLevel == [self numberOfGroups] - 1) {
@@ -639,39 +639,39 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addPageFooter {
-    MADReportSectionRepresentation22 *footer = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
+    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
                                                                                           row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addReportFooter {
-    MADReportSectionRepresentation22 *footer = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
+    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
                                                                                           row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
-    MADReportSectionRepresentation22 *footer = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
+    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
                                                                                    groupLevel: groupLevel
                                                                                           row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addDetail {
-    MADReportSectionRepresentation22 *detail = [[MADReportSectionRepresentation22 alloc] initWithSectionType: MNSDocumentSectionTypeBody
+    MADSectionPlist *detail = [[MADSectionPlist alloc] initWithSectionType: MNSDocumentSectionTypeBody
                                                                                           row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: detail];
     [self.pageIndexesTemporary addObject:self.machineState.detailRowId];
 }
 
 - (void)addReportHeader {
-    MADReportSectionRepresentation22 *obj = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
+    MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
                                                                                        row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: obj];
 }
 
 - (void)addPageHeader {
-    MADReportSectionRepresentation22 *obj = [MADReportSectionRepresentation22 newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
+    MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
                                                                                        row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject:  obj];
 }
