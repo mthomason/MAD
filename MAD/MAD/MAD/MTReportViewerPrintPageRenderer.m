@@ -56,7 +56,7 @@
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
 
-#import "NSDictionary+MADReportObjectRepresentation.h"
+#import "MADReportSectionRepresentation22.h"
 
 #import "MADAccessibilityLine.h"
 #import "MADReportTextRepresentation.h"
@@ -352,7 +352,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
     NSArray *pageSections = layoutEnumerator.allObjects;
     MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
-    for (NSDictionary *pageSection in pageSections) {
+    for (MADReportSectionRepresentation22 *pageSection in pageSections) {
         
         RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
         
@@ -386,7 +386,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 - (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection
                                        pageRect: (CGRect)pageRect
-                                    pageSection: (NSDictionary *)pageSection
+                                    pageSection: (MADReportSectionRepresentation22 *)pageSection
                                        document: (RptqDocument *)document
                                          onPage: (NSUInteger)pageIndex
                                    withDatabase: (MTDatabase *)database
@@ -536,7 +536,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 }
 
 - (CGRect)sectionRectForDocumentSection:(RptqDocumentSection *)documentSection
-                            pageSection:(NSDictionary *)pageSection
+                            pageSection:(MADReportSectionRepresentation22 *)pageSection
                              inDocument:(RptqDocument *)document
                                pageRect:(CGRect)pageRect
                           numberOfPages:(NSUInteger)numberOfPages

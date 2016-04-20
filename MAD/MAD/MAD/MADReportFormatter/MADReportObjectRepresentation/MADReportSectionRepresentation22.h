@@ -1,0 +1,39 @@
+//
+//  MADReportObjectRepresentation.h
+//  MAD
+//
+//  Created by Michael Thomason on 10/25/15.
+//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#ifndef MAD_NSDictionary_MADReportObjectRepresentation_h
+#define MAD_NSDictionary_MADReportObjectRepresentation_h
+
+#import <Foundation/NSObject.h>
+#import <MAD/MADReportSectionRepresentation.h>
+
+extern NSString * const MTReportSectionType;
+extern NSString * const MTReportDetailRowId;
+extern NSString * const MTReportGroupLevel;
+
+typedef NSDictionary  <__kindof NSString *, __kindof NSNumber *> MADSectionPlist;
+
+@interface MADReportSectionRepresentation22 : MADSectionPlist
+
+    - (instancetype)initWithSectionType:(MNSDocumentSectionType)sectionType
+                                    row:(NSNumber *)row;
+
+    + (instancetype)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
+                                          groupLevel:(NSUInteger)groupLevel
+                                                 row:(NSNumber *)row;
+
+    + (instancetype)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
+                                                 row:(NSNumber *)row;
+
+    - (NSUInteger)groupLevel;
+    - (MNSDocumentSectionType)sectionType;
+    - (NSNumber *)detailRowId;
+
+@end
+
+#endif

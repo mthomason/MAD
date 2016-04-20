@@ -253,17 +253,23 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSData *)dataForObject:(id)object {
-    return [NSPropertyListSerialization dataWithPropertyList: object
-                                                      format: NSPropertyListBinaryFormat_v1_0
-                                                     options: 0
-                                                       error: nil];
+    NSError * __autoreleasing * error = NULL;
+    NSData *data = [NSPropertyListSerialization dataWithPropertyList: object
+                                                              format: NSPropertyListBinaryFormat_v1_0
+                                                             options: 0
+                                                               error: error];
+    NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
+    return data;
 }
 
 - (id)objectForData:(NSData *)data {
-    return [NSPropertyListSerialization propertyListWithData: data
-                                                     options: NSPropertyListImmutable
-                                                      format: nil
-                                                       error: nil];
+    NSError * __autoreleasing * error = NULL;
+    id propertyList = [NSPropertyListSerialization propertyListWithData: data
+                                                                options: NSPropertyListImmutable
+                                                                 format: nil
+                                                                  error: error];
+    NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
+    return propertyList;
 }
 
 - (void)addObject:(id)object {
@@ -460,5 +466,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
     return i;
 }
+
+
 
 @end

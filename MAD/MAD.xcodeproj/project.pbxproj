@@ -227,8 +227,8 @@
 		4C994F291BDD96E40058627A /* MADReportPageRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F231BDD96E40058627A /* MADReportPageRepresentation.m */; };
 		4C994F2A1BDD96E40058627A /* MADReportTextRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F241BDD96E40058627A /* MADReportTextRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C994F2B1BDD96E40058627A /* MADReportTextRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F251BDD96E40058627A /* MADReportTextRepresentation.m */; };
-		4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */; };
-		4C994F301BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F2E1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m */; };
+		4C994F2F1BDD9A7E0058627A /* MADReportSectionRepresentation22.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* MADReportSectionRepresentation22.h */; };
+		4C994F301BDD9A7E0058627A /* MADReportSectionRepresentation22.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F2E1BDD9A7E0058627A /* MADReportSectionRepresentation22.m */; };
 		4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */; };
 		4C994F361BDDD85D0058627A /* MADAccessibilityLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */; };
 		4C994F461BE2B1320058627A /* MADReportSectionRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F441BE2B1320058627A /* MADReportSectionRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -616,8 +616,8 @@
 		4C994F231BDD96E40058627A /* MADReportPageRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportPageRepresentation.m; sourceTree = "<group>"; };
 		4C994F241BDD96E40058627A /* MADReportTextRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportTextRepresentation.h; sourceTree = "<group>"; };
 		4C994F251BDD96E40058627A /* MADReportTextRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportTextRepresentation.m; sourceTree = "<group>"; };
-		4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MADReportObjectRepresentation.h"; path = "MAD/MADReportFormatter/MADReportObjectRepresentation/NSDictionary+MADReportObjectRepresentation.h"; sourceTree = "<group>"; };
-		4C994F2E1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MADReportObjectRepresentation.m"; path = "MAD/MADReportFormatter/MADReportObjectRepresentation/NSDictionary+MADReportObjectRepresentation.m"; sourceTree = "<group>"; };
+		4C994F2D1BDD9A7E0058627A /* MADReportSectionRepresentation22.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSectionRepresentation22.h; path = MAD/MADReportFormatter/MADReportObjectRepresentation/MADReportSectionRepresentation22.h; sourceTree = "<group>"; };
+		4C994F2E1BDD9A7E0058627A /* MADReportSectionRepresentation22.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportSectionRepresentation22.m; path = MAD/MADReportFormatter/MADReportObjectRepresentation/MADReportSectionRepresentation22.m; sourceTree = "<group>"; };
 		4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAccessibilityLine.h; path = MAD/MADReportFormatter/MADReportObjectRepresentation/MADAccessibilityLine.h; sourceTree = "<group>"; };
 		4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAccessibilityLine.m; path = MAD/MADReportFormatter/MADReportObjectRepresentation/MADAccessibilityLine.m; sourceTree = "<group>"; };
 		4C994F441BE2B1320058627A /* MADReportSectionRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportSectionRepresentation.h; sourceTree = "<group>"; };
@@ -1146,8 +1146,8 @@
 		4C994F2C1BDD9A550058627A /* MADReportObjectRepresentation */ = {
 			isa = PBXGroup;
 			children = (
-				4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */,
-				4C994F2E1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m */,
+				4C994F2D1BDD9A7E0058627A /* MADReportSectionRepresentation22.h */,
+				4C994F2E1BDD9A7E0058627A /* MADReportSectionRepresentation22.m */,
 				4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */,
 				4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */,
 			);
@@ -1537,7 +1537,7 @@
 				4C401D3E1BAE3AF800BAE5FC /* MTPaperB1.h in Headers */,
 				4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */,
 				4C994F461BE2B1320058627A /* MADReportSectionRepresentation.h in Headers */,
-				4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */,
+				4C994F2F1BDD9A7E0058627A /* MADReportSectionRepresentation22.h in Headers */,
 				4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */,
 				4C401DC91BAE3BD600BAE5FC /* MTQueryCacheIndexDrop.h in Headers */,
 				4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */,
@@ -1807,7 +1807,7 @@
 				4C401D3F1BAE3AF800BAE5FC /* MTPaperB1.m in Sources */,
 				4C401DBA1BAE3BD600BAE5FC /* MTQueryCacheAddColumn.m in Sources */,
 				4C401DCA1BAE3BD600BAE5FC /* MTQueryCacheIndexDrop.m in Sources */,
-				4C994F301BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m in Sources */,
+				4C994F301BDD9A7E0058627A /* MADReportSectionRepresentation22.m in Sources */,
 				4C401D3B1BAE3AF800BAE5FC /* MTPaperA10.m in Sources */,
 				4C401DC41BAE3BD600BAE5FC /* MTQueryCacheDropTable.m in Sources */,
 				4CC2827A1BADE82200775B72 /* MADNotificationDidReadRows.m in Sources */,
