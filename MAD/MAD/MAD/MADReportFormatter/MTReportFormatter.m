@@ -40,7 +40,7 @@
 
 #import "NSData+Comparson.h"
 
-#import "MADReportSectionRepresentation22.h"
+#import "MADSectionPlist.h"
 
 NSString * const MTNullIdentifier = @"(null)";
 

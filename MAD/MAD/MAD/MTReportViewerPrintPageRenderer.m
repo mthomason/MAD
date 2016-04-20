@@ -56,7 +56,7 @@
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
 
-#import "MADReportSectionRepresentation22.h"
+#import "MADSectionPlist.h"
 
 #import "MADAccessibilityLine.h"
 #import "MADReportTextRepresentation.h"
