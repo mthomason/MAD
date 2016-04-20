@@ -34,50 +34,49 @@ extern NSString * const MTNullIdentifier;
 
 @interface MTReportFormatter : MTTableFormatter
 
-@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+    @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-- (instancetype)initWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options;
-//- (instancetype)initWithQuery: (MTQuery *)query layout: (MADocument *)layout options: (MTReportFormatterOptions)options;
-+ (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
-                                 options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED;
+    - (instancetype)initWithDocument: (MADocument *)layout
+                             options: (MTReportFormatterOptions)options;
+    + (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
+                                     options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED;
 
-- (void)formatForSize:(CGSize)printableSize;
-- (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
-- (void)reformatForSize:(CGSize)printableSize;
+    - (void)formatForSize:(CGSize)printableSize;
+    - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
+    - (void)reformatForSize:(CGSize)printableSize;
 
-- (void)loadFromCacheWithSize:(CGSize)printableSize;
+    - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
-- (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-- (NSArray *)layoutForPage:(NSUInteger)page;
+    - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
+    - (NSArray *)layoutForPage:(NSUInteger)page;
 
-- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-- (NSArray *)rowidsForPage:(NSUInteger)pageIndex;
-- (NSArray *)keysForCachedID:(NSNumber *)rowid;
+    - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
+    - (NSArray *)rowidsForPage:(NSUInteger)pageIndex;
+    - (NSArray *)keysForCachedID:(NSNumber *)rowid;
 
-- (void)setLayoutSize:(CGSize)layoutSize;
-- (void)setMarginUsingPrintableRect:(CGRect)printableRect;
+    - (void)setLayoutSize:(CGSize)layoutSize;
+    - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 
-@property (nonatomic, weak) id <MTReportFormatterDataSource> datasource;
-@property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, weak) id <MTReportFormatterDataSource> datasource;
+    @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 
-@property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
-@property (nonatomic, weak, readonly) MADocument *layout;
+    @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
+    @property (nonatomic, weak, readonly) MADocument *layout;
 
-@property (readonly) NSUInteger numberOfPages;
-@property (readonly) NSUInteger numberOfGroups;
+    @property (readonly) NSUInteger numberOfPages;
+    @property (readonly) NSUInteger numberOfGroups;
 
-//  These are the rowids by page.  These point to data in the cache.
-//      Once these arrays are populated, they are used by the print page render to
-//      draw the report.
-@property (nonatomic, strong, readonly) MADArrayCaching *reportIndexes;
+    //  These are the rowids by page.  These point to data in the cache.
+    //      Once these arrays are populated, they are used by the print page render to
+    //      draw the report.
+    @property (nonatomic, strong, readonly) MADArrayCaching *reportIndexes;
 
-//  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
-//      which represents a page.  The array contains dictionaries for each object on that page.
-@property (nonatomic, strong, readonly) MADArrayCaching *reportLayout;
+    //  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
+    //      which represents a page.  The array contains dictionaries for each object on that page.
+    @property (nonatomic, strong, readonly) MADArrayCaching *reportLayout;
 
-//  Use this to cache in location other than default.
-@property (nonatomic, strong) NSString *overrideIdentifier;
-
+    //  Use this to cache in location other than default.
+    @property (nonatomic, strong) NSString *overrideIdentifier;
 
 @end
 

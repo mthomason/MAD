@@ -190,7 +190,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (BOOL)needsFormat {
     NSAssert([self datasource] != nil, @"We need a datatable way before here");
-    return ([self didRefresh] || [self cachedIndexesExist] == NO || [self.datasource cacheExist] == NO) ? YES : NO;
+    return self.didRefresh ||
+            (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
+            ![self.datasource cacheExist] ? YES : NO;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
