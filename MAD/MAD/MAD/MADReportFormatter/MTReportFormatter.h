@@ -35,6 +35,7 @@ extern NSString * const MTNullIdentifier;
 
 @class MADArrayCaching<ObjectType>;
 
+typedef NSArray         <__kindof id>                                   MADObjectArray;
 typedef NSArray         <__kindof MADSectionPlist *>                    MADSectionArray;
 typedef NSArray         <__kindof NSNumber *>                           MADIndexArray;
 
@@ -54,6 +55,17 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     //      which represents a page.  The array contains dictionaries for each object on that page.
     @property (nonatomic, strong, readonly) MADCachingLayout *reportLayout;
 
+    @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
+    @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
+
+    @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
+    @property (nonatomic, weak, readonly)   MADocument *layout;
+
+    @property (readonly) NSUInteger numberOfPages;
+    @property (readonly) NSUInteger numberOfGroups;
+
+    //  Use this to cache in location other than default.
+    @property (nonatomic, copy, readwrite) NSString *overrideIdentifier;
 
     - (instancetype)initWithDocument: (MADocument *)layout
                              options: (MTReportFormatterOptions)options;
@@ -68,26 +80,14 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
     - (NSEnumerator <__kindof MADSectionPlist *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-    - (NSArray *)layoutForPage:(NSUInteger)page;
+    - (MADSectionArray *)layoutForPage:(NSUInteger)page;
 
     - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-    - (NSArray *)rowidsForPage:(NSUInteger)pageIndex;
-    - (NSArray *)keysForCachedID:(NSNumber *)rowid;
+    - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
+    - (MADObjectArray *)keysForCachedID:(NSNumber *)rowid;
 
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
-
-    @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
-    @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
-
-    @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
-    @property (nonatomic, weak, readonly)   MADocument *layout;
-
-    @property (readonly) NSUInteger numberOfPages;
-    @property (readonly) NSUInteger numberOfGroups;
-
-    //  Use this to cache in location other than default.
-    @property (nonatomic, strong) NSString *overrideIdentifier;
 
 @end
 

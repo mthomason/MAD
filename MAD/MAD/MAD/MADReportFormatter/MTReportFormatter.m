@@ -49,7 +49,6 @@ typedef NSMutableArray  <__kindof NSNumber *>                           MADMutab
 
 typedef NSDictionary    <__kindof NSString *, __kindof NSNumber *>      MADStringNumberMap;
 
-typedef NSArray         <__kindof id>                                   MADObjectArray;
 typedef NSArray         <__kindof RptqQueryGroup *>                     MADQueryGroupArray;
 
 @interface MTReportFormatter ()
@@ -91,10 +90,10 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     self.machineState.document = [self.layout activeDocumentModel];
 }
 
-- (NSArray *)keysForCachedID:(NSNumber *)rowid {
+- (MADObjectArray *)keysForCachedID:(NSNumber *)rowid {
     NSDictionary *row = [self.datasource dataForCacheId: rowid];
-    NSArray *keyValues = [self keyValuesForResultRow:row];
-    return [NSArray arrayWithArray:keyValues];
+    MADObjectArray *keyValues = [self keyValuesForResultRow:row];
+    return [MADObjectArray arrayWithArray:keyValues];
 }
 
 - (void)dealloc { }
@@ -121,9 +120,9 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     return result;
 }
 
-- (NSArray *)layoutForPage:(NSUInteger)page {
-    NSArray *result = [NSArray arrayWithArray:self.reportLayout[page]];
-    return (page < (NSUInteger)[self.reportLayout count]) ? result : nil;
+- (MADSectionArray *)layoutForPage:(NSUInteger)page {
+    MADSectionArray *result = (page < (NSUInteger)[self.reportLayout count]) ? self.reportLayout[page] : nil;
+    return result;
 }
 
 - (NSUInteger)layoutIdentifier {
@@ -404,7 +403,7 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     return comparsonResult;
 }
 
-- (NSArray *)rowidsForPage:(NSUInteger)pageIndex {
+- (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex {
     return _reportIndexes[pageIndex];
 }
 
