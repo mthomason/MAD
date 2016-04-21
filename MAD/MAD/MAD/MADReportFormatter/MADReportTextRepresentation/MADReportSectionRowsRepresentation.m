@@ -20,8 +20,16 @@
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
+- (void)dealloc {
+    [_lines removeAllObjects];
+}
+
 - (instancetype)init {
-    return [self initWithNumberOfSectionRowElements:0];
+    if (self = [super init]) {
+        NSMutableSet *lines = [[NSMutableSet alloc] init];
+        self.lines = lines;
+    }
+    return self;
 }
 
 - (instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount {

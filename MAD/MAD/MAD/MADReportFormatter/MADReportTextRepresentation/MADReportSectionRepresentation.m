@@ -20,8 +20,16 @@
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
+- (void)dealloc {
+    [_rows removeAllObjects];
+}
+
 - (instancetype)init {
-    return [self initWithNumberOfRows:0];
+    if (self = [super init]) {
+        NSMutableArray *rows = [[NSMutableArray alloc] init];
+        self.rows = rows;
+    }
+    return self;
 }
 
 - (instancetype)initWithNumberOfRows:(NSUInteger)capacity {

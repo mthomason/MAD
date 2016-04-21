@@ -21,27 +21,36 @@
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
+- (void)dealloc {
+    [_pages removeAllObjects];
+}
+
 - (instancetype)init {
-    return [self initWithPageCount:0];
+    if (self = [super init]) {
+        NSMutableDictionary *pages = [[NSMutableDictionary alloc] init];
+        self.pages = pages;
+    }
+    return self;
 }
 
 - (instancetype)initWithPageCount:(NSUInteger)pageCount {
     if (self = [super init]) {
         NSMutableDictionary *pages = pageCount > 0 ? [[NSMutableDictionary alloc] initWithCapacity:pageCount] :
-                                                     [NSMutableDictionary new];
+                                                     [[NSMutableDictionary alloc] init];
         self.pages = pages;
     }
     return self;
 }
 
 - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex {
-    NSNumber *p = @(pageIndex);
-    return self.pages[p];
+    NSNumber *p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+    MADReportPageRepresentation *result = self.pages[p];
+    return result;
 }
 
 - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex {
-    NSNumber *number = @(pageIndex);
-    [self.pages setObject:page forKey:number];
+    NSNumber *p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+    [self.pages setObject:page forKey:p];
 }
 
 - (void)removeAllPages {

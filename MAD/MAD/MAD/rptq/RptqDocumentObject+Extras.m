@@ -570,19 +570,21 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             break;
     }
     
-    NSNumber *baselineOffset = @(0.0000f);
+    NSNumber *baselineOffset = @0.00000000f;
     NSNumber *underlineStyle = self.underline.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     NSNumber *strikethroughStyle = self.strike.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
 
     UIFont *customFont = [UIFont fontWithDescriptor:f size:0.0];
 
-    return  @{
-              NSFontAttributeName : customFont,
-              NSBaselineOffsetAttributeName : baselineOffset,
-              NSUnderlineStyleAttributeName : underlineStyle,
-              NSStrikethroughStyleAttributeName : strikethroughStyle,
-              NSParagraphStyleAttributeName: paragraphStyle
-              };
+    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                customFont, NSFontAttributeName,
+                                @0.00000000f, NSBaselineOffsetAttributeName,
+                                underlineStyle, NSUnderlineStyleAttributeName,
+                                strikethroughStyle, NSStrikethroughStyleAttributeName,
+                                paragraphStyle, NSParagraphStyleAttributeName,
+                                nil];
+
+    return  attributes;
 }
 
 #pragma mark - MTProtocolLog
