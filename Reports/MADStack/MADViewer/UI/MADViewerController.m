@@ -290,13 +290,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
     [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: ^(BOOL finished) { }];
-
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
-    pageSlider.sliderDelegate = self;
-    [self.view addSubview:pageSlider];
-    [self.view bringSubviewToFront:pageSlider];
-    self.toolbarSlider = pageSlider;
     
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
     MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
@@ -310,6 +303,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
+    pageSlider.sliderDelegate = self;
+    [self.view addSubview:pageSlider];
+    [self.view bringSubviewToFront:pageSlider];
+    self.toolbarSlider = pageSlider;
+
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
@@ -368,13 +368,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     [self.toolbarSlider setNeedsLayout];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self uiUpdateTimeSinceLastRefresh:self];
     [self.toolbarSlider setNeedsLayout];
-    }
+}
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -384,6 +385,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super viewDidDisappear:animated];
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self timerDealloc];
+    [self.toolbarSlider removeFromSuperview];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -869,12 +871,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         if (visiblePageNumber + 1 <= self.numberOfPages) {
             
+            UIScrollView *documentScroller = pageViewControllerLast.documentScroller;
+            
             MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
             pageAttributes.pageNumber = visiblePageNumber + 1;
             pageAttributes.numberOfPages = self.numberOfPages;
-            pageAttributes.zoomScaleInital = pageViewControllerLast.documentScroller.zoomScale;
-            pageAttributes.contentOffsetInital = pageViewControllerLast.documentScroller.contentOffset;
-            pageAttributes.contentSizeInital = pageViewControllerLast.documentScroller.contentSize;
+            pageAttributes.zoomScaleInital = documentScroller.zoomScale;
+            pageAttributes.contentOffsetInital = documentScroller.contentOffset;
+            pageAttributes.contentSizeInital = documentScroller.contentSize;
             pageAttributes.contentScaleFactor = pageViewControllerLast.documentView.contentScaleFactor;
 
             result = [[MADReportPageViewController alloc] initWithDocument:self.document andPageAttributtes:pageAttributes];
@@ -905,12 +909,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         if (visiblePageNumber - 1 > 0) {
             
+            UIScrollView *documentScroller = pageViewControllerPrevious.documentScroller;
             MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
             pageAttributes.pageNumber = visiblePageNumber - 1;
             pageAttributes.numberOfPages = self.numberOfPages;
-            pageAttributes.zoomScaleInital = pageViewControllerPrevious.documentScroller.zoomScale;
-            pageAttributes.contentOffsetInital = pageViewControllerPrevious.documentScroller.contentOffset;
-            pageAttributes.contentSizeInital = pageViewControllerPrevious.documentScroller.contentSize;
+            pageAttributes.zoomScaleInital = documentScroller.zoomScale;
+            pageAttributes.contentOffsetInital = documentScroller.contentOffset;
+            pageAttributes.contentSizeInital = documentScroller.contentSize;
             pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;
 
             result = [[MADReportPageViewController alloc] initWithDocument:self.document andPageAttributtes:pageAttributes];

@@ -15,9 +15,9 @@
 
 @interface RptqDocumentObjectImage : NSManagedObject
 
-@property (nonatomic, strong) NSNumber * identifier;
-@property (nonatomic, strong) id image;
-@property (nonatomic, strong) RptqDocumentObject *parentObject;
+    @property (nonatomic, strong) NSNumber * identifier;
+    @property (nonatomic, strong) id image;
+    @property (nonatomic, strong) RptqDocumentObject *parentObject;
 
 @end
 

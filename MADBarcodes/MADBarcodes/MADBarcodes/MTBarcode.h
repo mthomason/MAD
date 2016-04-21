@@ -44,8 +44,8 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
     @property (nonatomic, readonly, strong) NSString *detailsSegueIdentifer;
     @property (nonatomic, copy)             NSString *primaryData;
 
-    @property (nonatomic, copy, readwrite) MADColor *forgroundColor;
-    @property (nonatomic, copy, readonly) MADColor *backgroundColor;
+    @property (nonatomic, copy, readwrite)  MADColor *forgroundColor;
+    @property (nonatomic, copy, readonly)   MADColor *backgroundColor;
 
     @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
 

@@ -104,7 +104,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     if (self = [super init]) {
         _document = document;
         _initalLayout = true;
-        _pageViewAttributes = pageAttributes.copy;
+        MADPageViewAttributes *attributes = pageAttributes.copy;
+        self.pageViewAttributes = attributes;
     }
     return self;
 }
@@ -113,16 +114,16 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)loadView {
 
-    MADocument *document = self.document;
+    MTPaper *paper = self.document.paper;
     
     MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:CGRectZero];
-    scrollView.contentSize = document.paper.paperSize;
+    scrollView.contentSize = paper.paperSize;
     scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin);
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     scrollView.translatesAutoresizingMaskIntoConstraints = YES;
     scrollView.delegate = self;
     
-    MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:document.paper.bounds];
+    MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
     renderedReportView.backgroundColor = [UIColor whiteColor];
     renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
@@ -155,7 +156,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
+    [self.documentView removeFromSuperview];
 }
 
 - (void)viewWillLayoutSubviews {

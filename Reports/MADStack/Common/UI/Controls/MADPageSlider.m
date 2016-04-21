@@ -14,26 +14,6 @@ static const CGFloat MADSliderPaginationWidth = 40.0000f;
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 static NSString * const ConstTestStringValue = @"0";
 
-@interface MADPageSlider ()
-
-    @property (nonatomic, weak) MADSliderPageVertical *slider;
-
-    @property (nonatomic, strong) UIVibrancyEffect *effectVibrancy;
-    @property (nonatomic, strong) UIVisualEffectView *vibrancyView;
-
-    @property (nonatomic, strong) NSMutableArray <UILabel *>*labels;
-    @property (nonatomic, assign) CGFloat stringHeight;
-    @property (nonatomic, strong) UIColor *drawingColor;
-
-    @property (nonatomic, assign) CGRect lastRect;
-    @property (nonatomic, assign) unsigned long lastNumberOfTicks;
-
-    @property (nonatomic, strong) NSShadow *shadow;
-
-@end
-
-@implementation MADPageSlider
-
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight) {
     return viewSizeHeight / elementSizeHeight;
@@ -48,6 +28,58 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     } else {
         return (unsigned long)numberOfTicksCalc(viewSizeHeight, elementSizeHeight) - 1;
     }
+}
+
+static inline CGFloat MaxDimension(CGSize size);
+static inline CGFloat MaxDimension(CGSize size) {
+    return MAX(size.width, size.height);
+}
+
+@interface MADPageSlider ()
+
+    @property (nonatomic, weak) MADSliderPageVertical *slider;
+
+    @property (nonatomic, weak)   UIVibrancyEffect *effectVibrancy;
+    @property (nonatomic, strong) UIVisualEffectView *vibrancyView;
+
+    @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
+    @property (nonatomic, assign) CGFloat stringHeight;
+
+    @property (nonatomic, assign) CGRect lastRect;
+    @property (nonatomic, assign) unsigned long lastNumberOfTicks;
+
+    @property (nonatomic, strong) NSShadow *shadow;
+
+    @property (nonatomic, assign) bool enabledColor;
+
+@end
+
+@implementation MADPageSlider
+
+- (void)dealloc {
+
+}
+
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
+    NSArray <UILabel *> *labels = self.labels;
+    for (UILabel *label in labels) {
+        [label removeFromSuperview];
+    }
+    [self.slider removeFromSuperview];
+    [self.vibrancyView removeFromSuperview];
+    [self.labels removeAllObjects];
+}
+
+- (NSShadow *)shadow {
+    if (_shadow == nil) {
+        NSShadow *shadow = [[NSShadow alloc] init];
+        UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
+        shadow.shadowColor = shadowColor;
+        shadow.shadowOffset = CGSizeMake(0.0000f, -1.0000f);
+        _shadow = shadow;
+    }
+    return _shadow;
 }
 
 - (instancetype)initWithEffect:(UIBlurEffect *)effect {
@@ -78,13 +110,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         self.slider = vertSlider;
         
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
-        NSShadow *shadow = [[NSShadow alloc] init];
-        UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
-        shadow.shadowColor = shadowColor;
-        shadow.shadowOffset = CGSizeMake(0.0000f, -1.0000f);
-        self.shadow = shadow;
-        
-        NSNumber *strokeWidth = @(-1.0000f);
+        NSNumber *strokeWidth = @-1.0000f;
         NSDictionary *attributes = @{
                                      NSFontAttributeName : font,
                                      NSStrokeWidthAttributeName : strokeWidth,
@@ -95,8 +121,6 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
         self.stringHeight = [self boundsForAttributedString:testString].height;
         self.labels = nil;
-        
-
 
     }
     return self;
@@ -132,6 +156,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
     
     double tickValue = self.maximumValue / (numberOfTicks - 1);
+    UIColor *drawingColor = [self drawingColor];
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
             
@@ -145,7 +170,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
             label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.80000000f];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             label.translatesAutoresizingMaskIntoConstraints = YES;
-            label.tintColor = self.drawingColor;
+            label.tintColor = drawingColor;
 
             label.transform = CGAffineTransformTranslate(label.transform,
                                                          label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
@@ -166,12 +191,16 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     }
 }
 
+- (UIColor *)drawingColor {
+    return self.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
+}
+
 - (void)setDisplayEnabled {
-    self.drawingColor = [MADColorEverydayApps newColorRed];
+    self.enabledColor = true;
 }
 
 - (void)setDisplayDisabled {
-    self.drawingColor = [UIColor lightGrayColor];
+    self.enabledColor = false;
 }
 
 - (MADSliderPageVertical *)pageSlider { return self.slider; }
@@ -221,13 +250,17 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     [self setNeedsLayout];
 }
 
--(float)maximumValue {
+- (float)maximumValue {
     return self.pageSlider.maximumValue;
+}
+
+- (NSUInteger)maximumNumberOfLabels {
+    return availableLabelSlots(MaxDimension(self.frame.size), self.stringHeight, self.maximumValue) / 2 + 1;
 }
 
 - (void)setMaximumValue:(float)maximumValue {
     if (self.labels == nil) {
-        NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: availableLabelSlots(MAX(self.frame.size.width, self.frame.size.height), self.stringHeight, self.maximumValue) / 2 + 1];
+        NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
         self.labels = labels;
     }
     self.pageSlider.maximumValue = maximumValue;

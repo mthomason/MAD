@@ -100,7 +100,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Helper functions
 
-- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
+- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail
+           completion:(void (^)(BOOL))completion {
     UIManagedDocument *openDocument = self.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         self.reportState = MTReportStateClosed;

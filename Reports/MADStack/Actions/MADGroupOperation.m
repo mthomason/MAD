@@ -38,7 +38,8 @@
 }
 
 
-- (void)addOperations:(NSArray <__kindof NSOperation *> *)operations finishingOperation:(NSBlockOperation *)finishingOperation {
+- (void)addOperations:(NSArray <__kindof NSOperation *> *)operations
+   finishingOperation:(NSBlockOperation *)finishingOperation {
     _finishingOperation = finishingOperation;
     if (_internalQueue == nil) {
         _internalQueue = [MADOperationQueue new];

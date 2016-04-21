@@ -20,9 +20,9 @@
 
 @interface MADRefreshReloadOperation ()
 
+    @property (nonatomic, readwrite, weak) MADocument *document;
     @property (nonatomic, readwrite, strong) MADGetCredentialsOperation *getCredentials;
     @property (nonatomic, readwrite, assign) bool completedSuccessfully;
-    @property (nonatomic, readwrite, weak) MADocument *document;
 
 @end
 
@@ -34,8 +34,9 @@
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    if (self.getCredentials.gotCredentials) {
-        MADCredential * __autoreleasing c = self.getCredentials.credentials.copy;
+    MADGetCredentialsOperation *getCredentials = self.getCredentials;
+    if (getCredentials.gotCredentials) {
+        MADCredential *c = getCredentials.credentials.copy;
         return c;
     } else {
         return nil;
@@ -62,7 +63,6 @@
 
 - (void)execute {
     [self addAllOperations];
-
     [super execute];
 }
 
@@ -81,7 +81,7 @@
     [refresh addDependency: self.getCredentials];
     [refresh addDependency: initalize];
     
-    NSArray <__kindof NSOperation *> *operations = @[self.getCredentials, initalizeMainDataTable, initalize, refresh];
+    NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: self.getCredentials, initalizeMainDataTable, initalize, refresh, nil];
         
     MADRefreshReloadOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
