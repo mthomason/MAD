@@ -90,7 +90,7 @@
         NSArray *sortDescriptors = weakdoc.sortDescriptors;
         
         [weakdoc.mainDataTable sortUsingDescriptors:sortDescriptors];
-        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery: weakdoc.mainQuery layout: weakdoc
+        MTReportFormatter *rf = [MTReportFormatter newReportFormatterWithQuery: weakdoc.mainQuery layout: weakdoc
                                                                     options: MTReportFormatterOptionsMargin];
         rf.cachedDelegate = weakdoc;
         rf.dataDelegate = weakdoc;

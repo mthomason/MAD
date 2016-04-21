@@ -108,14 +108,13 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 }
 
 + (instancetype)newReportFormatterWithDocument: (MADocument *)layout
-                                       options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
+                                       options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
 }
 
-+ (instancetype)reportFormatterWithQuery: (MTQuery *)query
-                                  layout: (MADocument *)layout
-                                 options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
++ (instancetype)newReportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
+                                 options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
 }

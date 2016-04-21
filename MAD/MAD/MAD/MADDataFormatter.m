@@ -18,7 +18,7 @@
 
 @implementation MADDataFormatter
 
-+ (instancetype)reportFormatterWithQuery:(MTQuery *)query NS_RETURNS_RETAINED {
++ (instancetype)newReportFormatterWithQuery:(MTQuery *)query {
     MADDataFormatter *result = [[MADDataFormatter alloc] initWithQuery:query];
     return result;
 }

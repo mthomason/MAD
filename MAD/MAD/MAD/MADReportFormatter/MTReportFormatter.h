@@ -70,8 +70,8 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     - (instancetype)initWithDocument: (MADocument *)layout
                              options: (MTReportFormatterOptions)options;
                              
-    + (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
-                                     options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED;
+    + (instancetype)newReportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
+                                     options: (MTReportFormatterOptions)options;
 
     - (void)formatForSize:(CGSize)printableSize;
     - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;

@@ -935,8 +935,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: self
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery layout: self
                                                                              options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
@@ -1033,8 +1032,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (MTReportViewerPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: self
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery layout: self
                                                                              options: MTReportFormatterOptionsMargin];
     reportFormatter.cachedDelegate = self;
     reportFormatter.overrideIdentifier = @"madprinter";

@@ -104,7 +104,7 @@
         document.sectionLayoutManagers = sectionLayoutManagers;
         
         
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: document.mainQuery
+        MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: document.mainQuery
                                                                                   layout: document
                                                                                  options: MTReportFormatterOptionsNone];
         reportFormatter.dataDelegate = document;
