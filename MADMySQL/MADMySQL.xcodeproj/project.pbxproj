@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C3DCC461BCAFA7E00ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */; };
+		4C2131331CC91D8E0094D802 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2131321CC91D8E0094D802 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7014941BACDC6800301713 /* MADMySQL.framework */; };
 		4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7014A31BACDC6800301713 /* MADMySQLTests.m */; };
@@ -240,7 +240,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
+		4C2131321CC91D8E0094D802 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C7014941BACDC6800301713 /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -506,7 +506,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C3DCC461BCAFA7E00ABE231 /* MADFoundation.framework in Frameworks */,
+				4C2131331CC91D8E0094D802 /* MADFoundation.framework in Frameworks */,
 				4C9374411BAD333400D6BD62 /* libmysqlclient.a in Frameworks */,
 				4C9373CB1BAD28AC00D6BD62 /* libc++.tbd in Frameworks */,
 			);
@@ -526,6 +526,7 @@
 		4C70148A1BACDC6800301713 = {
 			isa = PBXGroup;
 			children = (
+				4C2131321CC91D8E0094D802 /* MADFoundation.framework */,
 				4C7014AE1BACDC7600301713 /* Resources */,
 				4C7014961BACDC6800301713 /* MADMySQL */,
 				4C7014A21BACDC6800301713 /* MADMySQLTests */,
@@ -905,7 +906,6 @@
 		4C93743D1BAD2FFC00D6BD62 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

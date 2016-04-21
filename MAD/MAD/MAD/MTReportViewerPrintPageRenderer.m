@@ -138,9 +138,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
 
         [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeHorizontal];
-        
         [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeVertical];
-        
         [standardUserDefaults synchronize];
         
     }

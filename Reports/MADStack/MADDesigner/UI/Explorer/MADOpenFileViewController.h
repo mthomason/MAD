@@ -26,7 +26,7 @@
     @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 
     - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
-                                             animated:(BOOL)animated;
+                                                 animated:(BOOL)animated;
 
 
     - (IBAction)done:(id)sender;

@@ -293,7 +293,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
     MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
-    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent;
+    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     tabBarController.viewControllerDelegate = self;

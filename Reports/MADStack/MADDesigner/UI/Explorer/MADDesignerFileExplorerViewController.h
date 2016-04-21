@@ -14,6 +14,9 @@
 @interface MADDesignerFileExplorerViewController : MADOpenFileViewController
     <MADOpenFileViewControllerDelegate>
 
+    - (void)openDocumentAtURL:(NSURL *)url
+            completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
+
 @end
 
 #endif

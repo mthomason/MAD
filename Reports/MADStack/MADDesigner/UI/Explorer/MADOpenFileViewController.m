@@ -44,20 +44,20 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MADFileExplorerDelegate,
         MTDocumentCellProtocol>
 
-@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
+    @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
-@property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
+    @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
-@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, strong)           UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
-@property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
-@property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
+    @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
+    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
+    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
+    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
@@ -403,9 +403,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)openFileWithUrl:(NSURL *)url {
     [self.openFileDelegate openDocumentAtURL:url completionHandler:^(BOOL success, UIManagedDocument *document) {
         if (success) {
-            [self performSelectorOnMainThread:@selector(handleFileOpenCompletion:) withObject:self waitUntilDone:NO];
+            [[NSOperationQueue mainQueue] performSelectorOnMainThread:@selector(handleFileOpenCompletion:)
+                                                           withObject:self waitUntilDone:NO];
         }
-        [self reenable];
+        [[NSOperationQueue mainQueue] performSelectorOnMainThread:@selector(reenable)
+                                                       withObject:nil waitUntilDone:NO];
     }];
 }
 

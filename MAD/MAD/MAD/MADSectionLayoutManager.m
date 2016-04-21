@@ -161,9 +161,9 @@
         for (RptqDocumentObject *object in rows.hasObjects) {
         
             NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
-
-            MADSectionLayoutAttributes *layout = [MADSectionLayoutAttributes sectionLayoutAttributesWithIndex:path objectID:object.objectID andRect:object.frame];
-            layout = layout.copy;
+            id layout = [MADSectionLayoutAttributes sectionLayoutAttributesWithIndex:path
+                                                                            objectID:object.objectID
+                                                                             andRect:object.frame];
             [self addItem:layout];
             itemCounter++;
         }

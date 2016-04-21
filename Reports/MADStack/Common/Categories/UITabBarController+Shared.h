@@ -14,7 +14,7 @@
 
 @interface MADTabBarController (Shared)
 
-+ (instancetype)mainTabBarController;
++ (instancetype)mainTabBarController NS_RETURNS_NOT_RETAINED;
 
 @end
 

@@ -74,7 +74,6 @@
 		4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabel.m; path = MADCocoaExtensions/MADLabel.m; sourceTree = "<group>"; };
 		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
 		4C2480B91C8BFA340058E6B4 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColor.m; path = MADCocoaExtensions/MADColor.m; sourceTree = "<group>"; };
-		4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
 		4C5205621BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -236,7 +235,6 @@
 		4C5205CF1BA7E2FA000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */,
 				4C5205D01BA7E308000E6A59 /* CFNetwork.framework */,
 			);
 			name = Frameworks;

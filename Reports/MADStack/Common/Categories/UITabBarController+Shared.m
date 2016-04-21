@@ -13,9 +13,10 @@ static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
 @implementation MADTabBarController (Shared)
 
-+ (instancetype)mainTabBarController {
++ (instancetype)mainTabBarController NS_RETURNS_NOT_RETAINED {
     UIStoryboard *designer = [MADStoryboard storyboardDesigner];
-    return [designer instantiateViewControllerWithIdentifier:TabBar];
+    id viewController = [designer instantiateViewControllerWithIdentifier:TabBar];
+    return viewController;
 }
 
 @end

@@ -18,17 +18,16 @@ extern NSString * const MADImageToolbarCloudDownload;
 @class  MADMetaData;
 
 @protocol MADCollectionViewLayoutFilesDelegate <NSObject>
-@required
+  @required
 
-- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (BOOL)isFileViewEditing;
+    - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (BOOL)isFileViewEditing;
 
-@optional
-
-- (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath;
-- (void)selectionsUpdated;
+  @optional
+    - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (void)selectionsUpdated;
 
 @end
 

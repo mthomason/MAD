@@ -22,9 +22,9 @@
 
 @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
+@property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
 @property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
-@property (nonatomic, strong) NSArray *sortDescriptorsFields;
+@property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIFont *detailFont;
 @property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
@@ -98,7 +98,8 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
                                                                    ascending: YES];
-    NSArray *fieldsSortDescriptors = @[namesAccending];
+    NSArray <NSSortDescriptor *> *fieldsSortDescriptors =
+                    [[NSArray <NSSortDescriptor *> alloc] initWithObjects:namesAccending, nil];
     self.sortDescriptorsFields = fieldsSortDescriptors;
 }
 
@@ -148,16 +149,16 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                               managedObjectContext: self.document.managedObjectContext];
    
-    
     self.titleView.label.text = table.alias;
     self.titleView.label.font = self.titleFont;
     self.titleView.label.textColor = [UIColor whiteColor];
     
     [self.hasFieldsObjectIds removeAllObjects];
 
-    NSArray *fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
+    NSArray <RptqQueryField *> *fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
     for (RptqQueryField *field in fields) {
-        [self.hasFieldsObjectIds addObject:field.objectID];
+        NSManagedObjectID *fieldObjectID = field.objectID.copy;
+        [self.hasFieldsObjectIds addObject:fieldObjectID];
     }
 }
 
