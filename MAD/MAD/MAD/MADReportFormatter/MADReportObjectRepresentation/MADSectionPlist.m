@@ -77,7 +77,6 @@ static NSString * const MADIdentifierReportObject       = @"o";
                                                   row:(NSNumber *)row {
     MADSectionPlist *result = [[MADSectionPlist alloc] initWithSectionType:sectionType row:row];
     return result;
-    
 }
 
 - (NSUInteger)groupLevel {
