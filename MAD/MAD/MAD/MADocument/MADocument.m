@@ -958,6 +958,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [self.mainDataTable sortUsingDescriptors:sortDescriptors];
 }
 
+#pragma mark - MTReportFormatterDataSource
+
 - (NSEnumerator *)enumeratorForReportData {
     return [self.mainDataTable enumeratorForKeyObjectsSorted];
 }
@@ -969,6 +971,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (NSDictionary *)dataForCacheId:(NSNumber *)cachedID {
     return  [self.mainDataTable dataForCacheId:cachedID];
 }
+
+#pragma mark - Report Notifications
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];

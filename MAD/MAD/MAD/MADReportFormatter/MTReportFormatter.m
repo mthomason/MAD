@@ -44,27 +44,33 @@
 
 NSString * const MTNullIdentifier = @"(null)";
 
+typedef NSMutableArray  <__kindof MADSectionPlist *>                    MADMutableSectionArray;
+typedef NSMutableArray  <__kindof NSNumber *>                           MADMutableIndexArray;
+
+typedef NSDictionary    <__kindof NSString *, __kindof NSNumber *>      MADStringNumberMap;
+
+typedef NSArray         <__kindof id>                                   MADObjectArray;
+typedef NSArray         <__kindof RptqQueryGroup *>                     MADQueryGroupArray;
+
 @interface MTReportFormatter ()
 
-    @property (nonatomic, weak, readwrite) MADocument *layout;
-    @property (nonatomic, assign) MTReportFormatterOptions options;
+    @property (nonatomic, weak, readwrite)      MADocument *layout;
+    @property (nonatomic, assign)               MTReportFormatterOptions options;
 
-    @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
+    @property (nonatomic, strong, readwrite)    MTReportFormatterPageDefinition *page;
 
-    @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
-    @property (nonatomic, strong, readwrite) MADArrayCaching *reportLayout;
+    @property (nonatomic, strong, readwrite)    MADCachingIndexes *reportIndexes;
+    @property (nonatomic, strong, readwrite)    MADCachingLayout *reportLayout;
 
-    //At some point add the ability to format one page at a time.
-    @property (nonatomic, strong) MTReportFormatterState *machineState;
-    @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
+    @property (nonatomic, strong)               MTReportFormatterState *machineState;
+    @property (nonatomic, strong)               MTReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, strong) NSMutableArray <__kindof MADSectionPlist *>  *pageLayoutTemporary;
-    @property (nonatomic, strong) NSMutableArray <__kindof NSArray *>       *pageIndexesTemporary;
-    @property (nonatomic, strong) NSArray        <__kindof id>              *lastComparsonValues;
+    @property (nonatomic, strong)               MADMutableSectionArray *pageLayoutTemporary;
+    @property (nonatomic, strong)               MADMutableIndexArray *pageIndexesTemporary;
 
-    @property (nonatomic, strong) NSDictionary <__kindof NSString *, NSNumber *> *layoutHeightsBySectionKey;
-
-    @property (nonatomic, strong, readwrite) NSArray <__kindof RptqQueryGroup *> *sortedQueryGroups;
+    @property (nonatomic, strong)               MADObjectArray      *lastComparsonValues;
+    @property (nonatomic, strong)               MADStringNumberMap  *layoutHeightsBySectionKey;
+    @property (nonatomic, strong, readwrite)    MADQueryGroupArray  *sortedQueryGroups;
 
 @end
 
@@ -159,7 +165,7 @@ NSString * const MTNullIdentifier = @"(null)";
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
     self.reportFormatterCache = reportFormatterCache;
     
-    NSMutableArray <__kindof MADSectionPlist *> *temporaryLayoutForPage = [[NSMutableArray alloc] init];
+    MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];
     self.pageLayoutTemporary = temporaryLayoutForPage;
     
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
@@ -245,10 +251,10 @@ NSString * const MTNullIdentifier = @"(null)";
     [self addDetailToReportLayout];
     [self addReportFooterToReportLayout];
     
-    NSArray <__kindof MADSectionPlist *> *tlfp = [NSArray arrayWithArray:self.pageLayoutTemporary];
+    MADSectionArray *tlfp = [MADMutableSectionArray arrayWithArray:self.pageLayoutTemporary];
     [self.reportLayout addObject:tlfp];
     
-    NSArray *tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];
+    MADIndexArray *tdfp = [MADIndexArray arrayWithArray:self.pageIndexesTemporary];
     [self.reportIndexes addObject:tdfp];
     
     [self endBulkInserts];
@@ -535,7 +541,7 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
-- (NSArray <__kindof id> *)keyValuesForResultRow:(id)resultRow {
+- (MADObjectArray *)keyValuesForResultRow:(id)resultRow {
 
     NSArray *keyValues = nil;
 
@@ -659,14 +665,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addDetail {
     MADSectionPlist *detail = [[MADSectionPlist alloc] initWithSectionType: MNSDocumentSectionTypeBody
-                                                                                          row: self.machineState.detailRowId];
+                                                                       row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: detail];
     [self.pageIndexesTemporary addObject:self.machineState.detailRowId];
 }
 
 - (void)addReportHeader {
     MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
-                                                                                       row: self.machineState.detailRowId];
+                                                                         row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: obj];
 }
 
@@ -709,8 +715,9 @@ NSString * const MTNullIdentifier = @"(null)";
     return resultData;
 }
 
-- (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex {
-    return [self.reportLayout[pageIndex] objectEnumerator];
+- (NSEnumerator <__kindof MADSectionPlist *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex {
+    MADSectionArray *pageLayout = self.reportLayout[pageIndex];
+    return pageLayout.objectEnumerator;
 }
 
 #pragma mark - Help functions

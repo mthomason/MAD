@@ -227,7 +227,7 @@
 		4C994F291BDD96E40058627A /* MADReportPageRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F231BDD96E40058627A /* MADReportPageRepresentation.m */; };
 		4C994F2A1BDD96E40058627A /* MADReportTextRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F241BDD96E40058627A /* MADReportTextRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C994F2B1BDD96E40058627A /* MADReportTextRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F251BDD96E40058627A /* MADReportTextRepresentation.m */; };
-		4C994F2F1BDD9A7E0058627A /* MADSectionPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* MADSectionPlist.h */; };
+		4C994F2F1BDD9A7E0058627A /* MADSectionPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* MADSectionPlist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C994F301BDD9A7E0058627A /* MADSectionPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F2E1BDD9A7E0058627A /* MADSectionPlist.m */; };
 		4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */; };
 		4C994F361BDDD85D0058627A /* MADAccessibilityLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */; };

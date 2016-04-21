@@ -1,5 +1,5 @@
 //
-//  MADReportObjectRepresentation.h
+//  MADSectionPlist.h
 //  MAD
 //
 //  Created by Michael Thomason on 10/25/15.
@@ -24,7 +24,7 @@ typedef NSDictionary  <__kindof NSString *, __kindof NSNumber *> MADSectionPlist
 @interface  NSDictionary (MADSectionPlist)
 
     - (MADSectionPlist *)initWithSectionType:(MNSDocumentSectionType)sectionType
-                                    row:(NSNumber *)row;
+                                         row:(NSNumber *)row;
 
     + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
                                                groupLevel:(NSUInteger)groupLevel

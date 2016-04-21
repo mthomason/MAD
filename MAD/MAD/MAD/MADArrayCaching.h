@@ -12,7 +12,7 @@
 #import <Foundation/NSEnumerator.h>
 #import <MADFoundation/MTCacheProtocol.h>
 
-@interface MADArrayCaching : NSEnumerator
+@interface MADArrayCaching<ObjectType> : NSEnumerator
 
     @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
     @property (nonatomic, strong, readonly) NSString *identifier;
@@ -25,7 +25,7 @@
     - (void)finalizeDatabase;
 
     - (NSURL *)url;
-    - (id)objectAtIndex:(NSUInteger)index;
+    - (nullable ObjectType)objectAtIndex:(NSUInteger)index;
     - (void)addObject:(id)object;
     - (void)removeAllObjects;
 
