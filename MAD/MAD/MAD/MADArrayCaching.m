@@ -28,17 +28,17 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 @interface MADArrayCaching ()
 
-@property (nonatomic, strong, readwrite) NSString *identifier;
-@property (nonatomic, strong) MTDatabaseCache *database;
+    @property (nonatomic, strong, readwrite) NSString *identifier;
+    @property (nonatomic, strong) MTDatabaseCache *database;
 
-@property (nonatomic, assign) int numberOrRows;
-@property (nonatomic, assign) sqlite3_stmt *statementInsert;
-@property (nonatomic, assign) sqlite3_stmt *statementSelect;
-@property (nonatomic, assign) sqlite3_stmt *statementCount;
-@property (nonatomic, assign) sqlite3_stmt *statementEnumer;
+    @property (nonatomic, assign) int numberOrRows;
+    @property (nonatomic, assign) sqlite3_stmt *statementInsert;
+    @property (nonatomic, assign) sqlite3_stmt *statementSelect;
+    @property (nonatomic, assign) sqlite3_stmt *statementCount;
+    @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
-@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
-@property (nonatomic, strong) MADIndex *lastObjectSelected;
+    @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
+    @property (nonatomic, strong) MADIndex *lastObjectSelected;
 
 @end
 
@@ -270,23 +270,33 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (void)addObject:(id)object {
     @autoreleasepool {
-        [self setLastObjectSelected:nil];
-        NSData *data = [self dataForObject:object];
-        sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
-        sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+
+        self.lastObjectSelected = nil;
+        NSError * __autoreleasing * error = NULL;
+        static const NSPropertyListFormat format = NSPropertyListBinaryFormat_v1_0;
+        NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
+                                                                 options: 0 error: error];
+        
+        const void *dataBytes = data.bytes;
+        int dataLength = data.length;
+        
+        sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
+        sqlite3_bind_blob(_statementInsert, 2, dataBytes, dataLength, SQLITE_TRANSIENT);
         if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
             sqlite3_reset(_statementInsert);
-            self.numberOrRows++;
+            _numberOrRows++;
         }
     }
 }
 
 - (void)writeData:(NSData *)data {
-    sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
-    sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+    sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
+    const void *dataBytes = data.bytes;
+    int dataLength = data.length;
+    sqlite3_bind_blob(_statementInsert, 2, dataBytes, dataLength, SQLITE_TRANSIENT);
     if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
         sqlite3_reset(_statementInsert);
-        self.numberOrRows++;
+        _numberOrRows++;
     }
 }
 
@@ -325,7 +335,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     sqlite3_bind_int(_statementSelect, 1, (int)index);
     
     if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
-        NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0) length: (unsigned int)sqlite3_column_bytes(_statementSelect, 0)];
+        const void *sqlite3ColumnBlob = sqlite3_column_blob(_statementSelect, 0);
+        int bytes = sqlite3_column_bytes(_statementSelect, 0);
+        NSData *queryResult = [NSData dataWithBytes: sqlite3ColumnBlob
+                                             length: (NSUInteger)bytes];
         result = [self objectForData:queryResult];
         
         MADIndex *idx = [[MADIndex alloc] initWithIndex:index andObject:result];
@@ -355,7 +368,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                             ascending:NO
                                                              selector:@selector(compare:)];
     NSArray *sortdesc = @[sortn];
-    return [MTQuery queryDefinitionSelect:columnNameIndex tableName:MTArrayCachedTableName sortDescriptors:sortdesc];
+    NSDictionary *queryDefinitionSelect = [MTQuery queryDefinitionSelect: columnNameIndex
+                                                               tableName: MTArrayCachedTableName
+                                                         sortDescriptors: sortdesc];
+    return queryDefinitionSelect;
 }
 
 - (NSDictionary *)queryDefinationLastObject {
