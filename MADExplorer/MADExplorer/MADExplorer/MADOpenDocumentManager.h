@@ -17,6 +17,7 @@
     @property (readonly) UIManagedDocument *openDocument;
 
     - (void)setOpenDocument:(UIManagedDocument *)document;
+    - (void)unload;
     - (void)removeDocumentWithUrl:(NSURL *)url;
 
 @end

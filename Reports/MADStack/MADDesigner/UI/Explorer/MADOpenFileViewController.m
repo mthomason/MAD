@@ -101,10 +101,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - Helper functions
 
 - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
-    if (self.openDocument && self.openDocument.documentState != UIDocumentStateClosed) {
+    UIManagedDocument *openDocument = self.openDocument;
+    if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         self.reportState = MTReportStateClosed;
-        [self.fileManager removeDocumentWithUrl:self.fileManager.openUrl];
-        [self.openDocument closeWithCompletionHandler:^(BOOL success) {
+        [self.fileManager unload];
+        [openDocument closeWithCompletionHandler:^(BOOL success) {
             completion(success);
         }];
     }
@@ -403,11 +404,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)openFileWithUrl:(NSURL *)url {
     [self.openFileDelegate openDocumentAtURL:url completionHandler:^(BOOL success, UIManagedDocument *document) {
         if (success) {
-            [[NSOperationQueue mainQueue] performSelectorOnMainThread:@selector(handleFileOpenCompletion:)
-                                                           withObject:self waitUntilDone:NO];
+            SEL fileOpenCompletion = @selector(handleFileOpenCompletion:);
+            [self performSelectorOnMainThread:fileOpenCompletion withObject:self waitUntilDone:NO];
         }
-        [[NSOperationQueue mainQueue] performSelectorOnMainThread:@selector(reenable)
-                                                       withObject:nil waitUntilDone:NO];
+        SEL reenable = @selector(reenable);
+        [self performSelectorOnMainThread:reenable withObject:nil waitUntilDone:NO];
     }];
 }
 
