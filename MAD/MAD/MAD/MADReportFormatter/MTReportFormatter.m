@@ -51,6 +51,27 @@ typedef NSDictionary    <__kindof NSString *, __kindof NSNumber *>      MADStrin
 
 typedef NSArray         <__kindof RptqQueryGroup *>                     MADQueryGroupArray;
 
+static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
+static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
+    return UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f),
+                            CGFloatPointsForInches(1.0000f/4.0000f),
+                            CGFloatPointsForInches(1.0000f/4.0000f),
+                            CGFloatPointsForInches(1.0000f/4.0000f));
+}
+
+static inline UIEdgeInsets MADEdgeInsetsEmpty();
+static inline UIEdgeInsets MADEdgeInsetsEmpty() {
+    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height,
+                            CGSizeZero.height, CGSizeZero.height);
+}
+
+static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize);
+static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize) {
+    return UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
+                            layoutSize.height - printableRect.size.height - printableRect.origin.y,
+                            layoutSize.width - printableRect.size.width - printableRect.origin.x);
+}
+
 @interface MTReportFormatter ()
 
     @property (nonatomic, weak, readwrite)      MADocument *layout;
@@ -98,11 +119,12 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (void)dealloc { }
 
-- (instancetype)initWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options  {
+- (instancetype)initWithDocument: (MADocument *)layout
+                         options: (MTReportFormatterOptions)options  {
     if (self = [super init]) {
         self.options = options;
         self.layout = layout;
-        self.didRefresh = NO;
+        self.didRefresh = false;
     }
     return self;
 }
@@ -119,8 +141,11 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     return result;
 }
 
+#pragma mark - Accessors
+
 - (MADSectionArray *)layoutForPage:(NSUInteger)page {
-    MADSectionArray *result = (page < (NSUInteger)[self.reportLayout count]) ? self.reportLayout[page] : nil;
+    MADSectionArray *result = (page < (NSUInteger)[self.reportLayout count]) ?
+                                self.reportLayout[page] : nil;
     return result;
 }
 
@@ -132,35 +157,30 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (NSString *)nameCurrentReportIndexes {
     NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", sizeString];
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                            "ih", sizeString];
 }
 
 - (NSString *)nameCurrentReportLayout {
     NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
-}
-
-- (void)setCachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
-    _cachedDelegate = cachedDelegate;
-    [self initalize];
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                            "lh", sizeString];
 }
 
 - (void)initalize {
     
-    MTReportFormatterPageDefinition *page = [MTReportFormatterPageDefinition new];
+    MTReportFormatterPageDefinition *page = [[MTReportFormatterPageDefinition alloc] init];
     self.page = page;
     
     self.page.margins = (self.options & MTReportFormatterOptionsMargin) ?
-                            UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f),
-                                             CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
-                            UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
+                            MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
     
-    MTReportFormatterState *machineState = [MTReportFormatterState new];
+    MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
     self.machineState = machineState;
 
     [self initalizeStateMachine];
     
-    MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
+    MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
     self.reportFormatterCache = reportFormatterCache;
     
     MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];
@@ -170,18 +190,20 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     self.pageIndexesTemporary = temporaryDataForPage;
     
     if (self.layout) {
-        [self.layout initalizeSectionLayoutManagers:self.machineState.document];
+    
+        [self.layout initalizeSectionLayoutManagers: self.machineState.document];
         NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
+        
     } else {
+        
         [self setLayoutHeightsBySectionKey:nil];
+        
     }
 }
 
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
-    self.page.margins = UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
-                                         self.page.layoutSize.height - printableRect.size.height - printableRect.origin.y,
-                                         self.page.layoutSize.width - printableRect.size.width - printableRect.origin.x);
+    self.page.margins = MADEdgeInsetsPrinting(printableRect, self.page.layoutSize);
 }
 
 #pragma mark - Reading cached data
@@ -204,11 +226,12 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 }
 
 - (void)setLayoutSize:(CGSize)layoutSize {
-    [self.page setLayoutSize:layoutSize];
+    self.page.layoutSize = layoutSize;
 }
 
 - (void)loadFromCacheWithSize:(CGSize)printableSize {
-    [self setLayoutSize:printableSize];
+    self.didRefresh = false;
+    self.page.layoutSize = printableSize;
     [self loadLayoutAndIndexesFromCache];
 }
 
@@ -299,12 +322,12 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportIndexes]
                                                             cachedDelegate: self.cachedDelegate];
     [ixarray initializeDatabase];
-    [self setReportIndexes:ixarray];
+    self.reportIndexes = ixarray;
     
     MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportLayout]
                                                             cachedDelegate: self.cachedDelegate];
     [lyarray initializeDatabase];
-    [self setReportLayout:lyarray];
+    self.reportLayout = lyarray;
     
     [self cleanupTemporaryReportIndexes];
 }
@@ -472,9 +495,9 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     [self initReportLayoutContainers];
     self.machineState.rowCounter = 0;
     
-    RptqDocumentSection *detailSection = [self.machineState.document hasDetailSection];
+    RptqDocumentSection *detailSection = self.machineState.document.hasDetailSection;
     
-    BOOL firstRow = YES;
+    bool firstRow = true;
         
     NSArray *sqg = [self.layout.mainQuery.queryObject sortedQueryGroups];
     [self setSortedQueryGroups:sqg];
@@ -502,7 +525,9 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
             NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
             
             //Display new footers if needed.
-            if (!firstRow) {
+            if (firstRow) {
+                firstRow = false;
+            } else {
                 [self displayNewGroupFootersIfNeeded: keyValuesForComparson
                                        andLastValues: self.lastComparsonValues];
             }
@@ -517,7 +542,6 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
             
             self.lastComparsonValues = keyValuesForComparson;
             
-            firstRow = NO;
             self.machineState.rowCounter++;
             
         }
@@ -541,7 +565,7 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (MADObjectArray *)keyValuesForResultRow:(id)resultRow {
 
-    NSArray *keyValues = nil;
+    MADObjectArray *keyValues = nil;
 
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
@@ -554,7 +578,7 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
                 [keyValuesForComparson addObject:[NSNull null]];
             }
         }
-        keyValues = [NSArray arrayWithArray:keyValuesForComparson];
+        keyValues = [MADObjectArray arrayWithArray:keyValuesForComparson];
         
     } else {
         keyValues = @[];
@@ -573,7 +597,8 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     
     CGFloat pageFooterSectionHeight = [self heightForSection:self.machineState.document.hasPageFooterSection];
     
-    if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
+    if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight >
+        [self printableHeight]) {
         
         newPageCreated = YES;
         [self forcePageBreakWithFooterHeight:pageFooterSectionHeight];
@@ -588,10 +613,13 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
     self.machineState.counterHeightUsedCurrentPage = newHeight;
     [self addPageFooter];
     
-    NSArray *pageInfo = self.pageLayoutTemporary != nil ? [NSArray arrayWithArray: self.pageLayoutTemporary] : @[];
+    MADMutableSectionArray *pageInfo = self.pageLayoutTemporary != nil ?
+                                [MADMutableSectionArray arrayWithArray: self.pageLayoutTemporary] :
+                                @[];
     [self.reportLayout addObject:pageInfo];
     
-    NSArray *rowids = self.pageIndexesTemporary != nil ? [NSArray arrayWithArray: self.pageIndexesTemporary] : @[];
+    MADIndexArray *rowids = self.pageIndexesTemporary != nil ?
+                                [MADIndexArray arrayWithArray: self.pageIndexesTemporary] : @[];
     [self.reportIndexes addObject:rowids];
     
     [self cleanupTemporaryPageIndexes];
@@ -634,8 +662,8 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
     MADSectionPlist *header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
-                                                                                   groupLevel: groupLevel
-                                                                                          row: self.machineState.detailRowId];
+                                                                     groupLevel: groupLevel
+                                                                            row: self.machineState.detailRowId];
     if (groupLevel == [self numberOfGroups] - 1) {
         self.machineState.groupCounter++;
     }
@@ -644,20 +672,20 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (void)addPageFooter {
     MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
-                                                                                          row: self.machineState.detailRowId];
+                                                                            row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addReportFooter {
     MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
-                                                                                          row: self.machineState.detailRowId];
+                                                                            row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
     MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
-                                                                                   groupLevel: groupLevel
-                                                                                          row: self.machineState.detailRowId];
+                                                                     groupLevel: groupLevel
+                                                                            row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
@@ -676,14 +704,13 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 - (void)addPageHeader {
     MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
-                                                                                       row: self.machineState.detailRowId];
+                                                                         row: self.machineState.detailRowId];
     [self.pageLayoutTemporary addObject:  obj];
 }
 
 - (NSUInteger)numberOfPages {
     return (NSUInteger)self.reportLayout.count;
 }
-
 
 /*
  // FIXME: Write function to return results for keys without having data stored in memeory.

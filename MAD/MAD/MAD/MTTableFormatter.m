@@ -21,7 +21,7 @@
     if (self = [super initWithQuery:query]) {
 
         self.query = query;
-        self.didRefresh = NO;
+        self.didRefresh = false;
         
     }
     return self;

@@ -15,9 +15,9 @@
 
 @interface MTTableFormatter : MADDataFormatter
 
-@property (nonatomic, assign) BOOL didRefresh;
+    @property (nonatomic, assign) bool didRefresh;
 
-- (instancetype)initWithQuery:(MTQuery *)query;
+    - (instancetype)initWithQuery:(MTQuery *)query;
 
 @end
 

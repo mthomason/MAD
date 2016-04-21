@@ -323,7 +323,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [document initalizeMainQuery:activeDocumentModel];
     [document activeDocumentModel];
     [document prepareForQuery];
-    document.reportFormatter.didRefresh = NO;
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
     MTReportViewerPrintPageRenderer *printPageRender =
@@ -357,7 +356,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self uiUpdateRecordsRead];
     
-    document.reportFormatter.didRefresh = NO;
+    document.reportFormatter.didRefresh = false;
     
     if (self.printPageRendererReport == nil) {
         [document activeDocumentModel];
@@ -815,7 +814,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self uiUpdateRecordsRead];
     
-    document.reportFormatter.didRefresh = NO;
+    document.reportFormatter.didRefresh = false;
     
     if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
         

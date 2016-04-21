@@ -108,9 +108,10 @@
                                                                                   layout: document
                                                                                  options: MTReportFormatterOptionsNone];
         reportFormatter.dataDelegate = document;
-        reportFormatter.cachedDelegate = document;
         reportFormatter.datasource = document;
-        
+        reportFormatter.cachedDelegate = document;
+        [reportFormatter initalize];
+
         document.reportFormatter = reportFormatter;
         
     }];

@@ -142,7 +142,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     @property (nonatomic, copy, readwrite) NSURL *urlGuts;
     @property (nonatomic, copy, readwrite) NSURL *urlMetaPlaylist;
 
-    @property (nonatomic, assign) BOOL didRefresh;
+    @property (nonatomic, assign) bool didRefresh;
 
 @end
 
@@ -284,7 +284,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                               name: UIDocumentStateChangedNotification
                             object: self];
 
-        self.didRefresh = NO;
+        self.didRefresh = false;
     }
     return self;
 }
@@ -660,7 +660,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     self.printingReportFormatter.dataDelegate = self;
     self.printingReportFormatter.layoutSize = printInteractionController.printPaper.paperSize;
     self.printingReportFormatter.marginUsingPrintableRect = printInteractionController.printPaper.printableRect;
-    self.printingReportFormatter.didRefresh = YES;
+    self.printingReportFormatter.didRefresh = true;
     [self.printingReportFormatter formatForSize: printInteractionController.printPaper.paperSize contentChanged: NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
@@ -940,6 +940,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;
+    [reportFormatter initalize];
+
     self.reportFormatter = reportFormatter;
 }
 
@@ -1032,12 +1034,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (MTReportViewerPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery layout: self
-                                                                             options: MTReportFormatterOptionsMargin];
-    reportFormatter.cachedDelegate = self;
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery
+                                                                                 layout: self
+                                                                                options: MTReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.datasource = self;
-    
+    reportFormatter.cachedDelegate = self;
+    [reportFormatter initalize];
+
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
                                                                                                               dataTable: self.mainDataTable];
     self.printingReportFormatter = reportFormatter;

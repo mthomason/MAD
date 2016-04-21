@@ -65,15 +65,19 @@
     return item;
 }
 
+static inline CGRect CellDefaultBounds();
+static inline CGRect CellDefaultBounds() {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+}
+
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
 
     [self disableUserInteraction:window.view];
     UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForBaselineLayout;
-    MADActivityIndicator *activityView = [[MADActivityIndicator alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f)];
+    MADActivityIndicator *activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
     activityView.center = mainWindow.center;
     
-    [mainWindow performSelectorOnMainThread: @selector(addSubview:)
-                                 withObject: activityView
+    [mainWindow performSelectorOnMainThread: @selector(addSubview:) withObject: activityView
                               waitUntilDone: YES];
     [self.document setStatusLabel:activityView];
     
@@ -95,7 +99,7 @@
         rf.cachedDelegate = weakdoc;
         rf.dataDelegate = weakdoc;
         rf.overrideIdentifier = @"madpreview";
-        rf.didRefresh = YES;
+        rf.didRefresh = true;
         
         [[NSNotificationCenter defaultCenter] addObserver: weakdoc selector: @selector(reportFormatterDidFormatPage:)
                                                      name: MADNotificationDidFormatPagesName object: rf];
