@@ -123,10 +123,22 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
         createDatabase = ![self.database tableExist:MTArrayCachedTableName];
     }
     if (![self.database tableExist:MTArrayCachedTableName]) {
-        MADDataColumn *columnKey = [MADArrayCaching columnKey];
-        MADDataColumn *columnValue = [MADArrayCaching columnValue];
+
+        MADDataColumn *columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
+        columnKey.type = MTDataTypeInteger;
+        columnKey.primaryKey = true;
+        columnKey.notNull = true;
+        columnKey.autoIncrement = false;
+        
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier createTable:YES unique:NO];
-        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnValue.identifier createTable:NO unique:NO];
+
+        MADDataColumn *columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
+        columnValue.type = MTDataTypeBlob;
+        columnValue.primaryKey = false;
+        columnValue.notNull = true;
+        columnValue.autoIncrement = false;
+
+        [self addColumn:columnValue toTable:MTArrayCachedTableName columnName:columnValue.identifier createTable:NO unique:NO];
 
         self.numberOrRows = 0;
     }
@@ -222,30 +234,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
-+ (MADDataColumn *)columnKey {
-    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
-    column.type = MTDataTypeInteger;
-    column.primaryKey = YES;
-    column.notNull = YES;
-    column.autoIncrement = false;
-    return column;
-}
-
-+ (MADDataColumn *)columnValue {
-    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
-    column.type = MTDataTypeBlob;
-    column.primaryKey = NO;
-    column.notNull = YES;
-    column.autoIncrement = false;
-    return column;
-}
-
-- (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
+- (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
+                                       columnName:(NSString *)columnName
       createTable:(BOOL)create unique:(BOOL)unique {
     
-    MTQueryCacheAddColumn *queryCacheAddColumn = [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
-                                                                                      createTable:create ? true : false
-                                                                                 uniqueColumnHack:unique ? true : false];
+    MTQueryCacheAddColumn *queryCacheAddColumn =
+        [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
+                                             createTable:create ? true : false
+                                        uniqueColumnHack:unique ? true : false];
     queryCacheAddColumn.database = self.database;
     bool success = false;
     NSError * __autoreleasing error = NULL;
@@ -254,18 +250,18 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSData *)dataForObject:(id)object {
     NSError * __autoreleasing * error = NULL;
-    NSData *data = [NSPropertyListSerialization dataWithPropertyList: object
-                                                              format: NSPropertyListBinaryFormat_v1_0
-                                                             options: 0
-                                                               error: error];
+    static const NSPropertyListFormat format = NSPropertyListBinaryFormat_v1_0;
+    NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
+                                                             options: 0 error: error];
     NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
     return data;
 }
 
 - (id)objectForData:(NSData *)data {
     NSError * __autoreleasing * error = NULL;
+    static const NSPropertyListReadOptions options = NSPropertyListImmutable;
     id propertyList = [NSPropertyListSerialization propertyListWithData: data
-                                                                options: NSPropertyListImmutable
+                                                                options: options
                                                                  format: nil
                                                                   error: error];
     NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);

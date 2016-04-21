@@ -86,6 +86,7 @@
     }
     return self;
 }
+
 /*
 - (instancetype)initWithIdentifier:(NSString *)identifier {
     
@@ -193,6 +194,15 @@
         
     }
     return self;
+}
+
++ (MADDataColumn *)newDataColumnWithIdentifier:(NSString *)identifier {
+    MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:identifier];
+    column.type = MTDataTypeInteger;
+    column.primaryKey = true;
+    column.notNull = true;
+    column.autoIncrement = false;
+    return column;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {

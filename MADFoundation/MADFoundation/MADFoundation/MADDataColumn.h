@@ -40,6 +40,8 @@
     - (instancetype)objectAtIndex:(NSUInteger)index;        //Object at row number
     - (void)addRows:(NSUInteger)count;                      //Adds specifc number of rows with default value.
 
+    + (MADDataColumn *)newDataColumnWithIdentifier:(NSString *)identifier;
+
 @end
 
 #endif
