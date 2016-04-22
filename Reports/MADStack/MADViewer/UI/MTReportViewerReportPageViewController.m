@@ -168,13 +168,13 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     if (self.initalLayout) {
         self.initalLayout = false;
         
-        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView:self.documentScroller insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
+                                                                                                              insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         
         MADocument *document = self.document;
         self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
         self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
         
-
         [self.documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
         self.documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
     }

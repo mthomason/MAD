@@ -95,12 +95,12 @@
         //Initalize the section layout manager... Not neede for creating the report.
         NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
         RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
+
         for (RptqDocumentSection *reportSection in sectionEnumerator) {
-            
             MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
             [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
-            
         }
+        
         document.sectionLayoutManagers = sectionLayoutManagers;
         
         

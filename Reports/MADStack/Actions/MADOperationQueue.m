@@ -16,6 +16,10 @@
 
 @implementation MADOperationQueue
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (void)addOperation:(NSOperation *)operation {
 
     if ([operation isKindOfClass:[MADOperation class]]) {

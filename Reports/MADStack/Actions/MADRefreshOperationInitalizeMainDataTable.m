@@ -20,7 +20,9 @@
 
 @implementation MADRefreshOperationInitalizeMainDataTable
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithDocument:(MADocument *)document {
     if (self = [super init]) {

@@ -30,7 +30,7 @@ static const short errCache = 2;
 @implementation MADRefreshOperation
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDocument:(MADocument *)document {
@@ -79,7 +79,7 @@ static const short errCache = 2;
         queryString = [query getSqlWithManagedObjectContext:private error:&sqlError];
     }];
     
-    NSLog(@"QueryString: %@", queryString);
+    //NSLog(@"QueryString: %@", queryString);
     
     NSError *executeError = NULL;
     BOOL success = [document.database executeSql:queryString fieldKeys:query.fieldKeys onConnection:dbconn intoResultTable:document.mainDataTable withError:&executeError];

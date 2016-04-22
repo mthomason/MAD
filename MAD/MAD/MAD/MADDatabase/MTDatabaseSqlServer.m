@@ -1264,12 +1264,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     
-    if (!credentals) {
-        credentals = [self getCredentalsWithConnection:connection];
+    if (credentals == nil) {
+        credentals = [self copyCredentalsWithConnection:connection];
     }
     
     DBPROCESS *dbconn = NULL;
-    if (credentals) {
+    if (credentals != nil) {
         
         NSError *error = nil;
         dbconn = [self connect:credentals.username andPassword:credentals.password error:&error];
@@ -1299,7 +1299,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [NSString stringWithFormat:@"[%@].[%@]", tableName, fieldName];
+    NSString *safeQueryField = [[NSString alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName];
+    return safeQueryField;
 }
 - (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     return [MTDatabaseSqlServer safeQueryField:fieldName andTable:tableName];

@@ -554,14 +554,14 @@ void sqliteLog(void *foo, const char* statement) {
                 resultsForRow = nil;
                 rowCounter++;
             }
-            NSLog(@"%@", queryString);
-            NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+            //NSLog(@"%@", queryString);
+            //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
 
             [dataTable endBulkInsert];
             
         }
     } else {
-        NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+        //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
         // FIXME: Handle failures.
         sqlite3_step(statement);
     }
@@ -602,7 +602,7 @@ void sqliteLog(void *foo, const char* statement) {
 
     NSError *error = nil;
     NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
-    NSLog(@"SQL2: %@", queryString);
+    //NSLog(@"SQL2: %@", queryString);
 
     MTDataTable * dataTable;
     if (query.dataTable) {
@@ -828,7 +828,7 @@ void sqliteLog(void *foo, const char* statement) {
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = [queryStart UTF8String];
     char *sql = sqlite3_mprintf((char *) queryStartChar);
-    NSLog(@"SQL3: %s", sql);
+    //NSLog(@"SQL3: %s", sql);
 
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;

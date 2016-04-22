@@ -13,7 +13,7 @@
 @implementation MADNavigationController
 
 - (void)dealloc {
-    _document = nil;
+
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -24,6 +24,8 @@
 }
 
 - (void)viewDidLoad {
+    [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
+
     [super viewDidLoad];
     if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
         NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
@@ -43,6 +45,14 @@
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
     
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
 }
 
 - (UITabBarItem *)tabBarItem {
@@ -83,7 +93,6 @@
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                       presentingViewController:(UIViewController *)presenting
                                                           sourceViewController:(UIViewController *)source {
-    
     UIPresentationController *result = nil;
     if (presented == self || presenting == self) {
         result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented

@@ -526,22 +526,28 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return result;
 }
 
-- (NSDictionary *)attributesForDrawingText {
+- (NSDictionary *)attributesForDrawingText __attribute__((ns_returns_autoreleased)) {
 
+    UIFontDescriptorSymbolicTraits traits;
     UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname size:self.fontsize.floatValue];
-    
-    if (self.italic.boolValue) {
-        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits: UIFontDescriptorTraitItalic];
-        if (fontWithTraits) {
-            f = fontWithTraits;
-        }
+
+    bool gotTraits = false;
+    if (self.italic.boolValue && self.bold.boolValue) {
+        traits = UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold;
+        gotTraits = true;
+    } else if (self.italic.boolValue) {
+        traits = UIFontDescriptorTraitItalic;
+        gotTraits = true;
+    } else if (self.bold.boolValue) {
+        traits = UIFontDescriptorTraitBold;
+        gotTraits = true;
     }
-    
-    if (self.bold.boolValue) {
-        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits: UIFontDescriptorTraitBold];
-        if (fontWithTraits) {
-            f = fontWithTraits;
-        }
+    UIFont *customFont;
+    if (gotTraits) {
+        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits:traits];
+        customFont = [UIFont fontWithDescriptor:fontWithTraits size:0.0];
+    } else {
+        customFont = [UIFont fontWithDescriptor:f size:0.0];
     }
 
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -571,18 +577,15 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     }
     
     NSNumber *baselineOffset = @0.00000000f;
-    NSNumber *underlineStyle = self.underline.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    NSNumber *strikethroughStyle = self.strike.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-
-    UIFont *customFont = [UIFont fontWithDescriptor:f size:0.0];
+    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger:self.underline.boolValue ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+    NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
 
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                customFont, NSFontAttributeName,
-                                @0.00000000f, NSBaselineOffsetAttributeName,
-                                underlineStyle, NSUnderlineStyleAttributeName,
-                                strikethroughStyle, NSStrikethroughStyleAttributeName,
-                                paragraphStyle, NSParagraphStyleAttributeName,
-                                nil];
+                                    customFont, NSFontAttributeName,
+                                    @0.00000000f, NSBaselineOffsetAttributeName,
+                                    underlineStyle, NSUnderlineStyleAttributeName,
+                                    strikethroughStyle, NSStrikethroughStyleAttributeName,
+                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
 
     return  attributes;
 }

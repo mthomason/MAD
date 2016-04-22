@@ -105,6 +105,10 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 @implementation MTReportViewerPrintPageRenderer
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
                               dataTable:(MTDataTableFast *)dataTable {
     
@@ -409,32 +413,32 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
             MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
                         
             for (RptqDocumentObject *item in items) {
-                @autoreleasepool {
+                //@autoreleasepool {
                     id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
                     CGRect elementCanvasRect = item.frame;
                     elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
                     elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
                     
                     if ([drawingObject isKindOfClass:[NSString class]]) {
-                        @autoreleasepool {
-                            NSDictionary *attributes = [item attributesForDrawingText];
-                            [drawingObject drawWithRect: elementCanvasRect
-                                                options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
-                                             attributes: attributes
-                                                context: nil];
-                        }
+                        //@autoreleasepool {
+                        NSDictionary *attributes = [item attributesForDrawingText];
+                        [drawingObject drawWithRect: elementCanvasRect
+                                            options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                         attributes: attributes
+                                            context: nil];
+                        //}
                     } else {
                         [drawingObject drawInRect:elementCanvasRect];
                     }
                     
-                    MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
-                                                                                                                                 type:item.getType
-                                                                                                                                frame:elementCanvasRect];
-                    [rowRepresentation addLine:line];
-                    line.elementOffset = *(offsetElement);
-                    (*(offsetElement))++;
-                    
-                }
+                MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
+                                                                                                             type:item.getType
+                                                                                                            frame:elementCanvasRect];
+                [rowRepresentation addLine:line];
+                line.elementOffset = *(offsetElement);
+                (*(offsetElement))++;
+                
+                //}
             }
             [sectionRepresentation addRow:rowRepresentation];
         }
@@ -768,8 +772,10 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                 aggregateResult = dataOfInterest[fieldKey];
             }
             
-            drawingObject = [NSString stringWithString:[item formattedString:aggregateType
-                                                                    forValue:aggregateResult]];
+            NSString *formattedString = [item formattedString:aggregateType
+                                                     forValue:aggregateResult];
+            
+            drawingObject = [[NSString alloc] initWithString:formattedString];
             if ([drawingObject isEqualToString:MTNullIdentifier]) {
                 drawingObject = @"";
             }

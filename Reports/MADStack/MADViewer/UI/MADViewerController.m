@@ -160,6 +160,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     _document = nil;
     _lastCacheDate = nil;
     if (_timerLabelTimeSinceRefreh != nil) {

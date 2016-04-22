@@ -26,6 +26,11 @@ NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
 NSString * const MADSqlSqlite3Identifier = @"NONE";
 NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
+static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
+                                                                @"%@ %@ %@ "
+                                                                @"%@ %@ "
+                                                                @"LIMIT 511;";
+
 @interface MTDatabase ()
 
 @end
@@ -66,7 +71,7 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
     return result;
 }
 
-- (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection {
+- (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
     bool responds = [self.delegate respondsToSelector:@selector(getCredentialsForKey:)];
     MADCredential *results = nil;
@@ -95,7 +100,8 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 }
 
 + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [NSString stringWithFormat:@"%@.%@", tableName, fieldName];
+    id safeQueryFieldName = [[NSString alloc] initWithFormat:@"%@.%@", tableName, fieldName];
+    return safeQueryFieldName;
 }
 
 - (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
@@ -177,14 +183,8 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
     return @"MAX";
 }
 
-static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
-                                                @"%@ %@ %@ "
-                                                @"%@ %@ "
-                                                @"LIMIT 511;";
-
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString *safeField = [self safeQueryField: fieldName
-                                      andTable: tableName];
+    NSString *safeField = [self safeQueryField: fieldName andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
     NSString *safeTable = [self safeIdentifier:tableName];

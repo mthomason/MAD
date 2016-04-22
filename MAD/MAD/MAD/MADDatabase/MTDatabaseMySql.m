@@ -68,7 +68,7 @@
 - (id)connectWithConnection:(MTDatabaseConnectionMySql *)connection credentals:(MADCredential *)credentals {
 
     if (credentals == nil) {
-        credentals = [self getCredentalsWithConnection:connection];
+        credentals = [self copyCredentalsWithConnection:connection];
     }
 
     bool success = false;

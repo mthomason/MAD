@@ -28,14 +28,6 @@ static NSString * const FormatMilliseconds  = @"%@ milliseconds ";
 
 static NSString * const TextAgo = @"ago.";
 
-@interface MADDateFromTimeFormatter()
-
-@property (nonatomic, strong) NSNumberFormatter *formatter;
-
-@end
-
-@implementation MADDateFromTimeFormatter
-
 static inline NSCalendarUnit calUnitsAll();
 static inline NSCalendarUnit calUnitsAll() {
     return NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
@@ -51,10 +43,6 @@ static inline NSString *LocalizedFormatMonths(NSInteger i) {
     return i == 1 ? NSLocalizedString(FormatMonth, FormatMonth) : NSLocalizedString(FormatMonths, FormatMonths);
 }
 
-+ (NSString *)LocalizedFormatFormatMinutes:(NSInteger)i {
-    return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) : NSLocalizedString(FormatMinutes, FormatMinutes);
-}
-
 static inline NSString *LocalizedFormatSeconds(NSInteger i);
 static inline NSString *LocalizedFormatSeconds(NSInteger i) {
     return i == 1 ? NSLocalizedString(FormatSecond, FormatSecond) : NSLocalizedString(FormatSeconds, FormatSeconds);
@@ -63,6 +51,22 @@ static inline NSString *LocalizedFormatSeconds(NSInteger i) {
 static inline NSString *LocalizedFormatMilliseconds(NSInteger i);
 static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     return i == 1 ? NSLocalizedString(FormatMillisecond, FormatMillisecond) : NSLocalizedString(FormatMilliseconds, FormatMilliseconds);
+}
+
+@interface MADDateFromTimeFormatter()
+
+@property (nonatomic, strong) NSNumberFormatter *formatter;
+
+@end
+
+@implementation MADDateFromTimeFormatter
+
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
++ (NSString *)LocalizedFormatFormatMinutes:(NSInteger)i {
+    return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) : NSLocalizedString(FormatMinutes, FormatMinutes);
 }
 
 - (instancetype)init {

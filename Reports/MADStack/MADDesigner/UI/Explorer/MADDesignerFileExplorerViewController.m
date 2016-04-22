@@ -264,7 +264,10 @@ NSString * const MADUtiType                                     = @"com.everyday
         MADOpenFileViewController * __strong strongself = weakself;
         [strongself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:strongself waitUntilDone:NO];
     }];
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.tabController setViewControllers:nil];
+    }];
     
     self.shouldShowAddDocumentPopover = true;
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -288,7 +291,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - MADOpenFileViewControllerDelegate
 
-- (void)didOpenDocument:(MADocument *)document {
+- (void)didOpenDocument:(MADocument *)documentByRef {
+    
+    MADocument *document = (MADocument *)self.openDocument;
     
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
@@ -299,7 +304,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     tabBarController.viewControllerDelegate = self;
     
     NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
-    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
+    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
 
     // FIXME: UISplitViewController has retain cycle, and can't be dealloc without issues.  This is
     //          a work around.  We are keeping one split view controller alive.
@@ -323,11 +328,13 @@ NSString * const MADUtiType                                     = @"com.everyday
     [navControllerViewer setNavigationBarHidden:YES animated:NO];
     [navControllerViewer setToolbarHidden:NO animated:NO];
     
-    NSArray *tabBarViewControllers = @[self.splitViewController, designerViewController, navControllerViewer];
+    NSArray <__kindof UIViewController *> *tabBarViewControllers =
+        [[NSArray alloc] initWithObjects:self.splitViewController, designerViewController,
+                                         navControllerViewer, nil];
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
-    
+    self.tabController = tabBarController;
+
     MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
-    
     navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
     navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorWhite];
 

@@ -415,7 +415,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)handleFileOpenCompletion:(id)sender {
     self.reportState = MTReportStateOpen;
-    [self.openFileDelegate didOpenDocument:self.openDocument];
+    [self.openFileDelegate didOpenDocument:nil];
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
