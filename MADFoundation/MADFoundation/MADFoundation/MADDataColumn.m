@@ -151,7 +151,7 @@
     return self;
 }
 
-- (instancetype)initWithPlist:(id)plist {
+- (instancetype)initWithPlist:(NSDictionary *)plist {
 
     if (self = [super init]) {
         

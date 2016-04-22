@@ -117,17 +117,18 @@
     [self setSortIndex:sortIndex];
 }
 
-- (void)loadWithPlist:(id)plist {
+- (void)loadWithPlist:(MADDataTablePlist *)plist {
     [super loadWithPlist:plist];
     
     NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
     NSArray *sortIndexArray = plist[keySortIndex];
+    
     NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
     [self setSortIndex:sortIndex];
 }
 
-- (id)plist {
-    NSDictionary *superPlist = [super plist];
+- (MADDataTablePlist *)copyPlist {
+    NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
     NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
     plist[keySortIndex] = self.sortIndex;

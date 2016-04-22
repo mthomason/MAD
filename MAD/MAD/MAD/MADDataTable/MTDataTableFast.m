@@ -98,9 +98,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
 }
 
-- (NSDictionary *)plist {
+- (MADDataTablePlist *)copyPlist {
     
-    NSDictionary *superPlist = [super plist];
+    NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
     
     NSString *keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
@@ -109,7 +109,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
     plist[keyUrlFastCache] = [[self urlFastCache] absoluteString];
     plist[keyTag] = @([self tag]);
-    plist[keyBulkInsertLoop] = @(self.bulkInsertLoop ? YES : NO);
+    
+    NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:self.bulkInsertLoop ? YES : NO];
+    plist[keyBulkInsertLoop] = bulkInsert;
     
     NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
     NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
@@ -126,7 +128,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return plist;
 }
 
-- (void)loadWithPlist:(NSDictionary *)plist {
+- (void)loadWithPlist:(MADDataTablePlist *)plist {
     [super loadWithPlist:plist];
     
     _queueBulkAdd = nil;

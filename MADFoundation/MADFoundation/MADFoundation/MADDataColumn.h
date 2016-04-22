@@ -31,7 +31,7 @@
     @property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;
 
     - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
-    - (instancetype)initWithPlist:(id)plist;
+    - (instancetype)initWithPlist:(NSDictionary *)plist;
 
     - (NSDictionary *)plist;
     - (void)removeAllObjects;

@@ -246,8 +246,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         NSNumber *migratePersistentStoresAutomaticallyOption =  [[NSNumber alloc] initWithBool:YES];
         NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
-                                                                             migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
+        
+        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
+                                    migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
         
         self.persistentStoreOptions = options;
         
@@ -481,7 +483,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
         [self setExtraInformation:extraInfo];
     }
-    NSNumber *dataVersion = @(1.0);
+    NSNumber *dataVersion = [[NSNumber alloc] initWithDouble:1.0];
     self.extraInformation[MADDocumentInfoKeyVersion] = dataVersion;
     self.extraInformation[MADDocumentInfoKeyGenerator] = @"MAD Designer";
     return self.extraInformation;
@@ -906,10 +908,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (database) {
     
         RptqQuery *rquery = [database defaultQuery];
-        NSDictionary *parameters = [MTQuery newQueryDefinitionFull:rquery];
+        MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
         NSMutableDictionary *extraParameters = parameters.mutableCopy;
-        NSNumber *queryLimit = @(self.limitResultsDesignMode ? 50 : NSNotFound);
+
+        NSNumber *queryLimit = [[NSNumber alloc] initWithInteger: self.limitResultsDesignMode ? 50 : NSNotFound];
         extraParameters[@"MADQueryLimit"] = queryLimit;
+        
         MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
         defaultQuery.dataDelegate = self;
         

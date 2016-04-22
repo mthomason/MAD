@@ -24,6 +24,8 @@ typedef NS_ENUM(short, MTDataTableParameters) {
     MTDataTableNumberOfColumns,
 };
 
+typedef NSDictionary MADDataTablePlist;
+
 @class MADDataColumn;
 @class NSMutableArray, NSMutableDictionary;
 
@@ -43,8 +45,8 @@ typedef NS_ENUM(short, MTDataTableParameters) {
 
     - (bool)cacheWithUrl:(NSURL *)url;
 
-    - (NSDictionary *)plist;
-    - (void)loadWithPlist:(id)plist;
+    - (MADDataTablePlist *)copyPlist;
+    - (void)loadWithPlist:(MADDataTablePlist *)plist;
     - (void)loadFromCacheWithUrl:(NSURL *)url;
 
     - (void)addColumn:(MADDataColumn *)column;

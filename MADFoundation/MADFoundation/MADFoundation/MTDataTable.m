@@ -165,17 +165,15 @@ static NSString * const StringEmpty = @"";
 - (void)loadFromCacheWithUrl:(NSURL *)url {
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: url.path];
     [inputStream open];
-    switch (inputStream.streamStatus) {
-        case NSStreamStatusError:
-            NSLog(@"Can't open %@\n%@", url, inputStream.streamError);
-            break;
-        default:
-            break;
-    }
+
+    NSAssert(inputStream.streamStatus != NSStreamStatusError, @"Can't open %@\n%@",
+                                                                    url, inputStream.streamError);
+
     NSPropertyListFormat format;
     NSError *error = nil;
     id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
                                                             format: &format error: &error];
+    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     if (plist) {
         [self loadWithPlist:plist];
     }
@@ -185,31 +183,37 @@ static NSString * const StringEmpty = @"";
 
     NSLog(@"Writing cache to url %@.", url);
 
-    NSDictionary *plist = [self plist];
+    NSDictionary *plist = [self copyPlist];
 
-    NSError *error = nil;
-    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist format: NSPropertyListBinaryFormat_v1_0
-                                                              options: 0 error: &error];
+    NSError * __autoreleasing *error = nil;
+    static const propertyListFormat = NSPropertyListBinaryFormat_v1_0;
+    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
+                                                               format: propertyListFormat
+                                                              options: 0 error: error];
+
+    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+
     bool success = false;
     if (url) {
+        NSError * __autoreleasing *errorWriting = nil;
         success = [cache writeToURL: url
                             options: NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
-                              error: &error] ? true : false;
+                              error: &errorWriting] ? true : false;
 
-        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(errorWriting == nil, @"%s %@", __PRETTY_FUNCTION__, error);
 
     }
     
     return success;
 }
 
-- (NSDictionary *)plist {
+- (MADDataTablePlist *)copyPlist {
     
     NSString *keyName = [MTDataTable keyName];
     NSString *keyColumnKeys = [MTDataTable keyColumnKeys];
     NSString *keyColumns = [MTDataTable keyColumns];
     NSString *keyRowCounter = [MTDataTable keyRowCounter];
-    NSNumber *rowCounter = @([self rowCounter]);
+    NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: self.rowCounter];
     
     NSArray *columnKeys = [[NSArray alloc] initWithArray:[self columnKeys]];
     NSDictionary *columnsPlist = [NSDictionary dictionaryWithDictionary:[self columnsPlist]];
@@ -222,7 +226,7 @@ static NSString * const StringEmpty = @"";
              };
 }
 
-- (void)loadWithPlist:(id)plist {
+- (void)loadWithPlist:(MADDataTablePlist *)plist {
     NSString *name = plist[[MTDataTable keyName]];
     if (name == nil) {
         name = @"";

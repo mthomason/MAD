@@ -226,7 +226,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return @"";
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
+- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
+                managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                               error:(NSError **)error {
     return @"";
 }
 
@@ -365,7 +367,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return result;
 }
 
-+ (NSDictionary *)newQueryDefinitionFull:(RptqQuery *)query {
++ (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query {
     NSNumber *key = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
     id result = [[MADQueryDefinition alloc] initWithObjectsAndKeys:query, key, nil];
     return result;
