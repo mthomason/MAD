@@ -39,7 +39,7 @@ static NSString * const StringEmpty = @"";
         NSMutableArray *columnKeys =    [decoder decodeObjectForKey: [MTDataTable keyColumnKeys]];
         self.columnKeys = columnKeys;
         
-        NSMutableDictionary *columns =  [decoder decodeObjectForKey: [MTDataTable keyColumns]];
+        NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns =  [decoder decodeObjectForKey: [MTDataTable keyColumns]];
         self.columns = columns;
         
         NSNumber *rowCounterObject = [decoder decodeObjectForKey: [MTDataTable keyRowCounter]];
@@ -67,7 +67,7 @@ static NSString * const StringEmpty = @"";
         NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
         self.sortDescriptors = sortDescriptors;
         
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+        NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
         self.columns = columns;
         
         self.rowCounter = 0;
@@ -116,7 +116,7 @@ static NSString * const StringEmpty = @"";
     NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
     self.sortDescriptors = sortDescriptors;
     
-    NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns = [[NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> alloc] init];
     self.columns = columns;
     self.rowCounter = 0;
     self.tag = objectId;
@@ -166,16 +166,15 @@ static NSString * const StringEmpty = @"";
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: url.path];
     [inputStream open];
 
-    NSAssert(inputStream.streamStatus != NSStreamStatusError, @"Can't open %@\n%@",
-                                                                    url, inputStream.streamError);
-
-    NSPropertyListFormat format;
-    NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
-                                                            format: &format error: &error];
-    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
-    if (plist) {
-        [self loadWithPlist:plist];
+    if (inputStream.streamStatus != NSStreamStatusError) {
+        NSPropertyListFormat format;
+        NSError *error = nil;
+        id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
+                                                                format: &format error: &error];
+        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+        if (plist) {
+            [self loadWithPlist:plist];
+        }
     }
 }
 
@@ -215,8 +214,11 @@ static NSString * const StringEmpty = @"";
     NSString *keyRowCounter = [MTDataTable keyRowCounter];
     NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: self.rowCounter];
     
-    NSArray *columnKeys = [[NSArray alloc] initWithArray:[self columnKeys]];
-    NSDictionary *columnsPlist = [NSDictionary dictionaryWithDictionary:[self columnsPlist]];
+    NSArray *ck = self.columnKeys;
+    NSArray *columnKeys = [[NSArray alloc] initWithArray:ck];
+    
+    NSDictionary *cp = [self columnsPlist];
+    NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:cp];
     
     return @{
              keyName        : self.name,
@@ -227,38 +229,47 @@ static NSString * const StringEmpty = @"";
 }
 
 - (void)loadWithPlist:(MADDataTablePlist *)plist {
-    NSString *name = plist[[MTDataTable keyName]];
+    NSString * __weak name = plist[[MTDataTable keyName]];
     if (name == nil) {
         name = @"";
     }
-    [self setName: name];
+    NSString *nameCopy = name.copy;
+    self.name = nameCopy;
     
-    NSString *keyColumnKeys = [MTDataTable keyColumnKeys];
+    NSString * const keyColumnKeys = [MTDataTable keyColumnKeys];
     id columnKeysArray = plist[keyColumnKeys];
     
-    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:columnKeysArray];
-    [self setColumnKeys: columnKeys];
+    NSMutableArray <__kindof NSString *> *columnKeys =
+                [[NSMutableArray <__kindof NSString *> alloc] initWithArray: columnKeysArray
+                                                                  copyItems: YES];
     
-    NSArray *sortDescriptorsArray = plist[[MTDataTable keySortDescriptors]];
-    NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray:sortDescriptorsArray];
-    [self setSortDescriptors:sortDescriptors];
+    NSString * const keySortDescriptors = [MTDataTable keySortDescriptors];
+    NSArray * __weak sortDescriptorsArray = plist[keySortDescriptors];
+    NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray: sortDescriptorsArray
+                                                                  copyItems: YES];
+    self.sortDescriptors = sortDescriptors;
     
-    NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:plist[[MTDataTable keyColumns]]];
+    NSString *keyColumns = [MTDataTable keyColumns];
+    NSDictionary * __weak plistDataColumn = plist[keyColumns];
+    NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary: plistDataColumn
+                                                                copyItems: YES];
 
-    for (NSString *key in [self columnKeys]) {
-            NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
+    for (NSString *key in columnKeys) {
+            NSDictionary * __weak columnPlist = columnsPlist[key];
             MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
             self.columns[key] = column;
     }
+    self.columnKeys = columnKeys;
     
-    NSNumber *rowCounterObj = plist[[MTDataTable keyRowCounter]];
+    NSString * const keyRowCounter = [MTDataTable keyRowCounter];
+    NSNumber * __weak rowCounterObj = plist[keyRowCounter];
     self.rowCounter = rowCounterObj.unsignedIntegerValue;
     
 }
 
 - (NSDictionary *)columnsPlist {
     
-    NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
+    NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columnsPlist = [[NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> alloc] initWithCapacity:[self numberOfColumns]];
     for (NSString *key in [self columnKeys]) {
         MADDataColumn *dataColumn = self.columns[key];
         columnsPlist[key] = [dataColumn plist];

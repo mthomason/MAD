@@ -98,7 +98,9 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 #pragma mark - NSObject
 
-- (void)dealloc { }
+- (void)dealloc {
+    [_documentView removeFromSuperview];
+}
 
 - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
     if (self = [super init]) {
@@ -156,7 +158,6 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.documentView removeFromSuperview];
 }
 
 - (void)viewWillLayoutSubviews {

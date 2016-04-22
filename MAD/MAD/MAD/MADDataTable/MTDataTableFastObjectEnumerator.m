@@ -47,8 +47,7 @@ void sqliteCallback(void *foo, const char* statement) {
 }
 
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;

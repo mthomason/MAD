@@ -103,27 +103,33 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
     
+    NSURL *urlFastCache = [self urlFastCache];
+    NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: urlFastCache.absoluteString];
     NSString *keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
+    plist[keyUrlFastCache] = urlFastCacheAbsolute;
+    
+    NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
     NSString *keyTag = [MTDataTableFast keyTag];
-    NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
-
-    plist[keyUrlFastCache] = [[self urlFastCache] absoluteString];
-    plist[keyTag] = @([self tag]);
+    plist[keyTag] = tag;
     
     NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:self.bulkInsertLoop ? YES : NO];
+    NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
     plist[keyBulkInsertLoop] = bulkInsert;
     
-    NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
-    NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
-
     if ([self groupTableNames] != nil) {
         NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
         plist[keyGroupTableNames] = [self groupTableNames];
     }
+    
     if (self.groupKeys != nil) {
+        NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
         plist[keyGroupKeys] = self.groupKeys;
     }
-    plist[keySortDescriptorsSet] = @(self.sortDescriptorsSet ? YES : NO);
+    
+    NSNumber *sortSet = [[NSNumber alloc] initWithBool:self.sortDescriptorsSet ? YES : NO];
+    NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
+    plist[keySortDescriptorsSet] = sortSet;
+    
     _queueBulkAdd = nil;
     return plist;
 }
@@ -132,22 +138,29 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [super loadWithPlist:plist];
     
     _queueBulkAdd = nil;
-    NSString *absoluteString = plist[[MTDataTableFast keyUrlFastCache]];
-    NSURL *url = [NSURL URLWithString:absoluteString];
-    [self setUrlFastCache: url];
     
-    NSNumber *tagWrapper = plist[[MTDataTableFast keyTag]];
+    id keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
+    NSString * __weak absoluteString = plist[keyUrlFastCache];
+    NSURL *url = [[NSURL alloc] initWithString:absoluteString];
+    self.urlFastCache = url;
+    
+    id keyTag = [MTDataTableFast keyTag];
+    NSNumber *tagWrapper = plist[keyTag];
     self.tag = tagWrapper.unsignedIntegerValue;
     
-    NSNumber *bulkInsertLoopWrapper = plist[[MTDataTableFast keyBulkInsertLoop]];
+    id keyBuildInsertLoop = [MTDataTableFast keyBulkInsertLoop];
+    NSNumber * __weak bulkInsertLoopWrapper = plist[keyBuildInsertLoop];
     self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue ? true : false;
     
-    NSArray *groupKeysArray = plist[[MTDataTableFast keyGroupKeys]];
+    id keyGroupKeys = [MTDataTableFast keyGroupKeys];
+    NSArray *groupKeysArray = plist[keyGroupKeys];
     NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
-    [self setGroupKeys:groupKeys];
+    self.groupKeys = groupKeys;
     
-    NSArray *groupTableNames = plist[[MTDataTableFast keyGroupTableNames]];
-    [self setGroupTableNames:groupTableNames];
+    id keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
+    NSArray *groupTableNames = plist[keyGroupTableNames];
+    NSArray *tableNames = [[NSArray alloc] initWithArray:tableNames];
+    self.groupTableNames = groupTableNames;
     
     [self reopenDbConnection];
     
@@ -483,7 +496,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSDictionary *)createIndexParametersForIndexName:(NSString *)indexName tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {
-    NSDictionary *columns = [NSDictionary dictionaryWithDictionary: self.columns];
+    MADDictionaryDataColumns *columns = [MADDictionaryDataColumns dictionaryWithDictionary: self.columns];
     NSDictionary * parameters = @{
                                                   @(MTQueryCacheIndexCreateIndexName)         : indexName,
                                                   @(MTQueryCacheIndexCreateTableName)         : tableName,
@@ -663,7 +676,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName];
     NSArray *sortDescriptors = self.sortDescriptors;
-    NSDictionary *columns = self.columns;
+    MADDictionaryDataColumns *columns = self.columns;
     NSArray *columnKeys = self.columnKeys;
     
     NSNumber *selectFieldKeys = [[NSNumber alloc] initWithShort: MTQuerySelectFieldKeys];
@@ -989,7 +1002,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [self.databaseForInserts beginBulkInsert];
 
     NSString *tableName = [self tableName];
-    NSDictionary *columns = self.columns;
+    MADDictionaryDataColumns *columns = self.columns;
     NSArray *columnKeys = self.columnKeys;
     
     MTQueryCacheAddRow *bulkInsertQuery = [[MTQueryCacheAddRow alloc] initWithColumnKeys:columnKeys columns:columns andTableName:tableName];
@@ -1017,21 +1030,19 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds {  //Note, software currently usues NSArray for row ids
     
-    NSNumber *keyRowIds = @(MTQuerySelectRowIds);
-    NSNumber *keyTableN = @(MTQuerySelectTableName);
-    NSNumber *keySortDe = @(MTQuerySelectSortDescriptors);
-    NSNumber *keyColumn = @(MTQuerySelectColumns);
+    NSNumber *keyRowIds = [[NSNumber alloc] initWithShort: MTQuerySelectRowIds];
+    NSNumber *keyTableN = [[NSNumber alloc] initWithShort: MTQuerySelectTableName];
+    NSNumber *keySortDe = [[NSNumber alloc] initWithShort: MTQuerySelectSortDescriptors];
+    NSNumber *keyColumn = [[NSNumber alloc] initWithShort: MTQuerySelectColumns];
     
     NSString *tableName = [NSString stringWithString:[self tableName]];
     NSArray *sortDescs = [NSArray arrayWithArray:self.sortDescriptors];
-    NSDictionary *columns = [NSDictionary dictionaryWithDictionary:self.columns];
+    MADDictionaryDataColumns *columns = [MADDictionaryDataColumns dictionaryWithDictionary:self.columns];
     
-    NSDictionary *options = @{
-                                keyRowIds : cacheIds,
-                                keyTableN : tableName,
-                                keySortDe : sortDescs,
-                                keyColumn : columns
-                              };
+    
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                cacheIds, keyRowIds, tableName, keyTableN,
+                                sortDescs, keySortDe, columns, keyColumn, nil];
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     

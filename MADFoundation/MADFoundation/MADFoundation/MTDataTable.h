@@ -11,6 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSEnumerator.h>
+#import <Foundation/NSDictionary.h>
 
 
 typedef NS_ENUM(short, MTDataTableType) {
@@ -24,10 +25,14 @@ typedef NS_ENUM(short, MTDataTableParameters) {
     MTDataTableNumberOfColumns,
 };
 
-typedef NSDictionary MADDataTablePlist;
-
 @class MADDataColumn;
 @class NSMutableArray, NSMutableDictionary;
+
+typedef NSDictionary MADDataTablePlist;
+
+typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADDictionaryDataColumns;
+typedef NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *>
+                                                                MADMutableDictionaryDataColumns;
 
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
@@ -35,7 +40,7 @@ typedef NSDictionary MADDataTablePlist;
     @property (nonatomic, strong, readwrite) NSString *name;
     @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
     @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
-    @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
+    @property (nonatomic, strong, readwrite) MADMutableDictionaryDataColumns *columns;
     @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
     @property (nonatomic, assign) NSUInteger tag;
 
