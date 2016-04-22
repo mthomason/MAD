@@ -738,11 +738,11 @@ void sqliteLog(void *foo, const char* statement) {
     return MADIdentifierDatabaseSqlite3;
 }
 
-+ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
++ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     return [NSString stringWithFormat:MTDatabaseSqlite3SafeFormatField, tableName, fieldName];
 }
-- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [MTDatabaseSqlite3 safeQueryField:fieldName andTable:tableName];
+- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [MTDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
 }
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {

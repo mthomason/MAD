@@ -191,13 +191,13 @@
     return MADIdentifierDatabaseMySQL;
 }
 
-+ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
++ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
     return safeIdentifier;
 }
 
-- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString * __autoreleasing safeIdentifier = [MTDatabaseMySql safeQueryField:fieldName andTable:tableName];
+- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    NSString * __autoreleasing safeIdentifier = [MTDatabaseMySql newSafeQueryField:fieldName andTable:tableName];
     return safeIdentifier;
 }
 

@@ -118,7 +118,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheConnectionParameters) {
     MTQueryCacheConnection,
 };
 
-typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
+typedef NS_ENUM(short, MTQuerySelectParameters) {
 	MTQuerySelectConnection,
     MTQuerySelectTableName,
     MTQuerySelectFieldKeys,

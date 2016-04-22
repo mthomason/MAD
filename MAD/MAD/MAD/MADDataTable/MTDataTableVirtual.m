@@ -57,7 +57,7 @@
     return nil;
 }
 
-- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
+- (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

@@ -26,8 +26,8 @@ typedef struct sqlite3_stmt sqlite3_stmt;
     - (NSString *)identifier;
     + (NSString *)identifier;
 
-    + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
     + (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;

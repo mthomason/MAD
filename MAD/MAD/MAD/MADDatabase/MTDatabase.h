@@ -14,6 +14,8 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
 
+typedef NSString MADSafeQueryField;
+
 extern NSString * const MADSqlTextFromPart;
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
@@ -60,8 +62,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-+ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
++ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
 - (NSString *)selectPart;

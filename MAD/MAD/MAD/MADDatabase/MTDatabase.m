@@ -99,17 +99,18 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return nil;
 }
 
-+ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
++ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     id safeQueryFieldName = [[NSString alloc] initWithFormat:@"%@.%@", tableName, fieldName];
     return safeQueryFieldName;
 }
 
-- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [MTDatabase safeQueryField:fieldName andTable:tableName];
+- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [MTDatabase newSafeQueryField:fieldName andTable:tableName];
 }
 
 - (NSString *)safeIdentifier:(NSString *)s {
-    return s;
+    id result = s.copy;
+    return result;
 }
 
 - (void *)databaseHandle {
@@ -184,7 +185,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString *safeField = [self safeQueryField: fieldName andTable: tableName];
+    MADSafeQueryField *safeField = [self newSafeQueryField: fieldName andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
     NSString *safeTable = [self safeIdentifier:tableName];

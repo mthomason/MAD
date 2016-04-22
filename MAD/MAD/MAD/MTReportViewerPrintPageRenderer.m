@@ -434,9 +434,10 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                 MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
                                                                                                              type:item.getType
                                                                                                             frame:elementCanvasRect];
-                [rowRepresentation addLine:line];
                 line.elementOffset = *(offsetElement);
                 (*(offsetElement))++;
+
+                [rowRepresentation addLine:line];
                 
                 //}
             }
@@ -589,7 +590,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     NSString *drawingObject;
     NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
     if (rowData != nil) {
-        NSString *tableFieldKey = [database safeQueryField: item.referencesQueryField.databaseSchemaField.name
+        MADSafeQueryField *tableFieldKey = [database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                   andTable: item.referencesQueryField.inQueryTable.queryAlias];
         NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.unsignedIntegerValue
                                       forValue:rowData[tableFieldKey]];
@@ -610,9 +611,9 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 - (MTBarcode *)documentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
     NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
     
-    NSString *tableFieldKey1 = [database safeQueryField: item.referencesField1.databaseSchemaField.name
+    MADSafeQueryField *tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name
                                                andTable: item.referencesField1.inQueryTable.queryAlias];
-    NSString *tableFieldKey2 = [database safeQueryField: item.referencesField2.databaseSchemaField.name
+    MADSafeQueryField *tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
                                                andTable: item.referencesField2.inQueryTable.queryAlias];
     NSString *input1 = [self inputForField:item.referencesField1 forDocumentObject:item.parentObjectBarcode value:rowData[tableFieldKey1]];
     NSString *input2 = [self inputForField:item.referencesField2 forDocumentObject:item.parentObjectBarcode value:rowData[tableFieldKey2]];
@@ -633,10 +634,25 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     }
 }
 
-- (id)drawingObjectForDatabase:(MTDatabase *)database
-                     pageIndex:(NSUInteger)pageIndex
-                groupLevelKeys:(NSArray *)groupLevelKeys
-                   detailRowId:(NSNumber *)detailRowId
+static inline NSRange MADRangeToGroup(NSNumber *groupNumber);
+static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
+    return NSMakeRange(0, groupNumber.unsignedIntegerValue + 1);
+}
+
+- (NSArray *)dataForAggregateGroupByTypeSection:(NSNumber *)groupNumber
+                                 groupLevelKeys:(NSArray *)groupLevelKeys {
+    NSArray <__kindof NSDictionary *> *dataForGroup;
+    if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
+        dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
+    } else {
+        dataForGroup = @[];
+    }
+    return dataForGroup;
+}
+
+- (id)drawingObjectForDatabase:(MTDatabase *)database pageIndex:(NSUInteger)pageIndex
+                groupLevelKeys:(NSArray *)groupLevelKeys detailRowId:(NSNumber *)detailRowId
                        andItem:(RptqDocumentObject *)item {
 
     id drawingObject = nil;
@@ -644,41 +660,54 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
             
         case MTDocumentObjectTypeAggregate: {
             
-            NSString *fieldKey = [database safeQueryField: item.isAggregate.aggregateField.databaseSchemaField.name
-                                                 andTable: item.isAggregate.aggregateField.inQueryTable.queryAlias];
+            RptqDocumentObjectAggregate *isAggregate = item.isAggregate;
+            RptqQueryField *aggregateField = isAggregate.aggregateField;
+            RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
+            
+            NSString *queryAlias = [[NSString alloc] initWithString:inQueryTable.queryAlias];
+            MADSafeQueryField *fieldKey = [database newSafeQueryField: aggregateField.databaseSchemaField.name
+                                                             andTable: inQueryTable.queryAlias];
             
             NSArray *groupKeys;
-            if (item.isAggregate.groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
-                groupKeys = [groupLevelKeys subarrayWithRange: NSMakeRange(0, item.isAggregate.groupNumber.unsignedIntegerValue + 1)];
+            
+            NSNumber *groupNumber = isAggregate.groupNumber;
+            if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+                groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
             }
             
-            MTDataType aggregateType = item.isAggregate.aggregateField.databaseSchemaField.dataType.unsignedIntegerValue;
+            RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
+            MTDataType aggregateType = databaseSchemaField.dataType.unsignedIntegerValue;
             
-            BOOL calculateInMemory = item.isAggregate.function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||
-                                     item.isAggregate.function.unsignedIntegerValue == MTAggregateFunctionTypeLast;
+            NSNumber * __weak function = isAggregate.function;
+            BOOL calculateInMemory = function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||
+                                     function.unsignedIntegerValue == MTAggregateFunctionTypeLast;
             
             id aggregateResult;
             if (calculateInMemory == NO) {
                 
-                aggregateResult = [self resultsForAggregateType: item.isAggregate.groupType.unsignedIntegerValue
-                                                                 function: item.isAggregate.function.unsignedIntegerValue
-                                                                 fieldKey: fieldKey
-                                                                groupKeys: groupKeys
-                                                                   rowids: [self.reportFormatter rowidsForPage:pageIndex]];
+                NSNumber * __weak groupType = isAggregate.groupType;
+                MADIndexArray *rowIdsForPage = [self.reportFormatter rowidsForPage:pageIndex];
+                aggregateResult = [self resultsForAggregateType: groupType.unsignedIntegerValue
+                                                       function: function.unsignedIntegerValue
+                                                       fieldKey: fieldKey
+                                                      groupKeys: groupKeys
+                                                         rowids: rowIdsForPage];
                 
             } else {    //Handle first and last
                 
-                NSArray *dataForGroup = nil;
+                NSArray <__kindof NSDictionary *> *dataForGroup = nil;
                 NSDictionary *dataOfInterest = nil;
                 
                 switch (item.isAggregate.groupType.unsignedIntegerValue) {
                     case MTAggregateGroupByTypeSection: {
-                        if (item.isAggregate.groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
-                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: NSMakeRange(0, item.isAggregate.groupNumber.unsignedIntegerValue + 1)];
+                    
+                        if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
                             dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
                         } else {
                             dataForGroup = @[];
                         }
+                        
                         switch (item.isAggregate.function.unsignedIntegerValue) {
                             case MTAggregateFunctionTypeFirst:
                                 dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup[0] :

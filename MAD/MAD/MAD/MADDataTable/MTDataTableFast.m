@@ -26,6 +26,7 @@
 #import "MTQueryCacheVacuum.h"
 #import "MTQueryCacheDropTable.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
+#import "MTQuerySelectItemsForGroup.h"
 
 @interface MTDataTableFast ()
 
@@ -619,7 +620,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     if (success) {  //Expect success to == NO in normal working conditions.
         success = sqlite3_step(statement) == SQLITE_ROW;
         if (success) {
-            result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
+            result = [self newCurrentObject:statement];
             
             MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
             self.lastDataForCacheId = lastDataForCacheId;
@@ -653,30 +654,35 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 // FIXME: Return error handler... remove credentals
-- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
-
+- (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
+    
     [self initalizeGroupKeys];
 
-    NSMutableArray * results = [[NSMutableArray alloc] init];
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName];
     NSArray *sortDescriptors = self.sortDescriptors;
     NSDictionary *columns = self.columns;
     NSArray *columnKeys = self.columnKeys;
-    NSDictionary *querySelect = @{
-                                  @(MTQuerySelectFieldKeys) : columnKeys,
-                                  @(MTQuerySelectTableName) : tableName,
-                                  @(MTQuerySelectPredicates) : whereClause,
-                                  @(MTQuerySelectSortDescriptors) : sortDescriptors,
-                                  @(MTQuerySelectFieldDescriptors) : columns
-                                  
-                                  };
-    MTQuery * query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
+    
+    NSNumber *selectFieldKeys = [[NSNumber alloc] initWithShort: MTQuerySelectFieldKeys];
+    NSNumber *selectTableName = [[NSNumber alloc] initWithShort: MTQuerySelectTableName];
+    NSNumber *selectPredicates = [[NSNumber alloc] initWithShort: MTQuerySelectPredicates];
+    NSNumber *selectSortDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectSortDescriptors];
+    NSNumber *selectFieldDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectFieldDescriptors];
+
+    id querySelect = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                        columnKeys, selectFieldKeys,
+                                                        tableName, selectTableName,
+                                                        whereClause, selectPredicates,
+                                                        sortDescriptors, selectSortDescriptors,
+                                                        columns, selectFieldDescriptors, nil];
+    
+    MTQuery * query = [[MTQuerySelectItemsForGroup alloc] initWithObject:querySelect];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
     
-    const char *sqlc = [sql UTF8String];
+    const char *sqlc = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlc);
     sqlite3 *databaseHandle = [self.databaseForSelects databaseHandle];
     
@@ -687,10 +693,11 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding];
     }
 
+    NSMutableArray <__kindof NSDictionary *> *results = [[NSMutableArray alloc] init];
     if (success) {
         while (sqlite3_step(statement) == SQLITE_ROW) {
             @autoreleasepool {
-                NSDictionary *result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
+                NSDictionary *result = [self newCurrentObject:statement];
                 [results addObject:result];
             }
         }
@@ -721,7 +728,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         if (success) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 @autoreleasepool {
-                    NSDictionary * __weak currentObject = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
+                    NSDictionary *currentObject = [self newCurrentObject:statement];
                     [results addObject:currentObject];
                 }
             }
@@ -947,7 +954,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnIndex];
 }
 
-- (id)currentObject:(sqlite3_stmt *)statement {
+- (id)newCurrentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     for (NSString *key in self.columnKeys) {

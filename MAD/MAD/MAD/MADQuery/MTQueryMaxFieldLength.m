@@ -71,7 +71,7 @@
 
             NSString *fieldAliasSafe = [self.database fieldAliasForField:field.name
                                                               andTableName:field.inTable.name];
-            NSString *safeFieldName = [self.database safeQueryField:field.name
+            MADSafeQueryField *safeFieldName = [self.database newSafeQueryField:field.name
                                                              andTable:field.inTable.name];
             [self fields][fieldAliasSafe] = dbField;
             [[self fieldKeys] addObject:fieldAliasSafe];

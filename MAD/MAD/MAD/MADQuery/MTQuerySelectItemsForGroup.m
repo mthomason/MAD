@@ -26,30 +26,37 @@
 @implementation MTQuerySelectItemsForGroup
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSString *tableName = [NSString stringWithString:object[@(MTQuerySelectTableName)]];
-        [self setTableName:tableName];
+        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQuerySelectTableName];
+        NSString *tableName = object[keyTableName];
+        self.tableName = tableName;
         
-        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
-        [self setSortDescriptors:sortDescriptors];
+        NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectSortDescriptors];
+        NSArray *sortDescriptors = object[keySortDescriptors];
+        self.sortDescriptors = sortDescriptors;
         
-        NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:object[@(MTQuerySelectFieldKeys)]];
-        [columnKeys addObject:MADIdentifierROWID];
-        [self setColumnKeys:columnKeys];
+        NSNumber *keyFieldKeys = [[NSNumber alloc] initWithShort: MTQuerySelectFieldKeys];
+        NSArray *columnKeys = object[keyFieldKeys];
         
-        NSArray *whereClause = [NSArray arrayWithArray:object[@(MTQuerySelectPredicates)]];
-        [self setWhereClause:whereClause];
+        NSMutableArray *mutableColumnKeys = [[NSMutableArray alloc] initWithArray: columnKeys];
+        [mutableColumnKeys addObject:MADIdentifierROWID];
+        self.columnKeys = mutableColumnKeys;
         
-        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
+        NSNumber *keyPredicates = [[NSNumber alloc] initWithShort: MTQuerySelectPredicates];
+        NSArray *whereClause = object[keyPredicates];
+        self.whereClause = whereClause;
+        
+        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectFieldDescriptors];
+        NSDictionary *columns = object[keyFieldDescriptors];
+        NSMutableDictionary *mutableColumns = [NSMutableDictionary dictionaryWithDictionary:columns];
         
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         rowid.type = MTDataTypeInteger;
-        columns[MADIdentifierROWID] = rowid;
-        [self setColumns:columns];
+        mutableColumns[MADIdentifierROWID] = rowid;
+        self.columns = mutableColumns;
   
     }
     return self;

@@ -211,7 +211,7 @@
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
             
-            leftValue = [self.dataDelegate.database safeQueryField: leftField.databaseSchemaField.name
+            leftValue = [self.dataDelegate.database newSafeQueryField: leftField.databaseSchemaField.name
                                                           andTable: leftField.inQueryTable.queryAlias];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
@@ -224,7 +224,7 @@
             
             RptqQueryField *rightField = [queryPredicate hasRightField];
             
-            rightValue = [self.dataDelegate.database safeQueryField: rightField.databaseSchemaField.name
+            rightValue = [self.dataDelegate.database newSafeQueryField: rightField.databaseSchemaField.name
                                                            andTable: rightField.inQueryTable.queryAlias];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
@@ -511,13 +511,13 @@
                                 
                                 RptqQueryField *leftField = queryLink.hasLeftField;
                                 if (leftField) {
-                                    NSString *s = [self.dataDelegate.database safeQueryField: leftField.databaseSchemaField.name
+                                    NSString *s = [self.dataDelegate.database newSafeQueryField: leftField.databaseSchemaField.name
                                                                                     andTable: leftField.inQueryTable.queryAlias];
                                     [result appendString: s];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    NSString *s = [self.dataDelegate.database safeQueryField: rightField.databaseSchemaField.name
+                                    NSString *s = [self.dataDelegate.database newSafeQueryField: rightField.databaseSchemaField.name
                                                                                     andTable: rightField.inQueryTable.queryAlias];
                                     [result appendString: s];
                                 }
