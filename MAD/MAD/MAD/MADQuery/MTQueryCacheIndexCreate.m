@@ -59,20 +59,26 @@
     NSMutableString *sql = [[NSMutableString alloc] init];
 
     if (self.sortDescriptors.count > 0) {
-        NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ ", [self indexName], [self tableName]];
-        
+
+        NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ ", self.indexName, self.tableName];
         [sql appendString: queryCreateIndexFirstPart];
-        if ([[self sortDescriptors] count] > 0) {
+        
+        if (self.sortDescriptors.count > 0) {
+        
             [sql appendString:@" ("];
+
             NSUInteger sortCounter = 0;
             for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
 
                 if (sortCounter != 0) [sql appendString:@", "];
-                MADDataColumn *column = self.columns[sortDescriptor.key];
+                
+                NSString * __weak keySortDescriptor = sortDescriptor.key;
+                MADDataColumn * __weak column = self.columns[keySortDescriptor];
+                
                 NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: column.nativeType
-                                                                         ascending: sortDescriptor.ascending];
-                [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
+                MADSqlite3SortDescription *sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: column.nativeType
+                                                                                                           ascending: sortDescriptor.ascending];
+                [sql appendFormat:@"%@ %@", keySortDescriptor, sortDirection];
                 sortCounter++;
             }
             [sql appendString:@" )"];

@@ -238,11 +238,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                        columnName:(NSString *)columnName
       createTable:(BOOL)create unique:(BOOL)unique {
     
+    NSString *columnAffinity = [self.database newNativeTypeForDataType:column.type];
     MTQueryCacheAddColumn *queryCacheAddColumn =
         [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
                                              createTable:create ? true : false
-                                        uniqueColumnHack:unique ? true : false];
-    queryCacheAddColumn.database = self.database;
+                                        uniqueColumnHack:unique ? true : false
+                                        columnAffinity:columnAffinity];
     bool success = false;
     NSError * __autoreleasing error = NULL;
     success = [self.database executeQuery:queryCacheAddColumn withError:&error];
@@ -260,10 +261,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (id)objectForData:(NSData *)data {
     NSError * __autoreleasing * error = NULL;
     static const NSPropertyListReadOptions options = NSPropertyListImmutable;
-    id propertyList = [NSPropertyListSerialization propertyListWithData: data
-                                                                options: options
-                                                                 format: nil
-                                                                  error: error];
+    id propertyList = [NSPropertyListSerialization propertyListWithData: data options: options
+                                                                 format: nil error: error];
     NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
     return propertyList;
 }
@@ -352,7 +351,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)removeAllObjects {
     [self setLastObjectSelected:nil];
     self.numberOrRows = 0;
-    NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:MTArrayCachedTableName];
+    NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     

@@ -15,28 +15,16 @@
 #import "MTDatabase.h"
 
 @interface MTQueryCacheVacuum ()
-
-@property (nonatomic, strong) MTDatabaseConnection *connection;
-
+    @property (nonatomic, strong) MTDatabaseConnection *connection;
 @end
 
 @implementation MTQueryCacheVacuum
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
-        
-        NSNumber *keyMTQueryCacheDeleteAllFromTableConnection = @(MTQueryCacheVacuumConnection);
-        
-        MTDatabaseConnection *connection = object[keyMTQueryCacheDeleteAllFromTableConnection];
-        [self setConnection:connection];
-        
-        MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
-        [self setDatabase:db];
-        [self setQueryObject:object];
-        
+
+    if (self = [super init]) {
+        NSAssert([object isKindOfClass:[NSDictionary class]],
+                        @"MTQueryCacheVacuum expects NSDictionary.");
     }
     return self;
 }

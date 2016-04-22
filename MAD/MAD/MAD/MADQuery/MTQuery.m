@@ -298,8 +298,8 @@ NSString * const MADIdentifierROWID         = @"ROWID";
                 dataColumn = self.columns[[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeType
-                                                                     ascending: sortDescriptor.ascending];
+            MADSqlite3SortDescription *sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
+                                                                                                       ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
         }

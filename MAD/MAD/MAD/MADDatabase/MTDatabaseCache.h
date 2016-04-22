@@ -16,7 +16,7 @@
 
     - (void *)databaseHandle;
     - (BOOL)tableExist:(NSString *)tablename;
-    - (NSString *)nativeTypeForDataType:(MTDataType)dataType;
+    - (NSString *)newNativeTypeForDataType:(MTDataType)dataType;
     - (void)beginBulkInsert;
     - (void)endBulkInsert;
 

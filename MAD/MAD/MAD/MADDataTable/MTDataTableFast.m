@@ -334,11 +334,14 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
     
     bool success = false;
     NSError * __autoreleasing errorQuery = NULL;
+
+    NSString *columnAffinity = [_databaseForInserts newNativeTypeForDataType:column.type];
     MTQueryCache *query = [[MTQueryCacheAddColumn alloc] initWithTableName:table
                                                                 columnName:columnName
                                                                     column:column
                                                                createTable:create ? true : false
-                                                          uniqueColumnHack:unique ? true : false];
+                                                          uniqueColumnHack:unique ? true : false
+                                                            columnAffinity: columnAffinity];
     query.database = _databaseForInserts;
     success = [_databaseForInserts executeQuery:query withError:&errorQuery];
     NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts.databaseHandle), __PRETTY_FUNCTION__);

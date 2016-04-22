@@ -72,13 +72,14 @@ typedef NS_ENUM(short, MTQueryCacheFullParameters) {
     MTQueryCacheFullQuerySchema,
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheAddColumnParameters) {
+typedef NS_ENUM(short, MTQueryCacheAddColumnParameters) {
 	MTQueryCacheAddColumnDataColumn,
     MTQueryCacheAddColumnTableName,
     MTQueryCacheAddColumnUrl,
     MTQueryCacheAddColumnColumnName,
     MTQueryCacheAddColumnCreateTable,
-    MTQueryCacheAddColumnUnique
+    MTQueryCacheAddColumnUnique,
+    MTQueryCacheAddColumnAffinity
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheAddRowParameters) {
@@ -110,7 +111,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheDropTableParameters) {
     MTQueryCacheDropTableTableName
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheVacuumParameters) {
+typedef NS_ENUM(short, MTQueryCacheVacuumParameters) {
     MTQueryCacheVacuumConnection,
 };
 

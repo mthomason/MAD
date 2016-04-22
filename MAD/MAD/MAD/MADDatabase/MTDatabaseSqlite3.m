@@ -229,9 +229,11 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-+ (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending {
++ (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MTDataType)columnType
+                                                            ascending:(BOOL)ascending {
     NSString *sortDescription = nil;
-    if ([[MTDatabaseSqlite3 nativeTypeForDataType:columnType] isEqualToString:@"TEXT"]) {
+    NSString *nativeTypeDescription = [MTDatabaseSqlite3 newNativeTypeForDataType:columnType];
+    if ([nativeTypeDescription isEqualToString:@"TEXT"]) {
         sortDescription = ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
     } else {
         sortDescription = ascending ? @"ASC" : @"DESC";;
@@ -286,7 +288,7 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-+ (NSString *)nativeTypeForDataType:(MTDataType)dataType {
++ (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
     NSString *columnAffinity;
     switch (dataType) {
         case MTDataTypeBit:
@@ -330,8 +332,8 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
-    return [MTDatabaseSqlite3 nativeTypeForDataType:dataType];
+- (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
+    return [MTDatabaseSqlite3 newNativeTypeForDataType:dataType];
 }
 
 - (sqlite3_stmt *)statementForQueryInTransactionSet:(bool)partOfTransactionSet andStatement:(sqlite3_stmt *)statement {

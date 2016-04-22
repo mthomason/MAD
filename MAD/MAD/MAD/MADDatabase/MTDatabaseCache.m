@@ -42,7 +42,7 @@
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+- (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
     return nil;
 }
 

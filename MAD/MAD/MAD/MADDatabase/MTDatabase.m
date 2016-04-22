@@ -197,7 +197,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                     safeFieldAlias, MADSqlTextFromPart, safeTable];
 }
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+- (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
     return @"";
 }
 
@@ -207,29 +207,40 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (void)closeProcess:(id)process {}
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+   intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
+   NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn
+                                                   error:(NSError *__autoreleasing *)error {
+    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
+    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 
-- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+- (void)getTablesFromConnection:(id)process
+                     completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
+    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 
 - (void)enumerateTablesFromConnection:(id)dbconn
                            usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
+    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
+    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 

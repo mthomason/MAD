@@ -70,7 +70,8 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 
-        NSString *sqlSpeedSortingDescription = [MTDatabaseSqlite3 sortDescForColumnType:dataColumn.nativeType ascending:self.accending];
+        MADSqlite3SortDescription *sqlSpeedSortingDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType:dataColumn.nativeType
+                                                                                                                ascending:self.accending];
         NSString *sqlSpeedSort = [NSString stringWithString:sqlSpeedSortingDescription];
         self.sqlSpeedSorting = sqlSpeedSort;
         

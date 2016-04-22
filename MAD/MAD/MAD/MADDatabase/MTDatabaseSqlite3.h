@@ -15,6 +15,7 @@
 @class MTDatabaseDataBinding;
 
 typedef struct sqlite3_stmt sqlite3_stmt;
+typedef NSString MADSqlite3SortDescription;
 
 @interface MTDatabaseSqlite3 : MTDatabaseCache
 
@@ -38,8 +39,9 @@ typedef struct sqlite3_stmt sqlite3_stmt;
     int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
     int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
-    + (NSString *)nativeTypeForDataType:(MTDataType)dataType;
-    + (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending;
+    + (NSString *)newNativeTypeForDataType:(MTDataType)dataType;
+    + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MTDataType)columnType
+                                                                ascending:(BOOL)ascending;
 
     + (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber;
     + (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type;
