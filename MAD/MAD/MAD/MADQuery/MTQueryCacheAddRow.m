@@ -150,7 +150,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     }
     self.binaryBindings = binaryBindings;
     
-    NSString * __autoreleasing result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, self.sqlPreProcessColumnNames, values];
+    NSString *result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, self.sqlPreProcessColumnNames, values];
     return result;
 }
 

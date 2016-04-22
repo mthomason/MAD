@@ -31,24 +31,24 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
         
-        NSNumber *keyIndexName = @(MTQueryCacheIndexCreateIndexName);
-        NSNumber *keyTableName = @(MTQueryCacheIndexCreateTableName);
-        NSNumber *keySortDescriptors = @(MTQueryCacheIndexCreateSortDescriptors);
+        NSNumber *keyIndexName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateIndexName];
         
         NSString *indexName = object[keyIndexName];
-        [self setIndexName:indexName];
+        self.indexName = indexName;
 
+        NSNumber *keyTableName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateTableName];
         NSString *tableName = object[keyTableName];
-        [self setTableName:tableName];
+        self.tableName = tableName;
         
+        NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateSortDescriptors];
         NSArray *sortDescriptors = object[keySortDescriptors];
-        [self setSortDescriptors:sortDescriptors];
+        self.sortDescriptors = sortDescriptors;
         
-        NSNumber *keyColumns = @(MTQueryCacheIndexCreateColumns);
+        NSNumber *keyColumns = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateColumns];
         NSDictionary *columns = object[keyColumns];
-        [self setColumns:columns];
+        self.columns = columns;
         
-        [self setQueryObject:object];
+        self.queryObject = object;
         
     }
     return self;
@@ -58,7 +58,7 @@
 
     NSMutableString *sql = [[NSMutableString alloc] init];
 
-    if ([[self sortDescriptors] count] > 0) {
+    if (self.sortDescriptors.count > 0) {
         NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ ", [self indexName], [self tableName]];
         
         [sql appendString: queryCreateIndexFirstPart];
@@ -66,8 +66,8 @@
             [sql appendString:@" ("];
             NSUInteger sortCounter = 0;
             for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
+
                 if (sortCounter != 0) [sql appendString:@", "];
-                
                 MADDataColumn *column = self.columns[sortDescriptor.key];
                 NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
                 NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: column.nativeType
@@ -82,8 +82,6 @@
     return sql;
 }
 
-- (BOOL)returnsResults {
-    return NO;
-}
+- (BOOL)returnsResults { return NO; }
 
 @end

@@ -20,8 +20,8 @@
 
 @interface MADDataColumn ()
 
-@property (nonatomic, copy, readwrite) NSString *identifier;
-@property (nonatomic, strong) NSMutableArray *column;
+    @property (nonatomic, copy, readwrite) NSString *identifier;
+    @property (nonatomic, strong) NSMutableArray *column;
 
 @end
 

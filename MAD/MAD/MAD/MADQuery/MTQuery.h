@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheIndexDropParameters) {
     MTQueryCacheIndexDropIndexName,
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheIndexCreateParameters) {
+typedef NS_ENUM(short, MTQueryCacheIndexCreateParameters) {
     MTQueryCacheIndexCreateIndexName,
     MTQueryCacheIndexCreateTableName,
     MTQueryCacheIndexCreateSortDescriptors,
