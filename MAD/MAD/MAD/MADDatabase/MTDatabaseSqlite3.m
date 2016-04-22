@@ -763,7 +763,7 @@ void sqliteLog(void *foo, const char* statement) {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
         for (MTDatabaseTable *table in tables) {
-            NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
+            NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
             NSError * __autoreleasing error = NULL;
             bool success = false;

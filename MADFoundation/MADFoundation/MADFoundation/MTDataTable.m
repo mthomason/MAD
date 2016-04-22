@@ -156,9 +156,10 @@ static NSString * const StringEmpty = @"";
 
 + (NSString *)keyUrl { return @"url"; }
 
-- (NSString *)filenameMDCache {
-    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingPathExtension:@"mdcache"];
+- (NSString *)newFilenameMDCache {
+    NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
+    NSString *result = [tag stringByAppendingPathExtension:@"mdcache"];
+    return result;
 }
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {

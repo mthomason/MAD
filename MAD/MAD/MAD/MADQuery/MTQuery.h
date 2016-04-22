@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAggregateFunctionParamaters) {
     
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
+typedef NS_ENUM(short, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersLimit,
     MTQueryCacheSelectLimitOffsetParamatersOffset,
     MTQueryCacheSelectLimitOffsetParamatersTableNames,
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {
+typedef NS_ENUM(short, MTQueryCacheFullParameters) {
 	MTQueryCacheFullReportName,
     MTQueryCacheFullQuerySchema,
 };
@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheIndexCreateParameters) {
     MTQueryCacheIndexCreateColumns,
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheDeleteAllFromTableParameters) {
+typedef NS_ENUM(short, MTQueryCacheDeleteAllFromTableParameters) {
     MTQueryCacheDeleteAllFromTableConnection,
     MTQueryCacheDeleteAllFromTableTableName
 };
@@ -132,6 +132,8 @@ typedef NS_ENUM(short, MTQuerySelectParameters) {
     MTQuerySelectSortAccending,
     MTQuerySelectColumns
 };
+
+typedef NSDictionary MADQueryDefinition;
 
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
@@ -184,11 +186,16 @@ extern NSString * const MADIdentifierROWID;
 - (BOOL)returnsResults;
 - (BOOL)partOfTransactionSet;
 
-+ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
-+ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-+ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
++ (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query;
++ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                       withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
+                                       dropRowid:(BOOL)droprowid;
++ (MADQueryDefinition *)newQueryDefinitionSelect:(NSArray *)columnKeys
+                                       tableName:(NSString *)tableName
+                                 sortDescriptors:(NSArray *)sortDescriptors;
++ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                       withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
++ (MADQueryDefinition *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

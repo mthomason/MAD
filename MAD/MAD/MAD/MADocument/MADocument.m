@@ -182,16 +182,18 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)urlDataTableCache {
-    NSString *cacheName = [self.mainDataTable filenameMDCache];
-    return [self cacheUrlForFilename:cacheName];
+    NSString *cacheName = [self.mainDataTable newFilenameMDCache];
+    return [self newUrlCacheForFilename:cacheName];
 }
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = [self filename];
     return [MADocument cacheFilesDirectoryForFilename:filename];
 }
 
-- (NSURL *)cacheUrlForFilename:(NSString *)filename {
-    return [self.cachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+- (NSURL *)newUrlCacheForFilename:(NSString *)filename {
+    NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent: filename
+                                                                 isDirectory: NO];
+    return cacheUrl;
 }
 
 #pragma mark - Property Overrides
@@ -902,9 +904,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)initalizeMainQuery:(RptqDocument *)document {
     RptqDatabase *database = [document defaultDatabase];
     if (database) {
+    
         RptqQuery *rquery = [database defaultQuery];
-        
-        NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
+        NSDictionary *parameters = [MTQuery newQueryDefinitionFull:rquery];
         NSMutableDictionary *extraParameters = parameters.mutableCopy;
         NSNumber *queryLimit = @(self.limitResultsDesignMode ? 50 : NSNotFound);
         extraParameters[@"MADQueryLimit"] = queryLimit;
@@ -919,24 +921,27 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)initalizeMainDataTable {
 //CACHEFIX
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypePhysical);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSString *filename = self.filename;
-    NSNumber *objectIdV =  @(filename.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
+    NSNumber *objectIdV =  [[NSNumber alloc] initWithUnsignedInteger: filename.hash];
+    NSNumber *type = [[NSNumber alloc] initWithShort: MTDataTableTypePhysical];
+    
+    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
+    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                    type, typeKey, objectIdV, objectIdKey, nil];
     MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable newDataTableWithDefinition:parameters];
     datatable.cacheDelegate = self;
-    NSString *cacheName = [datatable filenameMDCache];
-    NSURL *cacheUrl = [self cacheUrlForFilename:cacheName];
+    NSString *cacheName = [datatable newFilenameMDCache];
+    NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
     self.urlDataTableCache = cacheUrl;
     [datatable loadFromCacheWithUrl:cacheUrl];
     self.mainDataTable = datatable;
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery layout: self
-                                                                             options: MTReportFormatterOptionsNone];
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery
+                                                                                 layout: self
+                                                                                options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;

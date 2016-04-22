@@ -578,11 +578,11 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery queryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:self.sortDescriptors];
+    return [MTQuery newQueryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:self.sortDescriptors];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
-    return [MTQuery queryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
+    return [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
 // FIXME: Return error handler... remove credentals
@@ -713,7 +713,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheSelectLimitOffset
+                                                 object: queryDefination];
 
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:limit];
     if (row != NSNotFound && limit > 0) {

@@ -13,12 +13,12 @@
 #import <Foundation/NSEnumerator.h>
 
 
-typedef NS_ENUM(NSUInteger, MTDataTableType) {
+typedef NS_ENUM(short, MTDataTableType) {
 	MTDataTableTypeVirtual,
     MTDataTableTypePhysical,
 };
 
-typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
+typedef NS_ENUM(short, MTDataTableParameters) {
     MTDataTableTypeOfTable,
 	MTDataTableObjectId,
     MTDataTableNumberOfColumns,
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 
     - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
 
-    - (NSString *)filenameMDCache;
+    - (NSString *)newFilenameMDCache;
 
 @end
 
