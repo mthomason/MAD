@@ -10,15 +10,57 @@
 #import <Foundation/NSException.h>
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
+static inline const char *functionName(MTAggregateFunctionType functionType);
+static inline const char *functionName(MTAggregateFunctionType functionType) {
+    
+    const char *result;
+    switch (functionType) {
+            
+        case MTAggregateFunctionTypeCount:
+            result = "COUNT";
+            break;
+            
+        case MTAggregateFunctionTypeFirst:
+            result = "FIRST";
+            break;
+            
+        case MTAggregateFunctionTypeLast:
+            result = "LAST";
+            break;
+            
+        case MTAggregateFunctionTypeMax:
+            result = "MAX";
+            break;
+            
+        case MTAggregateFunctionTypeMean:
+            result = "AVG";
+            break;
+            
+        case MTAggregateFunctionTypeMin:
+            result = "MIN";
+            break;
+            
+        case MTAggregateFunctionTypeSum:
+            result = "SUM";
+            break;
+            
+        default:
+            result = "SUM";
+            break;
+            
+    }
+    return result;
+}
+
 @interface MTQueryCacheAggregateFunction ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSString *columnName;
-@property (nonatomic, strong) NSString *columnKey;
-@property (nonatomic, strong) NSArray *whereClause;
-@property (nonatomic, strong) NSArray *rowids;
-@property (nonatomic, assign) MTAggregateGroupByType groupByType;
-@property (nonatomic, assign) MTAggregateFunctionType functionType;
+    @property (nonatomic, strong) NSString *tableName;
+    @property (nonatomic, strong) NSString *columnName;
+    @property (nonatomic, strong) NSString *columnKey;
+    @property (nonatomic, strong) NSArray *whereClause;
+    @property (nonatomic, strong) NSArray *rowids;
+    @property (nonatomic, assign) MTAggregateGroupByType groupByType;
+    @property (nonatomic, assign) MTAggregateFunctionType functionType;
 
 @end
 
@@ -74,48 +116,6 @@
     }
 
     return sql;
-}
-
-const char *functionName(MTAggregateFunctionType functionType);
-const char *functionName(MTAggregateFunctionType functionType) {
-    
-    const char *result;
-    switch (functionType) {
-
-        case MTAggregateFunctionTypeCount:
-            result = "COUNT";
-            break;
-
-        case MTAggregateFunctionTypeFirst:
-            result = "FIRST";
-            break;
-
-        case MTAggregateFunctionTypeLast:
-            result = "LAST";
-            break;
-
-        case MTAggregateFunctionTypeMax:
-            result = "MAX";
-            break;
-
-        case MTAggregateFunctionTypeMean:
-            result = "AVG";
-            break;
-
-        case MTAggregateFunctionTypeMin:
-            result = "MIN";
-            break;
-    
-        case MTAggregateFunctionTypeSum:
-            result = "SUM";
-            break;
-
-        default:
-            result = "SUM";
-            break;
-
-    }
-    return result;
 }
 
 @end

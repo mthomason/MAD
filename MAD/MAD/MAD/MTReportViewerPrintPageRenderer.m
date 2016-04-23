@@ -701,12 +701,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                 switch (item.isAggregate.groupType.unsignedIntegerValue) {
                     case MTAggregateGroupByTypeSection: {
                     
-                        if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
-                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
-                            dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
-                        } else {
-                            dataForGroup = @[];
-                        }
+                        dataForGroup = [self dataForAggregateGroupByTypeSection:groupNumber groupLevelKeys:groupLevelKeys];
                         
                         switch (item.isAggregate.function.unsignedIntegerValue) {
                             case MTAggregateFunctionTypeFirst:

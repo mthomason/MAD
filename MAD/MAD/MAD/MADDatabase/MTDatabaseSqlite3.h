@@ -19,7 +19,7 @@ typedef NSString MADSqlite3SortDescription;
 
 @interface MTDatabaseSqlite3 : MTDatabaseCache
 
-@property (nonatomic, readwrite, assign) sqlite3 *database;
+    @property (nonatomic, readwrite, assign) sqlite3 *database;
 
     - (void *)databaseHandle;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;

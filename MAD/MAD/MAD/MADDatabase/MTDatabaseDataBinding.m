@@ -15,6 +15,53 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSString.h>
 
+static inline MTDataType DataTypeLimited(MTDataType expandedDataType) {
+    switch (expandedDataType) {
+        case MTDataTypeBit:
+        case MTDataTypeInteger:
+        case MTDataTypeShort:
+        case MTDataTypeLong:
+        case MTDataTypeLongLong:
+        case MTDataTypeInt24:
+        case MTDataTypeEnum: {
+            return MTDataTypeInteger;
+            break;
+        }
+        case MTDataTypeSet:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeString:
+        case MTDataTypeVarChar:
+        case MTDataTypeGeometry: {
+            return MTDataTypeString;
+            break;
+        }
+        case MTDataTypeImage:
+        case MTDataTypeBlob: {
+            return MTDataTypeBlob;
+            break;
+        }
+        case MTDataTypeFloat: {
+            return MTDataTypeFloat;
+            break;
+        }
+        case MTDataTypeDouble:
+        case MTDataTypeDecimal:
+        case MTDataTypeNumber: {
+            return MTDataTypeDouble;
+            break;
+        }
+        case MTDataTypeUnknown:
+        default: {
+            return MTDataTypeUnknown;
+            break;
+        }
+    }
+}
+
 @interface MTDatabaseDataBinding ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -40,58 +87,19 @@
     return self;
 }
 
-- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSUInteger)fieldIndex value:(id)value {
+- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSUInteger)fieldIndex
+                           value:(id)value {
+
     if (self = [super init]) {
         
         if (value == nil || value == [NSNull null]) {
             datatype = MTDataTypeNull;
             value = [NSNull null];
         } else {
-            
-            switch (datatype) {
-                case MTDataTypeBit:
-                case MTDataTypeInteger:
-                case MTDataTypeShort:
-                case MTDataTypeLong:
-                case MTDataTypeLongLong:
-                case MTDataTypeInt24:
-                case MTDataTypeEnum: {
-                    datatype = MTDataTypeInteger;
-                    break;
-                }
-                case MTDataTypeSet:
-                case MTDataTypeTime:
-                case MTDataTypeTimeStamp:
-                case MTDataTypeYear:
-                case MTDataTypeDate:
-                case MTDataTypeDateTime:
-                case MTDataTypeString:
-                case MTDataTypeVarChar:
-                case MTDataTypeGeometry: {
-                    datatype = MTDataTypeString;
-                    break;
-                }
-                case MTDataTypeImage:
-                case MTDataTypeBlob: {
-                    datatype = MTDataTypeBlob;
-                    break;
-                }
-                case MTDataTypeFloat: {
-                    datatype = MTDataTypeFloat;
-                    break;
-                }
-                case MTDataTypeDouble:
-                case MTDataTypeDecimal:
-                case MTDataTypeNumber: {
-                    datatype = MTDataTypeDouble;
-                    break;
-                }
-                case MTDataTypeUnknown:
-                default: {
-                    value = [NSString stringWithFormat:@"%@", value];
-                    datatype = MTDataTypeString;
-                    break;
-                }
+            datatype = DataTypeLimited(datatype);
+            if (datatype == MTDataTypeUnknown) {
+                value = [NSString stringWithFormat:@"%@", value];
+                datatype = MTDataTypeString;
             }
         }
         self.datatype = datatype;

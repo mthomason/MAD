@@ -15,7 +15,8 @@
 
     @property (nonatomic, weak) NSArray *rowData;
 
-    - (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns andTableName:(NSString *)tablename;
+    - (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns
+                          andTableName:(NSString *)tablename forDatabase:(MTDatabase *)database;
 
 @end
 

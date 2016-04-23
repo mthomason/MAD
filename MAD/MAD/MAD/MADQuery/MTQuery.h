@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
 
 #pragma mark Types of specific paramamters accepted for each query
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheAggregateFunctionParamaters) {
+typedef NS_ENUM(short, MTQueryCacheAggregateFunctionParamaters) {
     MTQueryCacheAggregateFunctionParamatersTableName,
     MTQueryCacheAggregateFunctionParamatersGroupByType,
     MTQueryCacheAggregateFunctionParamatersRowids,
@@ -82,7 +82,7 @@ typedef NS_ENUM(short, MTQueryCacheAddColumnParameters) {
     MTQueryCacheAddColumnAffinity
 };
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheAddRowParameters) {
+typedef NS_ENUM(short, MTQueryCacheAddRowParameters) {
 	MTQueryCacheAddRowUrl,
     MTQueryCacheAddRowData,
     MTQueryCacheAddRowTableName,

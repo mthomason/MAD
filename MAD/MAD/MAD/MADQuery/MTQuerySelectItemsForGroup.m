@@ -67,7 +67,8 @@
     NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];
     NSUInteger columnCounter = 0;
     
-    for (NSString *key in [self columnKeys]) {
+    NSArray *columnKeys = self.columnKeys;
+    for (NSString *key in columnKeys) {
         
         if (columnCounter != 0) {
             [sql appendString:@", "];
@@ -75,9 +76,9 @@
         [sql appendFormat:@"\"%@\"", key];
         columnCounter++;
     }
-    [sql appendFormat:@" FROM %@", [self tableName]];
-    [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
-    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
+    [sql appendFormat:@" FROM %@", self.tableName];
+    [sql appendString:[self whereClauseWithParameters:self.whereClause]];
+    [sql appendString:[self orderByClauseWithSortDescriptors:self.sortDescriptors]];
 
     return sql;
 }

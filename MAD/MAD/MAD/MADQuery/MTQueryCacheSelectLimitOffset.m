@@ -70,8 +70,6 @@
         NSNumber *dropRowid = object[keyRowID];
         self.droprowid = dropRowid != nil ? dropRowid.boolValue : NO;
         
-        
-        
     }
     return self;
 }
@@ -123,8 +121,8 @@
             if (sortCounter != 0) [sql appendString:@", "];
             
             MADDataColumn *dataColumn = nil;
-            if ([self columns]) {
-                dataColumn = [self columns][sortDescriptor.key];
+            if (self.columns) {
+                dataColumn = self.columns[sortDescriptor.key];
             }
             MADSqlite3SortDescription *sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
                                                                                                          ascending: sortDescriptor.ascending];
@@ -146,17 +144,18 @@
             counter++;
         }
     }
-    
     return sql;
     
 }
 
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit {
-    return [[self sqlQuery] stringByAppendingFormat:@" LIMIT %ld ", (unsigned long)limit];
+    NSString *sqlQuery = [self sqlQuery];
+    return [sqlQuery stringByAppendingFormat:@" LIMIT %ld ", (unsigned long)limit];
 }
 
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
-    return [[self sqlQueryWithLimit:limit] stringByAppendingFormat:@" OFFSET %ld ", (unsigned long)offset];
+    NSString *sqlQueryWithLimit = [self sqlQueryWithLimit:limit];
+    return [sqlQueryWithLimit stringByAppendingFormat:@" OFFSET %ld ", (unsigned long)offset];
 }
 
 @end
