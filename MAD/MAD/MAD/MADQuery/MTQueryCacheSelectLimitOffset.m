@@ -12,11 +12,12 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <dispatch/dispatch.h>
 #import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectLimitOffset ()
 
-    @property (nonatomic, strong) NSString *tableName;
+    @property (nonatomic, copy) NSString *tableName;
     @property (nonatomic, strong) NSArray *columnKeys;
     @property (nonatomic, strong) NSArray *sortDesc;
 
@@ -46,8 +47,8 @@
         _offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
         
         NSNumber *keyTableNames = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
-        NSString *tableName = object[keyTableNames];
-        _tableName = [[NSString alloc] initWithString: tableName];
+        NSString * __weak tableName = object[keyTableNames];
+        _tableName = tableName.copy;
         
         NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
         NSArray *columnKeys = object[keyColumnKeys];
@@ -94,58 +95,101 @@
 }
 
 - (NSString *)sqlQuery {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
-    if (self.columnKeys.count == 0) {
-        [sql appendFormat:@" rowid FROM %@", self.tableName];
-    } else {
 
-        NSUInteger columnCounter = 0;
-        for (NSString *key in self.columnKeys) {
-            if (columnCounter != 0) {
-                [sql appendString:@", "];
-            }
-            [sql appendFormat:@"\"%@\"", key];
-            columnCounter++;
-        }
-        if (self.droprowid) {
-            [sql appendFormat:@" FROM %@", self.tableName];
+    NSString *(^sqlSelect)(NSString *, NSArray *, bool);
+    sqlSelect = ^(NSString *tableName, NSArray *columnKeys, bool includingRowID) {
+        NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
+        if (columnKeys.count == 0) {
+            [sql appendFormat:@" rowid FROM %@", tableName];
         } else {
-            [sql appendFormat:@", rowid FROM %@", self.tableName];
-        }
-    }
-    
-    if (self.sortDesc.count > 0) {
-        NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        for (NSSortDescriptor *sortDescriptor in self.sortDesc) {
-            if (sortCounter != 0) [sql appendString:@", "];
             
-            MADDataColumn *dataColumn = nil;
-            if (self.columns) {
-                dataColumn = self.columns[sortDescriptor.key];
+            NSUInteger columnCounter = 0;
+            for (NSString *key in columnKeys) {
+                if (columnCounter != 0) {
+                    [sql appendString:@", "];
+                }
+                [sql appendFormat:@"\"%@\"", key];
+                columnCounter++;
             }
-            MADSqlite3SortDescription *sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-                                                                                                         ascending: sortDescriptor.ascending];
+            if (includingRowID) {
+                [sql appendFormat:@" FROM %@", tableName];
+            } else {
+                [sql appendFormat:@", rowid FROM %@", tableName];
+            }
+        }
+        return sql;
+    };
+
+    NSString *(^sqlOrderBy)(NSArray *, NSDictionary *);
+    sqlOrderBy = ^(NSArray *sortDesc, NSDictionary *columns) {
+    
+        if (sortDesc.count > 0) {
+            NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+            NSUInteger sortCounter = 0;
+            [sql appendString:@" ORDER BY "];
+            for (NSSortDescriptor *sortDescriptor in sortDesc) {
+                if (sortCounter != 0) [sql appendString:@", "];
+                
+                MADDataColumn *dataColumn = nil;
+                if (columns) { dataColumn = columns[sortDescriptor.key]; }
+                MADSqlite3SortDescription *sortDescription;
+                sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
+                                                                                  ascending: sortDescriptor.ascending];
+                [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
+                sortCounter++;
+            }
+            return (NSString *)sql;
+        } else {
+            return @"";
+        }
+        
+    };
+    
+    NSString *(^sqlWhere)(NSArray *);
+    sqlWhere = ^(NSArray *whereClause) {
+        if (whereClause.count > 0) {
             
-            [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
-            sortCounter++;
+            NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+            [sql appendString:@" WHERE "];
+            
+            NSUInteger counter = 0;
+            for (NSDictionary *condition in whereClause) {
+                if (counter > 0) [sql appendString:@" AND "];
+                
+                NSString * __weak columnHandle = condition[MTQueryKeyPredicateColumn];
+                NSString * __weak columnValue = condition[MTQueryKeyPredicateValue];
+                [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
+                counter++;
+            }
+            return (NSString *)sql;
+        } else {
+            return @"";
         }
-    }
+    };
+
+    __block NSString *select;
+    __block NSString *orderBy;
+    __block NSString *whereClause;
+
+    dispatch_group_t group = dispatch_group_create();
     
-    // FIXME: Right now only handles equal case.
-    if (self.whereClause.count > 0) {
-        [sql appendString:@" WHERE "];
-        NSUInteger counter = 0;
-        for (NSDictionary *condition in self.whereClause) {
-            if (counter > 0) [sql appendString:@" AND "];
-            NSString * __weak columnHandle = condition[MTQueryKeyPredicateColumn];
-            NSString * __weak columnValue = condition[MTQueryKeyPredicateValue];
-            [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
-            counter++;
-        }
-    }
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        select = sqlSelect(self.tableName, self.columnKeys, self.droprowid);
+    });
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        orderBy = sqlOrderBy(self.sortDesc, self.columns);
+    });
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        whereClause = sqlWhere(self.whereClause);
+    });
+    
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:select];
+    [sql appendString:orderBy];
+    [sql appendString:whereClause];
+    
     return sql;
-    
 }
 
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit {

@@ -108,12 +108,12 @@ NSString * const MADStringEmpty = @"";
 }
 
 // Currently only returns SQLite3 type.
-+ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
     id resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
     return resultCredentals;
 }
 
-+ (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals {
     id resultCredentals = nil;
     
     NSString *mysqlConnectionId = [MTDatabaseConnectionMySql identifier];
@@ -148,7 +148,7 @@ NSString * const MADStringEmpty = @"";
     return resultCredentals;
 }
 
-+ (instancetype)newDatabaseConnectionForObject:(id)connectionObject NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseConnectionForObject:(id)connectionObject {
     
     id resultCredentals = nil;
     

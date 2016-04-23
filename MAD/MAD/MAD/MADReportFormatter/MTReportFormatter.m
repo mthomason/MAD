@@ -507,7 +507,8 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
 
     id lastResultRow = nil;
 
-    for (id resultRow in [self.datasource enumeratorForReportData]) {
+    NSEnumerator *enumeratorForReportData = [self.datasource enumeratorForReportData];
+    for (id resultRow in enumeratorForReportData) {
 
         @autoreleasepool {
             

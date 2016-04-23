@@ -34,9 +34,9 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
                                          database:(NSString *)database
                                              port:(NSInteger)port NS_RETURNS_RETAINED;
     // Currently only returns SQLite3 type.
-    + (instancetype)newDatabaseConnectionForObject:(id)credentals NS_RETURNS_RETAINED;
-    + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url NS_RETURNS_RETAINED;
-    + (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseConnectionForObject:(id)credentals;
+    + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url;
+    + (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals;
 
     - (NSString *)appname;
 

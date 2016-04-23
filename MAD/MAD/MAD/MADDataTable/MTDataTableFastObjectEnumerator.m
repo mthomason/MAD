@@ -80,7 +80,7 @@ void sqliteCallback(void *foo, const char* statement) {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     if (!self.empty) {
         while (sqlite3_step(_statement) == SQLITE_ROW) {
-            NSDictionary *newObject = [NSDictionary dictionaryWithDictionary: self.currentObject];
+            NSDictionary *newObject = [[NSDictionary alloc] initWithDictionary: self.currentObject];
             [results addObject:newObject];
         }
     }
