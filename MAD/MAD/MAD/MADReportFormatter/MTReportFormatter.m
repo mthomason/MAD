@@ -210,7 +210,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
 
 //  Data is cached by group, page, and report.
 
-- (BOOL)cachedIndexesExist {
+- (bool)cachedIndexesExist {
     return self.reportIndexes.count > 0 && self.reportLayout.count > 0;
 }
 
@@ -263,7 +263,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
     [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     
-    [self cleanupTemporaryReportIndexes];
+    [self cleanupTemporaryIndexes];
     
     [self beginBulkInserts];
     
@@ -280,7 +280,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     
     [self endBulkInserts];
     
-    [self cleanupTemporaryReportIndexes];
+    [self cleanupTemporaryIndexes];
     
     // FIXME: This cache is being set, but it is not being loaded.
     [self.reportFormatterCache setLayout: self.reportLayout.identifier
@@ -329,7 +329,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     [lyarray initializeDatabase];
     self.reportLayout = lyarray;
     
-    [self cleanupTemporaryReportIndexes];
+    [self cleanupTemporaryIndexes];
 }
 
 - (void)initReportLayoutContainers {
@@ -338,11 +338,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     self.lastComparsonValues = nil;
 }
 
-- (void)cleanupTemporaryReportIndexes {
-    [self cleanupTemporaryPageIndexes];
-}
-
-- (void)cleanupTemporaryPageIndexes {
+- (void)cleanupTemporaryIndexes {
     [self.pageLayoutTemporary removeAllObjects];
     [self.pageIndexesTemporary removeAllObjects];
 }
@@ -623,7 +619,7 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
                                 [MADIndexArray arrayWithArray: self.pageIndexesTemporary] : @[];
     [self.reportIndexes addObject:rowids];
     
-    [self cleanupTemporaryPageIndexes];
+    [self cleanupTemporaryIndexes];
     
     self.machineState.pageCounter++;
     
