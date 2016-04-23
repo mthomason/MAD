@@ -462,7 +462,8 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
 }
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
-    return [self.layoutHeightsBySectionKey[documentSection.sectionKey] floatValue];
+    NSNumber * __weak sectionHeight = self.layoutHeightsBySectionKey[documentSection.sectionKey];
+    return sectionHeight.floatValue;
 }
 
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
@@ -535,7 +536,9 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
             
             [self addHeightFromDocumentSectionToReportLayout:detailSection];
             
-            [self addDetail];
+            [MTReportFormatter addDetailForRowID:self.machineState.detailRowId
+                                      pageLayout:self.pageLayoutTemporary
+                                     pageIndexes:self.pageIndexesTemporary];
             
             self.lastComparsonValues = keyValuesForComparson;
             
@@ -610,9 +613,9 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     self.machineState.counterHeightUsedCurrentPage = newHeight;
     [self addPageFooter];
     
-    MADMutableSectionArray *pageInfo = self.pageLayoutTemporary != nil ?
-                                [MADMutableSectionArray arrayWithArray: self.pageLayoutTemporary] :
-                                @[];
+    id pageInfo = self.pageLayoutTemporary != nil ?
+                            [MADMutableSectionArray arrayWithArray: self.pageLayoutTemporary] :
+                            @[];
     [self.reportLayout addObject:pageInfo];
     
     MADIndexArray *rowids = self.pageIndexesTemporary != nil ?
@@ -686,11 +689,13 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     [self.pageLayoutTemporary addObject: footer];
 }
 
-- (void)addDetail {
++ (void)addDetailForRowID:(NSNumber *)rowID
+               pageLayout:(byref inout MADMutableSectionArray *)pageLayout
+              pageIndexes:(byref inout MADMutableIndexArray *)pageIndexes {
     MADSectionPlist *detail = [[MADSectionPlist alloc] initWithSectionType: MNSDocumentSectionTypeBody
-                                                                       row: self.machineState.detailRowId];
-    [self.pageLayoutTemporary addObject: detail];
-    [self.pageIndexesTemporary addObject:self.machineState.detailRowId];
+                                                                       row: rowID];
+    [pageLayout     addObject: detail];
+    [pageIndexes    addObject: rowID];
 }
 
 - (void)addReportHeader {
