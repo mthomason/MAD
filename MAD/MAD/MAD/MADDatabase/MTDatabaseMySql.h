@@ -20,7 +20,7 @@
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

@@ -23,11 +23,11 @@
 
 @interface MTObject : NSObject <NSCopying, MTProtocolCompare, MTProtocolLog>
 
-@property (atomic, strong) id object;
+    @property (atomic, strong) id object;
 
-- (instancetype)init;
-- (instancetype)initWithObject:(id <NSCopying>)object;
-+ (instancetype)objectWithObject:(id <NSCopying>)object;
+    - (instancetype)init;
+    - (instancetype)initWithObject:(id <NSCopying>)object;
+    + (instancetype)objectWithObject:(id <NSCopying>)object;
 
 @end
 

@@ -64,13 +64,13 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
 - (NSString *)selectPart;
 - (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
 - (NSString *)sqlLimitClause;
 - (NSString *)sqlLimitClause:(NSInteger)limit;
-- (NSString *)tableAliasForTable:(NSString *)tableName;
+- (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
 - (NSString *)fieldAliasForField:(NSString *)field
                withSafeTableName:(NSString *)safeTableName;
 - (NSString *)fieldAliasForField:(NSString *)fieldName

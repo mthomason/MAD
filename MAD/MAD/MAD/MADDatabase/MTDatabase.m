@@ -108,7 +108,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return [MTDatabase newSafeQueryField:fieldName andTable:tableName];
 }
 
-- (NSString *)safeIdentifier:(NSString *)s {
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
     id result = s.copy;
     return result;
 }
@@ -117,16 +117,17 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return NULL;
 }
 
-- (NSString *)fieldAliasForField:(NSString *)fieldName
+- (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
                     andTableName:(NSString *)tableName {
     NSString *fieldAlias = [fieldName stringByAppendingString:tableName];
-    return [self safeIdentifier:fieldAlias];
+    NSString *result = [self newSafeIdentifier:fieldAlias];
+    return result;
 }
 
 - (NSString *)fieldAliasForField:(NSString *)field
                withSafeTableName:(NSString *)safeTableName {
     NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-    NSString *fieldName = [self safeIdentifier: field];
+    MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
     NSString * __autoreleasing alias = [tableAlias stringByAppendingString:fieldName];
     return alias;
 }
@@ -143,8 +144,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (NSString *)tableAliasForTable:(NSString *)table {
-    return [self safeIdentifier: table];
+- (MADSafeQueryField *)tableAliasForTable:(NSString *)table {
+    return [self newSafeIdentifier: table];
 }
 
 - (NSString *)tableAliasConnector {
@@ -188,7 +189,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     MADSafeQueryField *safeField = [self newSafeQueryField: fieldName andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
-    NSString *safeTable = [self safeIdentifier:tableName];
+    MADSafeQueryField *safeTable = [self newSafeIdentifier:tableName];
 
     NSString *selectPart = [self selectPart];
     NSString *tableAliasConnector = [self tableAliasConnector];

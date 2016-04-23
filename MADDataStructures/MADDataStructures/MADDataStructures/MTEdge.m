@@ -22,7 +22,7 @@
 @property (nonatomic, weak, readwrite) MTVertex *destination;
 
 @property (nonatomic, strong) NSNumber *weight;
-@property (readwrite, assign, getter=isDirected) bool directed;
+@property (nonatomic, readwrite, assign, getter=isDirected) bool directed;
 @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end

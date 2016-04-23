@@ -55,27 +55,33 @@
         RptqQueryTable *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierObj = @(identifier);
-    self.identifier = identifierObj;
+    NSNumber *n = [[NSNumber alloc] initWithUnsignedInteger:identifier];
+    self.identifier = n;
     
-    NSNumber *x = [[NSNumber alloc] initWithDouble:CGPointZero.x];
-    NSNumber *y = [[NSNumber alloc] initWithDouble:CGPointZero.y];
-    NSNumber *w = [[NSNumber alloc] initWithDouble:CGSizeZero.width];
-    NSNumber *h = [[NSNumber alloc] initWithDouble:CGSizeZero.height];
-    NSNumber *yeah = [[NSNumber alloc] initWithBool:YES];
-    self.designerOriginX = x;
-    self.designerOriginY = y;
-    self.designerSizeWidth = w;
-    self.designerSizeHeight = h;
-    self.designerInitalLayout = yeah;
+    n = [[NSNumber alloc] initWithDouble:CGPointZero.x];
+    self.designerOriginX = n;
+
+    n = [[NSNumber alloc] initWithDouble:CGPointZero.y];
+    self.designerOriginY = n;
+
+    n = [[NSNumber alloc] initWithDouble:CGSizeZero.width];
+    self.designerSizeWidth = n;
+
+    n = [[NSNumber alloc] initWithDouble:CGSizeZero.height];
+    self.designerSizeHeight = n;
+
+    n = [[NSNumber alloc] initWithBool:YES];
+    self.designerInitalLayout = n;
     
 }
 
-+ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    return (RptqQueryTable *)[managedObjectContext objectRegisteredForID:objectID];
++ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqQueryTable *)[managedObjectContext objectWithID:objectID];
 }
 
-+ (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable database:(RptqDatabase *)database
++ (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+                                       database:(RptqDatabase *)database
                         forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
 
 
@@ -90,7 +96,8 @@
         }
     }
     
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class]) inManagedObjectContext: managedObjectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
+                                                   inManagedObjectContext: managedObjectContext];
     RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
 
     queryTable.databaseSchemaTable = databaseSchemaTable;

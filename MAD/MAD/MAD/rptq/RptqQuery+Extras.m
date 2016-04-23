@@ -229,9 +229,11 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
             RptqQueryField *groupField = [queryGroup hasField];
             
             NSString *queryTable = [groupField.inQueryTable queryAlias];
-            NSString *safeQueryTable = [database safeIdentifier: queryTable];
-            NSString *safeFieldName = [database safeIdentifier: groupField.databaseSchemaField.name];
+
+            MADSafeQueryField *safeQueryTable = [database newSafeIdentifier: queryTable];
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
+
+            MADSafeQueryField *safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
             SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.unsignedIntegerValue];

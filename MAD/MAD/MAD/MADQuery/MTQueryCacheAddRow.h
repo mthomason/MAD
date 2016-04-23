@@ -15,6 +15,12 @@
 
     @property (nonatomic, weak) NSArray *rowData;
 
+    @property (nonatomic, readonly, copy) NSString *tableName;
+    @property (nonatomic, readonly, weak) NSDictionary *columns;
+    @property (nonatomic, readonly, weak) NSArray *columnKeys;
+
+    @property (nonatomic, readonly, strong) NSString *sqlPreProcessColumnNames;
+
     - (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns
                           andTableName:(NSString *)tablename forDatabase:(MTDatabase *)database;
 

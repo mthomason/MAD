@@ -14,6 +14,40 @@
 #import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
 
+static inline bool isDataTypeNumeric(MTDataType type);
+static inline bool isDataTypeNumeric(MTDataType type) {
+    switch (type) {
+        case MTDataTypeBit:
+        case MTDataTypeFloat:
+        case MTDataTypeInteger:
+        case MTDataTypeNumber:
+        case MTDataTypeDecimal:
+        case MTDataTypeDouble:
+        case MTDataTypeEnum:
+        case MTDataTypeInt24:
+        case MTDataTypeLong:
+        case MTDataTypeLongLong:
+        case MTDataTypeShort:
+            return true;
+            break;
+        case MTDataTypeBlob:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        case MTDataTypeImage:
+        case MTDataTypeSet:
+        case MTDataTypeString:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeUnknown:
+        case MTDataTypeVarChar:
+        default:
+            return false;
+            break;
+    }
+}
+
 @interface MTDatabaseField ()
 
 @end
@@ -40,42 +74,9 @@
     return copy;
 }
 
-- (BOOL)isNumeric { return [MTDatabaseField isNumeric: _fieldType]; }
+- (BOOL)isNumeric { return isDataTypeNumeric(_fieldType) ? YES : NO; }
 
-+ (BOOL)isNumeric:(MTDataType)dataType {
-    BOOL result;
-    switch (dataType) {
-        case MTDataTypeBit:
-        case MTDataTypeFloat:
-        case MTDataTypeInteger:
-        case MTDataTypeNumber:
-        case MTDataTypeDecimal:
-        case MTDataTypeDouble:
-        case MTDataTypeEnum:
-        case MTDataTypeInt24:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeShort:
-            result = YES;
-            break;
-        case MTDataTypeBlob:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
-        case MTDataTypeString:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-        case MTDataTypeVarChar:
-        default:
-            result = NO;
-            break;
-    }
-    return result;
-}
++ (BOOL)isNumeric:(MTDataType)dataType { return isDataTypeNumeric(dataType) ? YES : NO; }
 
 - (SEL)selectorForSorting {
     return [MADDataType selectorForSorting:self.fieldType];

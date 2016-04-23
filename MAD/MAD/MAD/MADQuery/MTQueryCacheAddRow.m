@@ -24,12 +24,11 @@ static NSString * const SqlDelimitorObject = @", %@";
 @interface MTQueryCacheAddRow ()
     @property (nonatomic, weak, readwrite) MTDatabase *cacheDatabase;
 
-    @property (nonatomic, strong) NSURL *url;
-    @property (nonatomic, strong) NSString *tableName;
-    @property (nonatomic, strong) NSDictionary *columns;
-    @property (nonatomic, strong) NSArray *columnKeys;
+    @property (nonatomic, readwrite, copy) NSString *tableName;
+    @property (nonatomic, readwrite, weak) NSDictionary *columns;
+    @property (nonatomic, readwrite, weak) NSArray *columnKeys;
 
-    @property (nonatomic, strong) NSString *sqlPreProcessColumnNames;
+    @property (nonatomic, readwrite, strong) NSString *sqlPreProcessColumnNames;
 
 @end
 
@@ -48,18 +47,17 @@ static NSString * const SqlDelimitorObject = @", %@";
     NSMutableString *colmunNames = [[NSMutableString alloc] init];
     
     NSUInteger columnCount = self.columnKeys.count;
+    NSString * __weak fieldName;
     for (NSUInteger columnCounter=0; columnCounter<columnCount; columnCounter++) {
+        fieldName = self.columnKeys[columnCounter];
         
-        @autoreleasepool {
-            
-            NSString * __weak fieldName = self.columnKeys[columnCounter];
-            NSString *safeFieldName = [self.cacheDatabase safeIdentifier:fieldName];
-            if (columnCounter > 0) {
-                [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
-            } else {
-                [colmunNames appendString:safeFieldName];
-            }
+        MADSafeQueryField *safeFieldName = [self.cacheDatabase newSafeIdentifier:fieldName];
+        if (columnCounter > 0) {
+            [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
+        } else {
+            [colmunNames appendString:safeFieldName];
         }
+        
     }
     return colmunNames;
 }
@@ -93,28 +91,27 @@ static NSString * const SqlDelimitorObject = @", %@";
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddRow expects NSDictionary.");
         
-        id keyRowUrl = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowUrl];
-        NSURL *url = object[keyRowUrl];
-        self.url = url;
-
         id keyAddRowData = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowData];
-        NSArray *row = object[keyAddRowData];
+        NSArray * __weak row = object[keyAddRowData];
         self.rowData = row;
         
         id keyColumns = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumns];
-        NSDictionary *columns = object[keyColumns];
+        NSDictionary * __weak columns = object[keyColumns];
         self.columns = columns;
         
         id keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumnKeys];
-        NSArray *columnKeys = object[keyColumnKeys];
+        NSArray * __weak columnKeys = object[keyColumnKeys];
         self.columnKeys = columnKeys;
 
         id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowTableName];
-        NSString *tableName = object[keyTableName];
-        self.tableName = tableName;
+        NSString * __weak tableName = object[keyTableName];
+        self.tableName = tableName.copy;
+        
+        id keyRowUrl = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowUrl];
+        NSURL * __weak url = object[keyRowUrl];
         
         if (url != nil) {
-            MTDatabaseConnection *connection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
+            id connection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
             MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
             self.cacheDatabase = db;
@@ -133,10 +130,10 @@ static NSString * const SqlDelimitorObject = @", %@";
     
     NSUInteger columnCounter = 0;
 
-    char * __restrict colCtrBuf[19];
-    NSArray *row = self.rowData;
-    NSMutableArray *binaryBindings = [[NSMutableArray alloc] initWithCapacity:row.count];
+    char colCtrBuf[19];
 
+    NSArray *row = self.rowData;
+    
     [self.binaryBindings removeAllObjects];
     
     for (id object in row) {

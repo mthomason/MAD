@@ -1306,7 +1306,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return [MTDatabaseSqlServer newSafeQueryField:fieldName andTable:tableName];
 }
 
-- (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
     return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
 }
 
@@ -1337,7 +1337,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                                       andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                       withSafeTableName: tableName];
-    NSString *safeTable = [self safeIdentifier: tableName];
+    MADSafeQueryField *safeTable = [self newSafeIdentifier: tableName];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT TOP 511 "
                      @"%@ %@ %@ "
                      @"%@ %@ ",

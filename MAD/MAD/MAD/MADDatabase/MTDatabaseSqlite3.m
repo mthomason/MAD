@@ -747,8 +747,9 @@ void sqliteLog(void *foo, const char* statement) {
     return [MTDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
 }
 
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    return [NSString stringWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
+    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
+    return result;
 }
 
 - (NSString *)tableAliasConnector {

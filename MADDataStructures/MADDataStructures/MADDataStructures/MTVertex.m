@@ -59,7 +59,7 @@
 
 - (NSUInteger)numberOfIncidentEdges { return self.edges.count; }
 
-- (NSArray *)incidentEdges {
+- (NSArray <MTEdge *> *)incidentEdges {
     NSArray *results;
     @synchronized(self) {
         results = self.edges;

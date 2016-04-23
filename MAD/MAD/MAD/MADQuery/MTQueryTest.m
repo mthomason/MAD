@@ -32,7 +32,7 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
-    NSString *key = [self.database safeIdentifier:@"f1"];
+    MADSafeQueryField *key = [self.database newSafeIdentifier:@"f1"];
     NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self.database selectPart], key];
     return sql;
 }

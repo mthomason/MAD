@@ -24,23 +24,23 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 
 @interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
-@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
-@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+    @property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
+    @property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+    @property (readonly) NSArray <MTEdge *> *incidentEdges;
+    @property (readonly) NSUInteger numberOfIncidentEdges;
 
-- (instancetype)init;
-- (instancetype)initWithID:(NSUInteger)idnumber;
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
+    - (instancetype)init;
+    - (instancetype)initWithID:(NSUInteger)idnumber;
+    - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
 
-- (void)addEdge:(MTEdge *)edge;
+    - (void)addEdge:(MTEdge *)edge;
 
-- (NSUInteger)numberOfIncidentEdges;
-- (NSArray *)incidentEdges;
-- (void)removeEdge:(MTEdge *)edge;
-- (bool)isAdjacentToVertex:(MTVertex *)vertex;
+    - (void)removeEdge:(MTEdge *)edge;
+    - (bool)isAdjacentToVertex:(MTVertex *)vertex;
 
-@property (readonly) MADBfsProperties *bfsProperties;
-@property (readonly) MADDfsProperties *dfsProperties;
-@property (readonly) MADSortProperties *sortProperties;
+    @property (readonly) MADBfsProperties *bfsProperties;
+    @property (readonly) MADDfsProperties *dfsProperties;
+    @property (readonly) MADSortProperties *sortProperties;
 
 @end
 
