@@ -53,10 +53,10 @@ typedef NSArray         <__kindof RptqQueryGroup *>                     MADQuery
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
-    return UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f),
-                            CGFloatPointsForInches(1.0000f/4.0000f),
-                            CGFloatPointsForInches(1.0000f/4.0000f),
-                            CGFloatPointsForInches(1.0000f/4.0000f));
+    return UIEdgeInsetsMake(CGPointsForInches(1.0/4.0),
+                            CGPointsForInches(1.0/4.0),
+                            CGPointsForInches(1.0/4.0),
+                            CGPointsForInches(1.0/4.0));
 }
 
 static inline UIEdgeInsets MADEdgeInsetsEmpty();
@@ -70,6 +70,16 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     return UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
                             layoutSize.height - printableRect.size.height - printableRect.origin.y,
                             layoutSize.width - printableRect.size.width - printableRect.origin.x);
+}
+
+static inline CGFloat PrintableHeightForPage(MTReportFormatterPageDefinition *page);
+static inline CGFloat PrintableHeightForPage(MTReportFormatterPageDefinition *page) {
+    return page.layoutSize.height - page.margins.top - page.margins.bottom;
+}
+
+static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat nextItemHeight, CGFloat pageFooterHeight);
+static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat nextItemHeight, CGFloat pageFooterHeight) {
+    return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;
 }
 
 @interface MTReportFormatter ()
@@ -586,21 +596,17 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
     return keyValues;
 }
 
-- (CGFloat)printableHeight {
-    return self.page.layoutSize.height - self.page.margins.top - self.page.margins.bottom;
-}
-
 // FIXME: Make sure paper rect is passed in to the software
-- (BOOL)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
+- (bool)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
     
-    BOOL newPageCreated = NO;
+    bool newPageCreated = false;
     
     CGFloat pageFooterSectionHeight = [self heightForSection:self.machineState.document.hasPageFooterSection];
     
-    if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight >
-        [self printableHeight]) {
+    if (HeightWithNextItem(self.machineState.counterHeightUsedCurrentPage, nextItemHeight, pageFooterSectionHeight) >
+        PrintableHeightForPage(self.page)) {
         
-        newPageCreated = YES;
+        newPageCreated = true;
         [self forcePageBreakWithFooterHeight:pageFooterSectionHeight];
     }
 
