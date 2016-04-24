@@ -217,8 +217,10 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     
     [text appendString: NSLocalizedString(TextAgo, TextAgo)];
     
-    NSNumber *resultType = @(resultResolution);
-    return [MTPair newPairWithFormer:text andLatter:resultType];
+    NSNumber *resultType = [[NSNumber alloc] initWithShort: resultResolution];
+    NSString *resultText = text.copy;
+    return [MTPair newPairWithFormer: resultText
+                           andLatter: resultType];
 }
 
 + (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution {

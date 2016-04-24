@@ -109,7 +109,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, assign) bool updatingOfTimerIsPaused;
 
     @property (nonatomic, strong) MADOperationQueue *refreshQueue;
-    @property (nonatomic, strong) MADRefreshReloadOperation *refreshReloadOperation;
 
 @end
 
@@ -161,8 +160,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    _document = nil;
-    _lastCacheDate = nil;
+
+    [self setToolbarItems:nil];
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([_timerLabelTimeSinceRefreh isValid]) {
@@ -174,13 +173,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)timerDealloc {
-    if (_timerLabelTimeSinceRefreh != nil) {
-        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if ([_timerLabelTimeSinceRefreh isValid]) {
-                [_timerLabelTimeSinceRefreh invalidate];
+    NSTimer *timer = self.timerLabelTimeSinceRefreh;
+    if (timer != nil) {
+        if ([timer respondsToSelector:@selector(isValid)]) {
+            if ([timer isValid]) {
+                [timer invalidate];
             }
         }
-        _timerLabelTimeSinceRefreh = nil;
+        timer = nil;
+        self.timerLabelTimeSinceRefreh = nil;
     }
 }
 
@@ -293,10 +294,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: ^(BOOL finished) { }];
     
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
+    
     MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
+    
     self.labelStatus = labelStatus;
     
 }
@@ -704,7 +707,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                              databaseConnection:document.database.databaseConnection];
         [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
-        self.refreshReloadOperation = refreshReloadOperation;
         
     }
 }

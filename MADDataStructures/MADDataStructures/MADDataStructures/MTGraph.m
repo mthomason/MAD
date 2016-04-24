@@ -82,8 +82,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     BOOL result = NO;
     
     // MARK: Create new edge.
-    NSNumber *uniqueId = @(self.idUniqueEdges);
-    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:object andWeight:weight];
+    NSNumber *uniqueId = [[NSNumber alloc] initWithUnsignedInteger:self.idUniqueEdges];
+    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:uniqueId origin:origin destination:destination
+                                             object:object andWeight:weight];
     self.idUniqueEdges = self.idUniqueEdges + 1;
 
     // MARK: Make sure edge does not exist.
