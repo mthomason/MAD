@@ -18,26 +18,23 @@
 
 @interface MTEdge ()
 
-@property (nonatomic, weak, readwrite) MTVertex *origin;
-@property (nonatomic, weak, readwrite) MTVertex *destination;
+    @property (nonatomic, weak, readwrite) MTVertex *origin;
+    @property (nonatomic, weak, readwrite) MTVertex *destination;
 
-@property (nonatomic, strong) NSNumber *weight;
-@property (nonatomic, readwrite, assign, getter=isDirected) bool directed;
-@property (nonatomic, strong) NSNumber *uniqueIdForStructure;
+    @property (nonatomic, strong) NSNumber *weight;
+    @property (nonatomic, readwrite, assign, getter=isDirected) bool directed;
+    @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end
 
 @implementation MTEdge
 
-/*- (id)copyWithZone:(nullable NSZone *)zone {
-    NSNumber *uniqueId = self.uniqueIdForStructure.copy;
-    NSNumber *weight = self.weight.copy;
-    MTVertex *origin = self.origin.copy;
-    MTVertex *destination = self.destination.copy;
-    id<NSCopying> obj = [self.object copyWithZone:zone];
-    id copy = [[[self class] alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:obj andWeight:weight];
+- (id)copyWithZone:(nullable NSZone *)zone {
+    id copy = [[[self class] alloc] initWithUniqueID:self.uniqueIdForStructure
+                                              origin:self.origin destination:self.destination
+                                              object:self.object andWeight:self.weight];
     return copy;
-}*/
+}
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
     return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];

@@ -76,7 +76,8 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 }
 
 // MARK: Add new edge to the graph.
-- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
+- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination
+                       object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
     
     BOOL result = NO;
     
@@ -202,7 +203,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
                 if (vertex.properties.vertexColor == MTColorWhite) {
                     vertex.properties.vertexColor = MTColorGray;
                     vertex.bfsProperties.bfsPredecessor = u;
-                    NSNumber *distance = @(u.bfsProperties.bfsDistance.integerValue + 1);
+                    NSNumber *distance = [[NSNumber alloc] initWithInteger:u.bfsProperties.bfsDistance.integerValue + 1];
                     vertex.bfsProperties.bfsDistance = distance;
                     [greyVertices enqueue: vertex];
                 }
@@ -239,7 +240,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 - (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
-    NSNumber *counter = @(0);
+    NSNumber *counter = @0;
     
     NSArray *vertices = self.vertices;
     for (MTVertex *vertex in vertices) {
@@ -291,7 +292,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     vertex.properties.vertexColor = MTColorGray;
     
-    NSNumber *count = @((*counter).integerValue + 1);
+    NSNumber *count = [[NSNumber alloc] initWithInteger:(*counter).integerValue + 1];
     *counter = count;
     
     vertex.dfsProperties.dfsDistance = *counter;
@@ -313,7 +314,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
             }
         }
         
-        NSNumber *et = @(edgeType);
+        NSNumber *et = [[NSNumber alloc] initWithShort:edgeType];
         MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
         [*listOfEdges add:pairEdge];
         
@@ -324,7 +325,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     }
     
     vertex.properties.vertexColor = MTColorBlack;
-    NSNumber *c2 = @((*counter).integerValue + 1);
+    NSNumber *c2 = [[NSNumber alloc] initWithInteger:(*counter).integerValue + 1];
     *counter = c2;
     vertex.dfsProperties.dfsTimestampFinished = *counter;
     vertex.dfsProperties.dfsFoundCounter = *counter;

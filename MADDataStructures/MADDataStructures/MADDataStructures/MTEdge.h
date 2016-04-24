@@ -21,7 +21,7 @@
 #endif
 #endif
 
-typedef NS_ENUM(NSUInteger, MTEdgeType) {
+typedef NS_ENUM(short, MTEdgeType) {
 	MTEdgeTypeTreeEdge,
 	MTEdgeTypeBackEdge,
 	MTEdgeTypeForwardEdge,
@@ -30,13 +30,14 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 
 @class MTVertex;
 
-@interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
+@interface MTEdge : MTObject
+    <NSCopying, MTProtocolLog, MTProtocolCompare>
 
     @property (nonatomic, weak, readonly) MTVertex *origin;
     @property (nonatomic, weak, readonly) MTVertex *destination;
 
     @property (readonly, nonatomic, assign, getter=isDirected) bool directed;
-    @property(atomic, assign) MTEdgeType dfsEdgeType;
+    @property (atomic, assign) MTEdgeType dfsEdgeType;
 
     - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
                                                   andDestination:(MTVertex *)vertex2;
