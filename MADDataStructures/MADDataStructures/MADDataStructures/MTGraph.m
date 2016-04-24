@@ -314,7 +314,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         }
         
         NSNumber *et = @(edgeType);
-        MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
+        MTPair *pairEdge = [MTPair g:incidentEdge andLatter:et];
         [*listOfEdges add:pairEdge];
         
         if (neighborVertex.properties.vertexColor == MTColorWhite) {

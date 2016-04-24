@@ -10,6 +10,6 @@
 
 @interface MADStoryboard : UIStoryboard
 
-+ (instancetype)storyboardDesigner NS_RETURNS_NOT_RETAINED;
++ (instancetype)newStoryboardDesigner;
 
 @end

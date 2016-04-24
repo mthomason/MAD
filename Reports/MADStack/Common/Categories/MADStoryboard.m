@@ -12,7 +12,7 @@ static NSString * const StoryboardDesigner     = @"MADDesigner";
 
 @implementation MADStoryboard
 
-+ (instancetype)storyboardDesigner NS_RETURNS_NOT_RETAINED {
++ (instancetype)newStoryboardDesigner {
     id designer = [self storyboardWithName: StoryboardDesigner bundle: NULL];
     return designer;
 }

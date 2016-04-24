@@ -14,12 +14,12 @@ static NSString * const MADIdentifierLayoutSettingsViewController = @"MTReportDe
 @implementation UIViewController (Designer)
 
 + (instancetype)layoutSettingsViewController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:MADIdentifierLayoutSettingsViewController];
 }
 
 + (instancetype)fileManager {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardOpenFileViewController"];
 }
 
@@ -29,37 +29,37 @@ static NSString * const MADIdentifierLayoutSettingsViewController = @"MTReportDe
 }*/
 
 + (instancetype)queryViewController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryViewController"];
 }
 
 + (instancetype)queryContainerController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryContainerController"];
 }
 
 + (instancetype)viewerNavigationController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerNavigationController"];
 }
 
 + (instancetype)designerViewController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
 }
 
 + (instancetype)designerNavigationController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerNavigationController"];
 }
 
 + (instancetype)viewerViewController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
 }
 
 + (instancetype)initalViewController {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     return [designer instantiateInitialViewController];
 }
 

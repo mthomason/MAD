@@ -265,9 +265,8 @@ NSString * const MADUtiType                                     = @"com.everyday
         [strongself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:strongself waitUntilDone:NO];
     }];
 
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabController setViewControllers:nil];
-    }];
+    [self.tabController setViewControllers:nil animated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
     
     self.shouldShowAddDocumentPopover = true;
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -315,7 +314,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         self.splitViewController = splitViewController;
     }
 
-    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     
     MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
     designerViewController.delegate = self;
@@ -352,13 +351,28 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     self.fileManager.openDocument = document;
     
-    [self.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
+    __block bool openDocumentSuccess = false;
+    
+    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 
-        if (success) [((MADocument *)self.fileManager.openDocument) activeDocumentModel];
-        UIManagedDocument *openDocument = self.fileManager.openDocument;
-        handler(success, openDocument);
-        [self reenable];
-    }];
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        [self.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
+            openDocumentSuccess = success ? true : false;
+            dispatch_semaphore_signal(sema);
+        }];
+    
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (openDocumentSuccess) [((MADocument *)self.fileManager.openDocument) activeDocumentModel];
+            UIManagedDocument *openDocument = self.fileManager.openDocument;
+            handler(openDocumentSuccess, openDocument);
+            [self reenable];
+        }];
+    
+    });
+    
+    
 }
 
 - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType {

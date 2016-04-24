@@ -149,7 +149,7 @@ const int8_t MADIndexViewer = 2;
 }
 
 + (instancetype)TabBarControllerMain {
-    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
     id controller = [designer instantiateViewControllerWithIdentifier:TabBar];
     return controller;
 }

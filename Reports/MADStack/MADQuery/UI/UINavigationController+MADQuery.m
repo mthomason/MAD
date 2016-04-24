@@ -16,19 +16,19 @@ static NSString * const ViewerNavigationController      = @"MADIdentifierStorybo
 @implementation UINavigationController (MADQuery)
 
 + (instancetype)QuerySplitViewController {
-    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: QueryNavigationController];
     return queryNavigationController;
 }
 
 + (instancetype)DesignerController {
-    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: DesignerNavigationController];
     return queryNavigationController;
 }
 
 + (instancetype)ViewerController {
-    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: ViewerNavigationController];
     return queryNavigationController;
 }

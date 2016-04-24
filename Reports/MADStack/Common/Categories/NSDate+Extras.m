@@ -55,7 +55,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
 
 @interface MADDateFromTimeFormatter()
 
-@property (nonatomic, strong) NSNumberFormatter *formatter;
+    @property (nonatomic, strong) NSNumberFormatter *formatter;
 
 @end
 
@@ -71,7 +71,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
 
 - (instancetype)init {
     if (self = [super init]) {
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         formatter.numberStyle = NSNumberFormatterSpellOutStyle;
         self.formatter = formatter;
     }
