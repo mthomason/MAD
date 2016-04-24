@@ -12,7 +12,8 @@
 
 @interface MADTableViewHeader (QueryViewSectionTypes)
 
-+ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame
++ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout
+                                          andFrame:(CGRect)frame
                                             target:(nullable id)target;
 
 @end

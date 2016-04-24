@@ -45,8 +45,9 @@
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
@@ -113,14 +114,15 @@
 }
 
 - (NSString *)tableAlias {
-    return self.dropIndex.unsignedIntegerValue == 0 ? self.databaseSchemaTable.name : [self queryAlias];
+    return self.dropIndex.unsignedIntegerValue == 0 ? self.databaseSchemaTable.name : [self copyQueryAlias];
 }
 
-- (NSString *)queryAlias {
+- (NSString *)copyQueryAlias {
     char buf[12];
-    sprintf(buf, "%ld", (long)self.dropIndex.integerValue);
-    NSString *indexString = @(buf);
-    return [self.databaseSchemaTable.name stringByAppendingString:indexString];
+    sprintf(buf, "%d", self.dropIndex.integerValue);
+    NSString *indexString = [[NSString alloc]  initWithUTF8String:buf];
+    NSString *alias = [self.databaseSchemaTable.name stringByAppendingString:indexString];
+    return alias;
 }
 
 - (BOOL)isEqualTo:(RptqQueryTable *)sender {

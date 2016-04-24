@@ -590,9 +590,11 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     NSString *drawingObject;
     NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
     if (rowData != nil) {
+        NSString *qa = [item.referencesQueryField.inQueryTable copyQueryAlias];
         MADSafeQueryField *tableFieldKey = [database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
-                                                  andTable: item.referencesQueryField.inQueryTable.queryAlias];
-        NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.unsignedIntegerValue
+                                                              andTable: qa];
+        
+        NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.shortValue
                                       forValue:rowData[tableFieldKey]];
         drawingObject = [NSString stringWithString:text];
         if ([drawingObject isEqualToString:MTNullIdentifier]) {
@@ -611,10 +613,12 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 - (MTBarcode *)documentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
     NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
     
+    NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
+    NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable copyQueryAlias];
     MADSafeQueryField *tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name
-                                               andTable: item.referencesField1.inQueryTable.queryAlias];
+                                               andTable: tableQueryAlias1];
     MADSafeQueryField *tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
-                                               andTable: item.referencesField2.inQueryTable.queryAlias];
+                                               andTable: tableQueryAlias2];
     NSString *input1 = [self inputForField:item.referencesField1 forDocumentObject:item.parentObjectBarcode value:rowData[tableFieldKey1]];
     NSString *input2 = [self inputForField:item.referencesField2 forDocumentObject:item.parentObjectBarcode value:rowData[tableFieldKey2]];
     
@@ -664,9 +668,9 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             RptqQueryField *aggregateField = isAggregate.aggregateField;
             RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
             
-            NSString *queryAlias = [[NSString alloc] initWithString:inQueryTable.queryAlias];
+            NSString *queryAlias = [inQueryTable copyQueryAlias];
             MADSafeQueryField *fieldKey = [database newSafeQueryField: aggregateField.databaseSchemaField.name
-                                                             andTable: inQueryTable.queryAlias];
+                                                             andTable: queryAlias];
             
             NSArray *groupKeys;
             
@@ -676,7 +680,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             }
             
             RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
-            MTDataType aggregateType = databaseSchemaField.dataType.unsignedIntegerValue;
+            MTDataType aggregateType = databaseSchemaField.dataType.shortValue;
             
             NSNumber * __weak function = isAggregate.function;
             BOOL calculateInMemory = function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||

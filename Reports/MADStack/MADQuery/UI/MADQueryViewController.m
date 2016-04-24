@@ -897,8 +897,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [MADTableViewHeader newTableViewHeaderWithType: [self.datamodel layoutAtIndex:(short)section]
-                                                andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight) target:self];
+    MADQueryViewControllerLayoutSection *layout = [self.datamodel layoutAtIndex:(short)section];
+    id header = [MADTableViewHeader newTableViewHeaderWithType: layout
+                                                      andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight)
+                                                        target: self];
+    return header;
 }
 
 #pragma mark - UITableViewDelegate
@@ -1485,7 +1488,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
                 
                 if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
-                    [self.document removeGroup:groupToRemove fromManagedObjectContext:context];
+                    [self.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:context];
                     NSIndexPath *deleteCellAtIndex = groupIndexPath.copy;
                     [cellsToDelete addObject:deleteCellAtIndex];
                 }
@@ -1731,7 +1734,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         RptqQueryGroup *groupToRemove = [rptqQuery queryGroupForIndex:(NSUInteger)indexPath.row];
-        [self.document removeGroup:groupToRemove fromManagedObjectContext:private];
+        [self.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:private];
         
         NSError * __autoreleasing * error = NULL;
         [private save:error];

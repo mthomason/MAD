@@ -17,14 +17,14 @@
     switch (layout.querySection) {
 
         case MTQuerySectionsDatasource:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             view.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             view.buttonAdd.hidden = YES;
             view.buttonAdd.isAccessibilityElement = NO;
             break;
 
         case MTQuerySectionsTables:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
             view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
@@ -32,7 +32,7 @@
             break;
             
         case MTQuerySectionsLinks:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
             view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
@@ -41,7 +41,7 @@
             
         case MTQuerySectionsDocumentGroups:
         case MTQuerySectionsGroups:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
             view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
@@ -49,7 +49,7 @@
             break;
             
         case MTQuerySectionsPredicate:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             [view.labelTitle sizeToFit];
             view.buttonAdd.isAccessibilityElement = YES;
@@ -58,7 +58,7 @@
             break;
             
         case MTQuerySectionsNumberOfQueryResults:
-            view.labelTitle.text = layout.name;
+            view.labelTitle.text = layout.name.copy;
             view.buttonAdd.enabled = NO;
             view.buttonAdd.hidden = YES;
             [view.labelTitle sizeToFit];

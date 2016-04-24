@@ -224,7 +224,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
             RptqQueryField *groupField = [queryGroup hasField];
             
-            NSString *queryTable = [groupField.inQueryTable queryAlias];
+            NSString *queryTable = [groupField.inQueryTable copyQueryAlias];
 
             MADSafeQueryField *safeQueryTable = [database newSafeIdentifier: queryTable];
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
@@ -232,7 +232,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
             MADSafeQueryField *safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.unsignedIntegerValue];
+            SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.shortValue];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: sortAscending selector: sel];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
         }

@@ -22,7 +22,7 @@
 
     + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSString *)queryAlias;
+    - (NSString *)copyQueryAlias;
     - (NSString *)tableAlias;
 
 @end

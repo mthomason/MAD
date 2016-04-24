@@ -8,6 +8,12 @@
 
 #import "MADTableViewHeader.h"
 
+@interface MADTableViewHeader ()
+
+    @property (nonatomic, weak) UIView *nibView;
+
+@end
+
 @implementation MADTableViewHeader
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -21,6 +27,7 @@
         self.buttonAdd.tintColor = [MADColorEverydayApps newColorBlue];
 
         [self addSubview:view];
+        self.nibView = view;
         self.labelTitle.numberOfLines = 0;
         self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];

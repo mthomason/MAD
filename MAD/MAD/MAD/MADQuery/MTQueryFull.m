@@ -221,8 +221,9 @@
             
             MTDatabase * __weak database = [self.dataDelegate database];
             RptqQueryField *leftField = queryPredicate.hasLeftField;
+            NSString *leftTableName = [leftField.inQueryTable copyQueryAlias];
             leftValue = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                           andTable: leftField.inQueryTable.queryAlias];
+                                           andTable: leftTableName];
             
         } else if (queryPredicate.fieldleftpred != nil) {
             
@@ -236,8 +237,9 @@
             
             MTDatabase * __weak database = [self.dataDelegate database];
             RptqQueryField *rightField = queryPredicate.hasRightField;
+            NSString *rightTableName = [rightField.inQueryTable copyQueryAlias];
             rightValue = [database newSafeQueryField: rightField.databaseSchemaField.name
-                                            andTable: rightField.inQueryTable.queryAlias];
+                                            andTable: rightTableName];
             
         } else if (queryPredicate.fieldrightpred != nil) {
             
@@ -416,7 +418,7 @@
             RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
             if (fieldCounter != 0)  [result appendString:@",\n"];
             
-            NSString *tableName = [[queryField inQueryTable] queryAlias];
+            NSString *tableName = [queryField.inQueryTable copyQueryAlias];
             MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
             MADSafeQueryField *fieldName = [database newSafeIdentifier: field.name];
@@ -443,7 +445,7 @@
             if (table != nil) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
-                NSString *tableName = [table queryAlias];
+                NSString *tableName = [table copyQueryAlias];
                 MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
                 NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 
@@ -506,7 +508,7 @@
                     NSString *tableConnector = [database tableAliasConnector];
                     [result appendString:tableConnector];
                     
-                    NSString *tableName = [table queryAlias];
+                    NSString *tableName = [table copyQueryAlias];
                     MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
@@ -547,7 +549,7 @@
                             NSString *tableAliasConnector = [database tableAliasConnector];
                             [result appendString:tableAliasConnector];
                             
-                            NSString *ogRightTable = [rightTable queryAlias];
+                            NSString *ogRightTable = [rightTable copyQueryAlias];
                             MADSafeQueryField *safeOgRightTable = [database newSafeIdentifier:ogRightTable];
                             [result appendString:safeOgRightTable];
                             [result appendString:NewLineTab];
@@ -559,14 +561,17 @@
                             [result appendString:@"ON "];
                             
                             RptqQueryField *leftField = queryLink.hasLeftField;
-
+                            
+                            NSString *lft = [leftField.inQueryTable copyQueryAlias];
                             MADSafeQueryField *safeField = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                                                              andTable: leftField.inQueryTable.queryAlias];
+                                                                              andTable: lft];
                             [result appendString: safeField];
                             
                             [result appendString:@" = "];
+                            
+                            NSString *rft = [rightField.inQueryTable copyQueryAlias];
                             safeField = [database newSafeQueryField: rightField.databaseSchemaField.name
-                                                           andTable: rightField.inQueryTable.queryAlias];
+                                                           andTable: rft];
                             [result appendString: safeField];
                         }
                     }

@@ -97,7 +97,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
     - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
-    - (void)removeGroup:(RptqQueryGroup *)group fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (UIImage *)fullyRenderedThumbnail;
     - (NSDictionary *)layoutHeightsBySectionKey;

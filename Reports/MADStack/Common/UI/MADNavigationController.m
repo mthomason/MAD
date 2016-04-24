@@ -16,6 +16,15 @@
 
 }
 
++ (void)initialize {
+  if (self == [MADNavigationController self]) {
+      Class thisClas = [MADTransparentPresentationController class];
+      UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
+      UIColor *clearColor = [UIColor clearColor];
+      appearanceProxy.barTintColor = clearColor;
+  }
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         
@@ -24,11 +33,8 @@
 }
 
 - (void)viewDidLoad {
-    [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
-
     [super viewDidLoad];
     if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-        NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
         ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
     }
     [self setNeedsStatusBarAppearanceUpdate];

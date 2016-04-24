@@ -48,51 +48,51 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
     @property (nonatomic, strong) NSMutableArray *errors;
 
-+ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED;
 
-- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
+    - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
 
-- (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion;
-- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error;
+    - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion;
+    - (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error;
 
-- (void)closeProcess:(id)process;
+    - (void)closeProcess:(id)process;
 
-- (NSString *)identifier;
-+ (NSString *)identifier;
+    - (NSString *)identifier;
+    + (NSString *)identifier;
 
-+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
+    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-- (NSString *)selectPart;
-- (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
-- (NSString *)sqlLimitClause;
-- (NSString *)sqlLimitClause:(NSInteger)limit;
-- (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
-- (NSString *)fieldAliasForField:(NSString *)field
-               withSafeTableName:(NSString *)safeTableName;
-- (NSString *)fieldAliasForField:(NSString *)fieldName
-                    andTableName:(NSString *)tableName;
-- (NSString *)tableAliasConnector;
+    - (NSString *)selectPart;
+    - (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
+    - (NSString *)sqlLimitClause;
+    - (NSString *)sqlLimitClause:(NSInteger)limit;
+    - (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
+    - (NSString *)fieldAliasForField:(NSString *)field
+                   withSafeTableName:(NSString *)safeTableName;
+    - (NSString *)fieldAliasForField:(NSString *)fieldName
+                        andTableName:(NSString *)tableName;
+    - (NSString *)tableAliasConnector;
 
-- (NSString *)sqlAggregateFunctionLength;
-- (NSString *)sqlAggregateFunctionMax;
+    - (NSString *)sqlAggregateFunctionLength;
+    - (NSString *)sqlAggregateFunctionMax;
 
-- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
 
-- (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection;
-- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals;
+    - (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection;
+    - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals;
 
-- (void)readRow:(NSUInteger)row;
+    - (void)readRow:(NSUInteger)row;
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
-- (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
+    - (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
+    - (void)enumerateTablesFromConnection:(id)dbconn
+                               usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                               completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 

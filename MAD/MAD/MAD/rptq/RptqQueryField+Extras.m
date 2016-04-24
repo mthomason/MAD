@@ -101,7 +101,7 @@
 }
 
 - (NSString *)toString {
-    NSString *queryAlias = [self.inQueryTable queryAlias];
+    NSString *queryAlias = [self.inQueryTable copyQueryAlias];
     return [NSString stringWithFormat:@"%@.%@", queryAlias, self.databaseSchemaField.name];
 }
 
