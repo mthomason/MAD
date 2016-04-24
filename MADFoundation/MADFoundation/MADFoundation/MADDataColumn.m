@@ -287,12 +287,12 @@
 }
 
 + (NSString *)keyColumnType {
-    SEL sel = @selector(columnType);
+    SEL sel = @selector(type);
     return NSStringFromSelector(sel);
 }
 
 + (NSString *)keyNativeColumnType {
-    SEL sel = @selector(nativeColumnType);
+    SEL sel = @selector(nativeType);
     return NSStringFromSelector(sel);
 }
 

@@ -56,14 +56,6 @@
 /* Begin PBXFileReference section */
 		4C0FA9F21C94F462005E8B33 /* MADIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADIndex.m; path = MADDataStructures/MADIndex.m; sourceTree = "<group>"; };
 		4C0FA9F31C94F462005E8B33 /* MADIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADIndex.h; path = MADDataStructures/MADIndex.h; sourceTree = "<group>"; };
-		4C0FAA061C95160D005E8B33 /* MADAlgorithmElementProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlgorithmElementProperties.m; path = MADDataStructures/MADAlgorithmElementProperties.m; sourceTree = "<group>"; };
-		4C0FAA071C95160D005E8B33 /* MADAlgorithmElementProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmElementProperties.h; path = MADDataStructures/MADAlgorithmElementProperties.h; sourceTree = "<group>"; };
-		4C0FAA081C95160D005E8B33 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSortProperties.m; path = MADDataStructures/MADSortProperties.m; sourceTree = "<group>"; };
-		4C0FAA091C95160D005E8B33 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortProperties.h; path = MADDataStructures/MADSortProperties.h; sourceTree = "<group>"; };
-		4C0FAA0A1C95160D005E8B33 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDfsProperties.h; path = MADDataStructures/MADDfsProperties.h; sourceTree = "<group>"; };
-		4C0FAA0B1C95160D005E8B33 /* MADDfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDfsProperties.m; path = MADDataStructures/MADDfsProperties.m; sourceTree = "<group>"; };
-		4C0FAA0C1C95160D005E8B33 /* MADBfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBfsProperties.m; path = MADDataStructures/MADBfsProperties.m; sourceTree = "<group>"; };
-		4C0FAA0D1C95160D005E8B33 /* MADBfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBfsProperties.h; path = MADDataStructures/MADBfsProperties.h; sourceTree = "<group>"; };
 		4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataStructures.h; sourceTree = "<group>"; };
 		4C2C7B461BA929EF00C9CC5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -120,21 +112,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C0FAA161C951636005E8B33 /* ElementProperties */ = {
-			isa = PBXGroup;
-			children = (
-				4C0FAA071C95160D005E8B33 /* MADAlgorithmElementProperties.h */,
-				4C0FAA061C95160D005E8B33 /* MADAlgorithmElementProperties.m */,
-				4C0FAA091C95160D005E8B33 /* MADSortProperties.h */,
-				4C0FAA081C95160D005E8B33 /* MADSortProperties.m */,
-				4C0FAA0A1C95160D005E8B33 /* MADDfsProperties.h */,
-				4C0FAA0B1C95160D005E8B33 /* MADDfsProperties.m */,
-				4C0FAA0D1C95160D005E8B33 /* MADBfsProperties.h */,
-				4C0FAA0C1C95160D005E8B33 /* MADBfsProperties.m */,
-			);
-			name = ElementProperties;
-			sourceTree = "<group>";
-		};
 		4C2C7B371BA929EF00C9CC5E = {
 			isa = PBXGroup;
 			children = (
@@ -225,7 +202,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C0FAA111C95160E005E8B33 /* MADSortProperties.h in Headers */,
 				4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */,
 				4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */,
 				4C2C7B831BA92A8700C9CC5E /* MTProtocolLog.h in Headers */,
@@ -237,9 +213,7 @@
 				4C2C7B8A1BA92A8700C9CC5E /* MTTree.h in Headers */,
 				4C2C7B7B1BA92A8700C9CC5E /* MTLinkedList.h in Headers */,
 				4C2C7B811BA92A8700C9CC5E /* MTProtocolCompare.h in Headers */,
-				4C0FAA0F1C95160E005E8B33 /* MADAlgorithmElementProperties.h in Headers */,
 				4C2C7B8C1BA92A8700C9CC5E /* MTVertex.h in Headers */,
-				4C0FAA121C95160E005E8B33 /* MADDfsProperties.h in Headers */,
 				4C2C7B791BA92A8700C9CC5E /* MTGraph.h in Headers */,
 				4C2C7B7F1BA92A8700C9CC5E /* MTPair.h in Headers */,
 				4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */,
@@ -299,6 +273,7 @@
 				TargetAttributes = {
 					4C2C7B401BA929EF00C9CC5E = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = D3C58YS54A;
 					};
 					4C2C7B4A1BA929EF00C9CC5E = {
 						CreatedOnToolsVersion = 7.0;
@@ -345,9 +320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C0FAA0E1C95160D005E8B33 /* MADAlgorithmElementProperties.m in Sources */,
-				4C0FAA141C95160E005E8B33 /* MADBfsProperties.m in Sources */,
-				4C0FAA101C95160E005E8B33 /* MADSortProperties.m in Sources */,
 				4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */,
 				4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */,
 				4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */,
@@ -355,7 +327,6 @@
 				4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */,
 				4CBC23E31C9559C40006C0A6 /* MADDfsProperties.m in Sources */,
 				4C2C7B801BA92A8700C9CC5E /* MTPair.m in Sources */,
-				4C0FAA131C95160E005E8B33 /* MADDfsProperties.m in Sources */,
 				4C2C7B7A1BA92A8700C9CC5E /* MTGraph.m in Sources */,
 				4C2C7B781BA92A8700C9CC5E /* MTEdge.m in Sources */,
 				4CBC23E41C9559C40006C0A6 /* MADBfsProperties.m in Sources */,
@@ -480,6 +451,7 @@
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -507,6 +479,7 @@
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

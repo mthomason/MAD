@@ -102,7 +102,8 @@ static inline CGRect rectCellLabel() {
     }
 
     if ([self.delegate respondsToSelector:@selector(userSelectedItemAtIndexPath:)]) {
-        [self.delegate userSelectedItemAtIndexPath:indexPath];
+        NSIndexPath *path = indexPath.copy;
+        [self.delegate userSelectedItemAtIndexPath:path];
     }
     
     if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {
@@ -180,12 +181,19 @@ static inline CGRect rectCellLabel() {
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename attributes: attributesCaption];
     
-    CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString contentScaleFactor: collectionView.contentScaleFactor font: [MTCollectionViewCellDocument CaptionFont]];
+    UIFont *font = [MTCollectionViewCellDocument newCaptionFont];
+    CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
+                                           contentScaleFactor: collectionView.contentScaleFactor
+                                                         font: font];
     
     NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
                                                                               attributes: attributesCaption2];
-    CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub contentScaleFactor: collectionView.contentScaleFactor font: [MTCollectionViewCellDocument CaptionFont2]];
-    return CGSizeMake(140.0000f, 128.0000f + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0000f);
+    
+    font = [MTCollectionViewCellDocument newCaptionFont2];
+    CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
+                                              contentScaleFactor: collectionView.contentScaleFactor
+                                                            font: font];
+    return CGSizeMake(140.0000f, (CGFloat)(128.0 + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0));
 }
 
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {

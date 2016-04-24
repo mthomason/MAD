@@ -18,34 +18,34 @@
 
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
-@property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;
-@property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
-@property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
-@property (nonatomic, strong) IBOutlet UIProgressView *progressViewDownload;
-@property (nonatomic, strong) IBOutlet UIProgressView *progressViewUpload;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;
+    @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
+    @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
+    @property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
+    @property (nonatomic, weak) IBOutlet UIProgressView *progressViewUpload;
 
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+    @property (nonatomic, weak) UIActivityIndicatorView *activityIndicator;
 
-@property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
+    @property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
 
-+ (UIFont *)CaptionFont;
-+ (UIFont *)CaptionFont2;
+    + (UIFont *)newCaptionFont;
+    + (UIFont *)newCaptionFont2;
 
-+ (NSDictionary *)attributesCaption;
-+ (NSDictionary *)attributesCaption2;
+    + (NSDictionary *)attributesCaption;
+    + (NSDictionary *)attributesCaption2;
 
-+ (UIImage *)defaultThumbnail;
+    + (UIImage *)newDefaultThumbnail;
 
-- (void)normalizeTint;
-- (void)performSelectionAnimations;
-- (void)performDeselectionAnimations;
-- (void)setText:(NSString *)text;
+    - (void)normalizeTint;
+    - (void)performSelectionAnimations;
+    - (void)performDeselectionAnimations;
+    - (void)setText:(NSString *)text;
 
-- (void)updateFont;
+    - (void)updateFont;
 
-- (void)startWobble;
-- (void)stopWobble;
+    - (void)startWobble;
+    - (void)stopWobble;
 
 @end
 

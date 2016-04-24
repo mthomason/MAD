@@ -12,6 +12,7 @@
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 #import "UIViewController+Designer.h"
 
 static NSString * const MADTextVisible         = @"Visible";
@@ -40,7 +41,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.view.autoresizingMask = MADViewAutoresizingFlexable();
     self.labelVisible.text = NSLocalizedString(MADTextVisible, MADTextVisible);
     self.labelFormFeed.text = NSLocalizedString(MADTextFormFeed, MADTextFormFeed);
     self.labelVisible.isAccessibilityElement = NO;

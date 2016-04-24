@@ -61,7 +61,9 @@ const int8_t MADIndexViewer = 2;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (self.viewControllers.count > 0) {
-        [self showTitleWithText: self.viewControllers[0].title];
+        UIViewController *vc = self.viewControllers.firstObject;
+        NSString *title = vc.title.copy;
+        [self showTitleWithText: title];
     }
 }
 

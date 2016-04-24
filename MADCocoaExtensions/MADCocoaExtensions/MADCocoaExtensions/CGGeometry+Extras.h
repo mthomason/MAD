@@ -491,10 +491,10 @@ CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 	return (y - b) / m;
 }
 
-CG_INLINE CGFloat CGDistance(CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat
+CG_INLINE double CGDistance(CGPoint p1, CGPoint p2);
+CG_INLINE double
 CGDistance(CGPoint p1, CGPoint p2) {
-	return (CGFloat)sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
+	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 }
 
 CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
@@ -510,13 +510,13 @@ CGLineSegmentSlope(CGLineSegment lineSegment) {
 	return CGSlope(lineSegment.start, lineSegment.end);
 }
 
-CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m);
-CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m) {
+CG_INLINE double CGInterceptBySlope(CGPoint p2, double m);
+CG_INLINE double CGInterceptBySlope(CGPoint p2, double m) {
 	return (p2.y - (m * p2.x));
 }
 
-CG_INLINE CGFloat CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
-CG_INLINE CGFloat
+CG_INLINE double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
+CG_INLINE double
 CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 	if (t2 - t1 != 0) return (CGDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
@@ -525,37 +525,34 @@ CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d);
 CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
 	CGPoint returnVal;
-	CGFloat m = -1 * CGDistance(p1, p2);
-	CGFloat b = CGInterceptBySlope(p2, m);
-	BOOL movingUp;
-	if (p1.y < p2.y) movingUp = YES;
-        else movingUp = NO;
+	double m = -1 * CGDistance(p1, p2);
+	double b = CGInterceptBySlope(p2, m);
+    double x = p2.x;
+    double y = p2.y;
+    bool movingUp = p1.y < p2.y ? true : false;
+    
+    if (d >= 0) {
+        double mPow2 = pow(m, 2);
+        double bPow2 = pow(b, 2);
+        double dPow2 = pow(d, 2);
+        double u = p2.x;
+        double v = p2.y;
+        double sqrtPart = 0.0;
+        sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
+        if (!isnan(sqrtPart)) {
+            if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
+            else y = ((b)+((m)*(u))+((mPow2)*(v))-sqrt(sqrtPart)) / (1+mPow2);
             
-            CGFloat x = p2.x;
-            CGFloat y = p2.y;
-            
-            if (d >= 0) {		
-                CGFloat mPow2 = pow(m, 2);
-                CGFloat bPow2 = pow(b, 2);
-                CGFloat dPow2 = pow(d, 2);
-                CGFloat u = p2.x;
-                CGFloat v = p2.y;
-                CGFloat sqrtPart = 0.0;
-                sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
-                if (!isnan(sqrtPart)) {
-                    if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
-                        else y = ((b)+((m)*(u))+((mPow2)*(v))-sqrt(sqrtPart)) / (1+mPow2);
-                            
-                            x=(y-b)/m;
-                            }
-                if (!isnan(x) && !isnan(y)) {
-                    returnVal.x = x;
-                    returnVal.y = y;
-                } else {
-                    returnVal.x = p2.x;
-                    returnVal.y = p2.y;			
-                }
-            }
+            x=(y-b)/m;
+        }
+        if (!isnan(x) && !isnan(y)) {
+            returnVal.x = (CGFloat)x;
+            returnVal.y = (CGFloat)y;
+        } else {
+            returnVal.x = p2.x;
+            returnVal.y = p2.y;
+        }
+    }
 	return returnVal;
 }
 

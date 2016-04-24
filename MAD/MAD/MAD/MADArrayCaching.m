@@ -227,8 +227,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSURL *)url {
     NSURL *result = nil;
     NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-    [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
-    [self.cachedDelegate cachedFilesDirectory];
+        [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+        [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     return result;
@@ -249,12 +249,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     success = [self.database executeQuery:queryCacheAddColumn withError:&error];
 }
 
-- (NSData *)dataForObject:(id)object {
+- (NSData *)dataForObject:(id _Nonnull)object {
     NSError * __autoreleasing * error = NULL;
     static const NSPropertyListFormat format = NSPropertyListBinaryFormat_v1_0;
     NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
                                                              options: 0 error: error];
-    NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
+    NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
     return data;
 }
 
@@ -263,11 +263,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     static const NSPropertyListReadOptions options = NSPropertyListImmutable;
     id propertyList = [NSPropertyListSerialization propertyListWithData: data options: options
                                                                  format: nil error: error];
-    NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
+    NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
     return propertyList;
 }
 
-- (void)addObject:(id)object {
+- (void)addObject:(id _Nonnull)object {
     @autoreleasepool {
 
         self.lastObjectSelected = nil;
@@ -276,11 +276,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
                                                                  options: 0 error: error];
         
-        const void *dataBytes = data.bytes;
-        int dataLength = data.length;
-        
         sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
-        sqlite3_bind_blob(_statementInsert, 2, dataBytes, dataLength, SQLITE_TRANSIENT);
+        sqlite3_bind_blob(_statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
         if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
             sqlite3_reset(_statementInsert);
             _numberOrRows++;
@@ -290,9 +287,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (void)writeData:(NSData *)data {
     sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
-    const void *dataBytes = data.bytes;
-    int dataLength = data.length;
-    sqlite3_bind_blob(_statementInsert, 2, dataBytes, dataLength, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(_statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
     if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
         sqlite3_reset(_statementInsert);
         _numberOrRows++;

@@ -30,7 +30,7 @@
 + (NSArray *)addressesForHostname:(NSString *)hostname {
     // Get the addresses for the given hostname.
     CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (__bridge CFStringRef)hostname);
-    BOOL isSuccess = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
+    Boolean isSuccess = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
     if (!isSuccess) return nil;
     CFArrayRef addressesRef = CFHostGetAddressing(hostRef, nil);
     if (addressesRef == nil) return nil;
@@ -74,20 +74,21 @@
     hints.ai_protocol = 0;
     int errorStatus = getaddrinfo([address cStringUsingEncoding:NSASCIIStringEncoding], NULL, &hints, &result);
     if (errorStatus != 0) return nil;
-    CFDataRef addressRef = CFDataCreate(NULL, (UInt8 *)result->ai_addr, result->ai_addrlen);
+    CFDataRef addressRef = CFDataCreate(NULL, (UInt8 *)result->ai_addr, (CFIndex)result->ai_addrlen);
     if (addressRef == nil) return nil;
     freeaddrinfo(result);
     CFHostRef hostRef = CFHostCreateWithAddress(kCFAllocatorDefault, addressRef);
     if (hostRef == nil) return nil;
     CFRelease(addressRef);
-    BOOL isSuccess = CFHostStartInfoResolution(hostRef, kCFHostNames, NULL);
+    Boolean isSuccess = CFHostStartInfoResolution(hostRef, kCFHostNames, NULL);
     if (!isSuccess) return nil;
     
     // Get the hostnames for the host reference.
     NSArray* hostnamesRef = CFBridgingRelease(CFHostGetNames(hostRef, NULL));
     NSMutableArray *hostnames = [NSMutableArray array];
-    for (int currentIndex = 0; currentIndex < [(NSArray *)hostnamesRef count]; currentIndex++) {
-        [hostnames addObject:[(NSArray *)hostnamesRef objectAtIndex:currentIndex]];
+    for (NSUInteger currentIndex = 0; currentIndex < ((NSArray *)hostnamesRef).count; currentIndex++) {
+        id obj = [(NSArray *)hostnamesRef objectAtIndex:currentIndex];
+        [hostnames addObject:obj];
     }
     
     return hostnames;

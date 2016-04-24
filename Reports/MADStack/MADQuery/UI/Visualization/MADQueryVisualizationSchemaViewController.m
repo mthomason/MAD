@@ -23,7 +23,7 @@
 @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
-@property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
+@property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
 @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIFont *detailFont;
@@ -115,7 +115,10 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.schemaTableViewController.delegate = self;
     self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
-    self.toolbar.backgroundColor = [UIColor darkGrayColor];
+    
+    UIColor *color = [UIColor darkGrayColor];
+    self.toolbar.backgroundColor = color;
+    
     UIColor *darkBlue = [MADColorEverydayApps newColorBlueDark];
     self.view.layer.shadowColor = [darkBlue CGColor];
     self.view.layer.shadowOpacity = 1.0000f;
@@ -143,15 +146,18 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    self.view.objectIdTag = tableObjectId;
-    self.cachedTableObjectId = tableObjectId;
-    
-    RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
-                                              managedObjectContext: self.document.managedObjectContext];
+    self.view.objectIdTag = tableObjectId.copy;
+    self.cachedTableObjectId = tableObjectId.copy;
+    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableObjectId];
    
-    self.titleView.label.text = table.alias;
-    self.titleView.label.font = self.titleFont;
-    self.titleView.label.textColor = [UIColor whiteColor];
+    NSString *tableAlias = table.alias.copy;
+    self.titleView.label.text = tableAlias;
+    
+    UIFont *titleFont = self.titleFont.copy;
+    self.titleView.label.font = titleFont;
+    
+    UIColor *color = [UIColor whiteColor];
+    self.titleView.label.textColor = color;
     
     [self.hasFieldsObjectIds removeAllObjects];
 

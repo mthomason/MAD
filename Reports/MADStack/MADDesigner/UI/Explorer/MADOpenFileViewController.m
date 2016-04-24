@@ -461,8 +461,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)reenable {
     self.collectionView.userInteractionEnabled = YES;
-    for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-        [cell.activityIndicator stopAnimating];
+    NSArray *visibleCells = self.collectionView.visibleCells;
+    UIActivityIndicatorView *activityIndicator;
+    for (MTCollectionViewCellDocument *cell in visibleCells) {
+        activityIndicator = cell.activityIndicator;
+        [activityIndicator stopAnimating];
     }
 }
 /*

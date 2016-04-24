@@ -282,9 +282,11 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)finishCloseDocument:(MADOpenFileViewController *)sender {
     [sender reenable];
+    MADOpenFileViewController * __weak wsender = sender;
     [UIView performWithoutAnimation:^{
-        [sender.collectionView.backgroundView setNeedsDisplay];
-        [sender.collectionView reloadItemsAtIndexPaths:sender.collectionView.indexPathsForVisibleItems];
+        UICollectionViewController *ssender = wsender;
+        [ssender.collectionView.backgroundView setNeedsDisplay];
+        [ssender.collectionView reloadItemsAtIndexPaths:ssender.collectionView.indexPathsForVisibleItems];
     }];
 }
 

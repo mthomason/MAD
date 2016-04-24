@@ -7,9 +7,10 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
@@ -39,7 +40,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         self.textColor = tintColor;
         
         self.text = [section localizedDisplayName];
-        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.autoresizingMask = MADViewAutoresizingFlexable();
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.backgroundColor = [UIColor clearColor];
         self.translatesAutoresizingMaskIntoConstraints = NO;

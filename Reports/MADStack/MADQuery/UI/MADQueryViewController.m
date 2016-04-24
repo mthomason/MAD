@@ -680,23 +680,27 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
 
-                NSString *databaseType = [NSString stringWithFormat:@"%@", database.ownedByUser.database_driver_type];
+                NSString *databaseType = [[NSString alloc] initWithFormat:@"%@", database.ownedByUser.database_driver_type];
                 NSString *schemaName = [database.ownedByUser databaseSchemaName];
                 NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
-                NSString *message = [NSString stringWithFormat:localizedMessage, databaseType, schemaName];
-                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-                NSDictionary *attributes = @{ NSFontAttributeName : font };
-                NSRange rangeOfSchemaName = [message rangeOfString:schemaName];
-                NSRange rangeOfDatabaseTypeName = [message rangeOfString:databaseType];
-                UIFont *fontItalic = [UIFont italicSystemFontOfSize:font.pointSize];
+                NSString *message = [[NSString alloc] initWithFormat:localizedMessage, databaseType, schemaName];
                 
-                NSDictionary *additionalAttributeStroke = @{ NSFontAttributeName : fontItalic };
-
+                
+                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+                NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                                font, NSFontAttributeName, nil];
+                
+                UIFont *fontItalic = [UIFont italicSystemFontOfSize:font.pointSize];
+                NSDictionary *attributeStroke = [[NSDictionary alloc] initWithObjectsAndKeys: fontItalic, NSFontAttributeName, nil];
+                
                 NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString: message attributes: attributes];
-                [messageAttributed removeAttribute: NSFontAttributeName range: rangeOfDatabaseTypeName];
-                [messageAttributed removeAttribute: NSFontAttributeName range: rangeOfSchemaName];
-                [messageAttributed addAttributes: additionalAttributeStroke range: rangeOfDatabaseTypeName];
-                [messageAttributed addAttributes: additionalAttributeStroke range: rangeOfSchemaName];
+                NSRange range = [messageAttributed.string rangeOfString:databaseType];
+                [messageAttributed removeAttribute: NSFontAttributeName range: range];
+                [messageAttributed addAttributes: attributeStroke range: range];
+
+                range = [messageAttributed.string rangeOfString:schemaName];
+                [messageAttributed removeAttribute: NSFontAttributeName range: range];
+                [messageAttributed addAttributes: attributeStroke range: range];
                 
                 result.textLabel.text = message;
                 result.textLabel.attributedText = messageAttributed;

@@ -24,7 +24,7 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        NSNumberFormatter *numberFormatter = [NSNumberFormatter twoDecimalPlaces];
+        NSNumberFormatter *numberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
         self.numberFormatter = numberFormatter;
     }
     return self;
@@ -44,7 +44,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.metadataItems.count;
+    return (NSInteger)self.metadataItems.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -56,8 +56,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MADTableViewCellDocumentInformation" forIndexPath: indexPath];
-    MADMetaData *metadata = self.metadataItems[indexPath.section];
+    static NSString * const MADDocumentInformationID = @"MADTableViewCellDocumentInformation";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: MADDocumentInformationID
+                                                            forIndexPath: indexPath];
+    MADMetaData *metadata = self.metadataItems[(NSUInteger)indexPath.section];
     NSString *systemFileSizeString;
     switch (indexPath.row) {
         case 0:
@@ -66,7 +68,7 @@
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;
         case 1: {
-            NSNumber *n = @(madSystemFileSizeToMB(metadata.fileSystemFileSize));
+            NSNumber *n = [[NSNumber alloc] initWithDouble: madSystemFileSizeToMB(metadata.fileSystemFileSize)];
             systemFileSizeString = [self.numberFormatter stringFromNumber: n];
             cell.textLabel.text = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];

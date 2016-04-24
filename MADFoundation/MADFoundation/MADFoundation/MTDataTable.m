@@ -185,21 +185,21 @@ static NSString * const StringEmpty = @"";
     NSDictionary *plist = [self copyPlist];
 
     NSError * __autoreleasing *error = nil;
-    static const propertyListFormat = NSPropertyListBinaryFormat_v1_0;
+    static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
                                                                format: propertyListFormat
                                                               options: 0 error: error];
 
-    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
 
     bool success = false;
     if (url) {
         NSError * __autoreleasing *errorWriting = nil;
         success = [cache writeToURL: url
                             options: NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
-                              error: &errorWriting] ? true : false;
+                              error: errorWriting] ? true : false;
 
-        NSAssert(errorWriting == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(errorWriting == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
 
     }
     

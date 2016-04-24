@@ -25,6 +25,7 @@
 #import <MAD/MADNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
 
+#import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MADDataStructures/MTPair.h>
 #import "MADTabBarController.h"
@@ -888,7 +889,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             result.delegate = self;
             result.view.backgroundColor = self.view.backgroundColor;
             result.view.frame = self.view.bounds;
-            result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            result.view.autoresizingMask = MADViewAutoresizingFlexable();
             result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
     }
@@ -926,7 +927,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
             result.delegate =  self;
             result.view.frame = self.view.bounds;
-            result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            result.view.autoresizingMask = MADViewAutoresizingFlexable();
             result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
         

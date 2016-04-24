@@ -11,45 +11,42 @@
 
 @implementation NSAttributedString (Logo)
 
-+ (NSAttributedString *)logoForTitle:(NSString *)title {
++ (MADLogoString *)newLogoStringForTitle:(NSString *)title {
     
     NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, attributedStringMadDesigner.string.length);
-    UIColor *foregroundColor = [UIColor whiteColor];
-    NSArray *components = [title componentsSeparatedByString:@" "];
+    NSArray <NSString *> *components = [title componentsSeparatedByString:@" "];
     NSRange firstRange;
     NSRange secondRange;
     
     if (components.count == 2) {
-        firstRange = [title rangeOfString:components[0]];
-        secondRange = [title rangeOfString:components[1]];
+        NSString *component = components[0];
+        firstRange = [title rangeOfString:component];
+        component = components[1];
+        secondRange = [title rangeOfString:component];
     } else {
         firstRange = range; secondRange = range;
     }
     
+    UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fonta
-                                        range: firstRange];
+                                        value: font range: firstRange];
     
+    font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fontb
-                                        range: secondRange];
+                                        value: font range: secondRange];
     
     [attributedStringMadDesigner addAttribute: NSParagraphStyleAttributeName
-                                        value: paragraphStyle
-                                        range: range];
+                                        value: paragraphStyle range: range];
     
+    UIColor *foregroundColor = [UIColor whiteColor];
     [attributedStringMadDesigner addAttribute: NSForegroundColorAttributeName
-                                        value: foregroundColor
-                                        range: range];
+                                        value: foregroundColor range: range];
     
     [attributedStringMadDesigner addAttribute:NSKernAttributeName
-                                        value:[NSNull null]
-                                        range:range];
+                                        value:[NSNull null] range:range];
     return attributedStringMadDesigner;
 }
 

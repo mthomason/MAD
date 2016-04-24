@@ -8,8 +8,10 @@
 
 #import <Foundation/NSAttributedString.h>
 
+typedef NSAttributedString MADLogoString;
+
 @interface NSAttributedString (Logo)
 
-+ (NSAttributedString *)logoForTitle:(NSString *)title;
+    + (MADLogoString *)newLogoStringForTitle:(NSString *)title;
 
 @end

@@ -17,8 +17,6 @@
 		4C9372D01BACFF0F00D6BD62 /* MADDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372CE1BACFF0F00D6BD62 /* MADDataColumn.m */; };
 		4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372EB1BAD215B00D6BD62 /* NSData+Comparson.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372F21BAD215B00D6BD62 /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EC1BAD215B00D6BD62 /* NSData+Comparson.m */; };
-		4C9372F31BAD215B00D6BD62 /* NSFileManager+Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372ED1BAD215B00D6BD62 /* NSFileManager+Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C9372F41BAD215B00D6BD62 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EE1BAD215B00D6BD62 /* NSFileManager+Common.m */; };
 		4C9372F51BAD215B00D6BD62 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EF1BAD215B00D6BD62 /* NSURL+Document.m */; };
 		4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,8 +53,6 @@
 		4C9372CE1BACFF0F00D6BD62 /* MADDataColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataColumn.m; sourceTree = "<group>"; };
 		4C9372EB1BAD215B00D6BD62 /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Comparson.h"; path = "Categories/NSData+Comparson.h"; sourceTree = "<group>"; };
 		4C9372EC1BAD215B00D6BD62 /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Comparson.m"; path = "Categories/NSData+Comparson.m"; sourceTree = "<group>"; };
-		4C9372ED1BAD215B00D6BD62 /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "Categories/NSFileManager+Common.h"; sourceTree = "<group>"; };
-		4C9372EE1BAD215B00D6BD62 /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+Common.m"; path = "Categories/NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4C9372EF1BAD215B00D6BD62 /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+Document.m"; path = "Categories/NSURL+Document.m"; sourceTree = "<group>"; };
 		4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "Categories/NSURL+Document.h"; sourceTree = "<group>"; };
 		4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataType.h; sourceTree = "<group>"; };
@@ -164,8 +160,6 @@
 			children = (
 				4C9372EB1BAD215B00D6BD62 /* NSData+Comparson.h */,
 				4C9372EC1BAD215B00D6BD62 /* NSData+Comparson.m */,
-				4C9372ED1BAD215B00D6BD62 /* NSFileManager+Common.h */,
-				4C9372EE1BAD215B00D6BD62 /* NSFileManager+Common.m */,
 				4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */,
 				4C9372EF1BAD215B00D6BD62 /* NSURL+Document.m */,
 			);
@@ -205,7 +199,6 @@
 				4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */,
 				4C9372BB1BACFDB200D6BD62 /* MTDataTable.h in Headers */,
 				4CF09A491BB2791D007BCF7A /* UIApplication+MADAppDelegate.h in Headers */,
-				4C9372F31BAD215B00D6BD62 /* NSFileManager+Common.h in Headers */,
 				4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */,
 				4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */,
 				4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */,
@@ -266,6 +259,7 @@
 				TargetAttributes = {
 					4C9372991BACFC9200D6BD62 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = D3C58YS54A;
 					};
 					4C9372A31BACFC9200D6BD62 = {
 						CreatedOnToolsVersion = 7.0;
@@ -317,7 +311,6 @@
 				4C9372D01BACFF0F00D6BD62 /* MADDataColumn.m in Sources */,
 				4CF09A4A1BB2791D007BCF7A /* UIApplication+MADAppDelegate.m in Sources */,
 				4C9372F51BAD215B00D6BD62 /* NSURL+Document.m in Sources */,
-				4C9372F41BAD215B00D6BD62 /* NSFileManager+Common.m in Sources */,
 				4C9372BC1BACFDB200D6BD62 /* MTDataTable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +434,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -476,6 +470,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

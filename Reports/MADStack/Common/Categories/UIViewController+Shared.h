@@ -9,7 +9,7 @@
 #ifndef Reports_UIViewController_Shared_h
 #define Reports_UIViewController_Shared_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 
 @interface UIViewController (Shared)
 

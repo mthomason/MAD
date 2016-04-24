@@ -16,24 +16,24 @@
 
 + (instancetype)newDataTableWithDefinition:(NSDictionary *)parameters {
 
-    NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
-    NSNumber *keyDataTableObjectId = @(MTDataTableObjectId);
+    NSNumber *keyDataTableType = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
+    NSNumber *keyDataTableObjectId = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
     
     NSNumber *dataTableType = parameters[keyDataTableType];
     NSNumber *dataTableObjectId = parameters[keyDataTableObjectId];
     
-    BOOL objectIdSet = NO;
+    bool objectIdSet = false;
     
     //Default type is virtual. If there is no object id, then type MUST be virtual.  That's
     //  because we won't know where to store it.
     MTDataTableType type = MTDataTableTypeVirtual;
     NSUInteger objectId = 0;
     if (dataTableType != nil && dataTableObjectId != nil) {
-        type = [dataTableType unsignedIntegerValue];
+        type = dataTableType.shortValue;
     }
     
     if (dataTableObjectId != nil) {
-        objectIdSet = YES;
+        objectIdSet = true;
         objectId = [dataTableObjectId unsignedIntegerValue];
     }
     if (objectIdSet) {

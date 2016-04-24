@@ -13,6 +13,7 @@
 #import "MTCollectionViewCellDocument.h"
 #import "MADBackgroundViewSelected.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
@@ -23,72 +24,81 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @interface MTCollectionViewCellDocument ()
 
-@property (nonatomic, strong) UIColor *bgColor;
-@property (nonatomic, strong) UIColor *colorTextNormal;
-@property (nonatomic, strong) UIColor *colorTextSelectedHighlighted;
-@property (nonatomic, strong) UIColor *colorTextSelected;
+    @property (nonatomic, strong) UIColor *bgColor;
+    @property (nonatomic, strong) UIColor *colorTextNormal;
+    @property (nonatomic, strong) UIColor *colorTextSelectedHighlighted;
+    @property (nonatomic, strong) UIColor *colorTextSelected;
 
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+    @property (nonatomic, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
+    @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
-@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
+    @property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
 
-@property (nonatomic, assign) BOOL wobbling;
+    @property (nonatomic, assign) BOOL wobbling;
 
 @end
 
 @implementation MTCollectionViewCellDocument
 
-+ (UIImage *)defaultThumbnail {
++ (UIImage *)newDefaultThumbnail {
     UIImage *result = [UIImage imageNamed:MTImageBlank];
     return result;
 }
 
-+ (UIFont *)CaptionFont {
-    return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
++ (UIFont *)newCaptionFont {
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    return font;
 }
 
-+ (UIFont *)CaptionFont2 {
-    return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
++ (UIFont *)newCaptionFont2 {
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    return font;
 }
 
 - (void)awakeFromNib {
     //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
-    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+    UIColor *color = [UIColor darkGrayColor];
+    UIColor *clearColor = [UIColor clearColor];
+    UIColor *lightGrayColor = [UIColor lightGrayColor];
+
+    self.imagePreview.layer.shadowColor = color.CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(rename:)];
+    SEL actionRename = @selector(rename:);
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                          action: actionRename];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
-    self.tapGestureRecognizer = tap;
-    
     [self.labelTitle addGestureRecognizer:tap];
+    self.tapGestureRecognizer = tap;
+
     self.labelTitle.userInteractionEnabled = YES;
 
     self.labelTitle.textColor = self.colorTextNormal;
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
-    self.labelTitle.backgroundColor = [UIColor clearColor];
+    self.labelTitle.backgroundColor = clearColor;
     self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     [self.labelTitle setNeedsLayout];
     
-    self.labelTitleSub.textColor = [UIColor lightGrayColor];
+    self.labelTitleSub.textColor = lightGrayColor;
     self.labelTitleSub.clipsToBounds = NO;
     self.labelTitleSub.numberOfLines = 0;
-    self.labelTitleSub.backgroundColor = [UIColor clearColor];
+    self.labelTitleSub.backgroundColor = clearColor;
     self.labelTitleSub.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     [self.labelTitleSub setNeedsLayout];
 
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                                                             action: @selector(activateEditMode:)];
-    [self addGestureRecognizer: longPressGestureRecognizer];
-    self.longPressGestureRecognizer = longPressGestureRecognizer;
+    SEL actionEdit = @selector(activateEditMode:);
+    id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                        action: actionEdit];
+    [self addGestureRecognizer: longPressGesture];
+    self.longPressGestureRecognizer = longPressGesture;
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -197,7 +207,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIFont *font = [self CaptionFont];
+    UIFont *font = [self newCaptionFont];
     NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
                                  NSFontAttributeName : font,
                                  NSParagraphStyleAttributeName : paragraphStyle};
@@ -210,7 +220,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIFont *font = [self CaptionFont2];
+    UIFont *font = [self newCaptionFont2];
     NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
                                  NSFontAttributeName : font,
                                  NSParagraphStyleAttributeName : paragraphStyle};

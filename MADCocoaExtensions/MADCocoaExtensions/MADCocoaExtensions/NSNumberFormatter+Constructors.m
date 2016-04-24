@@ -8,14 +8,17 @@
 
 #import "NSNumberFormatter+Constructors.h"
 
+static NSString * const TextDecimalSeparator = @".";
+static NSString * const TextGroupingSeparator = @",";
+
 @implementation NSNumberFormatter (Constructors)
 
-+ (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED {
++ (instancetype)newNumberFormatterTwoDecimalPlaces {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     numberFormatter.maximumFractionDigits = 2;
-    numberFormatter.decimalSeparator = @".";
-    numberFormatter.groupingSeparator = @",";
+    numberFormatter.decimalSeparator = TextDecimalSeparator;
+    numberFormatter.groupingSeparator = TextGroupingSeparator;
     return numberFormatter;
 }
 

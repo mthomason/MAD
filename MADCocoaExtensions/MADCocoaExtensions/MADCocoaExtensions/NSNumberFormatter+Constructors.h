@@ -13,7 +13,7 @@
 
 @interface NSNumberFormatter (Constructors)
 
-    + (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED;
+    + (instancetype)newNumberFormatterTwoDecimalPlaces;
 
 @end
 

@@ -31,10 +31,10 @@
 @interface MADDesignerElementView ()
     <MTElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) MTElementCanvas *canvasView;
-@property (nonatomic, strong) MADResizeHandles *resizeHandles;
+    @property (nonatomic, strong) MTElementCanvas *canvasView;
+    @property (nonatomic, strong) MADResizeHandles *resizeHandles;
 
-@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
 @end
 
@@ -208,10 +208,20 @@
 }
 
 - (void)resize:(CGSize)size {
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.managedObjectContext objectWithID:self.objectIdTag];
-    documentObject.sizewidth = @(size.width);
-    documentObject.sizeheight = @(size.height);
-    [self.managedObjectContext save:nil];
+
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    RptqDocumentObject *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
+
+    NSNumber *n = [[NSNumber alloc] initWithFloat:size.width];
+    documentObject.sizewidth = n;
+    
+    n = [[NSNumber alloc] initWithFloat:size.height];
+    documentObject.sizeheight = n;
+
+    NSError * __autoreleasing *error = NULL;
+    [managedObjectContext save:error];
+    NSAssert(*error == nil, @"Error: %@", *error);
+    
 }
 #pragma mark - Members
 

@@ -27,6 +27,10 @@ static NSString * const Downloading                             = @"Downloading"
 
 @implementation MADFileExplorerViewController
 
+- (void)dealloc {
+    _subtitleNumberFormatter = nil;
+}
+
 - (NSURL *)documentDirectory {
     return self.filesCoordnator.filesController.documentDirectory;
 }
@@ -172,7 +176,7 @@ static NSString * const Downloading                             = @"Downloading"
 
     NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-    cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
+    cell.imagePreview.image = image ?: [MTCollectionViewCellDocument newDefaultThumbnail];
     
     [cell normalizeTint];
     
@@ -221,7 +225,7 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (NSNumberFormatter *)subtitleNumberFormatter {
     if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter twoDecimalPlaces];
+        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
     }
     return _subtitleNumberFormatter;
 }

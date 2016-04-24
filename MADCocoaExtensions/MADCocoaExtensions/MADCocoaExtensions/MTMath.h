@@ -23,14 +23,14 @@ static inline NSUInteger madRandomNumberInRange(NSRange range) {
     return range.location + arc4random() % ((range.location + range.length - 1) - range.location + 1);
 }
 
-static inline unsigned long long madSystemFileSizeToMB(unsigned long long sfs);
-static inline unsigned long long madSystemFileSizeToMB(unsigned long long sfs) {
+static inline double madSystemFileSizeToMB(unsigned long long sfs);
+static inline double madSystemFileSizeToMB(unsigned long long sfs) {
     return sfs / 1000000;
 }
 
 @interface MTMath : NSObject
 
-+ (NSNumber *)systemFileSizeToMB:(unsigned long long)sfs;
+    + (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs;
 
 @end
 
