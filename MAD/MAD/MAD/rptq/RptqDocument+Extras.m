@@ -271,7 +271,8 @@
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
-    [section setLayoutHeight: @(height)];
+    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
+    section.layoutHeight = layoutHeight;
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
@@ -311,13 +312,14 @@
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
-    section.layoutHeight = @(height);
+    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
+    section.layoutHeight = layoutHeight;
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
-    NSNumber *visibility = @(isVisible);
+    NSNumber *visibility = [[NSNumber alloc] initWithBool:isVisible];
     section.visibility = visibility;
 }
 

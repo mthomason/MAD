@@ -157,15 +157,13 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
                 
             case MNSDocumentSectionTypeGroupHeader: {
                 RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
-                NSSet *groupHasSection = group.hasSection;
-                resultSection = [self headerSectionInSections:groupHasSection];
+                resultSection = [self headerSectionInSections:group.hasSection];
                 break;
             }
                 
             case MNSDocumentSectionTypeGroupFooter: {
                 RptqQueryGroup *group = [self queryGroupForIndex:queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
-                NSSet *groupHasSection = group.hasSection;
-                resultSection = [self footerSectionInSections:groupHasSection];
+                resultSection = [self footerSectionInSections:group.hasSection];
                 break;
             }
                 
@@ -177,26 +175,24 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     return resultSection;
 }
 
-- (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
-    RptqDocumentSection *resultSection = nil;
+- (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
         if (section.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
-            resultSection = section;
+            return section;
             break;
         }
     }
-    return resultSection;
+    return nil;
 }
 
-- (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
-    RptqDocumentSection *resultSection = nil;
+- (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
         if (section.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
-            resultSection = section;
+            return section;
             break;
         }
     }
-    return resultSection;
+    return nil;
 }
 
 - (RptqQueryGroup *)firstQueryGroup {

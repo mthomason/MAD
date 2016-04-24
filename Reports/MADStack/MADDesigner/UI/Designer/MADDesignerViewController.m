@@ -2160,15 +2160,20 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     }
 }
 
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
+    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+}
+
 - (void)repositionSectionViews:(CGRect)presentedRect {
+
     if (presentedRect.origin.x > CGPointZero.x) {
-        
         for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
-            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
-            sectionView.scrollIndicatorInsets = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            sectionView.contentInset = ScrollIndicatorContentInsets(presentedRect);
+            sectionView.scrollIndicatorInsets = ScrollIndicatorContentInsets(presentedRect);
         }
-        
     }
+    
 }
 
 - (void)selectElementView:(MADDesignerElementView *)elementView {
@@ -2177,8 +2182,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     if (numberOfViewsDeselected == 0) {
         
-        [self.selectedObjectIds addObject:elementView.objectIdTag];
-        [self applyBorderToView:elementView];
+        [self.selectedObjectIds addObject: elementView.objectIdTag];
+        [self applyBorderToView: elementView];
         
         self.viewControllerToolbox.document = self.document;
         self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
@@ -2191,9 +2196,11 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self removeBorderFromView: elementView];
     
     if (self.popoverToolbox.passthroughViews != nil) {
+
         NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray: self.popoverToolbox.passthroughViews];
         [passThroughViews removeObject: elementView];
         self.popoverToolbox.passthroughViews = passThroughViews.allObjects;
+
     }
 }
 
