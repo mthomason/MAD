@@ -47,7 +47,9 @@
 }
 
 - (void)initalize {
+    UIColor *color = [UIColor darkGrayColor];
     UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
+
     lbl.backgroundColor = [UIColor whiteColor];
     
     [self.contentView addSubview:lbl];
@@ -59,7 +61,7 @@
                            UIViewAutoresizingFlexibleLeftMargin;
     self.label = lbl;
     self.contentView.layer.borderWidth = 1.0000f;
-    self.contentView.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.contentView.layer.borderColor = color.CGColor;
 }
 
 @end

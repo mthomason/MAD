@@ -48,8 +48,9 @@
 - (void)initalize {
     UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
     UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
+    UIColor *textColor = [MADColorEverydayApps newColorWhite];
     lbl.backgroundColor = bgcolor;
-    lbl.textColor = [MADColorEverydayApps newColorWhite];
+    lbl.textColor = textColor;
     lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
                            UIViewAutoresizingFlexibleWidth |
                            UIViewAutoresizingFlexibleTopMargin |
@@ -60,7 +61,7 @@
     [self addSubview:lbl];
     self.label = lbl;
     self.layer.borderWidth = 1.0000f;
-    self.layer.borderColor = [bgcolor CGColor];
+    self.layer.borderColor = bgcolor.CGColor;
 }
 
 @end

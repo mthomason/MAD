@@ -16,7 +16,7 @@
     + (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 
     + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
-    - (NSString *)databaseSchemaName;
+    - (NSString *)copyDatabaseSchemaName;
 
 @end
 

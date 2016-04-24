@@ -20,12 +20,15 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+
+        UIColor *shadowColor = [UIColor clearColor];
         self.arrowOffsetHolder = 50.0000f;
         self.arrowDirectionHolder = UIPopoverArrowDirectionAny;
-        self.layer.shadowColor = [UIColor clearColor].CGColor;
+        self.layer.shadowColor = shadowColor.CGColor;
         self.layer.shadowOffset = CGSizeZero;
         self.layer.shadowRadius = CGSizeZero.width;
         self.opaque = NO;
+        
     }
     return self;
 }

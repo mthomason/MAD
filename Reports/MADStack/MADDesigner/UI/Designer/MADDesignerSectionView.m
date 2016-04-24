@@ -51,6 +51,9 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
 
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
+
+        UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
+        UIColor *clearColor = [UIColor clearColor];
         
         self.accessibile = true;
         
@@ -72,9 +75,9 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         self.allowsSelection = YES;
         self.allowsMultipleSelection = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.borderColor = [MADColorEverydayApps newColorBorderColor].CGColor;
+        self.layer.borderColor = borderColor.CGColor;
         self.backgroundView = nil;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = clearColor;
         
         [self setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisVertical];
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisVertical];
@@ -139,17 +142,21 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 }
 
 - (void)setBorderState:(MADBorderState)borderState {
+    UIColor *color;
     switch (borderState) {
         case MADBorderStateDisabled:
-            self.layer.borderColor = [UIColor blackColor].CGColor;
+            color = [UIColor blackColor];
+            self.layer.borderColor = color.CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         case MADBorderStateNormal:
-            self.layer.borderColor = [UIColor blackColor].CGColor;
+            color = [UIColor blackColor];
+            self.layer.borderColor = color.CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         case MADBorderStateSelected:
-            self.layer.borderColor = [MADColorEverydayApps newColorAnalogous4].CGColor;
+            color = [MADColorEverydayApps newColorAnalogous4];
+            self.layer.borderColor = color.CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         default:

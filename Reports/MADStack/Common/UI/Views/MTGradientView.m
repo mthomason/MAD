@@ -20,31 +20,31 @@
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
     UIColor *startColor = [MADColorEverydayApps newColorGreenLight];
-    CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents([startColor CGColor]);
+    CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents(startColor.CGColor);
     
     UIColor *secondColor = [UIColor colorWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *secondColorComponents = (CGFloat *)CGColorGetComponents([secondColor CGColor]);
+    CGFloat *secondColorComponents = (CGFloat *)CGColorGetComponents(secondColor.CGColor);
     
     UIColor *thirdColor = [UIColor colorWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *thirdColorComponents = (CGFloat *)CGColorGetComponents([thirdColor CGColor]);
+    CGFloat *thirdColorComponents = (CGFloat *)CGColorGetComponents(thirdColor.CGColor);
     
     UIColor *fourthColor = [UIColor colorWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *fourthColorComponents = (CGFloat *)CGColorGetComponents([fourthColor CGColor]);
+    CGFloat *fourthColorComponents = (CGFloat *)CGColorGetComponents(fourthColor.CGColor);
     
     UIColor *middleColor = [MADColorEverydayApps newColorGreenDark];
-    CGFloat *middleColorComponents = (CGFloat *)CGColorGetComponents([middleColor CGColor]);
+    CGFloat *middleColorComponents = (CGFloat *)CGColorGetComponents(middleColor.CGColor);
 
     UIColor *sixthColor = [UIColor colorWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *sixthColorComponents = (CGFloat *)CGColorGetComponents([sixthColor CGColor]);
+    CGFloat *sixthColorComponents = (CGFloat *)CGColorGetComponents(sixthColor.CGColor);
 
     UIColor *seventhColor = [UIColor colorWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *seventhColorComponents = (CGFloat *)CGColorGetComponents([seventhColor CGColor]);
+    CGFloat *seventhColorComponents = (CGFloat *)CGColorGetComponents(seventhColor.CGColor);
     
     UIColor *eightColor = [UIColor colorWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
-    CGFloat *eightColorComponents = (CGFloat *)CGColorGetComponents([eightColor CGColor]);
+    CGFloat *eightColorComponents = (CGFloat *)CGColorGetComponents(eightColor.CGColor);
     
     UIColor *ninthColor = [MADColorEverydayApps newColorGreenLight];
-    CGFloat *ninthColorComponents = (CGFloat *)CGColorGetComponents([ninthColor CGColor]);
+    CGFloat *ninthColorComponents = (CGFloat *)CGColorGetComponents(ninthColor.CGColor);
 
     CGFloat colorComponents[40] = {
         

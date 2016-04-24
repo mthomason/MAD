@@ -56,9 +56,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 @implementation MADPageSlider
 
-- (void)dealloc {
-
-}
+- (void)dealloc { }
 
 - (void)removeFromSuperview {
     [super removeFromSuperview];
@@ -156,18 +154,26 @@ static inline CGFloat MaxDimension(CGSize size) {
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
     
     double tickValue = self.maximumValue / (numberOfTicks - 1);
+    
+    UIColor *darkTextColor = [UIColor darkTextColor];
+    UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
+    UIColor *clearColor = [UIColor clearColor];
     UIColor *drawingColor = [self drawingColor];
+    UIColor *blueColor = [MADColorEverydayApps newColorBlue];
+    
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:9.0000f];
+    
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
             
-            NSString *pageNumber = [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
+            NSString *pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
-            label.backgroundColor = [UIColor clearColor];
+            label.backgroundColor = clearColor;
             label.textAlignment = NSTextAlignmentRight;
             label.text = pageNumber;
-            label.font = [UIFont boldSystemFontOfSize:9.0000f];
-            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.80000000f];
+            label.font = boldFont;
+            label.textColor = textColor;
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             label.translatesAutoresizingMaskIntoConstraints = YES;
             label.tintColor = drawingColor;
@@ -183,7 +189,8 @@ static inline CGFloat MaxDimension(CGSize size) {
             label.layer.shadowOpacity = 6.0;
             label.layer.shadowRadius = 0.0;
             label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-            label.layer.shadowColor = [MADColorEverydayApps newColorBlue].CGColor;
+            label.layer.shadowColor = blueColor.CGColor;
+            
             [self.vibrancyView addSubview:label];
             [self.labels addObject:label];
         }

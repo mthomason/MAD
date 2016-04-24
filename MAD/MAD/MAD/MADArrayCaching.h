@@ -14,17 +14,17 @@
 
 @interface MADArrayCaching<ObjectType> : NSEnumerator
 
-    @property (nonatomic, weak) id <MTCacheProtocol> _Nullable cachedDelegate;
-    @property (nonatomic, strong, readonly) NSString * _Nonnull identifier;
+    @property (nonatomic, readwrite, weak, nullable) id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, readonly, strong, nonnull) NSString * identifier;
     @property (readonly) long long int count;
 
-    - (instancetype _Nonnull)initWithIdentifier:(NSString * _Nonnull)identifier;
-    - (instancetype _Nonnull)initWithIdentifier:(NSString * _Nonnull)identifier cachedDelegate:(id <MTCacheProtocol> _Nullable)cachedDelegate;
+    - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier;
+    - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier cachedDelegate:(id <MTCacheProtocol> _Nullable)cachedDelegate;
 
     - (void)initializeDatabase;
     - (void)finalizeDatabase;
 
-    - (NSURL * _Nullable)url;
+    - (nullable NSURL *)url;
     - (nullable ObjectType)objectAtIndex:(NSUInteger)index;
     - (void)addObject:(id _Nonnull)object;
     - (void)removeAllObjects;
@@ -32,7 +32,7 @@
     - (void)beginBulkInserts;
     - (void)endBulkInserts;
 
-    + (NSURL * _Nullable)urlForIdentifier:(NSString * _Nonnull)identifer;
+    + (nullable NSURL *)urlForIdentifier:(nonnull NSString *)identifer;
 
     - (void)resetEnumerator;
     - (id _Nullable)objectAtIndexedSubscript:(NSUInteger)idx;

@@ -86,17 +86,18 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
-    return [self subtitleForMetadata:metadata];
+    return [self copySubtitleForMetadata:metadata];
 }
 
-- (NSString *)subtitleForMetadata:(MADMetaData *)metadata {
+- (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata {
     NSString *result;
-    if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+    NSString *downloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+    if ([downloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
         result = NSLocalizedString(NotDownloaded, NotDownloaded);;
     } else {
-        NSNumber *systemFileSizeMB = @(madSystemFileSizeToMB(metadata.fileSystemFileSize));
+        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(metadata.fileSystemFileSize)];
         NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
-        result = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
+        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
     }
     return result;
 }
@@ -120,27 +121,27 @@ static NSString * const Downloading                             = @"Downloading"
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString * MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
-    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
+    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier
+                                                                                   forIndexPath: indexPath];
     
     if (cell.delegate == nil) {
         ((MTCollectionViewCellDocument *)cell).delegate = self;
     }
     MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
-    NSString *filename = metadata.name;
+    NSString *filename = metadata.name.copy;
     cell.labelTitle.text = filename;
     
     bool notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
     bool downloading = metadata.ubiquitousItemIsDownloading;
     bool uploading = metadata.ubiquitousItemIsUploading;
-    //bool uploaded = metadata.ubiquitousItemIsUploaded;
-    //CGFloat p = metadata.ubiquitousItemPercentUploaded;
-    
+
     if (downloading) {
         cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
     } else if (uploading) {
         cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
     } else {
-        cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
+        NSString *subtitle = [self copySubtitleForMetadata:metadata];
+        cell.labelTitleSub.text = subtitle.copy;
     }
     
     if (uploading) {

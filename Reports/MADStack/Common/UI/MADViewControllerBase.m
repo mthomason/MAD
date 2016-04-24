@@ -8,9 +8,7 @@
 
 @dynamic tabBarController;
 
-- (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)init {
     if (self = [super init]) {

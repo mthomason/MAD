@@ -50,8 +50,6 @@
     
 }
 
-+ (CGFloat)borderWidthThin {
-    return 1.0000f;
-}
++ (CGFloat)borderWidthThin { return 1.0000f; }
 
 @end

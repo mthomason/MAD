@@ -138,12 +138,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [MADQueryViewController deleteCoreDataCache];
-    [[NSNotificationCenter defaultCenter] removeObserver: self name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: _document.managedObjectContext];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self name: UIContentSizeCategoryDidChangeNotification
-                                                  object: nil];
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [MADQueryViewController deleteCoreDataCache];
+    });
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -305,6 +303,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                  selector: @selector(documentStateChanged)
                                                      name: UIDocumentStateChangedNotification
                                                    object: document];
+        [self observeManagedObjectContextChanges:document.managedObjectContext];
     }
     [self.tabBarController enableTabBarItems];
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
@@ -316,6 +315,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
+    [self ingnoreManagedObjectContextChanges:self.document.managedObjectContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
@@ -658,9 +658,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return @[];
-}
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView { return nil; }
+
+static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -680,11 +680,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
 
-                NSString *databaseType = [[NSString alloc] initWithFormat:@"%@", database.ownedByUser.database_driver_type];
-                NSString *schemaName = [database.ownedByUser databaseSchemaName];
-                NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
+                id databaseType = [[NSString alloc] initWithFormat:@"%@", database.ownedByUser.database_driver_type];
+                id schemaName = [database.ownedByUser copyDatabaseSchemaName];
+                id localizedMessage = NSLocalizedString(TextFormatConnection, TextFormatConnection);
                 NSString *message = [[NSString alloc] initWithFormat:localizedMessage, databaseType, schemaName];
-                
                 
                 UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
                 NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -714,15 +713,17 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
         // MARK: Display the table names that are used in the query
         case MTQuerySectionsTables: {
+        
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryTable *tablea = [self.queryTablesController objectAtIndexPath: path];
+            NSString *alias = tablea.alias.copy;
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            result.textLabel.text = [NSString stringWithFormat:@"%@", tablea.alias];
-            result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            result.textLabel.text = alias;
             result.textLabel.font = font;
             result.textLabel.backgroundColor = [UIColor whiteColor];
+            result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             result.indentationLevel = 1;
             result.tintColor = [MADColorEverydayApps newColorBlue];
             result.backgroundColor = [UIColor whiteColor];
@@ -742,16 +743,22 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             
             NSString *messageText = @"%@ %@ %@";
             
-            NSString *leftString = [NSString stringWithFormat:@"%@.%@", links.tableleft.capitalizedString, links.fieldleft.capitalizedString];
-            NSString *rightString = [NSString stringWithFormat:@"%@.%@", links.tableright.capitalizedString, links.fieldright.capitalizedString];
+            NSString *table = links.tableleft.capitalizedString;
+            NSString *field = links.fieldleft.capitalizedString;
+            NSString *leftString = [[NSString alloc] initWithFormat:@"%@.%@", table, field];
+            
+            table = links.tableright.capitalizedString;
+            field = links.fieldright.capitalizedString;
+            NSString *rightString = [[NSString alloc] initWithFormat:@"%@.%@", table, field];
 
-            [(MADTableViewCellQueryLink *)result setTableID: links.objectID];
+            NSManagedObjectID *tableID = links.objectID.copy;
+            ((MADTableViewCellQueryLink *)result).tableID = tableID;
             result.textLabel.numberOfLines = 0;
 
             NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             paragraphStyle.headIndent = 20.0000f;
             
-            NSString *linksDescription = [links linkDescription];
+            NSString *linksDescription = [links copyLinkDescription];
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
             NSDictionary *attributes = @{ NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle };
             UIColor *color = [MADColorEverydayApps newColorBlue];

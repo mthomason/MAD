@@ -41,7 +41,7 @@
     @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
     @property (nonatomic, assign) MTReportState reportState;
 
-    - (NSString *)subtitleForMetadata:(MADMetaData *)metadata;
+    - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
     @property (readonly) UIManagedDocument *openDocument;
 
 @end

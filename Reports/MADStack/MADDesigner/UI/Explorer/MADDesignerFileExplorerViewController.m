@@ -75,7 +75,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     @property (nonatomic, assign)   bool shouldShowAddDocumentPopover;
     @property (nonatomic, assign)   bool aboutViewControllerOnScreen;
 
-    @property (nonatomic, weak)     MADTabBarController *tabController;
+    @property (nonatomic, weak)   MADTabBarController *tabController;
 
 @end
 
@@ -126,7 +126,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     MADAppDelegate delegate = [MADApplication AppDelegate];
-    titleView.text = [delegate name];
+    NSString *name = [delegate name];
+    titleView.text = name.copy;
     titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     
@@ -294,52 +295,52 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)didOpenDocument:(MADocument *)documentByRef {
     
-    MADocument *document = (MADocument *)self.openDocument;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
     
-    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+        MADocument *document = (MADocument *)self.openDocument;
 
-    MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
-    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    tabBarController.viewControllerDelegate = self;
-    
-    NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
-    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
-
-    // FIXME: UISplitViewController has retain cycle, and can't be dealloc without issues.  This is
-    //          a work around.  We are keeping one split view controller alive.
-    if (self.splitViewController == nil) {
+        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+   
+        MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
+        tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
+        tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        tabBarController.viewControllerDelegate = self;
+        NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
+        ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
+        
         UIStoryboard *storyboardQuery = [UIStoryboard Query];
         MADQueryBuilderSplitViewController *splitViewController =  [storyboardQuery instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
         splitViewController.viewControllerDelegate = self;
-        self.splitViewController = splitViewController;
-    }
-
-    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
+        
+        UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
+        
+        MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+        designerViewController.delegate = self;
+        
+        MADViewerController *viewerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
+        viewerViewController.viewControllerDelegate = self ;
+        
+        MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
+        navControllerViewer.document = document;
+        [navControllerViewer setNavigationBarHidden:YES animated:NO];
+        [navControllerViewer setToolbarHidden:NO animated:NO];
+        
+        NSArray <__kindof UIViewController *> *tabBarViewControllers =
+        [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
+         navControllerViewer, nil];
+        
+        [tabBarController setViewControllers:tabBarViewControllers animated:NO];
+        self.tabController = tabBarController;
+        
+        MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
+        navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
+        navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorWhite];
+        
+        [self presentViewController:navigationController animated:YES completion:nil];
+        
+    }];
     
-    MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
-    designerViewController.delegate = self;
-    
-    MADViewerController *viewerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
-    viewerViewController.viewControllerDelegate = self ;
-    
-    MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
-    navControllerViewer.document = document;
-    [navControllerViewer setNavigationBarHidden:YES animated:NO];
-    [navControllerViewer setToolbarHidden:NO animated:NO];
-    
-    NSArray <__kindof UIViewController *> *tabBarViewControllers =
-        [[NSArray alloc] initWithObjects:self.splitViewController, designerViewController,
-                                         navControllerViewer, nil];
-    [tabBarController setViewControllers:tabBarViewControllers animated:NO];
-    self.tabController = tabBarController;
-
-    MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
-    navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
-    navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorWhite];
-
-    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (UIManagedDocument *)documentForURL:(NSURL *)url {

@@ -23,20 +23,22 @@ extern const NSInteger MTViewTagDocumentObjectNewLabelStatic;
 extern const NSInteger MTViewTagFieldOrFormulaSelector;
 
 @protocol MADDesignerElementPickerDelegate <MTViewControllerProtocol>
-- (void)insertDocumentObjectNewLabel:(NSString *)labelText;
-- (void)insertDocumentObjectDataField:(RptqQueryField *)field;
-- (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
-                                               inputType:(MTAggregateFunctionInputType)inputType
-                                             inputObject:(NSManagedObjectID *)inputObject
-                                               groupType:(MTAggregateGroupByType)groupType
-                                             groupNumber:(NSNumber *)groupNumber;
-- (void)viewControllerDidFinish:(id)sender;
+
+    - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+    - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
+    - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                                   inputType:(MTAggregateFunctionInputType)inputType
+                                                 inputObject:(NSManagedObjectID *)inputObject
+                                                   groupType:(MTAggregateGroupByType)groupType
+                                                 groupNumber:(NSNumber *)groupNumber;
+    - (void)viewControllerDidFinish:(id)sender;
+
 @end
 
 @interface MADDesignerElementPickerViewController : MADCollectionViewController
 
-@property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
+    @property (nonatomic, weak) MADocument *document;
 
 @end
 

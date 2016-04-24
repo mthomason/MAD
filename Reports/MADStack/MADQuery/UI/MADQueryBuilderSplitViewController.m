@@ -40,6 +40,14 @@
 
 @implementation MADQueryBuilderSplitViewController
 
++ (void)initialize {
+    if (self == [MADQueryBuilderSplitViewController self]) {
+        UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil];
+        UIColor *white =  [MADColorEverydayApps newColorWhite];
+        appearance.tintColor = white;
+    }
+}
+
 - (void)dealloc {
     _viewControllerDelegate = nil;
     _document = nil;
@@ -93,11 +101,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.delegate = self;
+
     MADocument *doc = self.document;
     NSAssert(doc != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-    
-    id <UISplitViewControllerDelegate> __weak delegate = self;
-    self.delegate = delegate;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = self.title;
@@ -109,7 +116,6 @@
 
     self.detailNavigationController.navigationBarHidden = NO;
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [MADColorEverydayApps newColorWhite];
 
     self.queryBuilderControllerAdvanced.document = doc;
 }

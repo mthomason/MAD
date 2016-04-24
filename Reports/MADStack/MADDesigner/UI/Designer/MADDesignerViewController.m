@@ -2772,9 +2772,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (void)applyBorderToView:(MADDesignerElementView *)view {
+    
     view.enableResizing = YES;
-    NSNumber *key = @(view.tag);
+    
+    NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
     self.borderAppliedToView[key] = @YES;
+    
     UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
     view.layer.borderWidth = [UIView borderWidthThin];
@@ -2784,10 +2787,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
-        NSNumber *key = @(view.tag);
+
+        NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
         self.borderAppliedToView[key] = @NO;
         result = YES;
-        view.layer.borderColor = [UIColor blackColor].CGColor;
+        UIColor *color = [UIColor blackColor];
+        view.layer.borderColor = color.CGColor;
         view.layer.borderWidth = 0;
         view.enableResizing = NO;
     } else {

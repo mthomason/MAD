@@ -243,7 +243,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [super viewWillAppear:animated];
     
     [self.collectionView.backgroundView setNeedsDisplay];
-    [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+    
+    id indexPaths = self.collectionView.indexPathsForVisibleItems.copy;
+    [self.collectionView reloadItemsAtIndexPaths: indexPaths];
     
     [self addActionItemToToolbar:animated];
     
@@ -604,20 +606,21 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
     [updates removeObjectsInArray:inserts];
     [updates removeObjectsInArray:removes];
-    
-    [self.collectionView performBatchUpdates:^{
+
+    UICollectionView *__weak weakCollectionView = self.collectionView;
+    [weakCollectionView performBatchUpdates:^{
+        UICollectionView *collectionView = weakCollectionView;
         if (inserts.count > 0) {
-            [self.collectionView insertItemsAtIndexPaths: inserts];
+            [collectionView insertItemsAtIndexPaths: inserts];
         }
         if (removes.count > 0) {
-            [self.collectionView deleteItemsAtIndexPaths: removes];
+            [collectionView deleteItemsAtIndexPaths: removes];
         }
         if (updates.count > 0) {
-            [self.collectionView reloadItemsAtIndexPaths: updates];
+            [collectionView reloadItemsAtIndexPaths: updates];
         }
     } completion:^(BOOL finished) {
         if (finished) {
-//            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
             completion(YES, nil);
         }
     }];

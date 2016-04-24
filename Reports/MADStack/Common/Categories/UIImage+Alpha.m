@@ -102,11 +102,13 @@
                                                      kCGBitmapByteOrderDefault | kCGImageAlphaNone);
     
     // Start with a mask that's entirely transparent
-    CGContextSetFillColorWithColor(maskContext, [UIColor blackColor].CGColor);
+    UIColor *blackColor = [UIColor blackColor];
+    CGContextSetFillColorWithColor(maskContext, blackColor.CGColor);
     CGContextFillRect(maskContext, CGRectMake(0, 0, size.width, size.height));
     
     // Make the inner part (within the border) opaque
-    CGContextSetFillColorWithColor(maskContext, [UIColor whiteColor].CGColor);
+    UIColor *whiteColor = [UIColor whiteColor];
+    CGContextSetFillColorWithColor(maskContext, whiteColor.CGColor);
     CGContextFillRect(maskContext, CGRectMake(borderSize, borderSize, size.width - borderSize * 2, size.height - borderSize * 2));
     
     // Get an image of the context

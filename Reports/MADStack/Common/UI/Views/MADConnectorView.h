@@ -13,7 +13,6 @@
 
 @interface MADConnectorView : MADManagedObjectView
 
-    @property (nonatomic, strong) NSString *linkDescription;
     @property (nonatomic, assign) bool topLeftToBottomRight;
     @property (nonatomic, assign) bool leftViewIsInital;
 

@@ -71,7 +71,7 @@
     }
 }
 
-- (NSString *)databaseSchemaName {
+- (NSString *)copyDatabaseSchemaName {
     NSString *result = @"";
     MNSDatabaseType databaseType = [self.inDatabase databaseType];
     switch (databaseType) {
@@ -106,7 +106,9 @@
             result = @"unknown";
             break;
     }
-    return [[result stringByDeletingPathExtension] capitalizedString];
+    NSString *resultNoPathExtension = [result stringByDeletingPathExtension];
+    NSString *capitalized = resultNoPathExtension.capitalizedString;
+    return capitalized;
 }
 
 #pragma mark - Static

@@ -13,7 +13,7 @@
 
 @protocol MADViewControllerDocumentProtocol <NSObject>
 
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) MADocument *document;
 
 @end
 

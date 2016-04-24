@@ -320,15 +320,16 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
     
-    [self.delegateQueue addOperationWithBlock:^{
-        
+    MADFilesController * __weak weakSelf = self;
+    [weakSelf.delegateQueue addOperationWithBlock:^{
+        MADFilesController *sself = self;
         // Filter out all lists that are already included in the tracked lists.
         __block NSArray *trackedRemovedListInfos;
         __block NSArray *untrackedInsertedListInfos;
         
-        NSArray *fileMetaDatum = [NSArray arrayWithArray:self.fileMetaDatum];
+        NSArray *fileMetaDatum = [[NSArray alloc] initWithArray:sself.fileMetaDatum];
  
-        dispatch_sync(self.fileMetaDataQueue, ^{
+        dispatch_sync(sself.fileMetaDataQueue, ^{
             NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
             trackedRemovedListInfos = [removedMetaDatum filteredArrayUsingPredicate:containPredicate];
 
@@ -340,22 +341,23 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
             return;
         }
         
-        if ([self.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
-            [self.delegate filesControllerWillChangeContent:self];
+        if ([sself.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
+            [sself.delegate filesControllerWillChangeContent:self];
         }
         
         // Remove
         for (MADMetaData *trackedRemovedListInfo in trackedRemovedListInfos) {
             __block NSUInteger trackedRemovedListInfoIndex;
             
-            dispatch_sync(self.fileMetaDataQueue, ^{
-                trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
+            MADFilesController *__weak wself = sself;
+            dispatch_sync(wself.fileMetaDataQueue, ^{
+                trackedRemovedListInfoIndex = [wself.fileMetaDatum indexOfObject:trackedRemovedListInfo];
                 //NSLog(@"REMOVING %@", trackedRemovedListInfo);
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
             
-            if ([self.delegate respondsToSelector:@selector(filesController:didRemoveListInfo:atIndex:)]) {
-                [self.delegate filesController: self
+            if ([sself.delegate respondsToSelector:@selector(filesController:didRemoveListInfo:atIndex:)]) {
+                [sself.delegate filesController: sself
                              didRemoveListInfo: trackedRemovedListInfo
                                        atIndex: trackedRemovedListInfoIndex];
             }
@@ -365,18 +367,19 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         untrackedInsertedListInfos = [untrackedInsertedListInfos sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
         
         // Insert
-        [self.fileMetaDatum addObjectsFromArray:untrackedInsertedListInfos];
-        NSArray *fileMetaDatumSorted = [self.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
-        self.fileMetaDatum = fileMetaDatumSorted.mutableCopy;
+        [sself.fileMetaDatum addObjectsFromArray:untrackedInsertedListInfos];
+        NSArray *fileMetaDatumSorted = [sself.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
+        sself.fileMetaDatum = fileMetaDatumSorted.mutableCopy;
         for (MADMetaData *untrackedInsertedListInfo in untrackedInsertedListInfos) {
             __block NSUInteger untrackedInsertedListInfoIndex;
             
-            dispatch_sync(self.fileMetaDataQueue, ^{
-                untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
+            MADFilesController *__weak wself = sself;
+            dispatch_sync(wself.fileMetaDataQueue, ^{
+                untrackedInsertedListInfoIndex = [wself.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
             });
             
-            if ([self.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
-                [self.delegate filesController: self
+            if ([sself.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
+                [sself.delegate filesController: sself
                              didInsertListInfo: untrackedInsertedListInfo
                                        atIndex: untrackedInsertedListInfoIndex];
             }
@@ -386,24 +389,25 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         for (MADMetaData *updatedListInfo in updatedMetaDatum) {
             __block NSUInteger updatedListInfoIndex;
             
-            dispatch_sync(self.fileMetaDataQueue, ^{
+            MADFilesController *__weak wself = sself;
+            dispatch_sync(wself.fileMetaDataQueue, ^{
                 //NSLog(@"UPDATING %@", updatedListInfo);
 
                 updatedListInfoIndex = [self.fileMetaDatum indexOfObject:updatedListInfo];
                 
                 // Track the new list info instead of the old one.
                 if (updatedListInfoIndex != NSNotFound) {
-                    self.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
+                    wself.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
                 }
             });
             
-            if (updatedListInfoIndex != NSNotFound && [self.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
-                [self.delegate filesController:self didUpdateListInfo:updatedListInfo atIndex:updatedListInfoIndex];
+            if (updatedListInfoIndex != NSNotFound && [sself.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
+                [sself.delegate filesController:sself didUpdateListInfo:updatedListInfo atIndex:updatedListInfoIndex];
             }
         }
         
-        if ([self.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
-            [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
+        if ([sself.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+            [sself.delegate filesControllerDidChangeContent:sself completion:^(BOOL success, NSError *error) {
                 completion(success, error);
             }];
         } else {

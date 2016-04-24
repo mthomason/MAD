@@ -56,7 +56,7 @@ typedef NS_ENUM(short, MNSLinkType) {
                                   joinType:(MNSLinkType)joinType
                       managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (NSString *)linkDescription;
+- (NSString *)copyLinkDescription;
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
 + (NSString *)LocalizedNamesForLinkType:(MNSLinkType)type;

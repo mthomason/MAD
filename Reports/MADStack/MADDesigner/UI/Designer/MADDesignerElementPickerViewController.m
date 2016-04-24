@@ -124,7 +124,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    NSNumber *madob = self.dataSource[indexPath.row];
+    NSNumber *madob = self.dataSource[(NSUInteger)indexPath.row];
  
     switch (madob.shortValue) {
         case MTDocumentObjectTypeAggregate:

@@ -17,8 +17,13 @@ static NSString * const TextGroupingSeparator = @",";
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     numberFormatter.maximumFractionDigits = 2;
-    numberFormatter.decimalSeparator = TextDecimalSeparator;
-    numberFormatter.groupingSeparator = TextGroupingSeparator;
+    
+    NSString *decimalSeparator = TextDecimalSeparator;
+    numberFormatter.decimalSeparator = decimalSeparator;
+    
+    NSString *groupingSeparator = TextGroupingSeparator;
+    numberFormatter.groupingSeparator = groupingSeparator;
+    
     return numberFormatter;
 }
 

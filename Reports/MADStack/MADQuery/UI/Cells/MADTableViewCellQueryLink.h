@@ -15,14 +15,14 @@
 
 @interface MADTableViewCellQueryLink : MTAutoLayoutTableViewCell
 
-@property (retain) NSManagedObjectID *tableID;
+    @property (nonatomic, copy) NSManagedObjectID *tableID;
 
-@property (nonatomic, weak) IBOutlet UILabel *labelTableLeft;
-@property (nonatomic, weak) IBOutlet UILabel *labelTableRight;
-@property (nonatomic, weak) IBOutlet UILabel *labelJoinArrow;
-@property (nonatomic, weak) IBOutlet UILabel *labelJoinDesc;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTableLeft;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTableRight;
+    @property (nonatomic, weak) IBOutlet UILabel *labelJoinArrow;
+    @property (nonatomic, weak) IBOutlet UILabel *labelJoinDesc;
 
-+ (CGFloat)defaultHeight;
+    + (CGFloat)defaultHeight;
 
 @end
 

@@ -250,19 +250,20 @@ static const CGFloat BorderWidth = 1.0000f;
     self.segmentedControlHorizontalAlignment.tag = MADIDTagSegmentedControlHorizontalAlignment;
     self.segmentedControlVerticalAlignment.tag = MADIDTagSegmentedControlVerticalAlignment;
     
-    self.buttonBold.layer.borderColor = self.view.tintColor.CGColor;
+    UIColor *tintColor = self.view.tintColor.copy;
+    self.buttonBold.layer.borderColor = tintColor.CGColor;
     self.buttonBold.layer.cornerRadius = CornerRadius;
     self.buttonBold.layer.borderWidth = BorderWidth;
     
-    self.buttonItalic.layer.borderColor = self.view.tintColor.CGColor;
+    self.buttonItalic.layer.borderColor = tintColor.CGColor;
     self.buttonItalic.layer.cornerRadius = CornerRadius;
     self.buttonItalic.layer.borderWidth = BorderWidth;
     
-    self.buttonStrike.layer.borderColor = self.view.tintColor.CGColor;
+    self.buttonStrike.layer.borderColor = tintColor.CGColor;
     self.buttonStrike.layer.cornerRadius = CornerRadius;
     self.buttonStrike.layer.borderWidth = BorderWidth;
     
-    self.buttonUnderline.layer.borderColor = self.view.tintColor.CGColor;
+    self.buttonUnderline.layer.borderColor = tintColor.CGColor;
     self.buttonUnderline.layer.cornerRadius = CornerRadius;
     self.buttonUnderline.layer.borderWidth = BorderWidth;
     

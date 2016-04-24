@@ -136,8 +136,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return queryLinks;
 }
 
-- (NSString *)linkDescription {
-    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.unsignedCharValue];
+- (NSString *)copyLinkDescription {
+    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.shortValue];
 }
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type {
@@ -240,7 +240,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 - (NSString *)toStringHumanReadable {
     NSMutableString *result = [[NSMutableString alloc] initWithString:[[[self hasLeftField] databaseSchemaField] name]];
-    [result appendFormat:@" %@ ", [self linkDescription]];
+    NSString *linkDescription = [self copyLinkDescription];
+    [result appendFormat:@" %@ ", linkDescription];
     [result appendString:[[[self hasRightField] databaseSchemaField] name]];
     return result;
 }

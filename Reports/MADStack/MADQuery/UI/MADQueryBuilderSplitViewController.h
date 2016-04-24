@@ -20,12 +20,12 @@
 @interface MADQueryBuilderSplitViewController : MADSplitViewController
     <MTViewControllerProtocol, MADViewControllerDocumentProtocol>
 
-@property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (readonly) UINavigationController *detailNavigationController;
-@property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
-@property (readonly) MADQueryViewController *queryBuilderController;
+    @property (readonly) UINavigationController *detailNavigationController;
+    @property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
+    @property (readonly) MADQueryViewController *queryBuilderController;
 
 @end
 

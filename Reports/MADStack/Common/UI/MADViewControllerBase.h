@@ -12,5 +12,5 @@
 //  !!!:        UITableViewController, UICollectionViewController, etc...
 //
 
-@property (nonatomic, assign, readonly) BOOL firstTimeViewWillLayoutSubviews;
-@property(nullable, nonatomic, readonly, strong) MADTabBarController *tabBarController;;
+    @property (nonatomic, assign, readonly) BOOL firstTimeViewWillLayoutSubviews;
+    @property (nullable, nonatomic, readonly, weak) MADTabBarController *tabBarController;;

@@ -325,11 +325,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         [MADocument deleteCoreDataFilesAtDirectory:self.urlGuts];
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        
         NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+        NSError * __autoreleasing *error = NULL;
         success = [fileWrapper writeToURL: self.urlGuts
                                   options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
                       originalContentsURL: url
-                                    error: outError];
+                                    error: error];
         NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
     }
     if (success) {

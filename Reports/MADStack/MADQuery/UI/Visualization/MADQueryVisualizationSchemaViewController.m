@@ -120,7 +120,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.toolbar.backgroundColor = color;
     
     UIColor *darkBlue = [MADColorEverydayApps newColorBlueDark];
-    self.view.layer.shadowColor = [darkBlue CGColor];
+    self.view.layer.shadowColor = darkBlue.CGColor;
     self.view.layer.shadowOpacity = 1.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);

@@ -19,7 +19,8 @@
                              source.size.width, source.size.height);
     [source drawInRect:rect blendMode:kCGBlendModeNormal alpha:1.0000f];
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);
+    UIColor *clearColor = [UIColor clearColor];
+    CGContextSetStrokeColorWithColor(context, clearColor.CGColor);
     CGContextStrokeRectWithWidth(context, rect, 1.0000f);
     id result =  UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
