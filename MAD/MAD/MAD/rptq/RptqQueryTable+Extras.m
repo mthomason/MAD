@@ -121,7 +121,8 @@
     char buf[12];
     sprintf(buf, "%d", self.dropIndex.integerValue);
     NSString *indexString = [[NSString alloc]  initWithUTF8String:buf];
-    NSString *alias = [self.databaseSchemaTable.name stringByAppendingString:indexString];
+    NSString *databaseName = self.databaseSchemaTable.name.copy;
+    NSString *alias = [databaseName stringByAppendingString:indexString];
     return alias;
 }
 

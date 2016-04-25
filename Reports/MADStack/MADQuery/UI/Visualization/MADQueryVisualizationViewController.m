@@ -74,8 +74,8 @@ typedef void(^MTBlockResultVoid)(void);
 @implementation MADQueryVisualizationViewController
 
 - (void)dealloc {
-    _operationQueueCache.underlyingQueue = nil;
-    _document = nil;
+    //_operationQueueCache.underlyingQueue = nil;
+    //_document = nil;
 }
 
 #pragma mark - UIContainerViewControllerCallbacks

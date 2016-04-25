@@ -24,8 +24,10 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADOperationBackgroundTaskBegin * __weak weakself = self;
+    
     UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         MADOperationBackgroundTaskBegin *sself = weakself;
         [[UIApplication sharedApplication] endBackgroundTask:sself.backgroundTaskIdentifier];

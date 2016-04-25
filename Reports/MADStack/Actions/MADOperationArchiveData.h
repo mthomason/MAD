@@ -9,9 +9,9 @@
 #ifndef MAD_Designer_MADOperationArchiveData_h
 #define MAD_Designer_MADOperationArchiveData_h
 
-#import <Foundation/NSOperation.h>
+#import "MADOperation.h"
 
-@interface MADOperationArchiveData : NSOperation
+@interface MADOperationArchiveData : MADOperation
 
     - (instancetype)initWithURL:(NSURL *)url andObject:(id <NSCoding>)object;
 

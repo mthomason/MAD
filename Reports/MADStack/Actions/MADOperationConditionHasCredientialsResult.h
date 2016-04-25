@@ -15,7 +15,7 @@
 
 @interface MADOperationConditionHasCredientialsResult : MADOperationConditionResult
 
-@property (nonatomic, copy) MADCredential *credential;
+    @property (nonatomic, copy) MADCredential *credential;
 
 @end
 

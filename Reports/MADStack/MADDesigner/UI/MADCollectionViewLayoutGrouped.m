@@ -28,10 +28,10 @@
             [elementAttributes addObject:attribute];
         }
     }
-    //NSMutableArray *results = [[NSMutableArray alloc] initWithArray:elementAttributes];
-    //[results addObjectsFromArray:elementAttributes];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithArray:elementAttributes];
+    [results addObjectsFromArray:elementAttributes];
    
-    return elementAttributes;
+    return results;
 }
 
 @end
