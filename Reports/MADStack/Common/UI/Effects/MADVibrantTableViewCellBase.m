@@ -7,6 +7,7 @@
 //
 
 #import "MADVibrantTableViewCellBase.h"
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 @interface MADVibrantTableViewCellBase ()
 
@@ -87,7 +88,7 @@
         self.effectView.translatesAutoresizingMaskIntoConstraints = NO;
         self.effectView.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         self.selectionStyle = UITableViewCellSelectionStyleGray;
-        self.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
         self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
         
         self.backgroundColor = [UIColor clearColor];

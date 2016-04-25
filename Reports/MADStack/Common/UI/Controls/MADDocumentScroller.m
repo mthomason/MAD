@@ -7,6 +7,7 @@
 //
 
 #import "MADDocumentScroller.h"
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 @interface MADDocumentScroller ()
 
@@ -16,7 +17,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.autoresizingMask = MADViewAutoresizingFlexable();
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;

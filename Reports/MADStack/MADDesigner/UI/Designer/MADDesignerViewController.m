@@ -1192,7 +1192,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
             UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
             visualEffectsView.frame = navigationController.view.bounds;
-            visualEffectsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            visualEffectsView.autoresizingMask = MADViewAutoresizingFlexable();
             [navigationController.view insertSubview:visualEffectsView atIndex:0];
             
             result = navigationController;
@@ -1530,7 +1530,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             }
             
             cell.backgroundColor = [UIColor clearColor];
-            cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             

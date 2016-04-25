@@ -9,13 +9,14 @@
 #import "MADNavigationBarTitleView.h"
 #import "NSParagraphStyle+CommonStyles.h"
 #import "NSAttributedString+Logo.h"
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 @implementation MADNavigationBarTitleView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.autoresizingMask = MADViewAutoresizingFlexable();
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.lineBreakMode = NSLineBreakByTruncatingTail;
         self.numberOfLines = 1;

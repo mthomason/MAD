@@ -46,7 +46,8 @@ static NSString * const Downloading                             = @"Downloading"
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
 
-        dispatch_queue_t queueCell = dispatch_queue_create("com.everydayapps.mad.cell.image", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queueCell = dispatch_queue_create("com.everydayapps.mad.cell.image",
+                                                           DISPATCH_QUEUE_SERIAL);
         self.queueCell = queueCell;
 
     }
@@ -56,7 +57,8 @@ static NSString * const Downloading                             = @"Downloading"
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    MADCollectionViewLayoutGroupedDelegate *delegate =
+                                        [[MADCollectionViewLayoutGroupedDelegate alloc] init];
     delegate.delegate = self;
     self.collectionViewDelegate = delegate;
     
@@ -68,9 +70,10 @@ static NSString * const Downloading                             = @"Downloading"
     [super viewDidAppear:animated];
 
     for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
-        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        MTCollectionViewCellDocument *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
     }
+    
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
         [self.collectionView deselectItemAtIndexPath: path animated: animated];
     }
@@ -177,7 +180,12 @@ static NSString * const Downloading                             = @"Downloading"
 
     NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-    cell.imagePreview.image = image ?: [MTCollectionViewCellDocument newDefaultThumbnail];
+    if (image != nil) {
+        cell.imagePreview.image = image;
+    } else {
+        image = [MTCollectionViewCellDocument newDefaultThumbnail];
+        cell.imagePreview.image = image;
+    }
     
     [cell normalizeTint];
     

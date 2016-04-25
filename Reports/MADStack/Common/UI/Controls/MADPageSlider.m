@@ -8,6 +8,7 @@
 
 #import "MADPageSlider.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 #import "MADSliderPageVertical.h"
 
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
@@ -88,7 +89,7 @@ static inline CGFloat MaxDimension(CGSize size) {
         
         UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
         vibrancyView.frame = self.frame;
-        vibrancyView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
         vibrancyView.contentView.tintColor = [UIColor redColor];
         [self.contentView addSubview:vibrancyView];
         self.vibrancyView = vibrancyView;

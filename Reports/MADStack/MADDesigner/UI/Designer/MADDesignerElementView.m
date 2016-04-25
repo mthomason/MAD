@@ -19,6 +19,7 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -108,7 +109,7 @@
     if (self) {
         
         MTElementCanvas *canvasView = [[MTElementCanvas alloc] initWithFrame:viewFrame];
-        canvasView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        canvasView.autoresizingMask = MADViewAutoresizingFlexable();
         canvasView.backgroundColor = [UIColor clearColor];
         canvasView.canvasDelegate = self;
         
@@ -136,7 +137,7 @@
         
         self.clipsToBounds = NO;
         
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.autoresizingMask = MADViewAutoresizingFlexable();
         
         [self updateForManagedObjectContent:documentObject.managedObjectContext];
         

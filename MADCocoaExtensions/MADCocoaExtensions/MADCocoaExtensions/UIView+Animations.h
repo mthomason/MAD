@@ -13,7 +13,7 @@
 
 static inline UIViewAutoresizing MADViewAutoresizingFlexable();
 static inline UIViewAutoresizing MADViewAutoresizingFlexable() {
-    return UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 #endif

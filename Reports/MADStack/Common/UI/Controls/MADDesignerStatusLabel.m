@@ -8,6 +8,7 @@
 
 #import "MADDesignerStatusLabel.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
 const CGFloat MADViewDetailSmallAnimationDuration   =  0.3333f;
@@ -34,7 +35,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:8.0000f];
         label.backgroundColor = [UIColor clearColor];
-        label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        label.autoresizingMask = MADViewAutoresizingFlexable();
         label.translatesAutoresizingMaskIntoConstraints = YES;
         [self addSubview:label];
         self.label = label;

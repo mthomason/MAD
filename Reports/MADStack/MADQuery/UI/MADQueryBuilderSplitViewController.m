@@ -42,7 +42,8 @@
 
 + (void)initialize {
     if (self == [MADQueryBuilderSplitViewController self]) {
-        UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil];
+        Class thisClass = [MADQueryBuilderSplitViewController class];
+        UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:thisClass, nil];
         UIColor *white =  [MADColorEverydayApps newColorWhite];
         appearance.tintColor = white;
     }
@@ -63,36 +64,36 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
     
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-        self.navigationController.navigationItem.titleView.tintColor = [UIColor whiteColor];
-        
-        self.localEditing = NO;
-    
-        UIBarButtonItem *barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                                           target: self
-                                                                                           action: @selector(done:)];
-        self.navigationItem.leftBarButtonItem = barButtonItemDone;
-        self.barButtonItemDone = barButtonItemDone;
+        id redraw = NSLocalizedString(@"Redraw", @"Redraw");
+        id whiteColor = [UIColor whiteColor];
+        id traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
 
-        NSString *redraw = NSLocalizedString(@"Redraw", @"Redraw");
-        
-        UIBarButtonItem *barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
-                                                                                     style: UIBarButtonItemStylePlain
-                                                                                    target: self
-                                                                                    action: @selector(redrawQueryVisualization:)];
+        id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                             target: self
+                                                                             action: @selector(done:)];
+        id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
+                                                                       style: UIBarButtonItemStylePlain
+                                                                      target: self
+                                                                      action: @selector(redrawQueryVisualization:)];
 
-        UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
         [self setOverrideTraitCollection:traitCollection forChildViewController:self.detailNavigationController];
+
+        self.navigationController.navigationBar.tintColor = whiteColor;
+        self.navigationController.navigationItem.titleView.tintColor = whiteColor;
         
-        self.barButtonItemRevealQuery = barButtonItemRevealQuery;
-        
+        self.navigationItem.leftBarButtonItem = barButtonItemDone;
+        self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
         self.editButtonItem.target = self;
         self.editButtonItem.action = @selector(edit:);
-        self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+        self.localEditing = NO;
+
+        self.barButtonItemDone = barButtonItemDone;
+        self.barButtonItemRevealQuery = barButtonItemRevealQuery;
         
     }
     return self;
@@ -107,10 +108,11 @@
     NSAssert(doc != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = self.title;
+    titleView.text = self.title.copy;
     self.navigationItem.titleView = titleView;
     
-    self.tabBarController.navigationItem.prompt = doc.fileURL.lastPathComponent;
+    NSString *lastPathComponent = doc.fileURL.lastPathComponent.copy;
+    self.tabBarController.navigationItem.prompt = lastPathComponent;
 
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 

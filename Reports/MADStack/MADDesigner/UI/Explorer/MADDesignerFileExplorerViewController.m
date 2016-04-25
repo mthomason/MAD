@@ -283,12 +283,27 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)finishCloseDocument:(MADOpenFileViewController *)sender {
     [sender reenable];
-    MADOpenFileViewController * __weak wsender = sender;
-    [UIView performWithoutAnimation:^{
-        UICollectionViewController *ssender = wsender;
-        [ssender.collectionView.backgroundView setNeedsDisplay];
-        [ssender.collectionView reloadItemsAtIndexPaths:ssender.collectionView.indexPathsForVisibleItems];
-    }];
+    //MADOpenFileViewController * __weak wsender = sender;
+    //[UIView performWithoutAnimation:^{
+    //    UICollectionViewController *ssender = wsender;
+    //    [ssender.collectionView.backgroundView setNeedsDisplay];
+    //    [ssender.collectionView reloadItemsAtIndexPaths:ssender.collectionView.indexPathsForVisibleItems];
+    //}];
+
+//    NSString *(^sqlWhere)(NSArray *);
+//    sqlWhere = ^(NSArray *whereClause)
+    
+    void (^reloadCells)(void) = ^(){
+        NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
+        [self.collectionView.backgroundView setNeedsDisplay];
+        [self.collectionView reloadItemsAtIndexPaths:paths];
+    };
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [UIView performWithoutAnimation:reloadCells];
+        }];
+    });
 }
 
 #pragma mark - MADOpenFileViewControllerDelegate

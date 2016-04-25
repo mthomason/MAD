@@ -18,6 +18,7 @@
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/NSURL+Document.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 #import <MAD/MADocument.h>
 
 #import "MADOpenFileSectionHeaderView.h"
@@ -244,8 +245,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     [self.collectionView.backgroundView setNeedsDisplay];
     
-    id indexPaths = self.collectionView.indexPathsForVisibleItems.copy;
-    [self.collectionView reloadItemsAtIndexPaths: indexPaths];
+    //id indexPaths = self.collectionView.indexPathsForVisibleItems.copy;
+    //[self.collectionView reloadItemsAtIndexPaths: indexPaths];
     
     [self addActionItemToToolbar:animated];
     
@@ -472,7 +473,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 /*
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
-   NSURL *fileUrl = [self documentForIndexPath:indexPath];
+   NSURL *fileUrl = [self copyMetaDataUrlForIndexPath:indexPath];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
@@ -493,26 +494,32 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 */
 - (void)selectionsUpdated {
+
     switch (self.collectionView.indexPathsForSelectedItems.count) {
+
         case 0:
             self.barButtonItemInformationDocument.enabled = NO;
             self.barButtonItemTrash.enabled = NO;
             self.barButtonItemDuplicate.enabled = NO;
             self.barButtonItemAction.enabled = NO;
             break;
+
         case 1:
             self.barButtonItemInformationDocument.enabled = YES;
             self.barButtonItemTrash.enabled = YES;
             self.barButtonItemDuplicate.enabled = YES;
             self.barButtonItemAction.enabled = YES;
             break;
+
         default:
             self.barButtonItemInformationDocument.enabled = YES;
             self.barButtonItemTrash.enabled = YES;
             self.barButtonItemDuplicate.enabled = YES;
             self.barButtonItemAction.enabled = NO;
             break;
+
     }
+
 }
 
 #pragma mark - UIDocumentPickerDelegate
@@ -607,6 +614,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [updates removeObjectsInArray:inserts];
     [updates removeObjectsInArray:removes];
 
+
     UICollectionView *__weak weakCollectionView = self.collectionView;
     [weakCollectionView performBatchUpdates:^{
         UICollectionView *collectionView = weakCollectionView;
@@ -621,9 +629,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         }
     } completion:^(BOOL finished) {
         if (finished) {
-            completion(YES, nil);
+            //completion(YES, nil);
         }
     }];
+    completion(YES, nil);
+
 }
 
 - (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
@@ -674,8 +684,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         
         
         UIView *searchViewHolder = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        searchViewHolder.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.searchBar.autoresizingMask = MADViewAutoresizingFlexable();
+        searchViewHolder.autoresizingMask = MADViewAutoresizingFlexable();
         [searchViewHolder addSubview:self.searchBar];
         [searchViewHolder sizeToFit];
         self.searchBar.translucent = NO;
@@ -798,11 +808,16 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)activity:(id)sender {
     
-    NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0];
-    for (NSIndexPath *selectedCellLocation in self.collectionView.indexPathsForSelectedItems) {
-        NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
+    NSMutableArray *wrappedUrls =
+        [[NSMutableArray alloc] initWithCapacity: self.filesCoordnator.filesController ?
+                                                    self.filesCoordnator.filesController.count : 0];
+
+    NSArray<NSIndexPath *> *indexPaths = self.collectionView.indexPathsForSelectedItems;
+    for (NSIndexPath *indexPath in indexPaths) {
+        NSURL *fileUrl = [self copyMetaDataUrlForIndexPath:indexPath];
         [wrappedUrls addObject:fileUrl];
     }
+    
     NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
     for (NSInteger i=0; i<numberOfItemsInSection; i++) {
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
@@ -813,17 +828,21 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }
     
     NSArray *applicationActivities = @[];
-    NSArray *excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo];
+    NSArray *excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook,
+                                       UIActivityTypePostToFlickr, UIActivityTypePostToTwitter,
+                                       UIActivityTypePostToVimeo];
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
                                                                                          applicationActivities: applicationActivities];
     activityViewController.excludedActivityTypes = excludedActivityTypes;
     
     MADOpenFileViewController * __weak weakself = self;
     activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+    
         for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
             MTCollectionViewCellDocument * __weak documentCell = (MTCollectionViewCellDocument *)cell;
             [documentCell normalizeTint];
         }
+        
     };
     
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -842,15 +861,16 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)delete:(id)sender {
     NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
-    UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count
-                                                                confirm:^(UIAlertAction *action) {
-                                                                    for (NSIndexPath *selectedItem in selectedItems) {
-                                                                        MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:selectedItem.item];
-                                                                        [self.filesCoordnator.filesController removeFileInfo:metaData];
-                                                                    }
-                                                                } cancel:^(UIAlertAction *action) {
-                                                                    
-                                                                }];
+    
+    UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count confirm:^(UIAlertAction *action) {
+    
+        for (NSIndexPath *selectedItem in selectedItems) {
+            MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)selectedItem.item];
+            [self.filesCoordnator.filesController removeFileInfo:metaData];
+        }
+        
+    } cancel:^(UIAlertAction *action) { }];
+    
     if ([sender isKindOfClass:[UIBarButtonItem class]]) {
         alertController.popoverPresentationController.barButtonItem = sender;
     }
@@ -859,7 +879,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)actionDuplicate:(id)sender {
     for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
-        MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:selectedItem.item];
+        MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)selectedItem.item];
         [self.filesCoordnator.filesController duplicateFileInfo:metaData];
     }
 }
@@ -877,7 +897,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
+    MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
     
     UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
         
@@ -896,8 +916,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                     UIDocument *doc = [self.openFileDelegate documentForURL:metaData.URL];
                     [doc openWithCompletionHandler:^(BOOL success) {
                         if (success) {
-                            [doc closeWithCompletionHandler:^(BOOL success) {
-                                if (success) {
+                            [doc closeWithCompletionHandler:^(BOOL successClose) {
+                                if (successClose) {
                                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                                 }
                             }];
@@ -998,8 +1018,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return @[self.navigationController.navigationBar, self.navigationController.toolbar];
 }
 
-- (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
+- (NSURL *)copyMetaDataUrlForIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
     return metadata.URL;
 }
 

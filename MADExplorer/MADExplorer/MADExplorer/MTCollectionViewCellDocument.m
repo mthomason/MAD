@@ -70,16 +70,33 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     
-    SEL actionRename = @selector(rename:);
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                          action: actionRename];
-    tap.numberOfTapsRequired = 1;
-    tap.numberOfTouchesRequired = 1;
-    [self.labelTitle addGestureRecognizer:tap];
-    self.tapGestureRecognizer = tap;
-
     self.labelTitle.userInteractionEnabled = YES;
 
+    SEL actionEdit = @selector(activateEditMode:);
+    bool gotActionEdit = false, gotActionRename = false;
+    SEL actionRename = @selector(rename:);
+    for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
+        if ([gestureRecognizer respondsToSelector:actionEdit]) gotActionEdit = true;
+        if ([gestureRecognizer respondsToSelector:actionRename]) gotActionRename = true;
+        if (gotActionEdit && gotActionRename) break;
+    }
+    
+    if (!gotActionEdit) {
+        id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                            action: actionEdit];
+        [self addGestureRecognizer: longPressGesture];
+        self.longPressGestureRecognizer = longPressGesture;
+    }
+    
+    if (!gotActionRename) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                              action: actionRename];
+        tap.numberOfTapsRequired = 1;
+        tap.numberOfTouchesRequired = 1;
+        [self.labelTitle addGestureRecognizer:tap];
+        self.tapGestureRecognizer = tap;
+    }
+    
     self.labelTitle.textColor = self.colorTextNormal;
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
@@ -93,12 +110,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.labelTitleSub.backgroundColor = clearColor;
     self.labelTitleSub.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     [self.labelTitleSub setNeedsLayout];
-
-    SEL actionEdit = @selector(activateEditMode:);
-    id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                        action: actionEdit];
-    [self addGestureRecognizer: longPressGesture];
-    self.longPressGestureRecognizer = longPressGesture;
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -125,6 +136,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         self.colorTextSelectedHighlighted = colorTextSelectedHighlighted;
         self.colorTextSelected = colorTextSelected;
         self.colorTextNormal = colorTextNormal;
+
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         
@@ -186,6 +198,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     [self.labelTitle setNeedsLayout];
     [self.labelTitleSub setNeedsLayout];
 }
+
 
 - (void)setBounds:(CGRect)bounds {
     [super setBounds:bounds];

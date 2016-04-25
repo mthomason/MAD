@@ -407,9 +407,12 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         }
         
         if ([sself.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
-            [sself.delegate filesControllerDidChangeContent:sself completion:^(BOOL success, NSError *error) {
-                completion(success, error);
-            }];
+
+                [sself.delegate filesControllerDidChangeContent:sself completion:^(BOOL success, NSError *error) {
+                    completion(success, nil);
+                }];
+                
+            
         } else {
             completion(YES, nil);
         }
