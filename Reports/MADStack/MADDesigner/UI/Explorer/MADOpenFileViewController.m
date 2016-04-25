@@ -103,14 +103,29 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail
            completion:(void (^)(BOOL))completion {
+
     UIManagedDocument *openDocument = self.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         self.reportState = MTReportStateClosed;
         [self.fileManager unload];
-        [openDocument closeWithCompletionHandler:^(BOOL success) {
-            completion(success);
+
+        __block bool success;
+        //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+        [openDocument closeWithCompletionHandler:^(BOOL successClose) {
+            success = successClose;
+        //    dispatch_semaphore_signal(s0);
+            completion(successClose);
         }];
+        //dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+
+
+
+    } else {
+
+        completion(NO);
+
     }
+
 }
 
 #pragma mark - Static Functions

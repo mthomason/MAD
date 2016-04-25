@@ -22,16 +22,16 @@
         attributes = [NSArray array];
     }
     
-    NSMutableArray *elementAttributes = [NSMutableArray arrayWithCapacity:attributes.count];
+    NSMutableArray *elementAttributes = [[NSMutableArray alloc] initWithCapacity:attributes.count];
     for (UICollectionViewLayoutAttributes *attribute in attributes) {
         if (CGRectIntersectsRect(rect, attribute.frame)) {
             [elementAttributes addObject:attribute];
         }
     }
-    NSMutableArray *results = [[NSMutableArray alloc] initWithArray:elementAttributes];
-    [results addObjectsFromArray:elementAttributes];
+    //NSMutableArray *results = [[NSMutableArray alloc] initWithArray:elementAttributes];
+    //[results addObjectsFromArray:elementAttributes];
    
-    return results;
+    return elementAttributes;
 }
 
 @end

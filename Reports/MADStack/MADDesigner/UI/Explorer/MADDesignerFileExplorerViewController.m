@@ -259,12 +259,6 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = true;
-    
-    MADOpenFileViewController * __weak weakself = self;
-    [self closeDocument:self.traitCollection completion:^(BOOL success) {
-        MADOpenFileViewController * __strong strongself = weakself;
-        [strongself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:strongself waitUntilDone:NO];
-    }];
 
     [self.tabController setViewControllers:nil animated:YES];
     [self dismissViewControllerAnimated:YES completion:^{ }];
@@ -272,6 +266,27 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.shouldShowAddDocumentPopover = true;
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
+    
+    __block bool closeSuccess;
+    //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+    [self closeDocument:self.traitCollection completion:^(BOOL success) {
+        closeSuccess = success ? true : false;
+    //    dispatch_semaphore_signal(s0);
+    }];
+    //dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+
+    void (^reloadCells)(void) = ^(){
+        NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
+        [self.collectionView.backgroundView setNeedsDisplay];
+        [self.collectionView reloadItemsAtIndexPaths:paths];
+    };
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [UIView performWithoutAnimation:reloadCells];
+        }];
+    });
+
 }
 
 - (void)viewControllerDidCancel:(id)sender {
