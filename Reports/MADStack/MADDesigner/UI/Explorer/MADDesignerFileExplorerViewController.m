@@ -16,9 +16,6 @@
 #import <MAD/MADConstants.h>
 #import "Constants.h"
 
-//#import "MADKeyChainGetCredentials.h"
-//#import "MADKeyChainSaveCredentials.h"
-
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import "MUIViewControllerDelegate.h"
@@ -267,22 +264,21 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
-    __block bool closeSuccess;
-    //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
-    [self closeDocument:self.traitCollection completion:^(BOOL success) {
-        closeSuccess = success ? true : false;
-    //    dispatch_semaphore_signal(s0);
-    }];
-    //dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+    [self closeDocument:self.traitCollection completion:^(BOOL success) { }];
 
-    void (^reloadCells)(void) = ^(){
-        NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
-        [self.collectionView.backgroundView setNeedsDisplay];
-        [self.collectionView reloadItemsAtIndexPaths:paths];
-    };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+            UICollectionView * __weak weakCollectionView = self.collectionView;
+            void (^reloadCells)(void) = ^(){
+                UICollectionView *collectionView = weakCollectionView;
+                NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+                [collectionView.backgroundView setNeedsDisplay];
+                [collectionView reloadItemsAtIndexPaths:paths];
+            };
+        
             [UIView performWithoutAnimation:reloadCells];
         }];
     });
@@ -336,19 +332,17 @@ NSString * const MADUtiType                                     = @"com.everyday
         tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         tabBarController.viewControllerDelegate = self;
-        NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
+        NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
+                 @"Controller to conform to MADocumentProtocol.");
         ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
         
-        UIStoryboard *storyboardQuery = [UIStoryboard Query];
-        MADQueryBuilderSplitViewController *splitViewController =  [storyboardQuery instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
+        MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController];
         splitViewController.viewControllerDelegate = self;
         
-        UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
-        
-        MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+        MADDesignerViewController *designerViewController = [MADDesignerViewController newDesignerViewController];
         designerViewController.delegate = self;
         
-        MADViewerController *viewerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
+        MADViewerController *viewerViewController = [MADViewerController newViewerController];
         viewerViewController.viewControllerDelegate = self ;
         
         MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
@@ -358,14 +352,18 @@ NSString * const MADUtiType                                     = @"com.everyday
         
         NSArray <__kindof UIViewController *> *tabBarViewControllers =
         [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
-         navControllerViewer, nil];
+                                            navControllerViewer, nil];
         
         [tabBarController setViewControllers:tabBarViewControllers animated:NO];
         self.tabController = tabBarController;
         
         MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
-        navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
-        navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorWhite];
+
+        UIColor *color = [MADColorEverydayApps newColorBlue];
+        navigationController.navigationBar.barTintColor = color;
+
+        color = [MADColorEverydayApps newColorWhite];
+        navigationController.navigationBar.tintColor = color;
         
         [self presentViewController:navigationController animated:YES completion:nil];
         

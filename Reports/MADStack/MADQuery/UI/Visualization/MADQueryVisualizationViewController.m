@@ -47,7 +47,14 @@
 #import "MADQueryVisualizationContentView.h"
 #import "MADQueryVisualizationScrollView.h"
 
+#import "MADOperationQueue.h"
+
 typedef void(^MTBlockResultVoid)(void);
+
+static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
+static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount) {
+    return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
+}
 
 @interface MADQueryVisualizationViewController ()
     <UIGestureRecognizerDelegate,
@@ -67,7 +74,7 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
-    @property (nonatomic, strong) NSOperationQueue *operationQueueCache;
+    @property (nonatomic, strong) MADOperationQueue *operationQueueCache;
 
 @end
 
@@ -138,9 +145,9 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)commonInit {
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    MADOperationQueue *queue = [[MADOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 1;
-    queue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //queue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     self.operationQueueCache = queue;
     
     NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
@@ -202,9 +209,9 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    MADocument *doc = self.document;
+    MADocument * __weak doc = self.document;
     [self reloadDocument:doc animated:YES];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextWillSave:)
                                                  name: NSManagedObjectContextWillSaveNotification
@@ -302,6 +309,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)managedObjectContextWillSave:(NSNotification *)notification { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
+
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
@@ -311,6 +319,8 @@ typedef void(^MTBlockResultVoid)(void);
     
 #pragma mark Handle inserted objects
     
+    CGFloat height;
+    NSUInteger rootTableCount;
     for (id insertedObject in insertedObjects) {
         
         if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
@@ -325,8 +335,12 @@ typedef void(^MTBlockResultVoid)(void);
             NSManagedObjectID *objectID = ((RptqQueryTable *)insertedObject).objectID.copy;
             [self.rootTables addObject: objectID];
 
-            CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x + 500, self.scrollView.contentView.bounds.size.height / (self.rootTables.count + 2) * (self.rootTables.count + 1));
-            [self addSchemaViewControllerForTable:insertedObject center:insertTableAnchorPoint root:YES animated:YES];
+            height = self.scrollView.contentView.bounds.size.height;
+            rootTableCount = self.rootTables.count;
+            [self addSchemaViewControllerForTableID: objectID
+                                             center: PointInsertTable(&height, &rootTableCount)
+                                               root: YES
+                                           animated: YES];
             [self.view layoutIfNeeded];
         }
     }
@@ -403,12 +417,15 @@ typedef void(^MTBlockResultVoid)(void);
         MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
         cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
         cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
-        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:doc.activeDocumentModel.defaultDatabase.defaultQuery];
+        
+        RptqQuery *query = doc.activeDocumentModel.defaultDatabase.defaultQuery;
+        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 
                 MADQueryVisualizationSchemaViewController *viewController = self.controllersByObjectID[(NSManagedObjectID *)tableIdVertext.object];
+                
                 MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
                 tableDef.center = viewController.view.center;
                 tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
@@ -536,19 +553,23 @@ typedef void(^MTBlockResultVoid)(void);
         
 
         MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
-        for (MTPair *pair in queryDef.topologicallySortedTables) {
+        MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
+        for (MTPair *pair in topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 
                 RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
+                
+                NSManagedObjectID *objectID = table.objectID.copy;
+
                 BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
                 if (topLevel) {
-                    NSManagedObjectID *objectID = table.objectID.copy;
                     [self.rootTables addObject: objectID];
                 }
 
-                MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
-                [self addSchemaViewControllerForTable:table center:tableDef.center root:topLevel animated:animated];
+                MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:objectID];
+                [self addSchemaViewControllerForTableID:objectID center:tableDef.center
+                                                   root:topLevel animated:animated];
 
             }
         }
@@ -570,12 +591,17 @@ typedef void(^MTBlockResultVoid)(void);
     MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
 
+    NSManagedObjectID *tableID;
     for (MTPair *pair in queryDef.topologicallySortedTables) {
         MTVertex *tableIdVertext = pair.former;
         if (tableIdVertext.object != nil) {
             RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
             BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
-            [self addSchemaViewControllerForTable:table center:self.scrollView.contentView.center root:topLevel animated:animated];
+
+            tableID = table.objectID.copy;
+            [self addSchemaViewControllerForTableID:tableID
+                                             center:self.scrollView.contentView.center
+                                               root:topLevel animated:animated];
             if (topLevel) {
                 NSManagedObjectID *objectID = table.objectID.copy;
                 [self.rootTables addObject: objectID];
@@ -652,17 +678,17 @@ typedef void(^MTBlockResultVoid)(void);
     [self.view layoutIfNeeded];
 }
 
-- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table center:(CGPoint)center
-                                   root:(BOOL)root animated:(BOOL)animated {
+- (void)addSchemaViewControllerForTableID:(NSManagedObjectID *)tableID center:(CGPoint)center
+                                     root:(BOOL)root animated:(BOOL)animated {
     
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
-    viewController.tableObjectId = table.objectID;
+    viewController.tableObjectId = tableID;
     viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     
     if (root) viewController.toolbar.backgroundColor = [UIColor blueColor];
-    self.controllersByObjectID[table.objectID] = viewController;
+    self.controllersByObjectID[tableID] = viewController;
 
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
     panGesture.delegate = self;

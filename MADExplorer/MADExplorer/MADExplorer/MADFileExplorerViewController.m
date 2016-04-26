@@ -20,8 +20,8 @@ static NSString * const Downloading                             = @"Downloading"
 @interface MADFileExplorerViewController ()
     <MTDocumentCellProtocol, UIGestureRecognizerDelegate, UISearchBarDelegate>
 
-@property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
-@property (nonatomic, strong) dispatch_queue_t queueCell;
+    @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+    @property (nonatomic, strong) dispatch_queue_t queueCell;
 
 @end
 
@@ -57,8 +57,7 @@ static NSString * const Downloading                             = @"Downloading"
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADCollectionViewLayoutGroupedDelegate *delegate =
-                                        [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
     delegate.delegate = self;
     self.collectionViewDelegate = delegate;
     
@@ -69,14 +68,17 @@ static NSString * const Downloading                             = @"Downloading"
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
-        MTCollectionViewCellDocument *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell performDeselectionAnimations];
-    }
+    NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems;
+    [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
+                                     usingBlock: ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
     
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-        [self.collectionView deselectItemAtIndexPath: path animated: animated];
-    }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            id cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+            [cell performDeselectionAnimations];
+        }];
+        
+    }];
+
     
 }
 
@@ -113,9 +115,7 @@ static NSString * const Downloading                             = @"Downloading"
 
 #pragma mark - UICollectionViewDataSource
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
@@ -123,14 +123,16 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString * MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
+    static NSString * const MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier
                                                                                    forIndexPath: indexPath];
     
     if (cell.delegate == nil) {
         ((MTCollectionViewCellDocument *)cell).delegate = self;
     }
+    
     MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
+
     NSString *filename = metadata.name.copy;
     cell.labelTitle.text = filename;
     

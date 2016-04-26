@@ -13,7 +13,7 @@
 
 @protocol MTTabBarImageProtocol <NSObject>
 
-- (UIImage *)tabBarImage;
+    + (UIImage *)newTabBarImage;
 
 @end
 

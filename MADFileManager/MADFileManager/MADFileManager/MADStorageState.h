@@ -16,8 +16,8 @@ typedef NS_ENUM(short, MADAppStorage) {
 
 @interface MADStorageState : NSObject
 
-@property (nonatomic, assign) MADAppStorage storageOption;
-@property (nonatomic, assign) BOOL accountDidChange;
-@property (nonatomic, assign) BOOL cloudAvailable;
+    @property (nonatomic, assign) MADAppStorage storageOption;
+    @property (nonatomic, assign) BOOL accountDidChange;
+    @property (nonatomic, assign) BOOL cloudAvailable;
 
 @end

@@ -29,6 +29,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     
 }
 
+static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.information";
+
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
     @property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
@@ -43,6 +45,42 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 @synthesize delegateQueue = _delegateQueue;
 
 #pragma mark - Static helpers
+
++ (instancetype)newFilesControllerWithPathExtension: (NSString *)pathExtension
+                                      storageOption: (MADAppStorage)storageOption
+                                         identifier: (NSString *)identifier
+                                  firstQueryHandler: (void (^)(void))firstQueryHandler {
+
+    id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: pathExtension
+                                                      storageOption: storageOption
+                                                         identifier: identifier
+                                                  firstQueryHandler: firstQueryHandler];
+    
+    id filesController = [[MADFilesController alloc] initWithFileCoordinator: fc
+                                                               delegateQueue: [NSOperationQueue mainQueue]
+                                                              sortComparator: ^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+         return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+    }];
+    return filesController;
+}
+
++ (instancetype)newFilesControllerWithLastPathComponent: (NSString *)lastPathComponent
+                                          storageOption: (MADAppStorage)storageOption
+                                             identifier: (NSString *)identifier
+                                      firstQueryHandler: (void (^)(void))firstQueryHandler {
+
+    id coordinator = [MADFileCoordinator newFileCoordinatorWithLastPathComponent: lastPathComponent
+                                                                   storageOption: storageOption
+                                                                      identifier: identifier
+                                                               firstQueryHandler: firstQueryHandler];
+
+    id filesController = [[MADFilesController alloc] initWithFileCoordinator: coordinator
+                                                               delegateQueue: [NSOperationQueue mainQueue]
+                                                              sortComparator: ^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+                                                                  return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+                                                              }];
+    return filesController;
+}
 
 + (bool)isCloudAvailable {
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
@@ -97,7 +135,9 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Initialization
 
-- (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
+- (instancetype)initWithFileCoordinator: (id <MADFileCoordinator>)fileCoordinator
+                          delegateQueue: (NSOperationQueue *)delegateQueue
+                         sortComparator: (NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
 
     if (self = [super init]) {
         
@@ -105,7 +145,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         
         self.delegateQueue = delegateQueue ?: [NSOperationQueue mainQueue];
         
-        dispatch_queue_t fileMetaDataQueue = dispatch_queue_create("com.everydayapps.mad.designer.queue.file.information", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t fileMetaDataQueue = dispatch_queue_create(QueueFileInfoID, DISPATCH_QUEUE_SERIAL);
         self.fileMetaDataQueue = fileMetaDataQueue;
         
         NSMutableArray *fileMetaData = [[NSMutableArray alloc] init];
@@ -138,13 +178,19 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         
         [oldFileCoordinator stopQuery];
         
-        // Map the listInfo objects protected by listInfoQueue.
+        // Map the fileInfo objects protected by fileInfoQueue.
         __block NSArray *allURLs;
         dispatch_sync(self.fileMetaDataQueue, ^{
             allURLs = [self.fileMetaDatum valueForKey:@"URL"];
         });
         
-        [self processContentChangesWithInsertedMetaDatum:@[] removedMetaDatum:allURLs updatedMetaDatum:@[] completion:^(BOOL success, NSError *error) { }];
+        NSArray *removed = allURLs.copy;
+        NSArray *inserted = [[NSArray alloc] initWithObjects: nil];
+        NSArray *updated = [[NSArray alloc] initWithObjects: nil];
+        [self processContentChangesWithInsertedMetaDatum: inserted
+                                        removedMetaDatum: removed
+                                        updatedMetaDatum: updated
+                                              completion: ^(BOOL success, NSError *error) { }];
         
         _fileCoordinator.delegate = self;
         oldFileCoordinator.delegate = nil;
@@ -156,28 +202,30 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 #pragma mark - Subscripting
 
 - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
-    // Fetch the appropriate list info protected by listInfoQueue.
-    __block MADMetaData *listInfo = nil;
-    
-    dispatch_sync(self.fileMetaDataQueue, ^{
-        listInfo = self.fileMetaDatum[index];
+
+    dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
+    __block MADMetaData *fileInfo = nil;
+    __unsafe_unretained typeof(self) weakSelf = self;
+
+    dispatch_sync(fileMetaDataQueue, ^{
+        fileInfo = weakSelf.fileMetaDatum[index];
     });
     
-    return listInfo;
+    return fileInfo;
 }
 
 #pragma mark - Inserting / Removing / Managing / Updating MADMetaData Objects
 
-- (void)removeFileInfo:(MADMetaData *)listInfo {
-    [self.fileCoordinator removeFileAtURL: listInfo.URL];
+- (void)removeFileInfo:(MADMetaData *)fileInfo {
+    [self.fileCoordinator removeFileAtURL: fileInfo.URL];
 }
 
-- (void)duplicateFileInfo:(MADMetaData *)listInfo {
-    [self.fileCoordinator duplicateFileAtURL: listInfo.URL];
+- (void)duplicateFileInfo:(MADMetaData *)fileInfo {
+    [self.fileCoordinator duplicateFileAtURL: fileInfo.URL];
 }
 
-- (void)renameFileInfo:(MADMetaData *)listInfo toName:(NSString *)name {
-    NSURL *url = listInfo.URL.copy;
+- (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name {
+    NSURL *url = fileInfo.URL.copy;
     [self.fileCoordinator renameFileAtURL: url toName: name];
 }
 
@@ -193,24 +241,31 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     return [self.fileCoordinator documentsDirectory];
 }
 
-- (void)setFileInfoHasNewContents:(MADMetaData *)listInfo {
+- (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo {
 
-    dispatch_async(self.fileMetaDataQueue, ^{
-        // Remove the old list info and replace it with the new one.
-        NSUInteger indexOfListInfo = [self.fileMetaDatum indexOfObject:listInfo];
-        self.fileMetaDatum[indexOfListInfo] = listInfo;
+    dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
+
+    __unsafe_unretained typeof(self) weakSelf = self;
+    dispatch_async(fileMetaDataQueue, ^{
+
+        NSUInteger indexOfFileInfo = [weakSelf.fileMetaDatum indexOfObject:fileInfo];
+        weakSelf.fileMetaDatum[indexOfFileInfo] = fileInfo;
         
-        [self.delegateQueue addOperationWithBlock:^{
-            if ([self.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
-                [self.delegate filesControllerWillChangeContent:self];
+        [weakSelf.delegateQueue addOperationWithBlock:^{
+
+            MADFilesController *sself = weakSelf;
+            if ([sself.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
+                [sself.delegate filesControllerWillChangeContent:sself];
             }
             
-            if ([self.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
-                [self.delegate filesController:self didUpdateListInfo:listInfo atIndex:indexOfListInfo];
+            if ([sself.delegate respondsToSelector:@selector(filesController:didUpdateFileInfo:atIndex:)]) {
+                [sself.delegate filesController:sself didUpdateFileInfo:fileInfo
+                                       atIndex:indexOfFileInfo];
             }
             
-            if ([self.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
-                [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) { }];
+            if ([sself.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+                [sself.delegate filesControllerDidChangeContent:sself
+                                                    completion:^(BOOL success, NSError *error) { }];
             }
         }];
     });
@@ -223,30 +278,34 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     NSMutableArray *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count];
     NSMutableArray *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count];
     NSMutableArray *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
+
     NSURL *URL;
-    
     MADMetaData *metadata;
     for (URL in insertedURLs) {
-        metadata = [[MADMetaData alloc] initWithURL:URL];
-        [insertedMetaDatum addObject:metadata];
+        @autoreleasepool {
+            metadata = [[MADMetaData alloc] initWithURL:URL];
+            [insertedMetaDatum addObject:metadata];
+        }
     }
     
     for (URL in removedURLs) {
-        metadata = [[MADMetaData alloc] initWithURL:URL];
-        [removedMetaDatum addObject:metadata];
+        @autoreleasepool {
+            metadata = [[MADMetaData alloc] initWithURL:URL];
+            [removedMetaDatum addObject:metadata];
+        }
     }
 
     for (URL in updatedURLs) {
-        metadata = [[MADMetaData alloc] initWithURL:URL];
-        [updatedMetaDatum addObject:metadata];
+        @autoreleasepool {
+            metadata = [[MADMetaData alloc] initWithURL:URL];
+            [updatedMetaDatum addObject:metadata];
+        }
     }
 
     [self processContentChangesWithInsertedMetaDatum: insertedMetaDatum
                                     removedMetaDatum: removedMetaDatum
                                     updatedMetaDatum: updatedMetaDatum
-                                          completion:^(BOOL success, NSError *error) {
-                                              
-                                          }];
+                                          completion:^(BOOL success, NSError *error) { }];
 }
 
 - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
@@ -265,37 +324,46 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
+    __unsafe_unretained typeof(self) weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
-        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
-        if ([self.delegate respondsToSelector:@selector(filesController:didFailCreatingListInfo:withError:)]) {
-            [self.delegate filesController:self didFailCreatingListInfo:listInfo withError:error];
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailCreatingFile = @selector(filesController:didFailCreatingFileInfo:withError:);
+        if ([weakSelf.delegate respondsToSelector:didFailCreatingFile]) {
+            [weakSelf.delegate filesController:weakSelf didFailCreatingFileInfo:fileInfo withError:error];
         }
+        
     }];
 }
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
+    __unsafe_unretained typeof(self) weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
-        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
-        if ([self.delegate respondsToSelector:@selector(filesController:didFailDuplicatingListInfo:withError:)]) {
-            [self.delegate filesController:self didFailDuplicatingListInfo:listInfo withError:error];
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailDuplicatingFile = @selector(filesController:didFailDuplicatingFileInfo:withError:);
+        if ([weakSelf.delegate respondsToSelector:didFailDuplicatingFile]) {
+            [weakSelf.delegate filesController:weakSelf didFailDuplicatingFileInfo:fileInfo withError:error];
         }
     }];
 }
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
+    __unsafe_unretained typeof(self) weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
-        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
-        if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
-            [self.delegate filesController:self didFailRenamingListInfo:listInfo withError:error];
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
+        if ([weakSelf.delegate respondsToSelector:didFailRemovingFile]) {
+            [weakSelf.delegate filesController:weakSelf didFailRenamingFileInfo:fileInfo withError:error];
         }
     }];
 }
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
+    __unsafe_unretained typeof(self) weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
-        MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
-        if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
-            [self.delegate filesController:self didFailRemovingListInfo:listInfo withError:error];
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
+        if ([weakSelf.delegate respondsToSelector:didFailRemovingFile]) {
+            [weakSelf.delegate filesController:weakSelf didFailRemovingFileInfo:fileInfo withError:error];
         }
     }];
 }
@@ -316,99 +384,118 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
                                   updatedMetaDatum:(NSArray *)updates
                                         completion:(void (^)(BOOL success, NSError *error))completion {
                                         
-    NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
-    NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
-    NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
+    NSArray *insertedMetaDatum = inserts.copy;
+    NSArray *removedMetaDatum = removes.copy;
+    NSArray *updatedMetaDatum = updates.copy;
     
     MADFilesController * __weak weakSelf = self;
     [weakSelf.delegateQueue addOperationWithBlock:^{
-        MADFilesController *sself = self;
-        // Filter out all lists that are already included in the tracked lists.
-        __block NSArray *trackedRemovedListInfos;
-        __block NSArray *untrackedInsertedListInfos;
+
+        MADFilesController *sself = weakSelf;
+
+        __block NSArray *trackedRemovedFileInfos;
+        __block NSArray *untrackedInsertedFileInfos;
         
         NSArray *fileMetaDatum = [[NSArray alloc] initWithArray:sself.fileMetaDatum];
  
         dispatch_sync(sself.fileMetaDataQueue, ^{
-            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
-            trackedRemovedListInfos = [removedMetaDatum filteredArrayUsingPredicate:containPredicate];
+            
+            id contains = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
+            trackedRemovedFileInfos = [removedMetaDatum filteredArrayUsingPredicate:contains];
 
-            NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
-            untrackedInsertedListInfos = [insertedMetaDatum filteredArrayUsingPredicate:doesntContainPredicate];
+            id excludes = [NSCompoundPredicate notPredicateWithSubpredicate:contains];
+            untrackedInsertedFileInfos = [insertedMetaDatum filteredArrayUsingPredicate:excludes];
+            
         });
         
-        if (untrackedInsertedListInfos.count == 0 && trackedRemovedListInfos.count == 0 && updatedMetaDatum.count == 0) {
+        if (untrackedInsertedFileInfos.count == 0 && trackedRemovedFileInfos.count == 0 &&
+            updatedMetaDatum.count == 0) {
             return;
         }
         
         if ([sself.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
-            [sself.delegate filesControllerWillChangeContent:self];
+            [sself.delegate filesControllerWillChangeContent:sself];
         }
         
         // Remove
-        for (MADMetaData *trackedRemovedListInfo in trackedRemovedListInfos) {
-            __block NSUInteger trackedRemovedListInfoIndex;
+        for (MADMetaData *trackedRemovedFileInfo in trackedRemovedFileInfos) {
+            __block NSUInteger trackedRemovedFileInfoIndex;
             
-            MADFilesController *__weak wself = sself;
+            MADFilesController * __weak wself = sself;
             dispatch_sync(wself.fileMetaDataQueue, ^{
-                trackedRemovedListInfoIndex = [wself.fileMetaDatum indexOfObject:trackedRemovedListInfo];
-                //NSLog(@"REMOVING %@", trackedRemovedListInfo);
-                [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
+            
+                trackedRemovedFileInfoIndex = [wself.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
+                [wself.fileMetaDatum removeObjectAtIndex: trackedRemovedFileInfoIndex];
+                
             });
             
-            if ([sself.delegate respondsToSelector:@selector(filesController:didRemoveListInfo:atIndex:)]) {
+            SEL didRemoveFileInfo = @selector(filesController:didRemoveFileInfo:atIndex:);
+            if ([sself.delegate respondsToSelector:didRemoveFileInfo]) {
+            
                 [sself.delegate filesController: sself
-                             didRemoveListInfo: trackedRemovedListInfo
-                                       atIndex: trackedRemovedListInfoIndex];
+                             didRemoveFileInfo: trackedRemovedFileInfo
+                                       atIndex: trackedRemovedFileInfoIndex];
+                
             }
         }
         
         // Sort the untracked inserted list infos
-        untrackedInsertedListInfos = [untrackedInsertedListInfos sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
+        NSLocale *currentLocale = [NSLocale currentLocale];
+        untrackedInsertedFileInfos = [untrackedInsertedFileInfos sortedArrayUsingFunction:finderSortWithLocale
+                                                                                  context:(__bridge void *)(currentLocale)];
         
         // Insert
-        [sself.fileMetaDatum addObjectsFromArray:untrackedInsertedListInfos];
-        NSArray *fileMetaDatumSorted = [sself.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
+        [sself.fileMetaDatum addObjectsFromArray:untrackedInsertedFileInfos];
+        NSArray *fileMetaDatumSorted = [sself.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale
+                                                                             context:(__bridge void *)(currentLocale)];
+        
         sself.fileMetaDatum = fileMetaDatumSorted.mutableCopy;
-        for (MADMetaData *untrackedInsertedListInfo in untrackedInsertedListInfos) {
-            __block NSUInteger untrackedInsertedListInfoIndex;
+
+        for (MADMetaData *untrackedInsertedFileInfo in untrackedInsertedFileInfos) {
+            __block NSUInteger untrackedInsertedFileInfoIndex;
             
             MADFilesController *__weak wself = sself;
             dispatch_sync(wself.fileMetaDataQueue, ^{
-                untrackedInsertedListInfoIndex = [wself.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
+                untrackedInsertedFileInfoIndex = [wself.fileMetaDatum indexOfObject:untrackedInsertedFileInfo];
             });
             
-            if ([sself.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
-                [sself.delegate filesController: sself
-                             didInsertListInfo: untrackedInsertedListInfo
-                                       atIndex: untrackedInsertedListInfoIndex];
+            if ([sself.delegate respondsToSelector:@selector(filesController:didInsertFileInfo:atIndex:)]) {
+                [sself.delegate filesController: sself didInsertFileInfo: untrackedInsertedFileInfo
+                                       atIndex: untrackedInsertedFileInfoIndex];
             }
         }
         
         // Update
-        for (MADMetaData *updatedListInfo in updatedMetaDatum) {
-            __block NSUInteger updatedListInfoIndex;
+        for (MADMetaData *updatedFileInfo in updatedMetaDatum) {
+
+            __block NSUInteger updatedFileInfoIndex;
             
             MADFilesController *__weak wself = sself;
             dispatch_sync(wself.fileMetaDataQueue, ^{
-                //NSLog(@"UPDATING %@", updatedListInfo);
 
-                updatedListInfoIndex = [self.fileMetaDatum indexOfObject:updatedListInfo];
+                updatedFileInfoIndex = [self.fileMetaDatum indexOfObject:updatedFileInfo];
                 
-                // Track the new list info instead of the old one.
-                if (updatedListInfoIndex != NSNotFound) {
-                    wself.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
+                if (updatedFileInfoIndex != NSNotFound) {
+                    wself.fileMetaDatum[updatedFileInfoIndex] = updatedFileInfo;
                 }
+                
             });
             
-            if (updatedListInfoIndex != NSNotFound && [sself.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
-                [sself.delegate filesController:sself didUpdateListInfo:updatedListInfo atIndex:updatedListInfoIndex];
+            SEL didUpdateFileInfo = @selector(filesController:didUpdateFileInfo:atIndex:);
+            if (updatedFileInfoIndex != NSNotFound &&
+                [sself.delegate respondsToSelector:didUpdateFileInfo]) {
+                
+                [sself.delegate filesController:sself didUpdateFileInfo:updatedFileInfo
+                                        atIndex:updatedFileInfoIndex];
+
             }
         }
         
+        SEL didChangeContent = @selector(filesController:didUpdateFileInfo:atIndex:);
         if ([sself.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
 
-                [sself.delegate filesControllerDidChangeContent:sself completion:^(BOOL success, NSError *error) {
+                [sself.delegate filesControllerDidChangeContent: sself
+                                                     completion: ^(BOOL success, NSError *error) {
                     completion(success, nil);
                 }];
                 
@@ -421,7 +508,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Convenience
 
-- (NSArray *)listInfosByMappingURLs:(NSArray *)URLs {
+- (NSArray *)fileInfosByMappingURLs:(NSArray *)URLs {
 
     NSMutableArray *fileMetaDatum = [NSMutableArray arrayWithCapacity:URLs.count];
     for (NSURL *URL in URLs) {

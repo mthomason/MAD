@@ -1104,7 +1104,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
 #pragma mark - MTTabBarImageProtocol
 
-- (UIImage *)tabBarImage {
++ (UIImage *)newTabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 

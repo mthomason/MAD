@@ -52,8 +52,10 @@
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
 
+#import "MADStoryboard.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
+static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
 static NSString * const MADTextNoCache = @"No Cache";
 
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
@@ -114,6 +116,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @end
 
 @implementation MADViewerController
+
++ (instancetype)newViewerController {
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
+    id viewerViewController = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
+    return viewerViewController;
+}
 
 #pragma mark - MADOperationObserver
 
@@ -440,7 +448,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTTabBarImageProtocol
 
-- (UIImage *)tabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
++ (UIImage *)newTabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
 
 - (nullable MADReportPageViewController *)visiblePageViewController { return self.viewControllers.count > 0 ? self.viewControllers[0] : nil; }
 

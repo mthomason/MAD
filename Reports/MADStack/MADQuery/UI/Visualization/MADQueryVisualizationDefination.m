@@ -16,13 +16,14 @@
 #import <MADDataStructures/MTVertex.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSURL.h>
 
 @interface MADQueryVisualizationDefination()
 
-@property (nonatomic, strong, readwrite) MTGraph *graphRepresentation;
-@property (nonatomic, strong, readwrite) MTLinkedList *topologicallySortedTables;
-@property (nonatomic, strong, readwrite) NSArray *startingPoints;
-@property (nonatomic, assign, readwrite, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
+    @property (nonatomic, strong, readwrite) MTGraph *graphRepresentation;
+    @property (nonatomic, strong, readwrite) MTLinkedList *topologicallySortedTables;
+    @property (nonatomic, strong, readwrite) NSArray <NSURL *> *startingPoints;
+    @property (nonatomic, assign, readwrite, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
 @end
 
@@ -57,12 +58,14 @@
                 }
                 
                 if (topLevel) {
-                    [startingPoints addObject:table.objectID.URIRepresentation];
+                    NSURL *url = table.objectID.URIRepresentation.copy;
+                    [startingPoints addObject:url];
                 }
             }
         }
-
-        self.startingPoints = [NSArray arrayWithArray:startingPoints];
+        
+        NSArray *points = [[NSArray alloc] initWithArray:startingPoints];
+        self.startingPoints = points;
         self.directedAcyclicGraph = isDirectedAcyclicGraph;
         
     }

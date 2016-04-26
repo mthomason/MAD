@@ -155,12 +155,12 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     return _textRepresentation;
 }
 
-- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size
-                    edgeEffect:(BOOL)edgeEffect
-                    zoomEffect:(BOOL)zoomEffect
-                  squareEffect:(BOOL)squareEffect
-                    cornerSize:(CGFloat)cornerSize
-                         scale:(CGFloat)scale {
+- (UIImage *)newThumbnailWithRect:(CGRect)rect size:(CGFloat)size
+                       edgeEffect:(BOOL)edgeEffect
+                       zoomEffect:(BOOL)zoomEffect
+                     squareEffect:(BOOL)squareEffect
+                       cornerSize:(CGFloat)cornerSize
+                            scale:(CGFloat)scale {
     size = size * scale;
     cornerSize = cornerSize * scale;
     CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
@@ -266,16 +266,16 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 }
 
 - (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
-    return [self thumbnailWithRect: [MTPaper rectLetter]
-                              size: MADFloat_1024
-                        edgeEffect: YES
-                        zoomEffect: YES
-                      squareEffect: NO
-                        cornerSize: cornerRadiusForHorizontalSizeClass(traits.horizontalSizeClass)
-                             scale: traits.displayScale];
+    return [self newThumbnailWithRect: [MTPaper rectLetter]
+                                 size: MADFloat_1024
+                           edgeEffect: YES
+                           zoomEffect: YES
+                         squareEffect: NO
+                           cornerSize: cornerRadiusForHorizontalSizeClass(traits.horizontalSizeClass)
+                                scale: traits.displayScale];
 }
 
-- (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
++ (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
     [[UIColor whiteColor] setFill];
     CGPathRef path = CGPathCreateWithRect(pageRect, NULL);
     CGContextAddPath(ctx, path);
@@ -287,7 +287,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                        withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [self drawWhiteCanvas: ctx pageRect: pageRect];
+    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
     
     [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 

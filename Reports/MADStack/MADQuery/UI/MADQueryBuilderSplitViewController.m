@@ -23,18 +23,21 @@
 
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
+#import "MADStoryboard.h"
+
+static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
 
 @interface MADQueryBuilderSplitViewController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
 
-@property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
-@property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
+    @property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
+    @property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
 
-@property (nonatomic, strong) UIPopoverController *popover;
-@property (nonatomic, assign) BOOL localEditing;
+    @property (nonatomic, strong) UIPopoverController *popover;
+    @property (nonatomic, assign) BOOL localEditing;
 
 @end
 
@@ -52,6 +55,12 @@
 - (void)dealloc {
     _viewControllerDelegate = nil;
     _document = nil;
+}
+
++ (instancetype)newQueryBuilderSplitViewController {
+    UIStoryboard *storyboardQuery = [MADStoryboard newStoryboardQuery];
+    id controller =  [storyboardQuery instantiateViewControllerWithIdentifier:SplitViewController];
+    return controller;
 }
 
 - (NSString *)title {
@@ -227,7 +236,7 @@
 
 #pragma mark - MTTabBarImageProtocol
 
-- (UIImage *)tabBarImage {
++ (UIImage *)newTabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 

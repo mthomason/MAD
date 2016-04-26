@@ -12,9 +12,13 @@
 #import <Foundation/NSFileManager.h>
 #import <dispatch/dispatch.h>
 
-@interface MADFileInfo ()
+static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
-    @property (nonatomic, strong) dispatch_queue_t fetchQueue;
+@interface MADFileInfo () {
+    dispatch_queue_t _fetchQueue;
+}
+
+@property (nonatomic, strong, readonly) dispatch_queue_t fetchQueue;
 
 @end
 
@@ -25,14 +29,25 @@
 - (instancetype)initWithURL:(NSURL *)URL {
     
     if (self = [super init]) {
-        _fetchQueue = dispatch_queue_create("com.everydayapps.mad.fileinfo", DISPATCH_QUEUE_SERIAL);
         _URL = URL.copy;
     }
     
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] alloc] initWithURL:self.URL];
+    return copy;
+}
+
 #pragma mark - Fetch Methods
+
+- (dispatch_queue_t)fetchQueue {
+    if (_fetchQueue == nil) {
+        _fetchQueue = dispatch_queue_create(QueueFileInfo, DISPATCH_QUEUE_SERIAL);
+    }
+    return _fetchQueue;
+}
 
 - (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler {
     dispatch_async(self.fetchQueue, ^{

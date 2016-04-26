@@ -10,6 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "MADDesignerViewController.h"
+
 #include <math.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADSectionLayoutManager.h>
@@ -20,8 +22,6 @@
 #import "MADTabBarController.h"
 
 #import "MADManagedObjectView.h"
-
-#import "MADDesignerViewController.h"
 
 #import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
@@ -67,6 +67,8 @@
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
 
+#import "MADStoryboard.h"
+
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -80,6 +82,7 @@ static NSString * const MTSegueChooseImageSaveIdentifer                     = @"
 static NSString * const MTIdentifierSegueEditFieldExit                      = @"MTIdentifierSegueEditFieldExit";
 static NSString * const MTSegueNewDocumentObjectAggregateLabelSaveIdentifer = @"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer";
 static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer        = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
+static NSString * const MADDesignerStoryboardID                             = @"MADIdentifierStoryboardDesignerViewController";
 
 static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
 static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
@@ -203,6 +206,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark - NSObject
 
 - (void)dealloc { }
+
++ (instancetype)newDesignerViewController {
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
+    id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
+    return controller;
+}
 
 #pragma mark - Unwind Segue
 
@@ -3085,7 +3094,7 @@ static const inline CGSize sizePopoverFonts() {
 
 #pragma mark MTTabBarImageProtocol
 
-- (UIImage *)tabBarImage {
++ (UIImage *)newTabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemMadDesigner8];
 }
 

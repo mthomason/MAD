@@ -234,71 +234,37 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     if (accountChanged || self.filesController == nil) {
+
         if (!self.filesController) {
-            MADFilesController *filesController = [self filesControllerForCurrentConfigurationWithPathExtension:self.delegate.fileExtention
-                                                                                              firstQueryHandler:storageOptionChangeHandler];
+
+            NSString *identifier = [self identifierForStorageOption];
+            id filesController = [MADFilesController newFilesControllerWithPathExtension:self.delegate.fileExtention
+                                                                           storageOption:self.storageOption
+                                                                              identifier:identifier
+                                                                       firstQueryHandler:storageOptionChangeHandler];
             self.filesController = filesController;
             [self.delegate didConfigureFilesController: self.filesController];
             [self.filesController startSearching];
             
         } else if (accountChanged) {
-            self.filesController.fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:self.delegate.fileExtention
-                                                                                                firstQueryHandler:storageOptionChangeHandler];
+            NSString *identifer = [self identifierForStorageOption];
+            
+            id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: self.delegate.fileExtention
+                                                              storageOption: self.storageOption
+                                                                 identifier: identifer
+                                                          firstQueryHandler: storageOptionChangeHandler];
+            self.filesController.fileCoordinator = fc;
             [self.delegate didConfigureFilesController: self.filesController];
         }
     }
     
 }
 
-#pragma mark - Document Operations
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }  else {
-        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension identifier:self.delegate.ubiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    } else {
-        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:self.delegate.ubiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension
-                                                                                          firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent
-                                                                                              firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
+- (NSString *)identifierForStorageOption {
+    return self.storageOption != MADAppStorageCloud ? self.groupIdentifier :
+                                                      self.delegate.ubiquityIdentifier;
 }
 
 @end

@@ -52,6 +52,12 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = self.metadataItem == nil ? [[[self class] alloc] initWithURL: self.URL] :
+                                         [[[self class] alloc] initWithMetadataItem:self.metadataItem];
+    return copy;
+}
+
 - (NSData *)fileSystemFileCreationDate {
     return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] : [self.attributes objectForKey:NSFileCreationDate];
 }

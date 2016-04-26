@@ -320,55 +320,49 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
 
     BOOL success = NO;
+    NSURL * __weak urlGuts;
     
     if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
-        
-        [MADocument deleteCoreDataFilesAtDirectory:self.urlGuts];
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        NSError * __autoreleasing *error = NULL;
-        success = [fileWrapper writeToURL: self.urlGuts
-                                  options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
-                      originalContentsURL: url
-                                    error: error];
-        NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
+    
+        @autoreleasepool {
+
+            urlGuts = self.urlGuts.copy;
+            
+            [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
+            
+            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+            NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+            NSError * __autoreleasing *error = NULL;
+            success = [fileWrapper writeToURL: urlGuts
+                                      options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
+                          originalContentsURL: url
+                                        error: error];
+            
+            NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
+            
+        }
     }
+    
     if (success) {
-        NSError * __autoreleasing *readError = NULL;
-        success = [super readFromURL:self.urlGuts error:readError];
+        return [super readFromURL:urlGuts error:outError];
     }
-    return success;
+    
+    return NO;
 }
 
 - (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes
           safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
                 error:(NSError **)outError {
     
-    [super writeContents:contents andAttributes:additionalFileAttributes
+    BOOL success = [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
     
-    [self wrapFileOverwrite: YES];
+    if (!success) return NO;
+
+    return [MADocument wrapFileOverwrite: YES
+                                 urlGuts: self.urlGuts
+                                 fileURL: self.fileURL] ? YES : NO;
     
-    NSError *fileWrapperError = nil;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
-                                                            options: NSFileWrapperReadingImmediate
-                                                              error: &fileWrapperError];
-    
-    BOOL success = NO;
-    if (fileWrapperError == nil) {
-        NSData *data = [fileWrapper serializedRepresentation];
-        NSError *errorWriting = nil;
-        success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
-        if (!success && errorWriting) {
-            *outError = errorWriting;
-        }
-        
-    } else {
-        *outError = fileWrapperError;
-    }
-    
-    return success;
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
@@ -1063,8 +1057,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
     BOOL isDirectory;
-
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: destinationUrl.path
+    
+    NSString *destinationPath = destinationUrl.path.copy;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
                                                        isDirectory: &isDirectory];
     if (exists) {
         NSError *deleteError = nil;
@@ -1149,10 +1144,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (success) {
             
             [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
-            //recreate the store like in the  appDelegate method
             
-            NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                      NSInferMappingModelAutomaticallyOption : @YES};
+            id options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                @YES, NSMigratePersistentStoresAutomaticallyOption,
+                                                @YES, NSInferMappingModelAutomaticallyOption, nil];
             
             [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
                                                      configuration: nil
@@ -1172,19 +1167,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
     
     CGRect letterRect = [MTPaper rectLetter];
-    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                        (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
-                                                                        (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
-                                                       size: MADFloat_1024
-                                                 edgeEffect: NO zoomEffect: NO squareEffect: YES
-                                                 cornerSize: 0.0000f scale: 1.0000f];
+    UIImage *thumbnail = [printPageRender newThumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                           (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
+                                                                           (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
+                                                          size: MADFloat_1024
+                                                    edgeEffect: NO zoomEffect: NO squareEffect: YES
+                                                    cornerSize: 0.0000f scale: 1.0000f];
     return thumbnail;
 }
 
-- (bool)wrapFileOverwrite:(BOOL)overwrite {
++ (bool)wrapFileOverwrite:(BOOL)overwrite urlGuts:(NSURL *)urlGuts fileURL:(NSURL *)fileURL {
     NSError *fileWrapperError = nil;
     bool success = false;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: urlGuts
                                                             options: NSFileWrapperReadingImmediate
                                                               error: &fileWrapperError];
     
@@ -1194,9 +1189,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (overwrite) {
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
-            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
+            success = [data writeToURL:fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
         } else {
-            resultUrl = [self.fileURL uniqueUrl];
+            resultUrl = [fileURL uniqueUrl];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }

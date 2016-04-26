@@ -92,6 +92,7 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
 }
 
 - (void)dealloc {
+    _lastDataForCacheId = nil;
     if (_queueBulkAdd != nil) {
         dispatch_suspend(_queueBulkAdd);
         _queueBulkAdd = nil;

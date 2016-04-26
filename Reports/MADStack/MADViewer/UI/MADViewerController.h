@@ -16,14 +16,14 @@
 @protocol MTViewControllerProtocol;
 
 @interface MADViewerController : MADPageViewController
-    <MADViewControllerDocumentProtocol,
-        MADActivityProtocol,
-        UIPageViewControllerDelegate,
-        UIPageViewControllerDataSource,
+    <MADViewControllerDocumentProtocol, MADActivityProtocol,
+        UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
     @property (nonatomic, weak) MADocument *document;
+
+    + (instancetype)newViewerController;
 
     - (IBAction)refresh:(id)sender;
     - (IBAction)zoomToActualSize:(id)sender;

@@ -8,7 +8,7 @@
 
 #import "MADToolboxViewController.h"
 #import "MTToolboxViewControllerProtocol.h"
-#import "UIStoryboard+Toolbox.h"
+#import "MADStoryboard.h"
 #import "UINavigationController+Designer.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
@@ -61,7 +61,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [UIStoryboard Toolbox];
+        UIStoryboard *storyboard = [MADStoryboard newToolbox];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
         UINavigationController *styleNavigationController = [UINavigationController navigationControllerFontPicker];

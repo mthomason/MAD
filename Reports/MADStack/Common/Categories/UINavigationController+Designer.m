@@ -7,10 +7,10 @@
 //
 
 #import "UINavigationController+Designer.h"
+#import "MADStoryboard.h"
 #import "UIStoryboard+Licensing.h"
 #import "UIStoryboard+InformationTable.h"
 #import "UIStoryboard+NewDocument.h"
-#import "UIStoryboard+Toolbox.h"
 #import "UIStoryboard+ObjectSelector.h"
 
 static NSString * const FontPicker      = @"MADIdentifierStoryboardFontPicker";
@@ -31,7 +31,7 @@ static NSString * const ElementPicker       = @"MADIdentifierNavigationControlle
 }
 
 + (instancetype)Licensing {
-    UIStoryboard *storyboard = [UIStoryboard Licensing];
+    UIStoryboard *storyboard = [MADStoryboard newLicensing];
     return [storyboard instantiateViewControllerWithIdentifier:Licensing];
 }
 
@@ -41,13 +41,13 @@ static NSString * const ElementPicker       = @"MADIdentifierNavigationControlle
 }
 
 + (instancetype)navigationControllerToolbox {
-    UIStoryboard *storyboardToolbox = [UIStoryboard Toolbox];
+    UIStoryboard *storyboardToolbox = [MADStoryboard newToolbox];
     UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
     return navigationControllerToolbox;
 }
 
 + (instancetype)navigationControllerFontPicker {
-    UIStoryboard *storyboard = [UIStoryboard Toolbox];
+    UIStoryboard *storyboard = [MADStoryboard newToolbox];
     return [storyboard instantiateViewControllerWithIdentifier:FontPicker];
 }
 

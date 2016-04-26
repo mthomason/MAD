@@ -14,6 +14,7 @@
 @class NSMetadataItem;
 
 @interface MADMetaData : NSObject
+    <NSCopying>
 
     + (NSArray <MADMetaData *> *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
 

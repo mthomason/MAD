@@ -10,6 +10,7 @@
 #define MAD_Designer_MADFileCoordinator_h
 
 #import <Foundation/NSObject.h>
+#import "MADStorageState.h"
 
 @class MADFile;
 
@@ -17,36 +18,51 @@
 
 @protocol MADFileCoordinator <NSObject>
 
-@property (nonatomic, weak) id<MADFileCoordinatorDelegate> delegate;
-@property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
+    @property (nonatomic, weak) id <MADFileCoordinatorDelegate> delegate;
+    @property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
 
-- (void)startQuery;
-- (void)stopQuery;
-- (void)removeFileAtURL:(NSURL *)URL;
-- (void)duplicateFileAtURL:(NSURL *)URL;
-- (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
-- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
+    - (void)startQuery;
+    - (void)stopQuery;
+    - (void)removeFileAtURL:(NSURL *)URL;
+    - (void)duplicateFileAtURL:(NSURL *)URL;
+    - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
+    - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
+                   extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
+    - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                        fileGroup:(NSString *)fileGroup;
 
 @end
 
 
 @protocol MADFileCoordinatorDelegate <NSObject>
 
-- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
-                                             removedURLs:(NSArray *)removedURLs
-                                             updatedURLs:(NSArray *)updatedURLs;
+    - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
+                                                 removedURLs:(NSArray *)removedURLs
+                                                 updatedURLs:(NSArray *)updatedURLs;
 
-- (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
-                                             removedMetaDatum:(NSArray *)removedMetaDatum
-                                             updatedMetaDatum:(NSArray *)updatedMetaDatum
-                                                   completion: (void (^)(BOOL success, NSError *error))completion;
+    - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
+                                                 removedMetaDatum:(NSArray *)removedMetaDatum
+                                                 updatedMetaDatum:(NSArray *)updatedMetaDatum
+                                                       completion: (void (^)(BOOL success, NSError *error))completion;
 
-- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-- (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
-- (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+    - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+    - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
+    - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+    - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
 
+@end
+
+@interface MADFileCoordinator : NSObject <MADFileCoordinator>
+
+    + (instancetype)newFileCoordinatorWithPathExtension: (NSString *)pathExtension
+                                          storageOption: (MADAppStorage)storageOption
+                                             identifier: (NSString *)identifier
+                                      firstQueryHandler: (void (^)(void))firstQueryHandler;
+
+    + (instancetype)newFileCoordinatorWithLastPathComponent: (NSString *)lastPathComponent
+                                              storageOption: (MADAppStorage)storageOption
+                                                 identifier: (NSString *)identifier
+                                          firstQueryHandler: (void (^)(void))firstQueryHandler;
 @end
 
 #endif

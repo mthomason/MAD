@@ -588,19 +588,31 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.batchUpdates removeAllObjects];
 }
 
-- (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+- (void)filesController:(MADFilesController *)filesController
+      didInsertFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
+    
+    id fi = fileInfo.copy;
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
     [self.batchInserts addObject:i];
+
 }
 
-- (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+- (void)filesController:(MADFilesController *)filesController
+      didRemoveFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
+
+    id fi = fileInfo.copy;
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
     [self.batchRemoves addObject:i];
+
 }
 
-- (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+- (void)filesController:(MADFilesController *)filesController
+      didUpdateFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
+
+    id fi = fileInfo.copy;
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
     [self.batchUpdates addObject:i];
+
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL, NSError *))completion {
@@ -651,11 +663,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 }
 
-- (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController didFailCreatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-- (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController didFailRemovingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-- (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
 #pragma mark - MADFileExplorerDelegate
 

@@ -12,6 +12,7 @@
 #import <Foundation/NSObject.h>
 
 @interface MADFileInfo : NSObject
+    <NSCopying>
 
     @property (nonatomic, copy, readonly) NSURL *URL;
     @property (readonly) NSString *name;

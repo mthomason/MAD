@@ -8,24 +8,26 @@
 
 #import "objcmad.h"
 
-void mad_swizzle_selectors(Class origionalClass, SEL originalSelector, Class swizzledClass, SEL swizzledSelector, dispatch_once_t *onceToken) {
+void mad_swizzle_selectors(Class origionalClass, SEL originalSelector,
+                           Class swizzledClass, SEL swizzledSelector, dispatch_once_t *onceToken) {
     
     dispatch_once(onceToken, ^{
         
         Method originalMethod = class_getInstanceMethod(origionalClass, originalSelector);
         Method swizzledMethod = class_getInstanceMethod(swizzledClass, swizzledSelector);
         
-        BOOL didAddMethod =
-        class_addMethod(origionalClass,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
+        IMP swizzledMethodImplementation            = method_getImplementation(swizzledMethod);
+        const char *swizzledMethodTypeEncoding      = method_getTypeEncoding(swizzledMethod);
+        BOOL didAddMethod = class_addMethod(origionalClass, originalSelector,
+                                            swizzledMethodImplementation,
+                                            swizzledMethodTypeEncoding);
         
         if (didAddMethod) {
-            class_replaceMethod(swizzledClass,
-                                swizzledSelector,
-                                method_getImplementation(originalMethod),
-                                method_getTypeEncoding(originalMethod));
+        
+            IMP origionalMethodImplementation            = method_getImplementation(originalMethod);
+            const char *origionalMethodTypeEncoding      = method_getTypeEncoding(originalMethod);
+            class_replaceMethod(swizzledClass, swizzledSelector, origionalMethodImplementation,
+                                origionalMethodTypeEncoding);
         } else {
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }

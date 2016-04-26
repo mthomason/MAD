@@ -13,22 +13,24 @@
 #import "UIViewController+tabBarItem.h"
 #import "objcmad.h"
 
+#import "MADQueryBuilderSplitViewController.h"
+#import "MADQueryViewController.h"
+#import "MADViewerController.h"
+#import "MADDesignerViewController.h"
+
 @implementation UIViewController (tabBarItem)
 
 + (void)load {
-    
-    Class class = [self class];
     static dispatch_once_t onceTokenTabBarItem;
     SEL originalSelectorTabBarItem = @selector(tabBarItem);
     SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);
-    mad_swizzle_selectors(class, originalSelectorTabBarItem, class, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
-    
+    mad_swizzle_selectors(self, originalSelectorTabBarItem, self, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
 }
 
 - (UITabBarItem *)mad_tabBarItem {
     UITabBarItem *tabBarItem = [self mad_tabBarItem];
     if (tabBarItem && [tabBarItem image] == nil) {
-        UIImage *tabBarImage = [self tabBarImage];
+        UIImage *tabBarImage = [self.class newTabBarImage];
         if (tabBarImage) {
             UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             tabBarItem.image = tabBarImageOg;
@@ -39,7 +41,7 @@
     return tabBarItem;
 }
 
-- (UIImage *)tabBarImage {
++ (UIImage *)newTabBarImage {
     return nil;
 }
 

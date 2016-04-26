@@ -28,11 +28,11 @@ NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey = @"MADUs
         _fileURL = userActivity.userInfo[NSUserActivityDocumentURLKey];
         
         if (!_fileURL) {
-            NSString *listInfoFilePath = userActivity.userInfo[MADAppConfigurationUserActivityListURLPathUserInfoKey];
+            NSString *fileInfoFilePath = userActivity.userInfo[MADAppConfigurationUserActivityListURLPathUserInfoKey];
             
-            NSAssert(listInfoFilePath != nil, @"The `userInfo` dictionary provided did not contain a URL or a URL path.");
+            NSAssert(fileInfoFilePath != nil, @"The `userInfo` dictionary provided did not contain a URL or a URL path.");
             
-            _fileURL = [NSURL fileURLWithPath:listInfoFilePath isDirectory:NO];
+            _fileURL = [NSURL fileURLWithPath:fileInfoFilePath isDirectory:NO];
         }
         
         NSAssert(_fileURL != nil, @"`listURL must not be `nil`.");

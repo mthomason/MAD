@@ -19,13 +19,13 @@
 
 @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 
-- (UIImage *)thumbnailWithRect:(CGRect)rect
-                          size:(CGFloat)size
-                    edgeEffect:(BOOL)edgeEffect
-                    zoomEffect:(BOOL)zoomEffect
-                  squareEffect:(BOOL)squareEffect
-                    cornerSize:(CGFloat)cornerSize
-                         scale:(CGFloat)scale;
+- (UIImage *)newThumbnailWithRect:(CGRect)rect
+                             size:(CGFloat)size
+                       edgeEffect:(BOOL)edgeEffect
+                       zoomEffect:(BOOL)zoomEffect
+                     squareEffect:(BOOL)squareEffect
+                       cornerSize:(CGFloat)cornerSize
+                            scale:(CGFloat)scale;
 
 @end
 

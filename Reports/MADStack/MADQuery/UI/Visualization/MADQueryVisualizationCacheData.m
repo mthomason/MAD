@@ -7,19 +7,13 @@
 //
 
 #import "MADQueryVisualizationCacheData.h"
-#import <Foundation/NSCoder.h>
-#import <UIKit/UIGeometry.h>
-#import "MADQueryVisualizationDefination.h"
-#import "MADOperationArchiveData.h"
-
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";
 static NSString * const keyTables                   = @"3";
-static NSString * const CacheExt =                  @"qvvc";
+static NSString * const CacheExt                    = @"qvvc";
 
 @interface MADQueryVisualizationCacheData ()
 
@@ -46,7 +40,7 @@ static NSString * const CacheExt =                  @"qvvc";
         self.scrollViewContentOffset = [aDecoder decodeCGPointForKey:keyScrollViewContentOffset];
         self.scrollViewZoomScale = (CGFloat)[aDecoder decodeDoubleForKey:keyScrollViewZoomScale];
         NSDictionary *tableDefinations = [aDecoder decodeObjectForKey:keyTables];
-        self.tableDefinations = tableDefinations.mutableCopy;
+        self.tableDefinations = [[NSMutableDictionary alloc] initWithDictionary: tableDefinations];
     }
     return self;
 }

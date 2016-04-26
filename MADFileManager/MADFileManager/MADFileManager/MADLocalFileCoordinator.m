@@ -21,12 +21,12 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 
 @interface MADLocalFileCoordinator () <MADDirectoryMonitorDelegate>
 
-@property (nonatomic, strong) NSPredicate *predicate;
-@property (nonatomic, strong) void (^firstQueryUpdateHandler)(void);
-@property (nonatomic, strong) MADDirectoryMonitor *directoryMonitor;
-@property (nonatomic, copy) NSArray *currentLocalContents;
+@property (nonatomic, strong)   NSPredicate *predicate;
+@property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
+@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
+@property (nonatomic, copy)     NSArray *currentLocalContents;
 
-@property (nonatomic, strong) NSString *fileGroup;
+@property (nonatomic, strong)   NSString *fileGroup;
 
 @end
 
@@ -167,17 +167,21 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 #pragma mark - Convenience
 
 - (void)processChangeToLocalDocumentsDirectory {
-    dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-    
-    dispatch_async(defaultQueue, ^{
 
-        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
-        NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
-                                                includingPropertiesForKeys: nil
-                                                                   options: NSDirectoryEnumerationSkipsPackageDescendants
-                                                                     error: nil];
+    NSString *fileGroup = self.fileGroup.copy;
+    NSPredicate *predicate = self.predicate.copy;
+
+    dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(defaultQueue, ^{
+    
+        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier: fileGroup];
         
-        NSArray *localListURLs = [localDocumentURLs filteredArrayUsingPredicate:self.predicate];
+        NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
+                                                                   includingPropertiesForKeys: nil
+                                                                                      options: NSDirectoryEnumerationSkipsPackageDescendants
+                                                                                        error: nil];
+        
+        NSArray *localListURLs = [localDocumentURLs filteredArrayUsingPredicate:predicate];
         
         if (localListURLs.count > 0) {
             NSPredicate *containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, self.currentLocalContents];

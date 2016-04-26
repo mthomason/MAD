@@ -12,10 +12,8 @@
 #import <objc/runtime.h>
 #import <dispatch/dispatch.h>
 
-void mad_swizzle_selectors(Class origionalClass,
-                           SEL originalSelector,
-                           Class swizzledClass,
-                           SEL swizzledSelector,
+void mad_swizzle_selectors(Class origionalClass, SEL originalSelector,
+                           Class swizzledClass, SEL swizzledSelector,
                            dispatch_once_t *onceToken);
 
 #endif
