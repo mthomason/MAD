@@ -6,11 +6,16 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellReceiptCharterMember_h
+#define MAD_Designer_MADTableViewCellReceiptCharterMember_h
+
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellReceiptCharterMember : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *charterMember;
-@property (weak, nonatomic) IBOutlet UILabel *detail;
+    @property (weak, nonatomic) IBOutlet UILabel *charterMember;
+    @property (weak, nonatomic) IBOutlet UILabel *detail;
 
 @end
+
+#endif

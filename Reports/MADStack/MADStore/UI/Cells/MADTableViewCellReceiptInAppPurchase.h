@@ -6,14 +6,18 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellReceiptInAppPurchase_h
+#define MAD_Designer_MADTableViewCellReceiptInAppPurchase_h
+
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellReceiptInAppPurchase : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *labelID;
-@property (weak, nonatomic) IBOutlet UILabel *labelOriginalPurchaseDate;
-@property (weak, nonatomic) IBOutlet UILabel *labelCancellationDate;
-@property (weak, nonatomic) IBOutlet UILabel *labelCancellationLabel;
-
+    @property (weak, nonatomic) IBOutlet UILabel *labelID;
+    @property (weak, nonatomic) IBOutlet UILabel *labelOriginalPurchaseDate;
+    @property (weak, nonatomic) IBOutlet UILabel *labelCancellationDate;
+    @property (weak, nonatomic) IBOutlet UILabel *labelCancellationLabel;
 
 @end
+
+#endif

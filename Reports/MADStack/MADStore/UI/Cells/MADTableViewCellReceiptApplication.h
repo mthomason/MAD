@@ -6,11 +6,16 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellReceiptApplication_h
+#define MAD_Designer_MADTableViewCellReceiptApplication_h
+
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellReceiptApplication : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *product;
-@property (weak, nonatomic) IBOutlet UILabel *version;
+    @property (weak, nonatomic) IBOutlet UILabel *product;
+    @property (weak, nonatomic) IBOutlet UILabel *version;
 
 @end
+
+#endif

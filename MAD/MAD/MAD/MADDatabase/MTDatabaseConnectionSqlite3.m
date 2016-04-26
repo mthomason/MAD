@@ -46,9 +46,4 @@
     return MADIdentifierDatabaseSqlite3;
 }
 
-- (NSURL *)databaseUrl {
-    NSURL * __autoreleasing url = _databaseUrl.copy;
-    return url;
-}
-
 @end

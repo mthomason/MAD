@@ -74,8 +74,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     bool gotActionEdit = false, gotActionRename = false;
     SEL actionRename = @selector(rename:);
     for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
-        if ([gestureRecognizer respondsToSelector:actionEdit]) gotActionEdit = true;
-        if ([gestureRecognizer respondsToSelector:actionRename]) gotActionRename = true;
+        if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = true;
+        if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = true;
         if (gotActionEdit && gotActionRename) break;
     }
     
@@ -100,14 +100,18 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
     self.labelTitle.backgroundColor = clearColor;
-    self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.labelTitle.font = font;
     [self.labelTitle setNeedsLayout];
     
     self.labelTitleSub.textColor = lightGrayColor;
     self.labelTitleSub.clipsToBounds = NO;
     self.labelTitleSub.numberOfLines = 0;
     self.labelTitleSub.backgroundColor = clearColor;
-    self.labelTitleSub.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    
+    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    self.labelTitleSub.font = font;
     [self.labelTitleSub setNeedsLayout];
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
@@ -118,8 +122,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         
         self.wobbling = NO;
         

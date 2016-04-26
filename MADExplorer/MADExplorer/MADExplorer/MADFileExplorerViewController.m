@@ -166,7 +166,7 @@ static NSString * const Downloading                             = @"Downloading"
         }
     } else {
         cell.progressViewDownload.hidden = YES;
-        [cell.progressViewDownload setProgress:0.0000f animated:YES];
+        [cell.progressViewDownload setProgress:0.0 animated:YES];
     }
     
     if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading) {
@@ -179,6 +179,7 @@ static NSString * const Downloading                             = @"Downloading"
     
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
+
 
     NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];

@@ -9,10 +9,23 @@
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADBackgroundView.h"
 #import <MADExplorer/MADBackgroundViewSelected.h>
+#import <UIKit/UIView.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UIBezierPath.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UITextView.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/NSTextContainer.h>
+
+static inline CGRect ImageSize(CGSize size) {
+    return CGRectMake(CGPointZero.x, CGPointZero.y,
+                      size.width + 4.0000f,
+                      size.height + 4.0000f);
+}
 
 @interface MADCollectionViewCellProductFeature ()
 
-@property (nonatomic, strong) UIColor *textColorFromNib;
+    @property (nonatomic, copy) UIColor *textColorFromNib;
 
 @end
 
@@ -33,21 +46,24 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y,
-               self.image.bounds.size.width + 4.0000f, self.image.bounds.size.height + 4.0000f);
-    UIBezierPath *exclusionPath = [UIBezierPath bezierPathWithRect:r];
-    self.labelDescription.textContainer.exclusionPaths = @[exclusionPath];
-    self.textColorFromNib = self.labelDescription.textColor;
+    id exclusionPath = [UIBezierPath bezierPathWithRect: ImageSize(self.image.bounds.size)];
+    id exclusionPaths = [[NSArray alloc] initWithObjects:exclusionPath, nil];
+    self.labelDescription.textContainer.exclusionPaths = exclusionPaths;
+    self.textColorFromNib = self.labelDescription.textColor.copy;
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
-    self.labelDescription.textColor = highlighted || self.selected ? self.labelTitle.highlightedTextColor : self.textColorFromNib;
+    self.labelDescription.textColor = highlighted || self.selected ?
+                                self.labelTitle.highlightedTextColor.copy :
+                                self.textColorFromNib.copy;
 }
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
-    self.labelDescription.textColor = selected || self.highlighted ? self.labelTitle.highlightedTextColor : self.textColorFromNib;
+    self.labelDescription.textColor = selected || self.highlighted ?
+                                    self.labelTitle.highlightedTextColor.copy :
+                                    self.textColorFromNib.copy;
 }
 
 @end
