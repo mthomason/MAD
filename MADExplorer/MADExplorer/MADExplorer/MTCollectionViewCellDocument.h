@@ -32,8 +32,8 @@
     + (UIFont *)newCaptionFont;
     + (UIFont *)newCaptionFont2;
 
-    + (NSDictionary *)attributesCaption;
-    + (NSDictionary *)attributesCaption2;
+    + (NSDictionary *)newAttributesCaption;
+    + (NSDictionary *)newAttributesCaption2;
 
     + (UIImage *)newDefaultThumbnail;
 

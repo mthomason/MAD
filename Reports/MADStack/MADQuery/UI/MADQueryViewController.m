@@ -128,11 +128,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - Static
 
 + (void)deleteCoreDataCache {
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    @autoreleasepool {
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    }
 }
 
 #pragma mark - NSObject

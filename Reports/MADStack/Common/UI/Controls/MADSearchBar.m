@@ -58,14 +58,18 @@
 
 - (void)setupIfNeeded {
     if (self.isIconColorUpdated == NO || self.isClearButtonUpdated == NO) {
+        UIImage * __unsafe_unretained image;
+        UIColor *whiteColor =  [UIColor whiteColor];
         for (UIView *subview in self.subviews) {
             for (id subview2 in subview.subviews) {
                 if ([subview2 isKindOfClass:[UITextField class]]) {
-                    ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                    ((UITextField *)subview2).tintColor = [UIColor whiteColor];
+                    ((UITextField *)subview2).textColor = whiteColor;
+                    ((UITextField *)subview2).tintColor = whiteColor;
                     
-                    ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
+                    image = ((UIImageView *)((UITextField *)subview2).leftView).image;
+                    UIImage *imageRenderingTemplate = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    ((UIImageView *)((UITextField *)subview2).leftView).image = imageRenderingTemplate;
+                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = whiteColor;
                     
                 }
             }

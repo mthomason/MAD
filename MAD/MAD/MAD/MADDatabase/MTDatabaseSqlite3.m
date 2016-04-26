@@ -34,7 +34,6 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 @property (atomic, assign) sqlite3_stmt *bulkStatement;
 
     @property (nonatomic, assign, getter=isOpen) bool open;
-    @property (nonatomic, strong) NSCalendar *currentCalandar;
     @property (nonatomic, strong) MTDatabaseConnectionSqlite3 *databaseConnection;
 
 @end
@@ -71,8 +70,6 @@ void sqliteLog(void *foo, const char* statement) {
         _database = NULL;
         _bulkStatement = NULL;
         _open = false;
-        NSCalendar *currentCalandar = [NSCalendar currentCalendar];
-        [self setCurrentCalandar:currentCalandar];
     }
     return self;
 }

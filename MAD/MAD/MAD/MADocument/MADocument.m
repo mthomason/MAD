@@ -152,7 +152,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [[UIScreen mainScreen] scale] > 1.5;
 }
 
-+ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
++ (NSURL *)newArchiveUrlForMadUrl:(NSURL *)madUrl {
     NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
     NSURL *destinationDirectoryUrl = [MADFileUtilities localTemporaryDirectory];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName isDirectory: YES];
@@ -213,7 +213,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     _database.delegate = nil;
     _database = nil;
     _mainQuery.database.delegate = nil;
-    
+}
+
+- (void)removeObservers {
+
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
                                                   object: self.managedObjectContext];
@@ -229,16 +232,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
                                                   object: self];
+    
 }
 
 #pragma mark - UIDocument
 
 - (NSDictionary *)layoutHeightsBySectionKey {
-    __block NSMutableDictionary *dictionary = [NSMutableDictionary new];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
+
     [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *sectionLayoutManager, BOOL *stop) {
         
-        NSString *k = [key key];
-        dictionary[k] = @(sectionLayoutManager.size.height);
+        id k = [key key];
+        NSNumber *height = [[NSNumber alloc] initWithFloat:sectionLayoutManager.size.height];
+        dictionary[k] = height;
         
     }];
     return dictionary;
@@ -247,16 +253,15 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
         
-        NSNumber *migratePersistentStoresAutomaticallyOption =  [[NSNumber alloc] initWithBool:YES];
-        NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
+        NSNumber *boolYes =  @YES;
         
         NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
-                                    migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
+                                    boolYes, NSInferMappingModelAutomaticallyOption,
+                                    boolYes, NSMigratePersistentStoresAutomaticallyOption, nil];
         
         self.persistentStoreOptions = options;
         
-        NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
+        NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:url];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         
         _urlMetaPlaylist = urlMetaPlaylist.copy;
@@ -264,10 +269,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         [self initalizeMainDataTable];
         
-        MADocumentState *documentState = [MADocumentState new];
+        id documentState = [[MADocumentState alloc] init];
         self.documentStatus = documentState;
         
-        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+        id extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
         self.extraInformation = extraInfo;
         
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
@@ -303,16 +308,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
     [self regenThumbnail];
     MADocument * __weak weakself = self;
+    
     [super closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            [weakself removeGuts];
-            if (completionHandler != nil) {
-                completionHandler(YES);
-            }
-        } else {
-            if (completionHandler != nil) {
-                completionHandler(NO);
-            }
+            MADocument *sself = weakself;
+            [sself removeGuts];
+            [sself removeObservers];
+        }
+        if (completionHandler != nil) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                completionHandler(success);
+            }];
         }
     }];
 }
@@ -1203,8 +1209,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark File Name
 
 - (void)removeGuts {
-    NSArray *propertyKeys = @[NSURLIsDirectoryKey];
-    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts includingPropertiesForKeys: propertyKeys options: NSNotFound errorHandler: ^BOOL(NSURL *url, NSError *error) {
+
+    NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
+                                                             includingPropertiesForKeys: propertyKeys
+                                                                                options: NSNotFound
+                                                                           errorHandler: ^BOOL(NSURL *url, NSError *error) {
         return YES;
     }];
     

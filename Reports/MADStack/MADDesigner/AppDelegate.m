@@ -221,9 +221,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         [MTVerificationController sharedInstance];
-    });
-    
-    dispatch_async(self.appDelegateQueueSerial, ^{
         [MADQueryViewController deleteCoreDataCache];
     });
     

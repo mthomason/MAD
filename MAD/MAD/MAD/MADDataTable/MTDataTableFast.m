@@ -263,16 +263,18 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
 }
 
 - (void)reopenDbConnection {
+
     NSURL *urlFastCache = [self urlFastCache];
-    MTDatabaseConnection *connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-    
+
     MTDatabaseCache *database = [[MTDatabaseSqlite3 alloc] init];
+    MTDatabaseConnection *connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
     database.databaseConnection = connection;
     
     [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX];
     self.databaseForInserts = database;
     
-    MTDatabaseCache *database2 = [MTDatabaseCache newDatabaseWithConnection:connection];
+    MTDatabaseConnection *connection2 = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+    MTDatabaseCache *database2 = [MTDatabaseCache newDatabaseWithConnection:connection2];
     self.databaseForSelects = database2;
 }
 

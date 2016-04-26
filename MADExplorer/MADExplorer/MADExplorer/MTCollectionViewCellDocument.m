@@ -24,9 +24,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @interface MTCollectionViewCellDocument ()
 
-    @property (nonatomic, strong) UIColor *bgColor;
     @property (nonatomic, strong) UIColor *colorTextNormal;
-    @property (nonatomic, strong) UIColor *colorTextSelectedHighlighted;
     @property (nonatomic, strong) UIColor *colorTextSelected;
 
     @property (nonatomic, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
@@ -93,6 +91,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
                                                                               action: actionRename];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
+        
         [self.labelTitle addGestureRecognizer:tap];
         self.tapGestureRecognizer = tap;
     }
@@ -123,18 +122,14 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     if (self) {
         
         self.wobbling = NO;
-        UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
-        UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
-        self.bgColor = bgColor;
         
         UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
         self.selectedBackgroundView = selectedBackground;
         
-
-        UIColor *colorTextSelectedHighlighted = [UIColor whiteColor];
         UIColor *colorTextSelected = [UIColor lightTextColor];
-        self.colorTextSelectedHighlighted = colorTextSelectedHighlighted;
         self.colorTextSelected = colorTextSelected;
+        
+        UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
         self.colorTextNormal = colorTextNormal;
 
         
@@ -146,7 +141,13 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 - (UIActivityIndicatorView *)activityIndicator {
     if (_activityIndicator == nil) {
-        UIActivityIndicatorView *activityView = [MTCollectionViewCellDocument activityIndicatorView];
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
+        [activityView stopAnimating];
+        activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                        UIViewAutoresizingFlexibleRightMargin |
+                                        UIViewAutoresizingFlexibleTopMargin |
+                                        UIViewAutoresizingFlexibleBottomMargin;
+        activityView.translatesAutoresizingMaskIntoConstraints = YES;
         activityView.center = self.contentView.center;
         [self.contentView addSubview:activityView];
         _activityIndicator = activityView;
@@ -166,7 +167,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     [self.progressViewUpload removeMotionEffect:effect];
 }
 
-+ (UIActivityIndicatorView *)activityIndicatorView {
++ (UIActivityIndicatorView *)newActivityIndicatorView {
 
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
     [activityIndicatorView stopAnimating];
@@ -207,36 +208,39 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 - (void)setText:(NSString *)text {
 
-    NSDictionary *attributes = [MTCollectionViewCellDocument attributesCaption];
+    NSDictionary *attributes = [MTCollectionViewCellDocument newAttributesCaption];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                                                          attributes: attributes];
     self.labelTitle.attributedText = attributedString;
     self.labelTitle.text = text;
 }
 
-+ (NSDictionary *)attributesCaption {
++ (NSDictionary *)newAttributesCaption {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
     UIFont *font = [self newCaptionFont];
-    NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
-                                 NSFontAttributeName : font,
-                                 NSParagraphStyleAttributeName : paragraphStyle};
+    
+    id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    [NSNull null], NSKernAttributeName,
+                                    font, NSFontAttributeName,
+                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
     return attributes;
 }
 
-+ (NSDictionary *)attributesCaption2 {
++ (NSDictionary *)newAttributesCaption2 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
     UIFont *font = [self newCaptionFont2];
-    NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
-                                 NSFontAttributeName : font,
-                                 NSParagraphStyleAttributeName : paragraphStyle};
+    id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                [NSNull null], NSKernAttributeName,
+                                font, NSFontAttributeName,
+                                paragraphStyle, NSParagraphStyleAttributeName, nil];
     return attributes;
 }
 
@@ -277,7 +281,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 - (void)normalizeTint {
     if (self.highlighted) {
-        self.labelTitle.textColor = self.colorTextSelectedHighlighted;
+        id colorTextSelectedHighlighted = [UIColor whiteColor];
+        self.labelTitle.textColor = colorTextSelectedHighlighted;
     } else if (self.selected) {
         self.labelTitle.textColor = self.colorTextSelected;
         self.tapGestureRecognizer.enabled = NO;

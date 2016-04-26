@@ -13,7 +13,7 @@
 
 @interface MTTitleView : UIView
 
-@property (nonatomic, strong) IBOutlet UILabel *label;
+    @property (nonatomic, weak) IBOutlet UILabel *label;
 
 @end
 

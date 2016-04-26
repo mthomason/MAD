@@ -17,7 +17,7 @@
  + (UIColor *)newColorBlueDarkSelection              { return newColorWithColorsAlpha(2.0000f, 108.0000f, 182.0000f, 0.5000f);}
  + (UIColor *)newColorBlueLightSelection             { return newColorWithColorsAlpha(185.0000f, 224.0000f, 247.0000f, 0.5000f);}
  + (UIColor *)newColorBlueLightBackground            { return newColorWithColorsAlpha(2.0000f, 108.0000f, 182.0000f, 0.8900f);}
- + (UIColor *)newColorHeaderColor                    { UIColor *color = [self newColorBlueLightBackground]; return [color colorWithAlphaComponent:0.20000f]; }
+ + (UIColor *)newColorHeaderColor                    { return newColorWithColorsAlpha(2.0000f, 108.0000f, 182.0000f, 0.20000f); }
  + (UIColor *)newColorBlackSeventyFivePercent        { return newColorWitColors(64.0000f, 64.0000f, 64.0000f);}
  + (UIColor *)newColorBlackFiftyPercent              { return newColorWitColors(147.0000f, 149.0000f, 152.0000f);}
  + (UIColor *)newColorBlackTwentyFivePercent         { return newColorWitColors(199.0000f, 200.0000f, 202.0000f);}
