@@ -84,7 +84,7 @@ const int8_t MADIndexViewer = 2;
 
 - (void)viewControllerDidFinish:(id)sender {
     [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
-    [self.viewControllerDelegate viewControllerDidFinish:sender];
+    [self.viewControllerDelegate viewControllerDidFinish:nil];
 }
 
 #pragma mark - UITabBarControllerDelegate

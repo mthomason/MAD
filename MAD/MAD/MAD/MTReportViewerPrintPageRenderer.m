@@ -111,10 +111,12 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
                               dataTable:(MTDataTableFast *)dataTable {
-    
-    return [self initWithReportFormatter:reportFormatter dataTable:dataTable
-                    andPrintableAreaSize:[MTPaper sizeLetter]];
-    
+    if (self = [super init]) {
+        [self initCommon];
+        self.dataTable = (MTDataTableFast<MADDataTableAggregateResultesProtocol> *)dataTable;
+        self.reportFormatter = reportFormatter;
+    }
+    return self;
 }
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter

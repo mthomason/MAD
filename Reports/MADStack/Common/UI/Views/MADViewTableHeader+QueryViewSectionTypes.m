@@ -11,8 +11,7 @@
 
 @implementation MADTableViewHeader (QueryViewSectionTypes)
 
-+ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame target:(nullable id)target {
-
+g
     MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {
 

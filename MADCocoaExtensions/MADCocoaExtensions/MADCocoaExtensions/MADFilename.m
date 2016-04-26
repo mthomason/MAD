@@ -16,7 +16,8 @@
 }
 
 + (NSString *)newFilenameForMadUrl:(NSURL *)madUrl {
-    id filename = [[NSString alloc] initWithString:madUrl.lastPathComponent.stringByDeletingPathExtension];
+    id name = madUrl.lastPathComponent.stringByDeletingPathExtension;
+    id filename = [[NSString alloc] initWithString:name];
     return filename;
 }
 

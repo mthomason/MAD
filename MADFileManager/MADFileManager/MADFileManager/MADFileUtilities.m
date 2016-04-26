@@ -505,9 +505,9 @@ static NSString * const MADPathComponentData       = @"Data";
     return result;
 }
 
-+ (NSURL *)localCacheDirectoryNamed:(NSString *)handle {
-    
-    NSURL *cachedArrayDirectories = [[MADFileUtilities localCacheDirectory] URLByAppendingPathComponent: handle isDirectory: YES];
++ (NSURL *)newUrlForLocalCacheDirectoryNamed:(NSString *)handle {
+    NSURL *url = [MADFileUtilities newUrlForLocalCacheDirectory];
+    NSURL *cachedArrayDirectories = [url URLByAppendingPathComponent: handle isDirectory: YES];
     BOOL exist, isDirectory;
     exist = [[NSFileManager defaultManager] fileExistsAtPath: cachedArrayDirectories.path isDirectory: &isDirectory];
     if (exist == NO || isDirectory == NO) {
@@ -539,9 +539,10 @@ static NSString * const MADPathComponentData       = @"Data";
     return result;
 }
 
-+ (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl {
++ (NSURL *)newUrlForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl {
     NSString *fileNameId = [NSString stringWithFormat:@"%lu", (unsigned long)fileUrl.lastPathComponent.stringByDeletingPathExtension.hash];
-    return [self localCacheDirectoryNamed:fileNameId];
+    NSURL *url = [self newUrlForLocalCacheDirectoryNamed:fileNameId];
+    return url;
 }
 
 + (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {
@@ -564,9 +565,10 @@ static NSString * const MADPathComponentData       = @"Data";
     return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
-+ (NSURL *)localCacheDirectory {
++ (NSURL *)newUrlForLocalCacheDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    return [NSURL fileURLWithPath:paths.firstObject isDirectory:YES];
+    id url = [[NSURL alloc] initFileURLWithPath:paths.firstObject isDirectory:YES];
+    return url;
 }
 
 + (NSURL *)localDataDirectory {
@@ -609,11 +611,12 @@ static NSString * const MADPathComponentData       = @"Data";
 
    NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [MADFileUtilities localCachedDirectoryForFileUrl:documentUrl];
-    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL: cachedDirectory
-                                                                     includingPropertiesForKeys: nil
-                                                                                        options: 0 error: &error];
-    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
+    NSURL *cachedDirectory = [MADFileUtilities newUrlForLocalCachedDirectoryForFileUrl: documentUrl];
+    NSArray *cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
+                                                         includingPropertiesForKeys: nil
+                                                                            options: 0
+                                                                            error: &error];
+    for (NSURL *cachedFile in cachedFiles) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
     [defaultManager removeItemAtURL:cachedDirectory error:&error];

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; settings = {ASSET_TAGS = (); }; };
+		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
 		4C66C17D1BA8882300663575 /* bkpublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C1651BA8882300663575 /* bkpublic.h */; };
 		4C66C17E1BA8882300663575 /* cspublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C1661BA8882300663575 /* cspublic.h */; };
@@ -385,7 +385,7 @@
 		4C66C15C1BA887D500663575 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -405,7 +405,7 @@
 		4C66C15D1BA887D500663575 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

@@ -47,7 +47,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
-    @property (readwrite)                       MTDatabase *database;
+    @property (nonatomic, strong, readwrite)    MTDatabase *database;
     @property (nonatomic, strong)               MADActivityIndicator *statusLabel;
 
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
@@ -99,7 +99,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
     - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (UIImage *)fullyRenderedThumbnail;
     - (NSDictionary *)layoutHeightsBySectionKey;
 
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;

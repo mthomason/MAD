@@ -140,9 +140,14 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
     self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     BOOL canMakePayments = [SKPaymentQueue canMakePayments];
     self.barButtonItemLicensing.enabled = canMakePayments;
-
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -267,21 +272,20 @@ NSString * const MADUtiType                                     = @"com.everyday
     [self closeDocument:self.traitCollection completion:^(BOOL success) { }];
 
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-            UICollectionView * __weak weakCollectionView = self.collectionView;
-            void (^reloadCells)(void) = ^(){
-                UICollectionView *collectionView = weakCollectionView;
-                NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-                [collectionView.backgroundView setNeedsDisplay];
-                [collectionView reloadItemsAtIndexPaths:paths];
-            };
+    UICollectionView * __weak weakCollectionView = self.collectionView;
+    void (^reloadCells)(void) = ^(){
+        UICollectionView *collectionView = weakCollectionView;
+        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+        [collectionView.backgroundView setNeedsDisplay];
+        [collectionView reloadItemsAtIndexPaths:paths];
+    };
+    
+    [UIView performWithoutAnimation:reloadCells];
+    
+//    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         
-            [UIView performWithoutAnimation:reloadCells];
-        }];
-    });
+ //   }];
 
 }
 

@@ -18,7 +18,7 @@
     + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
     + (NSURL *)localTemporaryDirectory;
-    + (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
+    + (NSURL *)newUrlForLocalCacheDirectoryNamed:(NSString *)handle;
     + (NSURL *)sharedApplicationGroupContainer:(NSString *)groupIdentifier;
     + (NSURL *)uniqueURLForURL:(NSURL *)url;
     + (NSURL *)uniqueUrlInDirectory: (NSURL *)directory withDesiredHandle: (NSString *)desiredFileHandle andExtension: (NSString *)extension;

@@ -129,10 +129,7 @@ NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
 NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
-@interface MADocument () {
-    MTDatabase *_database;
-    NSManagedObjectModel *_madObjectModel;
-}
+@interface MADocument ()
 
     @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
@@ -148,37 +145,45 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @implementation MADocument
 
+@synthesize managedObjectModel = _managedObjectModel;
+
 + (BOOL)isRetnaDisplay {
     return [[UIScreen mainScreen] scale] > 1.5;
 }
 
 + (NSURL *)newArchiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
+    NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
+    NSString *destinationName = [name stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
     NSURL *destinationDirectoryUrl = [MADFileUtilities localTemporaryDirectory];
-    return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName isDirectory: YES];
+    id url = [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
+                                                      isDirectory: YES];
+    return url;
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
     NSString *filenameId = [MADFilename newFilenameId:filename.hash];
-    return [MADFileUtilities localCacheDirectoryNamed:filenameId];
+    return [MADFileUtilities newUrlForLocalCacheDirectoryNamed:filenameId];
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
     
-    return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [self isRetnaDisplay]];
+    return [self newUrlThumbnailForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [self isRetnaDisplay]];
     
 }
 
-+ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
++ (NSURL *)newUrlThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
     NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
     NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
-    NSURL *cacheDirectory = [MADFileUtilities localCacheDirectoryNamed:fileNameId];
+    NSURL *cacheDirectory = [MADFileUtilities newUrlForLocalCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
-- (NSURL *)thumbnailURL {
-    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [MADocument isRetnaDisplay]];
+- (NSURL *)copyThumbnailURL {
+    NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+    NSURL *url = [MADocument newUrlThumbnailForHandle: name
+                                     andRetinaDisplay: [MADocument isRetnaDisplay]];
+    return url;
 }
 
 - (NSURL *)urlDataTableCache {
@@ -198,18 +203,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - Property Overrides
 
-- (MTDatabase *)database { return _database; }
-
 - (void)setDatabase:(MTDatabase *)database {
-    _database = database;
-    _database.delegate = self;
+    if (_database != database) {
+        _database = database;
+        _database.delegate = self;
+    }
 }
 
 #pragma mark - NSObject
 
 - (void)dealloc {
     
-    _madObjectModel = nil;
     _database.delegate = nil;
     _database = nil;
     _mainQuery.database.delegate = nil;
@@ -250,14 +254,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return dictionary;
 }
 
+
+
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
-        
-        NSNumber *boolYes =  @YES;
-        
+                
         NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    boolYes, NSInferMappingModelAutomaticallyOption,
-                                    boolYes, NSMigratePersistentStoresAutomaticallyOption, nil];
+                                    @YES, NSInferMappingModelAutomaticallyOption,
+                                    @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
         
         self.persistentStoreOptions = options;
         
@@ -393,22 +397,15 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
                                        error:(NSError **)outError {
     
-    UIImage *thumbnail = [self fullyRenderedThumbnail];
-    NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
+    UIImage *thumbnail = [self newFullyRenderedThumbnail];
+    NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                thumbnail, NSThumbnail1024x1024SizeKey, nil];
     
-    /*  Testing the image
-     NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-     NSError *error = nil;
-     [pngImage writeToFile:@"/Users/mthomason/Desktop/test.png" options:NSAtomicWrite error:&error];
-     NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
-     *outError = error;
-     */
+    id fileAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         thumbnails, NSURLThumbnailDictionaryKey, nil];
     
     
-    
-    return @{
-             NSURLThumbnailDictionaryKey : thumbnails
-             };
+    return fileAttributes;
 }
 
 
@@ -420,17 +417,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSManagedObjectModel *)managedObjectModel {
 
-    if (_madObjectModel == nil) {
+    if (_managedObjectModel == nil) {
     
         
         NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
                                                               ofType: MADManagedObjectModelExtention];
         NSURL *modelURL = [[NSURL alloc] initFileURLWithPath:modelPath];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-        _madObjectModel = mom;
+        _managedObjectModel = mom;
         
     }
-    return _madObjectModel;
+    return _managedObjectModel;
 }
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
@@ -438,8 +435,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSError *readError = nil;
 
     NSData *imageData = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path]) {
-        imageData = [NSData dataWithContentsOfURL: self.thumbnailURL options:NSDataReadingUncached error:&readError];
+    NSURL *thumbnailURL = [self copyThumbnailURL];
+    if ([[NSFileManager defaultManager] fileExistsAtPath: thumbnailURL.path]) {
+        imageData = [NSData dataWithContentsOfURL: thumbnailURL options:NSDataReadingUncached error:&readError];
     }
     
     if (imageData != nil) {
@@ -1024,12 +1022,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)regenThumbnail {
-    [[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path];
+    NSURL *thumbnailURL = [self copyThumbnailURL];
+    [[NSFileManager defaultManager] fileExistsAtPath: thumbnailURL.path];
     BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned) && [self.reportFormatter numberOfPages] > 0;
-    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.thumbnailURL.path] == NO) {
-        UIImage *thumbnail = [self fullyRenderedThumbnail];
+    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:thumbnailURL.path] == NO) {
+        UIImage *thumbnail = [self newFullyRenderedThumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        [pngImage writeToURL:self.thumbnailURL atomically:YES];
+        [pngImage writeToURL:thumbnailURL atomically:YES];
     }
 }
 
@@ -1168,7 +1167,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
 }
 
-- (UIImage *)fullyRenderedThumbnail {
+- (UIImage *)newFullyRenderedThumbnail {
     MTReportViewerPrintPageRenderer *printPageRender =
     [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
     

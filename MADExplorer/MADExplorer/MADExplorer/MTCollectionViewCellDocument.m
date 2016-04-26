@@ -56,6 +56,17 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (void)awakeFromNib {
     //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
+    self.wobbling = NO;
+    
+    UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
+    self.selectedBackgroundView = selectedBackground;
+    
+    UIColor *colorTextSelected = [UIColor lightTextColor];
+    self.colorTextSelected = colorTextSelected;
+    
+    UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
+    self.colorTextNormal = colorTextNormal;
+    
     self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
@@ -119,27 +130,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     [self normalizeTint];
     
     [super awakeFromNib];
-}
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-        self.wobbling = NO;
-        
-        UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
-        self.selectedBackgroundView = selectedBackground;
-        
-        UIColor *colorTextSelected = [UIColor lightTextColor];
-        self.colorTextSelected = colorTextSelected;
-        
-        UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
-        self.colorTextNormal = colorTextNormal;
-
-        
-        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-    }
-    return self;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {
