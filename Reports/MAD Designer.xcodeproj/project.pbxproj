@@ -1088,6 +1088,7 @@
 		4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
 		4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE4EFB01CD08C58006CA2B0 /* MADCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */; };
 		4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -2462,6 +2463,8 @@
 		4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignTop20@2x.png"; path = "Reports/UIImageAlignTop20@2x.png"; sourceTree = "<group>"; };
 		4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignBottom20.png; path = Reports/UIImageAlignBottom20.png; sourceTree = "<group>"; };
 		4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignBottom20@2x.png"; path = "Reports/UIImageAlignBottom20@2x.png"; sourceTree = "<group>"; };
+		4CE4EFAE1CD08C58006CA2B0 /* MADCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCacheManager.h; path = MADStack/Managers/MADCacheManager.h; sourceTree = "<group>"; };
+		4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCacheManager.m; path = MADStack/Managers/MADCacheManager.m; sourceTree = "<group>"; };
 		4CE84D8A1B396F3200BB3A0A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4CE84D8C1B396F3800BB3A0A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MAD.xcdatamodel; sourceTree = "<group>"; };
@@ -3253,6 +3256,7 @@
 		4C401EB51BAE5E7100BAE5FC /* MADStack */ = {
 			isa = PBXGroup;
 			children = (
+				4CE4EFAD1CD08C14006CA2B0 /* Managers */,
 				4C26BAA21BAF9E8000456DC8 /* Activities */,
 				4C26B95F1BAF11C800456DC8 /* Operations */,
 				4C401EFE1BAE64AF00BAE5FC /* Common */,
@@ -4904,6 +4908,15 @@
 			name = ReceiptModuleAsn1c;
 			sourceTree = "<group>";
 		};
+		4CE4EFAD1CD08C14006CA2B0 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				4CE4EFAE1CD08C58006CA2B0 /* MADCacheManager.h */,
+				4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		4CF46F5A1AC64A2F007C0A82 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -6419,6 +6432,7 @@
 				4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */,
 				4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */,
 				4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */,
+				4CE4EFB01CD08C58006CA2B0 /* MADCacheManager.m in Sources */,
 				4C26BA011BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
 				4C5B55DD1C97C5FA005C19D9 /* MADRefreshOperation.m in Sources */,
 				4C401F251BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m in Sources */,
