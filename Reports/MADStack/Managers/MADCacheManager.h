@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class gNSOperation;
+@class NSOperation;
 
 @interface MADCacheManager : NSObject
 
