@@ -13,10 +13,10 @@
 
 @interface MADObjectIdentifier : NSObject
 
-@property (nonatomic, strong, readonly) NSString *identifier;
-@property (nonatomic, assign, readonly) NSInteger tag;
+    @property (nonatomic, copy, readonly) NSString *identifier;
+    @property (nonatomic, assign, readonly) NSUInteger tag;
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSInteger)tag;
+    - (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSUInteger)tag;
 
 @end
 

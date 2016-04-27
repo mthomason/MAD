@@ -11,18 +11,17 @@
 
 @interface MADObjectIdentifier ()
 
-@property (nonatomic, strong, readwrite) NSString *identifier;
-@property (nonatomic, assign, readwrite) NSInteger tag;
+    @property (nonatomic, copy, readwrite) NSString *identifier;
+    @property (nonatomic, assign, readwrite) NSUInteger tag;
 
 @end
 
 @implementation MADObjectIdentifier
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSInteger)tag {
+- (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSUInteger)tag {
     if (self = [super init]) {
-        NSString *objid = [NSString stringWithString:identifier];
-        self.identifier = objid;
-        self.tag = tag;
+        self->_identifier = identifier.copy;
+        self->_tag = tag;
     }
     return self;
 }
