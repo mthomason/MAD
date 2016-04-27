@@ -147,7 +147,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
                 [self uiUpdateTimeSinceLastRefresh: NULL];
 
-                [self setDisplayActive];
                 [self removeObserverDidReadRowsFromDatabase:document.database];
 
             }];
@@ -774,78 +773,86 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)reloadWithSize:(CGSize)viewBounds {
 
-    MADocument *document = self.document;
-
     if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
         self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
     }
     
     [self setDisplayInactive];
-    [document prepareForQuery];
 
-    [self watchFormatter: document.reportFormatter];
-    
-    document.reportFormatter.didRefresh = self.startedRefresh;
-    [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
-    
-    MTReportViewerPrintPageRenderer *printPageRender =
+    MADocument * __unsafe_unretained document = self.document;
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(queue, ^{
+
+        [document prepareForQuery];
+        
+        [self watchFormatter: document.reportFormatter];
+        
+        document.reportFormatter.didRefresh = self.startedRefresh;
+        [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
+        
+        MTReportViewerPrintPageRenderer *printPageRender =
         [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                dataTable: document.mainDataTable];
-    self.printPageRendererReport = printPageRender;
-    [self ignoreFormatter: document.reportFormatter];
-
-
-    [self uiUpdateNumberOfPages];
-    
-    MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
-    pageAttributes.pageNumber = self.currentPageNumber;
-    pageAttributes.numberOfPages = self.numberOfPages;
-    
-    // FIXME: Don't reset the display size to the paper size.
-    pageAttributes.contentSizeInital = document.paper.paperSize;
-    pageAttributes.zoomScaleInital = 1.0000f;
-    pageAttributes.contentScaleFactor = 0.0;
-    
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.printPageRendererReport = printPageRender;
         
-        MADReportPageViewController *pageOne =
+        [self ignoreFormatter: document.reportFormatter];
+        
+        
+        [self uiUpdateNumberOfPages];
+        
+        MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
+        pageAttributes.pageNumber = self.currentPageNumber;
+        pageAttributes.numberOfPages = self.numberOfPages;
+        
+        // FIXME: Don't reset the display size to the paper size.
+        pageAttributes.contentSizeInital = document.paper.paperSize;
+        pageAttributes.zoomScaleInital = 1.0000f;
+        pageAttributes.contentScaleFactor = 0.0;
+        
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            MADReportPageViewController *pageOne =
             [MADReportPageViewController newReportPageViewControllerWithDocument: document
                                                                   pageAttributes: pageAttributes
                                                                            frame: self.view.bounds
                                                                      andDelegate: self];
+            
+            NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
+            
+            [self setViewControllers: viewControllers
+                           direction: UIPageViewControllerNavigationDirectionForward
+                            animated: NO completion: nil];
+            
+            [self setDisplayActive];
+            
+        }];
         
-        NSArray *viewControllers = @[pageOne];
+        self.refreshing = false;
+        self.startedRefresh = false;
         
-        [self setViewControllers: viewControllers
-                       direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion: nil];
+        [self uiUpdateRecordsRead];
         
-    }];
-    
-    self.refreshing = false;
-    self.startedRefresh = false;
-    
-    [self uiUpdateRecordsRead];
-    
-    document.reportFormatter.didRefresh = false;
-    
-    if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+        document.reportFormatter.didRefresh = false;
         
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        
-        if (self.didRefreshBeforeReaload) {
-            NSString *body = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
-            notification.alertBody = body;
-            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-            self.didRefreshBeforeReaload = false;
+        if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+            
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            
+            if (self.didRefreshBeforeReaload) {
+                NSString *body = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
+                notification.alertBody = body;
+                [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                self.didRefreshBeforeReaload = false;
+            }
+            
+            NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
+            self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+            [[UIApplication sharedApplication] handoffBackground:bgtask];
         }
-        
-        NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
-        self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-        [[UIApplication sharedApplication] handoffBackground:bgtask];
-    }
 
+    });
 }
 
 #pragma mark - Post Report Notifications

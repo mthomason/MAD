@@ -19,50 +19,9 @@
 #import "MTDataTableFast.h"
 #import "MADNotificationDidFormatPage.h"
 
-@interface  MTActivityItemProviderPdf ()
-
-    @property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
-
-@end
-
-@implementation MTActivityItemProviderPdf
-
-- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
-    id result = [super activityViewController:activityViewController itemForActivityType:activityType];
-    self.activityViewController = activityViewController;
-    return result;
-}
-
-- (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
-    self.activityViewController = activityViewController;
-    return activityType == nil ? @"" : [super activityViewController:activityViewController dataTypeIdentifierForActivityType:activityType];
-}
-
-- (UIImage *)activityViewController:(UIActivityViewController *)activityViewController thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {
-    self.activityViewController = activityViewController;
-    return [super activityViewController:activityViewController thumbnailImageForActivityType:activityType suggestedSize:size];
-}
-
-- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
-    self.activityViewController = activityViewController;
-    return [super activityViewControllerPlaceholderItem:activityViewController];
-}
-
-- (id)item {
-    id item = nil;
-    if ([[self activityType] caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {    //Printer
-        if (self.activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            [self.delegate showPrintDialog]; //Need some help getting out of this popover!!!
-        }
-        item = nil;
-    } else {                                                                                    //Return URL to PDF printout.
-        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-        item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-        
-        [self writeToPdf:item withViewController:self.activityViewController];
-    }
-    return item;
+static inline CGFloat halfinch();
+static inline CGFloat halfinch() {
+    return 72.0000 / 72.0000;
 }
 
 static inline CGRect CellDefaultBounds();
@@ -80,17 +39,75 @@ static inline CGRect PdfTrimBox(CGRect rect) {
     return UIEdgeInsetsInsetRect(rect, PdfBorder());
 }
 
+@interface  MTActivityItemProviderPdf ()
+    @property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
+@end
+
+@implementation MTActivityItemProviderPdf
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController
+         itemForActivityType:(NSString *)activityType {
+    
+    id result = [super activityViewController: activityViewController
+                          itemForActivityType: activityType];
+    
+    self.activityViewController = activityViewController;
+    
+    return result;
+    
+}
+
+- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
+   dataTypeIdentifierForActivityType:(NSString *)activityType {
+   
+    self.activityViewController = activityViewController;
+    return activityType == nil ? @"" : [super activityViewController: activityViewController
+                                   dataTypeIdentifierForActivityType: activityType];
+}
+
+- (UIImage *)activityViewController:(UIActivityViewController *)activityViewController
+      thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {
+    self.activityViewController = activityViewController;
+    return [super activityViewController:activityViewController thumbnailImageForActivityType:activityType suggestedSize:size];
+}
+
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    self.activityViewController = activityViewController;
+    return [super activityViewControllerPlaceholderItem:activityViewController];
+}
+
+- (id)item {
+    id item = nil;
+    if ([self.activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {    //Printer
+        if (self.activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            [self.delegate showPrintDialog]; //Need some help getting out of this popover!!!
+        }
+        item = nil;
+    } else {                                                                                    //Return URL to PDF printout.
+        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
+        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
+        item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+        
+        [self writeToPdf:item withViewController:self.activityViewController];
+    }
+    return item;
+}
+
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
 
     [self disableUserInteraction:window.view];
+
     UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForBaselineLayout;
-    MADActivityIndicator *activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
+
+    MADActivityIndicator *activityView;
+    activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
     activityView.center = mainWindow.center;
     
-    [mainWindow performSelectorOnMainThread: @selector(addSubview:) withObject: activityView
+    [mainWindow performSelectorOnMainThread: @selector(addSubview:)
+                                 withObject: activityView
                               waitUntilDone: YES];
     
-    [self.document setStatusLabel:activityView];
+    self.document.statusLabel = activityView;
     
     MADocument * __weak weakdoc = self.document;
     
@@ -120,7 +137,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         [[NSNotificationCenter defaultCenter] addObserver: weakdoc
                                                  selector: @selector(reportFormatterDidFormatPage:)
                                                      name: MADNotificationDidFormatPagesName
-                                                        object: reportFormatter];
+                                                   object: reportFormatter];
         
         
         [reportFormatter setMarginUsingPrintableRect:PdfTrimBox(letterRect)];
@@ -142,6 +159,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                                         trimBox, (__bridge NSString *)kCGPDFContextTrimBox, nil];
         
         id pagesWrapper = [[NSNumber alloc] initWithUnsignedInteger: reportFormatter.numberOfPages];
+        
         id totalPages = [NSNumberFormatter localizedStringFromNumber: pagesWrapper
                                                          numberStyle: NSNumberFormatterDecimalStyle];
         
@@ -176,10 +194,6 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         window.view.userInteractionEnabled = YES;
     }];
     
-}
-
-static inline CGFloat halfinch() {
-    return 72.0000 / 72.0000;
 }
 
 - (void)disableUserInteraction:(UIView *)view {

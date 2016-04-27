@@ -113,8 +113,9 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
         [self.display appendAttributedString:self.statusMessage3];
     }
     
+    NSAttributedString *display = self.display.copy;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        self.attributedText = self.display;
+        self.attributedText = display;
     }];
 }
 
