@@ -12,6 +12,7 @@
 
 #import "MTKeyChain.h"
 #import "MADErrorUserInfo.h"
+#import <Foundation/NSException.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
@@ -43,6 +44,10 @@ const NSInteger MTKeyErrorUserCanceled = 393920;
 @implementation MTKeyChain
 
 static MTKeyChain *sharedSingleton = nil;
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 + (void)initialize {
     static dispatch_once_t onceToken;

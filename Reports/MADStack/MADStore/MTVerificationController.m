@@ -33,6 +33,10 @@
 
 static MTVerificationController *sharedSingleton;
 
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
+
 + (MTVerificationController *)sharedInstance {
     
     static dispatch_once_t onceToken;

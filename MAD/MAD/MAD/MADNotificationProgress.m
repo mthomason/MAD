@@ -12,6 +12,7 @@
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSDate.h>
+#import <Foundation/NSException.h>
 #import <dispatch/once.h>
 #import <math.h>
 
@@ -24,7 +25,11 @@ NSString * const MADNotificationProgressKey = @"p";
 
 @implementation MADNotificationProgress
 
-    static MADNotificationProgress *sharedSingleton = nil;
+static MADNotificationProgress *sharedSingleton = nil;
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 + (void)initialize {
     static dispatch_once_t onceToken;

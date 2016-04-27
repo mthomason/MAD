@@ -96,17 +96,6 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 
 }
 
-+ (NSDate *)dateFromReceiptString:(NSString *)dateString {
-    static NSDateFormatter *receiptDateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
-        receiptDateFormatter = dateFormat;
-    });
-    return [receiptDateFormatter dateFromString:dateString];
-}
-
 - (NSDate *)experationDateIOS7 {
     
     NSDate *experationDate = nil;
@@ -129,6 +118,9 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
             BOOL refunded = NO;
             NSDictionary *transactionData = evaluatedObject;
             
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+
             //Only goes though this if a refunded transaction exist.
             for (NSDictionary *refundTransaction in refundedPurchases) {
                 
@@ -140,7 +132,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
                         NSString *refundTransactionCancelDate = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptCancellationDate];
                         NSDate *refundDate = nil;
                         if ([refundTransactionCancelDate length] > 0) {
-                            refundDate = [MTStoreKitController dateFromReceiptString:refundTransactionCancelDate];
+                            refundDate = [dateFormat dateFromString: refundTransactionCancelDate];
                             if ([refundDate compare:[NSDate date]] == NSOrderedAscending) {
                                 refunded = YES;
                             }

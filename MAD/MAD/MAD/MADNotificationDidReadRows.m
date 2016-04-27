@@ -12,6 +12,7 @@
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSDate.h>
+#import <Foundation/NSException.h>
 #import <dispatch/once.h>
 #import <math.h>
 
@@ -25,6 +26,10 @@ NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadK
 @implementation MADNotificationDidReadRows
 
 static MADNotificationDidReadRows *sharedSingleton = nil;
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 + (void)initialize {
     static dispatch_once_t onceToken;

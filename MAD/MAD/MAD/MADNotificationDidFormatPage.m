@@ -10,6 +10,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSValue.h>
+#import <Foundation/NSException.h>
 #import <dispatch/once.h>
 #import <math.h>
 
@@ -28,6 +29,10 @@ static const NSInteger PageIntervalInitalMax = 7;
 @implementation MADNotificationDidFormatPage
 
 static MADNotificationDidFormatPage *sharedSingleton = nil;
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 + (void)initialize {
     static dispatch_once_t onceToken;

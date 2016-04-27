@@ -24,11 +24,11 @@ extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 
 @interface MTStoreKitController (NonRenewableLicensing)
 
-+ (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
-- (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
-- (NSDate *)experationDateIOS7;
-+ (NSDate *)experationDate;
-+ (BOOL)licensedUser;
+    + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
+    - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
+    - (NSDate *)experationDateIOS7;
+    + (NSDate *)experationDate;
+    + (BOOL)licensedUser;
 
 @end
 

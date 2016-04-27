@@ -42,25 +42,30 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 @interface MTStoreKitController ()
     <SKPaymentTransactionObserver, SKProductsRequestDelegate>
 
-@property(nonatomic, retain) NSArray *productIdentifiers;
-@property(nonatomic, readwrite, retain) NSArray *products;
+    @property(nonatomic, retain) NSArray *productIdentifiers;
+    @property(nonatomic, readwrite, retain) NSArray *products;
 
-@property(atomic, assign) BOOL purchasingProduct;
+    @property(atomic, assign) BOOL purchasingProduct;
 
-@property(copy) MTBlockCompletion    purchaseProductWithIdentifierCompletion;
-@property(copy) MTBlockCompletion    initalizeProductsCompletion;
-@property(copy) MTBlockCompletion    restoringPurchasesCompletion;
+    @property(copy) MTBlockCompletion    purchaseProductWithIdentifierCompletion;
+    @property(copy) MTBlockCompletion    initalizeProductsCompletion;
+    @property(copy) MTBlockCompletion    restoringPurchasesCompletion;
 
-@property(nonatomic, strong) SKProduct *purchasingProductObject;
-@property(nonatomic, strong) NSArray *restoredTransactionArray;
+    @property(nonatomic, strong) SKProduct *purchasingProductObject;
+    @property(nonatomic, strong) NSArray *restoredTransactionArray;
 
-@property(atomic, assign) BOOL restoringPurchases;
+    @property(atomic, assign) BOOL restoringPurchases;
 
 @end
 
 @implementation MTStoreKitController
 
 static MTStoreKitController *sharedSingleton = nil;
+
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 - (id)debugQuickLookObject {
     NSMutableString *string = [[NSMutableString alloc] init];
@@ -74,7 +79,7 @@ static MTStoreKitController *sharedSingleton = nil;
         [string appendString:@"---------------------------\n"];
     }
     
-    return [string autorelease];
+    return string;
 }
 
 + (MTStoreKitController *)sharedObject {
@@ -86,20 +91,6 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    return self;
-}
-
-- (instancetype)retain {
-    return self;
-}
-
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
-}
-
-- (oneway void)release { }
-
-- (instancetype)autorelease {
     return self;
 }
 
@@ -174,7 +165,7 @@ static MTStoreKitController *sharedSingleton = nil;
     SKProduct *result = nil;
     for (SKProduct *product in self.products) {
         if ([product.productIdentifier isEqualToString:productIdentifier]) {
-            result = [product retain];
+            result = product;
             break;
         }
     }

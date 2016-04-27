@@ -11,17 +11,22 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
 
 static id _sharedInstance = nil;
 
 @interface MADExclusivityController () {
     dispatch_queue_t _serialQueue;
-    NSMutableDictionary * _operations; // [String: [Operation]]
+    NSMutableDictionary * _operations;
 }
 
 @end
 
 @implementation MADExclusivityController
+
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
 
 + (instancetype)sharedExclusivityController {
     
