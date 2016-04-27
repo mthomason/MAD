@@ -18,7 +18,7 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
     dispatch_queue_t _fetchQueue;
 }
 
-@property (nonatomic, strong, readonly) dispatch_queue_t fetchQueue;
+    @property (nonatomic, strong, readonly) dispatch_queue_t fetchQueue;
 
 @end
 
