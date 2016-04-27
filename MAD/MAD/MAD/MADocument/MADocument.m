@@ -982,8 +982,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
-                                                                                options: MTReportFormatterOptionsNone];
+    MTReportFormatter *reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
+                                                                             options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;

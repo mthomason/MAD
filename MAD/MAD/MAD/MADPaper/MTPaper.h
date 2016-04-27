@@ -12,6 +12,24 @@
 #import <Foundation/NSObject.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+static inline CGRect CGRectBoundsForSize(CGSize size);
+static inline CGRect CGRectPaperLetter();
+
+static inline CGSize CGSizePaperLetter();
+static inline CGSize CGSizePaperGovernmentLetter();
+static inline CGSize CGSizePaperLegal();
+static inline CGSize CGSizePaperA0();
+static inline CGSize CGSizePaperA1();
+static inline CGSize CGSizePaperA2();
+static inline CGSize CGSizePaperA3();
+static inline CGSize CGSizePaperA4();
+static inline CGSize CGSizePaperA5();
+static inline CGSize CGSizePaperA6();
+static inline CGSize CGSizePaperA7();
+static inline CGSize CGSizePaperA8();
+static inline CGSize CGSizePaperA9();
+static inline CGSize CGSizePaperA10();
+
 typedef NS_ENUM(unsigned short, MTPaperType) {
     MTPaperTypeLetter = 2,
     MTPaperTypeGovernmentLetter = 3,

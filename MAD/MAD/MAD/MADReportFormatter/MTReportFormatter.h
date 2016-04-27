@@ -59,7 +59,7 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
 
     @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
-    @property (nonatomic, weak, readonly)   MADocument *layout;
+    @property (nonatomic, weak,   readonly) MADocument *layout;
 
     @property (readonly) NSUInteger numberOfPages;
     @property (readonly) NSUInteger numberOfGroups;

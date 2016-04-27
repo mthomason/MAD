@@ -606,7 +606,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     activityItemProviderPdf.delegate = self;
-    NSArray *activityItems = @[activityItemProviderPdf];
+    NSArray *activityItems = [[NSArray alloc] initWithObjects: activityItemProviderPdf, nil];
     [self setActivityItemProviderPdf:activityItemProviderPdf];
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];

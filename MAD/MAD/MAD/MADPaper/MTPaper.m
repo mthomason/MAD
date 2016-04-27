@@ -49,6 +49,71 @@
 #import "MTPaperC9.h"
 #import "MTPaperC10.h"
 
+static inline CGRect CGRectBoundsForSize(CGSize size) {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
+}
+
+static inline CGRect CGRectPaperLetter() {
+    return CGRectBoundsForSize(CGSizePaperLetter());
+}
+
+static inline CGSize CGSizePaperLetter() {
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(11.0000f));
+}
+
+
+static inline CGSize CGSizePaperGovernmentLetter() {
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(10.5000f));
+}
+
+static inline CGSize CGSizePaperLegal() {
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(14.0000f));
+}
+
+static inline CGSize CGSizePaperA0() {
+    return CGSizeMake(CGFloatPointsForMillimeters(841.0000f), CGFloatPointsForMillimeters(1189.0000f));
+}
+
+static inline CGSize CGSizePaperA1() {
+    return CGSizeMake(CGFloatPointsForMillimeters(594.0000f), CGFloatPointsForMillimeters(841.0000f));
+}
+
+static inline CGSize CGSizePaperA2() {
+    return CGSizeMake(CGFloatPointsForMillimeters(420.0000f), CGFloatPointsForMillimeters(594.0000f));
+}
+
+static inline CGSize CGSizePaperA3() {
+    return CGSizeMake(CGFloatPointsForMillimeters(297.0000f), CGFloatPointsForMillimeters(420.0000f));
+}
+
+static inline CGSize CGSizePaperA4() {
+    return CGSizeMake(CGFloatPointsForMillimeters(210.0000f), CGFloatPointsForMillimeters(297.0000f));
+}
+
+static inline CGSize CGSizePaperA5() {
+    return CGSizeMake(CGFloatPointsForMillimeters(148.0000f), CGFloatPointsForMillimeters(210.0000f));
+}
+
+static inline CGSize CGSizePaperA6() {
+    return CGSizeMake(CGFloatPointsForMillimeters(105.0000f), CGFloatPointsForMillimeters(148.0000f));
+}
+
+static inline CGSize CGSizePaperA7() {
+    return CGSizeMake(CGFloatPointsForMillimeters(74.0000f), CGFloatPointsForMillimeters(105.0000f));
+}
+
+static inline CGSize CGSizePaperA8() {
+    return CGSizeMake(CGFloatPointsForMillimeters(52.0000f), CGFloatPointsForMillimeters(74.0000f));
+}
+
+static inline CGSize CGSizePaperA9() {
+    return CGSizeMake(CGFloatPointsForMillimeters(37.0000f), CGFloatPointsForMillimeters(52.0000f));
+}
+
+static inline CGSize CGSizePaperA10() {
+    return CGSizeMake(CGFloatPointsForMillimeters(26.0000f), CGFloatPointsForMillimeters(37.0000f));
+}
+
 @interface MTPaper ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -233,7 +298,7 @@
 - (CGRect)bounds { return [MTPaper boundsForSize:self.paperSize]; }
 
 + (CGRect)boundsForSize:(CGSize)size {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
+    return CGRectBoundsForSize(size);
 }
 
 + (CGRect)rectLetter {
@@ -253,60 +318,22 @@
 }
 
 + (CGSize)sizeLetter {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(11.0000f));
+    return CGSizePaperLetter();
 }
 
-+ (CGSize)sizeGovernmentLetter {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(10.5000f));
-}
-
-+ (CGSize)sizeLegal {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(14.0000f));
-}
-
-+ (CGSize)sizeA0 {
-    return CGSizeMake(CGFloatPointsForMillimeters(841.0000f), CGFloatPointsForMillimeters(1189.0000f));
-}
-
-+ (CGSize)sizeA1 {
-    return CGSizeMake(CGFloatPointsForMillimeters(594.0000f), CGFloatPointsForMillimeters(841.0000f));
-}
-
-+ (CGSize)sizeA2 {
-    return CGSizeMake(CGFloatPointsForMillimeters(420.0000f), CGFloatPointsForMillimeters(594.0000f));
-}
-
-+ (CGSize)sizeA3 {
-    return CGSizeMake(CGFloatPointsForMillimeters(297.0000f), CGFloatPointsForMillimeters(420.0000f));
-}
-
-+ (CGSize)sizeA4 {
-    return CGSizeMake(CGFloatPointsForMillimeters(210.0000f), CGFloatPointsForMillimeters(297.0000f));
-}
-
-+ (CGSize)sizeA5 {
-    return CGSizeMake(CGFloatPointsForMillimeters(148.0000f), CGFloatPointsForMillimeters(210.0000f));
-}
-
-+ (CGSize)sizeA6 {
-    return CGSizeMake(CGFloatPointsForMillimeters(105.0000f), CGFloatPointsForMillimeters(148.0000f));
-}
-
-+ (CGSize)sizeA7 {
-    return CGSizeMake(CGFloatPointsForMillimeters(74.0000f), CGFloatPointsForMillimeters(105.0000f));
-}
-
-+ (CGSize)sizeA8 {
-    return CGSizeMake(CGFloatPointsForMillimeters(52.0000f), CGFloatPointsForMillimeters(74.0000f));
-}
-
-+ (CGSize)sizeA9 {
-    return CGSizeMake(CGFloatPointsForMillimeters(37.0000f), CGFloatPointsForMillimeters(52.0000f));
-}
-
-+ (CGSize)sizeA10 {
-    return CGSizeMake(CGFloatPointsForMillimeters(26.0000f), CGFloatPointsForMillimeters(37.0000f));
-}
++ (CGSize)sizeGovernmentLetter  { return CGSizePaperGovernmentLetter(); }
++ (CGSize)sizeLegal             { return CGSizePaperLegal(); }
++ (CGSize)sizeA0                { return CGSizePaperA0(); }
++ (CGSize)sizeA1                { return CGSizePaperA1(); }
++ (CGSize)sizeA2                { return CGSizePaperA2(); }
++ (CGSize)sizeA3                { return CGSizePaperA3(); }
++ (CGSize)sizeA4                { return CGSizePaperA4(); }
++ (CGSize)sizeA5                { return CGSizePaperA5(); }
++ (CGSize)sizeA6                { return CGSizePaperA6(); }
++ (CGSize)sizeA7                { return CGSizePaperA7(); }
++ (CGSize)sizeA8                { return CGSizePaperA8(); }
++ (CGSize)sizeA9                { return CGSizePaperA9(); }
++ (CGSize)sizeA10               { return CGSizePaperA10(); }
 
 + (CGSize)sizeB0 {
     return CGSizeMake(CGFloatPointsForMillimeters(1000.0000f), CGFloatPointsForMillimeters(1414.0000f));

@@ -21,7 +21,7 @@
 
 @interface  MTActivityItemProviderPdf ()
 
-@property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
+    @property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
 
 @end
 
@@ -70,6 +70,16 @@ static inline CGRect CellDefaultBounds() {
     return CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
 }
 
+static inline UIEdgeInsets PdfBorder();
+static inline UIEdgeInsets PdfBorder() {
+    return UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
+}
+
+static inline CGRect PdfTrimBox(CGRect rect);
+static inline CGRect PdfTrimBox(CGRect rect) {
+    return UIEdgeInsetsInsetRect(rect, PdfBorder());
+}
+
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
 
     [self disableUserInteraction:window.view];
@@ -79,6 +89,7 @@ static inline CGRect CellDefaultBounds() {
     
     [mainWindow performSelectorOnMainThread: @selector(addSubview:) withObject: activityView
                               waitUntilDone: YES];
+    
     [self.document setStatusLabel:activityView];
     
     MADocument * __weak weakdoc = self.document;
@@ -88,52 +99,71 @@ static inline CGRect CellDefaultBounds() {
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(dipatchQueue, ^{
         
-        
-        NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
+        NSDictionary *options;
+        options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    @"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
         CGRect letterRect = [MTPaper rectLetter];
         NSArray *sortDescriptors = weakdoc.sortDescriptors;
         
         [weakdoc.mainDataTable sortUsingDescriptors:sortDescriptors];
-        MTReportFormatter *rf = [MTReportFormatter newReportFormatterWithLayout: weakdoc
-                                                                        options: MTReportFormatterOptionsMargin];
-        rf.cachedDelegate = weakdoc;
-        rf.dataDelegate = weakdoc;
-        rf.overrideIdentifier = @"madpreview";
-        rf.didRefresh = true;
+        MTReportFormatter *reportFormatter;
+        reportFormatter = [[MTReportFormatter alloc] initWithDocument: weakdoc
+                                                              options: MTReportFormatterOptionsMargin];
+        reportFormatter.cachedDelegate = weakdoc;
+        reportFormatter.dataDelegate = weakdoc;
+        reportFormatter.datasource = weakdoc;
+        reportFormatter.overrideIdentifier = @"madpreview";
+        [reportFormatter initalize];
+        reportFormatter.didRefresh = true;
+        reportFormatter.layoutSize = letterRect.size;
         
-        [[NSNotificationCenter defaultCenter] addObserver: weakdoc selector: @selector(reportFormatterDidFormatPage:)
-                                                     name: MADNotificationDidFormatPagesName object: rf];
+        [[NSNotificationCenter defaultCenter] addObserver: weakdoc
+                                                 selector: @selector(reportFormatterDidFormatPage:)
+                                                     name: MADNotificationDidFormatPagesName
+                                                        object: reportFormatter];
         
         
-        rf.layoutSize = letterRect.size;
-        UIEdgeInsets border = UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
-        CGRect trimBoxRect = UIEdgeInsetsInsetRect(letterRect, border);
-        [rf setMarginUsingPrintableRect:trimBoxRect];
-        rf.datasource = weakdoc;
-        [rf formatForSize:letterRect.size contentChanged:NO];
+        [reportFormatter setMarginUsingPrintableRect:PdfTrimBox(letterRect)];
+        [reportFormatter formatForSize:letterRect.size contentChanged:NO];
         
         
         [[NSNotificationCenter defaultCenter] removeObserver: weakdoc
                                                         name: MADNotificationDidFormatPagesName
-                                                      object: rf];
+                                                      object: reportFormatter];
         
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: rf
-                                                                                                                  dataTable: weakdoc.mainDataTable];
-        NSUInteger numberOfPages = rf.numberOfPages;
+        MTReportViewerPrintPageRenderer *printPageRender;
+        printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                                 dataTable: weakdoc.mainDataTable];
+
         UIGraphicsBeginPDFContextToFile(filepath.path, letterRect, options);
         
-        NSValue *trimBox = [NSValue valueWithCGRect:trimBoxRect];
-        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: trimBox};
-        NSString *numberOfPagesString = [NSNumberFormatter localizedStringFromNumber:@(numberOfPages)
-                                                                         numberStyle:NSNumberFormatterDecimalStyle];
-        for (NSUInteger i=0; i<numberOfPages; i++) {
-            @autoreleasepool {
-                UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-                [printPageRender drawPageAtIndex:(NSInteger)i inRect:trimBoxRect];
-                NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
-                NSString *text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
-                [activityView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
-            }
+        NSValue *trimBox = [NSValue valueWithCGRect:PdfTrimBox(letterRect)];
+        NSDictionary *boxInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        trimBox, (__bridge NSString *)kCGPDFContextTrimBox, nil];
+        
+        id pagesWrapper = [[NSNumber alloc] initWithUnsignedInteger: reportFormatter.numberOfPages];
+        id totalPages = [NSNumberFormatter localizedStringFromNumber: pagesWrapper
+                                                         numberStyle: NSNumberFormatterDecimalStyle];
+        
+        for (NSUInteger i=0; i<reportFormatter.numberOfPages; i++) {
+
+            NSNumber *pageNumber;
+            NSString *page, *text;
+
+            UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
+            [printPageRender drawPageAtIndex:(NSInteger)i inRect:PdfTrimBox(letterRect)];
+            
+            pageNumber = [[NSNumber alloc] initWithUnsignedInteger: i];
+            
+            page  = [NSNumberFormatter localizedStringFromNumber: pageNumber
+                                                     numberStyle: NSNumberFormatterDecimalStyle];
+            
+            text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", page, totalPages];
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                activityView.status.text = text.copy;
+            }];
+            
         }
         UIGraphicsEndPDFContext();
         
@@ -141,8 +171,10 @@ static inline CGRect CellDefaultBounds() {
         
     });
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    [activityView removeFromSuperview];
-    window.view.userInteractionEnabled = YES;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [activityView removeFromSuperview];
+        window.view.userInteractionEnabled = YES;
+    }];
     
 }
 

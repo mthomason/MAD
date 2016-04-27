@@ -51,14 +51,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
     @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
     @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEdit;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
     @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
+    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
+    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
-    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 

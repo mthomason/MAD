@@ -28,9 +28,7 @@
 
 @implementation MADCreateDocumentOperation
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
               databaseConnection: (MTDatabaseConnection *)databaseConnection

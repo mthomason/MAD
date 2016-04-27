@@ -319,14 +319,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (void)loadLayoutAndIndexesFromCache {
     
-    if (self.reportIndexes != nil) {
-        [self.reportIndexes finalizeDatabase];
-        self.reportIndexes = nil;
-    }
-    if (self.reportLayout != nil) {
-        [self.reportLayout finalizeDatabase];
-        self.reportLayout = nil;
-    }
+    [self.reportIndexes finalizeDatabase];
+    [self.reportLayout finalizeDatabase];
 
     MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportIndexes]
                                                             cachedDelegate: self.cachedDelegate];

@@ -15,11 +15,13 @@
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIImage.h>
 
+typedef UIDocumentInteractionController MADocumentActivityController;
+
 @interface MTActivityReportPrintPreview()
     <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, strong) UIDocumentInteractionController *interactionController;
-@property (nonatomic, strong) NSURL *pdfurl;
+    @property (nonatomic, strong) MADocumentActivityController *activityController;
+    @property (nonatomic, copy) NSURL *pdfurl;
 
 @end
 
@@ -45,7 +47,7 @@
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
     for (id activityItem in activityItems) {
         if ([activityItem isKindOfClass:[NSURL class]]) {
-            [self setPdfurl:activityItem];
+            self->_pdfurl = [((id <NSCopying>)activityItem) copyWithZone:nil];
         }
     }
 }
@@ -55,12 +57,16 @@
 }
 
 - (void)performActivity {
-    UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:[self pdfurl]];
-    c.delegate = self;
-    [self setInteractionController:c];
-    [self.delegate prepareForInteractionController:c withCompletionHandler:^(BOOL success) {
+    NSURL *pdfurl = self.pdfurl;
+    MADocumentActivityController *controller = [MADocumentActivityController  interactionControllerWithURL:pdfurl];
+    controller.delegate = self;
+    self.activityController = controller;
+    
+    UIDocumentInteractionController * __unsafe_unretained weakController = self.activityController;
+    [self.delegate prepareForInteractionController: weakController
+                             withCompletionHandler: ^(BOOL success) {
         if (success) {
-            [c presentPreviewAnimated:YES];
+            [weakController presentPreviewAnimated:YES];
         }
     }];
 }
