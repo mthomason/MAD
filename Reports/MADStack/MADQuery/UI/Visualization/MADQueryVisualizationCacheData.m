@@ -27,9 +27,9 @@ static NSString * const CacheExt                    = @"qvvc";
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
-- (instancetype)init {
+- (instancetype)initWithNumberOfTables:(NSUInteger)countTables {
     if (self = [super init]) {
-        NSMutableDictionary *tableDefinations = [[NSMutableDictionary alloc] init];
+        id tableDefinations = [[NSMutableDictionary alloc] initWithCapacity:countTables];
         self.tableDefinations = tableDefinations;
     }
     return self;
@@ -46,9 +46,11 @@ static NSString * const CacheExt                    = @"qvvc";
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeCGPoint:self.scrollViewContentOffset forKey:keyScrollViewContentOffset];
-    [aCoder encodeDouble:self.scrollViewZoomScale forKey:keyScrollViewZoomScale];
-    [aCoder encodeObject:self.tableDefinations forKey:keyTables];
+    [aCoder encodeCGPoint:_scrollViewContentOffset forKey:keyScrollViewContentOffset];
+    [aCoder encodeDouble:_scrollViewZoomScale forKey:keyScrollViewZoomScale];
+
+    NSDictionary *tableDefinations = self.tableDefinations;
+    [aCoder encodeObject:tableDefinations forKey:keyTables];
 }
 
 - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {

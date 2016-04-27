@@ -446,9 +446,15 @@ CGEdgeLeftPointInRect(CGRect frame) {
 	return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0000f));
 }
 
-CG_INLINE double CGPointsForInches(double inches);
+CG_INLINE double MGPointsForInches(double inches);
 CG_INLINE double
-CGPointsForInches(double inches) {
+MGPointsForInches(double inches) {
+    return inches * 72.0;
+}
+
+CG_INLINE CGFloat fMGPointsForInches(CGFloat inches);
+CG_INLINE CGFloat
+fMGPointsForInches(CGFloat inches) {
     return inches * 72.0;
 }
 
@@ -456,8 +462,7 @@ CG_INLINE CGFloat CGFloatPointsForMillimeters(CGFloat millimeters);
 
 CG_INLINE CGFloat
 CGFloatPointsForMillimeters(CGFloat millimeters) {
-    CGFloat inches = millimeters * 0.0393701f;
-    return inches * 72.0000f;
+    return millimeters * 0.0393701f * 72.0000f;
 }
 
 CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);

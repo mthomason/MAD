@@ -12,9 +12,9 @@
 @interface MADQueryVisualizationTableDefination : NSObject
     <NSCoding, NSCopying>
 
-+ (instancetype)newTableDefination;
+    + (instancetype)newTableDefination;
 
-@property (nonatomic, assign) CGPoint center;
-@property (nonatomic, assign, getter=isRoot) BOOL root;
+    @property (nonatomic, assign) CGPoint center;
+    @property (nonatomic, assign, getter=isRoot) BOOL root;
 
 @end

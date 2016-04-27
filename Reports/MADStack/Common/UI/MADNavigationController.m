@@ -12,23 +12,19 @@
 
 @implementation MADNavigationController
 
-- (void)dealloc {
-
-}
-
 + (void)initialize {
-  if (self == [MADNavigationController self]) {
-      Class thisClas = [MADTransparentPresentationController class];
-      UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
-      UIColor *clearColor = [UIColor clearColor];
-      appearanceProxy.barTintColor = clearColor;
-  }
+    if (self == [MADNavigationController self]) {
+        Class thisClas = [MADTransparentPresentationController class];
+        UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
+        UIColor *clearColor = [UIColor clearColor];
+        appearanceProxy.barTintColor = clearColor;
+    }
 }
+
+- (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
@@ -37,7 +33,7 @@
     if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
         ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
     }
-    [self setNeedsStatusBarAppearanceUpdate];
+    //[self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

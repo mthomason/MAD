@@ -45,10 +45,12 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 
 + (void)initialize {
     if (self == [MADQueryBuilderSplitViewController self]) {
-        Class thisClass = [MADQueryBuilderSplitViewController class];
-        UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:thisClass, nil];
-        UIColor *white =  [MADColorEverydayApps newColorWhite];
-        appearance.tintColor = white;
+        @autoreleasepool {
+            Class thisClass = [MADQueryBuilderSplitViewController class];
+            UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:thisClass, nil];
+            UIColor *white =  [MADColorEverydayApps newColorWhite];
+            appearance.tintColor = white;
+        }
     }
 }
 

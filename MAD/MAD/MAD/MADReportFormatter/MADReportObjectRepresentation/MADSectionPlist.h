@@ -19,12 +19,9 @@ extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 
-typedef NSDictionary  <__kindof NSString *, __kindof NSNumber *> MADSectionPlist;
+typedef NSDictionary  <NSString *, NSNumber *> MADSectionPlist;
 
 @interface  NSDictionary (MADSectionPlist)
-
-    - (MADSectionPlist *)initWithSectionType:(MNSDocumentSectionType)sectionType
-                                         row:(NSNumber *)row;
 
     + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
                                                groupLevel:(NSUInteger)groupLevel

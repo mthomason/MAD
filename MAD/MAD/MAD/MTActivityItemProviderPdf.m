@@ -94,8 +94,8 @@ static inline CGRect CellDefaultBounds() {
         NSArray *sortDescriptors = weakdoc.sortDescriptors;
         
         [weakdoc.mainDataTable sortUsingDescriptors:sortDescriptors];
-        MTReportFormatter *rf = [MTReportFormatter newReportFormatterWithQuery: weakdoc.mainQuery layout: weakdoc
-                                                                    options: MTReportFormatterOptionsMargin];
+        MTReportFormatter *rf = [MTReportFormatter newReportFormatterWithLayout: weakdoc
+                                                                        options: MTReportFormatterOptionsMargin];
         rf.cachedDelegate = weakdoc;
         rf.dataDelegate = weakdoc;
         rf.overrideIdentifier = @"madpreview";

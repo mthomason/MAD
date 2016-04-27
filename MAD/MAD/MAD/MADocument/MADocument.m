@@ -146,6 +146,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @implementation MADocument
 
 @synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreOptions = _persistentStoreOptions;
+
 
 + (BOOL)isRetnaDisplay {
     return [[UIScreen mainScreen] scale] > 1.5;
@@ -241,7 +243,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - UIDocument
 
-- (NSDictionary *)layoutHeightsBySectionKey {
+- (NSDictionary *)copyLayoutHeightsBySectionKey {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
 
     [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *sectionLayoutManager, BOOL *stop) {
@@ -254,18 +256,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return dictionary;
 }
 
-
+- (NSDictionary *)persistentStoreOptions {
+    if (_persistentStoreOptions != nil) return _persistentStoreOptions;
+    
+    _persistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    @YES, NSInferMappingModelAutomaticallyOption,
+                                    @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
+    return _persistentStoreOptions;
+}
 
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
                 
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @YES, NSInferMappingModelAutomaticallyOption,
-                                    @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
-        
-        self.persistentStoreOptions = options;
-        
-        NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:url];
+        NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:self.fileURL];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         
         _urlMetaPlaylist = urlMetaPlaylist.copy;
@@ -429,6 +432,47 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
     return _managedObjectModel;
 }
+
+
+
+/*- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    // This implementation creates and return a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.)
+    if (_persistentStoreCoordinator) {
+        return _persistentStoreCoordinator;
+    }
+    
+    NSURL *url = self.storeURL;
+    if (!url) {
+        return nil;
+    }
+    
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    
+    NSDictionary *options = @{
+                              NSMigratePersistentStoresAutomaticallyOption: @(YES),
+                              NSInferMappingModelAutomaticallyOption: @(YES)
+                              };
+    
+    NSError *error;
+    
+    if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error]) {
+        [NSApp presentError:error];
+        
+        return nil;
+    }
+    
+    _persistentStoreCoordinator = psc;
+    
+    return _persistentStoreCoordinator;
+}*/
+
+/*- (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)storeURL
+                                           ofType:(NSString *)fileType
+                               modelConfiguration:(NSString *)configuration
+                                     storeOptions:(NSDictionary *)storeOptions
+                                            error:(NSError * _Nullable *)error {
+    
+}*/
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
 
@@ -925,17 +969,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeMainDataTable {
-//CACHEFIX
+
     NSString *filename = self.filename;
-    NSNumber *objectIdV =  [[NSNumber alloc] initWithUnsignedInteger: filename.hash];
-    NSNumber *type = [[NSNumber alloc] initWithShort: MTDataTableTypePhysical];
-    
-    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
-    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                    type, typeKey, objectIdV, objectIdKey, nil];
-    MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable newDataTableWithDefinition:parameters];
+    MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
     datatable.cacheDelegate = self;
+
     NSString *cacheName = [datatable newFilenameMDCache];
     NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
     self.urlDataTableCache = cacheUrl;
@@ -944,8 +982,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery
-                                                                                 layout: self
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
                                                                                 options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
@@ -1044,17 +1081,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.database];
 }
 
-- (MTReportViewerPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithQuery: self.mainQuery
-                                                                                 layout: self
+- (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender {
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
                                                                                 options: MTReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
+    reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;
     [reportFormatter initalize];
 
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                                              dataTable: self.mainDataTable];
+    id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                                dataTable: self.mainDataTable];
     self.printingReportFormatter = reportFormatter;
     return printPageRender;
     

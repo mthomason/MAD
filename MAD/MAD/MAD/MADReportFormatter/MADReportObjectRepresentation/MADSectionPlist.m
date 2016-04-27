@@ -22,60 +22,28 @@ static NSString * const MADIdentifierReportObject       = @"o";
 
 @implementation NSDictionary (MADSectionPlist)
 
-- (MADSectionPlist *)initWithPlist:(MADSectionPlist *)plist {
-    if (self = [self initWithDictionary:plist]) { }
-    return self;
-}
-
-- (MADSectionPlist *)initWithSectionType:(MNSDocumentSectionType)sectionType
-                              groupLevel:(NSUInteger)groupLevel {
-    
-    NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
-    NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger: groupLevel];
-    self = [self initWithObjectsAndKeys: section,    MTReportSectionType,
-                                         level,      MTReportGroupLevel, nil];
-    return self;
-    
-}
-
-- (MADSectionPlist *)initWithSectionType:(MNSDocumentSectionType)sectionType
-                                     row:(NSNumber *)row {
-    
-    NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
-    NSNumber *rowID = row.copy;
-    self = [self initWithObjectsAndKeys: section,    MTReportSectionType,
-                                         rowID,      MTReportDetailRowId, nil];
-    return self;
-    
-}
-
-- (MADSectionPlist *)initWithSectionType:(MNSDocumentSectionType)sectionType
-                              groupLevel:(NSUInteger)groupLevel
-                                     row:(NSNumber *)row {
-    NSNumber *section = [[NSNumber alloc] initWithShort: sectionType];
-    NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger: groupLevel];
-    NSNumber *rowID = row.copy;
-    
-    self = [self initWithObjectsAndKeys: section,    MTReportSectionType,
-                                         level,      MTReportGroupLevel,
-                                         rowID,      MTReportDetailRowId, nil];
-    return self;
-
-}
-
 + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
-                                      groupLevel:(NSUInteger)groupLevel
-                                             row:(NSNumber *)row {
-
-    MADSectionPlist *result = [[MADSectionPlist alloc] initWithSectionType:sectionType
-                                                                groupLevel:groupLevel row:row];
+                                           groupLevel:(NSUInteger)groupLevel
+                                                  row:(NSNumber *)row {
+    
+    NSNumber *section = [[NSNumber alloc] initWithShort:sectionType];
+    NSNumber *level = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
+    NSNumber *rowID = row.copy;
+    MADSectionPlist *result = [[MADSectionPlist alloc] initWithObjectsAndKeys:
+                                                            section,    MTReportSectionType,
+                                                            level,      MTReportGroupLevel,
+                                                            rowID,      MTReportDetailRowId, nil];
     return result;
     
 }
 
 + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
                                                   row:(NSNumber *)row {
-    MADSectionPlist *result = [[MADSectionPlist alloc] initWithSectionType:sectionType row:row];
+    NSNumber *section = [[NSNumber alloc] initWithShort:sectionType];
+    NSNumber *rowID = row.copy;
+    MADSectionPlist *result = [[MADSectionPlist alloc] initWithObjectsAndKeys:
+                                                            section,    MTReportSectionType,
+                                                            rowID,      MTReportDetailRowId, nil];
     return result;
 }
 

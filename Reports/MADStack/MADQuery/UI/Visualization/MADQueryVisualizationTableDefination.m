@@ -26,21 +26,21 @@ static NSString * const keyRoot = @"r";
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
         _center = [decoder decodeCGPointForKey:keyCenter];
-        _root = [decoder decodeIntegerForKey:keyRoot];
+        _root = [decoder decodeBoolForKey:keyRoot];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeCGPoint:_center forKey:keyCenter];
-    [coder encodeInteger:_root forKey:keyRoot];
+    [coder encodeCGPoint:_center forKey: keyCenter];
+    [coder encodeBool: _root forKey: keyRoot];
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MADQueryVisualizationTableDefination *result = [[[self class] allocWithZone:zone] init];
-    result.center = self.center;
-    result.root = self.root;
-    return result;
+    MADQueryVisualizationTableDefination *copy = [[[self class] allocWithZone:zone] init];
+    copy.center = _center;
+    copy.root = _root;
+    return copy;
 }
 
 + (instancetype)newTableDefination {

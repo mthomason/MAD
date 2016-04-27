@@ -253,15 +253,15 @@
 }
 
 + (CGSize)sizeLetter {
-    return CGSizeMake(CGPointsForInches(8.5000f), CGPointsForInches(11.0000f));
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(11.0000f));
 }
 
 + (CGSize)sizeGovernmentLetter {
-    return CGSizeMake(CGPointsForInches(8.5000f), CGPointsForInches(10.5000f));
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(10.5000f));
 }
 
 + (CGSize)sizeLegal {
-    return CGSizeMake(CGPointsForInches(8.5000f), CGPointsForInches(14.0000f));
+    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(14.0000f));
 }
 
 + (CGSize)sizeA0 {

@@ -39,8 +39,11 @@
 
     @try {
 
-        NSData *d = [NSKeyedArchiver archivedDataWithRootObject:self.object];
-        success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
+        @autoreleasepool {
+            id <NSCoding> obj = self.object;
+            NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj];
+            success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
+        }
         
     } @catch (NSException *exception) {
         

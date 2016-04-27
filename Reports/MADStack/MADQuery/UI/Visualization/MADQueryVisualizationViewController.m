@@ -414,12 +414,15 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)updateCache {
     MADocument *doc = self.document;
     if (doc != nil) {
-        MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
-        cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
-        cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
         
         RptqQuery *query = doc.activeDocumentModel.defaultDatabase.defaultQuery;
         MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
+        MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
+
+        MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] initWithNumberOfTables:[topologicallySortedTables count]];
+        cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
+        cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
+        
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
@@ -428,7 +431,9 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                 
                 MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
                 tableDef.center = viewController.view.center;
-                tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+                
+                NSArray <NSURL *> * __unsafe_unretained startingPoints = queryDef.startingPoints;
+                tableDef.root = [startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
                 [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
             }
         }

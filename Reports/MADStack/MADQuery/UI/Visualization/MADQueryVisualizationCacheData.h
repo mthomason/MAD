@@ -24,6 +24,7 @@
     @property (nonatomic, assign) CGPoint scrollViewContentOffset;
     @property (nonatomic, assign) CGFloat scrollViewZoomScale;
 
+    - (instancetype)initWithNumberOfTables:(NSUInteger)countTables;
     - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination forObjectID:(NSManagedObjectID *)objectID;
     - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
     - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;

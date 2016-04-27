@@ -34,10 +34,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     return self;
 }
 
-- (void)dealloc {
-    [_conditions removeAllObjects];
-    [_observers removeAllObjects];
-}
+- (void)dealloc { }
 
 #pragma mark - Lazy Load
 
@@ -57,8 +54,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 // use the KVO mechanism to indicate that changes to "state" affect other properties as well
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
-    if ([@[MADOperatorSelectorIsReady, MADOperatorSelectorIsExecuting, MADOperatorSelectorIsFinished] containsObject:key]) {
-        return [NSSet setWithArray:@[MADOperatorSelectorState]];
+    NSArray *keys = [[NSArray alloc] initWithObjects:MADOperatorSelectorIsReady, MADOperatorSelectorIsExecuting, MADOperatorSelectorIsFinished, nil];
+    if ([keys containsObject:key]) {
+        NSSet *result = [[NSSet alloc] initWithObjects:MADOperatorSelectorState, nil];
+        return result;
     }
     return [super keyPathsForValuesAffectingValueForKey:key];
 }
@@ -146,7 +145,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 #pragma mark - Conditions
 
-- (void)addCondition:(NSObject <MADOperationCondition>*)condition {
+- (void)addCondition:(NSObject <MADOperationCondition> *)condition {
     NSAssert(self.state < evaluatingConditions, @"Cannot modify observers after execution has begun.");
     [self.conditions addObject:condition];
 }

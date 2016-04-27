@@ -47,16 +47,15 @@ NSString * const MTNullIdentifier = @"(null)";
 typedef NSMutableArray  <__kindof MADSectionPlist *>                    MADMutableSectionArray;
 typedef NSMutableArray  <__kindof NSNumber *>                           MADMutableIndexArray;
 
-typedef NSDictionary    <__kindof NSString *, __kindof NSNumber *>      MADStringNumberMap;
-
-typedef NSArray         <__kindof RptqQueryGroup *>                     MADQueryGroupArray;
+typedef NSDictionary    <NSString *, NSNumber *>    MADStringNumberMap;
+typedef NSArray         <RptqQueryGroup *>          MADQueryGroupArray;
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
-    return UIEdgeInsetsMake(CGPointsForInches(1.0/4.0),
-                            CGPointsForInches(1.0/4.0),
-                            CGPointsForInches(1.0/4.0),
-                            CGPointsForInches(1.0/4.0));
+    return UIEdgeInsetsMake(fMGPointsForInches(1.0/4.0),
+                            fMGPointsForInches(1.0/4.0),
+                            fMGPointsForInches(1.0/4.0),
+                            fMGPointsForInches(1.0/4.0));
 }
 
 static inline UIEdgeInsets MADEdgeInsetsEmpty();
@@ -114,8 +113,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     self.machineState.rowCounter = 0;
     self.machineState.groupCounter = 0;
     self.machineState.pageCounter = 0;
-    self.machineState.detailRowId = @(0);
-    self.machineState.detailRowIdLast = @(0);
+    self.machineState.detailRowId = @0;
+    self.machineState.detailRowIdLast = @0;
     self.machineState.sortDescriptors = sortDescriptors;
     self.machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
     self.machineState.document = [self.layout activeDocumentModel];
@@ -145,8 +144,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     return result;
 }
 
-+ (instancetype)newReportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
-                                 options: (MTReportFormatterOptions)options {
++ (instancetype)newReportFormatterWithLayout: (MADocument *)layout
+                                     options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
 }
@@ -202,7 +201,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     if (self.layout) {
     
         [self.layout initalizeSectionLayoutManagers: self.machineState.document];
-        NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
+        NSDictionary *layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
         
     } else {
@@ -270,8 +269,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
-    NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
-    [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
+    NSDictionary *layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
+    self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     
     [self cleanupTemporaryIndexes];
     
@@ -698,8 +697,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 + (void)addDetailForRowID:(NSNumber *)rowID
                pageLayout:(byref inout MADMutableSectionArray *)pageLayout
               pageIndexes:(byref inout MADMutableIndexArray *)pageIndexes {
-    MADSectionPlist *detail = [[MADSectionPlist alloc] initWithSectionType: MNSDocumentSectionTypeBody
-                                                                       row: rowID];
+    MADSectionPlist *detail = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeBody
+                                                                            row: rowID];
     [pageLayout     addObject: detail];
     [pageIndexes    addObject: rowID];
 }

@@ -20,6 +20,7 @@
     if (self = [super initWithFrame:frame]) {
         
         NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MADTableViewHeader" owner: self options: nil];
+        
         UIView *view = nibContents.firstObject;
         view.frame = self.frame;
         
@@ -28,6 +29,7 @@
 
         [self addSubview:view];
         self.nibView = view;
+        
         self.labelTitle.numberOfLines = 0;
         self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
@@ -38,7 +40,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self sizeToFit];
+    [self.labelTitle sizeToFit];
 }
 
 @end

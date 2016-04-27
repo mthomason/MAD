@@ -638,7 +638,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     if (sharedController) {
                         sharedController.delegate = sself;
                         
-                        MTReportViewerPrintPageRenderer *printPageRender = [sself.document printerPrintPageRender];
+                        MTReportViewerPrintPageRenderer *printPageRender = [sself.document newPrinterPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         
@@ -1076,7 +1076,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         MADocument *document = sself.document;
                         document.activityDelegate = sself;
                         
-                        UIPrintPageRenderer *printPageRender = [document printerPrintPageRender];
+                        UIPrintPageRenderer *printPageRender = [document newPrinterPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = document;
                         MADViewerController * __weak weakself2 = sself;

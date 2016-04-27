@@ -232,7 +232,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-    [searchBar sizeToFit];
     self.searchBar = searchBar;
 
     
@@ -287,6 +286,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    [self.searchBar sizeToFit];
 }
 
 #pragma mark - UIResponder

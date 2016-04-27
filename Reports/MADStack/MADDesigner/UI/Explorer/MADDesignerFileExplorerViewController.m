@@ -271,21 +271,14 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     [self closeDocument:self.traitCollection completion:^(BOOL success) { }];
 
-    
-
-    UICollectionView * __weak weakCollectionView = self.collectionView;
+    UICollectionView * __unsafe_unretained weakCollectionView = self.collectionView;
     void (^reloadCells)(void) = ^(){
-        UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-        [collectionView.backgroundView setNeedsDisplay];
-        [collectionView reloadItemsAtIndexPaths:paths];
+        NSArray <NSIndexPath *> *paths = weakCollectionView.indexPathsForVisibleItems.copy;
+        [weakCollectionView.backgroundView setNeedsDisplay];
+        [weakCollectionView reloadItemsAtIndexPaths:paths];
     };
     
     [UIView performWithoutAnimation:reloadCells];
-    
-//    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        
- //   }];
 
 }
 

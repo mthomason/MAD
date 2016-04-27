@@ -68,7 +68,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
     @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
-    - (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
+    - (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender;
 
     + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
     + (BOOL)isRetnaDisplay;
@@ -99,7 +99,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
     - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSDictionary *)layoutHeightsBySectionKey;
+    - (NSDictionary *)copyLayoutHeightsBySectionKey;
 
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
     - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;

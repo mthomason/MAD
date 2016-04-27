@@ -14,7 +14,8 @@
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 
     - (UIManagedDocument *)documentForURL:(NSURL *)url;
-    - (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
+    - (void)openDocumentAtURL:(NSURL *)url
+            completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
     - (void)didOpenDocument:(UIManagedDocument *)document;
     - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
     - (NSArray *)supportedUTIs;
@@ -32,7 +33,8 @@
     - (IBAction)done:(id)sender;
     - (IBAction)edit:(id)sender;
 
-    - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
+    - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail
+               completion:(void (^)(BOOL))completion;
     - (void)getUserCloudPrefs;
     - (void)reenable;
 
