@@ -19,7 +19,9 @@
     return copy;
 }
 
-+ (instancetype)sectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID andRect:(CGRect)rect {
++ (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
+                                           objectID:(NSManagedObjectID *)objectID
+                                            andRect:(CGRect)rect {
     MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
     NSManagedObjectID *managedObjectID = objectID.copy;
     instance.objectID = managedObjectID;
@@ -67,12 +69,12 @@
 
 + (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
     CGPoint dropPoint = CGPointZero;
-    CGFloat distance = CGDistance(placedItem.frame.origin, dropPoint), tmpDistance;
+    CGFloat distance = fCGDistance(placedItem.frame.origin, dropPoint), tmpDistance;
     for (MADSectionLayoutAttributes *item in allItems) {
         if (placedItem.objectID != item.objectID) {
-            NSArray *array = [item dropPoints];
+            NSArray *array = [item copyDropPoints];
             for (NSValue *v in array) {
-                if ((tmpDistance = CGDistance(placedItem.frame.origin, v.CGPointValue)) < distance) {
+                if ((tmpDistance = fCGDistance(placedItem.frame.origin, v.CGPointValue)) < distance) {
                     dropPoint = v.CGPointValue;
                     distance = tmpDistance;
                 }
@@ -94,15 +96,15 @@
     return valid;
 }
 
-- (NSArray <__kindof NSValue *> *)dropPoints {
-    return [MADSectionLayoutAttributes dropPointsOnAttribute:self];
+- (NSArray <NSValue *> *)copyDropPoints {
+    return [MADSectionLayoutAttributes newArrayOfdropPointsOnAttribute:self];
 }
 
-- (NSArray <__kindof NSValue *> *)dropPointsHorizontal {
-    return [MADSectionLayoutAttributes dropPointsHorizontalOnAttribute:self];
+- (NSArray <NSValue *> *)copyDropPointsHorizontal {
+    return [MADSectionLayoutAttributes newArrayOfDropPointsHorizontalOnAttribute:self];
 }
 
-+ (NSArray <__kindof NSValue *> *)dropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
++ (NSArray <NSValue *> *)newArrayOfDropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
     MTCorners corners = MTCornersMake(item.frame);
     NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
     NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
@@ -110,7 +112,7 @@
     return cornersArray;
 }
 
-+ (NSArray <__kindof NSValue *> *)dropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
++ (NSArray <NSValue *> *)newArrayOfdropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
     MTCorners corners = MTCornersMake(item.frame);
     
     NSValue *topLeft = [[NSValue alloc] initWithBytes:&corners.topLeft objCType:@encode(CGPoint)];

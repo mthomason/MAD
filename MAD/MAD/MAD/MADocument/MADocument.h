@@ -21,6 +21,8 @@
 #import <MAD/MTQueryFull.h>
 #import <MAD/MADSectionLayoutManager.h>
 
+typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
+                                                    MADSectionLayoutManagerMutableMap;
 
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
@@ -48,7 +50,9 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
     @property (nonatomic, strong, readwrite)    MTDatabase *database;
-    @property (nonatomic, strong)               MADActivityIndicator *statusLabel;
+
+    // Set and used by export operations
+    @property (nonatomic, weak)                 MADActivityIndicator *statusLabel;
 
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
@@ -56,7 +60,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, copy)                 NSManagedObjectID *documentObjectID;
 
-    @property (nonatomic, strong)               NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutManager *> *sectionLayoutManagers;
+    @property (nonatomic, strong)               MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
     @property (readonly)                        RptqDocument *activeDocumentModel;
     @property (readonly)                        NSString *filename;

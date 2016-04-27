@@ -21,14 +21,16 @@
 
     @property (nonatomic, copy) NSManagedObjectID *objectID;
 
-    + (instancetype)sectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID andRect:(CGRect)rect;
+    + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
+                                               objectID:(NSManagedObjectID *)objectID
+                                                andRect:(CGRect)rect;
 
     - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes;
     - (bool)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items;
     - (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
     - (bool)moveOnScreen;
-    - (NSArray <__kindof NSValue *> *)dropPointsHorizontal;
-    - (NSArray <__kindof NSValue *> *)dropPoints;
+    - (NSArray <NSValue *> *)copyDropPointsHorizontal;
+    - (NSArray <NSValue *> *)copyDropPoints;
 
 @end
 

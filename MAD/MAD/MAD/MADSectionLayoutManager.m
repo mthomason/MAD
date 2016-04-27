@@ -20,7 +20,7 @@
 
 @interface MADSectionLayoutManager ()
 
-    @property (nonatomic, strong, readwrite)    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
+    @property (nonatomic, strong, readwrite)    MADSectionLayoutAttributesMutableMap *items;
     @property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
     @property (nonatomic, assign)               bool lastOpperationWasAdditon;
     @property (nonatomic, assign)               bool visibility;
@@ -31,7 +31,9 @@
 
 #pragma mark - Static Helpers
 
-+ (NSArray *)nonOverlappingDropPointsForItem:(MADSectionLayoutAttributes *)attr1 givenDropPoints:(NSArray *)dropPoints andPlacedItems:(NSArray *)placedItems {
++ (NSArray *)nonOverlappingDropPointsForItem:(MADSectionLayoutAttributes *)attr1
+                             givenDropPoints:(NSArray *)dropPoints
+                              andPlacedItems:(NSArray *)placedItems {
     
     NSMutableArray *nonOverlappingDropPoints = [[NSMutableArray alloc] initWithCapacity:dropPoints.count];
     for (NSValue *pointObj in dropPoints) {
@@ -43,15 +45,16 @@
     return nonOverlappingDropPoints;
 }
 
-+ (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
++ (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
+   dropTolerance:(CGFloat)tolerance {
     CGPoint nearestPoint = CGPointZero;
     CGFloat distanceToLastDropPoint = tolerance;
     bool foundNearDropPoint = false;
     for (NSValue *pointObj in dropPoints) {
         CGPoint dropPoint = pointObj.CGPointValue;
-        CGFloat distanceToDropPoint = CGDistance(dropPoint, item.frame.origin);
+        CGFloat distanceToDropPoint = fCGDistance(dropPoint, item.frame.origin);
         if ((distanceToDropPoint <= tolerance && distanceToDropPoint <= distanceToLastDropPoint &&
-             distanceToLastDropPoint > CGSizeZero.width)) {                                    //Not yet found
+             distanceToLastDropPoint > CGSizeZero.width)) { //Not yet found
             
             nearestPoint = dropPoint;
             foundNearDropPoint = true;
@@ -64,25 +67,27 @@
     return foundNearDropPoint;
 }
 
-+ (NSArray <__kindof NSValue *> *)allHorizontallyValidLocations:(MADSectionLayoutAttributes *)attribute withAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count];
++ (NSArray <NSValue *> *)allHorizontallyValidLocations:(MADSectionLayoutAttributes *)attribute
+                                        withAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+    NSMutableArray <NSValue *> *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count];
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
         if (placedItem.objectID != attribute.objectID) {
-            NSArray <__kindof NSValue *> *dropPoints = [placedItem dropPoints];
+            NSArray <NSValue *> *dropPoints = [placedItem copyDropPoints];
             [results addObjectsFromArray:dropPoints];
         }
     }
     return results;
 }
 
-+ (NSArray <__kindof NSValue *> *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute withAttributes: (NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
++ (NSArray <NSValue *> *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute
+                                                  withAttributes: (NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
     
-    NSMutableArray <__kindof NSValue *> *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count + 1];
+    NSMutableArray <NSValue *> *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count + 1];
     NSValue *origin = [NSValue valueWithCGPoint:CGPointZero];
     [results addObject:origin];
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
         if (placedItem.objectID != attribute.objectID) {
-            NSArray <__kindof NSValue *> *dropPoints = [placedItem dropPoints];
+            NSArray <NSValue *> *dropPoints = [placedItem copyDropPoints];
             [results addObjectsFromArray:dropPoints];
         }
     }
@@ -93,25 +98,32 @@
     return attr1.frame.origin.y >= point.y - 0.5f && [attr1 validDropPoint:point givenPlacedItems:placedItems];
 }
 
-+ (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace alreadyPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)alreadyPlacedItems {
++ (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace
+        alreadyPlacedItems:(NSArray <MADSectionLayoutAttributes *> *)alreadyPlacedItems {
+    
     CGPoint dropPoint = CGPointZero;
-    CGFloat distance = 0.00000000f, tmpDistance;//CGDistance(itemToPlace.frame.origin, dropPoint), tmpDistance;
+    CGFloat distance = 0.00000000f, tmpDistance;
     bool distanceSet = false;
+    
     for (MADSectionLayoutAttributes *alreadyPlacedItem in alreadyPlacedItems) {
         if (itemToPlace.objectID != alreadyPlacedItem.objectID) {
-            NSArray *alreadyPlacedItemDropPoints = [alreadyPlacedItem dropPoints];
+        
+            NSArray <NSValue *> *alreadyPlacedItemDropPoints = [alreadyPlacedItem copyDropPoints];
+
             for (NSValue *v in alreadyPlacedItemDropPoints) {
-                if ([self isPointGoodLocation:v.CGPointValue forItem:itemToPlace givenPlacedItems:alreadyPlacedItems]) {
+                if ([self isPointGoodLocation: v.CGPointValue forItem: itemToPlace
+                             givenPlacedItems: alreadyPlacedItems]) {
                     if (!distanceSet) {
                         dropPoint = v.CGPointValue;
-                        distance = CGDistance(itemToPlace.frame.origin, v.CGPointValue);
+                        distance = fCGDistance(itemToPlace.frame.origin, v.CGPointValue);
                         distanceSet = true;
-                    } else if ((tmpDistance = CGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
+                    } else if ((tmpDistance = fCGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
                         dropPoint = v.CGPointValue;
                         distance = tmpDistance;
                     }
                 }
             }
+            
         }
     }
     itemToPlace.frame = CGRectMake(dropPoint.x, dropPoint.y, itemToPlace.frame.size.width, itemToPlace.frame.size.height);
@@ -123,12 +135,12 @@
     bool foundNearDropPoint = false;
     bool firstTime = true;
     
-    NSArray <__kindof NSValue *> *dropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: attr1 withAttributes: placedItems];
+    NSArray <NSValue *> *dropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: attr1 withAttributes: placedItems];
     for (NSValue *pointObj in dropPoints) {
         
         if ([self isPointGoodLocation:pointObj.CGPointValue forItem:attr1 givenPlacedItems:placedItems]) {
             
-            CGFloat distanceToDropPoint = CGDistance(pointObj.CGPointValue, attr1.frame.origin);
+            CGFloat distanceToDropPoint = fCGDistance(pointObj.CGPointValue, attr1.frame.origin);
             
             if (firstTime) {
                 firstTime = false;
@@ -151,20 +163,23 @@
 
     if (self = [super init]) {
     
-        NSMutableDictionary *items = [NSMutableDictionary new];
+        NSMutableDictionary *items = [[NSMutableDictionary alloc] init];
         self.items = items;
+        
         self.visibility = section.visibility.boolValue ? true : false;
         
         RptqDocumentSectionRows *rows = section.hasRows.firstObject;
         NSInteger itemCounter = 0;
-        
+
+        id layout, path;
         for (RptqDocumentObject *object in rows.hasObjects) {
-        
-            NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
-            id layout = [MADSectionLayoutAttributes sectionLayoutAttributesWithIndex:path
-                                                                            objectID:object.objectID
-                                                                             andRect:object.frame];
-            [self addItem:layout];
+            @autoreleasepool {
+                path = [NSIndexPath indexPathForItem: itemCounter inSection: 0];
+                layout = [MADSectionLayoutAttributes newSectionLayoutAttributesWithIndex: path
+                                                                                objectID: object.objectID
+                                                                                 andRect: object.frame];
+                [self addItem:layout];
+            }
             itemCounter++;
         }
 
@@ -176,7 +191,8 @@
 #pragma mark - Methods
 
 - (void)addItem:(MADSectionLayoutAttributes *)item {
-    [self appendItemToItems:item];
+    [self.items setObject:item forKey:item.objectID];
+    self.lastItem = item;
     self.lastOpperationWasAdditon = true;
 }
 
@@ -184,9 +200,11 @@
     
     NSIndexPath *pathToRemvoe = itemToRemove.indexPath;
     
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:
+                                        ^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
         if (obj.indexPath.item >= pathToRemvoe.item) {
-            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1 inSection: obj.indexPath.section];
+            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
+                                                inSection: obj.indexPath.section];
         }
     }];
     
@@ -196,7 +214,8 @@
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
     NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)self.items.count inSection:0];
-    MADSectionLayoutAttributes *layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+    MADSectionLayoutAttributes *layout;
+    layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
     layout.objectID = objectID;
     layout.frame = frame;
     [self.items setObject: layout forKey: objectID];
@@ -207,9 +226,11 @@
     MADSectionLayoutAttributes *item = [self.items objectForKey:objectID];
     NSIndexPath *pathToRemvoe = item.indexPath;
     
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:
+                                            ^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
         if (obj.indexPath.item >= pathToRemvoe.item) {
-            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1 inSection: obj.indexPath.section];
+            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
+                                                inSection: obj.indexPath.section];
         }
     }];
     
@@ -233,17 +254,20 @@
     }
 }
 
-- (void)placeItem:(MADSectionLayoutAttributes *)item givenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems {
-    [MADSectionLayoutManager moveItem:item alreadyPlacedItems:alreadyPlacedItems];
+- (void)placeItem:(MADSectionLayoutAttributes *)item givenAlreadyPlacedItems:(NSArray *)placedItems {
+    [MADSectionLayoutManager moveItem:item alreadyPlacedItems:placedItems];
 }
 
-- (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
-    return [MADSectionLayoutManager moveItem:item toNearestPointInGroup:dropPoints dropTolerance:tolerance];
+- (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
+   dropTolerance:(CGFloat)tolerance {
+    return [MADSectionLayoutManager moveItem: item toNearestPointInGroup: dropPoints
+                               dropTolerance: tolerance];
 }
 
 - (void)positionItem:(MADSectionLayoutAttributes *)placedItem {
-    NSArray <__kindof MADSectionLayoutAttributes *> *allValues = self.items.allValues;
-    NSMutableArray <__kindof MADSectionLayoutAttributes *> *placedItems = [[NSMutableArray alloc] initWithCapacity:allValues.count];
+
+    NSArray <MADSectionLayoutAttributes *> *allValues = self.items.allValues;
+    NSMutableArray <MADSectionLayoutAttributes *> *placedItems = [[NSMutableArray alloc] initWithCapacity:allValues.count];
     
     // If offscreen, move it onscreen.
     if (placedItem.frame.origin.x < CGPointZero.x) {
@@ -263,7 +287,8 @@
     }
     [placedItems addObject:placedItem];
     
-    NSPredicate *unplaced = [NSPredicate predicateWithFormat:@"objectID != %@.objectID", placedItem];
+    static NSString * const formatString = @"objectID != %@.objectID";
+    NSPredicate *unplaced = [NSPredicate predicateWithFormat:formatString, placedItem];
     NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:unplaced];
     
     bool positionItems = true;
@@ -273,7 +298,8 @@
         [placedItems setArray:placedNow];
         positionItems = false;
         
-        NSPredicate *filterPlacedItems = [NSPredicate predicateWithFormat:@"NOT objectID IN %@.objectID", placedItems];
+        static NSString * const format = @"NOT objectID IN %@.objectID";
+        NSPredicate *filterPlacedItems = [NSPredicate predicateWithFormat:format, placedItems];
         NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:filterPlacedItems];
         for (MADSectionLayoutAttributes *item in placedItems) {
             if ([item intersectsAnItemInArray:unplacedItems]) {
@@ -328,7 +354,7 @@
 #pragma mark - Helpers
 
 - (NSArray <__kindof NSValue *> *)allValidLocations {
-    NSDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items = self.items;
+    MADSectionLayoutAttributesMutableMap *items = self.items;
     NSValue *placement0Value;
     NSArray *allItems = items.allValues;
     NSMutableArray <__kindof NSValue *> *allValidLocations = [[NSMutableArray alloc] initWithCapacity:allItems.count * 4];
@@ -349,11 +375,6 @@
         }
     }
     return allValidLocations;
-}
-
-- (void)appendItemToItems:(MADSectionLayoutAttributes *)item {
-    [self.items setObject:item forKey:item.objectID];
-    self.lastItem = item;
 }
 
 @end

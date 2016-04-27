@@ -447,15 +447,13 @@ CGEdgeLeftPointInRect(CGRect frame) {
 }
 
 CG_INLINE double MGPointsForInches(double inches);
-CG_INLINE double
-MGPointsForInches(double inches) {
+CG_INLINE double MGPointsForInches(double inches) {
     return inches * 72.0;
 }
 
-CG_INLINE CGFloat fMGPointsForInches(CGFloat inches);
-CG_INLINE CGFloat
-fMGPointsForInches(CGFloat inches) {
-    return inches * 72.0;
+CG_INLINE CGFloat fCGPointsForInches(CGFloat inches);
+CG_INLINE CGFloat fCGPointsForInches(CGFloat inches) {
+    return inches * 72.00000f;
 }
 
 CG_INLINE CGFloat CGFloatPointsForMillimeters(CGFloat millimeters);
@@ -466,52 +464,46 @@ CGFloatPointsForMillimeters(CGFloat millimeters) {
 }
 
 CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);
-
-CG_INLINE CGFloat
-CGFloatInchesForPoints(CGFloat points) {
+CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points) {
     return points / 72.0000f;
 }
 
 CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters);
-
-CG_INLINE CGFloat
-CGFloatInchesForCentmeters(CGFloat centemeters) {
+CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) {
     return centemeters / 2.5400f;
 }
 
 CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches);
-
-CG_INLINE CGFloat
-CGFloatCentemetersForInches(CGFloat inches) {
+CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches) {
     return inches * 2.5400f;
 }
 
 CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2);
-
-CG_INLINE CGFloat
-CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
+CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 	//y = m x + b;
 	CGFloat m = ((p2.y - p1.y) / (p2.x - p1.x));
 	CGFloat b = p1.y - (m * p1.x);
 	return (y - b) / m;
 }
 
+CG_INLINE CGFloat fCGDistance(CGPoint p1, CGPoint p2);
+CG_INLINE CGFloat fCGDistance(CGPoint p1, CGPoint p2) {
+    return sqrtf(powf((p2.x - p1.x), 2) + powf((p2.y - p1.y), 2));
+}
+
 CG_INLINE double CGDistance(CGPoint p1, CGPoint p2);
-CG_INLINE double
-CGDistance(CGPoint p1, CGPoint p2) {
+CG_INLINE double CGDistance(CGPoint p1, CGPoint p2) {
 	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 }
 
 CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat
-CGSlope(CGPoint p1, CGPoint p2) {
+CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2) {
     CGFloat d = (p2.x - p1.x);
 	return d > FLT_EPSILON ? ((p2.y - p1.y) / d) : 0.0000f;
 }
 
 CG_INLINE CGFloat CGLineSegmentSlope(CGLineSegment lineSegment);
-CG_INLINE CGFloat
-CGLineSegmentSlope(CGLineSegment lineSegment) {
+CG_INLINE CGFloat CGLineSegmentSlope(CGLineSegment lineSegment) {
 	return CGSlope(lineSegment.start, lineSegment.end);
 }
 

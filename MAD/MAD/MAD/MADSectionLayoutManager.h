@@ -12,11 +12,14 @@
 #import <Foundation/NSObject.h>
 #import <MAD/MADSectionLayoutAttributes.h>
 
+typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutAttributes *>
+                                                        MADSectionLayoutAttributesMutableMap;
+
 @class MADSectionLayoutManager, RptqDocumentSection, NSManagedObjectID;
 
 @interface MADSectionLayoutManager : NSObject
 
-    @property (nonatomic, strong, readonly) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
+    @property (nonatomic, strong, readonly) MADSectionLayoutAttributesMutableMap *items;
     @property (readonly) CGSize size;
 
     - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;

@@ -58,16 +58,16 @@ static inline CGRect CGRectPaperLetter() {
 }
 
 static inline CGSize CGSizePaperLetter() {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(11.0000f));
+    return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(11.0000f));
 }
 
 
 static inline CGSize CGSizePaperGovernmentLetter() {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(10.5000f));
+    return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(10.5000f));
 }
 
 static inline CGSize CGSizePaperLegal() {
-    return CGSizeMake(fMGPointsForInches(8.5000f), fMGPointsForInches(14.0000f));
+    return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(14.0000f));
 }
 
 static inline CGSize CGSizePaperA0() {

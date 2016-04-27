@@ -52,10 +52,10 @@ typedef NSArray         <RptqQueryGroup *>          MADQueryGroupArray;
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
-    return UIEdgeInsetsMake(fMGPointsForInches(1.0/4.0),
-                            fMGPointsForInches(1.0/4.0),
-                            fMGPointsForInches(1.0/4.0),
-                            fMGPointsForInches(1.0/4.0));
+    return UIEdgeInsetsMake(fCGPointsForInches(1.0/4.0),
+                            fCGPointsForInches(1.0/4.0),
+                            fCGPointsForInches(1.0/4.0),
+                            fCGPointsForInches(1.0/4.0));
 }
 
 static inline UIEdgeInsets MADEdgeInsetsEmpty();
