@@ -37,7 +37,8 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)fileGroup
+          firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
     if (self = [super init]) {
         self.fileGroup = fileGroup;
@@ -171,9 +172,13 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     NSString *fileGroup = self.fileGroup.copy;
     NSPredicate *predicate = self.predicate.copy;
 
+    id __weak wself = self;
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(defaultQueue, ^{
     
+        MADLocalFileCoordinator *sself = wself;
+        if (sself == nil) return;
+        
         NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier: fileGroup];
         
         NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
@@ -192,18 +197,19 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
             containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
             doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
-            NSArray *removedURLs = [self.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
+            NSArray *removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
             
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs
-                                                                removedURLs:removedURLs
-                                                                updatedURLs:@[]];
+            NSArray *emptyArray = [[NSArray alloc] init];
+            [sself.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
+                                                                 removedURLs: removedURLs
+                                                                 updatedURLs: emptyArray];
             
-            self.currentLocalContents = localListURLs;
+            sself.currentLocalContents = localListURLs;
         }
         
-        if (self.firstQueryUpdateHandler) {
-            self.firstQueryUpdateHandler();
-            self.firstQueryUpdateHandler = nil;
+        if (sself.firstQueryUpdateHandler) {
+            sself.firstQueryUpdateHandler();
+            sself.firstQueryUpdateHandler = nil;
         }
     });
 }

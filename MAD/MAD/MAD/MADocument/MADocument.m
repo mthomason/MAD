@@ -149,6 +149,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @synthesize persistentStoreOptions = _persistentStoreOptions;
 
 
++ (instancetype)newManagedDocumentForURL:(NSURL *)url {
+    id document = [[self alloc] initWithFileURL:url];
+    return document;
+}
+
 + (BOOL)isRetnaDisplay {
     return [[UIScreen mainScreen] scale] > 1.5;
 }
@@ -167,9 +172,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [MADFileUtilities newUrlForLocalCacheDirectoryNamed:filenameId];
 }
 
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    
-    return [self newUrlThumbnailForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [self isRetnaDisplay]];
++ (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl {
+    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
+    return [self newUrlThumbnailForHandle: handle andRetinaDisplay: [self isRetnaDisplay]];
     
 }
 
@@ -215,7 +220,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark - NSObject
 
 - (void)dealloc {
-    
+    _managedObjectModel = nil;
     _database.delegate = nil;
     _database = nil;
     _mainQuery.database.delegate = nil;
@@ -246,7 +251,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (NSDictionary *)copyLayoutHeightsBySectionKey {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
 
-    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *sectionLayoutManager, BOOL *stop) {
+    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key,
+                                                                    MADSectionLayoutManager *sectionLayoutManager,
+                                                                    BOOL *stop) {
         
         id k = [key key];
         NSNumber *height = [[NSNumber alloc] initWithFloat:sectionLayoutManager.size.height];
@@ -267,10 +274,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
-                
+        
         NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:self.fileURL];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         
+        _managedObjectModel = nil;
         _urlMetaPlaylist = urlMetaPlaylist.copy;
         _urlGuts = urlGuts.copy;
         
@@ -343,7 +351,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             
             [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
             
-            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+            NSData *data = [NSData dataWithContentsOfURL:url];
             NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
             NSError * __autoreleasing *error = NULL;
             success = [fileWrapper writeToURL: urlGuts
@@ -421,14 +429,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (NSManagedObjectModel *)managedObjectModel {
 
     if (_managedObjectModel == nil) {
-    
-        
-        NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
-                                                              ofType: MADManagedObjectModelExtention];
-        NSURL *modelURL = [[NSURL alloc] initFileURLWithPath:modelPath];
-        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-        _managedObjectModel = mom;
-        
+        @synchronized (_managedObjectModel) {
+            NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
+                                                                  ofType: MADManagedObjectModelExtention];
+            NSURL *modelURL = [[NSURL alloc] initFileURLWithPath:modelPath];
+            _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+        }
     }
     return _managedObjectModel;
 }

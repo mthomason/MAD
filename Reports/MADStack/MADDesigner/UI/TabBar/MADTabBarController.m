@@ -10,6 +10,7 @@
 #import "MADNavigationBarTitleView.h"
 
 #import "MADQueryBuilderSplitViewController.h"
+#import "MADQueryVisualizationViewController.h"
 #import "MADDesignerViewController.h"
 #import "MADViewerController.h"
 #import "MADStoryboard.h"
@@ -29,9 +30,9 @@ const int8_t MADIndexViewer = 2;
 
 @implementation MADTabBarController
 
-- (void)dealloc {
-    _document = nil;
-}
+@synthesize document = _document;
+
+- (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) { }
@@ -83,6 +84,7 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (void)viewControllerDidFinish:(id)sender {
+    [self.querySplitViewController.queryBuilderControllerAdvanced cleanup];
     [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
     [self.viewControllerDelegate viewControllerDidFinish:nil];
 }
@@ -120,19 +122,19 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (MADQueryBuilderSplitViewController *)querySplitViewController {
-    MADQueryBuilderSplitViewController * __autoreleasing topViewController = ((MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery]);
+    MADQueryBuilderSplitViewController *topViewController = ((MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery]);
     return topViewController;
 }
 
 - (MADDesignerViewController *)designerViewController {
     UINavigationController *navigationController = ((UINavigationController *)self.viewControllers[MADIndexDesigner]);
-    MADDesignerViewController * __autoreleasing topViewController = (MADDesignerViewController *)navigationController.topViewController;
+    MADDesignerViewController *topViewController = (MADDesignerViewController *)navigationController.topViewController;
     return topViewController;
 }
 
 - (MADViewerController *)viewerViewController {
     UINavigationController *navigationController = ((UINavigationController *)self.viewControllers[MADIndexViewer]);
-    MADViewerController * __autoreleasing topViewController = (MADViewerController *)navigationController.topViewController;
+    MADViewerController *topViewController = (MADViewerController *)navigationController.topViewController;
     return topViewController;
 }
 

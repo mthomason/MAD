@@ -34,22 +34,26 @@
 
 - (void)start {
 
+    if (self.cancelled) {
+        [self finish];
+    }
+    
     BOOL success = NO;
     NSError *error = nil;
 
     @try {
 
-        @autoreleasepool {
-            id <NSCoding> obj = self.object;
-            NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj];
-            success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
-        }
+        id <NSCoding> obj = self.object;
+        NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj];
+        success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
+        obj = nil;
+        d = nil;
+        self.object = nil;
         
     } @catch (NSException *exception) {
         
     } @finally {
 
-        self.object = nil;
         if (success) {
             [self finish];
         } else {

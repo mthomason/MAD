@@ -27,7 +27,6 @@ extern NSString * const MADSegueShowSql;
     <MADViewControllerDocumentProtocol>
 
     @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-    @property (nonatomic, weak) MADocument *document;
 
     + (void)deleteCoreDataCache;
     - (void)reloadMainDocumentAnimated:(BOOL)animated;

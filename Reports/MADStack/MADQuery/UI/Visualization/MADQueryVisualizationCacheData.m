@@ -49,7 +49,7 @@ static NSString * const CacheExt                    = @"qvvc";
     [aCoder encodeCGPoint:_scrollViewContentOffset forKey:keyScrollViewContentOffset];
     [aCoder encodeDouble:_scrollViewZoomScale forKey:keyScrollViewZoomScale];
 
-    NSDictionary *tableDefinations = self.tableDefinations;
+    NSDictionary *tableDefinations = self.tableDefinations.copy;
     [aCoder encodeObject:tableDefinations forKey:keyTables];
 }
 

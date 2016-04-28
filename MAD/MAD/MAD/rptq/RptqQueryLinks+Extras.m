@@ -137,7 +137,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 }
 
 - (NSString *)copyLinkDescription {
-    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.shortValue];
+    NSString *localizedName = [RptqQueryLinks newLocalizedNameForLinkType:self.jointypeenum.shortValue];
+    return localizedName;
 }
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type {
@@ -231,7 +232,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return sql;
 }
 
-+ (NSString *)LocalizedNamesForLinkType:(MNSLinkType)type {
++ (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type {
     NSString *name = [self NamesForLinkType:type];
     return NSLocalizedString(name, name);
 }

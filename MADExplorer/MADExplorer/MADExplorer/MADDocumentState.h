@@ -9,7 +9,7 @@
 #ifndef MADDocumentState_h
 #define MADDocumentState_h
 
-typedef NS_ENUM(NSUInteger, MTReportState) {
+typedef NS_ENUM(short, MTReportState) {
     MTReportStateOpen = 0,
     MTReportStateClosed
 };

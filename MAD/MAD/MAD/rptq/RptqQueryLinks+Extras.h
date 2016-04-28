@@ -59,7 +59,7 @@ typedef NS_ENUM(short, MNSLinkType) {
 - (NSString *)copyLinkDescription;
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
-+ (NSString *)LocalizedNamesForLinkType:(MNSLinkType)type;
++ (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type;
 + (NSString *)SqlForLinkType:(MNSLinkType)type;
 
 @end

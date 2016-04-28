@@ -81,7 +81,8 @@
 }
 
 - (MNSDatabaseType)databaseType {
-    return self.databaseDriverTypeEnum.unsignedIntegerValue;
+    NSNumber *type = self.databaseDriverTypeEnum;
+    return type.unsignedIntegerValue;
 }
 
 #pragma mark - Static

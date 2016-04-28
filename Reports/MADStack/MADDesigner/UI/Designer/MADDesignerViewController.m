@@ -186,6 +186,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @implementation MADDesignerViewController
 
+@synthesize document = _document;
+
 #pragma mark - Static Helpers
 
 static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);

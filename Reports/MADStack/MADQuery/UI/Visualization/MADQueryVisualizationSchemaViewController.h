@@ -27,24 +27,23 @@ extern const CGFloat MADSchemaViewDefaultHeight;
 @interface MADQueryVisualizationSchemaViewController : UIViewController
     <MADViewControllerDocumentProtocol>
 
-@property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
-@property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
-@property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
+    @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
+    @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-- (void)setCenter:(CGPoint)center;
-- (void)setBounds:(CGRect)bounds;
-- (void)setTransform:(CGAffineTransform)transform;
-- (CGPoint)center;
-- (CGRect)bounds;
-- (CGAffineTransform)transform;
+    - (void)setCenter:(CGPoint)center;
+    - (void)setBounds:(CGRect)bounds;
+    - (void)setTransform:(CGAffineTransform)transform;
+    - (CGPoint)center;
+    - (CGRect)bounds;
+    - (CGAffineTransform)transform;
 
-- (NSManagedObjectID *)tableObjectId;
-- (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
-- (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
+    - (NSManagedObjectID *)tableObjectId;
+    - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
+    - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
 
 @end
 

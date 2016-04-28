@@ -60,29 +60,29 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
     @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
 
-@property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
+    @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-@property (nonatomic, strong) MADSearchBar *searchBar;
-@property (readonly) UILabel *titleView;
+    @property (nonatomic, strong) MADSearchBar *searchBar;
+    @property (readonly) UILabel *titleView;
 
-@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
+    @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
-@property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
+    @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
 
-@property (nonatomic, assign) BOOL cloudActivityRunning;
-@property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
+    @property (nonatomic, assign) BOOL cloudActivityRunning;
+    @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
-@property (nonatomic, strong) UIProgressView *progressViewFileManager;
+    @property (nonatomic, strong) UIProgressView *progressViewFileManager;
 
-@property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
+    @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 
-@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchInserts;
-@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchRemoves;
-@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchUpdates;
+    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchInserts;
+    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchRemoves;
+    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchUpdates;
 
-@property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
+    @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
-@property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
+    @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
 @end
 
@@ -98,35 +98,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
-
-#pragma mark - Helper functions
-
-- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail
-           completion:(void (^)(BOOL))completion {
-
-    UIManagedDocument *openDocument = self.openDocument;
-    if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
-        self.reportState = MTReportStateClosed;
-        [self.fileManager unload];
-
-        __block bool success;
-        //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
-        [openDocument closeWithCompletionHandler:^(BOOL successClose) {
-            success = successClose;
-        //    dispatch_semaphore_signal(s0);
-            completion(successClose);
-        }];
-        //dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
-
-
-
-    } else {
-
-        completion(NO);
-
-    }
-
-}
 
 #pragma mark - Static Functions
 
@@ -355,7 +326,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     CGPoint touchPoint = [touch locationInView:self.collectionView];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:touchPoint];
     BOOL shouldReceiveTouch = YES;
-    if (indexPath && [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+    BOOL tapGestureRecognizer = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]];
+    if (indexPath != nil && tapGestureRecognizer) {
         shouldReceiveTouch = NO;
     }
     return shouldReceiveTouch;
@@ -418,24 +390,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [((UICollectionView *)scrollView).collectionViewLayout invalidateLayout];
 }
 
-#pragma mark - UICollectionViewDelegate
-
-- (void)openFileWithUrl:(NSURL *)url {
-    [self.openFileDelegate openDocumentAtURL:url completionHandler:^(BOOL success, UIManagedDocument *document) {
-        if (success) {
-            SEL fileOpenCompletion = @selector(handleFileOpenCompletion:);
-            [self performSelectorOnMainThread:fileOpenCompletion withObject:self waitUntilDone:NO];
-        }
-        SEL reenable = @selector(reenable);
-        [self performSelectorOnMainThread:reenable withObject:nil waitUntilDone:NO];
-    }];
-}
-
-- (void)handleFileOpenCompletion:(id)sender {
-    self.reportState = MTReportStateOpen;
-    [self.openFileDelegate didOpenDocument:nil];
-}
-
 #pragma mark - MADCollectionViewLayoutFilesDelegate
 
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -456,8 +410,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         [cell stopWobble];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         [cell.activityIndicator startAnimating];
-        [self.collectionView setUserInteractionEnabled: NO];
-        [self openFileWithUrl:metadata.URL];
+
+        NSURL *fileURL = metadata.URL.copy;
+        [self.openFileDelegate openDocumentAtURL:fileURL];
         [cell normalizeTint];
     }
 }
@@ -478,6 +433,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)reenable {
+/*
     self.collectionView.userInteractionEnabled = YES;
     NSArray *visibleCells = self.collectionView.visibleCells;
     UIActivityIndicatorView *activityIndicator;
@@ -485,6 +441,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         activityIndicator = cell.activityIndicator;
         [activityIndicator stopAnimating];
     }
+    */
 }
 /*
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
@@ -671,8 +628,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - MADFileExplorerDelegate
 
-- (NSURL *)thumbnailUrlForUrl:(NSURL *)fileUrl {
-    return [MADocument thumbnailUrlForMadUrl:fileUrl];
+- (NSURL *)newUrlThumbnailForUrl:(NSURL *)fileUrl {
+    return [MADocument newThumbnailUrlForMadUrl:fileUrl];
 }
 
 - (void)editFile:(id)sender {
@@ -926,9 +883,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
     
+    NSString *textFieldText = cellDocument.labelTitle.text.copy;
     UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
         
-        textField.text = cellDocument.labelTitle.text;
+        textField.text = textFieldText;
         textField.clearButtonMode = UITextFieldViewModeAlways;
         textField.delegate = self;
         
@@ -940,7 +898,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
                     
-                    UIDocument *doc = [self.openFileDelegate documentForURL:metaData.URL];
+                    UIDocument *doc = [MADocument newDocumentForURL:metaData.URL];
                     [doc openWithCompletionHandler:^(BOOL success) {
                         if (success) {
                             [doc closeWithCompletionHandler:^(BOOL successClose) {
@@ -980,7 +938,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
         MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
-        UIManagedDocument *documentReport = [self.openFileDelegate documentForURL:metadata.URL];
+        UIManagedDocument *documentReport = [MADocument newDocumentForURL:metadata.URL];
         if (documentReport.documentState != UIDocumentStateClosed) {
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {

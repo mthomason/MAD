@@ -18,8 +18,6 @@
         UINavigationControllerDelegate,
         UIViewControllerTransitioningDelegate>
 
-    @property (nonatomic, weak) MADocument *document;
-
     - (IBAction)done:(id)sender;
 
 @end

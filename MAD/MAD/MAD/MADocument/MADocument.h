@@ -72,9 +72,11 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
     @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
+    + (instancetype)newDocumentForURL:(NSURL *)url;
+
     - (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender;
 
-    + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
+    + (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl;
     + (BOOL)isRetnaDisplay;
 
     - (instancetype)initWithFileURL:(NSURL *)url;

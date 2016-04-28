@@ -145,7 +145,8 @@
 #pragma mark - Helper functions
 
 - (void)setJoinType:(MNSLinkType)type {
-    NSString *text = [[RptqQueryLinks LocalizedNamesForLinkType:type] lowercaseString];
+    NSString *linkName = [RptqQueryLinks newLocalizedNameForLinkType:type];
+    NSString *text = [linkName lowercaseString];
     [[[self tableViewCellJoinType] detailTextLabel] setText:text];
     [self setLinkType: type];
 }

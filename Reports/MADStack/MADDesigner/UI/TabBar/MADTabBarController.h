@@ -31,8 +31,6 @@ extern const int8_t MADIndexViewer;
     @property (nullable, readonly) MADViewerController * viewerViewController;
     @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
-    @property (nonatomic, weak) MADocument *document;
-
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;
 

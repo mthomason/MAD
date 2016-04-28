@@ -21,7 +21,6 @@
         UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
-    @property (nonatomic, weak) MADocument *document;
 
     + (instancetype)newViewerController;
 

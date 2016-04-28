@@ -60,9 +60,6 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 @implementation MTStoreKitController
 
-static MTStoreKitController *sharedSingleton = nil;
-
-
 - (void)dealloc {
     NSAssert(NO, @"Don't dealloc the singleton.");
 }
@@ -83,6 +80,7 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 + (MTStoreKitController *)sharedObject {
+    static id sharedSingleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[self alloc] init];
@@ -98,10 +96,6 @@ static MTStoreKitController *sharedSingleton = nil;
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.productIdentifiers = nil;
-        self.products = nil;
-        self.initalizeProductsCompletion = nil;
-        self.purchaseProductWithIdentifierCompletion = nil;
         [[SKPaymentQueue defaultQueue] addTransactionObserver: self];
     }
     return self;

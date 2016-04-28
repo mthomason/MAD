@@ -49,6 +49,8 @@
 
 #import "MADOperationQueue.h"
 
+#import "MADCacheManager.h"
+
 typedef void(^MTBlockResultVoid)(void);
 
 static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
@@ -74,16 +76,13 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
-    @property (nonatomic, strong) MADOperationQueue *operationQueueCache;
-
 @end
 
 @implementation MADQueryVisualizationViewController
 
-- (void)dealloc {
-    //_operationQueueCache.underlyingQueue = nil;
-    //_document = nil;
-}
+@synthesize document = _document;
+
+- (void)dealloc { }
 
 #pragma mark - UIContainerViewControllerCallbacks
 
@@ -145,10 +144,6 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 }
 
 - (void)commonInit {
-    MADOperationQueue *queue = [[MADOperationQueue alloc] init];
-    queue.maxConcurrentOperationCount = 1;
-    //queue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    self.operationQueueCache = queue;
     
     NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
     self.controllersByObjectID = controllersByObjectID;
@@ -159,6 +154,12 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
     self.rootTables = rootTables;
 
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (_document != document) {
+        _document = document;
+    }
 }
 
 #pragma mark - UIViewController
@@ -209,7 +210,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    MADocument * __weak doc = self.document;
+    MADocument *doc = self.document;
     [self reloadDocument:doc animated:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -228,21 +229,43 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     if (animated) [self.scrollView flashScrollIndicators];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)cleanup {
     [self archiveCache];
     [self clearScreen];
     
     MADocument *doc = self.document;
-
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextWillSaveNotification
-                                                  object: doc.activeDocumentModel.managedObjectContext];
+    id managedObjectContext = doc.activeDocumentModel.managedObjectContext;
     
+    NSString * __unsafe_unretained willSave = NSManagedObjectContextWillSaveNotification;
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextDidSaveNotification
-                                                  object: doc.activeDocumentModel.managedObjectContext];
+                                                    name: willSave
+                                                  object: managedObjectContext];
+    
+    NSString * __unsafe_unretained didSave = NSManagedObjectContextDidSaveNotification;
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: didSave
+                                                  object: managedObjectContext];
+
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+  /*  [self archiveCache];
+    [self clearScreen];
+    
+    MADocument *doc = self.document;
+    id managedObjectContext = doc.activeDocumentModel.managedObjectContext;
+    
+    NSString * __unsafe_unretained willSave = NSManagedObjectContextWillSaveNotification;
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: willSave
+                                                  object: managedObjectContext];
+    
+    NSString * __unsafe_unretained didSave = NSManagedObjectContextDidSaveNotification;
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: didSave
+                                                  object: managedObjectContext];
+*/}
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -253,7 +276,9 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
+    self.scrollView.scrollIndicatorInsets =
+        UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                         self.bottomLayoutGuide.length, CGSizeZero.height);
     [self layoutQueryTables];
     [self layoutQueryLinks];
 }
@@ -442,8 +467,10 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 }
 
 - (void)archiveCache {
-    MADOperationArchiveData *operation = [[MADOperationArchiveData alloc] initWithURL:self.localCacheFileUrl andObject:self.cacheData];
-    [self.operationQueueCache addOperation:operation];
+    [self updateCache];
+    MADOperationArchiveData *operation = [[MADOperationArchiveData alloc] initWithURL:self.localCacheFileUrl
+                                                                            andObject:self.cacheData];
+    [[MADCacheManager sharedManager] addOperation:operation];
 }
 
 - (MADQueryVisualizationCacheData *)loadCache {
@@ -689,7 +716,8 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
-    viewController.tableObjectId = tableID;
+    NSManagedObjectID *tableIDCopy = tableID.copy;
+    viewController.tableObjectId = tableIDCopy;
     viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     
     if (root) viewController.toolbar.backgroundColor = [UIColor blueColor];

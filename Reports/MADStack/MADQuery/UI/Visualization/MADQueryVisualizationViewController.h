@@ -15,10 +15,9 @@
 @interface MADQueryVisualizationViewController : UIViewController
     <MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) MADocument *document;
-
     - (void)redraw;
-
+    - (void)cleanup;
+    
 @end
 
 #endif

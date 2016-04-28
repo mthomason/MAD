@@ -20,14 +20,14 @@
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
-@property (nonatomic, weak) IBOutlet MTTitleView *titleView;
-@property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
-@property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
-@property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
-@property (nonatomic, strong) UIFont *titleFont;
-@property (nonatomic, strong) UIFont *detailFont;
-@property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
+    @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
+    @property (nonatomic, weak) IBOutlet UIView *containerView;
+    @property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
+    @property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
+    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
+    @property (nonatomic, strong) UIFont *titleFont;
+    @property (nonatomic, strong) UIFont *detailFont;
+    @property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
 
 @end
 
@@ -36,11 +36,10 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @implementation MADQueryVisualizationSchemaViewController
 
+@synthesize document = _document;
 @dynamic view;
 
-- (void)dealloc {
-    _document = nil;
-}
+- (void)dealloc { }
 
 - (void)setCenter:(CGPoint)center {
     self.view.center = center;
@@ -146,9 +145,10 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    self.view.objectIdTag = tableObjectId.copy;
-    self.cachedTableObjectId = tableObjectId.copy;
-    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableObjectId];
+    NSManagedObjectID *tableID = tableObjectId.copy;
+    self.view.objectIdTag = tableID;
+    self.cachedTableObjectId = tableID;
+    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableID];
    
     NSString *tableAlias = table.alias.copy;
     self.titleView.label.text = tableAlias;
@@ -199,11 +199,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     
-    NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[indexPath.row];
+    NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[(NSUInteger)indexPath.row];
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
-    result.detailLabel.text = field.databaseSchemaField.name;
-    result.detailLabel.font = self.detailFont;
+    result.detailLabel.text = field.databaseSchemaField.name.copy;
+    result.detailLabel.font = self.detailFont.copy;
     return result;
 }
 
@@ -212,20 +212,20 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.hasFieldsObjectIds.count;
+    return (NSInteger)self.hasFieldsObjectIds.count;
 }
 
 #pragma mark - Methods
 
 - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
     return (MTSchemaFieldCell *)[self.schemaTableViewController cellForRowAtIndexPath:cellIndexPath];
 }
 
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
     CGRect rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
     return [self.schemaTableViewController convertRect:rectForRow toView:self.view];
 }
@@ -236,7 +236,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     if (row == NSNotFound) {
         rectForRow = CGRectZero;
     } else {
-        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
         rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
     }
     return [self.schemaTableViewController convertRect:rectForRow toView:containerView];

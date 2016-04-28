@@ -15,7 +15,6 @@ static NSString * const MADFirstLaunch                                     = @"M
 @interface MADFileLocationManager ()
 
     @property (nonatomic, strong, readwrite) MADFilesController *filesController;
-    @property (nonatomic, assign) MTReportState reportState;
     @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
     @property (readonly) BOOL isFirstLaunch;
     @property (readonly) NSString *ubiquityIdentifier;
@@ -47,7 +46,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     
     BOOL hasChanged = NO;
     
-    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
+    id<NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
     id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
     
     bool currentTokenNilStoredNonNil = !currentToken && storedToken;
@@ -78,7 +77,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (void)persistAccount {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
+    id<NSObject, NSCopying, NSCoding> token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
     if (token) {
         NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
         [[NSUserDefaults standardUserDefaults] setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
@@ -102,7 +101,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 #pragma mark - Convenience
 
-- (MADStorageState *)storageState {
+- (MADStorageState *)newStorageState {
     MADStorageState *storageState = [[MADStorageState alloc] init];
     storageState.storageOption = self.storageOption;
     storageState.accountDidChange = [self hasUbiquityIdentityChanged];
@@ -134,7 +133,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (void)getUserCloudPrefs {
     if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
         self.getUserCloudPrefsFirstCall = NO;
-        MADStorageState *storageState = self.storageState;
+        MADStorageState *storageState = [self newStorageState];
         if (storageState.cloudAvailable) {
             
             if (storageState.storageOption == MADAppStorageCloud) {
@@ -199,7 +198,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (void)getUserCloudPrefsSubsquient {
     
-    MADStorageState *storageState = self.storageState;
+    MADStorageState *storageState = [self newStorageState];
     if (storageState.accountDidChange) {
         
         switch (storageState.storageOption) {

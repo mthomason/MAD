@@ -12,6 +12,8 @@
 
 @implementation MADNavigationController
 
+@synthesize document = _document;
+
 + (void)initialize {
     if (self == [MADNavigationController self]) {
         Class thisClas = [MADTransparentPresentationController class];

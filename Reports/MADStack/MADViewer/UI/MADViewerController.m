@@ -117,6 +117,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @implementation MADViewerController
 
+@synthesize document = _document;
+
 + (instancetype)newViewerController {
     UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     id viewerViewController = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
@@ -167,9 +169,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-
-    [self setToolbarItems:nil];
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([_timerLabelTimeSinceRefreh isValid]) {

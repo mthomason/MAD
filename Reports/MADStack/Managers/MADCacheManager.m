@@ -49,6 +49,8 @@
     return self;
 }
 
+@synthesize queueForCachingData = _queueForCachingData;
+
 - (void)addOperation:(NSOperation *)operation {
     [self.queueForCachingData addOperation:operation];
 }

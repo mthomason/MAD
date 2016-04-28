@@ -43,6 +43,8 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 
 @implementation MADQueryBuilderSplitViewController
 
+@synthesize document = _document;
+
 + (void)initialize {
     if (self == [MADQueryBuilderSplitViewController self]) {
         @autoreleasepool {
@@ -54,10 +56,7 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
     }
 }
 
-- (void)dealloc {
-    _viewControllerDelegate = nil;
-    _document = nil;
-}
+- (void)dealloc { }
 
 + (instancetype)newQueryBuilderSplitViewController {
     UIStoryboard *storyboardQuery = [MADStoryboard newStoryboardQuery];
@@ -150,16 +149,19 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
     
     [self.queryBuilderController reloadMainDocumentAnimated: YES];
     
-    __block MADQueryBuilderSplitViewController *blockSelf = self;
+    MADQueryBuilderSplitViewController * __unsafe_unretained weakself = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
-            NSArray *items = [self toolbarItems];
+            NSArray *items = [weakself toolbarItems];
             NSMutableArray *mutableItems = [items mutableCopy];
-            [mutableItems removeObject:blockSelf.barButtonItemRevealQuery];
-            [blockSelf setToolbarItems:mutableItems];
-            blockSelf = nil;
+            [mutableItems removeObject:weakself.barButtonItemRevealQuery];
+            [weakself setToolbarItems:mutableItems];
         }
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -231,7 +233,8 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {
-            [weakSelf.viewControllerDelegate viewControllerDidFinish:weakSelf];
+            MADQueryBuilderSplitViewController *sself = weakSelf;
+            [sself.viewControllerDelegate viewControllerDidFinish:sself];
         }
     }];
 }

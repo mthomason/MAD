@@ -12,21 +12,21 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self commonInit];
+        _viewWillLayoutSubviewsCounter = 0;
     }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self commonInit];
+        _viewWillLayoutSubviewsCounter = 0;
     }
     return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self commonInit];        
+        _viewWillLayoutSubviewsCounter = 0;
     }
     return self;
 }
@@ -34,18 +34,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationItem.titleView sizeToFit];
-}
-
-- (void)commonInit {
-    self.viewWillLayoutSubviewsCounter = 0;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (void)viewWillLayoutSubviews {

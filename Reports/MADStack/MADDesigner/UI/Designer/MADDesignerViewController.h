@@ -28,7 +28,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     + (instancetype)newDesignerViewController;
     
     @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-    @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, assign) bool hidesStatusBar;
 

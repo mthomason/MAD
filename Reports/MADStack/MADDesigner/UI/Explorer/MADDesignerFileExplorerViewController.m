@@ -33,7 +33,6 @@
 #import "MADWatermarkView.h"
 
 #import "MADNavigationController.h"
-#import "MADTabBarController.h"
 
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
@@ -43,6 +42,9 @@
 #import "UINavigationController+Designer.h"
 #import "UITabBarController+Shared.h"
 #import "UITableViewController+Designer.h"
+#import "MADQueryBuilderSplitViewController.h"
+#import "MADQueryVisualizationViewController.h"
+#import "MADTabBarController.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -57,7 +59,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate>
 
-    @property (nonatomic, strong)   MADQueryBuilderSplitViewController *splitViewController;
+    @property (nonatomic, weak)   MADQueryBuilderSplitViewController *splitViewController;
 
     @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
     @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemLicensing;
@@ -261,24 +263,22 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = true;
-
-    [self.tabController setViewControllers:nil animated:YES];
+    MADTabBarController *tabController = self.tabController;
+    [tabController setViewControllers:nil animated:YES];
     [self dismissViewControllerAnimated:YES completion:^{ }];
-    
+
     self.shouldShowAddDocumentPopover = true;
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
-    [self closeDocument:self.traitCollection completion:^(BOOL success) { }];
-
-    UICollectionView * __unsafe_unretained weakCollectionView = self.collectionView;
-    void (^reloadCells)(void) = ^(){
-        NSArray <NSIndexPath *> *paths = weakCollectionView.indexPathsForVisibleItems.copy;
-        [weakCollectionView.backgroundView setNeedsDisplay];
-        [weakCollectionView reloadItemsAtIndexPaths:paths];
-    };
-    
-    [UIView performWithoutAnimation:reloadCells];
+    UIManagedDocument *openDocument = self.openDocument;
+    if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
+        self.reportState = MTReportStateClosed;
+        [self.fileManager unload];
+        [openDocument closeWithCompletionHandler:^(BOOL successClose) {
+        
+        }];
+    }
 
 }
 
@@ -289,117 +289,118 @@ NSString * const MADUtiType                                     = @"com.everyday
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
-- (void)finishCloseDocument:(MADOpenFileViewController *)sender {
-    [sender reenable];
-    //MADOpenFileViewController * __weak wsender = sender;
-    //[UIView performWithoutAnimation:^{
-    //    UICollectionViewController *ssender = wsender;
-    //    [ssender.collectionView.backgroundView setNeedsDisplay];
-    //    [ssender.collectionView reloadItemsAtIndexPaths:ssender.collectionView.indexPathsForVisibleItems];
-    //}];
-
-//    NSString *(^sqlWhere)(NSArray *);
-//    sqlWhere = ^(NSArray *whereClause)
-    
-    void (^reloadCells)(void) = ^(){
-        NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
-        [self.collectionView.backgroundView setNeedsDisplay];
-        [self.collectionView reloadItemsAtIndexPaths:paths];
-    };
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [UIView performWithoutAnimation:reloadCells];
-        }];
-    });
-}
-
 #pragma mark - MADOpenFileViewControllerDelegate
 
-- (void)didOpenDocument:(MADocument *)documentByRef {
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    
-        MADocument *document = (MADocument *)self.openDocument;
+- (void)documentStateChanged:(NSNotification *)notification {
+    if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
 
-        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-   
-        MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
-        tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
-        tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        tabBarController.viewControllerDelegate = self;
-        NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
-                 @"Controller to conform to MADocumentProtocol.");
-        ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
-        
-        MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController];
-        splitViewController.viewControllerDelegate = self;
-        
-        MADDesignerViewController *designerViewController = [MADDesignerViewController newDesignerViewController];
-        designerViewController.delegate = self;
-        
-        MADViewerController *viewerViewController = [MADViewerController newViewerController];
-        viewerViewController.viewControllerDelegate = self ;
-        
-        MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
-        navControllerViewer.document = document;
-        [navControllerViewer setNavigationBarHidden:YES animated:NO];
-        [navControllerViewer setToolbarHidden:NO animated:NO];
-        
-        NSArray <__kindof UIViewController *> *tabBarViewControllers =
-        [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
-                                            navControllerViewer, nil];
-        
-        [tabBarController setViewControllers:tabBarViewControllers animated:NO];
-        self.tabController = tabBarController;
-        
-        MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
+        MADocument *document = notification.object;
+        switch (document.documentState) {
+            case UIDocumentStateClosed:
+                if (self.reportState == MTReportStateClosed) {
+                    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                                    name: UIDocumentStateChangedNotification
+                                                                  object: document];
+                }
+                [self reloadAfterClose];
+                NSLog(@"\n\n\tDocument state closed.\n\n");
+                break;
+            case UIDocumentStateEditingDisabled:
+                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                break;
+            case UIDocumentStateInConflict:
+                NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                break;
+            case UIDocumentStateNormal:
+                if (self.reportState !=  MTReportStateOpen) [self openViewerWithDocument:document];
+                self.reportState = MTReportStateOpen;
+                NSLog(@"\n\n\tDocument state normal.\n\n");
+                break;
+            case UIDocumentStateSavingError:
+                NSLog(@"\n\n\tDocument state saving error.\n\n");
+                break;
+            default:
+                break;
+        }
 
-        UIColor *color = [MADColorEverydayApps newColorBlue];
-        navigationController.navigationBar.barTintColor = color;
+    }
+}
 
-        color = [MADColorEverydayApps newColorWhite];
-        navigationController.navigationBar.tintColor = color;
-        
-        [self presentViewController:navigationController animated:YES completion:nil];
-        
+- (void)reloadAfterClose {
+    id weakCollectionView __unsafe_unretained = self.collectionView;
+    [UIView performWithoutAnimation:^{
+        UICollectionView *collectionView = weakCollectionView;
+        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+        [collectionView.backgroundView setNeedsDisplay];
+        [collectionView reloadItemsAtIndexPaths:paths];
     }];
+}
+
+- (void)openViewerWithDocument:(MADocument *)document {
+    MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
+    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
+    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    tabBarController.viewControllerDelegate = self;
+    NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
+             @"Controller to conform to MADocumentProtocol.");
     
+    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
+    
+    MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController];
+    splitViewController.viewControllerDelegate = self;
+    
+    MADDesignerViewController *designerViewController = [MADDesignerViewController newDesignerViewController];
+    designerViewController.delegate = self;
+    
+    MADViewerController *viewerViewController = [MADViewerController newViewerController];
+    viewerViewController.viewControllerDelegate = self ;
+    
+    MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
+    navControllerViewer.document = document;
+    [navControllerViewer setNavigationBarHidden:YES animated:NO];
+    [navControllerViewer setToolbarHidden:NO animated:NO];
+    
+    NSArray <__kindof UIViewController *> *tabBarViewControllers =
+    [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
+     navControllerViewer, nil];
+    
+    [tabBarController setViewControllers:tabBarViewControllers animated:NO];
+    self.tabController = tabBarController;
+    
+    MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
+    
+    UIColor *color = [MADColorEverydayApps newColorBlue];
+    navigationController.navigationBar.barTintColor = color;
+    
+    color = [MADColorEverydayApps newColorWhite];
+    navigationController.navigationBar.tintColor = color;
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (UIManagedDocument *)documentForURL:(NSURL *)url {
+- (void)openDocumentAtURL:(NSURL *)url {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    return document;
-}
-
-- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler {
-    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
     document.documentDelegate = self;
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(documentStateChanged:)
+                                                 name: UIDocumentStateChangedNotification
+                                               object: document];
+    
+    self.reportState = MTReportStateClosed;
     self.fileManager.openDocument = document;
     
-    __block bool openDocumentSuccess = false;
-    
-    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    id __weak wself = self;
+    [document openWithCompletionHandler:^(BOOL success) {
+        if (success) {
+            MADDesignerFileExplorerViewController *sself = wself;
+            @synchronized (sself) {
+                sself.reportState = MTReportStateOpen;
+            }
+        }
+    }];
 
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        [self.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
-            openDocumentSuccess = success ? true : false;
-            dispatch_semaphore_signal(sema);
-        }];
-    
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            if (openDocumentSuccess) [((MADocument *)self.fileManager.openDocument) activeDocumentModel];
-            UIManagedDocument *openDocument = self.fileManager.openDocument;
-            handler(openDocumentSuccess, openDocument);
-            [self reenable];
-        }];
-    
-    });
-    
     
 }
 

@@ -35,8 +35,9 @@
     [super viewDidLoad];
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-            NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-            ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
+            MADocument * __unsafe_unretained document = self.document;
+            NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+            ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = document;
         }
     }
 

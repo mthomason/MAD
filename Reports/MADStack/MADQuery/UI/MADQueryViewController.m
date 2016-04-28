@@ -109,6 +109,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 @implementation MADQueryViewController
 
+@synthesize document = _document;
+
 #pragma mark - Exit
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
@@ -1115,10 +1117,10 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 - (IBAction)edit:(id)sender {
     
     BOOL editing = !self.tableView.isEditing;
-    
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone
-                                                                                   target: self
-                                                                                   action: @selector(edit:)];
+    NSInteger systemType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
+    id barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: systemType
+                                                                     target: self
+                                                                     action: @selector(edit:)];
     [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.barButtonItemEdit = barButtonItem;
     self.tableView.editing = editing;
