@@ -15,6 +15,7 @@
 #import <QuickLook/QLPreviewController.h>
 #import <Foundation/NSString.h>
 #import <MAD/MADConstants.h>
+#import "MADOperationQueue.h"
 #import "MADDesignerFileExplorerViewController.h"
 
 #import "Constants.h"
@@ -32,13 +33,12 @@
 
 @class MADTransparentPresentationController;
 
-NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
-NSString * const MADIdentifierFileLondon                            = @"London";
-NSString * const MADIdentifierFileMusic                             = @"Music";
-NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
-NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
-
-NSString * const MADIDUser                                          = @"MADIDUser";
+static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
+static NSString * const MADIdentifierFileLondon                            = @"London";
+static NSString * const MADIdentifierFileMusic                             = @"Music";
+static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
+static NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
+static NSString * const MADIDUser                                          = @"MADIDUser";
 
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 
@@ -56,11 +56,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-//@property (readonly) MADNavigationController *navigationController;
-@property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
-@property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
-@property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
-@property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
+    @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
+    @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
+    //@property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
+    @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 
 @end
 
@@ -127,8 +126,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         dispatch_queue_t appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
         self.appDelegateQueueSerial = appDelegateQueueSerial;
 
-        dispatch_queue_t appDelegateQueueBackground = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
-        self.appDelegateQueueBackground = appDelegateQueueBackground;
+        //dispatch_queue_t appDelegateQueueBackground = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+        //self.appDelegateQueueBackground = appDelegateQueueBackground;
     }
     return self;
 }
@@ -152,13 +151,11 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-    NSNumber *defaultSamplesInstalled = @(NO);
-    NSNumber *defaultReportsInstalled = @(NO);
-    NSNumber *defaultChinookInstalled = @(NO);
-    NSDictionary *defaultsToRegister = @{MADUpgradeInstalledChinook: defaultChinookInstalled,
-                                         MADUpgradeInstalledSamples : defaultReportsInstalled,
-                                         MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
-                                         };
+    
+    NSDictionary *defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        @NO, MADUpgradeInstalledChinook,
+                                        @NO, MADUpgradeInstalledSamples,
+                                        @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
     [defaults registerDefaults:defaultsToRegister];
     self.applicationUserDefaults = defaults;
     
@@ -195,24 +192,32 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)runOperations {
-    NSOperationQueue *operationQueueBackground = [[NSOperationQueue alloc] init];
-    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground;
+    MADOperationQueue *operationQueueBackground = [[MADOperationQueue alloc] init];
     
-    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
+    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
+                                                                                selector: @selector(getUserCloudPrefs)
+                                                                                  object: NULL];
     
     MADInstallOperationSampleDatabase *sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
-    MADInstallOperationSampleDocument *sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename:MADIdentifierFileLondon
-                                                                                                           fileExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                         groupIdentifier:MADIdentifierGroup
-                                                                                                             installFlag:MADUpgradeInstalledSamplesLondon];
-    MADInstallOperationSampleDocument *sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename:MADIdentifierFileMusic
-                                                                                                            fileExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                          groupIdentifier:MADIdentifierGroup
-                                                                                                              installFlag:MADUpgradeInstalledSamplesMusic];
+    
+    MADInstallOperationSampleDocument *sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+                                                                                                           fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                                                         groupIdentifier: MADIdentifierGroup
+                                                                                                             installFlag: MADUpgradeInstalledSamplesLondon];
+    
+    MADInstallOperationSampleDocument *sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+                                                                                                            fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                                                          groupIdentifier: MADIdentifierGroup
+                                                                                                              installFlag: MADUpgradeInstalledSamplesMusic];
     
     NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
-                                                                     selector: @selector(resetReceipt) object: NULL];
-    NSArray *addSampleData = @[getUserCloudPreferences, sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
+                                                                     selector: @selector(resetReceipt)
+                                                                       object: NULL];
+    NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
+                                                               sampleDatabase,
+                                                               sampleDocumentMusic,
+                                                               sampleDatabaseLondon,
+                                                               resetReceipt, nil];
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
 }
 

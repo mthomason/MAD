@@ -40,6 +40,7 @@ typedef NS_ENUM(char, MADOperationState) {
     - (void)finish:(NSArray *)errors;
     - (void)finishWithError:(NSError *)error;
     - (void)finished:(NSArray *)errors;
+    - (void)finishIfCancelled;
     - (void)execute;
     - (void)produceOperation:(NSOperation *)operation;
 

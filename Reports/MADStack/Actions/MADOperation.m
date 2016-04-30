@@ -300,4 +300,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
     //NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
 }
 
+- (void)finishIfCancelled {
+    if (self.cancelled) {
+        [self finish];
+    }
+}
+
 @end

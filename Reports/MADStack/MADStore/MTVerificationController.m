@@ -64,7 +64,8 @@ static MTVerificationController *sharedSingleton;
             NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
                 return [evaluatedObject[@"product-id"] isEqualToString:productID];
             }];
-            NSArray *results = [self.receipt.inAppPurchases filteredArrayUsingPredicate:p];
+            NSArray *inAppPurchases = self.receipt.inAppPurchases;
+            NSArray *results = [inAppPurchases filteredArrayUsingPredicate:p];
             result = results.count >= 1;
         }
     }

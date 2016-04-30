@@ -86,15 +86,20 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
-+ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier groupIdentifier: (NSString *)groupIdentifier
-                                               delay: (void (^)())handleLongRunningCall completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
++ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                     groupIdentifier: (NSString *)groupIdentifier
+                                               delay: (void (^)())handleLongRunningCall
+                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
 
     if ([self isCloudAvailable]) {
         
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         
-        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000 target: self selector: @selector(handleLongRunningCloudUrlLookup:)
-                              userInfo: longRunningCallBlock repeats: NO];
+        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
+                                target: self
+                              selector: @selector(handleLongRunningCloudUrlLookup:)
+                              userInfo: longRunningCallBlock
+                               repeats: NO];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             

@@ -9,17 +9,17 @@
 #ifndef Reports_MADInstallOperationSampleDatabase_h
 #define Reports_MADInstallOperationSampleDatabase_h
 
-#import <Foundation/NSOperation.h>
+#import "MADOperation.h"
 
 extern NSString * const MADUpgradeInstalledSamples;
 extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamplesLondon;
 extern NSString * const MADUpgradeInstalledSamplesMusic;
 
-@interface MADInstallOperationSampleDatabase : NSOperation
+@interface MADInstallOperationSampleDatabase : MADOperation
 
-+ (NSURL *)applicationBundleSampleDatabaseChinook;
-+ (NSURL *)applicationSupportSampleDatabaseChinook;
+    + (NSURL *)applicationBundleSampleDatabaseChinook;
+    + (NSURL *)applicationSupportSampleDatabaseChinook;
 
 @end
 

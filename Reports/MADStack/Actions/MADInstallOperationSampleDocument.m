@@ -16,54 +16,66 @@
 
 @interface MADInstallOperationSampleDocument ()
 
-@property (nonatomic, copy) NSString *filename;
-@property (nonatomic, copy) NSString *fileExtension;
-@property (nonatomic, copy) NSString *groupIdentifier;
-@property (nonatomic, copy) NSString *installFlag;
+    @property (nonatomic, copy) NSString *filename;
+    @property (nonatomic, copy) NSString *fileExtension;
+    @property (nonatomic, copy) NSString *groupIdentifier;
+    @property (nonatomic, copy) NSString *installFlag;
 
 @end
 
 @implementation MADInstallOperationSampleDocument
 
-- (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
+- (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension
+                 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
+
     if (self = [super init]) {
         
-        NSString *fn = [[NSString alloc] initWithString:filename];
-        self.filename = fn;
-        
-        NSString *fe = [[NSString alloc] initWithString:fileExtension];
-        self.fileExtension = fe;
-        
-        NSString *gi = [[NSString alloc] initWithString:groupIdentifier];
-        self.groupIdentifier = gi;
-        
-        NSString *ii = [[NSString alloc] initWithString:installFlag];
-        self.installFlag = ii;
+        _filename = filename.copy;
+        _fileExtension = fileExtension.copy;
+        _groupIdentifier = groupIdentifier.copy;
+        _installFlag = installFlag.copy;
         
     }
     return self;
 }
 
-- (void)main {
-    BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:self.installFlag];
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+
+    BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
     if (!installed) {
         
-        NSURL *destinationDirectory = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.groupIdentifier];
-        NSURL *destination = [destinationDirectory URLByAppendingPathComponent: self.filename isDirectory: NO];
+        [self finishIfCancelled];
+        
+        NSURL *localDocumentsDirectory;
+        localDocumentsDirectory =
+            [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
+        NSURL *destination = [localDocumentsDirectory URLByAppendingPathComponent: _filename
+                                                                      isDirectory: NO];
         
         // !!!: Do an extra check to hanle the case of upgrades.
         BOOL isDirectory;
-        installed = [[NSFileManager defaultManager] fileExistsAtPath:destination.path isDirectory:&isDirectory];
+        installed = [[NSFileManager defaultManager] fileExistsAtPath: destination.path
+                                                         isDirectory: &isDirectory];
         
         if (!installed) {
-            NSURL *origin = [[NSBundle mainBundle] URLForResource: self.filename withExtension: self.fileExtension];
+            NSURL *origin = [self resourceUrl];
             NSError *error;
-            destination = [destination URLByAppendingPathExtension:self.fileExtension];
-            installed = [[NSFileManager defaultManager] copyItemAtURL:origin toURL:destination error:&error];
+            destination = [destination URLByAppendingPathExtension:_fileExtension];
+            installed = [[NSFileManager defaultManager] copyItemAtURL:origin
+                                                                toURL:destination
+                                                                    error:&error];
         }
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-        [standardUserDefaults setBool:installed forKey:self.installFlag];
+        [standardUserDefaults setBool:installed forKey:_installFlag];
     }
+    [self finish];
+}
+
+- (NSURL *)resourceUrl {
+    return [[NSBundle mainBundle] URLForResource: _filename
+                                   withExtension: _fileExtension];
 }
 
 @end

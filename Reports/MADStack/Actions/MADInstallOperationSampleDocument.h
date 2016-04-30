@@ -9,12 +9,14 @@
 #ifndef MAD_Designer_MADInstallOperationSampleDocument_h
 #define MAD_Designer_MADInstallOperationSampleDocument_h
 
-#import <Foundation/NSOperation.h>
+#import "MADOperation.h"
 
-@interface MADInstallOperationSampleDocument : NSOperation
+@interface MADInstallOperationSampleDocument : MADOperation
 
-- (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension
-                 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag;
+    - (instancetype)initWithFilename:(NSString *)filename
+                       fileExtension:(NSString *)fileExtension
+                     groupIdentifier:(NSString *)groupIdentifier
+                         installFlag:(NSString *)installFlag;
 
 @end
 

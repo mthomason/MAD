@@ -15,8 +15,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 @interface MADFileLocationManager ()
 
     @property (nonatomic, strong, readwrite) MADFilesController *filesController;
-    @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
-    @property (readonly) BOOL isFirstLaunch;
+    @property (nonatomic, assign) bool getUserCloudPrefsFirstCall;
+    @property (readonly) bool isFirstLaunch;
     @property (readonly) NSString *ubiquityIdentifier;
     @property (readonly) NSString *groupIdentifier;
     @property (readonly) NSString *fileExtention;
@@ -30,11 +30,12 @@ static NSString * const MADFirstLaunch                                     = @"M
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *yes = @YES;
-        NSNumber *notSet = @(MADAppStorageNotSet);
-        NSDictionary *defaultValues = @{MADFirstLaunch: yes,
-                                        MADAppConfigurationUserDefaultsStorageOption : notSet};
+        NSNumber *notSet = [[NSNumber alloc] initWithShort: MADAppStorageNotSet];
+        NSDictionary *defaultValues = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        yes, MADFirstLaunch,
+                                        notSet, MADAppConfigurationUserDefaultsStorageOption, nil];
         [defaults registerDefaults:defaultValues];
-        self.getUserCloudPrefsFirstCall = YES;
+        self.getUserCloudPrefsFirstCall = true;
     }
     return self;
 }
@@ -109,8 +110,8 @@ static NSString * const MADFirstLaunch                                     = @"M
     return storageState;
 }
 
-- (BOOL)isFirstLaunch {
-    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch];
+- (bool)isFirstLaunch {
+    bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ? true : false;
     if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -131,8 +132,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)getUserCloudPrefs {
-    if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
-        self.getUserCloudPrefsFirstCall = NO;
+    if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == false) {
+        self.getUserCloudPrefsFirstCall = false;
         MADStorageState *storageState = [self newStorageState];
         if (storageState.cloudAvailable) {
             
@@ -178,9 +179,9 @@ static NSString * const MADFirstLaunch                                     = @"M
                     self.storageOption = MADAppStorageLocal;
                     [self configureFilesController: NO storageOptionChangeHandler: nil];
                 };
-                UIAlertController *prompt = [self.delegate promotStorageOptionLocal:handleOptionLocal
-                                                                              cloud:handleOptionCloud];
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    UIAlertController *prompt = [self.delegate promotStorageOptionLocal:handleOptionLocal
+                                                                                  cloud:handleOptionCloud];
                     [self.delegate presentViewController:prompt animated:YES completion:nil];
                 }];
             }
@@ -191,7 +192,7 @@ static NSString * const MADFirstLaunch                                     = @"M
             [self configureFilesController: NO storageOptionChangeHandler: nil];
         }
     } else {
-        self.getUserCloudPrefsFirstCall = NO;
+        self.getUserCloudPrefsFirstCall = false;
         [self getUserCloudPrefsSubsquient];
     }
 }
@@ -204,11 +205,13 @@ static NSString * const MADFirstLaunch                                     = @"M
         switch (storageState.storageOption) {
             case MADAppStorageCloud: {
                 
-                UIAlertController *signedOutController = [self.delegate promotCloudSignOut:^(UIAlertAction *action) {
-                    self.storageOption = MADAppStorageNotSet;
-                    [self getUserCloudPrefs];
-                }];
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+
+                    UIAlertController *signedOutController = [self.delegate promotCloudSignOut:^(UIAlertAction *action) {
+                        self.storageOption = MADAppStorageNotSet;
+                        [self getUserCloudPrefs];
+                    }];
+
                     [self.delegate presentViewController:signedOutController animated:YES completion:nil];
                 }];
                 
@@ -232,9 +235,11 @@ static NSString * const MADFirstLaunch                                     = @"M
     
 }
 
-- (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
+- (void)configureFilesController: (BOOL)accountChanged
+      storageOptionChangeHandler: (void (^)(void))storageOptionChangeHandler {
     
-    if (accountChanged || self.filesController == nil) {
+    if (self.filesController != nil && !accountChanged) return;
+
 
         if (!self.filesController) {
 
@@ -257,8 +262,7 @@ static NSString * const MADFirstLaunch                                     = @"M
             self.filesController.fileCoordinator = fc;
             [self.delegate didConfigureFilesController: self.filesController];
         }
-    }
-    
+
 }
 
 - (NSString *)identifierForStorageOption {

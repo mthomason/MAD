@@ -24,9 +24,16 @@ NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3"
 
 @implementation MADInstallOperationSampleDatabase
 
-- (void)main {
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+
+    [self finishIfCancelled];
+
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
     if (installed == NO) {
+
+        [self finishIfCancelled];
         
         NSURL *fileUrl = [MADInstallOperationSampleDatabase applicationBundleSampleDatabaseChinook];
         NSURL *chinookAppSupportUrl = [MADInstallOperationSampleDatabase applicationSupportSampleDatabaseChinook];
@@ -42,15 +49,20 @@ NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3"
             }
         }
     }
+    [self finish];
 }
 
 + (NSURL *)applicationBundleSampleDatabaseChinook {
-    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook withExtension: MTDocumentExtentionSqlite3];
+    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook
+                                   withExtension: MTDocumentExtentionSqlite3];
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory = [MADFileUtilities localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
-    NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
+    NSURL *appSupportDirectory =
+        [MADFileUtilities localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSString *filename = [NSString stringWithFormat: @"%@.%@",
+                                                     MTSampleDatabaseChinook,
+                                                     MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

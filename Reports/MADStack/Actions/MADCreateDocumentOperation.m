@@ -10,6 +10,7 @@
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
+#import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADGetCredentialsOperation.h"
 #import "MADCreateDocumentOperationCreateDocument.h"
@@ -93,7 +94,9 @@
 }
 
 - (void)execute {
-    [super execute];
+    [self finishIfCancelled];
+    self.internalQueue.suspended = NO;
+    [self.internalQueue addOperation:self.finishingOperation];
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
