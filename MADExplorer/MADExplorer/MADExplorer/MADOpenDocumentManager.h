@@ -9,7 +9,10 @@
 #ifndef Reports_MADFileManager_h
 #define Reports_MADFileManager_h
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+
+@class UIManagedDocument;
+@class NSURL;
 
 @interface MADOpenDocumentManager : NSObject
 

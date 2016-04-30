@@ -92,12 +92,45 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
                                           cloud:(void (^)())handlerCloud {
-    UIAlertController *alert = [UIAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
+    UIAlertController *alert = [UIAlertController newAlertControllerPromptStorageOptionLocal:handlerLocal
+                                                                                       cloud:handlerCloud];
     return alert;
 }
 
+- (void)setupFileStorageLocationsForLocal:(id)sender {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        UIAlertController *prompt = [self promotStorageOptionLocal:^ {
+            [self configureFilesController: NO storageOptionChangeHandler: nil];
+        } cloud: ^{
+            
+            self.storageOption = MADAppStorageCloud;
+            [self configureFilesController: NO storageOptionChangeHandler:^{
+                
+                [MADFileUtilities migrateLocalFiles: self.groupIdentifier
+                                            toCloud: self.ubiquityIdentifier
+                                          extension: self.fileExtention];
+                
+            }];
+            
+        }];
+        
+        [self.delegate presentViewController:prompt animated:YES completion:nil];
+    }];
+}
+
+- (void)didDisconnectFromCloud:(id)sender {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        
+        UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+            [self getUserCloudPrefs];
+        }];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
+}
+
 - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
-    UIAlertController *alert = [UIAlertController promotCloudSignOut:handler];
+    UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:handler];
     return alert;
 }
 

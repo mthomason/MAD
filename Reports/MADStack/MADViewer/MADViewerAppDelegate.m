@@ -304,7 +304,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [self.navigationController popToRootViewControllerAnimated:YES];
     
     
-    UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
+    UIAlertController *signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
         [self.openFileViewController getUserCloudPrefs];
     }];
     

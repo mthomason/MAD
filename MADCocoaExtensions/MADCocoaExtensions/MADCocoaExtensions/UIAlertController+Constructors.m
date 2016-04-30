@@ -107,7 +107,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction *action) {
                                                          handlerContinue(((UITextField *)alertController.textFields.firstObject).text);
@@ -118,7 +118,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                          handler:^(UIAlertAction *action) {
                                                              handlerCancel();
                                                          }];
-    [alertController addAction:actionKk];
+    [alertController addAction:actionConfirm];
     [alertController addAction:actionCancel];
     [alertController addTextFieldWithConfigurationHandler:passwordSetup];
 
@@ -139,7 +139,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction *action) {
                                                          handlerContinue(((UITextField *)alertController.textFields.firstObject).text, ((UITextField *)[alertController.textFields objectAtIndex:1]).text);
@@ -151,7 +151,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                              handlerCancel();
                                                          }];
     
-    [alertController addAction:actionKk];
+    [alertController addAction:actionConfirm];
     [alertController addAction:actionCancel];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -203,7 +203,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler: handlerContinue];
     
@@ -211,27 +211,27 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                            style: UIAlertActionStyleCancel
                                                          handler: handlerCancel];
     
-    [alertController addAction:actionKk];
+    [alertController addAction:actionConfirm];
     [alertController addAction:actionCancel];
     return alertController;
 }
 
-+ (instancetype)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
++ (instancetype)newAlertControlerNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler {
     NSString *title = NSLocalizedString(MADTitleCloudSignout, MADTitleCloudSignout);
     NSString *message = NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout);
     NSString *ok = NSLocalizedString(MADTitleButtonDismiss, MADTitleButtonDismiss);
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
-    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler: handler];
-    [alertController addAction:actionKk];
+    [alertController addAction:actionConfirm];
     return alertController;
 }
 
-+ (instancetype)promotStorageOptionLocal:(void (^)())handlerLocal
-                                   cloud:(void (^)())handlerCloud {
++ (instancetype)newAlertControllerPromptStorageOptionLocal:(void (^)())handlerLocal
+                                                     cloud:(void (^)())handlerCloud {
 
     NSString *title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions);
     NSString *message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions);

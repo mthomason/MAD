@@ -13,6 +13,11 @@
 
 @interface UIAlertController (Constructors)
 
++ (instancetype)newAlertControlerNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler;
+
++ (instancetype)newAlertControllerPromptStorageOptionLocal:(void (^)())handlerLocal
+                                                     cloud:(void (^)())handlerCloud;
+
 + (instancetype)addedDocument;
 
 + (instancetype)alertNotConfiguredForEmail;
@@ -28,11 +33,6 @@
                              andCompletion:(void (^)(UIAlertAction *action))handlerContinue;
 
 + (instancetype)nofityTransactionComplete;
-
-+ (instancetype)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
-
-+ (instancetype)promotStorageOptionLocal:(void (^)())handlerLocal
-                                   cloud:(void (^)())handlerCloud;
 
 + (instancetype)editLabel:(void (^)(UITextField *textField))textFieldConfig
                completion:(void (^)(UIAlertAction *action, NSString *text))completion;

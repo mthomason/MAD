@@ -7,6 +7,7 @@
 //
 
 #import "MADOpenDocumentManager.h"
+#import <UIKit/UIManagedDocument.h>
 
 NSString * const MADFileManagerOpenUrl      = @"MADFileManagerOpenUrl";
 NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";

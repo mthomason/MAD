@@ -357,15 +357,15 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
-    UINavigationController * __weak navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
-    [navController popToRootViewControllerAnimated:YES];
-    
-    
-    UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-        [self.openFileViewController getUserCloudPrefs];
-    }];
-    
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    
+        UINavigationController * __weak navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+        [navController popToRootViewControllerAnimated:YES];
+        
+        UIAlertController *signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+            [self.openFileViewController getUserCloudPrefs];
+        }];
+
         [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
     }];
 
