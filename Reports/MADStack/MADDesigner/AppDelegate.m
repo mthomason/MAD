@@ -294,32 +294,59 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)initalizeAppearance {
 
-    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : [MADColorEverydayApps newColorWhite]};
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
+    //Make tab bar buttons white
+    UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
+    
+
+    UITabBarItem *tabBarItemAppearance =                [UITabBarItem appearance];
+    UIBarButtonItem *barButtonItem =                    [UIBarButtonItem appearance];
+    UINavigationBar *navigationBarAppearance =          [UINavigationBar appearance];
+    
+    UINavigationBar *navigationBarQLPreviewAppearance = [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil];
+    UINavigationBar *navigationBarMailAppearance =      [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
+    UINavigationBar *navigationBarViewController =      [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil];
+    UINavigationBar *navigationBarNavigationBar =       [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
+    UIBarButtonItem *barButtonItemToolbar =             [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil];
+    UISegmentedControl *segmentedControl =              [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil];
     
     #ifndef MADWATCHKIT
         [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [MADColorEverydayApps newColorBlue];
     #endif
     
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [MADColorEverydayApps newColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [MADColorEverydayApps newColorAnalogous4];
+
+    navigationBarQLPreviewAppearance.barTintColor   = madColor4;
+    navigationBarMailAppearance.barTintColor        = madColor4;
+    
+    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
+    navigationBarViewController.tintColor           = whiteColor;
+    navigationBarNavigationBar.tintColor            = whiteColor;
+    barButtonItemToolbar.tintColor                  = whiteColor;
+    barButtonItem.tintColor                         = whiteColor;
+    segmentedControl.tintColor                      = whiteColor;
+
+    id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                    whiteColor, NSForegroundColorAttributeName, nil];
+    [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
+                                        forState: UIControlStateNormal];
+    navigationBarAppearance.titleTextAttributes = titleTextAttributes;
+
+    UIColor *redColor = [MADColorEverydayApps newColorRed];
+    navigationBarQLPreviewAppearance.tintColor = redColor;
+    navigationBarMailAppearance.tintColor = redColor;
     
     #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                  = [MADColorEverydayApps newColorWhite];
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor = whiteColor;
     #endif
     
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = [MADColorEverydayApps newColorWhite];
-    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = [MADColorEverydayApps newColorWhite];
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor                          = [MADColorEverydayApps newColorRed];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor                  = [MADColorEverydayApps newColorRed];
-    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                                    = [MADColorEverydayApps newColorWhite];
-    [UIBarButtonItem appearance].tintColor                                                                          = [MADColorEverydayApps newColorWhite];
-    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor                           = [MADColorEverydayApps newColorOrange];
-    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor                      = [MADColorEverydayApps newColorOrange];
-    [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [MADColorEverydayApps newColorOrange];
-    [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = [MADColorEverydayApps newColorWhite];
-    [[UINavigationBar appearance] setTitleTextAttributes:
-    [NSDictionary dictionaryWithObjectsAndKeys: [MADColorEverydayApps newColorWhite], NSForegroundColorAttributeName, nil]];
+    UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
+    UILabel *labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
+    labelInTableCell.highlightedTextColor       = orangeColor;
+
+    UILabel *labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+    labelInCollectionCell.highlightedTextColor  = orangeColor;
+    
+    UIImageView *imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+    imageInCollectionViewCell.tintColor         = orangeColor;
     
 }
 
