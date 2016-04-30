@@ -97,27 +97,6 @@ NSString * const MADUtiType                                     = @"com.everyday
     return alert;
 }
 
-- (void)setupFileStorageLocationsForLocal:(id)sender {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIAlertController *prompt = [self promotStorageOptionLocal:^ {
-            [self configureFilesController: NO storageOptionChangeHandler: nil];
-        } cloud: ^{
-            
-            self.storageOption = MADAppStorageCloud;
-            [self configureFilesController: NO storageOptionChangeHandler:^{
-                
-                [MADFileUtilities migrateLocalFiles: self.groupIdentifier
-                                            toCloud: self.ubiquityIdentifier
-                                          extension: self.fileExtention];
-                
-            }];
-            
-        }];
-        
-        [self.delegate presentViewController:prompt animated:YES completion:nil];
-    }];
-}
-
 - (void)didDisconnectFromCloud:(id)sender {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         

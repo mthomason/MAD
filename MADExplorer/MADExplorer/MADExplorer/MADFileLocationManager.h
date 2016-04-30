@@ -20,7 +20,6 @@
     @required
         - (void)didConfigureFilesController:(MADFilesController *)filesController;
         - (void)didDisconnectFromCloud:(id)sender;
-        - (void)setupFileStorageLocationsForLocal:(id)sender;
 
         - (NSString *)groupIdentifier;
         - (NSString *)ubiquityIdentifier;
