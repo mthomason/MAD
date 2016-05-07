@@ -18,15 +18,13 @@
 
 @implementation MADSearchBar
 
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        UIColor *white = [UIColor whiteColor];
++ (void)initialize {
+    if (self == [MADSearchBar self]) {
         Class searchBar = [UISearchBar class];
         UIButton *button = [UIButton appearanceWhenContainedIn: searchBar, nil];
+        UIColor *white = [UIColor whiteColor];
         button.tintColor = white;
-        
-    });
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
