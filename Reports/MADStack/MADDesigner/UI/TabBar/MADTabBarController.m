@@ -84,7 +84,6 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self.querySplitViewController.queryBuilderControllerAdvanced cleanup];
     [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
     [self.viewControllerDelegate viewControllerDidFinish:nil];
 }

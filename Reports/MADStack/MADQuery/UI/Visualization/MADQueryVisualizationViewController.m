@@ -250,22 +250,8 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-  /*  [self archiveCache];
-    [self clearScreen];
-    
-    MADocument *doc = self.document;
-    id managedObjectContext = doc.activeDocumentModel.managedObjectContext;
-    
-    NSString * __unsafe_unretained willSave = NSManagedObjectContextWillSaveNotification;
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: willSave
-                                                  object: managedObjectContext];
-    
-    NSString * __unsafe_unretained didSave = NSManagedObjectContextDidSaveNotification;
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: didSave
-                                                  object: managedObjectContext];
-*/}
+    [self cleanup];
+}
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];

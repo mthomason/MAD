@@ -133,11 +133,11 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 }
 
 - (UINavigationController *)detailNavigationController {
-    return (UINavigationController *)self.viewControllers[0];
+    return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
 }
 
 - (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
-    return self.viewControllers[1];
+    return self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
 }
 
 - (MADQueryViewController *)queryBuilderController {
@@ -162,6 +162,7 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
