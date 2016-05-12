@@ -780,29 +780,33 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     MADocument * __unsafe_unretained document = self.document;
 
+    typedef typeof(self) MADSelf;
+    
+    MADSelf __weak weakself = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queue, ^{
-
+        MADSelf sself = weakself;
+        
         [document prepareForQuery];
         
-        [self watchFormatter: document.reportFormatter];
+        [sself watchFormatter: document.reportFormatter];
         
-        document.reportFormatter.didRefresh = self.startedRefresh;
+        document.reportFormatter.didRefresh = sself.startedRefresh;
         [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
         
         MTReportViewerPrintPageRenderer *printPageRender =
         [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                dataTable: document.mainDataTable];
-        self.printPageRendererReport = printPageRender;
+        sself.printPageRendererReport = printPageRender;
         
-        [self ignoreFormatter: document.reportFormatter];
+        [sself ignoreFormatter: document.reportFormatter];
         
         
-        [self uiUpdateNumberOfPages];
+        [sself uiUpdateNumberOfPages];
         
         MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
-        pageAttributes.pageNumber = self.currentPageNumber;
-        pageAttributes.numberOfPages = self.numberOfPages;
+        pageAttributes.pageNumber = sself.currentPageNumber;
+        pageAttributes.numberOfPages = sself.numberOfPages;
         
         // FIXME: Don't reset the display size to the paper size.
         pageAttributes.contentSizeInital = document.paper.paperSize;
@@ -810,44 +814,46 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageAttributes.contentScaleFactor = 0.0;
         
         
+        MADSelf __weak weakself2 = sself;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            MADReportPageViewController *pageOne =
-            [MADReportPageViewController newReportPageViewControllerWithDocument: document
-                                                                  pageAttributes: pageAttributes
-                                                                           frame: self.view.bounds
-                                                                     andDelegate: self];
-            
-            NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
-            
-            [self setViewControllers: viewControllers
-                           direction: UIPageViewControllerNavigationDirectionForward
-                            animated: NO completion: nil];
-            
-            [self setDisplayActive];
-            
+            MADSelf sself2 = weakself2;
+            if (sself2) {
+                MADReportPageViewController *pageOne =
+                [MADReportPageViewController newReportPageViewControllerWithDocument: document
+                                                                      pageAttributes: pageAttributes
+                                                                               frame: sself2.view.bounds
+                                                                         andDelegate: sself2];
+                
+                NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
+                
+                [sself2 setViewControllers: viewControllers
+                                 direction: UIPageViewControllerNavigationDirectionForward
+                                  animated: NO completion: nil];
+                
+                [sself2 setDisplayActive];
+            }
         }];
         
-        self.refreshing = false;
-        self.startedRefresh = false;
+        sself.refreshing = false;
+        sself.startedRefresh = false;
         
-        [self uiUpdateRecordsRead];
+        [sself uiUpdateRecordsRead];
         
         document.reportFormatter.didRefresh = false;
         
-        if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+        if (sself.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
             
             UILocalNotification *notification = [[UILocalNotification alloc] init];
             
-            if (self.didRefreshBeforeReaload) {
+            if (sself.didRefreshBeforeReaload) {
                 NSString *body = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
                 notification.alertBody = body;
                 [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                self.didRefreshBeforeReaload = false;
+                sself.didRefreshBeforeReaload = false;
             }
             
-            NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
-            self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+            NSNumber *bgtask = [[NSNumber alloc] initWithUnsignedInteger: sself.backgroundTaskIdRefresh];
+            sself.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
             [[UIApplication sharedApplication] handoffBackground:bgtask];
         }
 

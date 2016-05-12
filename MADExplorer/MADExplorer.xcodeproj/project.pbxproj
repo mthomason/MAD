@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C21313C1CC91E2E0094D802 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C21313A1CC91E2E0094D802 /* MADCocoaExtensions.framework */; };
-		4C21313D1CC91E2E0094D802 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C21313B1CC91E2E0094D802 /* MADFileManager.framework */; };
 		4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */; };
 		4C401E421BAE44B200BAE5FC /* MADDocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E411BAE446100BAE5FC /* MADDocumentState.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -43,7 +42,6 @@
 
 /* Begin PBXFileReference section */
 		4C21313A1CC91E2E0094D802 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
-		4C21313B1CC91E2E0094D802 /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFileManager.framework"; sourceTree = "<group>"; };
 		4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOpenDocumentManager.h; path = MADExplorer/MADOpenDocumentManager.h; sourceTree = "<group>"; };
 		4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOpenDocumentManager.m; path = MADExplorer/MADOpenDocumentManager.m; sourceTree = "<group>"; };
 		4C401E411BAE446100BAE5FC /* MADDocumentState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADDocumentState.h; path = MADExplorer/MADDocumentState.h; sourceTree = "<group>"; };
@@ -75,7 +73,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C21313C1CC91E2E0094D802 /* MADCocoaExtensions.framework in Frameworks */,
-				4C21313D1CC91E2E0094D802 /* MADFileManager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +90,7 @@
 		4C5205D51BA7E4FE000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C21313A1CC91E2E0094D802 /* MADCocoaExtensions.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -100,8 +98,6 @@
 		4C6700E11BA20633001C9D5A = {
 			isa = PBXGroup;
 			children = (
-				4C21313A1CC91E2E0094D802 /* MADCocoaExtensions.framework */,
-				4C21313B1CC91E2E0094D802 /* MADFileManager.framework */,
 				4CC641601BA77BB700F3ECCE /* Resources */,
 				4C6700ED1BA20633001C9D5A /* MADExplorer */,
 				4C6700F91BA20633001C9D5A /* MADExplorerTests */,
@@ -433,7 +429,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -450,7 +447,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "362e691e-dbb4-42d1-853c-a7e42ed92898";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -468,7 +465,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -485,7 +483,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "362e691e-dbb4-42d1-853c-a7e42ed92898";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

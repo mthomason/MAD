@@ -14,12 +14,14 @@
 
 @interface MADDirectoryMonitor ()
 
-@property (nonatomic, assign) int monitoredDirectoryFileDescriptor;
-@property (nonatomic, strong) dispatch_queue_t directoryMonitorQueue;
-@property (nonatomic, strong) dispatch_source_t directoryMonitorSource;
-@property (nonatomic, strong) NSURL *URL;
+    @property (nonatomic, assign) int fileDescriptor;
+    @property (nonatomic, strong) dispatch_queue_t directoryMonitorQueue;
+    @property (nonatomic, strong) dispatch_source_t directoryMonitorSource;
+    @property (nonatomic, strong) NSURL *URL;
 
 @end
+
+const char * MADQueueFileSystemWatcher = "com.everydayapps.mad.filesystem.watcher";
 
 @implementation MADDirectoryMonitor
 #pragma mark - Initializers
@@ -28,7 +30,7 @@
 
     if (self = [super init]) {
         self.URL = URL;
-        self.monitoredDirectoryFileDescriptor = 0;
+        self.fileDescriptor = 0;
     }
     
     return self;
@@ -38,21 +40,30 @@
 
 - (void)startMonitoring {
 
-    if (self.directoryMonitorSource == nil && self.monitoredDirectoryFileDescriptor == -1) {
-        self.monitoredDirectoryFileDescriptor = open([self.URL.path cStringUsingEncoding:NSUTF8StringEncoding], O_EVTONLY);
-        if (self.monitoredDirectoryFileDescriptor >= 0) {
-            self.directoryMonitorQueue = dispatch_queue_create("com.everydayapps.mad.filesystem.watcher", DISPATCH_QUEUE_CONCURRENT);
+    if (self.directoryMonitorSource == nil && self.fileDescriptor == -1) {
+        const char *path = [self.URL.path cStringUsingEncoding:NSUTF8StringEncoding];
+        self.fileDescriptor = open(path, O_EVTONLY);
+        if (self.fileDescriptor >= 0) {
             
-            unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
-            self.directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, (uintptr_t)self.monitoredDirectoryFileDescriptor, mask, self.directoryMonitorQueue);
+            id directoryMonitorQueue = dispatch_queue_create(MADQueueFileSystemWatcher,
+                                                            DISPATCH_QUEUE_CONCURRENT);
+            self.directoryMonitorQueue = directoryMonitorQueue;
+            
+            unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
+                                 DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+            
+            id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
+                                                               (uintptr_t)self.fileDescriptor,
+                                                               mask, self.directoryMonitorQueue);
+            self.directoryMonitorSource = directoryMonitorSource;
             
             dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
                 [self.delegate directoryMonitorDidObserveChange:self];
             });
             
             dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
-                close(self.monitoredDirectoryFileDescriptor);
-                self.monitoredDirectoryFileDescriptor = -1;
+                close(self.fileDescriptor);
+                self.fileDescriptor = -1;
                 self.directoryMonitorSource = nil;
             });
             dispatch_resume(self.directoryMonitorSource);

@@ -26,6 +26,8 @@
 #import "MADProgressView.h"
 
 
+const char * MADQueueFileViewController = "com.everydayapps.mad.designer.file.view.controller";
+
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
@@ -109,7 +111,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 + (NSOperationQueue *)queue {
-
+// ???: Does this run?
     static NSOperationQueue *queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -132,7 +134,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
         self.getUserCloudPrefsFirstCall = YES;
         
-        dispatch_queue_t queueSerialOperations = dispatch_queue_create("MADFileManager", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queueSerialOperations = dispatch_queue_create(MADQueueFileViewController, DISPATCH_QUEUE_SERIAL);
         self.queueSerialOperations = queueSerialOperations;
         
         MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
@@ -613,10 +615,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         }
     } completion:^(BOOL finished) {
         if (finished) {
-            //completion(YES, nil);
+            completion(YES, nil);
         }
     }];
-    completion(YES, nil);
 
 }
 

@@ -14,26 +14,6 @@
 
 @class MADFile;
 
-@protocol MADFileCoordinatorDelegate;
-
-@protocol MADFileCoordinator <NSObject>
-
-    @property (nonatomic, weak) id <MADFileCoordinatorDelegate> delegate;
-    @property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
-
-    - (void)startQuery;
-    - (void)stopQuery;
-    - (void)removeFileAtURL:(NSURL *)URL;
-    - (void)duplicateFileAtURL:(NSURL *)URL;
-    - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
-    - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
-                   extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
-    - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
-                        fileGroup:(NSString *)fileGroup;
-
-@end
-
-
 @protocol MADFileCoordinatorDelegate <NSObject>
 
     - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
@@ -49,6 +29,23 @@
     - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
     - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
     - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+
+@end
+
+@protocol MADFileCoordinator <NSObject>
+
+    @property (nonatomic, weak) id <MADFileCoordinatorDelegate> delegate;
+    @property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
+
+    - (void)startQuery;
+    - (void)stopQuery;
+    - (void)removeFileAtURL:(NSURL *)URL;
+    - (void)duplicateFileAtURL:(NSURL *)URL;
+    - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
+    - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
+                   extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
+    - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                        fileGroup:(NSString *)fileGroup;
 
 @end
 

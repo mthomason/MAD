@@ -68,13 +68,17 @@ static NSString * const Downloading                             = @"Downloading"
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems;
+    NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
+    typeof (self.collectionView) __weak wCollectionView = self.collectionView;
     [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
                                      usingBlock: ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
     
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            id cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            [cell performDeselectionAnimations];
+            UICollectionView *collectionView = wCollectionView;
+            if (collectionView) {
+                id cell = [collectionView cellForItemAtIndexPath:indexPath];
+                [cell performDeselectionAnimations];
+            }
         }];
         
     }];

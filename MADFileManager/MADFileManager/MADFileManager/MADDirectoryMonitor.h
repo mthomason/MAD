@@ -16,18 +16,18 @@
 /// A protocol that allows delegates of \c AAPLDirectoryMonitor to respond to changes in a directory.
 @protocol MADDirectoryMonitorDelegate <NSObject>
 
-- (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor;
+    - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor;
 
 @end
 
 @interface MADDirectoryMonitor : NSObject
 
-@property (nonatomic, weak) id<MADDirectoryMonitorDelegate> delegate;
+    @property (nonatomic, weak) id<MADDirectoryMonitorDelegate> delegate;
 
-- (instancetype)initWithURL:(NSURL *)URL;
+    - (instancetype)initWithURL:(NSURL *)URL;
 
-- (void)startMonitoring;
-- (void)stopMonitoring;
+    - (void)startMonitoring;
+    - (void)stopMonitoring;
 
 @end
 

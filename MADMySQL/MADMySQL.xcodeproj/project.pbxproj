@@ -526,7 +526,6 @@
 		4C70148A1BACDC6800301713 = {
 			isa = PBXGroup;
 			children = (
-				4C2131321CC91D8E0094D802 /* MADFoundation.framework */,
 				4C7014AE1BACDC7600301713 /* Resources */,
 				4C7014961BACDC6800301713 /* MADMySQL */,
 				4C7014A21BACDC6800301713 /* MADMySQLTests */,
@@ -906,6 +905,7 @@
 		4C93743D1BAD2FFC00D6BD62 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C2131321CC91D8E0094D802 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

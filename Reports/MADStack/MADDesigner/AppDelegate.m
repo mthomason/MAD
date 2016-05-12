@@ -57,8 +57,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     <UIDocumentInteractionControllerDelegate>
 
     @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
-    @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
-    //@property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
+    @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
     @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 
 @end
@@ -125,9 +124,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     if (self = [super init]) {
         dispatch_queue_t appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
         self.appDelegateQueueSerial = appDelegateQueueSerial;
-
-        //dispatch_queue_t appDelegateQueueBackground = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
-        //self.appDelegateQueueBackground = appDelegateQueueBackground;
     }
     return self;
 }

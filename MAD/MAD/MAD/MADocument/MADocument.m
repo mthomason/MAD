@@ -220,10 +220,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark - NSObject
 
 - (void)dealloc {
-    _managedObjectModel = nil;
-    _database.delegate = nil;
-    _database = nil;
-    _mainQuery.database.delegate = nil;
+    //_managedObjectModel = nil;
+    //_database.delegate = nil;
+    //_database = nil;
+    //_mainQuery.database.delegate = nil;
 }
 
 - (void)removeObservers {
@@ -322,20 +322,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
     [self regenThumbnail];
-    MADocument * __weak weakself = self;
     
+    NSURL *gutsUrl = self.urlGuts.copy;
+    [self removeObservers];
+    MADocument * __weak weakself = self;
     [super closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            MADocument *sself = weakself;
-            [sself removeGuts];
-            [sself removeObservers];
-        }
-        if (completionHandler != nil) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                completionHandler(success);
-            }];
+            [MADocument RemoveGutsAtUrl:gutsUrl];
         }
     }];
+
+    if (completionHandler != nil) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            completionHandler(YES);
+        }];
+    }
 }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
@@ -1250,15 +1251,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark File Name
 
-- (void)removeGuts {
-
++ (void)RemoveGutsAtUrl:(NSURL *)url {
     NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
-    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
                                                              includingPropertiesForKeys: propertyKeys
                                                                                 options: NSNotFound
                                                                            errorHandler: ^BOOL(NSURL *url, NSError *error) {
-        return YES;
-    }];
+                                                                               return YES;
+                                                                           }];
     
     NSError *error;
     for (NSURL *url in enumerator) {
@@ -1267,7 +1267,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
     
     error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:self.urlGuts error:&error];
+    [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+    
+}
+
+- (void)removeGuts {
+    [MADocument RemoveGutsAtUrl:self.urlGuts];
     
 }
 

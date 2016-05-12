@@ -70,6 +70,8 @@
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
+static const char *MADQueueTextRepresentation = "com.everdayapps.mad.accessibility";
+
 static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc);
 static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc) {
     return sc == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f;
@@ -132,9 +134,8 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 - (void)initCommon {
 
-    NSString *classnameConcurrentBackground = [NSStringFromClass(self.class) stringByAppendingString:@"DispatchConcurrentBackground"];
-    const char *queueName = [classnameConcurrentBackground cStringUsingEncoding:NSUTF8StringEncoding];
-    self.textRepresentationQueue =  dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t queue = dispatch_queue_create(MADQueueTextRepresentation, DISPATCH_QUEUE_SERIAL);
+    self.textRepresentationQueue =  queue;
     
     self.showWaterMark = false;
     self.accessibilityCacheNeedsUpdate = false;

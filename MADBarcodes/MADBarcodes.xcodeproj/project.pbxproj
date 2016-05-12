@@ -424,8 +424,8 @@
 			files = (
 				4C2131351CC91DD70094D802 /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
-				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
 				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
+				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
 				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
 				4C130AF71BA808150022665F /* libpng.a in Frameworks */,
 			);
@@ -445,7 +445,6 @@
 		4C1309601BA8068B0022665F = {
 			isa = PBXGroup;
 			children = (
-				4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */,
 				4C130B061BA808660022665F /* Resouces */,
 				4C13096C1BA8068B0022665F /* MADBarcodes */,
 				4C1309781BA8068B0022665F /* MADBarcodesTests */,
@@ -729,6 +728,7 @@
 		4C130B091BA808970022665F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */,
 				4C130B141BA80D240022665F /* libz.tbd */,
 				4C130B121BA80C1A0022665F /* Foundation.framework */,
 				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,

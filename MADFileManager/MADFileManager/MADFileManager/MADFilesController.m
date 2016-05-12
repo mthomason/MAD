@@ -496,8 +496,8 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
             }
         }
         
-        SEL didChangeContent = @selector(filesController:didUpdateFileInfo:atIndex:);
-        if ([sself.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+        SEL didChangeContent = @selector(filesControllerDidChangeContent:completion:);
+        if ([sself.delegate respondsToSelector:didChangeContent]) {
 
                 [sself.delegate filesControllerDidChangeContent: sself
                                                      completion: ^(BOOL success, NSError *error) {

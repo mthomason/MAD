@@ -15,36 +15,28 @@ NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
 
+static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect();
+static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, fLabelWidth, fLabelMaxHeight);
+}
+
 @interface MADCollectionViewLayoutGroupedDelegate ()
 
     @property (nonatomic, strong) UILabel *testLabel;
-    @property (nonatomic, strong) UILabel *testLabelSub;
 
 @end
 
 @implementation MADCollectionViewLayoutGroupedDelegate
 
-static inline CGRect rectCellLabel();
-static inline CGRect rectCellLabel() {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, fLabelWidth, fLabelMaxHeight);
-}
-
 #pragma mark - Lazy Load
 
 - (UILabel *)testLabel {
     if (!_testLabel) {
-        UILabel *label = [MADLabel newDocumentCaption:rectCellLabel() width:fLabelWidth];
+        UILabel *label = [MADLabel newDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
+                                                width: fLabelWidth];
         _testLabel = label;
     }
     return _testLabel;
-}
-
-- (UILabel *)testLabelSub {
-    if (!_testLabelSub) {
-        UILabel *label = [MADLabel newDocumentCaption:rectCellLabel() width:fLabelWidth];
-        _testLabelSub = label;
-    }
-    return _testLabelSub;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -175,13 +167,20 @@ static inline CGRect rectCellLabel() {
 }
 
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
-    self.testLabel.frame = rectCellLabel();
-    self.testLabel.font = font;
-    self.testLabel.attributedText = attributedString;
+
+    self.testLabel.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.testLabel.contentScaleFactor = contentScaleFactor;
+    self.testLabel.font = font;
+    self.testLabel.attributedText = attributedString;
     [self.testLabel sizeToFit];
-    return self.testLabel.frame.size.height;
+
+    CGFloat height = self.testLabel.frame.size.height;
+
+    self.testLabel.font = nil;
+    self.testLabel.attributedText = nil;
+
+    return height;
 }
 
 @end

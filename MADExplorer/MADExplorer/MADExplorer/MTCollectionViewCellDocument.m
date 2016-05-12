@@ -24,15 +24,15 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @interface MTCollectionViewCellDocument ()
 
-    @property (nonatomic, strong) UIColor *colorTextNormal;
-    @property (nonatomic, strong) UIColor *colorTextSelected;
+    @property (nonatomic, copy) UIColor *colorTextNormal;
+    @property (nonatomic, copy) UIColor *colorTextSelected;
 
     @property (nonatomic, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
     @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
-    @property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
-
     @property (nonatomic, assign) BOOL wobbling;
+
+    //@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
 
 @end
 
@@ -54,7 +54,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)awakeFromNib {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     self.wobbling = NO;
     
@@ -62,10 +61,10 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.selectedBackgroundView = selectedBackground;
     
     UIColor *colorTextSelected = [UIColor lightTextColor];
-    self.colorTextSelected = colorTextSelected;
+    self.colorTextSelected = colorTextSelected.copy;
     
     UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
-    self.colorTextNormal = colorTextNormal;
+    self.colorTextNormal = colorTextNormal.copy;
     
     self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
@@ -107,7 +106,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         self.tapGestureRecognizer = tap;
     }
     
-    self.labelTitle.textColor = self.colorTextNormal;
+    self.labelTitle.textColor = self.colorTextNormal.copy;
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
     self.labelTitle.backgroundColor = clearColor;
@@ -277,10 +276,10 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         id colorTextSelectedHighlighted = [UIColor whiteColor];
         self.labelTitle.textColor = colorTextSelectedHighlighted;
     } else if (self.selected) {
-        self.labelTitle.textColor = self.colorTextSelected;
+        self.labelTitle.textColor = self.colorTextSelected.copy;
         self.tapGestureRecognizer.enabled = NO;
     } else {
-        self.labelTitle.textColor = self.colorTextNormal;
+        self.labelTitle.textColor = self.colorTextNormal.copy;
         self.tapGestureRecognizer.enabled = YES;
     }
 }

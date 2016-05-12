@@ -17,9 +17,6 @@ static NSString * const MADFirstLaunch                                     = @"M
     @property (nonatomic, strong, readwrite) MADFilesController *filesController;
     @property (nonatomic, assign) bool getUserCloudPrefsFirstCall;
     @property (readonly) bool isFirstLaunch;
-    @property (readonly) NSString *ubiquityIdentifier;
-    @property (readonly) NSString *groupIdentifier;
-    @property (readonly) NSString *fileExtention;
 
 @end
 
@@ -118,37 +115,34 @@ static NSString * const MADFirstLaunch                                     = @"M
     return isFirstLaunch;
 }
 
-- (NSString *)ubiquityIdentifier {
-    return [self.delegate ubiquityIdentifier];
-}
-
-- (NSString *)groupIdentifier {
-    return [self.delegate groupIdentifier];
-}
-
-- (NSString *)fileExtention {
-    return [self.delegate fileExtention];
-}
-
-
 - (void)setupFileStorageLocationsForCloud {
-    NSString *ubiquityIdentifier = [self ubiquityIdentifier].copy;
-    NSString *groupIdentifier = [self groupIdentifier].copy;
+    NSString *ubiquityIdentifier = [self.delegate ubiquityIdentifier].copy;
+    NSString *groupIdentifier = [self.delegate groupIdentifier].copy;
     
+    UIViewController <MADFileLocationManagerDelegate> * __weak weakDelegate = self.delegate;
+    typeof(self) __weak weakself = self;
     [MADFilesController getFileStorageLocationsForUbiquityIdentifier: ubiquityIdentifier
                                                      groupIdentifier: groupIdentifier
                                                                delay: ^ {
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.delegate startLongRunningActivity];
+            UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
+            if (delegate) {
+                [delegate startLongRunningActivity];
+            }
         }];
         
     } completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
         
-        self.storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-        [self configureFilesController: NO storageOptionChangeHandler: nil];
+        MADFileLocationManager *sself = weakself;
+        sself.storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
+        [sself configureFilesController: NO storageOptionChangeHandler: nil];
+        UIViewController <MADFileLocationManagerDelegate> * __weak wdelegate = sself.delegate;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.delegate completedLongRunningActivity];
+            UIViewController <MADFileLocationManagerDelegate> * sdelegate = wdelegate;
+            if (sdelegate) {
+                [sdelegate completedLongRunningActivity];
+            }
         }];
         
     }];
@@ -161,20 +155,29 @@ static NSString * const MADFirstLaunch                                     = @"M
         UIViewController <MADFileLocationManagerDelegate> *delegate = self.delegate;
         
         typeof(self) __weak weakself = self;
+        NSString *groupIdentifier = [self.delegate groupIdentifier].copy;
+        NSString *ubiquityIdentifier = [self.delegate ubiquityIdentifier].copy;
+        NSString *fileExtention = [self.delegate fileExtention].copy;
+        
         UIAlertController *prompt = [delegate promotStorageOptionLocal:^ {
-            weakself.storageOption = MADAppStorageLocal;
-            [weakself configureFilesController: NO storageOptionChangeHandler: nil];
+            typeof(self) sself = weakself;
+            if (sself) {
+                sself.storageOption = MADAppStorageLocal;
+                [sself configureFilesController: NO storageOptionChangeHandler: nil];
+            }
         } cloud: ^{
         
-            self.storageOption = MADAppStorageCloud;
-            [self configureFilesController: NO storageOptionChangeHandler:^{
-            
-                [MADFileUtilities migrateLocalFiles: self.groupIdentifier
-                                            toCloud: self.ubiquityIdentifier
-                                          extension: self.fileExtention];
-
-            }];
-            
+            typeof(self) sself = weakself;
+            if (sself) {
+                sself.storageOption = MADAppStorageCloud;
+                [sself configureFilesController: NO storageOptionChangeHandler:^{
+                    
+                    [MADFileUtilities migrateLocalFiles: groupIdentifier
+                                                toCloud: ubiquityIdentifier
+                                              extension: fileExtention];
+                    
+                }];
+            }
         }];
         
         [delegate presentViewController:prompt animated:YES completion:nil];
@@ -263,9 +266,11 @@ static NSString * const MADFirstLaunch                                     = @"M
 
         if (!self.filesController) {
 
-            NSString *identifier = [self identifierForStorageOption];
-            id filesController = [MADFilesController newFilesControllerWithPathExtension:self.delegate.fileExtention
-                                                                           storageOption:self.storageOption
+            NSString *identifier = [self copyIdentifierForStorageOption];
+            NSString *fileExtention = [self.delegate fileExtention].copy;
+            MADAppStorage storageOption = self.storageOption;
+            id filesController = [MADFilesController newFilesControllerWithPathExtension:fileExtention
+                                                                           storageOption:storageOption
                                                                               identifier:identifier
                                                                        firstQueryHandler:storageOptionChangeHandler];
             self.filesController = filesController;
@@ -273,10 +278,11 @@ static NSString * const MADFirstLaunch                                     = @"M
             [self.filesController startSearching];
             
         } else if (accountChanged) {
-            NSString *identifer = [self identifierForStorageOption];
-            
-            id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: self.delegate.fileExtention
-                                                              storageOption: self.storageOption
+            NSString *identifer = [self copyIdentifierForStorageOption];
+            NSString *fileExtention = [self.delegate fileExtention].copy;
+            MADAppStorage storageOption = self.storageOption;
+            id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: fileExtention
+                                                              storageOption: storageOption
                                                                  identifier: identifer
                                                           firstQueryHandler: storageOptionChangeHandler];
             self.filesController.fileCoordinator = fc;
@@ -285,9 +291,9 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 }
 
-- (NSString *)identifierForStorageOption {
-    return self.storageOption != MADAppStorageCloud ? self.groupIdentifier :
-                                                      self.delegate.ubiquityIdentifier;
+- (NSString *)copyIdentifierForStorageOption {
+    return self.storageOption != MADAppStorageCloud ? [self.delegate groupIdentifier].copy :
+                                                      [self.delegate ubiquityIdentifier].copy;
 }
 
 @end

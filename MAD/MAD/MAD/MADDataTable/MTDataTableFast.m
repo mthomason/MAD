@@ -54,6 +54,8 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
     }
 }
 
+static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
+
 @interface MTDataTableFast ()
 
     @property (nonatomic, strong) MTDatabaseCache *databaseForInserts;
@@ -77,27 +79,57 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
 
 @implementation MTDataTableFast
 
+- (void)dealloc {
+    //_lastDataForCacheId = nil;
+    //if (_queueBulkAdd != nil) {
+    //    dispatch_suspend(_queueBulkAdd);
+    //}
+    
+}
+
 - (instancetype)initWithId:(NSUInteger)objectId {
     return [self initWithId:objectId fromCache:YES];
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     if (self = [super initWithId:objectId fromCache:fromCache]) {
+    
+        dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+        self.queueBulkAdd = queue;
+    
         self.bulkInsertLoop = false;
         self.tag = objectId;
         self.sortDescriptorsSet = false;
-        _queueBulkAdd = nil;
     }
     return self;
 }
 
-- (void)dealloc {
-    _lastDataForCacheId = nil;
-    if (_queueBulkAdd != nil) {
-        dispatch_suspend(_queueBulkAdd);
-        _queueBulkAdd = nil;
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+    if (self = [super initWithCoder:decoder]) {
+
+        dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+        self.queueBulkAdd = queue;
+        
+        NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
+        NSURL *url = [NSURL URLWithString:absoluteString];
+        self.urlFastCache = url;
+        
+        NSNumber *tag = [decoder decodeObjectForKey: [MTDataTableFast keyTag]];
+        self.tag = tag.unsignedIntegerValue;
+        
+        _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]] ? true : false;
+        _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]] ? true : false;
+        
+        NSArray *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
+        self.groupKeys = groupKeys;
+        
+        NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
+        self.groupTableNames = groupTableNames;
+        
+        [self reopenDbConnection];
     }
-    
+    return self;
 }
 
 - (MADDataTablePlist *)copyPlist {
@@ -132,15 +164,15 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
     NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
     plist[keySortDescriptorsSet] = sortSet;
     
-    _queueBulkAdd = nil;
     return plist;
 }
 
 - (void)loadWithPlist:(MADDataTablePlist *)plist {
     [super loadWithPlist:plist];
     
-    _queueBulkAdd = nil;
-    
+    dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+    self.queueBulkAdd = queue;
+
     id keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
     NSString * __weak absoluteString = plist[keyUrlFastCache];
     NSURL *url = [[NSURL alloc] initWithString:absoluteString];
@@ -209,34 +241,7 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
     [encoder encodeObject: objid                                forKey: [MTDataTableFast keyTag]];
     [encoder encodeBool: _bulkInsertLoop ? YES : NO             forKey: [MTDataTableFast keyBulkInsertLoop]];
     [encoder encodeBool: _sortDescriptorsSet ? YES : NO         forKey: [MTDataTableFast keySortDescriptorsSet]];
-    _queueBulkAdd = nil;
 
-}
-
-- (instancetype)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithCoder:decoder]) {
-        
-        _queueBulkAdd = nil;
-        NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
-        NSURL *url = [NSURL URLWithString:absoluteString];
-        self.urlFastCache = url;
-        
-        NSNumber *tag = [decoder decodeObjectForKey: [MTDataTableFast keyTag]];
-        self.tag = tag.unsignedIntegerValue;
-
-        _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]] ? true : false;
-        _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]] ? true : false;
-        
-        NSArray *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
-        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
-        self.groupKeys = groupKeys;
-        
-        NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
-        self.groupTableNames = groupTableNames;
-        
-        [self reopenDbConnection];
-    }
-    return self;
 }
 
 - (NSString *)filenameCacheMadDB {
@@ -1004,7 +1009,7 @@ static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) 
     self.bulkInsertQuery = bulkInsertQuery;
     
     if (self.queueBulkAdd == nil) {
-        dispatch_queue_t queue = dispatch_queue_create("mad.cache", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
         self.queueBulkAdd = queue;
     }
     

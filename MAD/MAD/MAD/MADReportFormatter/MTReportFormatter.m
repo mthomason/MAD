@@ -247,7 +247,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
     if (contextChanged == NO || self.needsFormat) {
-        @synchronized(self) {
+        //@synchronized(self) {
             [self setLayoutSize:printableSize];
             [self loadLayoutAndIndexesFromCache];
             if (self.needsFormat) {
@@ -257,7 +257,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
                 }
                 [self formatDocument];
             }
-        }
+        //}
     } else {
         [self formatForSize:printableSize contentChanged:NO];
     }

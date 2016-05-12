@@ -56,8 +56,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 @property (readonly) MADNavigationController *navigationController;
 @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
-@property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
-@property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
+@property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
+@property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueBackground;
 @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 
 @end
@@ -173,12 +173,26 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)runOperations {
+
     NSOperationQueue *operationQueueBackground = [[NSOperationQueue alloc] init];
-    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground;
+    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground; //Guess app delegate
+                                                                                // can leak, but
+                                                                                // this should be
+                                                                                // removed from
+                                                                                // underlying queue
+                                                                                // at dealloc
     
-    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
-    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance] selector: @selector(resetReceipt) object: NULL];
-    NSArray *addSampleData = @[getUserCloudPreferences, resetReceipt];
+    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController
+                                                                                selector:@selector(getUserCloudPrefs) object:NULL];
+    
+    
+    MTVerificationController * __weak verificationController = [MTVerificationController sharedInstance];
+    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: verificationController
+                                                                     selector: @selector(resetReceipt) object: NULL];
+    
+    NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
+                                                               resetReceipt, nil];
+
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
 }
 

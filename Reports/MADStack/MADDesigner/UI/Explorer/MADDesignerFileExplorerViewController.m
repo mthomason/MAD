@@ -98,13 +98,19 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)didDisconnectFromCloud:(id)sender {
+    typeof(self) __weak weakself = self;
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        
-        UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-            [self getUserCloudPrefs];
-        }];
-        
-        [self presentViewController:alert animated:YES completion:nil];
+        MADDesignerFileExplorerViewController *sself = weakself;
+        if (sself) {
+            id __weak weakself2 = sself;
+            UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+                MADDesignerFileExplorerViewController *sself2 = weakself2;
+                [sself2 getUserCloudPrefs];
+            }];
+            
+            [sself presentViewController:alert animated:YES completion:nil];
+        }
     }];
 }
 
@@ -308,15 +314,19 @@ NSString * const MADUtiType                                     = @"com.everyday
 
         MADocument *document = notification.object;
         switch (document.documentState) {
-            case UIDocumentStateClosed:
+            case UIDocumentStateClosed: {
                 if (self.reportState == MTReportStateClosed) {
                     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                                     name: UIDocumentStateChangedNotification
                                                                   object: document];
                 }
-                [self reloadAfterClose];
+                id o = [[NSInvocationOperation alloc] initWithTarget:self
+                                                            selector:@selector(reloadAfterClose)
+                                                              object:nil];
+                [[NSOperationQueue mainQueue] addOperation:o];
                 NSLog(@"\n\n\tDocument state closed.\n\n");
                 break;
+            }
             case UIDocumentStateEditingDisabled:
                 NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
@@ -324,8 +334,14 @@ NSString * const MADUtiType                                     = @"com.everyday
                 NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
             case UIDocumentStateNormal:
-                if (self.reportState !=  MTReportStateOpen) [self openViewerWithDocument:document];
-                self.reportState = MTReportStateOpen;
+                if (self.reportState !=  MTReportStateOpen) {
+                    SEL open = @selector(openViewerWithDocument:);
+                    id o = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                selector: open
+                                                                  object: document];
+                    [[NSOperationQueue mainQueue] addOperation:o];
+                    self.reportState = MTReportStateOpen;
+                }
                 NSLog(@"\n\n\tDocument state normal.\n\n");
                 break;
             case UIDocumentStateSavingError:
@@ -339,10 +355,10 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)reloadAfterClose {
-    id weakCollectionView __unsafe_unretained = self.collectionView;
+    UICollectionView *weakCollectionView __unsafe_unretained = self.collectionView;
+    NSArray <NSIndexPath *> *paths = weakCollectionView.indexPathsForVisibleItems.copy;
     [UIView performWithoutAnimation:^{
         UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
         [collectionView.backgroundView setNeedsDisplay];
         [collectionView reloadItemsAtIndexPaths:paths];
     }];

@@ -19,14 +19,14 @@ NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
 NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";
 NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathComponent = %@)";
 
-@interface MADLocalFileCoordinator () <MADDirectoryMonitorDelegate>
+@interface MADLocalFileCoordinator ()
+            <MADDirectoryMonitorDelegate>
 
-@property (nonatomic, strong)   NSPredicate *predicate;
-@property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
-@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
-@property (nonatomic, copy)     NSArray *currentLocalContents;
-
-@property (nonatomic, strong)   NSString *fileGroup;
+    @property (nonatomic, copy)     NSArray *currentLocalContents;
+    @property (nonatomic, strong)   NSPredicate *predicate;
+    @property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
+    @property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
+    @property (nonatomic, strong)   NSString *fileGroup;
 
 @end
 
@@ -59,22 +59,27 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     return self;
 }
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
+              firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension, pathExtension];
     
-    if (self = [self initWithPredicate:predicate identifier:fileGroup firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+    if (self = [self initWithPredicate:predicate identifier:fileGroup
+               firstQueryUpdateHandler:firstQueryUpdateHandler]) {
         self.fileGroup = fileGroup;
     }
     
     return self;
 }
 
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent
+                               identifier:(NSString *)fileGroup
+                  firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent, lastPathComponent];
     
-    if (self = [self initWithPredicate:predicate identifier:fileGroup firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+    if (self = [self initWithPredicate:predicate identifier:fileGroup
+               firstQueryUpdateHandler:firstQueryUpdateHandler]) {
         self.fileGroup = fileGroup;
     }
     
@@ -150,7 +155,9 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         return NO;
     }
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
-    return ![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
+    NSString *path = documentURL.path;
+    if (path == nil) return NO;
+    return ![[NSFileManager defaultManager] fileExistsAtPath:path];
 
 }
 

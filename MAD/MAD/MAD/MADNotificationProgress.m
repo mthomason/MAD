@@ -60,8 +60,8 @@ static MADNotificationProgress *sharedSingleton = nil;
         self.lastUpdate = [NSDate date];
         MADProgress *madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
         NSDictionary *userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:madProgress, MADNotificationProgressKey, nil];
-        NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier object:
-        object  userInfo: userInfo];
+        NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+                                                                     object: object  userInfo: userInfo];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
     }
 }
@@ -71,7 +71,8 @@ static MADNotificationProgress *sharedSingleton = nil;
         self.lastUpdate = [NSDate date];
         MADProgress *madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier object: madProgress userInfo: nil];
+            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+                                                                         object: madProgress userInfo: nil];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
         }];
     }
@@ -82,7 +83,8 @@ static MADNotificationProgress *sharedSingleton = nil;
         NSDate *lastUpdate = [NSDate date].copy;
         self.lastUpdate = lastUpdate;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier object: progress userInfo: nil];
+            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+                                                                         object: progress userInfo: nil];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
         }];
     }
