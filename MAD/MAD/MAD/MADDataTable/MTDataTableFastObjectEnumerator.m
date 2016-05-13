@@ -24,13 +24,13 @@
 
 @interface MTDataTableFastObjectEnumerator ()
 
-@property (atomic, assign) sqlite3_stmt *statement;
-@property (atomic, assign) bool empty;
-@property (nonatomic, strong) NSDictionary *columns;
-@property (nonatomic, strong) NSArray *columnKeys;
+    @property (atomic, assign) sqlite3_stmt *statement;
+    @property (atomic, assign) bool empty;
+    @property (nonatomic, strong) NSDictionary *columns;
+    @property (nonatomic, strong) NSArray *columnKeys;
 
-@property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
-@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
+    @property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
+    @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
 @end
 
@@ -46,7 +46,9 @@ void sqliteCallback(void *foo, const char* statement) {
     _databaseForQuery = nil;
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection
+                                   columns:(NSDictionary *)columns
+                                columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     if (self = [super init]) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
@@ -158,7 +160,8 @@ void sqliteCallback(void *foo, const char* statement) {
             if (sqlite3DataType == SQLITE_NULL) {
                 columnValue = [NSNull null];
             } else {
-                columnValue = [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
+                columnValue = [MTDatabaseSqlite3 newValueForStatement:_statement
+                                                         columnNumber:columnCounter];
             }
             
             if (columnValue == nil) {

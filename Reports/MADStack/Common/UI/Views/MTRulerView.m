@@ -11,32 +11,9 @@
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 
-@interface MTRulerView ()
-
-static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints);
+static inline CGFloat xPoint(NSInteger i, double offsetInPoints);
 static inline double cmInPoints();
 static inline double eigthInchInPoints();
-
-@end
-
-@implementation MTRulerView
-
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
-}
 
 static inline double eigthInchInPoints() {
     return 72.0000f / 8.0000f;
@@ -46,8 +23,29 @@ static inline double cmInPoints() {
     return (72.0000f / 1.0000f) / 2.5400f;
 }
 
-static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
+static inline CGFloat xPoint(NSInteger i, double offsetInPoints) {
     return i * offsetInPoints;
+}
+
+@interface MTRulerView ()
+
+@end
+
+@implementation MTRulerView
+
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self commonInit];
+    }
+    return self;
 }
 
 - (void)commonInit {
@@ -76,10 +74,9 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
     paragraphStyle.lineBreakMode = NSLineBreakByClipping;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
-    NSDictionary *attributes = @{
-                                 NSFontAttributeName : fontStandard,
-                                 NSParagraphStyleAttributeName : paragraphStyle
-                                 };
+    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                    fontStandard, NSFontAttributeName,
+                                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
     
     CGFloat length = 0.0000f;
     CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
@@ -88,8 +85,10 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
         @autoreleasepool {
             length = 0.0000f;
             if ((i % 8) == 0) {
-                CGRect locationRect = CGRectMake(xPoint(i, eigthInchInPoints()) - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
-                NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 8];
+                CGRect locationRect = CGRectMake(xPoint(i, eigthInchInPoints()) - 5.000f,
+                                                 rect.size.height - 8.0000f,
+                                                 10.0000f, 5.0000f);
+                NSString *s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 8];
                 [s drawInRect:locationRect withAttributes:attributes];
                 length = 1.0000f;
                 CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
@@ -109,10 +108,9 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
     }
     
     UIFont *fontMetric = [UIFont systemFontOfSize: 4.0000f];
-    NSDictionary *attributesMetric = @{
-                                       NSFontAttributeName : fontMetric,
-                                       NSParagraphStyleAttributeName : paragraphStyle
-                                       };
+    NSDictionary *attributesMetric = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                    fontMetric, NSFontAttributeName,
+                                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
     CGFloat offsetInPoints = (72.0000f / 2.5400f) / 10.0000f;   //One cm
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
@@ -120,7 +118,7 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
             length = 0.0000f;
             if ((i % 10) == 0) {
                 CGRect locationRect = CGRectMake(xPoint(i, cmInPoints() / 10.0000f) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
-                NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 10];
+                NSString *s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 10];
                 [s drawInRect:locationRect withAttributes:attributesMetric];
                 length = 2.0000f;
                 CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);

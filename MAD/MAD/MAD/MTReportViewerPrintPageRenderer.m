@@ -361,8 +361,10 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
         
         RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
         
-        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document
-                                                        pageRect:pageRect numberOfPages:self.reportFormatter.numberOfPages
+        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection
+                                                     pageSection:pageSection inDocument:document
+                                                        pageRect:pageRect
+                                                   numberOfPages:self.reportFormatter.numberOfPages
                                                        pageIndex:pageIndex offset:&originY];
         
         [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
@@ -371,10 +373,15 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
             readGroupCounter++;
         }
         
-        MADReportSectionRepresentation *sectionRepresentation = [self drawSection:documentSection pageRect:pageRect
-                                                                      pageSection:pageSection document:document
-                                                                           onPage:pageIndex withDatabase:database offset:&originY
-                                                                 offsetElement:&offsetElement offsetCharacter:&offsetCharacter];
+        MADReportSectionRepresentation *sectionRepresentation = [self drawSection:documentSection
+                                                                         pageRect:pageRect
+                                                                      pageSection:pageSection
+                                                                         document:document
+                                                                           onPage:pageIndex
+                                                                     withDatabase:database
+                                                                           offset:&originY
+                                                                    offsetElement:&offsetElement
+                                                                  offsetCharacter:&offsetCharacter];
         [pageRepresentation addSection:sectionRepresentation];
         
         if (pageSection.sectionType == MNSDocumentSectionTypeBody) {

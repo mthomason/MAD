@@ -15,19 +15,20 @@
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
 
+static NSString * const MADTableCellHederKey = @"MTTableCellHeader";
+
 @interface MADTableLayout ()
     <UICollectionViewDelegate>
-
 
 typedef struct _ColumnWidth {
     CGFloat originX, width;
 } ColumnWidth;
 
-@property (nonatomic, strong) NSMutableArray *columnWidth;
-@property (nonatomic, assign) NSUInteger rowCount;
-@property (nonatomic, assign) NSUInteger columnCount;
-@property (nonatomic, assign) CGFloat heightRow;
-@property (nonatomic, assign) CGFloat heightHeader;
+    @property (nonatomic, strong) NSMutableArray <NSValue *> *columnWidth;
+    @property (nonatomic, assign) NSUInteger rowCount;
+    @property (nonatomic, assign) NSUInteger columnCount;
+    @property (nonatomic, assign) CGFloat heightRow;
+    @property (nonatomic, assign) CGFloat heightHeader;
 
 @end
 
@@ -57,7 +58,9 @@ typedef struct _ColumnWidth {
 
 - (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width,
+                                                                 CGSizeZero.height,
+                                                                 CGSizeZero.width);
     
     NSMutableArray *columnWidths = [NSMutableArray array];
     self.columnWidth = columnWidths;
@@ -79,8 +82,11 @@ typedef struct _ColumnWidth {
         }
         ColumnWidth columnWidth;
         columnWidth.originX = lastColumnWidth.originX + lastColumnWidth.width;
-        columnWidth.width = [self.delegate collectionView:self.collectionView layout:self widthRequiredColumn:(NSInteger)i];
-        NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];
+        columnWidth.width = [self.delegate collectionView: self.collectionView
+                                                   layout: self
+                                      widthRequiredColumn: (NSInteger)i];
+        NSValue *columnWidthEncoding = [[NSValue alloc] initWithBytes:&columnWidth
+                                                             objCType:@encode(ColumnWidth)];
         [columnWidths addObject:columnWidthEncoding];
     }
 
@@ -101,29 +107,34 @@ typedef struct _ColumnWidth {
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
                                                                      atIndexPath:(NSIndexPath *)indexPath {
 
-    UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" withIndexPath:indexPath];
+    
+    UICollectionViewLayoutAttributes *supplementalAttributes;
+    supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: MADTableCellHederKey
+                                                                                            withIndexPath: indexPath];
     NSUInteger column = (NSUInteger)indexPath.row;
     CGRect frame = [self locationOfHeaderAtColumn:column];
-    [supplementalAttributes setFrame:frame];
-    [supplementalAttributes setHidden:NO];
-    [supplementalAttributes setZIndex:999];
-    [supplementalAttributes setAlpha:0.9000f];
+    supplementalAttributes.frame = frame;
+    supplementalAttributes.hidden = NO;
+    supplementalAttributes.zIndex = 999;
+    supplementalAttributes.alpha = 0.9000f;
     return supplementalAttributes;
 }
 
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath {
-    return (NSUInteger)indexPath.row % [self columnCount];
+    return (NSUInteger)indexPath.row % self.columnCount;
 }
 - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath {
-    return (NSUInteger)indexPath.row / [self columnCount];
+    return (NSUInteger)indexPath.row / self.columnCount;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger column = [self columnForIndexPath:indexPath];
     NSUInteger row = [self rowForIndexPath:indexPath];
     CGRect elementFrame = [self locationOfObjectAtRow:row andColumn:column];
-    UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow:row andColumn:column withFrame:elementFrame];
-    return elementAttributes;
+    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtRow: row
+                                                                            andColumn: column
+                                                                            withFrame: elementFrame];
+    return attributes;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -184,9 +195,13 @@ typedef struct _ColumnWidth {
     
     NSUInteger lastColumn = columnsToDisplay + firstColumn;
     if (lastColumn > self.columnCount) lastColumn = self.columnCount;
+    
+    UICollectionViewLayoutAttributes *supplementalAttributes;
+    NSIndexPath *indexPath;
     for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)colCounter inSection:0];
-        UICollectionViewLayoutAttributes *supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" atIndexPath:indexPath];
+        indexPath = [NSIndexPath indexPathForItem:(NSInteger)colCounter inSection:0];
+        supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind: MADTableCellHederKey
+                                                                      atIndexPath: indexPath];
         [layoutAttributes addObject:supplementalAttributes];
     }
     
@@ -196,8 +211,11 @@ typedef struct _ColumnWidth {
         lastColumn = columnsToDisplay + firstColumn;
         if (lastColumn > self.columnCount) lastColumn = self.columnCount;
         for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
+        
             CGRect elementFrame = [self locationOfObjectAtRow:rowCounter andColumn:colCounter];
-            UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow:rowCounter andColumn:colCounter withFrame:elementFrame];
+            UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow: rowCounter
+                                                                                           andColumn: colCounter
+                                                                                           withFrame: elementFrame];
             [layoutAttributes addObject:elementAttributes];
         }
     }
@@ -256,16 +274,19 @@ typedef struct _ColumnWidth {
     return cw;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow: (NSUInteger)row
+                                                         andColumn: (NSUInteger)column {
     CGFloat x = [self originXColumn:column];
     CGFloat w = [self widthColumn:column];
     CGRect f = CGRectMake(x, self.heightRow * row, w, self.heightRow);
     return [self layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:f];
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:(CGRect)frame {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger) ((row*self.columnCount)+column)
-                                                 inSection:0];
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow: (NSUInteger)row
+                                                         andColumn: (NSUInteger)column
+                                                         withFrame: (CGRect)frame {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: (NSInteger) ((row*self.columnCount)+column)
+                                                 inSection: 0];
     UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     layoutAttributes.frame = frame;
     layoutAttributes.alpha = 1.0000f;
@@ -279,20 +300,19 @@ typedef struct _ColumnWidth {
 }
 
 - (CGRect)locationOfHeaderAtColumn:(NSUInteger)column {
-    CGFloat x = [self originXColumn:column];
-    CGFloat w = [self widthColumn:column];
-    return CGRectMake(x,
+    return CGRectMake([self originXColumn:column],
                       (self.collectionView.contentOffset.y < - self.collectionView.contentInset.top) ?
                             CGPointZero.y :
-                            CGPointZero.y + self.collectionView.contentOffset.y + self.collectionView.contentInset.top,
-                      w,
+                            CGPointZero.y + self.collectionView.contentOffset.y +
+                                            self.collectionView.contentInset.top,
+                      [self widthColumn:column],
                       self.heightHeader);
 }
 
 - (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
-    CGFloat x = [self originXColumn:column];
-    CGFloat w = [self widthColumn:column];
-    return CGRectMake(x, CGPointZero.y + self.heightHeader + (row * self.heightRow), w, self.heightRow);
+    return CGRectMake([self originXColumn:column],
+                      CGPointZero.y + self.heightHeader + (row * self.heightRow),
+                      [self widthColumn:column], self.heightRow);
 }
 
 + (CGFloat)sumArrayOfFloats:(NSArray *)array {

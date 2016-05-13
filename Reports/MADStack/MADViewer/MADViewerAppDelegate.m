@@ -98,8 +98,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return @"MAD";
 }
 
-- (NSString *)applicationNameSufixPart {
++ (NSString *)ApplicationNameSufixPart {
     return @"Designer";
+}
+
+- (NSString *)applicationNameSufixPart {
+    return [MADViewerAppDelegate ApplicationNameSufixPart];
 }
 
 - (NSString *)localizedApplicationNameSufixPart {

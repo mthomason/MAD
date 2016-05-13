@@ -270,13 +270,17 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
 
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
+    MADWatermarkView *watermarkView;
+    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
     self.tableView.backgroundView = watermarkView;
     
-    [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
+    NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory.copy;
+    [self updateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
+    SEL handleContentSizeCategoryDidChange =
+                                        @selector(handleContentSizeCategoryDidChangeNotification:);
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                             selector: handleContentSizeCategoryDidChange
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
     
@@ -288,9 +292,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     self.navigationItem.prompt = nil;
     
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                                   target: self
-                                                                                   action: @selector(edit:)];
+    UIBarButtonItem *barButtonItem;
+    barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                  target: self
+                                                                  action: @selector(edit:)];
     
     self.barButtonItemEdit = barButtonItem;
 }
@@ -309,8 +314,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                    object: document];
         [self observeManagedObjectContextChanges:document.managedObjectContext];
     }
-    [self.tabBarController enableTabBarItems];
-    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
+    
+    typeof(self.tabBarController) tabBarController = self.tabBarController;
+    if (tabBarController) {
+        [tabBarController enableTabBarItems];
+        [tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit
+                                                      animated:NO];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -319,27 +329,41 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
-    [self ingnoreManagedObjectContextChanges:self.document.managedObjectContext];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIDocumentStateChangedNotification
-                                                  object: self.document];
+    typeof(self.document) document = self.document;
+    if (document) {
+        [self ingnoreManagedObjectContextChanges:document.managedObjectContext];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                        name: UIDocumentStateChangedNotification
+                                                      object: document];
+    }
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.tabBarController.navigationItem setRightBarButtonItem:nil animated:animated];;
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
+              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                            CGSizeZero.width,
+                                                            self.bottomLayoutGuide.length,
+                                                            CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                                   self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.firstTimeViewWillLayoutSubviews) {
-        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.frame.size.width, 1.0000f);
+        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y,
+                              self.tableView.frame.size.width, 1.0000f);
         [self.tableView scrollRectToVisible: r animated: NO];
         
     }
@@ -374,7 +398,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name"
                                                                                      ascending: YES];
-                    request.sortDescriptors = @[sortDescriptor];
+                    request.sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 
                     MADocument *document = self.document;
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -805,7 +829,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
             result.textLabel.numberOfLines = 0;
-            [(MADTableViewCellQueryGroup *)result setTableID:group.objectID];
+            ((MADTableViewCellQueryGroup *)result).tableID = group.objectID.copy;
             break;
         }
         
@@ -846,7 +870,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                              range: rangeMiddle];
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
-            [(MADTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
+            ((MADTableViewCellQueryPredicate *)result).tableID = predicate.objectID.copy;
             
             break;
         }
@@ -964,24 +988,24 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     NSNumber *sectionNumber;
     if ([controller isEqual:self.queryTablesController]) {
         
-        sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:[self queryLinksController]]) {
 
-        sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:self.queryGroupsController]) {
 
-        NSInteger sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
-        sectionNumber = @(sectionGroup);
+        short sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
+        sectionNumber = [[NSNumber alloc] initWithShort: sectionGroup];
         [result addObject: sectionNumber];
     
     } else if ([controller isEqual:self.queryPredicatesController]) {
     
-        NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
-        sectionNumber = @(section);
+        short section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
+        sectionNumber = [[NSNumber alloc] initWithShort:section];
         [result addObject: sectionNumber];
     }
     
@@ -997,7 +1021,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     
     for (NSNumber *section in sections) {
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            MTQuerySections updateSection = section.unsignedIntegerValue;
+            MTQuerySections updateSection = section.shortValue;
             switch(type) {
                 case NSFetchedResultsChangeInsert: {
                     NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
@@ -1210,9 +1234,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
             request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias"
-                                                                             ascending: YES];
-            [request setSortDescriptors: @[sortDescriptor]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"alias"
+                                                                           ascending: YES];
+
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            request.sortDescriptors = sortDescriptors;
+
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
@@ -1226,8 +1253,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         {
             NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-            [request setSortDescriptors: @[sortDescriptor]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"tableleft"
+                                                                           ascending: YES];
+
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            request.sortDescriptors = sortDescriptors;
+
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
@@ -1241,8 +1272,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         {
             NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-            [request setSortDescriptors: @[sortDescriptor]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
+                                                                           ascending: YES];
+
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            request.sortDescriptors = sortDescriptors;
+
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
@@ -1257,9 +1292,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         {
             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fieldleftpred" ascending:YES];
-            NSArray *sortDescriptors = @[sortDescriptor];
-            [request setSortDescriptors: sortDescriptors];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"fieldleftpred"
+                                                                           ascending: YES];
+
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            request.sortDescriptors = sortDescriptors;
+
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
@@ -1298,97 +1336,120 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
     NSString *h7 = NSLocalizedString(@"Reporting Mode", @"Reporting Mode");
 
-    NSNumber *one = @(1);
-    NSNumber *unknown = @(-1);
-    NSNumber *datasource = @(MTQuerySectionsDatasource);
-    NSNumber *tables = @(MTQuerySectionsTables);
-    NSNumber *resultCount = @(MTQuerySectionsNumberOfQueryResults);
+    NSNumber *one = [[NSNumber alloc] initWithInteger:1];
+    NSNumber *unknown = [[NSNumber alloc] initWithInteger:-1];
+    NSNumber *datasource = [[NSNumber alloc] initWithShort: MTQuerySectionsDatasource];
+    NSNumber *tables = [[NSNumber alloc] initWithShort: MTQuerySectionsTables];
+    NSNumber *resultCount = [[NSNumber alloc] initWithShort: MTQuerySectionsNumberOfQueryResults];
 
     bool reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
     switch (numberOfTables) {
-        case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
+        case 0: { //There are three configurations for the table.  These configurations depend
+                    //on the number of schemas in the query: zero, one, or more than one.
             
-            NSArray *sections = reportingEnabled ? @[datasource, tables, resultCount] :
-                                                   @[datasource, tables];
-            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, one] : @[one, unknown];
-            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects: countRowsForSection
-                                                                                       forKeys: sections];
+            NSArray *sections = reportingEnabled ? [[NSArray alloc] initWithObjects: datasource, tables, resultCount, nil] :
+                                                   [[NSArray alloc] initWithObjects: datasource, tables, nil];
+            NSArray *countRowsForSection = reportingEnabled ? [[NSArray alloc] initWithObjects: one, unknown, one, nil] :
+                                                              [[NSArray alloc] initWithObjects: one, unknown, nil];
+            NSDictionary *countRowsForSectionD;
+            countRowsForSectionD =  [[NSDictionary alloc] initWithObjects: countRowsForSection
+                                                                  forKeys: sections];
             
-            NSArray *headersSection = reportingEnabled ? @[h2, h3, h7] : @[h2, h3];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
-            NSNumber *height1 = @(50.0000f);
-            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
-            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1] : @[height1, height2]; 
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection forKeys: sections];
-            result = @{MTTableSectionSectionsKey : sections,
-                       MTTableHeaderSectionKey : headersSectionDictionary,
-                       MTTableSectionRowKey : countRowsForSectionDictionary,
-                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-            
+            NSArray *headersSection = reportingEnabled ? [[NSArray alloc] initWithObjects: h2, h3, h7, nil] :
+                                                         [[NSArray alloc] initWithObjects: h2, h3, nil];
+            NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
+                                                                                   forKeys: sections];
+            NSNumber *height1 = [[NSNumber alloc] initWithDouble: 50.0000f];
+            NSNumber *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]];
+            NSArray *heightRowsForSectionA = reportingEnabled ? [[NSArray alloc] initWithObjects: height1, height2, height1, nil] :
+                                                                [[NSArray alloc] initWithObjects: height1, height2, nil];
+            NSDictionary *heightRowsForSectionD;
+            heightRowsForSectionD = [[NSDictionary alloc] initWithObjects: heightRowsForSectionA
+                                                                  forKeys: sections];
+            result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                        sections, MTTableSectionSectionsKey,
+                                                        headersSectionDictionary, MTTableHeaderSectionKey,
+                                                        countRowsForSectionD, MTTableSectionRowKey,
+                                                        heightRowsForSectionD, MTTableSectionRowHeightKey, nil];
             
             break;
         }
         case 1: {   //Only one table in query.  No ability to add links.
             
-            NSNumber *groups = @(MTQuerySectionsGroups);
-            NSNumber *predicate = @(MTQuerySectionsPredicate);
+            NSNumber *groups = [[NSNumber alloc] initWithShort: MTQuerySectionsGroups];
+            NSNumber *predicate = [[NSNumber alloc] initWithShort: MTQuerySectionsPredicate];
 
-            NSArray *sections = reportingEnabled ? @[datasource, tables, groups, predicate, resultCount] :
-                                                   @[datasource, tables, groups, predicate];
+            NSArray *sections = reportingEnabled ? [[NSArray alloc] initWithObjects: datasource, tables, groups, predicate, resultCount, nil] :
+                                                   [[NSArray alloc] initWithObjects: datasource, tables, groups, predicate, nil];
             
-            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, unknown, unknown, one] :
-                                                              @[one, unknown, unknown, unknown];
+            NSArray *countRowsForSection = reportingEnabled ? [[NSArray alloc] initWithObjects: one, unknown, unknown, unknown, one, nil] :
+                                                              [[NSArray alloc] initWithObjects: one, unknown, unknown, unknown, nil];
             NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
                                                                                       forKeys: sections];
             
-            NSArray *headersSection = reportingEnabled ? @[h2, h3, h5, h6, h7] : @[h2, h3, h5, h6];
+            NSArray *headersSection = reportingEnabled ? [[NSArray alloc] initWithObjects: h2, h3, h5, h6, h7, nil] :
+                                                         [[NSArray alloc] initWithObjects: h2, h3, h5, h6, nil];
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             
-            NSNumber *height1 = @(44.0000f);
-            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
-            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1, height1, height1] :
-                                                               @[height1, height2, height1, height1];
+            NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0000f];
+            NSNumber *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]];
+            NSArray *heightRowsForSection = reportingEnabled ? [[NSArray alloc] initWithObjects: height1, height2, height1, height1, height1, nil] :
+                                                               [[NSArray alloc] initWithObjects: height1, height2, height1, height1, nil];
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
                                                                                                  forKeys: sections];
             
-            result = @{MTTableSectionSectionsKey : sections,
-                       MTTableHeaderSectionKey : headersSectionDictionary,
-                       MTTableSectionRowKey : countRowsForSectionDictionary,
-                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            sections, MTTableSectionSectionsKey,
+                                            headersSectionDictionary, MTTableHeaderSectionKey,
+                                            countRowsForSectionDictionary, MTTableSectionRowKey,
+                                            heightRowsForSectionDictionaryDictionary, MTTableSectionRowHeightKey, nil];
             
             break;
         }
         default: {   //Two more more tables in query.  All features available.
             
-            NSNumber *links = @(MTQuerySectionsLinks);
-            NSNumber *groups = @(MTQuerySectionsGroups);
-            NSNumber *predicate = @(MTQuerySectionsPredicate);
+            NSNumber *links = [[NSNumber alloc] initWithShort: MTQuerySectionsLinks];
+            NSNumber *groups = [[NSNumber alloc] initWithShort: MTQuerySectionsGroups];
+            NSNumber *predicate = [[NSNumber alloc] initWithShort: MTQuerySectionsPredicate];
 
-            NSArray *sections = reportingEnabled ? @[datasource, tables, links, groups, predicate, resultCount] :
-                                                   @[datasource, tables, links, groups, predicate];
+            NSArray *sections;
+            if (reportingEnabled) {
+                sections = [[NSArray alloc] initWithObjects: datasource, tables, links, groups, predicate, resultCount, nil];
+            } else {
+                sections = [[NSArray alloc] initWithObjects: datasource, tables, links, groups, predicate, nil];
+            }
             
-            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, unknown, unknown, unknown, one] :
-                                                              @[one, unknown, unknown, unknown, unknown];
-            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
-                                                                                      forKeys: sections];
+            NSArray *countRowsForSection = reportingEnabled ? [[NSArray alloc] initWithObjects: one, unknown, unknown, unknown, unknown, one, nil] :
+                                                              [[NSArray alloc] initWithObjects: one, unknown, unknown, unknown, unknown, nil];
+            NSDictionary *countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
+                                                                                        forKeys: sections];
             
-            NSArray *headersSection = reportingEnabled ? @[h2, h3, h4, h5, h6, h7] :
-                                                         @[h2, h3, h4, h5, h6];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
-                                                                                 forKeys: sections];
-            NSNumber *height1 = @(44.0000f);
-            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
-            NSNumber *height3 = @([MADTableViewCellQueryLink defaultHeight]);    //50.0000f
-            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height3, height1, height1, height1] :
-                                                               @[height1, height2, height3, height1, height1];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection
-                                                                                                 forKeys:sections];
+            NSArray *headersSection = reportingEnabled ? [[NSArray alloc] initWithObjects: h2, h3, h4, h5, h6, h7, nil] :
+                                                         [[NSArray alloc] initWithObjects: h2, h3, h4, h5, h6, nil];
+            NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
+                                                                                   forKeys: sections];
+            NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0000f];
+            NSNumber *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]];
+            NSNumber *height3 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryLink defaultHeight]];    //50.0000f
+            NSArray *heightRowsForSection;
+            if (reportingEnabled) {
+                heightRowsForSection = [[NSArray alloc] initWithObjects: height1, height2, height3,
+                                                                            height1, height1,
+                                                                            height1, nil];
+            } else {
+                heightRowsForSection = [[NSArray alloc] initWithObjects: height1, height2, height3,
+                                                                            height1, height1, nil];
+            }
+            NSDictionary *rowHeightsBySection;
+            rowHeightsBySection = [[NSDictionary alloc] initWithObjects:heightRowsForSection
+                                                                forKeys:sections];
             
-            result = @{MTTableSectionSectionsKey : sections,
-                       MTTableHeaderSectionKey : headersSectionDictionary,
-                       MTTableSectionRowKey : countRowsForSectionDictionary,
-                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            result = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                sections, MTTableSectionSectionsKey,
+                                                headersSectionDictionary, MTTableHeaderSectionKey,
+                                                countRowsForSectionDictionary, MTTableSectionRowKey,
+                                                rowHeightsBySection, MTTableSectionRowHeightKey, nil];
             
             break;
         }
@@ -1424,8 +1485,9 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     UIFont *fonti = [UIFont fontWithName: @"HelveticaNeue-LightItalic" size: 18.0000f];
     
     UIColor *foregroundColor = [UIColor whiteColor];
-    NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,
-                                 NSForegroundColorAttributeName: foregroundColor};
+    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                paragraphStyle, NSParagraphStyleAttributeName,
+                                                foregroundColor, NSForegroundColorAttributeName, nil];
     NSMutableAttributedString *titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
                                                                                       attributes:attributes];
     
@@ -1494,7 +1556,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         NSIndexPath *groupIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
 
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.queryGroupsController sections] objectAtIndex:0];
+        id <NSFetchedResultsSectionInfo> sectionInfo = [self.queryGroupsController.sections objectAtIndex:0];
         if (row < (NSInteger)sectionInfo.numberOfObjects) {
             NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
             NSManagedObject *object = [self.queryGroupsController objectAtIndexPath:testGroupIndexPath];

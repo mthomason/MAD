@@ -143,8 +143,7 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-    const char *queryStartChar = [queryStart UTF8String];
-	char *sql = sqlite3_mprintf((char *) queryStartChar);
+	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
 
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -544,7 +543,8 @@ void sqliteLog(void *foo, const char* statement) {
                 for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
                     
                     NSString *fieldName = fieldKeys[(NSUInteger)colCtr];
-                    id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
+                    id value = [MTDatabaseSqlite3 newValueForStatement:statement
+                                                          columnNumber:colCtr];
                     resultsForRow[fieldName] = value;
                     
                 }
@@ -615,26 +615,22 @@ void sqliteLog(void *foo, const char* statement) {
             returnsResults: query.returnsResults binaryBindings: query.binaryBindings withError: resultError];
 }
 
-+ (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
++ (id)newValueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
     id value = nil;
     int affentyType = sqlite3_column_type(statement, columnNumber);   //http://www.sqlite.org/c3ref/c_blob.html
     switch (affentyType) {
         case SQLITE_INTEGER: {
-            sqlite3_int64 rint = sqlite3_column_int64(statement, columnNumber);
-            value = @(rint);
+            value = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnNumber)];
             break;
         }
         case SQLITE_FLOAT: {
-            double rint = sqlite3_column_double(statement, columnNumber);
-            value = @(rint);
+            value = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnNumber)];
             break;
         }
         case SQLITE_BLOB: {
             const void *blob = sqlite3_column_blob(statement, columnNumber);
-            if (blob != NULL) {
-                int numBytes = sqlite3_column_bytes16(statement, columnNumber);
-                value = [NSData dataWithBytes:blob length:numBytes];
-            }
+            value = [[NSData alloc] initWithBytes: blob
+                                           length: (NSUInteger)sqlite3_column_bytes16(statement, columnNumber)];
             break;
         }
         case SQLITE_NULL: {
@@ -642,11 +638,9 @@ void sqliteLog(void *foo, const char* statement) {
             break;
         }
         case SQLITE3_TEXT: {
-            
-            const unsigned char *resultString = sqlite3_column_text(statement, columnNumber);
-            if (resultString != NULL) {
-                value = @((char *) resultString);
-            }
+            const char *resultString = (char *)sqlite3_column_text(statement, columnNumber);
+            value = [[NSString alloc] initWithCString: resultString
+                                             encoding: NSUTF8StringEncoding];
             break;
         }
         default:
@@ -660,34 +654,37 @@ void sqliteLog(void *foo, const char* statement) {
     return value;
 }
 
-+ (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
++ (id)newObject:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter
+    withType:(MTDataType)type {
     id columnValue;
     switch (type) {
         case MTDataTypeLong:
-            columnValue = @(sqlite3_column_int64(statement, columnCounter));
+            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
             break;
         case MTDataTypeLongLong:
-            columnValue = @(sqlite3_column_int64(statement, columnCounter));
+            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
             break;
         case MTDataTypeInt24:
         case MTDataTypeInteger:
-            columnValue = @(sqlite3_column_int64(statement, columnCounter));
+            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
             break;
         case MTDataTypeShort:
-            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
+            columnValue = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, columnCounter)];
             break;
         case MTDataTypeImage:
-        case MTDataTypeBlob:
-            columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
-                                         length: sqlite3_column_bytes(statement, columnCounter)];
+        case MTDataTypeBlob: {
+            const void *blob = sqlite3_column_blob(statement, columnCounter);
+            columnValue = [[NSData alloc] initWithBytes: blob
+                                                 length: (NSUInteger)sqlite3_column_bytes(statement, columnCounter)];
             break;
+        }
         case MTDataTypeFloat:
-            columnValue = @(sqlite3_column_double(statement, columnCounter));
+            columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
         case MTDataTypeNumber:
         case MTDataTypeDouble:
         case MTDataTypeDecimal:
-            columnValue = @(sqlite3_column_double(statement, columnCounter));
+            columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
         case MTDataTypeBit:
         case MTDataTypeVarChar:
@@ -699,7 +696,8 @@ void sqliteLog(void *foo, const char* statement) {
             if (text == NULL) {
                 columnValue = [NSNull null];
             } else {
-                columnValue = @((const char *) text);
+                columnValue = [[NSString alloc] initWithCString: (const char *) text
+                                                       encoding: NSUTF8StringEncoding];
             }
             break;
         }
@@ -720,7 +718,8 @@ void sqliteLog(void *foo, const char* statement) {
                 if (text == NULL) {
                     columnValue = [NSNull null];
                 } else {
-                    columnValue = @((const char *) text);
+                    columnValue = [[NSString alloc] initWithCString: (const char *) text
+                                                           encoding: NSUTF8StringEncoding];
                 }
             }
             break;
@@ -836,10 +835,12 @@ void sqliteLog(void *foo, const char* statement) {
         NSUInteger counter = 0;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             
-            const unsigned char *resultString = sqlite3_column_text(statement, 0);
-            NSString *tableName = @((char *)resultString);
+            const char *resultString = (char *)sqlite3_column_text(statement, 0);
+            NSString *readName = [[NSString alloc] initWithCString: resultString
+                                                          encoding: NSUTF8StringEncoding];
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            
+            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
             block(databaseTable, counter, &stop);
             if (stop) break;
@@ -863,17 +864,17 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-    const char *queryStartChar = [queryStart UTF8String];
-    char *sql = sqlite3_mprintf((char *) queryStartChar);
+    char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
     
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             
-            const unsigned char *resultString = sqlite3_column_text(statement, 0);
-            NSString *tableName = @((char *)resultString);
+            const char *resultString = (const char *)sqlite3_column_text(statement, 0);
+            NSString *readName = [[NSString alloc] initWithCString: resultString
+                                                          encoding: NSUTF8StringEncoding];
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
     }
@@ -889,17 +890,17 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-    const char *queryStartChar = [queryStart UTF8String];
-    char *sql = sqlite3_mprintf((char *) queryStartChar);
+    char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
     
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             
-            const unsigned char *resultString = sqlite3_column_text(statement, 0);
-            NSString *tableName = @((char *)resultString);
+            const char *resultString = (const char *)sqlite3_column_text(statement, 0);
+            NSString *readName = [[NSString alloc] initWithCString: resultString
+                                                           encoding: NSUTF8StringEncoding];
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
     }

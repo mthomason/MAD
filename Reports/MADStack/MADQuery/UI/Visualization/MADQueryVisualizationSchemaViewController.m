@@ -126,7 +126,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     
     NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
     NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
-    NSArray *constraints = @[width, height];
+    NSArray *constraints = [[NSArray alloc] initWithObjects: width, height, nil];
     [self.view addConstraints:constraints];
 }
 
@@ -145,10 +145,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    NSManagedObjectID *tableID = tableObjectId.copy;
-    self.view.objectIdTag = tableID;
-    self.cachedTableObjectId = tableID;
-    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableID];
+
+    self.view.objectIdTag = tableObjectId.copy;
+    self.cachedTableObjectId = tableObjectId.copy;
+
+    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableObjectId];
    
     NSString *tableAlias = table.alias.copy;
     self.titleView.label.text = tableAlias;

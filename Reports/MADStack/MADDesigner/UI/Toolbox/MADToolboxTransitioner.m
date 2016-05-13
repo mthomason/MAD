@@ -194,23 +194,24 @@
     //UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
     UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
+    
+    typeof(toolboxNavigationController) __weak weakNavController = toolboxNavigationController;
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
                           delay: 0.0000f
          usingSpringWithDamping: 300.0000f
           initialSpringVelocity: 5.0000f
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
-                         
-                         [tabBarController setNeedsStatusBarAppearanceUpdate];
-                         toolboxNavigationController.view.frame = finalFrame;
 
-                     }
-                     completion: ^(BOOL finished) {
+                         [tabBarController setNeedsStatusBarAppearanceUpdate];
+                         weakNavController.view.frame = finalFrame;
+
+                     } completion: ^(BOOL finished) {
                          
                          [designer.view setNeedsLayout];    // Give designer scroll view a chance to update insets
                          
                          if (isToolboxVisible == NO) {
-                             [toolboxNavigationController.view removeFromSuperview];
+                             [weakNavController.view removeFromSuperview];
                          }
 
                          [transitionContext completeTransition:YES];

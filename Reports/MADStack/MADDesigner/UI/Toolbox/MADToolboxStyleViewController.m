@@ -19,16 +19,10 @@
 #import <MAD/RptqDocumentObject+Extras.h>
 #import <MAD/NSManagedObject+Extras.h>
 
+static const CGFloat CornerRadius = 6.6666f;
+static const CGFloat BorderWidth = 1.0000f;
+
 static NSString * const MADIdentifierStoryboardSeguePushFontPicker = @"MADIdentifierStoryboardSeguePushFontPicker";
-
-@interface MADToolboxStrings : NSAttributedString
-
-    + (instancetype)newSystemString:(NSString *)string;
-    + (instancetype)newBoldSystemString:(NSString *)string;
-
-@end
-
-@implementation MADToolboxStrings
 
 static NSString * const FormatPoints = @"%#.1f pt";
 static NSString * const CommentPoints = @"Like '5.2 points.'";
@@ -40,19 +34,38 @@ static NSString * const DialogLeft = @"Left";
 static NSString * const DialogRight = @"Right";
 static NSString * const DialogSpace = @"--";
 
+static inline BOOL ControlStateIsOn(MTControlState controlState);
+static inline BOOL ControlStateIsOn(MTControlState controlState) {
+    return controlState == MTControlStateOn ? YES : NO;
+}
+
+@interface MADToolboxStrings : NSAttributedString
+
+    + (instancetype)newSystemString:(NSString *)string;
+    + (instancetype)newBoldSystemString:(NSString *)string;
+
+@end
+
+@implementation MADToolboxStrings
+
 + (instancetype)newSystemString:(NSString *)string {
+
     UIFont *font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
-    NSDictionary *boldAttributes = @{NSFontAttributeName : font};
+    NSDictionary *boldAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                                font, NSFontAttributeName, nil];
     if (string == nil) { string = @""; }
-    id localizedAttributedMessage = [[NSAttributedString alloc] initWithString: string attributes: boldAttributes];
+    id localizedAttributedMessage = [[NSAttributedString alloc] initWithString: string
+                                                                    attributes: boldAttributes];
     return localizedAttributedMessage;
 }
 
 + (instancetype)newBoldSystemString:(NSString *)string {
     UIFont *boldFont = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-    NSDictionary *boldAttributes = @{ NSFontAttributeName : boldFont };
+    NSDictionary *boldAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                            boldFont, NSFontAttributeName, nil];
     if (string == nil) { string = @""; }
-    id localizedAttributedMessage = [[NSAttributedString alloc] initWithString: string attributes: boldAttributes];
+    id localizedAttributedMessage = [[NSAttributedString alloc] initWithString: string
+                                                                    attributes: boldAttributes];
     return localizedAttributedMessage;
 }
 
@@ -72,9 +85,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:width value:stringValue];
+    id newSize = [MADToolboxStrings newStringForSubject:width value:stringValue];
+    return newSize;
 }
 
 + (instancetype)newSizeHeightForValue:(NSNumber *)value {
@@ -84,9 +98,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:height value:stringValue];
+    id newSize = [MADToolboxStrings newStringForSubject:height value:stringValue];
+    return newSize;
 }
 
 + (instancetype)newMarginTopForValue:(NSNumber *)value {
@@ -96,9 +111,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:top value:stringValue];
+    id newMargin = [MADToolboxStrings newStringForSubject:top value:stringValue];
+    return newMargin;
 }
 
 + (instancetype)newMarginBottomForValue:(NSNumber *)value {
@@ -108,9 +124,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:bottom value:stringValue];
+    id newMargin = [MADToolboxStrings newStringForSubject:bottom value:stringValue];
+    return newMargin;
 }
 
 + (instancetype)newMarginLeftForValue:(NSNumber *)value {
@@ -120,9 +137,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:left value:stringValue];
+    id newMargin = [MADToolboxStrings newStringForSubject:left value:stringValue];
+    return newMargin;
 }
 
 + (instancetype)newMarginRightForValue:(NSNumber *)value {
@@ -132,9 +150,10 @@ static NSString * const DialogSpace = @"--";
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [NSString stringWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
     }
-    return [MADToolboxStrings newStringForSubject:right value:stringValue];
+    id newMargin = [MADToolboxStrings newStringForSubject:right value:stringValue];
+    return newMargin;
 }
 
 @end
@@ -161,71 +180,63 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 @interface MADToolboxStyleViewController()
     <UITableViewDelegate>
 
-@property (assign) MTControlState controlStateBold;
-@property (assign) MTControlState controlStateItalic;
-@property (assign) MTControlState controlStateStrike;
-@property (assign) MTControlState controlStateUnderline;
+    @property (assign) MTControlState controlStateBold;
+    @property (assign) MTControlState controlStateItalic;
+    @property (assign) MTControlState controlStateStrike;
+    @property (assign) MTControlState controlStateUnderline;
 
-@property (nonatomic, strong) NSSet *userSelectedObjectIds;
+    @property (nonatomic, strong) NSSet *userSelectedObjectIds;
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
-@property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperFontSize;
-@property (nonatomic, weak) IBOutlet UIButton *buttonBold;
-@property (nonatomic, weak) IBOutlet UIButton *buttonItalic;
-@property (nonatomic, weak) IBOutlet UIButton *buttonStrike;
-@property (nonatomic, weak) IBOutlet UIButton *buttonUnderline;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
+    @property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperFontSize;
+    @property (nonatomic, weak) IBOutlet UIButton *buttonBold;
+    @property (nonatomic, weak) IBOutlet UIButton *buttonItalic;
+    @property (nonatomic, weak) IBOutlet UIButton *buttonStrike;
+    @property (nonatomic, weak) IBOutlet UIButton *buttonUnderline;
 
-@property (nonatomic, weak) IBOutlet UILabel *labelPaddingTop;
-@property (nonatomic, weak) IBOutlet UILabel *labelPaddingBottom;
-@property (nonatomic, weak) IBOutlet UILabel *labelPaddingLeft;
-@property (nonatomic, weak) IBOutlet UILabel *labelPaddingRight;
+    @property (nonatomic, weak) IBOutlet UILabel *labelPaddingTop;
+    @property (nonatomic, weak) IBOutlet UILabel *labelPaddingBottom;
+    @property (nonatomic, weak) IBOutlet UILabel *labelPaddingLeft;
+    @property (nonatomic, weak) IBOutlet UILabel *labelPaddingRight;
 
-@property (nonatomic, weak) IBOutlet UILabel *labelMarginTop;
-@property (nonatomic, weak) IBOutlet UILabel *labelMarginBottom;
-@property (nonatomic, weak) IBOutlet UILabel *labelMarginLeft;
-@property (nonatomic, weak) IBOutlet UILabel *labelMarginRight;
-@property (nonatomic, weak) IBOutlet UILabel *labelSizeWidth;
-@property (nonatomic, weak) IBOutlet UILabel *labelSizeHeight;
+    @property (nonatomic, weak) IBOutlet UILabel *labelMarginTop;
+    @property (nonatomic, weak) IBOutlet UILabel *labelMarginBottom;
+    @property (nonatomic, weak) IBOutlet UILabel *labelMarginLeft;
+    @property (nonatomic, weak) IBOutlet UILabel *labelMarginRight;
+    @property (nonatomic, weak) IBOutlet UILabel *labelSizeWidth;
+    @property (nonatomic, weak) IBOutlet UILabel *labelSizeHeight;
 
-@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingTop;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingBottom;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingLeft;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingRight;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingTop;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingBottom;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingLeft;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingRight;
 
-@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginTop;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginBottom;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginLeft;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginRight;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperMarginTop;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperMarginBottom;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperMarginLeft;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperMarginRight;
 
-@property (nonatomic, weak) IBOutlet UIStepper *stepperSizeWidth;
-@property (nonatomic, weak) IBOutlet UIStepper *stepperSizeHeight;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperSizeWidth;
+    @property (nonatomic, weak) IBOutlet UIStepper *stepperSizeHeight;
 
-@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
-@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
+    @property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
+    @property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
 
-@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
-@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
 
-@property (nonatomic, weak) IBOutletCollection(UIStepper) NSArray *steppers;
+    @property (nonatomic, weak) IBOutletCollection(UIStepper) NSArray *steppers;
 
-@property (nonatomic, assign) BOOL completedInitalLayout;
+    @property (nonatomic, assign) BOOL completedInitalLayout;
 
-- (IBAction)controlValueChanged:(id)sender;
+    - (IBAction)controlValueChanged:(id)sender;
 
 @end
 
 @implementation MADToolboxStyleViewController
 
-static inline BOOL ControlStateIsOn(MTControlState controlState);
-static inline BOOL ControlStateIsOn(MTControlState controlState) {
-    return controlState == MTControlStateOn ? YES : NO;
-}
-
 #pragma mark - View lifecycle
-
-static const CGFloat CornerRadius = 6.6666f;
-static const CGFloat BorderWidth = 1.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -357,20 +368,24 @@ static const CGFloat BorderWidth = 1.0000f;
 
     UIControl * __weak weakControl = control;
     dispatch_async(queuePriorityBackground, ^{
-        UIControl *strongControl = weakControl;
+        
+        UIControl * strongControl = weakControl;
         UIControl * __weak weakControl2 = strongControl;
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
             UIControl *strongControl2 = weakControl2;
-            
-            strongControl2.selected = select;
-            strongControl2.highlighted = highlight;
-            
-            if ([strongControl2 isKindOfClass:[UIButton class]]) {
-                strongControl2.backgroundColor = backgroundColor;
+            if (strongControl2) {
+                strongControl2.selected = select;
+                strongControl2.highlighted = highlight;
                 
-                strongControl2.tintColor = titleColor;
-                
-                [[(UIButton *)weakControl titleLabel] setTextColor:titleColor];
+                if ([strongControl2 isKindOfClass:[UIButton class]]) {
+                    strongControl2.backgroundColor = backgroundColor;
+                    
+                    strongControl2.tintColor = titleColor;
+                    
+                    [[(UIButton *)strongControl2 titleLabel] setTextColor:titleColor];
+                }
             }
             
         }];
@@ -643,9 +658,7 @@ static const CGFloat BorderWidth = 1.0000f;
                 case 0: {
                     fontDisplayName = NSLocalizedString(@"Undefined", @"Undefined");
                     NSAttributedString *attributedText = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                    NSAttributedString *attributedTextDetail = [MADToolboxStrings newBoldSystemString:fontDisplayName];
                     self.labelFontName.attributedText = attributedText;
-                    self.labelFontName.attributedText = attributedTextDetail;
                     break;
                 }
                 case 1: {
@@ -862,7 +875,7 @@ static const CGFloat BorderWidth = 1.0000f;
 - (void)updateLabelFontSize:(double)pointSize {
     NSAttributedString *attributedString = [self fontSizeStringForSizeInPoints:pointSize];
     self.labelFontSize.attributedText = attributedString;
-    NSNumber *value = @(pointSize);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: pointSize];
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.fontsize = value.copy;
@@ -871,7 +884,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updateLabelSizeHeight:(double)height {
-    NSNumber *value = @(height);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: height];
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:value];
     self.labelSizeHeight.attributedText = displayHeight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -882,7 +895,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updateLabelSizeWidth:(double)width {
-    NSNumber *value = @(width);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: width];
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:value];
     self.labelSizeWidth.attributedText = displayWidth;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -893,7 +906,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
-    NSNumber *value = @(index);
+    NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
@@ -903,7 +916,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
-    NSNumber *value = @(index);
+    NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
@@ -913,7 +926,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updatePaddingTop:(double)padding {
-    NSNumber *value = @(padding);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:value];
     self.labelPaddingTop.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -924,7 +937,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updatePaddingBottom:(double)padding {
-    NSNumber *value = @(padding);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -934,7 +947,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 - (void)updatePaddingLeft:(double)padding {
-    NSNumber *value = @(padding);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue:value];
     self.labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -944,7 +957,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 - (void)updatePaddingRight:(double)padding {
-    NSNumber *value = @(padding);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingRight = [MADToolboxStrings newMarginRightForValue:value];
     self.labelPaddingRight.attributedText = labelPaddingRight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -955,7 +968,7 @@ static const CGFloat BorderWidth = 1.0000f;
 }
 
 - (void)updateMarginTop:(double)margin {
-    NSNumber *value = @(margin);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: value];
     self.labelMarginTop.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -965,7 +978,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 - (void)updateMarginBottom:(double)margin {
-    NSNumber *value = @(margin);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelMarginBottom.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -975,7 +988,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 - (void)updateMarginLeft:(double)margin {
-    NSNumber *value = @(margin);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: value];
     self.labelMarginLeft.attributedText = labelMarginLeftAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -985,7 +998,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 - (void)updateMarginRight:(double)margin {
-    NSNumber *value = @(margin);
+    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *labelMarginRight = [MADToolboxStrings newMarginRightForValue: value];
     self.labelMarginRight.attributedText = labelMarginRight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {

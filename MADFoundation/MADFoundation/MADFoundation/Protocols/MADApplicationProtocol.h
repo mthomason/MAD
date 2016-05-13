@@ -15,6 +15,8 @@
 
 @protocol MADApplicationProtocol <NSObject>
 
++ (NSString *)ApplicationNameSufixPart;
++ (NSString *)Trademark;
 - (NSString *)applicationIdentifier;
 - (NSString *)applicationBundleIdentifier;
 - (NSString *)ubiquityIdentifier;

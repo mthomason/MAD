@@ -150,7 +150,7 @@
                     [NSError presentError: serror
                          onViewController: strongself3
                                completion:^(BOOL displayErrorSuccess) {
-                                   NSString *key = [NSString stringWithString:weakself5.query.database.databaseConnection.connectionString];
+                                   NSString *key = [[NSString alloc] initWithString:weakself5.query.database.databaseConnection.connectionString];
                                    [[MTKeyChain sharedObject] deleteKey:key];
                                }];
                     
@@ -159,7 +159,8 @@
             }
             
         }
-        [strongself2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:strongself2 waitUntilDone:NO];
+        [strongself2 performSelectorOnMainThread: @selector(invalidateLayout)
+                                      withObject: strongself2 waitUntilDone: NO];
         
         
     });
@@ -170,7 +171,9 @@
     [self.collectionView flashScrollIndicators];
     if (_firstTimeViewDidAppear) {
         _firstTimeViewDidAppear = false;
-        [self.collectionView scrollRectToVisible: CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f)
+        [self.collectionView scrollRectToVisible: CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                             self.collectionView.frame.size.width,
+                                                             1.0000f)
                                         animated: NO];
     }
 }
@@ -216,19 +219,19 @@
 - (void)invalidateLayout {
     UICollectionView *collectionView = self.collectionView;
     [collectionView reloadData];
-    [(MADTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
-                                                     andRowCount:self.rowCount];
+    [(MADTableLayout *)self.collectionViewLayout setColumnCount:self.columnCount
+                                                      andRowCount:self.rowCount];
     
     for (NSUInteger i=0; i<self.columnCount; i++) {
 
-        __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
         NSString *reuseId = [self reuseIdForColumn:(NSInteger)i];
-        [self.collectionView registerClass: classCollectionViewCell
+        [self.collectionView registerClass: [MTTableCell class]
                 forCellWithReuseIdentifier: reuseId];
         
-        __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
-        NSString *reuseIdHeader = [self reuseIdSupplementForColumn:(NSInteger)i];
-        [self.collectionView registerClass: classCollectionViewCellHeader forSupplementaryViewOfKind: @"MTTableCellHeader" withReuseIdentifier: reuseIdHeader];
+        NSString *reuseIdHeader = [self newReuseIdSupplementForColumn:(NSInteger)i];
+        [self.collectionView registerClass: [MTTableCellHeader class]
+                forSupplementaryViewOfKind: @"MTTableCellHeader"
+                       withReuseIdentifier: reuseIdHeader];
 
     }
 
@@ -241,24 +244,25 @@
 
 #pragma mark - Methods
 
-- (NSString *)reuseId {
++ (NSString *)reuseId {
     static NSString * reuseId;
     if (reuseId == nil) {
-        __unsafe_unretained Class class = [self class];
-        reuseId = NSStringFromClass(class);
+        reuseId = NSStringFromClass([self class]);
     }
     return reuseId;
 }
 
 - (NSString *)reuseIdForColumn:(NSInteger)column {
-    return [NSString stringWithFormat:@"%@%ld", [self reuseId], (long)column];
+    id result = [[NSString alloc] initWithFormat:@"%@%ld", [MADTableController reuseId], (long)column];
+    return result;
 }
 
-- (NSString *)reuseIdSupplementForColumn:(NSInteger)column {
-    return [NSString stringWithFormat:@"%@%ld", [self reuseIdSupplement], (long)column];
+- (NSString *)newReuseIdSupplementForColumn:(NSInteger)column {
+    id reuseId = [[NSString alloc] initWithFormat:@"%@%ld", [MADTableController reuseIdSupplement], (long)column];
+    return reuseId;
 }
 
-- (NSString *)reuseIdSupplement {
++ (NSString *)reuseIdSupplement {
     static NSString * reuseIdSupplement;
     if (reuseIdSupplement == nil) {
         __unsafe_unretained Class class = [self class];
@@ -289,8 +293,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger column =[(MADTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
-    NSUInteger row = [(MADTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
+    NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
+    NSUInteger row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
@@ -308,7 +312,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
     NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
-    NSString *reuseId = [self reuseIdSupplementForColumn:(NSInteger)column];
+    NSString *reuseId = [self newReuseIdSupplementForColumn:(NSInteger)column];
     NSString *fieldKey = [self.query fieldKeyForIndex:(NSUInteger)indexPath.row];
     NSArray <NSString *>  *components = [fieldKey componentsSeparatedByString:@"."];
     NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\"" withString:@""];

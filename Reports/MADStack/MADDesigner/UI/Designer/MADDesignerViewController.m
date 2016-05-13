@@ -768,25 +768,30 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         
         [self updateDisplayDetailZoomValue];
         self.statusLabelZoomScale.frame = [self detailDisplayFrame];
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.ruler setNeedsDisplay];
-        }];
         
-        NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
-        UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
+        [self.ruler setNeedsDisplay];
         
-        UIFont *font = [UIFont fontWithDescriptor: captionFontDescriptor size: captionFontDescriptor.pointSize / scrollView.zoomScale];
-        NSDictionary *attributes = @{NSFontAttributeName : font};
-
-        MADDesignerSectionLabel *controlView;
-        for (controlView in sectionControlViewsArray) {
-            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1 attributes:attributes context:nil];
+        @autoreleasepool {
+            UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
             
-            controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
-            controlView.font = font;
-            controlView.scale = self.scroller.zoomScale;
-            controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
-            [controlView setNeedsDisplay];
+            UIFont *font = [UIFont fontWithDescriptor: captionFontDescriptor
+                                                 size: captionFontDescriptor.pointSize / scrollView.zoomScale];
+            NSDictionary *attributes;
+            attributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
+            NSArray <MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
+            MADDesignerSectionLabel *controlView;
+            for (controlView in sectionControlViewsArray) {
+                CGRect boundingRectWithSize = [controlView.text boundingRectWithSize: controlView.bounds.size
+                                                                             options: -1
+                                                                          attributes: attributes
+                                                                             context: nil];
+                
+                controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
+                controlView.font = font;
+                controlView.scale = self.scroller.zoomScale;
+                controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
+                [controlView setNeedsDisplay];
+            }
         }
         
         [self adjustScroller];
@@ -3030,9 +3035,14 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)hideToolbox {
     self.hidesStatusBar = false;
+
+    typeof(self) __weak weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [self actionDismiss];
-        [self setDisplayActive];
+        MADDesignerViewController *sself = weakself;
+        if (sself) {
+            [sself actionDismiss];
+            [sself setDisplayActive];
+        }
     }];
 }
 

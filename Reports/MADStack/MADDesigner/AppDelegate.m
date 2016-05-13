@@ -96,12 +96,20 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return @"com.everydayapps.mad.designer";
 }
 
-- (NSString *)trademark {
++ (NSString *)Trademark {
     return @"MAD";
 }
 
-- (NSString *)applicationNameSufixPart {
+- (NSString *)trademark {
+    return [AppDelegate Trademark];
+}
+
++ (NSString *)ApplicationNameSufixPart {
     return @"Designer";
+}
+
+- (NSString *)applicationNameSufixPart {
+    return [AppDelegate ApplicationNameSufixPart];
 }
 
 - (NSString *)localizedApplicationNameSufixPart {

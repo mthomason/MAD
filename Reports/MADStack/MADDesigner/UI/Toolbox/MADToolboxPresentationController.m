@@ -42,10 +42,9 @@
 
 - (void)dismissalTransitionDidEnd:(BOOL)completed {
     [super presentationTransitionDidEnd:completed];
-    MADToolboxPresentationController * __weak weakself = self;
-    [weakself removeObserver: weakself
+    [self removeObserver: self
                   forKeyPath: [MADToolboxPresentationController keyPathPassthroughContainer]];
-    [weakself removeObserver: weakself
+    [self removeObserver: self
                   forKeyPath: [MADToolboxPresentationController keyPathPassthroughViews]];
 }
 
@@ -143,9 +142,9 @@
 - (void)dismissalTransitionWillBegin {
 
     if (self.presentedViewController.transitionCoordinator) {
-
+        typeof(self) __weak weakself = self;
         [self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            self.dimmingView.alpha = 0.0;
+            weakself.dimmingView.alpha = 0.0;
         } completion:nil];
         
     } else {

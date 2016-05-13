@@ -61,9 +61,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
 
 @implementation MADDateFromTimeFormatter
 
-- (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc {}
 
 + (NSString *)LocalizedFormatFormatMinutes:(NSInteger)i {
     return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) : NSLocalizedString(FormatMinutes, FormatMinutes);

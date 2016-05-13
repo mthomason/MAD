@@ -362,9 +362,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)reloadAfterClose {
     UICollectionView *weakCollectionView __unsafe_unretained = self.collectionView;
-    NSArray <NSIndexPath *> *paths = weakCollectionView.indexPathsForVisibleItems.copy;
     [UIView performWithoutAnimation:^{
         UICollectionView *collectionView = weakCollectionView;
+        NSArray <NSIndexPath *> *__weak paths = collectionView.indexPathsForVisibleItems;
         [collectionView.backgroundView setNeedsDisplay];
         [collectionView reloadItemsAtIndexPaths:paths];
     }];

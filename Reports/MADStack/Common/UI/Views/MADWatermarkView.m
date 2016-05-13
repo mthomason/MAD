@@ -16,6 +16,8 @@
 
 static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
 
+static const CGFloat offset = 2.0;
+
 static inline CGRect LogoRect1(CGPoint origin, CGSize size);
 static inline CGRect LogoRect1(CGPoint origin, CGSize size) {
     return CGRectMake(origin.x, origin.y, size.width, size.height);
@@ -73,7 +75,7 @@ static inline CGFloat LogoPointOriginYt(CGFloat height) {
                                             foregroundColor, NSForegroundColorAttributeName,
                                             customFont, NSFontAttributeName, nil];
     
-    NSString *trademark = [[MADApplication AppDelegate] trademark];
+    NSString *trademark = [[MADApplication AppDelegate] trademark].copy;
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: trademark
                                                                            attributes: attributes];
@@ -95,55 +97,10 @@ static inline CGFloat LogoPointOriginYt(CGFloat height) {
                                 customFont, NSFontAttributeName,
                                 paragraphStyle, NSParagraphStyleAttributeName, nil];
 
-    NSString *suffix = [[MADApplication AppDelegate] applicationNameSufixPart];
-    NSString *text = suffix.uppercaseString.copy;
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: text
+    NSString *suffix = [[MADApplication AppDelegate] applicationNameSufixPart].uppercaseString;
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: suffix
                                                                            attributes: attributes];
     return attributedString;
-}
-
-+ (void)drawMadWatermarkInRect:(CGRect)rect {
-
-    NSAttributedString *displayString = [self newWaterMarkStringMad];
-    NSAttributedString *displayString2 = [self newWaterMarkStringDesigner];
-    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    const CGFloat offset = 2.0;
-    const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
-    CGSize strings[2] = {displayString.size, displayString2.size};
-    NSUInteger counter[2] = {0, 0};
-    CGRect logoRect[2];
-    CGPoint origin;
-    
-    do {
-        counter[0] = 0;
-        do {
-            @autoreleasepool {
-                bool moveLeft = counter[1] % 2 == 0;
-                origin.x = LogoPointOriginX(counter[0], logoMargin.width, strings[0], moveLeft);
-                origin.y = LogoPointOriginY(counter[1], logoMargin.height, strings);
-                logoRect[0] = LogoRect1(origin, strings[0]);
-                logoRect[1] = LogoRect2(origin, strings);
-                
-                CGContextSaveGState(ctx);
-                {
-                    CGFloat firstT = LogoPointOriginYResolved(counter[0], origin, logoRect[0], logoMargin.height) +
-                                     LogoPointOriginYt(logoRect[0].size.height);
-                    origin.x += offset;
-                    CGContextTranslateCTM(ctx, origin.x, firstT);
-                    [displayString2 drawInRect:BoundsForRect(logoRect[1])];
-                    
-                    CGContextTranslateCTM(ctx, -offset, -LogoPointOriginYt(logoRect[0].size.height));
-                    [displayString drawInRect:BoundsForRect(logoRect[0])];
-                }
-                CGContextRestoreGState(ctx);
-                
-            }
-            counter[0]++;
-        } while (logoRect[0].origin.x + logoRect[0].size.width < rect.size.width);
-        counter[1]++;
-    } while (logoRect[0].origin.y + logoRect[0].size.height < rect.size.height);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -163,7 +120,50 @@ static inline CGFloat LogoPointOriginYt(CGFloat height) {
 }
 
 - (void)drawRect:(CGRect)rect {
-    [MADWatermarkView drawMadWatermarkInRect:rect];
+    const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
+    
+    NSAttributedString *displayString = [MADWatermarkView newWaterMarkStringMad];
+    NSAttributedString *displayString2 = [MADWatermarkView newWaterMarkStringDesigner];
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    
+    CGSize strings[2] = {displayString.size, displayString2.size};
+    NSUInteger counter[2] = {0, 0};
+    CGRect logoRect[2];
+    CGPoint origin;
+    
+    do {
+        counter[0] = 0;
+        do {
+            @autoreleasepool {
+            bool moveLeft = counter[1] % 2 == 0;
+            origin.x = LogoPointOriginX(counter[0], logoMargin.width, strings[0], moveLeft);
+            origin.y = LogoPointOriginY(counter[1], logoMargin.height, strings);
+            logoRect[0] = LogoRect1(origin, strings[0]);
+            logoRect[1] = LogoRect2(origin, strings);
+            
+            CGContextSaveGState(ctx);
+            {
+            
+            CGContextShowText(<#CGContextRef  _Nullable c#>, <#const char * _Nullable string#>, <#size_t length#>)
+            
+                CGFloat firstT = LogoPointOriginYResolved(counter[0], origin, logoRect[0], logoMargin.height) +
+                                    LogoPointOriginYt(logoRect[0].size.height);
+                origin.x += offset;
+                CGContextTranslateCTM(ctx, origin.x, firstT);
+                [displayString2 drawInRect:BoundsForRect(logoRect[1])];
+                
+                CGContextTranslateCTM(ctx, -offset, -LogoPointOriginYt(logoRect[0].size.height));
+                [displayString drawInRect:BoundsForRect(logoRect[0])];
+            }
+            CGContextRestoreGState(ctx);
+            
+            }
+            counter[0]++;
+        } while (logoRect[0].origin.x + logoRect[0].size.width < rect.size.width);
+        counter[1]++;
+    } while (logoRect[0].origin.y + logoRect[0].size.height < rect.size.height);
 }
 
 @end
