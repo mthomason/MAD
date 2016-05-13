@@ -15,11 +15,9 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
-typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView * __autoreleasing *);
+typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView * const __strong *);
 
 static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
-
-static const CGFloat offset = 2.0;
 
 static inline CGRect LogoRect1(CGPoint origin, CGSize size);
 static inline CGRect LogoRect1(CGPoint origin, CGSize size) {
@@ -48,11 +46,6 @@ static inline CGFloat LogoPointOriginY(NSUInteger rowCounter, CGFloat marginHeig
             rowCounter * strings[0].height +
             strings[1].height +
             (marginHeight / 2.0000f - strings[0].height / 2.0000f - 150.0000f);
-}
-
-static inline CGRect BoundsForRect(CGRect rect);
-static inline CGRect BoundsForRect(CGRect rect) {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, rect.size.height);
 }
 
 static inline CGFloat LogoPointOriginYResolved(NSUInteger columnCounter, CGFloat originY, CGRect rect, CGFloat marginHeight);
@@ -99,6 +92,12 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
                        LogoPointOriginY(counter[1], logoMargin.height, strings));
 }
 
+@interface MADWatermarkView() {
+    bool _drawn;
+}
+
+@end
+
 @implementation MADWatermarkView
 
 + (NSAttributedString *)newWaterMarkStringMad {
@@ -140,24 +139,24 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     return attributedString;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-        self.backgroundColor =  bgColor;
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
         self.backgroundColor =  bgColor;
-        [MADWatermarkView drawBackground:frame onView:&self];
+        _drawn = false;
     }
     return self;
 }
 
-+ (void)drawBackground:(CGRect)rect onView:(UIView * __autoreleasing *)view {
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!_drawn) {
+        _drawn = true;
+        [MADWatermarkView drawBackground:self.frame onView:&self];
+    }
+}
+
++ (void)drawBackground:(CGRect)rect onView:(UIView * const __strong *)view {
     const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
     
     NSAttributedString *displayString = [MADWatermarkView newWaterMarkStringMad];
@@ -166,7 +165,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     NSUInteger counter[2] = {0, 0};
     CGRect logoRect[2];
 
-    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string, UIView *__autoreleasing *backgroundView) {
+    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string, UIView * const __strong *backgroundView) {
         UILabel *l2 = [[UILabel alloc] initWithFrame:labelFrame];
         l2.attributedText = string;
         l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
