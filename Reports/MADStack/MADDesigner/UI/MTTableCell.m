@@ -16,52 +16,33 @@
 
 @interface MTTableCell ()
 
-    @property (nonatomic, strong, readwrite) UILabel *label;
+    @property (nonatomic, weak, readwrite) UILabel *label;
 
 @end
 
 @implementation MTTableCell
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initalize];
-    }
-    return self;
-}
+- (void)dealloc { [_label removeFromSuperview]; }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initalize];
+    if (self = [super initWithFrame:frame]) {
+        UIColor *color = [UIColor darkGrayColor];
+        UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
+        
+        lbl.backgroundColor = [UIColor whiteColor];
+        
+        [self.contentView addSubview:lbl];
+        lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+                                UIViewAutoresizingFlexibleWidth |
+                                UIViewAutoresizingFlexibleTopMargin |
+                                UIViewAutoresizingFlexibleBottomMargin |
+                                UIViewAutoresizingFlexibleRightMargin |
+                                UIViewAutoresizingFlexibleLeftMargin;
+        self.label = lbl;
+        self.contentView.layer.borderWidth = 1.0000f;
+        self.contentView.layer.borderColor = color.CGColor;
     }
     return self;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self initalize];
-    }
-    return self;
-}
-
-- (void)initalize {
-    UIColor *color = [UIColor darkGrayColor];
-    UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
-
-    lbl.backgroundColor = [UIColor whiteColor];
-    
-    [self.contentView addSubview:lbl];
-    lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
-                           UIViewAutoresizingFlexibleWidth |
-                           UIViewAutoresizingFlexibleTopMargin |
-                           UIViewAutoresizingFlexibleBottomMargin |
-                           UIViewAutoresizingFlexibleRightMargin |
-                           UIViewAutoresizingFlexibleLeftMargin;
-    self.label = lbl;
-    self.contentView.layer.borderWidth = 1.0000f;
-    self.contentView.layer.borderColor = color.CGColor;
 }
 
 @end

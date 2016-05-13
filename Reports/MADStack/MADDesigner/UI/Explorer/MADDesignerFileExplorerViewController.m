@@ -314,6 +314,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 
         MADocument *document = notification.object;
         switch (document.documentState) {
+
             case UIDocumentStateClosed: {
                 if (self.reportState == MTReportStateClosed) {
                     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -327,12 +328,15 @@ NSString * const MADUtiType                                     = @"com.everyday
                 NSLog(@"\n\n\tDocument state closed.\n\n");
                 break;
             }
+
             case UIDocumentStateEditingDisabled:
                 NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
+
             case UIDocumentStateInConflict:
                 NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
+                
             case UIDocumentStateNormal:
                 if (self.reportState !=  MTReportStateOpen) {
                     SEL open = @selector(openViewerWithDocument:);
@@ -344,9 +348,11 @@ NSString * const MADUtiType                                     = @"com.everyday
                 }
                 NSLog(@"\n\n\tDocument state normal.\n\n");
                 break;
+
             case UIDocumentStateSavingError:
                 NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
+
             default:
                 break;
         }
@@ -390,8 +396,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     [navControllerViewer setToolbarHidden:NO animated:NO];
     
     NSArray <__kindof UIViewController *> *tabBarViewControllers =
-    [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
-     navControllerViewer, nil];
+                    [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
+                                                                    navControllerViewer, nil];
     
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
     self.tabController = tabBarController;

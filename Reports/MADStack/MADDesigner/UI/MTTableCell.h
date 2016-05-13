@@ -15,7 +15,7 @@
 
 @interface MTTableCell : UICollectionViewCell
 
-@property (nonatomic, strong, readonly) UILabel *label;
+    @property (nonatomic, weak, readonly) UILabel *label;
 
 @end
 
