@@ -1234,6 +1234,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 260];
 }
 
+typedef struct png_control
+{
+    png_structp png_ptr;
+    png_infop   info_ptr;
+    png_voidp   error_buf;           /* Always a jmp_buf at present. */
+    
+    png_const_bytep memory;          /* Memory buffer. */
+    png_size_t      size;            /* Size of the memory buffer. */
+    
+    unsigned int for_write       :1; /* Otherwise it is a read structure */
+    unsigned int owned_file      :1; /* We own the file in io_ptr */
+} png_control;
+
 - (void)regenThumbnail {
     NSURL *thumbnailURL = [self copyThumbnailURL];
     NSString *path = thumbnailURL.path;
@@ -1261,17 +1274,18 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (info == NULL) {
             png_destroy_read_struct(&p, NULL, NULL);
         } else {
-        
+    
             dstream.i = 0;
             dstream.m = pngImage.bytes;
             png_set_read_fn(p, &dstream, mad_png_read_fn);
             png_set_sig_bytes(pngSignature, kPngSignatureLength);
         }
-
-        png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
-        int interlaceHandling = png_set_interlace_handling(p);
         png_byte numberOfChannels = png_get_channels(p, info);
         png_uint_32 imageWidth = png_get_image_width(p, info);
+        png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
+        
+        png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
+        int interlaceHandling = png_set_interlace_handling(p);
         png_uint_32 imageHeight = png_get_image_height(p, info);
         png_byte colorType = png_get_color_type(p, info);
         png_byte bitDepth = png_get_bit_depth(p, info);
