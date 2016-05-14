@@ -187,6 +187,7 @@ static NSString * const Downloading                             = @"Downloading"
 
     NSURL *thumbnailUrl = [self.fileExplorerDelegate newUrlThumbnailForUrl:metadata.URL];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
+//    UIImage *image = nil;
     if (image != nil) {
         cell.imagePreview.image = image;
     } else {

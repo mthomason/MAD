@@ -148,17 +148,18 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     return self;
 }
 
-- (void)layoutSubviews {
+/*- (void)layoutSubviews {
     [super layoutSubviews];
     if (!_drawn) {
         _drawn = true;
         [MADWatermarkView drawBackground:self.frame onView:&self];
     }
-}
+}*/
 
+// Uses about 10 MB of VM
 + (void)drawBackground:(CGRect)rect onView:(UIView * const __strong *)view {
     const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
-    
+
     NSAttributedString *displayString = [MADWatermarkView newWaterMarkStringMad];
     NSAttributedString *displayString2 = [MADWatermarkView newWaterMarkStringDesigner];
     const CGSize strings[2] = {displayString.size, displayString2.size};

@@ -17,12 +17,14 @@
     return edit;
 }
 
-+ (instancetype)buttonDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
-    UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
-    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
-                                                                               style: UIBarButtonItemStylePlain
-                                                                              target: target
-                                                                              action: action];
++ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
+    UIBarButtonItem *barButtonItemDuplicate = nil;
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"MADImageToolbarDuplicate" ofType:@"png"];
+    UIImage *imageDuplcate = [UIImage imageWithContentsOfFile:file];
+    barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
+                                                              style: UIBarButtonItemStylePlain
+                                                             target: target
+                                                             action: action];
     barButtonItemDuplicate.enabled = NO;
     return barButtonItemDuplicate;
 }

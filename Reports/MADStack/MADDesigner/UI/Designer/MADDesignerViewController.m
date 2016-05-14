@@ -2487,7 +2487,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                 CGPoint p1 = [self.view convertPoint:gesture.view.frame.origin toView:self.view];
                 CGPoint p2 = [self.scroller.container convertPoint:view.frame.origin toView:self.view];
-                if ((distance = CGDistance(p1, p2)) < minDistance) {
+                if ((distance = MADDistance(p1, p2)) < minDistance) {
                     sectionView = (MADDesignerSectionView *)view;
                     minDistance = distance;
                 }
@@ -2518,6 +2518,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             CGFloat documentSectionHeight = documentSection.height.floatValue;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
                 NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[documentSectionKey];
                 layoutConstraint.constant = documentSectionHeight;
                 [self.view setNeedsUpdateConstraints];
@@ -2535,7 +2536,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                     
                     CGSize documentObjectSize = documentObject.size;
                     
-                    la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObjectSize.width, documentObjectSize.height);
+                    la.frame = CGRectMake(locationInSection.x, locationInSection.y,
+                                          documentObjectSize.width, documentObjectSize.height);
                     [layoutManager addItem:la];
                     [layoutManager layout];
                     [piece removeFromSuperview];
@@ -2556,6 +2558,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                     
 
                     RptqDocumentSection *documentSectionBlock = [managedObjectContext objectRegisteredForID:sectionViewObjectIdTag];
+
                     CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
                     CFNumberRef h = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &sectionViewIntrinsicContentSizeHeight);
                     documentSectionBlock.height = (__bridge NSNumber *)(h);

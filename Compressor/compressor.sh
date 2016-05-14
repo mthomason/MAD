@@ -198,7 +198,7 @@ readonly version_mysql="6.1.6"
 readonly version_freetds="0.91"
 readonly version_tds=7.1
 readonly version_zint="2.4.2"
-readonly version_png="1.6.16"
+readonly version_png="1.6.21"
 readonly version_unixodbc="2.3.2"
 readonly version_classpath="0.98"
 readonly version_glib="2.38.2"
@@ -228,8 +228,9 @@ readonly version_ios_min="7.0"
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
+readonly archs="armv7 arm64 i386 x86_64"
 #readonly archs="armv7 armv7s arm64 i386 x86_64"
-readonly archs="arm64"
+#readonly archs="arm64"
 
 readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
@@ -1520,11 +1521,23 @@ fi
 
 if [[ $build_png == $true  && $show_help == $false ]]; then
 
+   set -e
+   printf "Starting PNG\n"
+   printf "\-\-\-\-\-\-\-\-\-\-\-\-\n\n"
+
    command_lipo_png="${command_lipo_create}"
    path_library_png="${path_library}/libpng"
 
+additional_config=""
+
    for arch in ${archs}
    do
+      
+      #printf "Starting arch: %s\n" "${arch}"
+      platform=$( platform_for_architecture arch )
+
+      printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
+
       if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
       then
          platform="iPhoneSimulator"
@@ -1532,16 +1545,16 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
       else
          platform="iPhoneOS"
 
-         additional_config="--enable-arm-neon=no "
-         if [[ "${architecture}" == "armv7" ]];
-         then
-            additional_config="--enable-arm-neon=no "
-         elif [[ "${architecture}" == "arm64" ]];
-         then
+         #additional_config="--enable-arm-neon=no "
+         #if [[ "${architecture}" == "armv7" ]];
+         #then
+            #additional_config="--enable-arm-neon=no "
+         #elif [[ "${architecture}" == "arm64" ]];
+         #then
             additional_config="--enable-arm-neon=yes "
-         else
-            additional_config="--enable-arm-neon=yes "
-         fi
+         #else
+         #   additional_config="--enable-arm-neon=yes "
+         #fi
       fi
 
       platform_version_arch="${platform}${version_ios}-${arch}"
@@ -1567,14 +1580,17 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
         platform_version_arch="${platform}${version_ios}-${arch}"
         path_build_unixodbc_arch="${path_build_png}/$platform_version_arch.sdk"
 
+	printf "Make directory build_png_arch\n";
         mkdir -p "${path_build_png_arch}"
         rm -rf -- "${path_build_png_arch}"
-        mkdir -p "${path_build_png_arch}"
+        printf "Make directory build_png_arch again\n";
+	mkdir -p "${path_build_png_arch}"
         log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
         > "$log_build_png"
 
         cd "${path_base}"
 
+	printf "Extract source.\n"
         extract_source $path_media_png $path_source &
         spinner $!
 
@@ -1589,15 +1605,22 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
 
       #extract_source $path_media_png $path_source &
       #spinner $!
+	printf "Changing to source directory.\n"
 
       cd "${path_source_png}"
+export CFLAGS=""
+export CPPFLAGS=""
 
+	printf "lipo\n"
       command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
+
+	printf "config_make_install\n\t" "${arch}" "${path_build_png_arch}" "${log_build_png}"
 
       config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
 
    done
 
+   printf "mkdir -p" "${path_library_png}"
    mkdir -p "${path_library_png}"
    rm -rf -- "${path_library_png}"
    mkdir -p "${path_library_png}"

@@ -196,9 +196,9 @@
 		4C130B001BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF81BA8085D0022665F /* png.h */; };
 		4C130B011BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF91BA8085D0022665F /* pngconf.h */; };
 		4C130B021BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFA1BA8085D0022665F /* pnglibconf.h */; };
-		4C130B031BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFC1BA8085D0022665F /* png.h */; };
-		4C130B041BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFD1BA8085D0022665F /* pngconf.h */; };
-		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; };
+		4C130B031BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFC1BA8085D0022665F /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130B041BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFD1BA8085D0022665F /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
 		4C2131351CC91DD70094D802 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */; };

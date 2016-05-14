@@ -52,7 +52,7 @@
     bool foundNearDropPoint = false;
     for (NSValue *pointObj in dropPoints) {
         CGPoint dropPoint = pointObj.CGPointValue;
-        CGFloat distanceToDropPoint = fCGDistance(dropPoint, item.frame.origin);
+        CGFloat distanceToDropPoint = MADDistance(dropPoint, item.frame.origin);
         if ((distanceToDropPoint <= tolerance && distanceToDropPoint <= distanceToLastDropPoint &&
              distanceToLastDropPoint > CGSizeZero.width)) { //Not yet found
             
@@ -94,8 +94,10 @@
     return results;
 }
 
-+ (bool)isPointGoodLocation:(CGPoint )point forItem:(MADSectionLayoutAttributes *)attr1 givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
-    return attr1.frame.origin.y >= point.y - 0.5f && [attr1 validDropPoint:point givenPlacedItems:placedItems];
++ (bool)isPointGoodLocation:(CGPoint )point forItem:(MADSectionLayoutAttributes *)attr1
+           givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+    return attr1.frame.origin.y >= point.y - 0.5f &&
+            [attr1 validDropPoint:point givenPlacedItems:placedItems];
 }
 
 + (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace
@@ -115,9 +117,9 @@
                              givenPlacedItems: alreadyPlacedItems]) {
                     if (!distanceSet) {
                         dropPoint = v.CGPointValue;
-                        distance = fCGDistance(itemToPlace.frame.origin, v.CGPointValue);
+                        distance = MADDistance(itemToPlace.frame.origin, v.CGPointValue);
                         distanceSet = true;
-                    } else if ((tmpDistance = fCGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
+                    } else if ((tmpDistance = MADDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
                         dropPoint = v.CGPointValue;
                         distance = tmpDistance;
                     }
@@ -126,7 +128,8 @@
             
         }
     }
-    itemToPlace.frame = CGRectMake(dropPoint.x, dropPoint.y, itemToPlace.frame.size.width, itemToPlace.frame.size.height);
+    itemToPlace.frame = CGRectMake(dropPoint.x, dropPoint.y,
+                                   itemToPlace.frame.size.width, itemToPlace.frame.size.height);
 }
 
 + (CGFloat)distanceToBestDropPoint:(MADSectionLayoutAttributes *)attr1 placedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
@@ -140,7 +143,7 @@
         
         if ([self isPointGoodLocation:pointObj.CGPointValue forItem:attr1 givenPlacedItems:placedItems]) {
             
-            CGFloat distanceToDropPoint = fCGDistance(pointObj.CGPointValue, attr1.frame.origin);
+            CGFloat distanceToDropPoint = MADDistance(pointObj.CGPointValue, attr1.frame.origin);
             
             if (firstTime) {
                 firstTime = false;

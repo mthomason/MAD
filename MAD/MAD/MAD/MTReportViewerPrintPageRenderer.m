@@ -268,7 +268,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 }
 
-- (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
+- (UIImage *)newThumbnailWithTraits:(UITraitCollection *)traits {
     return [self newThumbnailWithRect: [MTPaper rectLetter]
                                  size: MADFloat_1024
                            edgeEffect: YES

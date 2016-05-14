@@ -69,12 +69,12 @@
 
 + (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
     CGPoint dropPoint = CGPointZero;
-    CGFloat distance = fCGDistance(placedItem.frame.origin, dropPoint), tmpDistance;
+    CGFloat distance = MADDistance(placedItem.frame.origin, dropPoint), tmpDistance;
     for (MADSectionLayoutAttributes *item in allItems) {
         if (placedItem.objectID != item.objectID) {
             NSArray *array = [item copyDropPoints];
             for (NSValue *v in array) {
-                if ((tmpDistance = fCGDistance(placedItem.frame.origin, v.CGPointValue)) < distance) {
+                if ((tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue)) < distance) {
                     dropPoint = v.CGPointValue;
                     distance = tmpDistance;
                 }

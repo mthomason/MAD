@@ -8,6 +8,10 @@
 
 #import "MADSearchBar.h"
 #import "objcmad.h"
+#import <UIKit/UIImage.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UIColor.h>
+#import <UIKit/UIImageView.h>
 
 @interface MADSearchBar ()
 

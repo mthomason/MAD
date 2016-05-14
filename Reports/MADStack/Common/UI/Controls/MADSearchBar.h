@@ -9,7 +9,7 @@
 #ifndef Reports_MADSearchBar_h
 #define Reports_MADSearchBar_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UISearchBar.h>
 
 @interface MADSearchBar : UISearchBar
 

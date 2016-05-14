@@ -145,7 +145,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     MADAppDelegate delegate = [MADApplication AppDelegate];
     NSString *name = [delegate name];
     titleView.text = name.copy;
-    titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
+    titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.",
+                                                    @"MAD Designer is the mobile analytics document designer.");
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     
     self.navigationItem.titleView = titleView;

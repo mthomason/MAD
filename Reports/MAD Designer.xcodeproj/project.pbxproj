@@ -1064,6 +1064,7 @@
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD697001AD92458008A9ED3 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
+		4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DB91CE6B76600B56B90 /* rwpng.c */; };
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
@@ -2446,6 +2447,8 @@
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
 		4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeSqlServer.png; path = Reports/UIImageExportTypeSqlServer.png; sourceTree = "<group>"; };
 		4CD696FF1AD92458008A9ED3 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		4CD90DB91CE6B76600B56B90 /* rwpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rwpng.c; sourceTree = "<group>"; };
+		4CD90DBA1CE6B76600B56B90 /* rwpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwpng.h; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignVerticalCenter20.png; path = Reports/UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
 		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignVerticalCenter20@2x.png"; path = "Reports/UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
@@ -3240,6 +3243,7 @@
 		4C401EB51BAE5E7100BAE5FC /* MADStack */ = {
 			isa = PBXGroup;
 			children = (
+				4CD90DB71CE6B76600B56B90 /* Packages */,
 				4CE4EFAD1CD08C14006CA2B0 /* Managers */,
 				4C26BAA21BAF9E8000456DC8 /* Activities */,
 				4C26B95F1BAF11C800456DC8 /* Operations */,
@@ -4888,6 +4892,24 @@
 			name = ReceiptModuleAsn1c;
 			sourceTree = "<group>";
 		};
+		4CD90DB71CE6B76600B56B90 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				4CD90DB81CE6B76600B56B90 /* rwpng */,
+			);
+			name = Packages;
+			path = MADStack/Packages;
+			sourceTree = "<group>";
+		};
+		4CD90DB81CE6B76600B56B90 /* rwpng */ = {
+			isa = PBXGroup;
+			children = (
+				4CD90DBA1CE6B76600B56B90 /* rwpng.h */,
+				4CD90DB91CE6B76600B56B90 /* rwpng.c */,
+			);
+			path = rwpng;
+			sourceTree = "<group>";
+		};
 		4CE4EFAD1CD08C14006CA2B0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -6360,6 +6382,7 @@
 				4C59BDB01C9A88A40031BC6C /* MADBlockObserver.m in Sources */,
 				4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */,
 				4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */,
+				4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C5B56011C98DD76005C19D9 /* MADPromptOperationCredentials.m in Sources */,

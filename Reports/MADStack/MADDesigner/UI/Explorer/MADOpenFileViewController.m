@@ -602,7 +602,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 
     UICollectionView *__weak weakCollectionView = self.collectionView;
-    [weakCollectionView performBatchUpdates:^{
+    [self.collectionView performBatchUpdates:^{
         UICollectionView *collectionView = weakCollectionView;
         if (inserts.count > 0) {
             [collectionView insertItemsAtIndexPaths: inserts];
@@ -1077,7 +1077,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIBarButtonItem *)barButtonItemDuplicate {
     if (!_barButtonItemDuplicate) {
-        _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
+        _barButtonItemDuplicate = [UIBarButtonItem newBarButtonItemDuplicate:self
+                                                                      action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
 }

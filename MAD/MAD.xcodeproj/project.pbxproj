@@ -378,6 +378,8 @@
 		4CC284A21BADE9FB00775B72 /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */; };
 		4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C11BADEB6100775B72 /* libsybdb.a */; };
 		4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C31BADEBA500775B72 /* CoreText.framework */; };
+		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; };
+		4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD90DC31CE6C47A00B56B90 /* miniz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
@@ -769,6 +771,8 @@
 		4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "MAD/rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
 		4CC284C11BADEB6100775B72 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CC284C31BADEBA500775B72 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4CD90DC21CE6C47A00B56B90 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniz.c; path = ../../Reports/MADStack/Packages/miniz.c; sourceTree = "<group>"; };
+		4CD90DC31CE6C47A00B56B90 /* miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniz.h; path = ../../Reports/MADStack/Packages/miniz.h; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
 		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1166,6 +1170,8 @@
 		4CA0C6D11CA79E7000222B8D /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				4CD90DC31CE6C47A00B56B90 /* miniz.h */,
+				4CD90DC21CE6C47A00B56B90 /* miniz.c */,
 				4C24809A1C8B20E00058E6B4 /* MADFonts.h */,
 				4C24809B1C8B20E00058E6B4 /* MADFonts.m */,
 				4CC282361BADE81A00775B72 /* MADFont.h */,
@@ -1555,6 +1561,7 @@
 				4C401DD71BAE3BD700BAE5FC /* MTQueryCacheSelectRowIds.h in Headers */,
 				4C401E5B1BAE4E9400BAE5FC /* MTDataTableVirtual.h in Headers */,
 				4C401D681BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h in Headers */,
+				4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */,
 				4C401DEB1BAE3BD800BAE5FC /* MTQueryDefinitionTable.h in Headers */,
 				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
 				4C401DE71BAE3BD800BAE5FC /* MTQueryDefinitionPredicate.h in Headers */,
@@ -1705,6 +1712,7 @@
 				4C401D511BAE3AF800BAE5FC /* MTPaperB10.m in Sources */,
 				4C994F4B1BE33F300058627A /* MADReportSectionRowsRepresentation.m in Sources */,
 				4CC284791BADE9A900775B72 /* RptqDocumentObjectBarcode+Extras.m in Sources */,
+				4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */,
 				4C401D331BAE3AF800BAE5FC /* MTPaperA6.m in Sources */,
 				4C401DE21BAE3BD700BAE5FC /* MTQueryDefinitionField.m in Sources */,
 				4C401D4B1BAE3AF800BAE5FC /* MTPaperB7.m in Sources */,

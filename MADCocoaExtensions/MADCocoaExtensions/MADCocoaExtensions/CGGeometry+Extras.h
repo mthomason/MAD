@@ -11,19 +11,20 @@
 
 #import <UIKit/UIKit.h>
 
-/* Make a point from `(x, y)'. */
-
-#define            SQUARE(x)             ( (x) * (x) )
-
-//#define            MIN(x, y)             (((x) < (y)) ? (x) : (y))
-//#define            MAX(x, y)             (((x) > (y)) ? (x) : (y))
-
-#define            DEGTORAD(deg)         (((deg) * 2.0 * PI) / 360.0)
-#define            RADTODEG(rad)         (((rad) * 360.0) / (2.0 * PI))
-
+extern const double MADDZero;
+extern const double MADD_2;
+extern const double MADD_64;
+extern const double MADD_360;
+extern const CGFloat MADFloatZero;
+extern const CGFloat MADFloat_64;
 extern const CGFloat MADFloat_1024;
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
+
+static inline double square (double x);
+static inline double square (double x) {
+    return ( (x) * (x) );
+}
 
 /* Lines. */
 
@@ -486,13 +487,8 @@ CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 	return (y - b) / m;
 }
 
-CG_INLINE CGFloat fCGDistance(CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat fCGDistance(CGPoint p1, CGPoint p2) {
-    return sqrtf(powf((p2.x - p1.x), 2) + powf((p2.y - p1.y), 2));
-}
-
-CG_INLINE double CGDistance(CGPoint p1, CGPoint p2);
-CG_INLINE double CGDistance(CGPoint p1, CGPoint p2) {
+CG_INLINE double MADDistance(CGPoint p1, CGPoint p2);
+CG_INLINE double MADDistance(CGPoint p1, CGPoint p2) {
 	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 }
 
@@ -515,14 +511,14 @@ CG_INLINE double CGInterceptBySlope(CGPoint p2, double m) {
 CG_INLINE double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
 CG_INLINE double
 CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
-	if (t2 - t1 != 0) return (CGDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
+	if (t2 - t1 != 0) return (MADDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
 }
 
 CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d);
 CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
-	CGPoint returnVal;
-	double m = -1 * CGDistance(p1, p2);
+	CGPoint returnVal = CGPointZero;
+	double m = -1 * MADDistance(p1, p2);
 	double b = CGInterceptBySlope(p2, m);
     double x = p2.x;
     double y = p2.y;
@@ -590,11 +586,10 @@ CGFloatMin(CGFloat n1, CGFloat n2) {
     return n1 < n2 ? n1 : n2;
 }
 
-CG_INLINE BOOL CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
-CG_INLINE BOOL
-CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+static inline bool CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
+static inline bool CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
     
-    BOOL result = NO;
+    bool result = false;
 
     //If bounding rects intercept
     if (MAX(p1a.x, p1b.x) >= MIN(p2a.x, p2b.x) &&
@@ -636,7 +631,7 @@ CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
             s4 = 0;
         
         if ((s1 * s2 <= 0) && (s3 * s4 <= 0))
-            result = YES;
+            result = true;
 
     }
     
@@ -644,11 +639,11 @@ CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
     
 }
 
-CG_INLINE BOOL CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
-CG_INLINE BOOL
+static inline bool CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
+static inline bool
 CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
     
-    BOOL result = NO;
+    bool result =  false;
     
     //If bounding rects intercept
     if (MAX(lineSegment1.start.x, lineSegment1.end.x) >= MIN(lineSegment2.start.x, lineSegment2.end.x) &&
@@ -698,7 +693,7 @@ CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
             straddleTest4 = 0;
         
         if ((straddleTest1 * straddleTest2 <= 0) && (straddleTest3 * straddleTest4 <= 0))
-            result = YES;
+            result = true;
         
     }
     
