@@ -26,6 +26,10 @@
 #import "MADProgressView.h"
 
 
+static NSString * const NotDownloaded                           = @"Not Downloaded";
+static NSString * const Syncing                                 = @"Syncing";
+static NSString * const Downloading                             = @"Downloading";
+
 const char * MADQueueFileViewController = "com.everydayapps.mad.designer.file.view.controller";
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
@@ -43,9 +47,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
         UITextFieldDelegate,
+        UISearchBarDelegate,
         UIPopoverControllerDelegate,
-        MADFileExplorerDelegate,
         MTDocumentCellProtocol>
+
+    @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+    @property (nonatomic, strong) dispatch_queue_t queueCell;
+    @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
     @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
@@ -94,6 +102,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [_batchInserts removeAllObjects];
     [_batchUpdates removeAllObjects];
     [_batchRemoves removeAllObjects];
+    _subtitleNumberFormatter = nil;
     [self removeObservers];
 }
 
@@ -121,6 +130,18 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return queue;
 }
 
+#pragma mark - Ported
+
+- (NSURL *)documentDirectory {
+    return self.filesCoordnator.filesController.documentDirectory;
+}
+
+- (UIManagedDocument *)openDocument {
+    return self.reportState == MTReportStateOpen ? self.fileManager.openDocument : nil;
+}
+
+
+
 #pragma mark - Public
 
 - (void)getUserCloudPrefs {
@@ -131,6 +152,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+    
+        MADFileLocationManager *filesCoordnator = [[MADFileLocationManager alloc] init];
+        filesCoordnator.filesController.delegate = self;
+        self.filesCoordnator = filesCoordnator;
+
+        dispatch_queue_t queueCell = dispatch_queue_create("com.everydayapps.mad.cell.image",
+                                                           DISPATCH_QUEUE_SERIAL);
+        self.queueCell = queueCell;
+
 
         self.getUserCloudPrefsFirstCall = YES;
         
@@ -175,7 +205,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.fileExplorerDelegate = self;
+    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    delegate.delegate = self;
+    self.collectionViewDelegate = delegate;
+    
+    self.collectionView.delegate = self.collectionViewDelegate;
+    self.collectionView.dataSource = self;
     
     [self addObservers];
     
@@ -229,6 +264,21 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
+    typeof (self.collectionView) __weak wCollectionView = self.collectionView;
+    [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
+                                     usingBlock: ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UICollectionView *collectionView = wCollectionView;
+            if (collectionView) {
+                id cell = [collectionView cellForItemAtIndexPath:indexPath];
+                [cell performDeselectionAnimations];
+            }
+        }];
+    }];
+
     
     [self.collectionView.backgroundView setNeedsDisplay];
     
@@ -614,24 +664,23 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [collectionView reloadItemsAtIndexPaths: updates];
         }
     } completion:^(BOOL finished) {
-        if (finished) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             completion(YES, nil);
-        }
+        }];
     }];
 
 }
 
-- (void)filesController:(MADFilesController *)filesController didFailCreatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController
+                didFailCreatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-- (void)filesController:(MADFilesController *)filesController didFailRemovingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController
+                didFailRemovingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-- (void)filesController:(MADFilesController *)filesController didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+- (void)filesController:(MADFilesController *)filesController
+                didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-#pragma mark - MADFileExplorerDelegate
-
-- (NSURL *)newUrlThumbnailForUrl:(NSURL *)fileUrl {
-    return [MADocument newThumbnailUrlForMadUrl:fileUrl];
-}
+#pragma mark - MTDocumentCellProtocol
 
 - (void)editFile:(id)sender {
     [self activateEditMode:sender];
@@ -1087,6 +1136,159 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return YES;
+}
+
+#pragma mark - MADCollectionViewLayoutFilesDelegate
+
+- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
+    return metadata.URL.lastPathComponent.stringByDeletingPathExtension;
+}
+
+- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
+    return [self copySubtitleForMetadata:metadata];
+}
+
+- (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata {
+    NSString *result;
+    NSString *downloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+    if ([downloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
+    } else {
+        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(metadata.fileSystemFileSize)];
+        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
+        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
+    }
+    return result;
+}
+
+- (BOOL)isFileViewEditing { return self.editing; }
+
+- (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString * const MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
+    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier
+                                                                                   forIndexPath: indexPath];
+    
+    if (cell.delegate == nil) {
+        ((MTCollectionViewCellDocument *)cell).delegate = self;
+    }
+    
+    MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
+
+    NSString *filename = metadata.name.copy;
+    cell.labelTitle.text = filename;
+    
+    bool notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    bool downloading = metadata.ubiquitousItemIsDownloading;
+    bool uploading = metadata.ubiquitousItemIsUploading;
+
+    if (downloading) {
+        cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
+    } else if (uploading) {
+        cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
+    } else {
+        NSString *subtitle = [self copySubtitleForMetadata:metadata];
+        cell.labelTitleSub.text = subtitle.copy;
+    }
+    
+    if (uploading) {
+        cell.progressViewUpload.hidden = NO;
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
+            [cell.progressViewUpload setProgress:(float) (metadata.ubiquitousItemPercentUploaded / 100.0000f) animated:YES];
+        }
+    } else {
+        cell.progressViewUpload.hidden = YES;
+        [cell.progressViewUpload setProgress:0.0000f animated:YES];
+    }
+    
+    if (downloading) {
+        cell.progressViewDownload.hidden = NO;
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
+            [cell.progressViewDownload setProgress:(float) (metadata.ubiquitousItemPercentDownloaded / 100.0000f) animated:YES];
+        }
+    } else {
+        cell.progressViewDownload.hidden = YES;
+        [cell.progressViewDownload setProgress:0.0 animated:YES];
+    }
+    
+    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading) {
+        [cell.activityIndicator startAnimating];
+    } else {
+        [cell.activityIndicator stopAnimating];
+    }
+    
+    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+    
+    [cell.labelTitle layoutIfNeeded];
+    [cell.labelTitleSub layoutIfNeeded];
+
+
+    @autoreleasepool {
+        NSURL *thumbnailUrl = [MADocument newThumbnailUrlForMadUrl:metadata.URL];
+        NSString *path = thumbnailUrl.path;
+        if (!path) goto END_ReadThumbnail;
+        {
+            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
+            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
+        
+            if (image != nil) {
+                cell.imagePreview.image = image;
+            } else {
+                image = [MTCollectionViewCellDocument newDefaultThumbnail];
+                cell.imagePreview.image = image;
+            }
+            image = nil;
+            imageData = nil;
+        }
+        END_ReadThumbnail:;
+    }
+    
+    [cell normalizeTint];
+    
+    if ([self isFileViewEditing]) {
+        [cell startWobble];
+    } else {
+        [cell stopWobble];
+    }
+    
+    return cell;
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField { }
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar { }
+
+#pragma mark - Property Overrides
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
 }
 
 @end

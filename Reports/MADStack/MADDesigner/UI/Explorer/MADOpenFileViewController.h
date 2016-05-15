@@ -10,6 +10,15 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <MADExplorer/MADFileExplorerViewController.h>
+#import <UIKit/UICollectionViewController.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADExplorer/MADDocumentState.h>
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
+#import <MADExplorer/MADSaveFileProtocol.h>
+
+@class MADMetaData;
+@class MADFileLocationManager, MADOpenDocumentManager;
+@class UIManagedDocument;
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 
@@ -19,7 +28,18 @@
 
 @end
 
-@interface MADOpenFileViewController : MADFileExplorerViewController
+@interface MADOpenFileViewController : UICollectionViewController
+    <MADFilesControllerDelegate,
+        MADCollectionViewLayoutFilesDelegate,
+        MADSaveFileProtocol>
+
+    @property (nonatomic, assign) MTReportState reportState;
+    @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
+    @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
+
+    - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
+
+    @property (readonly) UIManagedDocument *openDocument;
 
     @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 
