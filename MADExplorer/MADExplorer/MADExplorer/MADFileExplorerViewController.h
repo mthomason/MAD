@@ -35,13 +35,12 @@
         MADSaveFileProtocol>
 
     @property (nonatomic, weak) id <MADFileExplorerDelegate> fileExplorerDelegate;
-
     @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
-    @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
     @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
     @property (nonatomic, assign) MTReportState reportState;
 
     - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
+
     @property (readonly) UIManagedDocument *openDocument;
 
 @end

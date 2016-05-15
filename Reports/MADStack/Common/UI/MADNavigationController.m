@@ -23,13 +23,6 @@
     }
 }
 
-- (void)dealloc { }
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {

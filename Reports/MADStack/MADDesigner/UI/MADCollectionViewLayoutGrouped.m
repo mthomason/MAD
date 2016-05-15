@@ -10,10 +10,10 @@
 
 @implementation MADCollectionViewLayoutGrouped
 
-- (void)prepareLayout {
-    [super prepareLayout];
-    self.scrollDirection = UICollectionViewScrollDirectionVertical;
-}
+//- (void)prepareLayout {
+//    [super prepareLayout];
+//    self.scrollDirection = UICollectionViewScrollDirectionVertical;
+//}
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 

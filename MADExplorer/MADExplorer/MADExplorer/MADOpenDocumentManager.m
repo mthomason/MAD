@@ -47,7 +47,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 }
 
 - (void)unload {
-    [self removeDocumentWithUrl:self.openUrl];
+    [self removeDocumentWithUrl: self.openUrl];
 }
 
 - (void)removeDocumentWithUrl:(NSURL *)url {

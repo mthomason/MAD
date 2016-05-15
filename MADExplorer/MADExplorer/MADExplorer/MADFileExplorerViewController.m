@@ -22,6 +22,7 @@ static NSString * const Downloading                             = @"Downloading"
 
     @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
     @property (nonatomic, strong) dispatch_queue_t queueCell;
+    @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 @end
 
@@ -80,10 +81,7 @@ static NSString * const Downloading                             = @"Downloading"
                 [cell performDeselectionAnimations];
             }
         }];
-        
     }];
-
-    
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
@@ -185,18 +183,24 @@ static NSString * const Downloading                             = @"Downloading"
     [cell.labelTitleSub layoutIfNeeded];
 
 
-    NSURL *thumbnailUrl = [self.fileExplorerDelegate newUrlThumbnailForUrl:metadata.URL];
-    
-    NSData *imageData = [[NSData alloc] initWithContentsOfFile:thumbnailUrl.path];
-    UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-    imageData = nil;
-//    UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-//    UIImage *image = nil;
-    if (image != nil) {
-        cell.imagePreview.image = image;
-    } else {
-        image = [MTCollectionViewCellDocument newDefaultThumbnail];
-        cell.imagePreview.image = image;
+    @autoreleasepool {
+        NSURL *thumbnailUrl = [self.fileExplorerDelegate newUrlThumbnailForUrl:metadata.URL];
+        NSString *path = thumbnailUrl.path;
+        if (!path) goto END_ReadThumbnail;
+        {
+            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
+            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
+        
+            if (image != nil) {
+                cell.imagePreview.image = image;
+            } else {
+                image = [MTCollectionViewCellDocument newDefaultThumbnail];
+                cell.imagePreview.image = image;
+            }
+            image = nil;
+            imageData = nil;
+        }
+        END_ReadThumbnail:;
     }
     
     [cell normalizeTint];
