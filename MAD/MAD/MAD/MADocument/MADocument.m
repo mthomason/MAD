@@ -1388,19 +1388,20 @@ typedef struct png_control
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
         NSURL *fileURL = self.fileURL;
         NSError *deleteError = nil;
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSArray *properties = @[NSURLIsDirectoryKey];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: fileURL
-                                              includingPropertiesForKeys: properties
-                                                                 options: NSDirectoryEnumerationSkipsHiddenFiles
-                                                            errorHandler: ^BOOL(NSURL *url, NSError *error) {
-                                                                return YES;
-                                                            }];
+
+        NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
+        
+        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: fileURL
+                                                                 includingPropertiesForKeys: properties
+                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles
+                                                                               errorHandler: ^BOOL(NSURL *url, NSError *error) {
+            return YES;
+        }];
         for (NSURL *file in enumerator) {
             NSError *error = nil;
-            [fileManager removeItemAtURL:file error:&error];
+            [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
         }
-        [fileManager removeItemAtURL:fileURL error:&deleteError];
+        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
         NSAssert(deleteError == nil, @"%@", deleteError);
         completion(YES);
     };
@@ -1426,9 +1427,11 @@ typedef struct png_control
             
             [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
             
+            NSNumber *o1 = @YES;
+            NSNumber *o2 = @YES;
             id options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                @YES, NSMigratePersistentStoresAutomaticallyOption,
-                                                @YES, NSInferMappingModelAutomaticallyOption, nil];
+                                                o1, NSMigratePersistentStoresAutomaticallyOption,
+                                                o2, NSInferMappingModelAutomaticallyOption, nil];
             
             [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
                                                      configuration: nil
