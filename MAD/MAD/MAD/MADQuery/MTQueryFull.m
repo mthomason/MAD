@@ -97,7 +97,7 @@
 }
 
 - (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                       error:(NSError **)error {
+                                       error:(NSError * __autoreleasing *)error {
     [super getSqlWithError:error];
     return [self getSqlOnlyActiveFields:YES managedObjectContext:managedObjectContext error:error];
 }

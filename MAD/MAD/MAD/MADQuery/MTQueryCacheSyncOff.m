@@ -23,7 +23,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     return @"PRAGMA synchronous=OFF;";
 }
 

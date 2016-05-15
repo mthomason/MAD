@@ -32,6 +32,27 @@
 
 #import "MADCredential.h"
 
+#import <Foundation/NSException.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSNULL.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSCalendar.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSLocale.h>
+#import <Foundation/NSNotificationQueue.h>
+#import <Foundation/NSNotification.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSDecimalNumber.h>
+#import <Foundation/NSTimeZone.h>
+
+#import <dispatch/time.h>
+#import <dispatch/queue.h>
+#import <dispatch/semaphore.h>
+#import <string.h>
+#import <stdlib.h>
+#import <unistd.h>
+
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
 NSString * const MTDatabaseConnectionDatabase   = @"MTDatabaseConnectionDatabase";
@@ -1194,7 +1215,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return result;
 }
 
-- (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error {
+- (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * __autoreleasing *)error {
 
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;

@@ -28,7 +28,7 @@
 
     + (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
     + (MysqlConnection *)connectToServer:(MysqlServer *)server;
-    + (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError **)error;
+    + (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError * __autoreleasing *)error;
 
     - (void)enableTransactions;
     - (void)disableTransactions;

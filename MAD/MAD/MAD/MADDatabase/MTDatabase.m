@@ -19,7 +19,8 @@
 #import "MADNotificationDidReadRows.h"
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
-
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";

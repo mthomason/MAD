@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseConnectionMySql.h"
+#import <Foundation/NSCharacterSet.h>
 
 @interface MTDatabaseConnectionMySql ()
 

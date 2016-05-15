@@ -36,7 +36,7 @@
 
     - (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
 
-    - (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
+    - (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
 
 @end
 

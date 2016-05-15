@@ -67,7 +67,7 @@ static NSString * const SqlFormat = @", %@";
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     return [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld", self.columnNames, self.tableName, (long)self.rowId.integerValue];
 }
 

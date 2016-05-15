@@ -20,6 +20,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseConnection.h"
+#import <Foundation/NSException.h>
 
 @interface MTQueryMaxFieldLength ()
 
@@ -49,7 +50,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     NSError *sqlError = nil;
     [super getSqlWithError:&sqlError];
     *error = sqlError;

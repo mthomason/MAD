@@ -66,6 +66,9 @@
 #import "MADReportLineRepresentation.h"
 
 #import <MAD/MTDataTableFast.h>
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/MADImage.h>
+#import <MADBarcodes/MTBarcode.h>
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";

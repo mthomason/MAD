@@ -15,6 +15,7 @@
 #import "RptqUserCredentals.h"
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
+#import <Foundation/NSString.h>
 
 @interface MTQueryTest ()
 
@@ -29,7 +30,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     [super getSqlWithError:error];
     
     MADSafeQueryField *key = [self.database newSafeIdentifier:@"f1"];

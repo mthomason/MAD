@@ -13,6 +13,8 @@
 #import "MTQueryCacheVacuum.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabase.h"
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
 
 @interface MTQueryCacheVacuum ()
     @property (nonatomic, strong) MTDatabaseConnection *connection;
@@ -29,7 +31,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     return @"VACUUM";
 }
 

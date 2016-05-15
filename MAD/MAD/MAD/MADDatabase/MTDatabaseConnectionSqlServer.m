@@ -11,6 +11,8 @@
 #endif
 
 #import "MTDatabaseConnectionSqlServer.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSCharacterSet.h>
 
 @interface MTDatabaseConnectionSqlServer ()
 

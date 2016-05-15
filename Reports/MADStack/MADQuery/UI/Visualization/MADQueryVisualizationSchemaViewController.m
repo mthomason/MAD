@@ -17,6 +17,8 @@
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADManagedObjectView.h"
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 

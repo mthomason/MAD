@@ -10,16 +10,7 @@
 #define Reports_CGGeometry_Extras_h
 
 #import <UIKit/UIKit.h>
-
-extern const double MADDZero;
-extern const double MADD_2;
-extern const double MADD_64;
-extern const double MADD_360;
-extern const CGFloat MADFloatZero;
-extern const CGFloat MADFloat_64;
-extern const CGFloat MADFloat_1024;
-extern const CGFloat MTDefaultFingerSizeWidth;
-extern const CGFloat MTDefaultFingerSizeHeight;
+#import <MADCocoaExtensions/MADNumericConstants.h>
 
 static inline double square (double x);
 static inline double square (double x) {

@@ -24,6 +24,17 @@
 #import "MTQueryCacheBeginTransaction.h"
 #import "MTQueryCacheEndTransaction.h"
 #import "MTQueryCacheSyncDefault.h"
+#import <Foundation/NSException.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSNULL.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSCalendar.h>
+#import <Foundation/NSBundle.h>
+#import <dispatch/time.h>
+#import <dispatch/semaphore.h>
+#import <string.h>
+#import <stdlib.h>
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";

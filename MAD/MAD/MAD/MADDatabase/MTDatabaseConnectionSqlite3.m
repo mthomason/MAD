@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseConnectionSqlite3.h"
+#import <Foundation/NSURL.h>
 
 @interface MTDatabaseConnectionSqlite3 ()
 

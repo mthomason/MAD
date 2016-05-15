@@ -164,7 +164,7 @@ extern NSString * const MADIdentifierROWID;
 
     - (id)initWithQueryType:(MTQueryType)type object:(id)object;
 
-    - (NSString *)getSqlWithError:(NSError **)error;
+    - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
     - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
                     managedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                    error:(NSError **)error;    //Only on MTQueryFull

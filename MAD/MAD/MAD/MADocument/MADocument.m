@@ -75,6 +75,9 @@
 #import "NSManagedObjectID+Extras.h"
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADFilename.h>
+#import <MADCocoaExtensions/MADThread.h>
+#import <MADFileManager/MADFileUtilities.h>
 
 #import "MTDataTableFast.h"
 #import "MTDatabase.h"
@@ -508,7 +511,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
+- (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
     BOOL success = NO;
     NSURL * __weak urlGuts;
@@ -543,7 +546,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes
           safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                error:(NSError **)outError {
+                error:(NSError * __autoreleasing *)outError {
     
     BOOL success = [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
@@ -576,7 +579,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                                       error:(NSError **)outError {
+                                       error:(NSError * __autoreleasing *)outError {
     
     UIImage *thumbnail = [self newFullyRenderedThumbnail];
     NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -650,7 +653,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }*/
 
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
 
     NSError *readError = nil;
 
@@ -694,7 +697,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return YES;
 }
 
-- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
+- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
 
     if (self.extraInformation == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];

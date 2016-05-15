@@ -86,7 +86,7 @@
     return newObject;
 }
 
-+ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError **)error {
++ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError * __autoreleasing *)error {
 
     MysqlConnection *newObject = [[self alloc] init];
     newObject->_connection= calloc(1, sizeof(MYSQL));

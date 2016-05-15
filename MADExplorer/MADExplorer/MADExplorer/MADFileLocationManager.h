@@ -10,10 +10,12 @@
 #define MADExplorer_MADFileLocationManager_h
 
 #import <Foundation/NSObject.h>
-#import <MADFileManager/MADFileManager.h>
 #import <MADExplorer/MADDocumentState.h>
 
 @class MADFilesController;
+@class UIAlertController;
+@class UIAlertAction;
+@class UIViewController;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 

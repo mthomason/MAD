@@ -12,6 +12,7 @@
 
 #import "MTConnectionViewController.h"
 #import <MAD/MADConstants.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADocument.h>

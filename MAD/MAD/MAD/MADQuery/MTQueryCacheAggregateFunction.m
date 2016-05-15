@@ -104,7 +104,7 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT %s(%@) FROM %@",
                             functionName([self functionType]), [self columnKey], [self tableName]];

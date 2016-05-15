@@ -7,6 +7,11 @@
 //
 
 #import "MADFileLocationManager.h"
+#import <MADFileManager/MADStorageState.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/MADFileCoordinator.h>
+#import <UIKit/UIViewController.h>
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
@@ -107,7 +112,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (bool)isFirstLaunch {
-    bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ? true : false;
+    bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
+                                                                                    true : false;
     if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
         [[NSUserDefaults standardUserDefaults] synchronize];

@@ -10,9 +10,9 @@
 #define Reports_RptqDocumentObjectBarcode_Extras_h
 
 #import "RptqDocumentObjectBarcode.h"
-#import <MADBarcodes/MADBarcodes.h>
 
 @class RptqQueryField;
+@class MTBarcode;
 
 @interface RptqDocumentObjectBarcode (Extras)
 

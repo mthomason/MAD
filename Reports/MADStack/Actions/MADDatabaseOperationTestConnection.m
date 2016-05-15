@@ -15,6 +15,8 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADErrorUserInfo.h>
 #import "MADKeyChainOperationGet.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
 
 @interface MADDatabaseOperationTestConnection ()
     <MTDatabaseProtocol>

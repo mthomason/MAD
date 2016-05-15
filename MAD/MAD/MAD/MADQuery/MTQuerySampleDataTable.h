@@ -13,7 +13,7 @@
 
 @interface MTQuerySampleDataTable : MTQuery
 
-- (NSString *)getSqlWithError:(NSError **)error;
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
 
 @end
 

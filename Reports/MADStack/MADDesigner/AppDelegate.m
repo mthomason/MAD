@@ -15,6 +15,11 @@
 #import <QuickLook/QLPreviewController.h>
 #import <Foundation/NSString.h>
 #import <MAD/MADConstants.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
+#import <MessageUI/MFMailComposeViewController.h>
+
 #import "MADOperationQueue.h"
 #import "MADDesignerFileExplorerViewController.h"
 

@@ -19,6 +19,7 @@
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 static NSString * const SetDatasource = @"Set Datasource";
 static NSString * const StringEmpty = @"";

@@ -10,14 +10,14 @@
 
 @implementation UIBarButtonItem (Constructors)
 
-+ (instancetype)buttonEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action {
     UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
                                                                           target: target
                                                                           action: action];
     return edit;
 }
 
-+ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action {
     UIBarButtonItem *barButtonItemDuplicate = nil;
     NSString *file = [[NSBundle mainBundle] pathForResource:@"MADImageToolbarDuplicate" ofType:@"png"];
     UIImage *imageDuplcate = [UIImage imageWithContentsOfFile:file];

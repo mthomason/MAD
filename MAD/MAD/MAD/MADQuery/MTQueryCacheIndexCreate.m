@@ -15,6 +15,9 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
 #import <MADFoundation/MADDataColumn.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSSortDescriptor.h>
 
 @interface MTQueryCacheIndexCreate ()
 
@@ -54,7 +57,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
 
     NSMutableString *sql = [[NSMutableString alloc] init];
 

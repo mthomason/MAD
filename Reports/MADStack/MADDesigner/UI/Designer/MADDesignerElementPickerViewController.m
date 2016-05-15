@@ -27,6 +27,8 @@
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentObjectCollectionViewCell.h"
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 const NSInteger MTViewTagAggregateFunctions             = 2003;
 const NSInteger MTViewTagGroupByOptions                 = 2011;
 const NSInteger MTViewTagDocumentObjectNewAggregate     = 2017;

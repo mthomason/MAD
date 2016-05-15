@@ -13,6 +13,8 @@
 #import "MTQueryCacheIndexDrop.h"
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
 
 @interface MTQueryCacheIndexDrop ()
 
@@ -39,7 +41,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     return [NSString stringWithFormat:@"DROP INDEX IF EXISTS main.%@", [self indexName]];
 }
 

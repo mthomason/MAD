@@ -53,6 +53,8 @@
 		4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAE71C8C244B00420CFF /* MADThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE51C8C244B00420CFF /* MADThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAE61C8C244B00420CFF /* MADThread.m */; };
+		4CE645891CE86B76000368BD /* MADNumericConstants.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CE645871CE86B76000368BD /* MADNumericConstants.c */; };
+		4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE645881CE86B76000368BD /* MADNumericConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +117,8 @@
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4CB9AAE51C8C244B00420CFF /* MADThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADThread.h; path = MADCocoaExtensions/MADThread.h; sourceTree = "<group>"; };
 		4CB9AAE61C8C244B00420CFF /* MADThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADThread.m; path = MADCocoaExtensions/MADThread.m; sourceTree = "<group>"; };
+		4CE645871CE86B76000368BD /* MADNumericConstants.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MADNumericConstants.c; path = MADCocoaExtensions/MADNumericConstants.c; sourceTree = "<group>"; };
+		4CE645881CE86B76000368BD /* MADNumericConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNumericConstants.h; path = MADCocoaExtensions/MADNumericConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +224,8 @@
 				4C5205A21BA7E2A2000E6A59 /* MTMath.m */,
 				4C2480B81C8BFA340058E6B4 /* MADColor.h */,
 				4C2480B91C8BFA340058E6B4 /* MADColor.m */,
+				4CE645881CE86B76000368BD /* MADNumericConstants.h */,
+				4CE645871CE86B76000368BD /* MADNumericConstants.c */,
 			);
 			name = MADCocoaExtensions;
 			sourceTree = "<group>";
@@ -260,6 +266,7 @@
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
 				4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */,
 				4C2480A41C8B2D7F0058E6B4 /* MADFilename.h in Headers */,
+				4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */,
 				4C5205B41BA7E2A2000E6A59 /* UIAlertController+Constructors.h in Headers */,
 				4C5205B61BA7E2A2000E6A59 /* UIView+Animations.h in Headers */,
 				4C5205B21BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h in Headers */,
@@ -383,6 +390,7 @@
 				4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */,
 				4C5205B71BA7E2A2000E6A59 /* UIView+Animations.m in Sources */,
 				4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */,
+				4CE645891CE86B76000368BD /* MADNumericConstants.c in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m in Sources */,
 				4C5205AF1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,

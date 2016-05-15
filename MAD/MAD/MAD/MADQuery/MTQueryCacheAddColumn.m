@@ -14,6 +14,8 @@
 #import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
 
 @class MTDatabaseSqlite3;
 
@@ -82,7 +84,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     return self.sql;
 }
 

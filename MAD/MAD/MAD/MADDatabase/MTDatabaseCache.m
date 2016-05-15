@@ -9,6 +9,7 @@
 #import "MTDatabaseCache.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
+#import <Foundation/NSString.h>
 
 @implementation MTDatabaseCache
 

@@ -62,7 +62,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
 
     NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];
     NSUInteger columnCounter = 0;

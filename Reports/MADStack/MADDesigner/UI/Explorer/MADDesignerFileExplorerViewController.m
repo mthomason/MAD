@@ -11,6 +11,8 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
 #import "MADStoryboard.h"
 
 #import <MAD/MADConstants.h>
@@ -45,6 +47,8 @@
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
 #import "MADTabBarController.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -166,8 +170,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    BOOL canMakePayments = [SKPaymentQueue canMakePayments];
-    self.barButtonItemLicensing.enabled = canMakePayments;
+    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
 }
 

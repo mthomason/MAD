@@ -23,6 +23,9 @@
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
 #import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
 
 @interface MTQuerySampleDataTable ()
     <MTDatabaseProtocol>
@@ -50,7 +53,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     NSError *sqlError = nil;
     [super getSqlWithError:&sqlError];
     *error = sqlError;

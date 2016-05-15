@@ -12,6 +12,7 @@
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 

@@ -15,6 +15,14 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTQueryCacheAddColumn.h"
+#import <MADFileManager/MADFileUtilities.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSURL.h>
+
+#import <Foundation/NSException.h>
+#import <Foundation/NSPropertyList.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSSortDescriptor.h>
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";

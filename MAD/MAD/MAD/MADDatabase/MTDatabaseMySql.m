@@ -44,6 +44,9 @@
 #import "MTDatabaseTable.h"
 
 #import <MADMySQL/mysql.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
 
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>

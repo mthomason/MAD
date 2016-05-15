@@ -16,6 +16,7 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+#import <MADBarcodes/MADBarcodes.h>
 
 @implementation RptqDocumentObjectBarcode (Extras)
 

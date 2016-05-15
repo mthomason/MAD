@@ -18,6 +18,11 @@
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <stdio.h>
+
 static NSString * const SqlDelimitor = @", ";
 static NSString * const SqlDelimitorObject = @", %@";
 
@@ -123,7 +128,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     [super getSqlWithError:error];
     
     NSMutableString *values = [[NSMutableString alloc] init];

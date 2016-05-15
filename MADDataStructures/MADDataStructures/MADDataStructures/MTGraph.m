@@ -239,7 +239,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     return resultEdges;
 }
 
-- (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
+- (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
     NSNumber *counter = @0;
     

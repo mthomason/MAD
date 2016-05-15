@@ -19,6 +19,8 @@
 #import "RptqDatabase.h"
 #import "MTDatabaseConnection.h"
 #import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSURL.h>
 
 @interface MTQuerySampleDataField ()
     <MTDatabaseProtocol>
@@ -52,7 +54,7 @@
 }
 
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     [super getSqlWithError:error];
     NSString *key = [self.database fieldAliasForField: ((RptqDatabaseSchemaField *)self.queryObject).name
                                          andTableName: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];

@@ -220,7 +220,7 @@ static MTVerificationController *sharedSingleton;
 #pragma mark
 #pragma mark NSURLConnection - Trust validation
 
-- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError **)error {
+- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError * __autoreleasing *)error {
     
     // Include some Security framework SPIs
     extern CFStringRef kSecTrustInfoExtendedValidationKey;

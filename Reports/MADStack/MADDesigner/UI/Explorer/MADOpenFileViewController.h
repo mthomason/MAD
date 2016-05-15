@@ -9,7 +9,6 @@
 #ifndef Reports_MADOpenFileViewController_h
 #define Reports_MADOpenFileViewController_h
 
-#import <MADExplorer/MADFileExplorerViewController.h>
 #import <UIKit/UICollectionViewController.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADExplorer/MADDocumentState.h>

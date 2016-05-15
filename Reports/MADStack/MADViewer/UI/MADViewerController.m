@@ -26,8 +26,12 @@
 #import <MAD/MTKeyChain.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import <MADFoundation/MTDataTable.h>
+
 #import <MADDataStructures/MTPair.h>
+
 #import "MADTabBarController.h"
 
 #import "MTActivityReportPrintPreview.h"

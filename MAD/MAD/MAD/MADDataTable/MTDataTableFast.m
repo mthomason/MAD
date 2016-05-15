@@ -30,6 +30,22 @@
 #import "MTQueryCacheIndexCreate.h"
 #import "MTQueryCacheSelectLimitOffset.h"
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSKeyValueCoding.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+#import <Foundation/NSNull.h>
+
+#import <dispatch/queue.h>
+#import <stdio.h>
+
 static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
 static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     switch (sqlite3type) {

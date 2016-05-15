@@ -220,7 +220,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return success;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     [self.fields removeAllObjects];
     [self.fieldKeys removeAllObjects];
     return @"";

@@ -1,5 +1,5 @@
 //
-//  UITableViewControllerChooseField.h
+//  MTQueryBuilderChooseFieldViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -12,15 +12,20 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MADNavigationBarTitleView.h"
+#include <MADCocoaExtensions/MADNumericConstants.h>
 
-#pragma mark -
-#pragma mark TableViewController
+//static const double height 44.0;
+#define HEADER_HEIGHT 45.0
 
+static inline CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
+static inline  CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
+    return (numTables * HEADER_HEIGHT) + (numFields * MAD_44);
+}
 
 // Private TableViewController properties and methods.
 @interface MTQueryBuilderChooseFieldViewController ()
 
-    @property (nonatomic, strong) NSMutableArray *sectionInfoArray;
+    @property (nonatomic, strong) NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> *sectionInfoArray;
     @property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
     @property (nonatomic, strong) NSArray *dataTables;
 
@@ -30,9 +35,6 @@
     @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
-
-#define DEFAULT_ROW_HEIGHT 44
-#define HEADER_HEIGHT 45
 
 @implementation MTQueryBuilderChooseFieldViewController
 
@@ -115,7 +117,7 @@
 			RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: queryTable];
 			sectionInfo.open = NO;
 			
-            NSNumber *defaultRowHeight = @DEFAULT_ROW_HEIGHT;
+            NSNumber *defaultRowHeight = [[NSNumber alloc] initWithDouble: MAD_44];
 			NSUInteger countOfQuotations = sectionInfo.table.hasQueryFields.count;
 			for (NSUInteger i = 0; i < countOfQuotations; i++) {
 				[sectionInfo insertObject:defaultRowHeight inRowHeightsAtIndex:i];
@@ -155,10 +157,10 @@
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.isAccessibilityElement = YES;
     cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton;
-    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)self.sectionInfoArray[indexPath.section];
+    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)self.sectionInfoArray[(NSUInteger)indexPath.section];
     NSArray *fieldsArray = [fieldSelectorManager.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
 
-    RptqQueryField *field = fieldsArray[indexPath.row];
+    RptqQueryField *field = fieldsArray[(NSUInteger)indexPath.row];
     RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
     if (field) {
         cell.textLabel.text = schemaField.name;
@@ -172,7 +174,7 @@
 
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)section];
     if (!sectionInfo.headerView) {
         CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, HEADER_HEIGHT);
         MADDatabaseTableSectionHeaderView *vsht = [[MADDatabaseTableSectionHeaderView alloc] initWithFrame: rect
@@ -295,13 +297,8 @@
     [self updateSize];
 }
 
-CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
-CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
-    return (numTables * HEADER_HEIGHT) + (numFields * DEFAULT_ROW_HEIGHT);
-}
-
 - (void)updateSize {
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[self.openSectionIndex];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[(NSUInteger)self.openSectionIndex];
     self.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
 }
@@ -313,11 +310,12 @@ CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numField
 }
 
 - (NSInteger)accessibilityElementCount {
-    return self.sectionInfoArray.count;
+    return (NSInteger)self.sectionInfoArray.count;
 }
 
 - (NSArray *)accessibilityElements {
-    NSMutableArray *accessibilityElements = [[NSMutableArray alloc] initWithCapacity:self.sectionInfoArray.count];
+    NSMutableArray *accessibilityElements;
+    accessibilityElements = [[NSMutableArray alloc] initWithCapacity:self.sectionInfoArray.count];
     for (RptqDatabaseSchemaFieldSelectorManager *sectionInfo in self.sectionInfoArray) {
         [accessibilityElements addObject: sectionInfo.headerView];
     }

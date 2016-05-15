@@ -12,6 +12,7 @@
 
 #import "MTViewControllerBarcode.h"
 #import "MADNavigationBarTitleView.h"
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 

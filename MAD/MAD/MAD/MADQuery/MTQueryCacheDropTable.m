@@ -13,6 +13,7 @@
 #import "MTQueryCacheDropTable.h"
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
+#import <Foundation/NSString.h>
 
 @interface MTQueryCacheDropTable ()
 
@@ -34,7 +35,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     NSString *tablename = self.tableName;
     NSString * __autoreleasing Sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", tablename];
     return Sql;

@@ -11,20 +11,37 @@
 #endif
 
 #import "MADOpenFileViewController.h"
+
 #import <MessageUI/MessageUI.h>
+
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
+
+#import <MADFileManager/MADFileInfo.h>
+#import <MADFileManager/MADMetaData.h>
+#import <MADFileManager/MADAppLaunchContext.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
+#import <MADCocoaExtensions/MTMath.h>
+
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MADIndex.h>
+
 #import <MADFoundation/NSURL+Document.h>
+
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+
 #import <MAD/MADocument.h>
 
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
-
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
@@ -72,8 +89,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-    @property (nonatomic, strong) MADSearchBar *searchBar;
-    @property (readonly) UILabel *titleView;
+    @property (nonatomic, strong)   MADSearchBar *searchBar;
+    @property (readonly)            UILabel *titleView;
 
     @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
@@ -250,7 +267,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
-    UIBarButtonItem *editButton = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
+    UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit:self
+                                                                 action:@selector(edit:)];
     self.barButtonItemEdit = editButton;
     self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
     self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
@@ -664,9 +682,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [collectionView reloadItemsAtIndexPaths: updates];
         }
     } completion:^(BOOL finished) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
             completion(YES, nil);
-        }];
+        //}];
     }];
 
 }
