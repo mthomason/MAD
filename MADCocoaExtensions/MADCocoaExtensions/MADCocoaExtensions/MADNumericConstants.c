@@ -11,6 +11,7 @@
 const double MADZero                        =    0.0;
 const double MADD_2                         =    2.0;
 const double MAD_44                         =   44.0;
+const double MAD_45                         =   45.0;
 const double MAD_64                         =   64.0;
 const double MAD_360                        =  360.0;
 const CGFloat MADFloatZero                  =    0.00000000f;
