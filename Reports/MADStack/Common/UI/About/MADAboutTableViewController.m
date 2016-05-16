@@ -16,12 +16,14 @@
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
 
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
 #import "MADOperationQueue.h"
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
+
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
+#import <CoreText/CTStringAttributes.h>
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,

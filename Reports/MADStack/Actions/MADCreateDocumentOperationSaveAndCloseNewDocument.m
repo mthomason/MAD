@@ -39,7 +39,7 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;
         if (doc.documentState != UIDocumentStateClosed) {
-            [doc closeWithCompletionHandler:^(BOOL success) {
+            [MADocument close: doc completion:^(BOOL success) {
                 if (success) {
                     [self finish];
                 } else {

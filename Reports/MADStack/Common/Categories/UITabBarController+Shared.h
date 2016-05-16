@@ -9,12 +9,11 @@
 #ifndef Reports_UITabBarController_Shared_h
 #define Reports_UITabBarController_Shared_h
 
-#import <UIKit/UIKit.h>
 #import "MADTabBarController.h"
 
 @interface MADTabBarController (Shared)
 
-+ (instancetype)mainTabBarController NS_RETURNS_NOT_RETAINED;
+    + (instancetype)mainTabBarController NS_RETURNS_NOT_RETAINED;
 
 @end
 

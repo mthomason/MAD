@@ -14,12 +14,12 @@
 @interface MTViewControllerDynamicItem : UIViewController
     <UIDynamicItem>
 
-- (void)setCenter:(CGPoint)center;
-- (void)setBounds:(CGRect)bounds;
-- (void)setTransform:(CGAffineTransform)transform;
-- (CGPoint)center;
-- (CGRect)bounds;
-- (CGAffineTransform)transform;
+    - (void)setCenter:(CGPoint)center;
+    - (void)setBounds:(CGRect)bounds;
+    - (void)setTransform:(CGAffineTransform)transform;
+    - (CGPoint)center;
+    - (CGRect)bounds;
+    - (CGAffineTransform)transform;
 
 @end
 

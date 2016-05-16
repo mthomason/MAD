@@ -9,8 +9,8 @@
 #ifndef Reports_MADTableViewControllerCoreDataResults_h
 #define Reports_MADTableViewControllerCoreDataResults_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import <UIKit/UITableViewController.h>
+#import <CoreData/NSFetchedResultsController.h>
 
 @interface MADTableViewControllerCoreDataResults : UITableViewController
     <NSFetchedResultsControllerDelegate>

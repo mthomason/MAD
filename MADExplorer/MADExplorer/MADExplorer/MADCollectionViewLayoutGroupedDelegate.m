@@ -10,8 +10,6 @@
 #import "MTCollectionViewCellDocument.h"
 #import <MADCocoaExtensions/MADLabel.h>
 
-NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
-
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
 
@@ -62,8 +60,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {
-        [self.delegate selectionsUpdated];
+    id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
+        [delegate selectionsUpdated];
     }
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
@@ -78,26 +77,38 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {
-        [self.delegate selectionsUpdated];
-    }
 
-    if ([self.delegate respondsToSelector:@selector(userSelectedItemAtIndexPath:)]) {
-        NSIndexPath *path = indexPath.copy;
-        [self.delegate userSelectedItemAtIndexPath:path];
+    id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
+    NSInvocationOperation *operations;
+    if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
+        operations = [[NSInvocationOperation alloc] initWithTarget: delegate
+                                                          selector: @selector(selectionsUpdated)
+                                                            object: nil];
+        [[NSOperationQueue mainQueue] addOperation:operations];
     }
     
-    if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {
-        [self.delegate selectionsUpdated];
+    if ([delegate respondsToSelector:@selector(userSelectedItemAtIndexPath:)]) {
+        NSIndexPath *path = indexPath.copy;
+        operations = [[NSInvocationOperation alloc] initWithTarget: delegate
+                                                          selector: @selector(userSelectedItemAtIndexPath:)
+                                                            object: path];
+        [[NSOperationQueue mainQueue] addOperation:operations];
+    }
+    
+    if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
+        operations = [[NSInvocationOperation alloc] initWithTarget: delegate
+                                                          selector: @selector(selectionsUpdated)
+                                                            object: nil];
+        [[NSOperationQueue mainQueue] addOperation:operations];
     }
     
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {
-        [self.delegate selectionsUpdated];
+    id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
+        [delegate selectionsUpdated];
     }
     
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -143,8 +154,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *filename = [self.delegate titleForItemAtIndexPath:indexPath];
-    NSString *size = [self.delegate subtitleForItemAtIndexPath:indexPath];
+    id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
+    NSString *filename = [delegate titleForItemAtIndexPath:indexPath];
+    NSString *size = [delegate subtitleForItemAtIndexPath:indexPath];
     
     NSDictionary *attributesCaption = [MTCollectionViewCellDocument newAttributesCaption];
     NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument newAttributesCaption];

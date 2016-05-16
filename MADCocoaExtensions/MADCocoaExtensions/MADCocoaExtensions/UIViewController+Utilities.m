@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+Utilities.h"
+#import <UIKit/UISplitViewController.h>
 
 @implementation UIViewController (Utilities)
 

@@ -9,7 +9,9 @@
 #ifndef Reports_MTTitleView_h
 #define Reports_MTTitleView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
+
+@class UILabel;
 
 @interface MTTitleView : UIView
 

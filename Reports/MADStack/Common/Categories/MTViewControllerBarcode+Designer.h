@@ -13,7 +13,7 @@
 
 @interface MTViewControllerBarcode (Designer)
 
-+ (instancetype)main;
+    + (instancetype)main;
 
 @end
 

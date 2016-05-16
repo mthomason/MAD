@@ -9,8 +9,8 @@
 #ifndef Reports_MTDocumentSectionView_h
 #define Reports_MTDocumentSectionView_h
 
-#import <UIKit/UIKit.h>
 #import "MADManagedObjectView.h"
+#import <UIKit/UIGestureRecognizer.h>
 
 @class MADDesignerSectionLabel;
 

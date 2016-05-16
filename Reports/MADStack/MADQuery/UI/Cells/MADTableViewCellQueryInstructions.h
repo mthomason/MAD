@@ -9,19 +9,21 @@
 #ifndef Reports_UITableViewCellInstruction_h
 #define Reports_UITableViewCellInstruction_h
 
-#import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
 extern const CGFloat MNSTableViewCellHeightDefault;
 
+@class NSManagedObjectID;
+@class UILabel;
+
 @interface MADTableViewCellQueryInstructions : MTAutoLayoutTableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
-@property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
+    @property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
+    @property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
 
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
-+ (CGFloat)defaultHeight;
+    - (id)initWithCoder:(NSCoder *)aDecoder;
+    - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+    + (CGFloat)defaultHeight;
 
 @end
 

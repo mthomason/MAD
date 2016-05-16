@@ -9,11 +9,11 @@
 #ifndef Reports_UIImage_Resizable_h
 #define Reports_UIImage_Resizable_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIImage.h>
 
 @interface UIImage (Resizable)
 
-- (UIImage *)resizableImage;
+    - (UIImage *)resizableImage;
 
 @end
 

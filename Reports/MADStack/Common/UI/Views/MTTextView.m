@@ -7,6 +7,7 @@
 //
 
 #import "MTTextView.h"
+#import <UIKit/UITextView.h>
 
 @interface MTTextView ()
 

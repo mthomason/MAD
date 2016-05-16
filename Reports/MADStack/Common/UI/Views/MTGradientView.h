@@ -9,12 +9,11 @@
 #ifndef Reports_MTGradientView_h
 #define Reports_MTGradientView_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIView.h>
 
 @interface MTGradientView : UIView
 
-@property (assign) BOOL highlight;
+    @property (assign) BOOL highlight;
 
 @end
 

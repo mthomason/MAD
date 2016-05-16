@@ -15,7 +15,7 @@
 
 @interface MADKeyChainSaveCredentials : MADOperation
 
-- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+    - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
 
 @end
 

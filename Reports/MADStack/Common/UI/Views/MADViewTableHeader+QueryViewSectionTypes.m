@@ -8,6 +8,9 @@
 
 #import "MADViewTableHeader+QueryViewSectionTypes.h"
 #import "MADQueryViewControllerLayout.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UIAccessibility.h>
 
 @implementation MADTableViewHeader (QueryViewSectionTypes)
 

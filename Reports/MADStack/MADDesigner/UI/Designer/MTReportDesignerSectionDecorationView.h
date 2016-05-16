@@ -9,7 +9,7 @@
 #ifndef Reports_MTReportDesignerSectionDecorationView_h
 #define Reports_MTReportDesignerSectionDecorationView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @interface MTReportDesignerSectionDecorationView : UICollectionReusableView
 

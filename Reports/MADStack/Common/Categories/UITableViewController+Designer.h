@@ -6,10 +6,15 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_UITableViewController_Extras_h
+#define MAD_Designer_UITableViewController_Extras_h
+
+#import <UIKit/UITableViewController.h>
 
 @interface UITableViewController (Designer)
 
-+ (instancetype)About;
+    + (instancetype)About;
 
 @end
+
+#endif

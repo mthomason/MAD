@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADDatabaseOperationTestConnection_h
+#define MAD_Designer_MADDatabaseOperationTestConnection_h
+
 #import "MADOperation.h"
 #import "MADPromptOperationDisplayError.h"
 
@@ -30,3 +33,5 @@
                                    credentials:(MADCredential *)credentials;
 
 @end
+
+#endif

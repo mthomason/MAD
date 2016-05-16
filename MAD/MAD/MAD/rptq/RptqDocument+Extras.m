@@ -58,6 +58,12 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
+
+#import <UIKit/UIImage.h>
 
 @implementation RptqDocument (Extras)
 

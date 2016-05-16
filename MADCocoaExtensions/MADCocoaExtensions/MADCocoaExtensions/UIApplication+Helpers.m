@@ -7,6 +7,8 @@
 //
 
 #import "UIApplication+Helpers.h"
+#import <UIKit/UIWindow.h>
+#import <UIKit/UINavigationController.h>
 
 @implementation MADStackViewController
 

@@ -14,6 +14,8 @@
 #import "UIApplication+Helpers.h"
 #import "MADThread.h"
 
+#import <UIKit/UIAlertController.h>
+
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
 @implementation NSError (Constructors)

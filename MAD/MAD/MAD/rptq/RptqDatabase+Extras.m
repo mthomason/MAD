@@ -10,7 +10,6 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -18,6 +17,8 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
 
 @implementation RptqDatabase (Extras)
 

@@ -13,6 +13,9 @@
 #import "MTCollectionViewCellElement.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
         return [MADColorEverydayApps newColorDisabledColor];

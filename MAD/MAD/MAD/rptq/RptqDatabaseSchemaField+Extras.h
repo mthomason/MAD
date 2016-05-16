@@ -16,17 +16,17 @@
 
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolLog>
 
-+ (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                         andField:(MTDatabaseField *)field;
+    + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                                andField:(MTDatabaseField *)field;
 
-- (MTDatabaseField *)databaseFieldWrapper;
-+ (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
-                 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (MTDatabaseField *)databaseFieldWrapper;
+    + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
+                     andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (NSString *)display;
-- (NSString *)fieldTypeDisplay;
+    - (NSString *)display;
+    - (NSString *)fieldTypeDisplay;
 
-- (SEL)selectorForSorting;
+    - (SEL)selectorForSorting;
 
 @end
 

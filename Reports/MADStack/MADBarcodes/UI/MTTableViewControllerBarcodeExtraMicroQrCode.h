@@ -9,16 +9,16 @@
 #ifndef Barcodes_MTTableViewControllerBarcodeExtraMicroQrCode_h
 #define Barcodes_MTTableViewControllerBarcodeExtraMicroQrCode_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerBarcodeExtraMicroQrCodeDelegate
-- (void)barcodeMicroQrCodeDidEnableAutomaticResizing;
-- (void)barcodeMicroQrCodeDidSetSize:(NSInteger)size;
-- (void)barcodeMicroQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection;
+    - (void)barcodeMicroQrCodeDidEnableAutomaticResizing;
+    - (void)barcodeMicroQrCodeDidSetSize:(NSInteger)size;
+    - (void)barcodeMicroQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection;
 
-- (BOOL)barcodeMicroQrCodeAutomaticResizing;
-- (NSInteger)barcodeMicroQrCodeInitalSize;
-- (NSInteger)barcodeMicroQrCodeInitalErrorCorrection;
+    - (BOOL)barcodeMicroQrCodeAutomaticResizing;
+    - (NSInteger)barcodeMicroQrCodeInitalSize;
+    - (NSInteger)barcodeMicroQrCodeInitalErrorCorrection;
 @end
 
 @interface MTTableViewControllerBarcodeExtraMicroQrCode : UITableViewController

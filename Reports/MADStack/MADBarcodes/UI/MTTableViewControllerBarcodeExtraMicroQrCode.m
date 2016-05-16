@@ -12,12 +12,14 @@
 
 #import "MTTableViewControllerBarcodeExtraMicroQrCode.h"
 #import "MTTableViewControllerStaticSelectRow.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
 
 @interface MTTableViewControllerBarcodeExtraMicroQrCode ()
     <MTTableViewControllerStaticSelectRowDelegate>
 
-@property (nonatomic, assign) BOOL displayingSize;
-@property (nonatomic, assign) BOOL displayingErrorCorrection;
+    @property (nonatomic, assign) BOOL displayingSize;
+    @property (nonatomic, assign) BOOL displayingErrorCorrection;
 
 @end
 

@@ -13,8 +13,6 @@
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 
-extern NSString * const MADImageToolbarCloudDownload;
-
 @class  MADMetaData;
 
 @protocol MADCollectionViewLayoutFilesDelegate <NSObject>

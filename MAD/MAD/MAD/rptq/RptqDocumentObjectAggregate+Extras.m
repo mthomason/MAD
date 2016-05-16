@@ -88,7 +88,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentObjectAggregate displayStringForType: self.function.unsignedIntegerValue];
+    return [RptqDocumentObjectAggregate newStringDisplayForType: self.function.unsignedIntegerValue];
 }
 
 - (NSString *)functionNameShort {
@@ -133,7 +133,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     }
 }
 
-+ (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
++ (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType {
 
     switch (aggregateFunctionType) {
 
@@ -173,7 +173,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     
 }
 
-+ (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType {
++ (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType {
 
     switch (groupByType) {
         case MTAggregateGroupByTypeSection:

@@ -13,7 +13,7 @@
 
 @interface MTQueryBuilderChooseFieldViewController (Designer)
 
-+ (instancetype)main;
+    + (instancetype)main;
 
 @end
 

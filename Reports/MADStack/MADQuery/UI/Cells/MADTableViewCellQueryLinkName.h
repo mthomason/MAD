@@ -9,12 +9,11 @@
 #ifndef Reports_UITableViewCellLinkName_h
 #define Reports_UITableViewCellLinkName_h
 
-#import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
 @interface MADTableViewCellQueryLinkName : MTAutoLayoutTableViewCell
 
-+ (CGFloat)defaultHeight;
+    + (CGFloat)defaultHeight;
 
 @end
 

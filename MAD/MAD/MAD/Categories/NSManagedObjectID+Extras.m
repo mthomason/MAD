@@ -7,6 +7,8 @@
 //
 
 #import "NSManagedObjectID+Extras.h"
+#import <Foundation/NSString.h>
+#import <stdio.h>
 
 @implementation NSManagedObjectID (Extras)
 

@@ -12,6 +12,8 @@
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"
 #import "MTTableViewControllerStaticSelectRow.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
 
 @interface MTTableViewControllerBarcodeExtraAztec ()
     <MTTableViewControllerStaticSelectRowDelegate>

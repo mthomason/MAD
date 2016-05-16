@@ -8,10 +8,12 @@
 
 #import "MADTableViewCellBase.h"
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UILabel.h>
 
 @interface MADTableViewCellBase ()
 
-@property (atomic, assign) BOOL initalSetupComplete;
+    @property (atomic, assign) BOOL initalSetupComplete;
 
 @end
 

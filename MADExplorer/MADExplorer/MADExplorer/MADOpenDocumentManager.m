@@ -12,9 +12,11 @@
 NSString * const MADFileManagerOpenUrl      = @"MADFileManagerOpenUrl";
 NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 
+typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocumentHolder;
+
 @interface MADOpenDocumentManager ()
 
-    @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
+    @property (nonatomic, strong) MADDocumentHolder *openFiles;   //MADocument stored by their NSURLS
     @property (nonatomic, copy, readwrite) NSURL *openUrl;
 
 @end
@@ -27,23 +29,23 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 
 - (instancetype)init {
     if (self = [super init]) {
-        NSMutableDictionary *openFiles = [[NSMutableDictionary alloc] init];
+        MADDocumentHolder *openFiles = [[MADDocumentHolder alloc] init];
         self.openFiles = openFiles;
         self.openUrl = nil;
     }
     return self;
 }
 
-- (void)setOpenDocument:(UIManagedDocument *)document {
+- (void)setOpenDocument:(__kindof UIManagedDocument *)document {
     if (document) {
         self.openUrl = document.fileURL.copy;
-        NSString *path = self.openUrl.absoluteString;
+        NSString *path = self.openUrl.absoluteURL.absoluteString;
         self.openFiles[path] = document;
     }
 }
 
-- (UIManagedDocument *)openDocument {
-    return self.openFiles[self.openUrl.absoluteString];
+- (id)openDocument {
+    return self.openFiles[self.openUrl.absoluteURL.absoluteString];
 }
 
 - (void)unload {
@@ -51,7 +53,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 }
 
 - (void)removeDocumentWithUrl:(NSURL *)url {
-    NSString *path = url.absoluteString;
+    NSString *path = url.absoluteURL.absoluteString;
     [self.openFiles removeObjectForKey:path];
     if ([url isEqual:self.openUrl]) {
         self.openUrl = nil;

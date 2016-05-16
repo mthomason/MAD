@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADVibrantTableViewCellImage_h
+#define MAD_Designer_MADVibrantTableViewCellImage_h
+
 #import <UIKit/UIKit.h>
 #import "MADVibrantTableViewCellBase.h"
 
@@ -14,3 +17,5 @@
 @property (nonatomic, strong) UIImageView *imageViewMain;
 
 @end
+
+#endif

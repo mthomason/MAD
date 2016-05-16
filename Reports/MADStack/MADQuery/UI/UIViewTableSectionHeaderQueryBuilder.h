@@ -13,7 +13,7 @@
 
 @interface UIViewTableSectionHeaderQueryBuilder : UIView
 
-@property (assign) BOOL highlight;
+    @property (assign) BOOL highlight;
 
 @end
 

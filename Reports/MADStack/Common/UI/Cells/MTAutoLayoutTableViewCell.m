@@ -7,6 +7,7 @@
 //
 
 #import "MTAutoLayoutTableViewCell.h"
+#import <UIKit/UINibLoading.h>
 
 @implementation MTAutoLayoutTableViewCell
 

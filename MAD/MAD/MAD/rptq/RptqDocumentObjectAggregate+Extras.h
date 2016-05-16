@@ -40,16 +40,16 @@ typedef NS_ENUM(NSUInteger, MTAggregateGroupByType) {
 
 @interface RptqDocumentObjectAggregate (Extras)
 
-+ (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType;
-+ (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType;
+    + (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType;
+    + (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType;
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
-- (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
-                                      inputType:(MTAggregateFunctionInputType)inputType
-                                      groupType:(MTAggregateGroupByType)groupType
-                                aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
-                                    groupNumber:(NSUInteger)groupNumber;
-- (NSString *)designerRepresentationText;
+    - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+    - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
+                                          inputType:(MTAggregateFunctionInputType)inputType
+                                          groupType:(MTAggregateGroupByType)groupType
+                                    aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+                                        groupNumber:(NSUInteger)groupNumber;
+    - (NSString *)designerRepresentationText;
 
 @end
 

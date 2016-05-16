@@ -8,6 +8,7 @@
 
 #import "MADTableViewCellQueryTableName.h"
 #import "Constants.h"
+#import <UIKit/UILabel.h>
 
 @implementation MADTableViewCellQueryTableName
 

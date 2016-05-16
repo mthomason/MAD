@@ -9,13 +9,13 @@
 #ifndef Reports_UIStoryboard_ObjectSelector_h
 #define Reports_UIStoryboard_ObjectSelector_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @class MADNavigationController;
 
 @interface UIStoryboard (ObjectSelector)
 
-+ (instancetype)ObjectSelector;
+    + (instancetype)ObjectSelector;
 
 @end
 

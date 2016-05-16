@@ -8,6 +8,8 @@
 
 #import "MADTableViewCellAuto.h"
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UILabel.h>
 
 @interface MADTableViewCellAuto ()
 

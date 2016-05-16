@@ -14,7 +14,7 @@
 
 @interface MFMailComposeViewController (FileManager)
 
-+ (instancetype)contactUs:(id<MFMailComposeViewControllerDelegate>) mailComposeDelegate;
+    + (instancetype)contactUs:(id<MFMailComposeViewControllerDelegate>) mailComposeDelegate;
 
 @end
 

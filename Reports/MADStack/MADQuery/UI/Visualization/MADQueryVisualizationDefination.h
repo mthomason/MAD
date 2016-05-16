@@ -10,9 +10,12 @@
 #define MAD_Designer_MADQueryVisualizationDefination_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/RptqQuery.h>
 
-@class RptqQuery, MTGraph, MTLinkedList;
+@class RptqQuery;
+@class MTGraph;
+@class MTLinkedList;
+@class NSArray<__covariant ObjectType>;
+@class NSURL;
 
 @interface MADQueryVisualizationDefination : NSObject
 

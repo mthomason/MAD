@@ -8,6 +8,7 @@
 
 #import "MADGettingStartedTableViewController.h"
 #import "MADTableViewCellBase.h"
+#import <UIKit/UILabel.h>
 
 @interface MADGettingStartedTableViewController ()
 

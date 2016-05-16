@@ -9,6 +9,9 @@
 #import "MADConnectorView.h"
 #import <MADCocoaExtensions/MADColor.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UIGraphics.h>
+#import <QuartzCore/CALayer.h>
+#import <UIKit/UIBezierPath.h>
 
 @interface MADConnectorView ()
 
@@ -27,8 +30,9 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+
+    if (self = [super initWithFrame:frame]) {
+
         self.backgroundColor = [UIColor clearColor];
 
         CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);

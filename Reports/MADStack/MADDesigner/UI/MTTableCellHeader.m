@@ -12,6 +12,8 @@
 
 #import "MTTableCellHeader.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UILabel.h>
+#import <QuartzCore/CALayer.h>
 
 @interface MTTableCellHeader ()
 

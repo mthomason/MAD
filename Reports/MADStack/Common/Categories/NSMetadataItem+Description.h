@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_NSMetadataItem_Description_h
+#define MAD_Designer_NSMetadataItem_Description_h
+
 #import <Foundation/NSMetadata.h>
 
 @interface NSMetadataItem (Description)
 
 @end
+
+#endif

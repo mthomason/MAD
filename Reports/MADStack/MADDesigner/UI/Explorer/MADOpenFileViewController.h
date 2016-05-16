@@ -38,7 +38,7 @@
 
     - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
 
-    @property (readonly) UIManagedDocument *openDocument;
+    @property (readonly) __kindof UIManagedDocument *openDocument;
 
     @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 

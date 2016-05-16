@@ -11,11 +11,14 @@
 #endif
 
 #import "MTReportViewerReportPageViewController.h"
-#import <MADCocoaExtensions/UIView+Animations.h>
 #import "MTReportViewerReportPageView.h"
 #import "NSDate+Extras.h"
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"
+
+#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MAD/MTPaper.h>
+#import <MAD/MADocument.h>
 
 static const CGFloat PageEdgeInsetMargin = 3.0000f;
 

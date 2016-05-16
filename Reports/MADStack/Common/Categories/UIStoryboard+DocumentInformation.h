@@ -13,7 +13,7 @@
 
 @interface UIStoryboard (DocumentInformation)
 
-+ (instancetype)DocumentInfo;
+    + (instancetype)DocumentInfo;
 
 @end
 

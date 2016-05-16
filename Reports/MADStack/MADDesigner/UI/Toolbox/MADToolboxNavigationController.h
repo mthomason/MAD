@@ -9,7 +9,7 @@
 #ifndef Reports_MADToolboxNavigationController_h
 #define Reports_MADToolboxNavigationController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UINavigationController.h>
 
 @interface MADToolboxNavigationController : UINavigationController
 

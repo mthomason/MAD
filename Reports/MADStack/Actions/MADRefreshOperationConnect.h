@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADRefreshOperationConnect_h
+#define MAD_Designer_MADRefreshOperationConnect_h
+
 #import "MADOperation.h"
 
 @interface MADRefreshOperationConnect : MADOperation
 
 @end
+
+#endif

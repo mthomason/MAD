@@ -9,9 +9,11 @@
 #define Reports_UIImage_Alpha_h
 
 @interface UIImage (Alpha)
-- (BOOL)hasAlpha;
-- (UIImage *)imageWithAlpha;
-- (UIImage *)transparentBorderImage:(NSUInteger)borderSize;
+
+    - (BOOL)hasAlpha;
+    - (UIImage *)imageWithAlpha;
+    - (UIImage *)transparentBorderImage:(NSUInteger)borderSize;
+
 @end
 
 #endif

@@ -9,11 +9,11 @@
 #ifndef Reports_UIStoryboard_InformationTable_h
 #define Reports_UIStoryboard_InformationTable_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (InformationTable)
 
-+ (instancetype)InformationTable;
+    + (instancetype)InformationTable;
 
 @end
 

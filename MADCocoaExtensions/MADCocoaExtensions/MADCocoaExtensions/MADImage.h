@@ -9,11 +9,11 @@
 #ifndef Reports_UIImage_Border_h
 #define Reports_UIImage_Border_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIImage.h>
 
 @interface MADImage : UIImage
 
-+ (instancetype)imageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED;
+    + (instancetype)imageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED;
 
 @end
 

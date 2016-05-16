@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADDocumentScroller_h
+#define MAD_Designer_MADDocumentScroller_h
+
+#import <UIKit/UIScrollView.h>
 
 @interface MADDocumentScroller : UIScrollView
 
 @end
+
+#endif

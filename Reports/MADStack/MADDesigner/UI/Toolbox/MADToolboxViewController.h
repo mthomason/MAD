@@ -9,20 +9,18 @@
 #ifndef MAD_MADToolboxViewController_h
 #define MAD_MADToolboxViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import "MADToolboxDisplayProtocol.h"
 #import "MADViewController.h"
+#import "MADToolboxDisplayProtocol.h"
 
 @class MADocument;
 
 @interface MADToolboxViewController : MADViewController
     <MADToolboxDisplayProtocol>
 
-@property (nonatomic, weak) MADocument *document;
-@property (nonatomic, copy) NSSet *selectedObjectIds;
+    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, copy) NSSet *selectedObjectIds;
 
-@property (nonatomic, assign) BOOL clearsBackground;
+    @property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

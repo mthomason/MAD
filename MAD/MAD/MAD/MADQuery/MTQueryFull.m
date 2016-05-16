@@ -58,6 +58,13 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectID.h>
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSCharacterSet.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSException.h>
+
 @interface MTQueryFull ()
 
     @property (nonatomic, copy) NSManagedObjectID *objectID;

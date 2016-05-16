@@ -19,6 +19,13 @@
 #import "MTDataTableFast.h"
 #import "MADNotificationDidFormatPage.h"
 
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UIActivity.h>
+#import <UIKit/UIActivityViewController.h>
+#import <UIKit/UIWindow.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIImageView.h>
+
 static inline CGFloat halfinch();
 static inline CGFloat halfinch() {
     return 72.0000 / 72.0000;

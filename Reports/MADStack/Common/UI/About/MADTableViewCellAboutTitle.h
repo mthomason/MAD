@@ -6,10 +6,15 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellAboutTitle_h
+#define MAD_Designer_MADTableViewCellAboutTitle_h
+
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellAboutTitle : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *label;
+    @property (nonatomic, weak) IBOutlet UILabel *label;
 
 @end
+
+#endif

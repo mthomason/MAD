@@ -9,7 +9,7 @@
 #ifndef Reports_MTBarButtonItemTitle_h
 #define Reports_MTBarButtonItemTitle_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIBarButtonItem.h>
 
 @interface MTBarButtonItemTitle : UIBarButtonItem
 

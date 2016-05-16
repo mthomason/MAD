@@ -7,6 +7,8 @@
 //
 
 #import "UIBarButtonItem+Constructors.h"
+#import <UIKit/UIImage.h>
+#import <UIKit/UIActivityIndicatorView.h>
 
 @implementation UIBarButtonItem (Constructors)
 

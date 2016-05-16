@@ -6,10 +6,15 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_CocoaExtensions_UIViewController_h
+#define MAD_CocoaExtensions_UIViewController_h
+
+#import <UIKit/UIViewController.h>
 
 @interface UIViewController (Utilities)
 
-+ (instancetype)topmostViewController;
+    + (instancetype)topmostViewController;
 
 @end
+
+#endif

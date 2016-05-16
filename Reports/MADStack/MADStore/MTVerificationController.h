@@ -20,28 +20,28 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 
 @interface MTVerificationController : NSObject
 
-+ (MTVerificationController *) sharedInstance;
+    + (MTVerificationController *) sharedInstance;
 
-@property (nonatomic, strong) NSMutableDictionary *transactionsReceiptStorageDictionary;
+    @property (nonatomic, strong) NSMutableDictionary *transactionsReceiptStorageDictionary;
 
-@property (nonatomic, assign) BOOL modernReceiptIsValid;
-@property (nonatomic, assign) BOOL modernReceiptProcess;
-@property (nonatomic, assign) BOOL modernReceiptProcessLicensed;
-@property (nonatomic, strong) NSDate *modernReceiptProcessExperationDate;
-@property (nonatomic, strong, readonly) MADSalesReceipt *receipt;
+    @property (nonatomic, assign) BOOL modernReceiptIsValid;
+    @property (nonatomic, assign) BOOL modernReceiptProcess;
+    @property (nonatomic, assign) BOOL modernReceiptProcessLicensed;
+    @property (nonatomic, strong) NSDate *modernReceiptProcessExperationDate;
+    @property (nonatomic, strong, readonly) MADSalesReceipt *receipt;
 
-// Checking the results of this is not enough.
-// The final verification happens in the connection:didReceiveData: callback within
-// this class.  So ensure IAP feaures are unlocked from there.
-- (void)resetReceipt;                                           //Load receipt from file.
-- (void)refreshReceipt:(MADCompletionSuccessError)completion;   //Load receipt from server.
-- (void)iOS7VerifyReceipt;
+    // Checking the results of this is not enough.
+    // The final verification happens in the connection:didReceiveData: callback within
+    // this class.  So ensure IAP feaures are unlocked from there.
+    - (void)resetReceipt;                                           //Load receipt from file.
+    - (void)refreshReceipt:(MADCompletionSuccessError)completion;   //Load receipt from server.
+    - (void)iOS7VerifyReceipt;
 
-- (BOOL)purchasedProductWithID:(NSString *)productID;
-- (BOOL)freeForCharterMemembers:(NSString *)productID;
-+ (BOOL)charterMemberGiftLookup:(NSString *)productID;
+    - (BOOL)purchasedProductWithID:(NSString *)productID;
+    - (BOOL)freeForCharterMemembers:(NSString *)productID;
+    + (BOOL)charterMemberGiftLookup:(NSString *)productID;
 
-- (BOOL)entitledToProduct:(NSString *)productID;
+    - (BOOL)entitledToProduct:(NSString *)productID;
 
 @end
 

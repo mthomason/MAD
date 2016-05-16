@@ -9,12 +9,11 @@
 #ifndef Reports_UITableViewCellOverride_h
 #define Reports_UITableViewCellOverride_h
 
-#import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
 @interface MADTableViewCellQueryOverride : MTAutoLayoutTableViewCell
 
-+ (CGFloat)defaultHeight;
+    + (CGFloat)defaultHeight;
 
 @end
 

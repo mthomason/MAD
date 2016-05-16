@@ -11,6 +11,9 @@
 #endif
 
 #import "MADTableViewControllerCoreDataResults.h"
+#import <CoreData/NSEntityDescription.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
 
 @interface MADTableViewControllerCoreDataResults()
     @property (nonatomic, assign) BOOL beganUpdates;
@@ -33,7 +36,8 @@
     if (newfrc != oldfrc) {
         _fetchedResultsController = newfrc;
         newfrc.delegate = self;
-        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {
+        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) &&
+            (!self.navigationController || !self.navigationItem.title)) {
             self.title = newfrc.fetchRequest.entity.name;
         }
         if (newfrc) {
@@ -58,7 +62,8 @@
 	return [self.fetchedResultsController.sections[(NSUInteger)section] name];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
+               atIndex:(NSInteger)index {
 	return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
 }
 

@@ -15,7 +15,7 @@
 
 @interface MADOperationConditionHasResultStringResult : MADOperationConditionResult
 
-@property (nonatomic, copy) NSString *result;
+    @property (nonatomic, copy) NSString *result;
 
 @end
 

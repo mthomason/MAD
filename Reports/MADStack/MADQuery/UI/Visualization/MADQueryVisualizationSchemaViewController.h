@@ -9,11 +9,10 @@
 #ifndef Reports_MTQueryBuilderAdvancedSchemaViewController_h
 #define Reports_MTQueryBuilderAdvancedSchemaViewController_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
-#import "MADViewController.h"
+#import <UIKit/UIViewController.h>
 #import "MADocumentProtocol.h"
+
+@class UITableView;
 
 @protocol MADQueryVisualizationSchemaDelegate
     - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;

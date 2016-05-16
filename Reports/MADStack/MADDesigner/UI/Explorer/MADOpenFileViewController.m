@@ -43,6 +43,8 @@
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
 
+static NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
+
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
 static NSString * const Downloading                             = @"Downloading";
@@ -153,7 +155,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return self.filesCoordnator.filesController.documentDirectory;
 }
 
-- (UIManagedDocument *)openDocument {
+- (__kindof UIManagedDocument *)openDocument {
     return self.reportState == MTReportStateOpen ? self.fileManager.openDocument : nil;
 }
 
@@ -181,7 +183,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
         self.getUserCloudPrefsFirstCall = YES;
         
-        dispatch_queue_t queueSerialOperations = dispatch_queue_create(MADQueueFileViewController, DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queueSerialOperations = dispatch_queue_create(MADQueueFileViewController,
+                                                                       DISPATCH_QUEUE_SERIAL);
         self.queueSerialOperations = queueSerialOperations;
         
         MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
@@ -469,20 +472,27 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [cell performSelectionAnimations];
     
     if (self.isEditing) {
-        [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        [self.collectionView selectItemAtIndexPath:indexPath animated:YES
+                                    scrollPosition:UICollectionViewScrollPositionCenteredVertically];
         if (metadata.isUbiquitous) {
             if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
-                NSError *error = nil;
-                [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:metadata.URL error:&error];
+                NSURL *url = metadata.URL.copy;
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    NSError *error = nil;
+                    [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
+                                                                                  error:&error];
+                }];
             }
         }
     } else {
         [cell stopWobble];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         [cell.activityIndicator startAnimating];
-
-        NSURL *fileURL = metadata.URL.copy;
-        [self.openFileDelegate openDocumentAtURL:fileURL];
+        
+        id open = [[NSInvocationOperation alloc] initWithTarget:self.openFileDelegate
+                                                       selector:@selector(openDocumentAtURL:)
+                                                         object:metadata.URL.copy];
+        [[NSOperationQueue mainQueue] addOperation:open];
         [cell normalizeTint];
     }
 }
@@ -536,8 +546,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 */
 - (void)selectionsUpdated {
-
-    switch (self.collectionView.indexPathsForSelectedItems.count) {
+    
+    NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
+    switch (indexPaths.count) {
 
         case 0:
             self.barButtonItemInformationDocument.enabled = NO;
@@ -682,11 +693,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [collectionView reloadItemsAtIndexPaths: updates];
         }
     } completion:^(BOOL finished) {
-        //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            completion(YES, nil);
-        //}];
+        
     }];
 
+    completion(YES, nil);
 }
 
 - (void)filesController:(MADFilesController *)filesController
@@ -962,14 +972,17 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         
         NSString *name = [NSURL fileNameFilter:text];
         if (name.length > 0) {
-            NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
+            NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent
+                                            URLByAppendingPathComponent:name isDirectory:NO];
+            NSString *path = newUrl.path;
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path] == NO &&
+                [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
                     
-                    UIDocument *doc = [MADocument newDocumentForURL:metaData.URL];
+                    MADocument *doc = [MADocument newDocumentForURL:metaData.URL];
                     [doc openWithCompletionHandler:^(BOOL success) {
                         if (success) {
-                            [doc closeWithCompletionHandler:^(BOOL successClose) {
+                            [MADocument close: doc completion:^(BOOL successClose) {
                                 if (successClose) {
                                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                                 }
@@ -1008,11 +1021,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
         UIManagedDocument *documentReport = [MADocument newDocumentForURL:metadata.URL];
         if (documentReport.documentState != UIDocumentStateClosed) {
-            [documentReport closeWithCompletionHandler:^(BOOL success) {
+            
+            [MADocument close: documentReport completion:^(BOOL success) {
                 if (success) {
                     [self email:cell];
                 }
             }];
+            
         } else {
             
             NSString *mimeType = [self.openFileDelegate mimeTypeForDocumentUTI:documentReport.fileType];

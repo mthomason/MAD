@@ -13,8 +13,8 @@
 
 @interface NSOperation (Advanced)
 
-- (void)addCompletionBlock:(void(^)(void))block;
-- (void)addDependencies:(NSArray /*NSOperation*/ *)dependencies;
+    - (void)addCompletionBlock:(void(^)(void))block;
+    - (void)addDependencies:(NSArray /*NSOperation*/ *)dependencies;
 
 @end
 

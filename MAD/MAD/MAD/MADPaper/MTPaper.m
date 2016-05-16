@@ -49,6 +49,8 @@
 #import "MTPaperC9.h"
 #import "MTPaperC10.h"
 
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 static inline CGRect CGRectBoundsForSize(CGSize size) {
     return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }

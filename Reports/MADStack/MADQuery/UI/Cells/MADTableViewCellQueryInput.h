@@ -9,12 +9,11 @@
 #ifndef Reports_UITableViewCellQueryInput_h
 #define Reports_UITableViewCellQueryInput_h
 
-#import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
 @interface MADTableViewCellQueryInput : MTAutoLayoutTableViewCell
 
-+ (CGFloat)defaultHeight;
+    + (CGFloat)defaultHeight;
 
 @end
 

@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_NSAttributedString_Logo_h
+#define MAD_Designer_NSAttributedString_Logo_h
+
 #import <Foundation/NSAttributedString.h>
 
 typedef NSAttributedString MADLogoString;
@@ -15,3 +18,5 @@ typedef NSAttributedString MADLogoString;
     + (MADLogoString *)newLogoStringForTitle:(NSString *)title;
 
 @end
+
+#endif

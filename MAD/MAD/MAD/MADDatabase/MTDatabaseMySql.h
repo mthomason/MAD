@@ -16,14 +16,14 @@
 
 @interface MTDatabaseMySql : MTDatabase
 
-- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
+    - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
+    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-- (NSString *)identifier;
-+ (NSString *)identifier;
+    - (NSString *)identifier;
+    + (NSString *)identifier;
 
 @end
 

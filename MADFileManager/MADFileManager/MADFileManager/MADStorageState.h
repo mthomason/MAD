@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADFileManager_MADStorageState_h
+#define MADFileManager_MADStorageState_h
+
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(short, MADAppStorage) {
@@ -21,3 +24,5 @@ typedef NS_ENUM(short, MADAppStorage) {
     @property (nonatomic, assign) BOOL cloudAvailable;
 
 @end
+
+#endif

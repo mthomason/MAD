@@ -13,10 +13,10 @@
 
 @interface RptqDocumentSectionRows (Extras)
 
-+ (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
-- (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value;
+    - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
+    - (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value;
 
 @end
 

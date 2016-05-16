@@ -9,11 +9,11 @@
 #ifndef MADExtensions_UIApplication_Constructors_h
 #define MADExtensions_UIApplication_Constructors_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 
 @interface MADStackViewController : UIViewController
 
-+ (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
+    + (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
 
 @end
 

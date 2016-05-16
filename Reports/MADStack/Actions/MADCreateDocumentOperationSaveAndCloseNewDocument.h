@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADCreateDocumentOperationSaveAndCloseNewDocument_h
+#define MAD_Designer_MADCreateDocumentOperationSaveAndCloseNewDocument_h
+
 #import "MADOperation.h"
 
 @interface MADCreateDocumentOperationSaveAndCloseNewDocument : MADOperation
 
 @end
+
+#endif

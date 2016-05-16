@@ -77,6 +77,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADFilename.h>
 #import <MADCocoaExtensions/MADThread.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MTDataTableFast.h"
@@ -87,6 +88,16 @@
 
 #import <MADBarcodes/png.h>
 #import <setjmp.h>
+
+#import <CoreData/NSManagedObjectModel.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSPersistentStoreCoordinator.h>
+
+#import <UIKit/UIScreen.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIPrintPaper.h>
+#import <UIKit/UILabel.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -99,44 +110,10 @@ static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
     png_voidp io_ptr = png_get_io_ptr(ps);
     memcpy(obuffer, (((iodata_stream *)io_ptr)->m) + (((iodata_stream*)io_ptr)->i), z);
     ((iodata_stream *)io_ptr)->i += (unsigned int)z;
-
-
-    //png_voidp a = png_get_io_ptr(png_ptr);
-    //memcpy(bytes, a, length);
-    //a = ((uint8_t *) a) + length;
-    //png_voidp io_ptr = png_get_io_ptr(png_ptr);
-    //if(io_ptr == NULL)
-    //    return;   // add custom error handling here
-    //png_cop(png_ptr)
-    //memcpy(&io_ptr, &bytes, size);
-    // bytes;
-    //NSData *d = [[NSData alloc] initWithBytesNoCopy: bytes length: size freeWhenDone: NO];
-    //[d getBytes:&io_ptr range:NSMakeRange(0, size)];
-//    io_ptr
-    
-    // using pulsar::InputStream
-    // -> replace with your own data source interface
-    //InputStream& inputStream = *(InputStream*)io_ptr;
-    //const size_t bytesRead = inputStream.Read(
-    //                                          (byte*)outBytes,
-    //                                          (size_t)byteCountToRead);
-    
-    //if((png_size_t)bytesRead != byteCount)
-    //    return;   // add custom error handling here
 }
 
 static void png_error_func(png_structp png_ptr, png_const_charp message) {
-    
-    NSLog(@"%s", message);
-    
-    /*
-     changed 20040224
-     From the libpng docs:
-     "Errors handled through png_error() are fatal, meaning that png_error()
-     should never return to its caller. Currently, this is handled via
-     setjmp() and longjmp()"
-     */
-    //return;
+    NSLog(@"PNG: %s", message);
     longjmp(png_jmpbuf(png_ptr), 1);
 }
 
@@ -147,112 +124,23 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
 int process_data(png_structp *png_ptr, png_infop *info_ptr,
                  png_bytep buffer, png_uint_32 length);
 int process_data(png_structp *png_ptr, png_infop *info_ptr,
-                 png_bytep buffer, png_uint_32 length)
-{
-    if (setjmp(png_jmpbuf((*png_ptr))))
-    {
+                 png_bytep buffer, png_uint_32 length) {
+    if (setjmp(png_jmpbuf((*png_ptr)))) {
         /* Free the png_ptr and info_ptr memory on error */
         png_destroy_read_struct(png_ptr, info_ptr, NULL);
         return (-1);
     }
-    
-    /* This one's new also.  Simply give it chunks of data as
-     * they arrive from the data stream (in order, of course).
-     * On segmented machines, don't give it any more than 64K.
-     * The library seems to run fine with sizes of 4K, although
-     * you can give it much less if necessary (I assume you can
-     * give it chunks of 1 byte, but I haven't tried with less
-     * than 256 bytes yet).  When this function returns, you may
-     * want to display any rows that were generated in the row
-     * callback, if you aren't already displaying them there.
-     */
-//#ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-//    png_process_data(*png_ptr, *info_ptr, buffer, length);
-//#endif
     return (0);
 }
 
 void info_callback(png_structp png_ptr, png_infop info);
-void info_callback(png_structp png_ptr, png_infop info) {
-    /* Do any setup here, including setting any of the transformations
-     * mentioned in the Reading PNG files section.  For now, you _must_
-     * call either png_start_read_image() or png_read_update_info()
-     * after all the transformations are set (even if you don't set
-     * any).  You may start getting rows before png_process_data()
-     * returns, so this is your last chance to prepare for that.
-     */
-}
+void info_callback(png_structp png_ptr, png_infop info) { }
 
 void row_callback(png_structp png_ptr, png_bytep new_row, png_uint_32 row_num, int pass);
-void row_callback(png_structp png_ptr, png_bytep new_row, png_uint_32 row_num, int pass) {
-    /*
-     * This function is called for every row in the image.  If the
-     * image is interlaced, and you turned on the interlace handler,
-     * this function will be called for every row in every pass.
-     *
-     * In this function you will receive a pointer to new row data from
-     * libpng called new_row that is to replace a corresponding row (of
-     * the same data format) in a buffer allocated by your application.
-     *
-     * The new row data pointer "new_row" may be NULL, indicating there is
-     * no new data to be replaced (in cases of interlace loading).
-     *
-     * If new_row is not NULL then you need to call
-     * png_progressive_combine_row() to replace the corresponding row as
-     * shown below:
-     */
-    
-    /* Get pointer to corresponding row in our
-     * PNG read buffer.
-     */
-    //png_bytep old_row = ((png_bytep *)our_data)[row_num];
-    
-#ifdef PNG_READ_INTERLACING_SUPPORTED
-    /* If both rows are allocated then copy the new row
-     * data to the corresponding row data.
-     */
-    /*if ((old_row != NULL) && (new_row != NULL))
-        png_progressive_combine_row(png_ptr, old_row, new_row);*/
-    
-    /*
-     * The rows and passes are called in order, so you don't really
-     * need the row_num and pass, but I'm supplying them because it
-     * may make your life easier.
-     *
-     * For the non-NULL rows of interlaced images, you must call
-     * png_progressive_combine_row() passing in the new row and the
-     * old row, as demonstrated above.  You can call this function for
-     * NULL rows (it will just return) and for non-interlaced images
-     * (it just does the memcpy for you) if it will make the code
-     * easier.  Thus, you can just do this for all cases:
-     */
-    
-    /*png_progressive_combine_row(png_ptr, old_row, new_row);*/
-    
-    /* where old_row is what was displayed for previous rows.  Note
-     * that the first pass (pass == 0 really) will completely cover
-     * the old row, so the rows do not have to be initialized.  After
-     * the first pass (and only for interlaced images), you will have
-     * to pass the current row as new_row, and the function will combine
-     * the old row and the new row.
-     */
-#endif /* READ_INTERLACING */
-}
+void row_callback(png_structp png_ptr, png_bytep new_row, png_uint_32 row_num, int pass) { }
 
 void end_callback(png_structp png_ptr, png_infop info);
-void end_callback(png_structp png_ptr, png_infop info)
-{
-    /* This function is called when the whole image has been read,
-     * including any chunks after the image (up to and including
-     * the IEND).  You will usually have the same info chunk as you
-     * had in the header, although some data may have been added
-     * to the comments and time fields.
-     *
-     * Most people won't do much here, perhaps setting a flag that
-     * marks the image as finished.
-     
-     */
-}
+void end_callback(png_structp png_ptr, png_infop info) { }
 
 /*
  {
@@ -319,7 +207,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreOptions = _persistentStoreOptions;
-
 
 + (instancetype)newManagedDocumentForURL:(NSURL *)url {
     id document = [[self alloc] initWithFileURL:url];
@@ -490,25 +377,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSString *)filename {
     return [MADocument fileNameForMadUrl:self.fileURL];
-}
-
-- (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
-    [self regenThumbnail];
-    
-    NSURL *gutsUrl = self.urlGuts.copy;
-    [self removeObservers];
-    MADocument * __weak weakself = self;
-    [super closeWithCompletionHandler:^(BOOL success) {
-        if (success) {
-            [MADocument RemoveGutsAtUrl:gutsUrl];
-        }
-    }];
-
-    if (completionHandler != nil) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            completionHandler(YES);
-        }];
-    }
 }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
@@ -1213,7 +1081,33 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                            waitUntilDone: NO];
 }
 
++ (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion  {
+
+    [document regenThumbnail];
+    [document removeObservers];
+    NSURL *gutsUrl = document.urlGuts.copy;
+
+    [document closeWithCompletionHandler:^(BOOL success) {
+        [self RemoveGutsAtUrl:gutsUrl];
+        completion(YES);
+    }];
+}
+
++ (void)closeAndDelete:(MADocument *)document completion:(void (^)(BOOL success))completion  {
+    [self close:document completion:^(BOOL success) {
+        [self DeletePersistentStoreForManagedObjectContext:document.managedObjectContext];
+        [self DeleteDocument:document fromDiskCompletion:^(BOOL successDelete) {
+            completion(YES);
+        }];
+    }];
+}
+
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
+    NSURL *gutsUrl = self.urlGuts.copy;
+    [self removeObservers];
+    MADocument * __weak weakself = self;
+    [MADocument RemoveGutsAtUrl:gutsUrl];
+    
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
         if (successClosingReport) {
             [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
@@ -1386,6 +1280,75 @@ typedef struct png_control
     }
 }
 
+- (NSURL *)copyPersistentStoreURL {
+    NSPersistentStoreCoordinator *persistentStoreCoordinator =
+        self.managedObjectContext.persistentStoreCoordinator;
+    NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
+    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
+    return storeURL.copy;
+}
+
++ (void)DeletePersistentStoreForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = managedObjectContext.persistentStoreCoordinator;
+    NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
+    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
+    
+    [managedObjectContext performBlockAndWait:^{
+        [managedObjectContext reset];//to drop pending changes
+    }];
+    NSError *error = nil;
+    
+    //delete the store from the current managedObjectContext
+    BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
+                                                               error: &error];
+    if (success) {
+        
+        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+        
+        NSNumber *o1 = @YES;
+        NSNumber *o2 = @YES;
+        id options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                      o1, NSMigratePersistentStoresAutomaticallyOption,
+                      o2, NSInferMappingModelAutomaticallyOption, nil];
+        
+        [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
+                                                 configuration: nil
+                                                           URL: storeURL
+                                                       options: options
+                                                         error: &error];
+    }
+
+}
+
++ (void)DeleteDocument:(MADocument *)document fromDiskCompletion:(void (^)(BOOL success))completion {
+    
+    NSURL *fileURL = document.fileURL;
+    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+
+        NSError *deleteError = nil;
+        
+        NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
+        
+        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: document.fileURL
+                                                                 includingPropertiesForKeys: properties
+                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles
+                                                                               errorHandler: ^BOOL(NSURL *url, NSError *error) {
+                                                                                   return YES;
+                                                                               }];
+        for (NSURL *file in enumerator) {
+            NSError *error = nil;
+            [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
+        }
+        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
+        NSAssert(deleteError == nil, @"%@", deleteError);
+        completion(YES);
+    };
+    
+    
+    [document performAsynchronousFileAccessUsingBlock:asyncBlock];
+}
+
+
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
     
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
@@ -1410,40 +1373,7 @@ typedef struct png_control
     };
     
     NSAssert(self.documentState == UIDocumentStateClosed, @"Document must be closed to call this!");
-    
-    // retrieve the store URL
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
-    NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
-    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
-    
-    [managedObjectContext performBlockAndWait:^{
-        
-        [managedObjectContext reset];//to drop pending changes
-        
-        NSError *error = nil;
-        
-        //delete the store from the current managedObjectContext
-        BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
-                                                                   error: &error];
-        if (success) {
-            
-            [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
-            
-            NSNumber *o1 = @YES;
-            NSNumber *o2 = @YES;
-            id options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                o1, NSMigratePersistentStoresAutomaticallyOption,
-                                                o2, NSInferMappingModelAutomaticallyOption, nil];
-            
-            [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
-                                                     configuration: nil
-                                                               URL: storeURL
-                                                           options: options
-                                                             error: &error];
-        }
-        
-    }];
+    [MADocument DeletePersistentStoreForManagedObjectContext:self.managedObjectContext];
 
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];

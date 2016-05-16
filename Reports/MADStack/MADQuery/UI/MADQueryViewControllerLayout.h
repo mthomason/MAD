@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADQueryViewControllerLayoutSection_h
+#define MAD_Designer_MADQueryViewControllerLayoutSection_h
+
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CGBase.h>
 
@@ -53,3 +56,5 @@ typedef NS_ENUM(short, MTQuerySections) {
     - (MADQueryViewControllerLayoutSection *)layoutAtIndex:(short)index;
     
 @end
+
+#endif

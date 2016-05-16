@@ -9,7 +9,7 @@
 #ifndef MAD_MADTransparentPresentationController_h
 #define MAD_MADTransparentPresentationController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIPresentationController.h>
 
 @interface MADTransparentPresentationController : UIPresentationController
 

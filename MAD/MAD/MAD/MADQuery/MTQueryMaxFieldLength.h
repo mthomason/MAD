@@ -13,7 +13,7 @@
 
 @interface MTQueryMaxFieldLength : MTQuery
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
+    - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
 
 @end
 

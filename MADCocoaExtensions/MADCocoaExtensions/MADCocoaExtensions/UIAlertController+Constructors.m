@@ -7,6 +7,7 @@
 //
 
 #import "UIAlertController+Constructors.h"
+#import <UIKit/UILabel.h>
 
 NSString * const MADTitleCloudSignout           = @"iCloud Sign Out";
 NSString * const MADTitleNewDocument            = @"New Document";

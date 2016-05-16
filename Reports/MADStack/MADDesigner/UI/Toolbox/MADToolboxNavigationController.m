@@ -7,6 +7,8 @@
 //
 
 #import "MADToolboxNavigationController.h"
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIBarCommon.h>
 
 @interface MADToolboxNavigationController ()
     <UINavigationBarDelegate, UIBarPositioningDelegate>

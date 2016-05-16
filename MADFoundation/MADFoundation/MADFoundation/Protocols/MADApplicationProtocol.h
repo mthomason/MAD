@@ -15,19 +15,19 @@
 
 @protocol MADApplicationProtocol <NSObject>
 
-+ (NSString *)ApplicationNameSufixPart;
-+ (NSString *)Trademark;
-- (NSString *)applicationIdentifier;
-- (NSString *)applicationBundleIdentifier;
-- (NSString *)ubiquityIdentifier;
-- (NSString *)groupIdentifier;
-- (NSString *)name;
-- (NSString *)trademark;
-- (NSString *)applicationNameSufixPart;
-- (NSString *)localizedApplicationNameSufixPart;
-- (NSUserDefaults *)applicationUserDefaults;
-- (NSString *)versionNumber;
-- (NSString *)revisionNumber;
+    + (NSString *)ApplicationNameSufixPart;
+    + (NSString *)Trademark;
+    - (NSString *)applicationIdentifier;
+    - (NSString *)applicationBundleIdentifier;
+    - (NSString *)ubiquityIdentifier;
+    - (NSString *)groupIdentifier;
+    - (NSString *)name;
+    - (NSString *)trademark;
+    - (NSString *)applicationNameSufixPart;
+    - (NSString *)localizedApplicationNameSufixPart;
+    - (NSUserDefaults *)applicationUserDefaults;
+    - (NSString *)versionNumber;
+    - (NSString *)revisionNumber;
 
 @end
 

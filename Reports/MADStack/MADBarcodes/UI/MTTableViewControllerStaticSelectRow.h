@@ -9,17 +9,17 @@
 #ifndef Barcodes_MTTableViewControllerStaticSelectRow_h
 #define Barcodes_MTTableViewControllerStaticSelectRow_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerStaticSelectRowDelegate
-- (NSInteger)initalRow;
-- (void)didSelectTag:(NSInteger)tag;
+    - (NSInteger)initalRow;
+    - (void)didSelectTag:(NSInteger)tag;
 @end
 
 @interface MTTableViewControllerStaticSelectRow : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, weak) id <MTTableViewControllerStaticSelectRowDelegate> delegate;
+    @property (nonatomic, weak) id <MTTableViewControllerStaticSelectRowDelegate> delegate;
 
 @end
 

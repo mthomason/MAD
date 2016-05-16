@@ -9,13 +9,13 @@
 #ifndef MAD_MTSliderPageVertical_h
 #define MAD_MTSliderPageVertical_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UISlider.h>
 #import <CoreGraphics/CoreGraphics.h>
 
 @interface MADSliderPageVertical : UISlider
 
-+ (UIImage *)sliderImageEnabled;
-+ (UIImage *)sliderImageDisabled;
+    + (UIImage *)sliderImageEnabled;
+    + (UIImage *)sliderImageDisabled;
 
 @end
 

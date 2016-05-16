@@ -13,7 +13,7 @@
 
 @interface UIStoryboard (About)
 
-+ (instancetype)About;
+    + (instancetype)About;
 
 @end
 

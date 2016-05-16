@@ -9,9 +9,10 @@
 #ifndef Reports_MADTableViewCellQueryPredicate_h
 #define Reports_MADTableViewCellQueryPredicate_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 #import "MTAutoLayoutTableViewCell.h"
+
+@class NSManagedObjectID;
+@class UILabel;
 
 @interface MADTableViewCellQueryPredicate : MTAutoLayoutTableViewCell
 

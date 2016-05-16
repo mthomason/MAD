@@ -9,11 +9,11 @@
 #ifndef Reports_UIStoryboard_NewDocument_h
 #define Reports_UIStoryboard_NewDocument_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (NewDocument)
 
-+ (instancetype)NewDocument;
+    + (instancetype)NewDocument;
 
 @end
 

@@ -9,11 +9,11 @@
 #ifndef Reports_MTReportViewerReportPageViewController_h
 #define Reports_MTReportViewerReportPageViewController_h
 
-#import <MAD/MADocument.h>
-#import <MAD/MTPaper.h>
+#import <UIKit/UIViewController.h>
 #import "MTPrintingProtocol.h"
 
-@class MADocument, MADPageViewAttributes;
+@class MADocument;
+@class MADPageViewAttributes;
 
 @interface MADReportPageViewController : UIViewController
 

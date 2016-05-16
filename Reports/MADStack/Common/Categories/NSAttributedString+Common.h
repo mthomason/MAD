@@ -6,12 +6,17 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_NSAttributedString_Common_h
+#define MAD_Designer_NSAttributedString_Common_h
+
 #import <Foundation/NSAttributedString.h>
 
 @interface NSAttributedString (Common)
 
-+ (NSAttributedString *)EverydayAppsOnTwitter;
-+ (NSAttributedString *)Twitter;
-+ (NSAttributedString *)FollowUsOnTwitter;
+    + (NSAttributedString *)EverydayAppsOnTwitter;
+    + (NSAttributedString *)Twitter;
+    + (NSAttributedString *)FollowUsOnTwitter;
 
 @end
+
+#endif

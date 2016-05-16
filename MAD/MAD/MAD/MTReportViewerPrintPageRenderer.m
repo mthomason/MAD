@@ -65,9 +65,11 @@
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
 
-#import <MAD/MTDataTableFast.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADImage.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import <MAD/MTDataTableFast.h>
 #import <MADBarcodes/MTBarcode.h>
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
@@ -427,19 +429,23 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                         
             for (RptqDocumentObject *item in items) {
                 //@autoreleasepool {
-                    id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
+                    id drawingObject = [self drawingObjectForDatabase:database
+                                                            pageIndex:pageIndex
+                                                       groupLevelKeys:groupLevelKeys
+                                                          detailRowId:pageSection.detailRowId
+                                                              andItem:item];
                     CGRect elementCanvasRect = item.frame;
                     elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
                     elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
                     
                     if ([drawingObject isKindOfClass:[NSString class]]) {
-                        //@autoreleasepool {
-                        NSDictionary *attributes = [item attributesForDrawingText];
-                        [drawingObject drawWithRect: elementCanvasRect
-                                            options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
-                                         attributes: attributes
-                                            context: nil];
-                        //}
+                        @autoreleasepool {
+                            NSDictionary *attributes = [item newDictionaryOfTextAttributes];
+                            [drawingObject drawWithRect: elementCanvasRect
+                                                options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                             attributes: attributes
+                                                context: nil];
+                            }
                     } else {
                         [drawingObject drawInRect:elementCanvasRect];
                     }
@@ -584,7 +590,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     
     if ([drawingObject isKindOfClass:[NSString class]]) {
         
-        NSDictionary *attributes = [item attributesForDrawingText];
+        NSDictionary *attributes = [item newDictionaryOfTextAttributes];
         [drawingObject drawWithRect: elementCanvasRect
                             options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
                          attributes: attributes context: nil];
@@ -624,7 +630,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 }
 
 - (MTBarcode *)documentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
-    NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:rowID]];
+    NSDictionary *rowData = [[NSDictionary alloc] initWithDictionary: [self.dataTable dataForCacheId:rowID]];
     
     NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
     NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable copyQueryAlias];

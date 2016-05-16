@@ -10,6 +10,9 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
+#import <UIKit/UILabel.h>
+#import <QuartzCore/CALayer.h>
+
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
 const CGFloat MADViewDetailSmallAnimationDuration   =  0.3333f;
 const CGFloat MADAlphaHidden                        =  0.0000f;

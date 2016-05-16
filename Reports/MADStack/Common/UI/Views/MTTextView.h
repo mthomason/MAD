@@ -9,15 +9,17 @@
 #ifndef Reports_MTTextView_h
 #define Reports_MTTextView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
+
+@class UITextView;
 
 @interface MTTextView : UIView
 
-@property (nonatomic, strong) UITextView *textView;
+    @property (nonatomic, strong) UITextView *textView;
 
-- (void)verticalAlignTop;
-- (void)verticalAlignBottom;
-- (void)verticalAlignMiddle;
+    - (void)verticalAlignTop;
+    - (void)verticalAlignBottom;
+    - (void)verticalAlignMiddle;
 
 @end
 

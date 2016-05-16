@@ -10,6 +10,11 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/NSAttributedString.h>
+
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";
 

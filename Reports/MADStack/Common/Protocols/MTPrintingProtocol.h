@@ -15,7 +15,7 @@
 
 @protocol MTPrintingProtocol <NSObject>
 @required
-- (MTReportViewerPrintPageRenderer *)printPageRender;
+    - (MTReportViewerPrintPageRenderer *)printPageRender;
 @end
 
 #endif

@@ -6,9 +6,13 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADQueryVisualizationSchemaPresentationController_h
+#define MAD_Designer_MADQueryVisualizationSchemaPresentationController_h
 
-@class MADQueryVisualizationTableDefination, NSManagedObjectID;
+#import <UIKit/UIPresentationController.h>
+
+@class NSManagedObjectID;
+@class MADQueryVisualizationTableDefination;
 
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
 
@@ -26,3 +30,5 @@
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaPresentationDelegate> delegatePresentation;
 
 @end
+
+#endif

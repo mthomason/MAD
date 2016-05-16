@@ -9,20 +9,20 @@
 #ifndef Reports_MTSchemaFieldCell_h
 #define Reports_MTSchemaFieldCell_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewCell.h>
 
 @class MTSchemaFieldCell;
 
 @protocol MTSchemaFieldCellDelegate
 @optional
-- (void)tableViewCell:(MTSchemaFieldCell *)tableViewCell didUpdateAnchorPointLeftTo:(CGPoint)anchorPointLeft andAnchorPointRightTo:(CGPoint)anchorPointRight;
+    - (void)tableViewCell:(MTSchemaFieldCell *)tableViewCell didUpdateAnchorPointLeftTo:(CGPoint)anchorPointLeft andAnchorPointRightTo:(CGPoint)anchorPointRight;
 @end
 
 @interface MTSchemaFieldCell : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
-@property (nonatomic, strong) IBOutlet UILabel *detailLabel;
-@property (nonatomic, strong) UIView *parentContainerView;
+    @property (nonatomic, weak) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
+    @property (nonatomic, strong) IBOutlet UILabel *detailLabel;
+    @property (nonatomic, strong) UIView *parentContainerView;
 
 @end
 

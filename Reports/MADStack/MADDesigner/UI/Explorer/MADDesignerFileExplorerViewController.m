@@ -7,15 +7,11 @@
 //
 
 #import "MADDesignerFileExplorerViewController.h"
-#import <MAD/MADCredential.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <StoreKit/SKPaymentQueue.h>
 
 #import "MADStoryboard.h"
 
-#import <MAD/MADConstants.h>
 #import "Constants.h"
 
 #import "MTStoreKitController.h"
@@ -36,9 +32,6 @@
 
 #import "MADNavigationController.h"
 
-#import <MADExplorer/MADFileLocationManager.h>
-#import <MADExplorer/MADOpenDocumentManager.h>
-
 #import "UIStoryboard+Query.h"
 #import "UINavigationController+MADQuery.h"
 #import "UINavigationController+Designer.h"
@@ -48,7 +41,18 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADTabBarController.h"
 
+#import <MAD/MADCredential.h>
+#import <MAD/MADConstants.h>
+#import <MAD/MADocument.h>
+
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MADExplorer/MADFileLocationManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -169,8 +173,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+    @autoreleasepool {
+        self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments] ? YES : NO;
+    }
     
 }
 
@@ -293,12 +298,12 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
-    UIManagedDocument *openDocument = self.openDocument;
+    MADocument *openDocument = self.fileManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         self.reportState = MTReportStateClosed;
-        [self.fileManager unload];
-        [openDocument closeWithCompletionHandler:^(BOOL successClose) {
-        
+        MADOpenDocumentManager * __unsafe_unretained fileManager = self.fileManager;
+        [MADocument close:openDocument completion:^(BOOL success) {
+            [fileManager unload];
         }];
     }
 
@@ -365,10 +370,10 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)reloadAfterClose {
-    UICollectionView *weakCollectionView __unsafe_unretained = self.collectionView;
+    UICollectionView *weakCollectionView __weak = self.collectionView;
     [UIView performWithoutAnimation:^{
         UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *__weak paths = collectionView.indexPathsForVisibleItems;
+        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
         [collectionView.backgroundView setNeedsDisplay];
         [collectionView reloadItemsAtIndexPaths:paths];
     }];

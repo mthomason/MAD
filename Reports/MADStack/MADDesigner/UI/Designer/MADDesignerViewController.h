@@ -9,11 +9,9 @@
 #ifndef Reports_MTReportDesignerViewController_h
 #define Reports_MTReportDesignerViewController_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import "MADViewController.h"
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
-#import "MADViewController.h"
 #import "MADViewControllerProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {

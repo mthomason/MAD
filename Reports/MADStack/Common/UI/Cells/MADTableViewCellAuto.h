@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellAuto_h
+#define MAD_Designer_MADTableViewCellAuto_h
+
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellAuto : UITableViewCell
 
@@ -19,3 +22,5 @@
     - (void)initalize;
 
 @end
+
+#endif

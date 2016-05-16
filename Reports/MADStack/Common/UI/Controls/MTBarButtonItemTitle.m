@@ -7,6 +7,7 @@
 //
 
 #import "MTBarButtonItemTitle.h"
+#import <UIKit/UINibLoading.h>
 
 @implementation MTBarButtonItemTitle
 

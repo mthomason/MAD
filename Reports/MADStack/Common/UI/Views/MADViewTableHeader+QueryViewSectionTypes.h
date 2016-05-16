@@ -6,14 +6,19 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADTableViewHeader_h
+#define MAD_Designer_MADTableViewHeader_h
+
 #import "MADTableViewHeader.h"
 
 @class MADQueryViewControllerLayoutSection;
 
 @interface MADTableViewHeader (QueryViewSectionTypes)
 
-+ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout
-                                          andFrame:(CGRect)frame
-                                            target:(nullable id)target;
+    + (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout
+                                              andFrame:(CGRect)frame
+                                                target:(nullable id)target;
 
 @end
+
+#endif

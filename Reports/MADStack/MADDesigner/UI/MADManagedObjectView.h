@@ -9,7 +9,9 @@
 #ifndef Reports_NSManagedObjectID_NSObjectIdTag_h
 #define Reports_NSManagedObjectID_NSObjectIdTag_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @class NSManagedObjectID;
 

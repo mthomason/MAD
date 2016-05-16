@@ -15,13 +15,13 @@
 
 @interface MTDataTableFastObjectEnumerator : NSEnumerator
 
-@property (nonatomic, assign) BOOL addRowId;
-@property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.
+    @property (nonatomic, assign) BOOL addRowId;
+    @property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.
 
-- (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
-                                   columns: (NSDictionary *)columns
-                                columnKeys: (NSArray *)columnKeys
-                                     query: (MTQuery *)query;
+    - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
+                                       columns: (NSDictionary *)columns
+                                    columnKeys: (NSArray *)columnKeys
+                                         query: (MTQuery *)query;
 
 @end
 

@@ -32,6 +32,7 @@
 #import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+#import <stdio.h>
 
 @implementation RptqQueryTable (Extras)
 

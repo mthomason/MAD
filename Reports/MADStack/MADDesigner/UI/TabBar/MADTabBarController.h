@@ -9,7 +9,7 @@
 #ifndef Reports_MADTabBarController_h
 #define Reports_MADTabBarController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITabBarController.h>
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 

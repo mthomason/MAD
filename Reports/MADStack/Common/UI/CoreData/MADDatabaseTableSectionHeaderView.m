@@ -9,6 +9,12 @@
 #import "MADDatabaseTableSectionHeaderView.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import <UIKit/UIFont.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UITapGestureRecognizer.h>
+
 static NSString * const TextAccessibilityHint = @"Toggles database field visibility.";
 static const CGFloat ButtonSize = 35.00000f;
 static const CGFloat PaddingSize = 5.00000f;

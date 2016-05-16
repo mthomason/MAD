@@ -1,6 +1,6 @@
 //
 //  UIColor+EverydayApps.m
-//  Reports
+//  CocoaExtensions
 //
 //  Created by Michael Thomason on 2/9/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.

@@ -18,6 +18,8 @@
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 
+#import <UIKit/UILabel.h>
+
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
 typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
 

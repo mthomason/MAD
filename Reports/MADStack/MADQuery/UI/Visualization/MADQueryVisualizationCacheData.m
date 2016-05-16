@@ -9,6 +9,7 @@
 #import "MADQueryVisualizationCacheData.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <CoreData/NSManagedObjectID.h>
 
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";

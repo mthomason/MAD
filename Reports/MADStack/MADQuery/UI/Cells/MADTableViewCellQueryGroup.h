@@ -9,9 +9,10 @@
 #ifndef Reports_UITableViewCellQueryGroup_h
 #define Reports_UITableViewCellQueryGroup_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 #import "MTAutoLayoutTableViewCell.h"
+
+@class NSManagedObjectID;
+@class UILabel;
 
 @interface MADTableViewCellQueryGroup : MTAutoLayoutTableViewCell
 

@@ -15,16 +15,6 @@
 
 #import <CoreData/CoreData.h>
 
-#import <MAD/MTReportViewerPrintPageRenderer.h>
-#import <MAD/MADocument.h>
-#import <MAD/MTDatabaseConnection.h>
-#import <MAD/MTDataTableFast.h>
-
-#import <MAD/MTActivityItemProviderPdf.h>
-#import <MAD/MADNotificationDidFormatPage.h>
-#import <MAD/MADNotificationDidReadRows.h>
-#import <MAD/MTKeyChain.h>
-
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -57,6 +47,17 @@
 #import "MADBlockOperation.h"
 
 #import "MADStoryboard.h"
+
+#import <MAD/MTReportViewerPrintPageRenderer.h>
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDataTableFast.h>
+
+#import <MAD/MTActivityItemProviderPdf.h>
+#import <MAD/MADNotificationDidFormatPage.h>
+#import <MAD/MADNotificationDidReadRows.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTPaper.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";

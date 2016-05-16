@@ -8,6 +8,7 @@
 
 #import "MTReportDesignerSectionViewLayoutLine.h"
 #import "MTReportDesignerSectionDecorationView.h"
+#import <UIKit/UITableView.h>
 
 @interface MTReportDesignerSectionViewLayoutLine ()
 

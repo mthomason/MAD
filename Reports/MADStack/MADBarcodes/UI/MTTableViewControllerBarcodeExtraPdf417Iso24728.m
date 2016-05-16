@@ -12,13 +12,15 @@
 
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 #import "MTTableViewControllerStaticSelectRow.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
-#if __has_attribute(objc_designated_initializer)
-#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
-#else
-#define NS_DESIGNATED_INITIALIZER
-#endif
+  #if __has_attribute(objc_designated_initializer)
+    #define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+  #else
+    #define NS_DESIGNATED_INITIALIZER
+  #endif
 #endif
 
 @interface MTTableViewControllerBarcodeExtraPdf417Iso24728 ()

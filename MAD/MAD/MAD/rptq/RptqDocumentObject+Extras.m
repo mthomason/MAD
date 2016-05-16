@@ -526,10 +526,11 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return result;
 }
 
-- (NSDictionary *)attributesForDrawingText __attribute__((ns_returns_autoreleased)) {
+- (NSDictionary *)newDictionaryOfTextAttributes {
 
     UIFontDescriptorSymbolicTraits traits;
-    UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname size:self.fontsize.floatValue];
+    UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname
+                                                              size:self.fontsize.floatValue];
 
     bool gotTraits = false;
     if (self.italic.boolValue && self.bold.boolValue) {
@@ -577,12 +578,14 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     }
     
     NSNumber *baselineOffset = @0.00000000f;
-    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger:self.underline.boolValue ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
-    NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger:self.underline.boolValue ?
+                                         NSUnderlineStyleSingle : NSUnderlineStyleNone];
+    NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ?
+                                             NSUnderlineStyleSingle : NSUnderlineStyleNone];
 
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     customFont, NSFontAttributeName,
-                                    @0.00000000f, NSBaselineOffsetAttributeName,
+                                    baselineOffset, NSBaselineOffsetAttributeName,
                                     underlineStyle, NSUnderlineStyleAttributeName,
                                     strikethroughStyle, NSStrikethroughStyleAttributeName,
                                     paragraphStyle, NSParagraphStyleAttributeName, nil];

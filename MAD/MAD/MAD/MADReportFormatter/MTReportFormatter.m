@@ -11,7 +11,7 @@
 #endif
 
 #import "MTReportFormatter.h"
-#import <CoreData/NSManagedObjectID.h>
+
 #import "MTReportFormatterState.h"
 #import "MADocument.h"
 #import "MTQueryFull.h"
@@ -41,6 +41,9 @@
 #import "NSData+Comparson.h"
 
 #import "MADSectionPlist.h"
+
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <CoreData/NSManagedObjectID.h>
 
 NSString * const MTNullIdentifier = @"(null)";
 

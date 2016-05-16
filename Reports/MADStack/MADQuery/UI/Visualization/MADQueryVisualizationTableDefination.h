@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADQueryVisualizationTableDefination_h
+#define MAD_Designer_MADQueryVisualizationTableDefination_h
+
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
@@ -18,3 +21,5 @@
     @property (nonatomic, assign, getter=isRoot) BOOL root;
 
 @end
+
+#endif

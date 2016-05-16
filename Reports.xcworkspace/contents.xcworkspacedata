@@ -14,7 +14,13 @@
             location = "group:MADFoundation/MADFoundation.xcodeproj">
          </FileRef>
          <FileRef
-            location = "group:MADCocoaExtensions/MADCocoaExtensions.xcodeproj">
+            location = "group:MADDataStructures/MADDataStructures.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "container:MADCocoaExtensions/MADCocoaExtensions.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:MADFileManager/MADFileManager.xcodeproj">
          </FileRef>
          <FileRef
             location = "group:MADTdsClient/MADTdsClient.xcodeproj">
@@ -29,13 +35,7 @@
             location = "group:MADBarcodes/MADBarcodes.xcodeproj">
          </FileRef>
          <FileRef
-            location = "group:MADDataStructures/MADDataStructures.xcodeproj">
-         </FileRef>
-         <FileRef
             location = "group:MADExplorer/MADExplorer.xcodeproj">
-         </FileRef>
-         <FileRef
-            location = "group:MADFileManager/MADFileManager.xcodeproj">
          </FileRef>
          <FileRef
             location = "group:MAD/MAD.xcodeproj">

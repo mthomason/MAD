@@ -9,11 +9,11 @@
 #ifndef Reports_UIStoryboard_Viewer_h
 #define Reports_UIStoryboard_Viewer_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (Viewer)
 
-+ (UIStoryboard *)viewer;
+    + (UIStoryboard *)viewer;
 
 @end
 

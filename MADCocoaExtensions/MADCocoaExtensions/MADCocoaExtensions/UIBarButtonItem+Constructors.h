@@ -9,13 +9,14 @@
 #ifndef MADExtensions_UIBarButtonItem_Constructors_h
 #define MADExtensions_UIBarButtonItem_Constructors_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIBarButtonItem.h>
 
 @interface UIBarButtonItem (Constructors)
-+ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action;
-+ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action;
-+ (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED;
-+ (instancetype)ActivityIndicator NS_RETURNS_RETAINED;
+
+    + (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action;
+    + (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action;
+    + (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED;
+    + (instancetype)ActivityIndicator NS_RETURNS_RETAINED;
 
 @end
 

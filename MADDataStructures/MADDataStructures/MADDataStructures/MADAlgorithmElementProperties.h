@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MADAlgorithmElementProperties_h
+#define MAD_DataStructures_MADAlgorithmElementProperties_h
+
 #import <Foundation/NSObject.h>
 
 typedef NS_ENUM(short, MTAlgorithmColor) {
@@ -19,3 +22,5 @@ typedef NS_ENUM(short, MTAlgorithmColor) {
     @property (atomic, assign) MTAlgorithmColor vertexColor;
 
 @end
+
+#endif

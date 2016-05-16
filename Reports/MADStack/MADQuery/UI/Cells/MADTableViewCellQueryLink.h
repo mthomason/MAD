@@ -9,9 +9,10 @@
 #ifndef Reports_UITableViewCellQueryLink_h
 #define Reports_UITableViewCellQueryLink_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 #import "MTAutoLayoutTableViewCell.h"
+
+@class NSManagedObjectID;
+@class UILabel;
 
 @interface MADTableViewCellQueryLink : MTAutoLayoutTableViewCell
 

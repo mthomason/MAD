@@ -9,11 +9,11 @@
 #ifndef Reports_NSManagedObjectID_Extras_h
 #define Reports_NSManagedObjectID_Extras_h
 
-#import <CoreData/CoreData.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface NSManagedObjectID (Extras)
 
-@property (readonly) NSString *key;
+    @property (readonly) NSString *key;
 
 @end
 

@@ -6,10 +6,15 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADQueryVisualizationViewController_Designer_h
+#define MAD_Designer_MADQueryVisualizationViewController_Designer_h
+
 #import "MADQueryVisualizationViewController.h"
 
 @interface MADQueryVisualizationViewController (Designer)
 
-+ (instancetype) QueryVisualizationViewController;
+    + (instancetype) QueryVisualizationViewController;
 
 @end
+
+#endif

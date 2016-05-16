@@ -6,12 +6,17 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MTStoreKitController_Features_h
+#define MAD_Designer_MTStoreKitController_Features_h
+
 #import "MTStoreKitController.h"
 
 @interface MTStoreKitController (Features)
 
-@property (readonly, getter=isReportingLimited)             BOOL reportingLimited;
-@property (readonly, getter=isReportingEnabled)             bool reportingEnabled;
-@property (readonly, getter=isBarcodeDesignerEnabled)       BOOL barcodeDesignerEnabled;
+    @property (readonly, getter=isReportingLimited)             BOOL reportingLimited;
+    @property (readonly, getter=isReportingEnabled)             bool reportingEnabled;
+    @property (readonly, getter=isBarcodeDesignerEnabled)       BOOL barcodeDesignerEnabled;
 
 @end
+
+#endif

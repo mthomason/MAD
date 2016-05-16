@@ -30,6 +30,9 @@
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSString.h>
 
 @implementation RptqQueryGroup (Extras)
 

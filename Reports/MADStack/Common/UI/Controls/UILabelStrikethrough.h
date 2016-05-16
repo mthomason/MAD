@@ -9,7 +9,7 @@
 #ifndef Reports_UILabelStrikethrough_h
 #define Reports_UILabelStrikethrough_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UILabel.h>
 
 @interface UILabelStrikethrough : UILabel
 

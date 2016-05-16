@@ -9,8 +9,10 @@
 #ifndef Reports_MADViewTableHeader_h
 #define Reports_MADViewTableHeader_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIView.h>
+
+@class UIButton;
+@class UILabel;
 
 @interface MADTableViewHeader : UIView
 

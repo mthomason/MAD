@@ -6,8 +6,13 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADQueryVisualizationPresentationController_h
+#define MAD_Designer_MADQueryVisualizationPresentationController_h
+
+#import <UIKit/UIPresentationController.h>
 
 @interface MADQueryVisualizationPresentationController : UIPresentationController
 
 @end
+
+#endif

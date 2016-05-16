@@ -56,7 +56,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGFloat)spacingBottom;
     - (CGFloat)spacingRight;
 
-    - (NSDictionary *)attributesForDrawingText __attribute__((ns_returns_autoreleased));
+    - (NSDictionary *)newDictionaryOfTextAttributes;
 
 @end
 

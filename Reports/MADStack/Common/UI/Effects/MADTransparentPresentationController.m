@@ -7,6 +7,8 @@
 //
 
 #import "MADTransparentPresentationController.h"
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
 
 @implementation MADTransparentPresentationController
 

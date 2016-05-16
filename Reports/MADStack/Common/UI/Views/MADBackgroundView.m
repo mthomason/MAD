@@ -8,6 +8,7 @@
 
 #import "MADBackgroundView.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <QuartzCore/CALayer.h>
 
 @implementation MADBackgroundView
 

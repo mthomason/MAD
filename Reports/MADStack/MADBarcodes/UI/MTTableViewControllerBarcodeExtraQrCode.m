@@ -12,6 +12,8 @@
 
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerStaticSelectRow.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
 
 @interface MTTableViewControllerBarcodeExtraQrCode ()
     <MTTableViewControllerStaticSelectRowDelegate>

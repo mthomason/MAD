@@ -9,7 +9,7 @@
 #ifndef Reports_MTResizeHandleView_h
 #define Reports_MTResizeHandleView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MTResizeHandleView;

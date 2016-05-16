@@ -501,9 +501,9 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 
                 [sself.delegate filesControllerDidChangeContent: sself
                                                      completion: ^(BOOL success, NSError *error) {
-                    completion(success, nil);
+                    
                 }];
-                
+                completion(YES, nil);
             
         } else {
             completion(YES, nil);

@@ -28,15 +28,6 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @implementation MTGroupByViewController
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-        
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -51,21 +42,21 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-    [request setSortDescriptors: @[sortDescriptor]];
+    id sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     
-    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                          managedObjectContext: self.document.managedObjectContext
-                                                                            sectionNameKeyPath: nil
-                                                                                     cacheName: nil];
+    NSFetchedResultsController *frc;
+    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                              managedObjectContext: self.document.managedObjectContext
+                                                sectionNameKeyPath: nil
+                                                         cacheName: nil];
     frc.delegate = self;
     self.fetchedResultsControllerGroups = frc;
     
     NSError *error = nil;
     [self.fetchedResultsControllerGroups performFetch:&error];
     if (error != nil) {
-        [NSError presentError: error
-             onViewController: self
-                   completion: NULL];
+        [NSError presentError: error onViewController: self completion: NULL];
     }
     frc = nil;
 
@@ -126,9 +117,9 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSUInteger rowCount = [tableView numberOfRowsInSection:indexPath.section];
+    NSInteger rowCount = [tableView numberOfRowsInSection:indexPath.section];
 
-    for (NSUInteger i = 0; i < rowCount; i++) {
+    for (NSInteger i = 0; i < rowCount; i++) {
         NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:indexPath.section];
         UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:cellPath];
         tableViewCell.accessoryType = UITableViewCellAccessoryNone;
@@ -137,33 +128,30 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     
+    id <MTGroupByViewControllerDelegate> delegate = _delegate;
+    if (delegate == nil) goto SkipDisplay;
     switch (indexPath.row) {
         
         case 0:
             [self setGroupType:MTAggregateGroupByTypePage];
-            if (self.delegate != nil) {
-                [self.delegate didSelectGroupByPage];
-            }
+            [delegate didSelectGroupByPage];
             break;
         
         case 1:
             [self setGroupType:MTAggregateGroupByTypeReport];
-            if (self.delegate != nil) {
-                [self.delegate didSelectGroupByReport];
-            }
+            [delegate didSelectGroupByReport];
             break;
         
         default: {
-            NSUInteger groupNumber = indexPath.row - 2;
+            NSUInteger groupNumber = (NSUInteger)indexPath.row - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
-            if (self.delegate != nil) {
-                [self.delegate didSelectGroupBySectionNumber: groupNumber];
-            }
+            [delegate didSelectGroupBySectionNumber: groupNumber];
             break;
         }
             
     }
+    SkipDisplay:;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -180,9 +168,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             break;
             
         default: {
-            NSUInteger groupNumber = indexPath.row - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
-            [self setGroupTypeSectionWithNumber: groupNumber];
+            [self setGroupTypeSectionWithNumber: (NSUInteger)indexPath.row - 2];
             break;
         }
             
@@ -190,7 +177,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     
 }
 
-- (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber {
+- (void)selectGroupType:(MTAggregateGroupByType)groupByType
+      withSectionNumber:(NSUInteger)sectionNumber {
     _aggregateGroupType = groupByType;
     _aggregateGroupNumber = sectionNumber;
 }
@@ -202,12 +190,13 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 #pragma mark - Table View Datasource Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[[self fetchedResultsControllerGroups] sections] count];
+    return (NSInteger)self.fetchedResultsControllerGroups.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsControllerGroups] sections][section];
-    return [sectionInfo numberOfObjects] + 2;
+    id <NSFetchedResultsSectionInfo> __unsafe_unretained sectionInfo =
+                                _fetchedResultsControllerGroups.sections[(NSUInteger)section];
+    return (NSInteger)sectionInfo.numberOfObjects + 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -218,14 +207,14 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     switch (indexPath.row) {
 
         case 0:
-            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage]];
+            [cell.textLabel setText:[RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage]];
             if ([self aggregateGroupType] == MTAggregateGroupByTypePage) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
             }
             break;
         
         case 1:
-            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport]];
+            [cell.textLabel setText:[RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport]];
             if ([self aggregateGroupType] == MTAggregateGroupByTypeReport) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
             }
@@ -238,8 +227,9 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             NSString *textLabel = fieldNameNice == nil ?
                     [NSString stringWithFormat:@"Group %ld", (long)groupLevel] :
                     [NSString stringWithFormat:@"Group %ld (%@)", (long)groupLevel, fieldNameNice];
-            [[cell textLabel] setText:textLabel];
-            if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && indexPath.row - 2 == [self aggregateGroupNumber]) {
+            [cell.textLabel setText:textLabel];
+            if (_aggregateGroupType == MTAggregateGroupByTypeSection &&
+                                        indexPath.row - 2 == (NSInteger)_aggregateGroupNumber) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
             }
             break;
@@ -251,16 +241,18 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsControllerGroups] sections][section];
+    id <NSFetchedResultsSectionInfo> __unsafe_unretained sectionInfo =
+                                _fetchedResultsControllerGroups.sections[(NSUInteger)section];
     return [sectionInfo name];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [[self fetchedResultsControllerGroups] sectionIndexTitles];
+    return [_fetchedResultsControllerGroups sectionIndexTitles];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    return [[self fetchedResultsControllerGroups] sectionForSectionIndexTitle:title atIndex:index];
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
+                                                                        atIndex:(NSInteger)index {
+    return [_fetchedResultsControllerGroups sectionForSectionIndexTitle:title atIndex:index];
 }
 
 @end

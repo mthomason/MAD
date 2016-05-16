@@ -10,6 +10,7 @@
 #import "NSAttributedString+Common.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <UIKit/UIAccessibility.h>
+#import <QuartzCore/CALayer.h>
 
 @implementation UIButton (FollowTwitter)
 

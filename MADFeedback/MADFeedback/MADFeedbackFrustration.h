@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Feedback_MADFeedbackFrustration_h
+#define MAD_Feedback_MADFeedbackFrustration_h
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
@@ -14,6 +17,8 @@
 
 @interface MADFeedbackFrustration : UIResponder
 
-+ (instancetype)sharedInstance;
+    + (instancetype)sharedInstance;
 
 @end
+
+#endif

@@ -25,6 +25,9 @@
 #import "MADQueryVisualizationViewController+Designer.h"
 #import "MADStoryboard.h"
 
+#import <UIKit/UIManagedDocument.h>
+#import <CoreData/NSManagedObjectContext.h>
+
 static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
 
 @interface MADQueryBuilderSplitViewController ()

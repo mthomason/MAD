@@ -43,7 +43,7 @@
 - (void)didDeactivate {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
-    [self.document closeWithCompletionHandler:nil];
+    [MADocument close: self.document completion:^(BOOL success) {}];
 }
 
 @end

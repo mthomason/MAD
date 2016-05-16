@@ -7,6 +7,7 @@
 //
 
 #import "UILabelStrikethrough.h"
+#import <UIKit/UIGraphics.h>
 
 @implementation UILabelStrikethrough
 

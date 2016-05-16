@@ -6,10 +6,15 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIMotionEffectGroup_Shared_h
+#define Reports_UIMotionEffectGroup_Shared_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIMotionEffectGroup (HoverEffects)
 
-+ (UIMotionEffectGroup *)HoverEffects;
+    + (UIMotionEffectGroup *)HoverEffects;
 
 @end
+
+#endif

@@ -9,12 +9,12 @@
 #ifndef Reports_NSManagedObject_Extras_h
 #define Reports_NSManagedObject_Extras_h
 
-#import <CoreData/CoreData.h>
+#import <CoreData/NSManagedObject.h>
 
 @interface NSManagedObject (Extras)
 
-- (void)obtainPermanentID;
-- (BOOL)saveContext;
+    - (void)obtainPermanentID;
+    - (BOOL)saveContext;
 
 @end
 

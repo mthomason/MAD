@@ -12,11 +12,6 @@
 
 #import "MADQueryVisualizationViewController.h"
 
-#import <MAD/MADConstants.h>
-#import <MADDataStructures/MTPair.h>
-#import <MADDataStructures/MTVertex.h>
-#import <MADDataStructures/MTLinkedList.h>
-
 #import "MADManagedObjectView.h"
 #import "MADViewControllerSQL.h"
 #import "MADConnectorView.h"
@@ -50,6 +45,35 @@
 #import "MADOperationQueue.h"
 
 #import "MADCacheManager.h"
+
+#import <MAD/MADConstants.h>
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTLinkedList.h>
+
+#import <MAD/MADocument.h>
+
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
+
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+
+#import <MAD/RptqQueryLinks.h>
+#import <MAD/RptqQueryLinks+Extras.h>
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryTable+Extras.h>
+
+#import <UIKit/UIManagedDocument.h>
+
+#import <CoreData/NSManagedObjectContext.h>
 
 typedef void(^MTBlockResultVoid)(void);
 

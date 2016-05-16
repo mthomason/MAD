@@ -9,7 +9,6 @@
 #ifndef Reports_MADQueryNavigationController_h
 #define Reports_MADQueryNavigationController_h
 
-#import <UIKit/UIKit.h>
 #import "MADNavigationController.h"
 
 @interface MADQueryNavigationController : MADNavigationController

@@ -9,6 +9,12 @@
 #import "MADNavigationController.h"
 #import "MADTransparentPresentationController.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIViewController.h>
 
 @implementation MADNavigationController
 
@@ -53,7 +59,7 @@
 }
 
 - (UITabBarItem *)tabBarItem {
-    return self.topViewController.tabBarItem;
+    return ((UITabBarController *)self.topViewController).tabBarItem;
 }
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action

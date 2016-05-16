@@ -7,6 +7,9 @@
 //
 
 #import "NSManagedObject+Extras.h"
+#import <UIKit/UIManagedDocument.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 @implementation NSManagedObject (Extras)
 

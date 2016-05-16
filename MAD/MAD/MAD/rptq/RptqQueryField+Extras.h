@@ -14,12 +14,13 @@
 
 @interface RptqQueryField (Extras) <MTProtocolLog>
 
-+ (instancetype)newQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED;
-+ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)newQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID
+                     managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (NSString *)display;
-- (NSString *)tableFieldKey;
-- (NSString *)toStringReverse;
+    - (NSString *)display;
+    - (NSString *)tableFieldKey;
+    - (NSString *)toStringReverse;
 
 @end
 

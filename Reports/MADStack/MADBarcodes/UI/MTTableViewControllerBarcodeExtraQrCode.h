@@ -9,21 +9,21 @@
 #ifndef Barcodes_MTTableViewControllerBarcodeExtraQrCode_h
 #define Barcodes_MTTableViewControllerBarcodeExtraQrCode_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerBarcodeExtraQrCodeDelegate
-- (void)barcodeQrCodeDidEnableAutomaticResizing;
-- (void)barcodeQrCodeDidSetSize:(NSInteger)size;
-- (void)barcodeQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection;
+    - (void)barcodeQrCodeDidEnableAutomaticResizing;
+    - (void)barcodeQrCodeDidSetSize:(NSInteger)size;
+    - (void)barcodeQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection;
 
-- (BOOL)barcodeQrCodeAutomaticResizing;
-- (NSInteger)barcodeQrCodeInitalSize;
-- (NSInteger)barcodeQrCodeInitalErrorCorrection;
+    - (BOOL)barcodeQrCodeAutomaticResizing;
+    - (NSInteger)barcodeQrCodeInitalSize;
+    - (NSInteger)barcodeQrCodeInitalErrorCorrection;
 @end
 
 @interface MTTableViewControllerBarcodeExtraQrCode : UITableViewController
 
-@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
+    @property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
 
 @end
 

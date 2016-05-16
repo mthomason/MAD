@@ -13,33 +13,35 @@
 #import "MTViewControllerBarcode.h"
 #import "MADNavigationBarTitleView.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MAD/MTDataTable+Factory.h>
 
-NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
+static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
+                                @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
     <MTDatabaseProtocol>
 
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
-@property (nonatomic, assign) BOOL editModeBarcodeType;
+    @property (nonatomic, assign) BOOL editModeBarcodeType;
 
-@property (nonatomic, strong) MTViewControllerBarcodePreview *previewViewController;
-@property (nonatomic, strong, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
+    @property (nonatomic, strong) MTViewControllerBarcodePreview *previewViewController;
+    @property (nonatomic, strong, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
 
-@property (nonatomic, copy) NSString *barcodeInput;
+    @property (nonatomic, copy) NSString *barcodeInput;
 
-@property (nonatomic, strong) NSArray *cachedData;
-@property (nonatomic, strong) NSArray *cachedDataMaxicode;
-@property (nonatomic, strong) NSArray *cachedData2dComponent;
+    @property (nonatomic, strong) NSArray *cachedData;
+    @property (nonatomic, strong) NSArray *cachedDataMaxicode;
+    @property (nonatomic, strong) NSArray *cachedData2dComponent;
 
-@property (nonatomic, weak) IBOutlet UIView *topView;
-@property (nonatomic, weak) IBOutlet UIView *bottomView;
+    @property (nonatomic, weak) IBOutlet UIView *topView;
+    @property (nonatomic, weak) IBOutlet UIView *bottomView;
 
-@property (nonatomic, strong) MTQuery *query;
-@property (nonatomic, strong) MTQuery *query2;
+    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, strong) MTQuery *query2;
 
-@property (nonatomic, strong) MTDataTable *dataTableSampleData;
-@property (nonatomic, strong) MTDataTable *dataTableSampleData2;
+    @property (nonatomic, strong) MTDataTable *dataTableSampleData;
+    @property (nonatomic, strong) MTDataTable *dataTableSampleData2;
 
 @end
 

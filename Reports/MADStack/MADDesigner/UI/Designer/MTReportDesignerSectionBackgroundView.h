@@ -9,7 +9,7 @@
 #ifndef Reports_MTReportDesignerSectionBackgroundView_h
 #define Reports_MTReportDesignerSectionBackgroundView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface MTReportDesignerSectionBackgroundView : UIView
 

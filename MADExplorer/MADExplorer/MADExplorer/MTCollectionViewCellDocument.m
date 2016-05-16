@@ -15,6 +15,18 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
+#import <UIKit/UINibLoading.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/UILongPressGestureRecognizer.h>
+#import <UIKit/UIProgressView.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIAccessibility.h>
+#import <QuartzCore/CALayer.h>
+
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)

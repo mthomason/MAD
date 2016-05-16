@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADFeatures_h
+#define MAD_Designer_MADFeatures_h
+
 #import <Foundation/NSObject.h>
 
 @class  MADFeature;
@@ -14,8 +17,10 @@
 
 @property (nonatomic, strong, readonly) NSArray *features;
 
-- (NSArray *)availableFeatures;
-- (NSArray *)availableFeaturesProductIDs;
-- (MADFeature *)featureForProductID:(NSString *)productID;
+    - (NSArray *)availableFeatures;
+    - (NSArray *)availableFeaturesProductIDs;
+    - (MADFeature *)featureForProductID:(NSString *)productID;
 
 @end
+
+#endif

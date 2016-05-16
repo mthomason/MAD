@@ -13,7 +13,7 @@
 
 @interface RptqQueryCache (Extras)
 
-+ (instancetype)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADFontPickerNavigationController_h
+#define MAD_Designer_MADFontPickerNavigationController_h
+
 #import <UIKit/UINavigationController.h>
 
 @interface MADFontPickerNavigationController : UINavigationController
 
 @end
+
+#endif

@@ -9,8 +9,30 @@
 #ifndef Reports_CGGeometry_Extras_h
 #define Reports_CGGeometry_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <CoreGraphics/CGBase.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSDate.h>
+#import <CoreGraphics/CGGeometry.h>
 #import <MADCocoaExtensions/MADNumericConstants.h>
+#import <stdlib.h>
+#import <math.h>
+
+extern const double MADZero;
+extern const double MAD_2;
+extern const double MAD_44;
+extern const double MAD_45;
+extern const double MAD_64;
+extern const double MAD_320;
+extern const double MAD_360;
+
+extern const double MADDefaultHeight;
+extern const double MADHeaderHeight;
+
+extern const CGFloat MADFloatZero;
+extern const CGFloat MADFloat_64;
+extern const CGFloat MADFloat_1024;
+extern const CGFloat MTDefaultFingerSizeWidth;
+extern const CGFloat MTDefaultFingerSizeHeight;
 
 static inline double square (double x);
 static inline double square (double x) {

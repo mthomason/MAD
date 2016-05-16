@@ -8,6 +8,9 @@
 
 #import "MTTableViewCellDocument.h"
 
+#import <UIKit/UIImageView.h>
+#import <UIKit/UINibLoading.h>
+
 @implementation MTTableViewCellDocument
 
 @synthesize labelH1, imageThumbnail;

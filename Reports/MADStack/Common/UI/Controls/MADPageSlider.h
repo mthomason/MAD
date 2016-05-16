@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADPageSlider_h
+#define MAD_Designer_MADPageSlider_h
+
+#import <UIKit/UIVisualEffectView.h>
 
 @protocol MADPageSliderProtocol <NSObject>
 
@@ -16,7 +19,7 @@
 
 @class MADSliderPageVertical;
 
-    @interface MADPageSlider : UIVisualEffectView
+@interface MADPageSlider : UIVisualEffectView
 
     @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
     @property (readonly) MADSliderPageVertical *pageSlider;
@@ -28,3 +31,5 @@
     @property(nonatomic) float maximumValue;
 
 @end
+
+#endif

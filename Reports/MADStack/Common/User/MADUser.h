@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADUser_h
+#define MAD_Designer_MADUser_h
+
 #import <Foundation/NSObject.h>
 
 @interface MADUser : NSObject
 
 @end
+
+#endif

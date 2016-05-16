@@ -13,7 +13,7 @@
 
 @interface MTBlurView : UIView
 
-@property (nonatomic, strong) UIColor *blurTintColor;
+    @property (nonatomic, strong) UIColor *blurTintColor;
 
 @end
 

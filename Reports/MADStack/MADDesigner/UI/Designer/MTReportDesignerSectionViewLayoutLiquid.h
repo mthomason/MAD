@@ -9,11 +9,12 @@
 #ifndef Reports_MTReportDesignerSectionViewLayout_h
 #define Reports_MTReportDesignerSectionViewLayout_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UICollectionViewLayout.h>
 
-@class MTReportDesignerSectionViewLayoutLiquid, MTCollectionViewLayoutLiquidAttributes;
+@class MTReportDesignerSectionViewLayoutLiquid;
+@class MTCollectionViewLayoutLiquidAttributes;
+@class MADSectionLayoutAttributes;
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 

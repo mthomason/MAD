@@ -7,6 +7,11 @@
 //
 
 #import "MADTableViewHeader.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UINibLoading.h>
+#import <Foundation/NSBundle.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MADTableViewHeader ()
 
@@ -19,7 +24,8 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MADTableViewHeader" owner: self options: nil];
+        NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MADTableViewHeader"
+                                                              owner: self options: nil];
         
         UIView *view = nibContents.firstObject;
         view.frame = self.frame;

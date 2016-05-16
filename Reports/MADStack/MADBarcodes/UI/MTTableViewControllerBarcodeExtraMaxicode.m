@@ -13,10 +13,12 @@
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTDataTable+Factory.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
-@property (nonatomic, strong) MTDataTable *dataTableSampleData;
+    @property (nonatomic, strong) MTDataTable *dataTableSampleData;
 
 @end
 

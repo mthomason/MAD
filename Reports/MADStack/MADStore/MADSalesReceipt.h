@@ -15,18 +15,18 @@
 
 @interface MADSalesReceipt : NSObject
 
-- (instancetype)initWithPath:(NSString *)path;
-- (BOOL)verifyReceiptWithBundleID:(NSString *)bundleID
-                    bundleVersion:(NSString *)bundleVersion
-                      andDeviceID:(NSUUID *)vendorUUID;
+    - (instancetype)initWithPath:(NSString *)path;
+    - (BOOL)verifyReceiptWithBundleID:(NSString *)bundleID
+                        bundleVersion:(NSString *)bundleVersion
+                          andDeviceID:(NSUUID *)vendorUUID;
 
-@property (nonatomic, assign, readonly, getter=isValidReceipt) BOOL validReceipt;
-@property (readonly) NSString *bundleID;
-@property (readonly) NSString *purcahseDate;
-@property (readonly) NSArray *inAppPurchases;
-@property (readonly) NSString *originalVersion;
-@property (readonly) NSString *version;
-@property (readonly) BOOL charterMembership;
+    @property (nonatomic, assign, readonly, getter=isValidReceipt) BOOL validReceipt;
+    @property (readonly) NSString *bundleID;
+    @property (readonly) NSString *purcahseDate;
+    @property (readonly) NSArray *inAppPurchases;
+    @property (readonly) NSString *originalVersion;
+    @property (readonly) NSString *version;
+    @property (readonly) BOOL charterMembership;
 
 @end
 

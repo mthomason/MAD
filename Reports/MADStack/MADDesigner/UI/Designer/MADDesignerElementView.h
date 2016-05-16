@@ -10,6 +10,8 @@
 #define Reports_MTElementView_h
 
 #import "MADManagedObjectView.h"
+#import <UIKit/UIGestureRecognizer.h>
+#import <UIKit/NSStringDrawing.h>
 
 @class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 

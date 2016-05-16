@@ -9,8 +9,9 @@
 #ifndef Reports_UITableViewCellTableName_h
 #define Reports_UITableViewCellTableName_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import <UIKit/UITableViewCell.h>
+
+@class NSManagedObjectID;
 
 @interface MADTableViewCellQueryTableName : UITableViewCell
 

@@ -9,7 +9,7 @@
 #ifndef Reports_MTAutoLayoutTableViewCell_h
 #define Reports_MTAutoLayoutTableViewCell_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewCell.h>
 
 @interface MTAutoLayoutTableViewCell : UITableViewCell
 

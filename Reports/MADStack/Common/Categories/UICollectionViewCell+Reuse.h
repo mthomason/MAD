@@ -13,7 +13,7 @@
 
 @interface UICollectionViewCell (Reuse)
 
-+ (NSString *)reuseIdentifier;
+    + (NSString *)reuseIdentifier;
 
 @end
 

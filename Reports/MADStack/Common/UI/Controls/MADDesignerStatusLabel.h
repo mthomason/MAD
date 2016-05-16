@@ -13,10 +13,10 @@
 
 @interface MADDesignerStatusLabel : UIView
 
-- (void)setText:(NSString *)text;
+    - (void)setText:(NSString *)text;
 
-- (void)show;
-- (void)hide;
+    - (void)show;
+    - (void)hide;
 
 @end
 

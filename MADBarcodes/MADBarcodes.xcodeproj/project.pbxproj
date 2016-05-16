@@ -201,8 +201,8 @@
 		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
-		4C2131351CC91DD70094D802 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */; };
 		4C66C1381BA814A400663575 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1371BA814A400663575 /* libpng16.a */; };
+		4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -413,8 +413,8 @@
 		4C130AFE1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C66C1371BA814A400663575 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
+		4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,7 +422,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2131351CC91DD70094D802 /* MADCocoaExtensions.framework in Frameworks */,
+				4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
 				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
@@ -728,7 +728,7 @@
 		4C130B091BA808970022665F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C2131341CC91DD70094D802 /* MADCocoaExtensions.framework */,
+				4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */,
 				4C130B141BA80D240022665F /* libz.tbd */,
 				4C130B121BA80C1A0022665F /* Foundation.framework */,
 				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,

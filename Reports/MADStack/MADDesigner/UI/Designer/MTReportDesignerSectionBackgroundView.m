@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerSectionBackgroundView.h"
+#import <UIKit/UIGraphics.h>
 
 @interface MTReportDesignerSectionBackgroundView ()
 

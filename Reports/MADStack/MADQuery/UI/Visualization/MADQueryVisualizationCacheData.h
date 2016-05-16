@@ -9,11 +9,12 @@
 #ifndef MAD_MADQueryVisualizationCacheData_h
 #define MAD_MADQueryVisualizationCacheData_h
 
-#import <CoreData/CoreData.h>
+#import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
 @class MADQueryVisualizationTableDefination;
 @class MADOperation;
+@class NSManagedObjectID;
 
 @interface MADQueryVisualizationCacheData : NSObject
     <NSCoding>

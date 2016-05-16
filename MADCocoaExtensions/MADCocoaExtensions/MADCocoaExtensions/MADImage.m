@@ -7,6 +7,7 @@
 //
 
 #import "MADImage.h"
+#import <UIKit/UIGraphics.h>
 
 @implementation MADImage
 

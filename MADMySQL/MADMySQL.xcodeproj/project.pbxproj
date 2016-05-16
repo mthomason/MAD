@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C2131331CC91D8E0094D802 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2131321CC91D8E0094D802 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7014941BACDC6800301713 /* MADMySQL.framework */; };
 		4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7014A31BACDC6800301713 /* MADMySQLTests.m */; };
@@ -120,6 +119,7 @@
 		4C7015A31BACDC9900301713 /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C70152A1BACDC9900301713 /* typelib.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C7015A41BACDC9900301713 /* violite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C70152B1BACDC9900301713 /* violite.h */; };
 		4C7015A51BACDC9900301713 /* welcome_copyright_notice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C70152C1BACDC9900301713 /* welcome_copyright_notice.h */; };
+		4C744EE91CE9B24800243830 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EE81CE9B24800243830 /* MADFoundation.framework */; };
 		4C9372F91BAD244800D6BD62 /* MTDataTypeMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372F71BAD244800D6BD62 /* MTDataTypeMySQL.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C9372FA1BAD244800D6BD62 /* MTDataTypeMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372F81BAD244800D6BD62 /* MTDataTypeMySQL.m */; };
 		4C9373641BAD26AB00D6BD62 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373001BAD26AA00D6BD62 /* aes.h */; };
@@ -240,7 +240,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C2131321CC91D8E0094D802 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C7014941BACDC6800301713 /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -368,6 +367,7 @@
 		4C70152B1BACDC9900301713 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4C70152C1BACDC9900301713 /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
 		4C70152D1BACDC9900301713 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmysqlclient.a; sourceTree = "<group>"; };
+		4C744EE81CE9B24800243830 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../Debug-iphonesimulator/MADFoundation.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9372F71BAD244800D6BD62 /* MTDataTypeMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataTypeMySQL.h; path = MADMySQL/MTDataTypeMySQL.h; sourceTree = "<group>"; };
 		4C9372F81BAD244800D6BD62 /* MTDataTypeMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataTypeMySQL.m; path = MADMySQL/MTDataTypeMySQL.m; sourceTree = "<group>"; };
 		4C9373001BAD26AA00D6BD62 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -506,7 +506,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2131331CC91D8E0094D802 /* MADFoundation.framework in Frameworks */,
+				4C744EE91CE9B24800243830 /* MADFoundation.framework in Frameworks */,
 				4C9374411BAD333400D6BD62 /* libmysqlclient.a in Frameworks */,
 				4C9373CB1BAD28AC00D6BD62 /* libc++.tbd in Frameworks */,
 			);
@@ -905,7 +905,7 @@
 		4C93743D1BAD2FFC00D6BD62 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C2131321CC91D8E0094D802 /* MADFoundation.framework */,
+				4C744EE81CE9B24800243830 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

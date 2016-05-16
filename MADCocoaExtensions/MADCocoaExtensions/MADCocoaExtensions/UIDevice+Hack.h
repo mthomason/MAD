@@ -9,7 +9,7 @@
 #ifndef Reports_UIDevice_Hack_h
 #define Reports_UIDevice_Hack_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIDevice.h>
 
 @interface UIDevice (Hack)
 

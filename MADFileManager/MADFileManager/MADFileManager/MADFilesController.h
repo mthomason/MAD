@@ -51,7 +51,8 @@
 
 @end
 
-typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
+typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble,
+                                                      NSURL *documents, NSURL *data);
 
 @interface MADFilesController : NSObject
 

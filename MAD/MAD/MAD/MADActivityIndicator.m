@@ -8,6 +8,9 @@
 
 #import "MADActivityIndicator.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <QuartzCore/CALayer.h>
 
 @implementation MADActivityIndicator
 

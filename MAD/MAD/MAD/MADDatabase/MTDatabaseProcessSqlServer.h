@@ -15,8 +15,8 @@
 
 @interface MTDatabaseProcessSqlServer : NSObject
 
-- (instancetype)initWithProcess:(DBPROCESS *)process;
-- (DBPROCESS *)process;
+    - (instancetype)initWithProcess:(DBPROCESS *)process;
+    - (DBPROCESS *)process;
 
 @end
 

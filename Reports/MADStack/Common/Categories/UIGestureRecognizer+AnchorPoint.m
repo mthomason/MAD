@@ -7,6 +7,9 @@
 //
 
 #import "UIGestureRecognizer+AnchorPoint.h"
+#import <CoreGraphics/CGBase.h>
+#import <UIKit/UIView.h>
+#import <QuartzCore/CALayer.h>
 
 @implementation UIGestureRecognizer (AnchorPoint)
 

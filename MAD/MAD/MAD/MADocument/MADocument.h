@@ -107,6 +107,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (NSDictionary *)copyLayoutHeightsBySectionKey;
 
+    + (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion;
+
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
     - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
     - (void)removeGuts; //Cleans any cache that may exist.

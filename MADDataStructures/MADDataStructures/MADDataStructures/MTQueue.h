@@ -23,11 +23,11 @@
 
 @interface MTQueue : NSObject  <NSFastEnumeration,  MTProtocolLog>
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCapacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
-- (void)enqueue:(id)object;
-- (id)dequeue;
-- (NSUInteger)count;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithCapacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+    - (void)enqueue:(id)object;
+    - (id)dequeue;
+    - (NSUInteger)count;
 
 @end
 

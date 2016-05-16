@@ -178,9 +178,8 @@ static int read_chunk_callback(png_structp png_ptr, png_unknown_chunkp in_chunk)
     25 = libpng error (via longjmp())
     26 = wrong PNG color type (no alpha channel)
  */
-
-pngquant_error rwpng_read_image24_libpng(FILE *infile, png24_image *mainprog_ptr, int verbose)
-{
+pngquant_error rwpng_read_image24_libpng(FILE *infile, png24_image *mainprog_ptr, int verbose);
+pngquant_error rwpng_read_image24_libpng(FILE *infile, png24_image *mainprog_ptr, int verbose) {
     png_structp  png_ptr = NULL;
     png_infop    info_ptr = NULL;
     png_size_t   rowbytes;

@@ -6,20 +6,25 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADResizeHandles_h
+#define MAD_Designer_MADResizeHandles_h
+
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
 @class MADResizeHandles;
 
 @protocol MTResizeHandlesDelegate
-- (void)resizeHandle:(MADResizeHandles *)handles resize:(CGSize)size;
+    - (void)resizeHandle:(MADResizeHandles *)handles resize:(CGSize)size;
 @end
 
 @interface MADResizeHandles : NSObject
 
-- (void)positionAroundRect:(CGRect)rect;
+    - (void)positionAroundRect:(CGRect)rect;
 
-@property (nonatomic, strong, readonly) NSArray *resizeHandles;
-@property (nonatomic, weak) id <MTResizeHandlesDelegate> delegate;
+    @property (nonatomic, strong, readonly) NSArray *resizeHandles;
+    @property (nonatomic, weak) id <MTResizeHandlesDelegate> delegate;
 
 @end
+
+#endif

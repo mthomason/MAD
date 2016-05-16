@@ -10,6 +10,8 @@
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADStoryboard.h"
 #import "UINavigationController+Designer.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";

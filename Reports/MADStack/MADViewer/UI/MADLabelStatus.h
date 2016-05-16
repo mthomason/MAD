@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADLabelStatus_h
+#define MAD_Designer_MADLabelStatus_h
+
 #import <UIKit/UILabel.h>
 
 @interface MADLabelStatus : UILabel
@@ -19,3 +22,5 @@
     - (void)updateStatusWithPageNumber:(NSString *)message;
 
 @end
+
+#endif

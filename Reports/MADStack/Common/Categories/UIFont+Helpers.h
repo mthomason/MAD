@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_UIFont_Helpers_h
+#define MAD_Designer_UIFont_Helpers_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIFont (Helpers)
 
 @end
+
+#endif

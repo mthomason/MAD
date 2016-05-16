@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerSectionDecorationView.h"
+#import <UIKit/UIGraphics.h>
 
 @implementation MTReportDesignerSectionDecorationView
 

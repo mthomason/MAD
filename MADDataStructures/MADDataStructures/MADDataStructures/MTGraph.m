@@ -255,11 +255,14 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
     MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
-    [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+    [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges
+                                  listOfVertices:&resultVertices];
     
     for (MTVertex *vertex in self.vertices) {
         if (vertex.properties.vertexColor == MTColorWhite) {
-            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
+                                             listOfEdges:&resultEdges
+                                          listOfVertices:&resultVertices];
         }
     }
     
@@ -287,9 +290,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 }
 
 - (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex
-                                       counter:(NSNumber **)counter
-                                   listOfEdges:(MTLinkedList **)listOfEdges
-                                listOfVertices:(MTLinkedList **)listOfVertices {
+                                       counter:(NSNumber * __autoreleasing *)counter
+                                   listOfEdges:(MTLinkedList * __autoreleasing *)listOfEdges
+                                listOfVertices:(MTLinkedList * __autoreleasing *)listOfVertices {
     
     vertex.properties.vertexColor = MTColorGray;
     
@@ -321,7 +324,8 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         
         if (neighborVertex.properties.vertexColor == MTColorWhite) {
             neighborVertex.dfsProperties.dfsPredecessor = vertex;
-            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter listOfEdges:listOfEdges listOfVertices:listOfVertices];
+            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter
+                                             listOfEdges:listOfEdges listOfVertices:listOfVertices];
         }
     }
     

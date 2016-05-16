@@ -207,7 +207,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
     if ([self aggregateViewController]) {
-        NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:functionType];
+        NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:functionType];
         NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
         [[[[self aggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
     }
@@ -279,7 +279,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             case MTAggregateGroupByTypeSection: {
 
                 NSUInteger group = self.aggregateGroupBySectionNumber;
-                NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
+                NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
                 break;
@@ -287,14 +287,14 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             }
             case MTAggregateGroupByTypeReport: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
+                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
+                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 

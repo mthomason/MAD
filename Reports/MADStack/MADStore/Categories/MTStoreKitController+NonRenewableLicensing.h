@@ -10,8 +10,9 @@
 #define Reports_MTStoreKitController_NonRenewableLicensing_h
 
 #import "MTStoreKitController.h"
+#import <Foundation/NSObject.h>
+#import <Foundation/NSDate.h>
 
-typedef void (^MTStoreKitNonRenewableLicensedUser)(BOOL isLicensedUser, NSDate *experationDate);
 extern const NSTimeInterval MTTimeIntervalHour;
 extern const NSTimeInterval MTTimeIntervalDay;
 extern const NSTimeInterval MTTimeIntervalMonth;
@@ -21,6 +22,8 @@ extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
+
+typedef void (^MTStoreKitNonRenewableLicensedUser)(BOOL isLicensedUser, NSDate *experationDate);
 
 @interface MTStoreKitController (NonRenewableLicensing)
 

@@ -292,7 +292,7 @@
                 break;
         }
         
-        NSDictionary *attributes = [documentObject attributesForDrawingText];
+        NSDictionary *attributes = [documentObject newDictionaryOfTextAttributes];
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
                                                                                 attributes:attributes];
         self.displayStringAttributed = attributtedString;

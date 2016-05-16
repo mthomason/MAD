@@ -6,18 +6,23 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADTableViewCellBase_h
+#define MAD_Designer_MADTableViewCellBase_h
+
+#import <UIKit/UITableViewCell.h>
 #import "MADTableViewCellMargin.h"
 
 @interface MADTableViewCellBase : UITableViewCell
 
-@property (nonatomic, strong) UILabel *label;
-@property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
+    @property (nonatomic, strong) UILabel *label;
+    @property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
 
-@property (nonatomic, strong) NSArray *layoutConstraints;
-@property (atomic, assign) BOOL updatingConstraints;
+    @property (nonatomic, strong) NSArray *layoutConstraints;
+    @property (atomic, assign) BOOL updatingConstraints;
 
-- (void)updateConstraints;
-- (void)initalize;
+    - (void)updateConstraints;
+    - (void)initalize;
 
 @end
+
+#endif

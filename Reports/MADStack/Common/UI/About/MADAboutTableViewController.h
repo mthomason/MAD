@@ -10,16 +10,15 @@
 #define Reports_MTTableViewControllerAbout_h
 
 #import <UIKit/UITableViewController.h>
-#import <CoreText/CoreText.h>
 #import <MAD/MADConstants.h>
 #import "MUIViewControllerDelegate.h"
 
 @interface MADAboutTableViewController : UITableViewController
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
 
-- (IBAction)cancel:(id)sender;
-- (IBAction)done:(id)sender;
+    - (IBAction)cancel:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 

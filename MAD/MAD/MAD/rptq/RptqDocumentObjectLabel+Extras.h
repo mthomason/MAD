@@ -14,7 +14,7 @@
 
 @interface RptqDocumentObjectLabel (Extras)
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+    - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end
 

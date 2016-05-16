@@ -9,7 +9,7 @@
 #ifndef Reports_MTTableViewCellBarcodeCompositCode_h
 #define Reports_MTTableViewCellBarcodeCompositCode_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewCell.h>
 
 @interface MTTableViewCellBarcodeCompositCode : UITableViewCell
 

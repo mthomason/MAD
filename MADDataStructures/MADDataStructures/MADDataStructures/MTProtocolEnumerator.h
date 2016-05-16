@@ -13,13 +13,13 @@
 
 @protocol MTProtocolEnumerator <NSObject>
 
-- (id)next;
-- (id)previous;
+    - (id)next;
+    - (id)previous;
 
 @optional
 
-- (id)first;
-- (id)last;
+    - (id)first;
+    - (id)last;
 
 @end
 

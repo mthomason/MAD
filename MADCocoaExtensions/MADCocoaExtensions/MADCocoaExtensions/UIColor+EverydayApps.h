@@ -1,6 +1,6 @@
 //
 //  UIColor+EverydayApps.h
-//  Reports
+//  CocoaExtensions
 //
 //  Created by Michael Thomason on 2/9/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
@@ -9,7 +9,6 @@
 #ifndef Reports_UIColor_EverydayApps_h
 #define Reports_UIColor_EverydayApps_h
 
-#import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADColor.h>
 
  @interface MADColorEverydayApps : MADColor

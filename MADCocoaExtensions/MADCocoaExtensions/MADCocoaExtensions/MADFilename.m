@@ -7,6 +7,9 @@
 //
 
 #import "MADFilename.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPathUtilities.h>
 
 @implementation MADFilename
 

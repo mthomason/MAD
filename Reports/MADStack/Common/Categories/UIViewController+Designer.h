@@ -15,15 +15,15 @@
 
 @interface UIViewController (Designer)
 
-+ (instancetype)layoutSettingsViewController;
-+ (instancetype)fileManager;
-+ (instancetype)queryViewController;
-+ (instancetype)queryContainerController;
-+ (instancetype)viewerNavigationController;
-+ (instancetype)designerViewController;
-+ (instancetype)designerNavigationController;
-+ (instancetype)viewerViewController;
-+ (instancetype)initalViewController;
+    + (instancetype)layoutSettingsViewController;
+    + (instancetype)fileManager;
+    + (instancetype)queryViewController;
+    + (instancetype)queryContainerController;
+    + (instancetype)viewerNavigationController;
+    + (instancetype)designerViewController;
+    + (instancetype)designerNavigationController;
+    + (instancetype)viewerViewController;
+    + (instancetype)initalViewController;
 
 @end
 

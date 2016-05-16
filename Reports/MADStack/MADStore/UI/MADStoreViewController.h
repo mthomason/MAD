@@ -6,13 +6,17 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "MUIViewControllerDelegate.h"
+#ifndef MAD_Designer_MADStoreViewController_h
+#define MAD_Designer_MADStoreViewController_h
+
 #import "MADViewController.h"
+#import "MUIViewControllerDelegate.h"
 
 @interface MADStoreViewController : MADCollectionViewController
     <MTViewControllerProtocol, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 
 @end
+
+#endif

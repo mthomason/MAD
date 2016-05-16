@@ -7,6 +7,7 @@
 //
 
 #import "MTTitleView.h"
+#import <UIKit/UILabel.h>
 
 static CGFloat Padding = 2.0;
 

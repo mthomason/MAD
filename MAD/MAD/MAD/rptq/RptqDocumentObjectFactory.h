@@ -13,10 +13,8 @@
 #import "RptqDocumentObject.h"
 
 @protocol RptqDocumentObjectFactory <NSObject>
-
-@required
-
-@optional
+  @required
+  @optional
 
 @end
 

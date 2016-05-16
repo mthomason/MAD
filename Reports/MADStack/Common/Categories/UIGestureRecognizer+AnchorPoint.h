@@ -9,12 +9,12 @@
 #ifndef Reports_UIGestureRecognizer_AnchorPoint_h
 #define Reports_UIGestureRecognizer_AnchorPoint_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIGestureRecognizer.h>
 
 @interface UIGestureRecognizer (AnchorPoint)
 
-+ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
-+ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer inView:(UIView *)containerView;
+    + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+    + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer inView:(UIView *)containerView;
 
 @end
 

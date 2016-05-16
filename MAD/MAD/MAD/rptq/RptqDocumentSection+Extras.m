@@ -35,6 +35,15 @@
 
 #import "NSManagedObjectID+Extras.h"
 
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSIndexPath.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSIndexPath.h>
+#import <UIKit/UICollectionView.h>
+
 @interface RptqDocumentSection ()
 
 @end

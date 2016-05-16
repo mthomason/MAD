@@ -6,12 +6,18 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_UIButton_FollowTwitter_h
+#define MAD_Designer_UIButton_FollowTwitter_h
+
 #import <UIKit/UIButton.h>
 #import "MADSizeGeneral.h"
 
 @interface UIButton (FollowTwitter)
 
-+ (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action;
-+ (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action size:(MADSizeGeneral)size;
+    + (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action;
+    + (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action
+                                        size:(MADSizeGeneral)size;
 
 @end
+
+#endif

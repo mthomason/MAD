@@ -9,11 +9,11 @@
 #ifndef Reports_UIStoryboard_QueryVisualization_h
 #define Reports_UIStoryboard_QueryVisualization_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (Designer)
 
-+ (instancetype)QueryVisualization;
+    + (instancetype)QueryVisualization;
 
 @end
 
