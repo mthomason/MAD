@@ -68,7 +68,7 @@
     [private performBlockAndWait:^{
         MADocument *document = wdocument;
 
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         if (rptqDocument == nil) {
             rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
         }

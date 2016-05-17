@@ -111,9 +111,9 @@
 
 - (NSString *)getSqlOnlyActiveFields: (BOOL)onlyActiveFields
                 managedObjectContext: (NSManagedObjectContext *)managedObjectContext
-                               error: (NSError **)error {
+                               error: (NSError * __autoreleasing *)error {
     
-    RptqDocument *document = [RptqDocument documentForManagedObjectContext:managedObjectContext];
+    RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *queryObject = database.hasQueries.anyObject;
 

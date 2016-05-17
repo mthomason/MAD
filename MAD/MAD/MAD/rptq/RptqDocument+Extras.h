@@ -13,26 +13,39 @@
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MADErrorContainer;
+@class NSManagedObjectContext;
+@class MTDatabase;
+@class MADErrorContainer;
+@class RptqDocumentSection;
+@class RptqDocumentObject;
+@class RptqQuery;
+@class RptqQueryPredicate;
+@class RptqQueryLinks;
 
 @interface RptqDocument (Extras)
 
     @property (readonly)RptqDatabase *defaultDatabase;
 
-    + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
-    + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+    + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+    + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject
+        fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
-    - (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables fieldsByTable:(NSDictionary *)fieldsByTable andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type
+                                           andLevel:(NSUInteger)level;
+    - (void)storeDatabaseConnectionDefination:(MTDatabase *)database
+                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
+                                           fieldsByTable:(NSDictionary *)fieldsByTable
+                                 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     
     - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)addDatabase:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+    - (void)addDatabase:(MTDatabase *)database
+                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                  status:(void (^)(NSString *status, float progress))status
              completion:(void (^)(BOOL success, MADErrorContainer *error))completion;
 

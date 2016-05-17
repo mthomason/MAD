@@ -86,7 +86,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
     @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
     @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
-    + (instancetype)newDocumentForURL:(NSURL *)url;
+    + (instancetype)newManagedDocumentForURL:(NSURL *)url;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
 

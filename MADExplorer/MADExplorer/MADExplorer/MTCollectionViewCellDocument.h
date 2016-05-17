@@ -25,12 +25,9 @@
     @property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
     @property (nonatomic, weak) IBOutlet UIProgressView *progressViewUpload;
 
-    @property (nonatomic, weak) UIActivityIndicatorView *activityIndicator;
+    @property (nonatomic, weak, readonly) UIActivityIndicatorView *activityIndicator;
 
     @property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
-
-    + (UIFont *)newCaptionFont;
-    + (UIFont *)newCaptionFont2;
 
     + (NSDictionary *)newAttributesCaption;
     + (NSDictionary *)newAttributesCaption2;

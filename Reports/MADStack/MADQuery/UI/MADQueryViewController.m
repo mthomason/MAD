@@ -1314,7 +1314,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 - (MADQueryViewControllerLayout *)datamodel {
 
     if (_datamodel == nil) {
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: self.document.managedObjectContext];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: self.document.managedObjectContext];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
@@ -1671,7 +1671,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     private.parentContext = self.document.managedObjectContext;
     [private performBlockAndWait:^{
         
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
@@ -1807,7 +1807,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     private.parentContext = self.document.managedObjectContext;
     [private performBlockAndWait:^{
     
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         RptqQueryGroup *groupToRemove = [rptqQuery queryGroupForIndex:(NSUInteger)indexPath.row];

@@ -979,7 +979,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                 [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
                     
-                    MADocument *doc = [MADocument newDocumentForURL:metaData.URL];
+                    MADocument *doc = [MADocument newManagedDocumentForURL:metaData.URL];
                     [doc openWithCompletionHandler:^(BOOL success) {
                         if (success) {
                             [MADocument close: doc completion:^(BOOL successClose) {
@@ -994,12 +994,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                 }
             } else {
-                UIAlertController *alert = [UIAlertController errorFileExist];
-                [self showViewController:alert sender:self];
+                UIAlertController *alertFileExist = [UIAlertController errorFileExist];
+                [self showViewController:alertFileExist sender:self];
             }
         } else {
-            UIAlertController *alert = [UIAlertController errorValidationFilename];
-            [self showViewController:alert sender:self];
+            UIAlertController *alertFilename = [UIAlertController errorValidationFilename];
+            [self showViewController:alertFilename sender:self];
         }
         
     } cancel:nil];
@@ -1018,8 +1018,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     } else {
         
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
-        MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
-        UIManagedDocument *documentReport = [MADocument newDocumentForURL:metadata.URL];
+        MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
+        MADocument *documentReport = [MADocument newManagedDocumentForURL:metadata.URL];
         if (documentReport.documentState != UIDocumentStateClosed) {
             
             [MADocument close: documentReport completion:^(BOOL success) {

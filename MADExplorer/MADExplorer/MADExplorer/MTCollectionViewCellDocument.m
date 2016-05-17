@@ -36,6 +36,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @interface MTCollectionViewCellDocument ()
 
+    @property (nonatomic, weak, readwrite) UIActivityIndicatorView *activityIndicator;
+
     @property (nonatomic, copy) UIColor *colorTextNormal;
     @property (nonatomic, copy) UIColor *colorTextSelected;
 
@@ -44,25 +46,33 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
     @property (nonatomic, assign) BOOL wobbling;
 
-    //@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
-
 @end
 
 @implementation MTCollectionViewCellDocument
 
++ (UIActivityIndicatorView *)newActivityIndicatorView {
+    
+    UIActivityIndicatorView *activityIndicatorView;
+    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
+    [activityIndicatorView stopAnimating];
+    activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                                UIViewAutoresizingFlexibleRightMargin |
+                                                UIViewAutoresizingFlexibleTopMargin |
+                                                UIViewAutoresizingFlexibleBottomMargin;
+    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = YES;
+    return activityIndicatorView;
+}
+
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    UIImage *result = [UIImage imageNamed:MTImageBlank];
+    self.imagePreview.image = result;
+}
+
 + (UIImage *)newDefaultThumbnail {
     UIImage *result = [UIImage imageNamed:MTImageBlank];
     return result;
-}
-
-+ (UIFont *)newCaptionFont {
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    return font;
-}
-
-+ (UIFont *)newCaptionFont2 {
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    return font;
 }
 
 - (void)awakeFromNib {
@@ -81,15 +91,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    UIColor *color = [UIColor darkGrayColor];
+    //UIColor *color = [UIColor darkGrayColor];
     UIColor *clearColor = [UIColor clearColor];
     UIColor *lightGrayColor = [UIColor lightGrayColor];
 
+    /*
     self.imagePreview.layer.shadowColor = color.CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
-    
+    */
     self.labelTitle.userInteractionEnabled = YES;
 
     SEL actionEdit = @selector(activateEditMode:);
@@ -144,19 +155,14 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {
-    if (_activityIndicator == nil) {
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
-        [activityView stopAnimating];
-        activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-                                        UIViewAutoresizingFlexibleRightMargin |
-                                        UIViewAutoresizingFlexibleTopMargin |
-                                        UIViewAutoresizingFlexibleBottomMargin;
-        activityView.translatesAutoresizingMaskIntoConstraints = YES;
-        activityView.center = self.contentView.center;
-        [self.contentView addSubview:activityView];
-        _activityIndicator = activityView;
+    UIActivityIndicatorView *result = _activityIndicator;
+    if (result == nil) {
+        result = [MTCollectionViewCellDocument newActivityIndicatorView];
+        result.center = self.contentView.center;
+        [self.contentView addSubview:result];
+        _activityIndicator = result;
     }
-    return _activityIndicator;
+    return result;
 }
 
 - (void)addMotionEffect:(UIMotionEffect *)effect {
@@ -169,18 +175,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     [self.imagePreview removeMotionEffect:effect];
     [self.progressViewDownload removeMotionEffect:effect];
     [self.progressViewUpload removeMotionEffect:effect];
-}
-
-+ (UIActivityIndicatorView *)newActivityIndicatorView {
-
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
-    [activityIndicatorView stopAnimating];
-    activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-                                                UIViewAutoresizingFlexibleRightMargin |
-                                                UIViewAutoresizingFlexibleTopMargin |
-                                                UIViewAutoresizingFlexibleBottomMargin;
-    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = YES;
-    return activityIndicatorView;
 }
 
 - (void)setDelegate:(id<MTDocumentCellProtocol, UIGestureRecognizerDelegate>)delegate {
@@ -225,7 +219,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIFont *font = [self newCaptionFont];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     
     id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNull null], NSKernAttributeName,
@@ -240,7 +234,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIFont *font = [self newCaptionFont2];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 [NSNull null], NSKernAttributeName,
                                 font, NSFontAttributeName,
@@ -249,7 +243,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)updateFont {
-    [self setText:self.labelTitle.text];
+    NSString *text = self.labelTitle.text.copy;
+    [self setText: text];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {

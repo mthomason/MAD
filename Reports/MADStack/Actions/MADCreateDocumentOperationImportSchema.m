@@ -65,7 +65,7 @@
     MADocument * __weak weakdoc = document;
     [private performBlockAndWait:^{
         MADocument *doc = weakdoc;
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         
         MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
         doc.database = database;

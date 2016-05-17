@@ -15,12 +15,17 @@
     
     NSLayoutConstraint *contentViewConstraint;
      NSArray<__kindof NSLayoutConstraint *> *constraints = self.constraints;
+
     for (__kindof NSLayoutConstraint *constraint in constraints) {
+
         @autoreleasepool {
+
             [self removeConstraint:constraint];
             
-            id firstItem = constraint.firstItem == self ? self.contentView : constraint.firstItem;
-            id seccondItem = constraint.secondItem == self ? self.contentView : constraint.secondItem;
+            id firstItem = constraint.firstItem == self ?
+                                self.contentView : constraint.firstItem;
+            id seccondItem = constraint.secondItem == self ?
+                                self.contentView : constraint.secondItem;
             
             contentViewConstraint = [NSLayoutConstraint constraintWithItem: firstItem
                                                                  attribute: constraint.firstAttribute
@@ -32,7 +37,9 @@
             
             [self.contentView addConstraint:contentViewConstraint];
         }
+
     }
+
     [super awakeFromNib];
 }
 

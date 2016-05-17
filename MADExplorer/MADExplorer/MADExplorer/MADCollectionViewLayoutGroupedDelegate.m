@@ -48,35 +48,46 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(MTCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView
+            didEndDisplayingCell:(MTCollectionViewCellDocument *)cell
+              forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+    willDisplaySupplementaryView:(UICollectionReusableView *)view
+                  forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
 
 }
 
-- (void)collectionView: (UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind: (NSString *)elementKind atIndexPath: (NSIndexPath *)indexPath {
+- (void)collectionView: (UICollectionView *)collectionView
+    didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
+    forElementOfKind: (NSString *)elementKind atIndexPath: (NSIndexPath *)indexPath {
 
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+                                        didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
     id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
     if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
         [delegate selectionsUpdated];
     }
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MTCollectionViewCellDocument *cell;
+    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+                                        didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MTCollectionViewCellDocument *cell;
+    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+                                                didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
     NSInvocationOperation *operations;
@@ -104,56 +115,77 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+                                            didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
     if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
         [delegate selectionsUpdated];
     }
     
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MTCollectionViewCellDocument *cell;
+    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
+- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action
+    forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)collectionView:(UICollectionView *)collectionView
+                                        shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)collectionView:(UICollectionView *)collectionView
+                                        shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)collectionView:(UICollectionView *)collectionView
+                                        shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)collectionView:(UICollectionView *)collectionView
+                                        shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
-                                                                                                   UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section {
+    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
+            UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
+            UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                                    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
+        30.0000f : 5.0000f;
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
+        30.0000f : 5.0000f;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+                                        referenceSizeForHeaderInSection:(NSInteger)section {
     return CGSizeZero;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+                                                sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
     NSString *filename = [delegate titleForItemAtIndexPath:indexPath];
     NSString *size = [delegate subtitleForItemAtIndexPath:indexPath];
@@ -161,24 +193,29 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSDictionary *attributesCaption = [MTCollectionViewCellDocument newAttributesCaption];
     NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument newAttributesCaption];
     
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename attributes: attributesCaption];
+    NSAttributedString *attributedString;
+    attributedString = [[NSAttributedString alloc] initWithString: filename
+                                                       attributes: attributesCaption];
     
-    UIFont *font = [MTCollectionViewCellDocument newCaptionFont];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
                                            contentScaleFactor: collectionView.contentScaleFactor
                                                          font: font];
     
-    NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
-                                                                              attributes: attributesCaption2];
+    NSAttributedString *attributedStringSub;
+    attributedStringSub = [[NSAttributedString alloc] initWithString: size
+                                                          attributes: attributesCaption2];
     
-    font = [MTCollectionViewCellDocument newCaptionFont2];
+    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
                                               contentScaleFactor: collectionView.contentScaleFactor
                                                             font: font];
-    return CGSizeMake(140.0000f, (CGFloat)(128.0 + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0));
+    return CGSizeMake(140.0000f,
+                      (CGFloat)(128.0 + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0));
 }
 
-- (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
+- (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
+                  contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
 
     self.testLabel.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;

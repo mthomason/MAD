@@ -194,6 +194,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @interface MADocument ()
 
+    @property (nonatomic, strong, readwrite) NSManagedObjectModel *madManagedObjectModel;
+    @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
+    @property (nonatomic, strong, readwrite) NSDictionary *madPersistentStoreOptions;
+
     @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
@@ -208,8 +212,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @implementation MADocument
 
-@synthesize managedObjectModel = _managedObjectModel;
-@synthesize persistentStoreOptions = _persistentStoreOptions;
+//@synthesize managedObjectModel = _managedObjectModel;
+//@synthesize persistentStoreOptions = _persistentStoreOptions;
 
 + (instancetype)newManagedDocumentForURL:(NSURL *)url {
     id document = [[self alloc] initWithFileURL:url];
@@ -281,12 +285,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - NSObject
 
-- (void)dealloc {
-    //_managedObjectModel = nil;
-    //_database.delegate = nil;
-    //_database = nil;
-    //_mainQuery.database.delegate = nil;
-}
+- (void)dealloc { }
 
 - (void)removeObservers {
 
@@ -326,12 +325,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSDictionary *)persistentStoreOptions {
-    if (_persistentStoreOptions != nil) return _persistentStoreOptions;
+    if (_madPersistentStoreOptions != nil) return _madPersistentStoreOptions;
     
-    _persistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+    _madPersistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     @YES, NSInferMappingModelAutomaticallyOption,
                                     @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
-    return _persistentStoreOptions;
+    return _madPersistentStoreOptions;
 }
 
 - (instancetype)initWithFileURL:(NSURL *)url {
@@ -340,7 +339,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:self.fileURL];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         
-        _managedObjectModel = nil;
         _urlMetaPlaylist = urlMetaPlaylist.copy;
         _urlGuts = urlGuts.copy;
         
@@ -470,59 +468,23 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark UIManagedDocument
 
-- (NSManagedObjectModel *)managedObjectModel {
-
-    if (_managedObjectModel == nil) {
-        @synchronized (_managedObjectModel) {
-            NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
-                                                                  ofType: MADManagedObjectModelExtention];
-            NSURL *modelURL = [[NSURL alloc] initFileURLWithPath:modelPath];
-            _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+- (NSManagedObjectModel *)madManagedObjectModel {
+    @synchronized (self) {
+        if (!_madManagedObjectModel) {
+            NSURL *modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
+                                                      withExtension: MADManagedObjectModelExtention];
+            NSManagedObjectModel *managedObjectModel;
+            managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+            _madManagedObjectModel = managedObjectModel;
         }
+        
     }
-    return _managedObjectModel;
+    return _madManagedObjectModel;
 }
 
-
-
-/*- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    // This implementation creates and return a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.)
-    if (_persistentStoreCoordinator) {
-        return _persistentStoreCoordinator;
-    }
-    
-    NSURL *url = self.storeURL;
-    if (!url) {
-        return nil;
-    }
-    
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
-    
-    NSDictionary *options = @{
-                              NSMigratePersistentStoresAutomaticallyOption: @(YES),
-                              NSInferMappingModelAutomaticallyOption: @(YES)
-                              };
-    
-    NSError *error;
-    
-    if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error]) {
-        [NSApp presentError:error];
-        
-        return nil;
-    }
-    
-    _persistentStoreCoordinator = psc;
-    
-    return _persistentStoreCoordinator;
-}*/
-
-/*- (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)storeURL
-                                           ofType:(NSString *)fileType
-                               modelConfiguration:(NSString *)configuration
-                                     storeOptions:(NSDictionary *)storeOptions
-                                            error:(NSError * _Nullable *)error {
-    
-}*/
+- (NSManagedObjectModel *)managedObjectModel {
+    return self.madManagedObjectModel;
+}
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
 
@@ -548,8 +510,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         }
     }
     
-    NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:self.urlMetaPlaylist];
-    NSString *lastGenerator = [NSString stringWithString: dicionary[MADDocumentInfoKeyGenerator]];
+    NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
+    NSString * __weak infoKeyGenerator = dicionary[MADDocumentInfoKeyGenerator];
+    NSString *lastGenerator = infoKeyGenerator.copy;
     NSNumber *lastVersion = ((NSNumber *)dicionary[MADDocumentInfoKeyVersion]).copy;
     
     if (lastGenerator == nil) {
@@ -580,10 +543,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return self.extraInformation;
 }
 
-- (BOOL)writeAdditionalContent: (id)content toURL: (NSURL *)absoluteURL
-           originalContentsURL: (NSURL *)absoluteOriginalContentsURL error: (NSError **)error {
+- (BOOL)writeAdditionalContent: (id)content
+                         toURL: (NSURL *)absoluteURL
+           originalContentsURL: (NSURL *)absoluteOriginalContentsURL
+                         error: (NSError * __autoreleasing *)error {
     
-    BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
+    BOOL writeAdditionalContent = [super writeAdditionalContent: content toURL: absoluteURL
+                                            originalContentsURL: absoluteOriginalContentsURL
+                                                          error: error];
 
     if (content == [NSNull null] || self.documentStatus.isSuspended) {
         
@@ -597,7 +564,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         id version = content[MADDocumentInfoKeyVersion];
         id generator = content[MADDocumentInfoKeyGenerator];
         
-        NSDictionary *additionalContent = @{MADDocumentInfoKeyVersion:version, MADDocumentInfoKeyGenerator:generator};
+        NSDictionary *additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                           version, MADDocumentInfoKeyVersion,
+                                           generator, MADDocumentInfoKeyGenerator, nil];
         [additionalContent writeToURL:metaUrl atomically:NO];
         
     } else {
@@ -620,11 +589,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [private performBlockAndWait:^{
 
         RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *query = rptqDatabase.hasQueries.anyObject;
         
-        RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable database:rptqDatabase forManagedObjectContext:private];
+        RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
+                                                                           database: rptqDatabase
+                                                            forManagedObjectContext: private];
         newQueryTable.inQuery = query;
         
         NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables];
@@ -678,7 +649,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [private performBlockAndWait:^{
         
         RptqQueryField *queryField = [private objectWithID:queryFieldObjectID];
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         
         
         RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder:sortOrder andManagedObjectContext:private];
@@ -852,7 +823,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     if (self.documentObjectID == nil) {
 
-        document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
+        document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
         if (document == nil) {
             document = [RptqDocument newDocumentForManagedObjectContext: self.managedObjectContext];
         }

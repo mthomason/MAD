@@ -332,48 +332,72 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
                 static int disregardedBind = -1023;
                 
-                NSMutableDictionary *counters = [[NSMutableDictionary alloc] initWithDictionary:
-                                                     
-                                                     @{
-                                                       @(SYBDATETIMN)         : @(0),     //Assumed good
-                                                       @(SYBDATETIME)         : @(0),     //Good
-                                                       @(SYBDATETIME4)        : @(0),     //Good
-                                                       
-                                                       @(SYBCHAR)             : @(0),     //Good
-                                                       @(SYBVARCHAR)          : @(0),     //Good
-                                                       @(SYBTEXT)             : @(0),     //Good
-                                                       @(SYBNTEXT)            : @(0),     //Good
-                                                       @(SYBNVARCHAR)         : @(0),     //Good
-                                                       
-                                                       @(SYBBIT)              : @(0),     //Good
-                                                       @(SYBBITN)             : @(0),     //Assumed good
-                                                       @(SYBINT1)             : @(0),     //Good
-                                                       @(SYBINT2)             : @(0),     //Good
-                                                       @(SYBINT4)             : @(0),     //Good
-                                                       @(SYBINT8)             : @(0),     //Good
-                                                       @(SYBINTN)             : @(0),     //Assumed good
-                                                       
-                                                       @(SYBMONEY)            : @(0),     //Good, also handles SYBMONEY4
-                                                       @(SYBMONEYN)           : @(0),     //Assumed good
-                                                       
-                                                       @(SYBREAL)             : @(0),     //Good
-                                                       @(SYBFLT8)             : @(0),     //Good
-                                                       @(SYBFLTN)             : @(0),     //Assumed good, but may overflow
-                                                       
-                                                       @(SYBNUMERIC)          : @(0),     //Converts to NSDecimalNumber...
-                                                       //  Also handles SYBDECIMAL
-                                                       
-                                                       
-                                                       @(SYBIMAGE)            : @(0),     //Currently not used
-                                                       @(SYBBINARY)           : @(0),     //Currently not used
-                                                       @(SYBVOID)             : @(0),     //Currently not used
-                                                       @(SYBVARBINARY)        : @(0),     //Currently not used
-                                                       
-                                                       @(disregardedBind)     : @(0)
-                                                       
-                                                       }
-                                                     
-                                                     ];
+                NSNumber *keySYBDATETIMN = [[NSNumber alloc] initWithInt: SYBDATETIMN];
+                NSNumber *keySYBDATETIME = [[NSNumber alloc] initWithInt: SYBDATETIME];
+                NSNumber *keySYBDATETIME4 = [[NSNumber alloc] initWithInt: SYBDATETIME4];
+                NSNumber *keySYBCHAR = [[NSNumber alloc] initWithInt: SYBCHAR];
+                NSNumber *keySYBVARCHAR = [[NSNumber alloc] initWithInt: SYBVARCHAR];
+                NSNumber *keySYBTEXT = [[NSNumber alloc] initWithInt: SYBTEXT];
+                NSNumber *keySYBNTEXT = [[NSNumber alloc] initWithInt: SYBNTEXT];
+                NSNumber *keySYBNVARCHAR = [[NSNumber alloc] initWithInt: SYBNVARCHAR];
+g                NSNumber *keySYBBIT = [[NSNumber alloc] initWithInt: SYBBIT];
+                NSNumber *keySYBBITN = [[NSNumber alloc] initWithInt: SYBBITN];
+                NSNumber *keySYBINT1 = [[NSNumber alloc] initWithInt: SYBINT1];
+                NSNumber *keySYBINT2 = [[NSNumber alloc] initWithInt: SYBINT2];
+                NSNumber *keySYBINT4 = [[NSNumber alloc] initWithInt: SYBINT4];
+                NSNumber *keySYBINT8 = [[NSNumber alloc] initWithInt: SYBINT8];
+                NSNumber *keySYBINTN = [[NSNumber alloc] initWithInt: SYBINTN];
+                NSNumber *keySYBMONEY = [[NSNumber alloc] initWithInt: SYBMONEY];
+                NSNumber *keySYBMONEYN = [[NSNumber alloc] initWithInt: SYBMONEYN];
+                NSNumber *keySYBREAL = [[NSNumber alloc] initWithInt: SYBREAL];
+                NSNumber *keySYBFLT8 = [[NSNumber alloc] initWithInt: SYBFLT8];
+                NSNumber *keySYBFLTN = [[NSNumber alloc] initWithInt: SYBFLTN];
+                NSNumber *keySYBNUMERIC = [[NSNumber alloc] initWithInt: SYBNUMERIC];
+                NSNumber *keySYBIMAGE = [[NSNumber alloc] initWithInt: SYBIMAGE];
+                NSNumber *keySYBBINARY = [[NSNumber alloc] initWithInt: SYBBINARY];
+                NSNumber *keySYBVOID = [[NSNumber alloc] initWithInt: SYBVOID];
+                NSNumber *keySYBVARBINARY = [[NSNumber alloc] initWithInt: SYBVARBINARY];
+                NSNumber *keyDisregardedBind = [[NSNumber alloc] initWithInt: disregardedBind];
+                
+                NSDictionary *countersStart = @{
+                                                keySYBDATETIMN         : @0,     //Assumed good
+                                                keySYBDATETIME         : @0,     //Good
+                                                keySYBDATETIME4        : @0,     //Good
+                                                
+                                                keySYBCHAR             : @0,     //Good
+                                                keySYBVARCHAR          : @0,     //Good
+                                                keySYBTEXT             : @0,     //Good
+                                                keySYBNTEXT            : @0,     //Good
+                                                keySYBNVARCHAR         : @0,     //Good
+                                                
+                                                keySYBBIT              : @0,     //Good
+                                                keySYBBITN             : @0,     //Assumed good
+                                                keySYBINT1             : @0,     //Good
+                                                keySYBINT2             : @0,     //Good
+                                                keySYBINT4             : @0,     //Good
+                                                keySYBINT8             : @0,     //Good
+                                                keySYBINTN             : @0,     //Assumed good
+                                                
+                                                keySYBMONEY            : @0,     //Good, also handles SYBMONEY4
+                                                keySYBMONEYN           : @0,     //Assumed good
+                                                
+                                                keySYBREAL             : @0,     //Good
+                                                keySYBFLT8             : @0,     //Good
+                                                keySYBFLTN             : @0,     //Assumed good, but may overflow
+                                                
+                                                keySYBNUMERIC          : @0,     //Converts to NSDecimalNumber...
+                                                                                 //  Also handles SYBDECIMAL
+                                                
+                                                keySYBIMAGE            : @0,     //Currently not used
+                                                keySYBBINARY           : @0,     //Currently not used
+                                                keySYBVOID             : @0,     //Currently not used
+                                                keySYBVARBINARY        : @0,     //Currently not used
+                                                
+                                                keyDisregardedBind     : @0
+                                                
+                                                };
+                NSMutableDictionary *counters = [[NSMutableDictionary alloc] initWithDictionary:countersStart];
+                
                 [datatable removeAllObjects];
                 
                 for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {

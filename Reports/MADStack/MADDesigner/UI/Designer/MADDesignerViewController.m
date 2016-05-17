@@ -915,7 +915,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     [private performBlock:^{
-        RptqDocument *document = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
@@ -937,7 +937,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     [private performBlock:^{
     
-        RptqDocument *document = [RptqDocument documentForManagedObjectContext: private];
+        RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         

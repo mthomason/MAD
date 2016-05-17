@@ -99,12 +99,13 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     
     NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
-    NSNumber *labelDynamic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelDynamic];
-    NSNumber *labelStatic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelStatic];
-    NSNumber *aggregate = [NSNumber numberWithShort:MTDocumentObjectTypeAggregate];
-    NSNumber *image = [NSNumber numberWithShort:MTDocumentObjectTypeImage];
-    NSNumber *whitespace = [NSNumber numberWithShort:MTDocumentObjectTypeWhtiespace];
-    NSArray *defaults = @[labelDynamic, labelStatic, aggregate, image, whitespace];
+    NSNumber *labelDynamic =    [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
+    NSNumber *labelStatic =     [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
+    NSNumber *aggregate =       [[NSNumber alloc] initWithShort:MTDocumentObjectTypeAggregate];
+    NSNumber *image =           [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
+    NSNumber *whitespace =      [[NSNumber alloc] initWithShort:MTDocumentObjectTypeWhtiespace];
+    NSArray *defaults = [[NSArray alloc] initWithObjects: labelDynamic, labelStatic, aggregate,
+                                                          image, whitespace, nil];
     [dataSource addObjectsFromArray:defaults];
     
     if ([[MTStoreKitController sharedObject] isBarcodeDesignerEnabled]) {
@@ -129,21 +130,27 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     NSNumber *madob = self.dataSource[(NSUInteger)indexPath.row];
  
     switch (madob.shortValue) {
+
         case MTDocumentObjectTypeAggregate:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
             break;
+
         case MTDocumentObjectTypeBarcode:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushBarcodeLabelNew" sender:self];
             break;
+
         case  MTDocumentObjectTypeLabelDynamic:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:self];
             break;
+
         case MTDocumentObjectTypeLabelStatic:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushStaticLabelNew" sender:self];
             break;
+            
         case MTDocumentObjectTypeImage:
             [self presentImagePicker];
             break;
+
         default:
             break;
     }
@@ -179,11 +186,15 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     return result;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section {
+
     switch (section) {
+
         case 0:
             return (NSInteger)self.dataSource.count;
             break;
+
         default:
             return 0;
             break;
@@ -196,7 +207,9 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout*)collectionViewLayout
+                                            sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(150.0000f, 100.0000f);
 }
 
@@ -212,28 +225,30 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 }
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
-    if ([self aggregateViewController]) {
+    if (self.aggregateViewController) {
         NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:functionType];
-        NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
-        [[[[self aggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+        NSString *detailText = [[NSString alloc] initWithFormat:@"%@(x)", functionName];
+        [self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel setText:detailText];
     }
 }
 
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [[[viewController navigationController] navigationBar] setHidden:YES];
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [viewController.navigationController.navigationBar setHidden:YES];
 }
 
 #pragma mark
 #pragma mark - UITableViewControllerChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+                                      withField:(RptqQueryField *)field {
     
     switch ([[controller view] tag]) {
             
         case MTDocumentObjectTypeLabelDynamic:
             
-            //[self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:<#(id)#>];
+            //[self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:(id)];
             //[[self objectSelectorDelegate] viewControllerDidFinish:self];
             
             break;
@@ -241,8 +256,9 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
         case MTViewTagFieldOrFormulaSelector: {
             
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-            NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
-            [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+            id display = [field display];
+            id detailtext = [[NSString alloc] initWithFormat:formatString, display];
+            [self.aggregateViewController.tableViewCellAggregateInput.detailTextLabel setText:detailtext];
             [self.navigationBar popNavigationItemAnimated:YES];
             
             break;
@@ -280,33 +296,43 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 }
 
 - (void)displaySelectedGroupByType {
-    if ([self aggregateViewController]) {
-        switch ([self aggregateGroupByType]) {
+
+    if (_aggregateViewController) {
+        
+        UITableViewCell * __unsafe_unretained cell;
+        UILabel * __unsafe_unretained detailTextLabel;
+        
+        cell = _aggregateViewController.tableViewCellAggregateGroupBy;
+        detailTextLabel = cell.detailTextLabel;
+        
+        switch (_aggregateGroupByType) {
+        
             case MTAggregateGroupByTypeSection: {
 
                 NSUInteger group = self.aggregateGroupBySectionNumber;
                 NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
-                NSString *detail = [NSString stringWithFormat:format, group];
-                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+                NSString *detail = [[NSString alloc] initWithFormat:format, group];
+                [detailTextLabel setText:detail];
                 break;
                 
             }
+            
             case MTAggregateGroupByTypeReport: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                [detailTextLabel setText:detailText];
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                [detailTextLabel setText:detailText];
                 break;
                 
             }
             default:
-                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+                [detailTextLabel setText:@""];
                 break;
         }
     }
