@@ -29,6 +29,7 @@
     - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination forObjectID:(NSManagedObjectID *)objectID;
     - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
     - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+    - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID;
 
     + (NSString *)cacheFileNameForFileName:(NSString *)filename;
 

@@ -13,7 +13,6 @@
 #import "MTTableController.h"
 #import <CoreData/NSManagedObjectID.h>
 #import <MAD/MTDataTable+Factory.h>
-#import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MAD/MTDatabaseConnection.h>
 
 #import "MADTableLayout.h"
@@ -27,6 +26,8 @@
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
@@ -171,9 +172,9 @@
     [self.collectionView flashScrollIndicators];
     if (_firstTimeViewDidAppear) {
         _firstTimeViewDidAppear = false;
-        [self.collectionView scrollRectToVisible: CGRectMake(CGPointZero.x, CGPointZero.y,
+        [self.collectionView scrollRectToVisible: MADRectOfSize(CGSizeMake(
                                                              self.collectionView.frame.size.width,
-                                                             1.0000f)
+                                                             1.0000f))
                                         animated: NO];
     }
 }

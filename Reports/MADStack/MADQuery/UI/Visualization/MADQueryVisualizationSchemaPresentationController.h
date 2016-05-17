@@ -16,7 +16,7 @@
 
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
 
-    - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+    - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID;
     - (CGRect)frameOfItemWithObjectID:(NSManagedObjectID *)objectID;
 
 @end

@@ -13,8 +13,8 @@
 
 @interface MADPromptManager : NSObject
 
-@property (nonatomic, strong) NSString *prompt;
-@property (nonatomic, strong, readonly) NSString *defaultPrompt;
+    @property (nonatomic, strong) NSString *prompt;
+    @property (nonatomic, strong, readonly) NSString *defaultPrompt;
 
     - (instancetype)initWithDefaultPrompt:(NSString *)defaultPrompt;
 

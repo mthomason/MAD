@@ -13,6 +13,7 @@
 #import "MADViewControllerSQL.h"
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
+#import <MAD/MTQueryFull.h>
 
 @implementation MADViewControllerSQL
 

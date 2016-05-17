@@ -26,6 +26,8 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIImageView.h>
 
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 static inline CGFloat halfinch();
 static inline CGFloat halfinch() {
     return 72.0000 / 72.0000;
@@ -33,7 +35,7 @@ static inline CGFloat halfinch() {
 
 static inline CGRect CellDefaultBounds();
 static inline CGRect CellDefaultBounds() {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+    return MADRectOfSize(CGSizeMake(230.0000f, 200.0000f));
 }
 
 static inline UIEdgeInsets PdfBorder();

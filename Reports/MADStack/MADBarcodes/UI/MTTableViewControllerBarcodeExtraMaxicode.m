@@ -15,6 +15,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTQuery.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 

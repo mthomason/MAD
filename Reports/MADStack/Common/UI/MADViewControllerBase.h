@@ -13,4 +13,4 @@
 //
 
     @property (nonatomic, assign, readonly) BOOL firstTimeViewWillLayoutSubviews;
-    @property (nullable, nonatomic, readonly, weak) MADTabBarController *tabBarController;;
+    @property (nullable, nonatomic, readonly, weak) MADTabBarController *tabBarController;

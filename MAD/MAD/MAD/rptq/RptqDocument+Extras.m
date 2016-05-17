@@ -74,9 +74,11 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    request.sortDescriptors = @[sortDescriptor];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
+                                                                   ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     
     NSError *error = nil;
@@ -85,7 +87,7 @@
     if (error == nil) {
         identifier = ((RptqDocument *)fetchResults.lastObject).identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierObj = @(identifier);
+    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;
 }
 
@@ -292,7 +294,7 @@
     } else if (numberOfRows > section.numberOfRows.unsignedIntegerValue) {
         
         //Add row
-        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
@@ -580,7 +582,7 @@
 }
 
 - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination {
-    NSManagedObjectContext *mangedObjectContext = [self managedObjectContext];
+    NSManagedObjectContext *mangedObjectContext = self.managedObjectContext;
     
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
     MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;

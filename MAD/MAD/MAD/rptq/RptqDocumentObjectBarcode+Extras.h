@@ -19,7 +19,7 @@
     - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo;
 
     + (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;
-    + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject;
+    + (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject;
 
 @end
 

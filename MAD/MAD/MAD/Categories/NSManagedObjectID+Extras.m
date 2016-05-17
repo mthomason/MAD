@@ -8,18 +8,20 @@
 
 #import "NSManagedObjectID+Extras.h"
 #import <Foundation/NSString.h>
-#import <stdio.h>
+#import <madlib.h>
 
 @implementation NSManagedObjectID (Extras)
 
-@dynamic key;
+@dynamic copyKey;
 
 #pragma mark - MTProtocolLog
 
-- (NSString *)key {
+- (NSString *)copyKey {
     char buf[18];
+    ultoa(self.hash, buf);
     snprintf(buf, 18, "s%lu", (unsigned long)self.hash);
-    return [NSString stringWithUTF8String:buf];
+    id result = [[NSString alloc] initWithUTF8String:buf];
+    return result;
 }
 
 - (NSString *)toStringHumanReadable {

@@ -26,7 +26,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
 @interface RptqDocumentSection (Extras)
 
-    @property (nonatomic, retain, readonly) NSString *sectionKey;
+    @property (nonatomic, retain, readonly) NSString *copySectionKey;
 
     + (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
@@ -38,7 +38,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
     - (CGFloat)layoutHeightCalculated;
     - (NSString *)localizedDisplayName;
-    - (NSString *)sectionKey;
+    - (NSString *)copySectionKey;
     - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin managedObjectContext:(NSManagedObjectContext *)managedObjectContext;

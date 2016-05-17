@@ -25,9 +25,11 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqRelationship class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    request.sortDescriptors = @[sortDescriptor];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqRelationship class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
+                                                                   ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];

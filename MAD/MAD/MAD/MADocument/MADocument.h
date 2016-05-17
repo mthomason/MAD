@@ -18,21 +18,36 @@
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
-#import <MAD/MTQueryFull.h>
-#import <MAD/MADSectionLayoutManager.h>
-
-typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
-                                                    MADSectionLayoutManagerMutableMap;
 
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
-@class NSManagedObjectID, UIImage, UIPrintPageRenderer, MADErrorContainer;
-@class MTDatabaseConnection, RptqDocument, MTReportFormatter, MTDataTableFast, MTQuery;
-@class MADActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable, MADocument;
-@class RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
-@class MTReportViewerPrintPageRenderer, MADCredential, MADocumentState;
+@class NSManagedObjectID;
+@class UIImage;
+@class UIPrintPageRenderer;
+@class MADErrorContainer;
+@class RptqDocument;
+@class RptqQueryGroup;
+@class RptqDatabaseSchemaTable;
+@class RptqDocumentSection;
+@class RptqDocumentObject;
+@class MTDatabaseConnection;
+@class MTReportFormatter;
+@class MTDataTableFast;
+@class MTQuery;
+@class MADActivityIndicator;
+@class MADocument;
+@class MTQueryFull;
+@class MTDatabase;
+@class MTPaper;
+@class MTReportViewerPrintPageRenderer;
+@class MADCredential;
+@class MADocumentState;
+@class MADSectionLayoutManager;
+
+typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
+                                                        MADSectionLayoutManagerMutableMap;
 
 @protocol MADActivityProtocol;
 
@@ -53,7 +68,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     // Set and used by export operations
     @property (nonatomic, weak)                 MADActivityIndicator *statusLabel;
-
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
@@ -74,19 +88,18 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     + (instancetype)newDocumentForURL:(NSURL *)url;
 
+    - (instancetype)initWithFileURL:(NSURL *)url;
+
     - (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender;
 
     + (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl;
     + (BOOL)isRetnaDisplay;
-
-    - (instancetype)initWithFileURL:(NSURL *)url;
 
     - (NSString *)mimetype;
 
     - (void)saveContext;
 
     - (void)regenThumbnail;
-
 
     - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
     - (void)initalizeMainDataTable;
@@ -96,14 +109,22 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
-    - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
+    - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
+                           andSortOrder:(MNSSortOrder)sortOrder;
+
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 
-    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID
+                        managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
-    - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
-    - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
+                                 inContent:(NSManagedObjectContext *)context;
+
+    - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
+                                     inContent:(NSManagedObjectContext *)context;
+
+    - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
+          fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (NSDictionary *)copyLayoutHeightsBySectionKey;
 

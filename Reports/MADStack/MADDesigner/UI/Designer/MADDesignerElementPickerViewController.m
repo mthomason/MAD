@@ -159,15 +159,21 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSNumber *madob = self.dataSource[indexPath.row];
     static NSString *MADIdentiferDocumentObjectCell = @"MADIdentiferDocumentObjectCell";
-    MADDocumentObjectCollectionViewCell *result = (MADDocumentObjectCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:MADIdentiferDocumentObjectCell forIndexPath:indexPath];
+    
+    MADDocumentObjectCollectionViewCell *result;
+    result = [collectionView dequeueReusableCellWithReuseIdentifier: MADIdentiferDocumentObjectCell
+                                                       forIndexPath: indexPath];
+    NSNumber * __unsafe_unretained madob = self.dataSource[(NSUInteger)indexPath.row];
     result.type = madob.shortValue;
+    
     if (result.selectedBackgroundView == nil) {
+    
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
         UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
         selectedBackgroundView.backgroundColor = bgColor;
         result.selectedBackgroundView = selectedBackgroundView;
+        
     }
     result.contentView.tag = madob.shortValue;
     return result;
@@ -176,7 +182,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return self.dataSource.count;
+            return (NSInteger)self.dataSource.count;
             break;
         default:
             return 0;

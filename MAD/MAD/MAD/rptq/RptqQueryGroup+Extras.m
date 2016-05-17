@@ -58,19 +58,19 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqQueryGroup *lastObject = [fetchResults lastObject];
+        RptqQueryGroup *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierObj = @(identifier);
+    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;
 }
 
@@ -113,10 +113,10 @@
 
 - (NSInteger)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending: NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
+                                                                   ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
 

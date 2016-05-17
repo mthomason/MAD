@@ -470,7 +470,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         
         @autoreleasepool {
             
-            NSString *reportSectionKey = [reportSection sectionKey];
+            NSString *reportSectionKey = [reportSection copySectionKey];
 
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
             
@@ -493,7 +493,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             
             NSString *lastKey = reportSectionKeyTracker.lastObject;
             UIView *constraintItem =  sectionCounter == 0 ? self.ruler : sectionViewsDictionary[lastKey];
-            NSString *key = [sectionView.objectIdTag key];
+            NSString *key = [sectionView.objectIdTag copyKey];
             NSLayoutConstraint *lc1a = [NSLayoutConstraint viewTop: constraintItem viewBottom: sectionView padding: MTReportDesignerBufferPaddingVertical];
             NSLayoutConstraint *lc1b = [NSLayoutConstraint view: sectionView height: reportSection.height.floatValue];
             NSLayoutConstraint *lc1c = [NSLayoutConstraint labelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
@@ -945,7 +945,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible ? YES : NO];
         section.visibility = visibility;
         
-        NSString *key = section.sectionKey;
+        NSString *key = [section copySectionKey];
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             MADDesignerSectionView *documentSectionView = self.sectionViewsDictionary[key];
@@ -970,7 +970,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
  
     [documentSection.managedObjectContext save:nil];
     
-    NSString *key = [documentSection sectionKey];
+    NSString *key = [documentSection copySectionKey];
     UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
@@ -1023,7 +1023,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];
     documentSection.numberOfRows = numberOfRowsObject;
     
-    UICollectionView *collectionView = self.sectionViewsDictionary[documentSection.sectionKey];
+    NSString *sectionKey = [documentSection copySectionKey];
+    UICollectionView *collectionView = self.sectionViewsDictionary[sectionKey];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
@@ -2417,7 +2418,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [private performBlockAndWait:^{
         
         RptqDocumentObject *documentObject = [private objectWithID:pieceObjectIDTag];
-        NSString *documentObjectSectionKey = documentObject.inSectionRow.inSection.sectionKey;
+        NSString *documentObjectSectionKey = [documentObject.inSectionRow.inSection copySectionKey];
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
            
@@ -2514,7 +2515,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         [private performBlockAndWait:^{
 
             RptqDocumentSection *documentSection = [private objectRegisteredForID:sectionViewObjectIdTag];
-            NSString *documentSectionKey = [documentSection sectionKey];
+            NSString *documentSectionKey = [documentSection copySectionKey];
             CGFloat documentSectionHeight = documentSection.height.floatValue;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -2603,8 +2604,10 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     __block CGFloat height;
 
     [private performBlockAndWait:^{
-        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: private];
-        key = [documentSection sectionKey];
+        RptqDocumentSection *documentSection;
+        documentSection = [RptqDocumentSection documentSectionForObjectID: objectId
+                                                   inManagedObjectContext: private];
+        key = [documentSection copySectionKey];
         height = documentSection.height.floatValue;
     }];
     
@@ -2743,11 +2746,13 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionViewsDictionary[documentSection.sectionKey];
+    NSString *sectionKey = [documentSection copySectionKey];
+    return self.sectionViewsDictionary[sectionKey];
 }
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionControlViewsDictionary[[documentSection sectionKey]];
+    NSString *sectionKey = [documentSection copySectionKey];
+    return self.sectionControlViewsDictionary[sectionKey];
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
@@ -2767,11 +2772,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (void)displayPrompt {
+    MADTabBarController * __unsafe_unretained tabBarController = self.tabBarController;
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        self.tabBarController.navigationItem.prompt = self.promptManager.prompt;
+        tabBarController.navigationItem.prompt = self.promptManager.prompt.copy;
     } else {
-        if (self.tabBarController.navigationItem.prompt != nil) {
-            self.tabBarController.navigationItem.prompt = nil;
+        if (tabBarController.navigationItem.prompt != nil) {
+            tabBarController.navigationItem.prompt = nil;
         }
     }
 }
@@ -2826,22 +2832,26 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
-    MADDesignerElementView *elementView = (MADDesignerElementView *)[self viewForObjectID:managedObject.objectID];
-    if (!elementView) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
-        if (documentObject) {
-            elementView = (MADDesignerElementView *)[self viewForObjectID:documentObject.objectID];
-            if (!elementView) {
-                
-                elementView = [[MADDesignerElementView alloc] initWithDocumentObject: documentObject];
-                [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
-                
-                UIGestureRecognizer *tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerElementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
-                [elementView addGestureRecognizer:tapGestureRecognizer];
-                
-            }
-        }
-    }
+    id elementView;
+    RptqDocumentObject *documentObject;
+
+    elementView = [self viewForObjectID:managedObject.objectID];
+    if (elementView) goto ElementViewForManagedObjectShortCircut;
+    
+    documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
+    if (!documentObject) goto ElementViewForManagedObjectShortCircut;
+
+
+    elementView = [self viewForObjectID:documentObject.objectID];
+    if (elementView) goto ElementViewForManagedObjectShortCircut;
+
+    SEL handleTap = @selector(handleToggleElementView:);
+    elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: documentObject
+                                                               tapGestureDelegate: self
+                                                                      tapSelector: handleTap];
+
+    ElementViewForManagedObjectShortCircut:;
+    
     return elementView;
 }
 
@@ -2865,10 +2875,21 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     return ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame.size.height;
 }
 
+static inline CGFloat DetailDisplayFrameOriginX(CGFloat width);
+static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) {
+    return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail;
+}
+
+static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop);
+static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
+    return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
+}
+
 - (CGRect)detailDisplayFrame {
-    return CGRectMake(self.view.frame.size.width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail,
-                      CGPointZero.y + self.topLayoutGuide.length + MTReportDesignerBorderPaddingDetail,
-                      MADSizeWidthViewDetailDisplay, MADSizeHeightViewDetailDisplay);
+    return CGRectMake(DetailDisplayFrameOriginX(self.view.frame.size.width),
+                      DetailDisplayFrameOriginY(self.topLayoutGuide.length),
+                      MADSizeWidthViewDetailDisplay,
+                      MADSizeHeightViewDetailDisplay);
 }
 
 - (CGSize)designerContentViewSize {
@@ -2896,7 +2917,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)[self.sectionControlViewsDictionary objectForKey:self.document.activeDocumentModel.hasDetailSection.objectID.key];
+    return (UIView *)[self.sectionControlViewsDictionary objectForKey:[self.document.activeDocumentModel.hasDetailSection.objectID copyKey]];
 }
 
 - (void)adjustSettingsLocation {

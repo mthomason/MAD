@@ -78,12 +78,12 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
         
         [self addObserver: self
                forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
-                  options: 0
+                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
         
         [self addObserver: self
                forKeyPath: [MADToolboxViewController keyPathDocument]
-                  options: 0
+                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
         
 

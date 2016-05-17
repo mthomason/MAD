@@ -16,6 +16,8 @@
 #import <MADFoundation/NSURL+Document.h>
 #import <MAD/MADErrorUserInfo.h>
 
+#import "MTQueryFull.h"
+
 #import "MADConstants.h"
 #import "MADCredential.h"
 
@@ -78,6 +80,7 @@
 #import <MADCocoaExtensions/MADFilename.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MTDataTableFast.h"
@@ -314,7 +317,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                                                     MADSectionLayoutManager *sectionLayoutManager,
                                                                     BOOL *stop) {
         
-        id k = [key key];
+        id k = [key copyKey];
         NSNumber *height = [[NSNumber alloc] initWithFloat:sectionLayoutManager.size.height];
         dictionary[k] = height;
         
@@ -971,12 +974,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             
             //Reweight Groups
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight)) ascending:YES];
-            NSArray *sortDescriptors = @[sortDescriptor];
+            id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
             NSArray *sortedQueryGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
             NSUInteger counter = 0;
-            for (RptqQueryGroup *group in sortedQueryGroups) {
+            for (RptqQueryGroup *sortedGroup in sortedQueryGroups) {
                 NSNumber *counterWrapper = [[NSNumber alloc] initWithUnsignedInteger:counter];
-                group.weight = counterWrapper;
+                sortedGroup.weight = counterWrapper;
                 counter++;
             }
 
@@ -1060,11 +1063,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    return [[NSFileManager defaultManager] fileExistsAtPath:self.urlDataTableCache.path];
+    NSString *path = self.urlDataTableCache.path;
+    return [[NSFileManager defaultManager] fileExistsAtPath: path];
 }
 
-- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID {
-    return  [self.mainDataTable dataForCacheId:cachedID];
+- (NSDictionary *)copyDataForCacheId:(NSNumber *)cachedID {
+    return  [self.mainDataTable copyDataForCacheId:cachedID];
 }
 
 #pragma mark - Report Notifications
@@ -1158,11 +1162,13 @@ typedef struct png_control
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         size_t newImageSize = 0;
         
-        const kPngSignatureLength = 8;
-        Byte pngSignature[kPngSignatureLength];
-        [pngImage getBytes:&pngSignature range:NSMakeRange(0, kPngSignatureLength)];
-        bool ispng = png_check_sig(pngSignature, 8);
+        const int kPngSignatureLength = 8;
+
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+        [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
+        if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
+
         iodata_stream dstream;
         
         png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);// (struct png_struct_def *)pngImage.bytes;
@@ -1173,19 +1179,16 @@ typedef struct png_control
         } else {
     
             dstream.i = 0;
-            dstream.m = pngImage.bytes;
+            dstream.m = (char *)pngImage.bytes;
             png_set_read_fn(p, &dstream, mad_png_read_fn);
-            png_set_sig_bytes(pngSignature, kPngSignatureLength);
+            png_set_sig_bytes((png_structp)pngSignature, kPngSignatureLength);
         }
         png_byte numberOfChannels = png_get_channels(p, info);
         png_uint_32 imageWidth = png_get_image_width(p, info);
         png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
         
         png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
-        int interlaceHandling = png_set_interlace_handling(p);
         png_uint_32 imageHeight = png_get_image_height(p, info);
-        png_byte colorType = png_get_color_type(p, info);
-        png_byte bitDepth = png_get_bit_depth(p, info);
         void *compressedPNG = tdefl_write_image_to_png_file_in_memory_ex(p,
                                                                          (int)imageWidth,
                                                                          (int)imageHeight,
@@ -1194,13 +1197,15 @@ typedef struct png_control
                                                                          MZ_UBER_COMPRESSION, 0);
         png_destroy_read_struct(&p, (png_infopp)NULL, NULL);
         p = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-        const char *path = thumbnailURL.path.UTF8String;
-        FILE *fp = fopen(path, "wb");
+        const char *thumbnailPath = thumbnailURL.path.UTF8String;
+        FILE *fp = fopen(thumbnailPath, "wb");
         png_init_io(p, fp);
         png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
         png_destroy_write_struct(&p, &info);
         free(compressedPNG);
+        free((void *)pngSignature);
         fclose(fp);
+        RegenThumbnailShortCircuit:;
     }
 }
 
@@ -1219,13 +1224,13 @@ typedef struct png_control
 
 - (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender {
     MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
-                                                                                options: MTReportFormatterOptionsMargin];
+                                                                                 options: MTReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;
     [reportFormatter initalize];
-
+    
     id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
                                                                                 dataTable: self.mainDataTable];
     self.printingReportFormatter = reportFormatter;
@@ -1384,9 +1389,9 @@ typedef struct png_control
     [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
     
     CGRect letterRect = [MTPaper rectLetter];
-    UIImage *thumbnail = [printPageRender newThumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y,
+    UIImage *thumbnail = [printPageRender newThumbnailWithRect: MADRectOfSize(CGSizeMake(
                                                                            (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
-                                                                           (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
+                                                                           (MADFloat_1024 * letterRect.size.height) / MADFloat_1024))
                                                           size: MADFloat_1024
                                                     edgeEffect: NO
                                                     zoomEffect: NO

@@ -74,6 +74,7 @@
 #import <UIKit/UIManagedDocument.h>
 
 #import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
 typedef void(^MTBlockResultVoid)(void);
 
@@ -146,16 +147,17 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 #pragma mark - MADQueryVisualizationSchemaPresentationDelegate
 
-- (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
-    return [self.cacheData tableDefinationForObjectID:objectID];
+- (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID {
+    return [self.cacheData copyTableDefinationForObjectID:objectID];
 }
 
 - (CGRect)frameOfItemWithObjectID:(NSManagedObjectID *)objectID {
     MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
-    return CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
-                      tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
-                      MADSchemaViewDefaultWidth,
-                      MADSchemaViewDefaultHeight);
+    CGRect result = CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
+                               tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
+                               MADSchemaViewDefaultWidth,
+                               MADSchemaViewDefaultHeight);
+    return result;
 }
 
 #pragma mark - NSObject
@@ -603,8 +605,8 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                 RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
                 
                 NSManagedObjectID *objectID = table.objectID.copy;
-
-                BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
+                NSURL *uriRepresentation = [objectID URIRepresentation];
+                BOOL topLevel = [queryDef.startingPoints containsObject: uriRepresentation];
                 if (topLevel) {
                     [self.rootTables addObject: objectID];
                 }
@@ -691,17 +693,21 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     [orphanedQueryTables minusSet:self.rootTables];  // Should only be one newly orphaned table.
     
     RptqQueryLinks *deletedLink = (RptqQueryLinks *)[doc.managedObjectContext objectWithID:deletedQueryLinks.objectID];
-    
+    MADQueryVisualizationTableDefination *tableDefination;
+    NSManagedObjectID *objectID;
     for (RptqQueryTable *table in orphanedQueryTables) {
-        MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:table.objectID];
-        tableDefination.root = YES;
-        
-        NSManagedObjectID *objectID = table.objectID.copy;
-        [self.rootTables addObject: objectID];
+
+        @autoreleasepool {
+            objectID = table.objectID.copy;
+            tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
+            tableDefination.root = YES;
+            [self.rootTables addObject: objectID];
+            objectID = nil;
+        }
         
     }
     
-    MADConnectorView * __weak connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
+    MADConnectorView * __unsafe_unretained connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
     [connectorView removeFromSuperview];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];

@@ -9,8 +9,8 @@
 #ifndef MAD_MTReportFormatter_h
 #define MAD_MTReportFormatter_h
 
-#import <CoreGraphics/CGGeometry.h>
 #import <MAD/MTTableFormatter.h>
+#import <CoreGraphics/CGGeometry.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSectionPlist.h>
@@ -24,16 +24,18 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
 
     - (BOOL)cacheExist;
     - (NSEnumerator *)enumeratorForReportData;
-    - (NSDictionary *)dataForCacheId:(NSNumber *)cachedID;
+    - (NSDictionary *)copyDataForCacheId:(NSNumber *)cachedID;
 
 @end
 
 extern NSString * const MTNullIdentifier;
 
-@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching,
-        MTReportFormatterPageDefinition;
-
-@class MADArrayCaching<ObjectType>;
+@class MADocument;
+@class RptqDocumentSection;
+@class RptqDocument;
+@class MADArrayCaching;
+@class MTReportFormatterPageDefinition;
+@class MADArrayCaching <ObjectType>;
 
 typedef NSArray         <__kindof id>                                   MADObjectArray;
 typedef NSArray         <__kindof MADSectionPlist *>                    MADSectionArray;
@@ -85,7 +87,7 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
 
     - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
     - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
-    - (MADObjectArray *)keysForCachedID:(NSNumber *)rowid;
+    - (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid;
 
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;

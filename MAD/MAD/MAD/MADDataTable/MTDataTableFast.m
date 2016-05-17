@@ -642,7 +642,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 // FIXME: Return error handler... remove credentals
-- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
     
     if (self.lastDataForCacheId != nil) {
         if (cacheId.unsignedIntegerValue == self.lastDataForCacheId.index) {
@@ -670,14 +670,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
-    bool success = sqlite3_prepare_v2([self.databaseForSelects databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+    bool success = sqlite3_prepare_v2([self.databaseForSelects databaseHandle], queryString, -1,
+                                      &statement, NULL) == SQLITE_OK;
     
     if (success) {  //Expect success to == NO in normal working conditions.
         success = sqlite3_step(statement) == SQLITE_ROW;
         if (success) {
             result = [self newCurrentObject:statement];
             
-            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
+            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue
+                                                                  andObject:result];
             self.lastDataForCacheId = lastDataForCacheId;
             
         } else {

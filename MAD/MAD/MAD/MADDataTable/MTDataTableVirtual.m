@@ -28,15 +28,6 @@
 
 @implementation MTDataTableVirtual
 
-- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
-                     function:(MTAggregateFunctionType)function
-                     fieldKey:(NSString *)fieldKey
-                    groupKeys:(NSArray *)groupKeys
-                       rowids:(NSArray *)rowids {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
-    return nil;
-}
-
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
@@ -52,7 +43,7 @@
     return nil;
 }
 
-- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

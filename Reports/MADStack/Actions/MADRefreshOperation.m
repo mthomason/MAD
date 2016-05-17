@@ -18,6 +18,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import "MADRefreshOperationInitalize.h"
 #import <MAD/MADCredential.h>
+#import <MAD/MTQueryFull.h>
 
 static const short errCache = 2;
 

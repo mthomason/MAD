@@ -34,14 +34,16 @@
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqUserCredentals class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField
+                                                                     ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqUserCredentals *lastObject = [fetchResults lastObject];
+        RptqUserCredentals *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identifierObj = @(identifier);
@@ -124,7 +126,8 @@
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
-    request.sortDescriptors = @[sortDescriptor];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
     NSArray *results = [[NSArray alloc] initWithArray:fetchResults];

@@ -25,16 +25,16 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuerySort class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQuerySort class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqQuerySort *lastObject = [fetchResults lastObject];
+        RptqQuerySort *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identifierObj = @(identifier);

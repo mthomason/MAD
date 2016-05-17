@@ -7,6 +7,7 @@
 //
 
 #import "MADQueryVisualizationCacheData.h"
+#import "MADQueryVisualizationTableDefination.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <CoreData/NSManagedObjectID.h>
@@ -54,12 +55,26 @@ static NSString * const CacheExt                    = @"qvvc";
     [aCoder encodeObject:tableDefinations forKey:keyTables];
 }
 
-- (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {
-    self.tableDefinations[objectID.URIRepresentation.absoluteString] = tableDef;
+- (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination
+               forObjectID:(NSManagedObjectID *)objectID {
+    NSURL *uriRepresentation = [objectID URIRepresentation];
+    id stringRepresention = uriRepresentation.absoluteString;
+    MADQueryVisualizationTableDefination *copyTableDefination = [tableDefination copyWithZone:nil];
+    self.tableDefinations[stringRepresention] = copyTableDefination;
 }
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
-    return self.tableDefinations[objectID.URIRepresentation.absoluteString];
+    NSURL *uriRepresentation = [objectID URIRepresentation];
+    id stringRepresention = uriRepresentation.absoluteString;
+    return self.tableDefinations[stringRepresention];
+}
+
+- (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID {
+    NSURL *uriRepresentation = [objectID URIRepresentation];
+    id stringRepresention = uriRepresentation.absoluteString;
+    MADQueryVisualizationTableDefination *tableDefination = self.tableDefinations[stringRepresention];
+    id copyTableDefination = [tableDefination copyWithZone:nil];
+    return copyTableDefination;
 }
 
 - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID {

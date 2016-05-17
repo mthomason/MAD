@@ -12,7 +12,9 @@
 #import <MAD/MTDataTableFast.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
+#import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTQueryFull.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase.h>
@@ -50,13 +52,14 @@
 - (void)execute {
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADocument *doc = _document;
-/*
+    /*
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADRefreshOperationInitalizeMainDataTableProtocol)]) {
                 doc = ((id <MADRefreshOperationInitalizeMainDataTableProtocol>)dependency).document;
                 break;
             }
-        }*/
+        }
+    */
    
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = doc.managedObjectContext;

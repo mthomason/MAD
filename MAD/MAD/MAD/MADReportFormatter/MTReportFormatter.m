@@ -123,10 +123,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     self.machineState.document = [self.layout activeDocumentModel];
 }
 
-- (MADObjectArray *)keysForCachedID:(NSNumber *)rowid {
-    NSDictionary *row = [self.datasource dataForCacheId: rowid];
-    MADObjectArray *keyValues = [self keyValuesForResultRow:row];
-    return [MADObjectArray arrayWithArray:keyValues];
+- (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid {
+    NSDictionary *row = [self.datasource copyDataForCacheId: rowid];
+    MADObjectArray *keyValues = [self newObjectArrayKeyValuesForResultRow:row];
+    return keyValues;
 }
 
 - (void)dealloc { }
@@ -162,21 +162,28 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (NSUInteger)layoutIdentifier {
-    return self.overrideIdentifier == nil ?
-                    self.layout.documentObjectID.URIRepresentation.absoluteString.hash :
-                    self.overrideIdentifier.hash;
+    if (_overrideIdentifier == nil) {
+        NSManagedObjectID *objectID = _layout.documentObjectID;
+        NSURL *uri = objectID.URIRepresentation;
+        NSString *string = uri.absoluteString;
+        return string.hash;
+    } else {
+        return _overrideIdentifier.hash;
+    }
 }
 
-- (NSString *)nameCurrentReportIndexes {
-    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
-                                            "ih", sizeString];
+- (NSString *)newStringNameCurrentReportIndexes:(CGSize)size andHash:(unsigned long)hash {
+    NSString *sizeString = NSStringFromCGSize(_page.layoutSize);
+    NSString *name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                                      "ih", sizeString];
+    return name;
 }
 
-- (NSString *)nameCurrentReportLayout {
-    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
-                                            "lh", sizeString];
+- (NSString *)newStringNameCurrentReportLayout:(CGSize)size andHash:(unsigned long)hash {
+    NSString *sizeString = NSStringFromCGSize(_page.layoutSize);
+    NSString *name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                                      "lh", sizeString];
+    return name;
 }
 
 - (void)initalize {
@@ -201,10 +208,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     self.pageIndexesTemporary = temporaryDataForPage;
     
-    if (self.layout) {
+    MADocument * __unsafe_unretained layout = self.layout;
+    if (layout) {
     
-        [self.layout initalizeSectionLayoutManagers: self.machineState.document];
-        NSDictionary *layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
+        [layout initalizeSectionLayoutManagers: self.machineState.document];
+        NSDictionary *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
         
     } else {
@@ -227,10 +235,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (BOOL)needsFormat {
-    NSAssert([self datasource] != nil, @"We need a datatable way before here");
+    id <MTReportFormatterDataSource> __unsafe_unretained datasource = self.datasource;
+    NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
-            ![self.datasource cacheExist] ? YES : NO;
+            ![datasource cacheExist] ? YES : NO;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
@@ -325,13 +334,21 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     [self.reportIndexes finalizeDatabase];
     [self.reportLayout finalizeDatabase];
 
-    MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportIndexes]
-                                                            cachedDelegate: self.cachedDelegate];
+    id <MTCacheProtocol> cachedDelegate = self.cachedDelegate;
+    
+    NSString *nixarray = [self newStringNameCurrentReportIndexes:_page.layoutSize
+                                                        andHash:(unsigned long)[self layoutIdentifier]];
+
+    MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: nixarray
+                                                            cachedDelegate: cachedDelegate];
     [ixarray initializeDatabase];
     self.reportIndexes = ixarray;
     
-    MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportLayout]
-                                                            cachedDelegate: self.cachedDelegate];
+    NSString *nlyarray = [self newStringNameCurrentReportLayout:_page.layoutSize
+                                                        andHash:(unsigned long)[self layoutIdentifier]];
+    
+    MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: nlyarray
+                                                            cachedDelegate: cachedDelegate];
     [lyarray initializeDatabase];
     self.reportLayout = lyarray;
     
@@ -468,7 +485,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
-    NSNumber * __weak sectionHeight = self.layoutHeightsBySectionKey[documentSection.sectionKey];
+    NSString *key = [documentSection copySectionKey];
+    NSNumber * __unsafe_unretained sectionHeight = self.layoutHeightsBySectionKey[key];
     return sectionHeight.floatValue;
 }
 
@@ -526,7 +544,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
             self.machineState.detailRowId = rowIdOnly ? resultRow : resultRow[MADIdentifierROWID];
             
             //Get row key values
-            NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
+            MADObjectArray *keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
             
             //Display new footers if needed.
             if (firstRow) {
@@ -556,7 +574,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     //Need to account for the last set of group footers.
     if (lastResultRow) {
         
-        NSArray *keyValuesForComparson = [self keyValuesForResultRow:lastResultRow];
+        MADObjectArray *keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:lastResultRow];
         NSUInteger groupLevel = keyValuesForComparson.count;
         while (groupLevel >= 1) {
             @autoreleasepool {
@@ -569,27 +587,27 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     }
 }
 
-- (MADObjectArray *)keyValuesForResultRow:(id)resultRow {
+- (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow {
 
-    MADObjectArray *keyValues = nil;
 
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
-        NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
+        NSMutableArray *keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
 
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
-            id predicateValue = resultRow[sortDesc.key];
-            if (predicateValue != nil) {
-                [keyValuesForComparson addObject:predicateValue];
-            } else {
-                [keyValuesForComparson addObject:[NSNull null]];
+            NSString * __unsafe_unretained key = sortDesc.key;
+            if (key) {
+                id predicateValue = resultRow[key];
+                if (predicateValue != nil) {
+                    [keyValues addObject:predicateValue];
+                } else {
+                    [keyValues addObject:[NSNull null]];
+                }
             }
         }
-        keyValues = [MADObjectArray arrayWithArray:keyValuesForComparson];
-        
+        return keyValues;
     } else {
-        keyValues = @[];
+        return @[];
     }
-    return keyValues;
 }
 
 // FIXME: Make sure paper rect is passed in to the software

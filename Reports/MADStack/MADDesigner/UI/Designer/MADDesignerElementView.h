@@ -27,12 +27,14 @@
 
     @property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
 
-    + (NSStringDrawingOptions)drawingOptions;
+    - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
+
+    + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
+                                         tapGestureDelegate:(id<UIGestureRecognizerDelegate>)tapGestureDelegate
+                                                tapSelector:(SEL)selector;
 
     - (void)setWobbleRunning:(BOOL)running;
     - (void)flash:(void (^)(BOOL finished))completion;
-
-    - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
 
     - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
     - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;

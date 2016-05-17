@@ -31,18 +31,19 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelLink class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObjectLabelLink class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqDocumentObjectLabelLink *lastObject = [fetchResults lastObject];
+        RptqDocumentObjectLabelLink *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierObj = @(identifier);
+    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;}
 
 - (void)awakeFromFetch {

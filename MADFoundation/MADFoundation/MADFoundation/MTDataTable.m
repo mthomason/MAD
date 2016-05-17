@@ -144,7 +144,7 @@ static NSString * const StringEmpty = @"";
     return nil;
 }
 
-- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

@@ -11,15 +11,17 @@
 #endif
 
 #import "MADQueryVisualizationSchemaViewController.h"
+
+#import <UIKit/UIManagedDocument.h>
+
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
+
 #import "MADConnectorView.h"
 #import "MTTitleView.h"
 #import "MTSchemaFieldCell.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADManagedObjectView.h"
-
-#import <UIKit/UIManagedDocument.h>
-
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 

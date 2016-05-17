@@ -13,7 +13,7 @@
 
 @interface NSManagedObjectID (Extras)
 
-    @property (readonly) NSString *key;
+    @property (readonly) NSString *copyKey;
 
 @end
 

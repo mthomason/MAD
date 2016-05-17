@@ -69,9 +69,8 @@
 - (instancetype)initWithPresentedViewController: (UIViewController *)presentedViewController
                        presentingViewController: (UIViewController *)presentingViewController; {
 
-    self = [super initWithPresentedViewController: presentedViewController
-                         presentingViewController: presentingViewController];
-    if (self) {
+    if (self = [super initWithPresentedViewController: presentedViewController
+                             presentingViewController: presentingViewController]) {
 
         MADDimmingView *dimmingView = [[MADDimmingView alloc] init];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
@@ -84,12 +83,12 @@
 
         [self addObserver: self
                forKeyPath: [MADToolboxPresentationController keyPathPassthroughContainer]
-                  options: 0
+                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
 
         [self addObserver: self
                forKeyPath: [MADToolboxPresentationController keyPathPassthroughViews]
-                  options: 0
+                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
 
         

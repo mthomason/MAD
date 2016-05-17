@@ -13,6 +13,8 @@
 		4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809B1C8B20E00058E6B4 /* MADFonts.m */; };
 		4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */; };
+		4C2DC0B21CEAD65800167DA3 /* madlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC0B01CEAD65800167DA3 /* madlib.c */; };
+		4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2DC0B11CEAD65800167DA3 /* madlib.h */; };
 		4C39D0241C9284F800C70B10 /* MADCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C39D0221C9284F800C70B10 /* MADCredential.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C39D0251C9284F800C70B10 /* MADCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39D0231C9284F800C70B10 /* MADCredential.m */; };
 		4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CD81BAE3AF800BAE5FC /* MTPaper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -402,6 +404,8 @@
 		4C24809B1C8B20E00058E6B4 /* MADFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFonts.m; path = MAD/MADFonts.m; sourceTree = "<group>"; };
 		4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorUserInfo.h; path = MAD/MADErrorUserInfo.h; sourceTree = "<group>"; };
 		4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorUserInfo.m; path = MAD/MADErrorUserInfo.m; sourceTree = "<group>"; };
+		4C2DC0B01CEAD65800167DA3 /* madlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = madlib.c; path = MAD/madlib.c; sourceTree = "<group>"; };
+		4C2DC0B11CEAD65800167DA3 /* madlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = madlib.h; path = MAD/madlib.h; sourceTree = "<group>"; };
 		4C39D0221C9284F800C70B10 /* MADCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCredential.h; path = MAD/MADCredential.h; sourceTree = "<group>"; };
 		4C39D0231C9284F800C70B10 /* MADCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCredential.m; path = MAD/MADCredential.m; sourceTree = "<group>"; };
 		4C401CD81BAE3AF800BAE5FC /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaper.h; path = MAD/MADPaper/MTPaper.h; sourceTree = "<group>"; };
@@ -1119,6 +1123,8 @@
 				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
 				4C39D0221C9284F800C70B10 /* MADCredential.h */,
 				4C39D0231C9284F800C70B10 /* MADCredential.m */,
+				4C2DC0B11CEAD65800167DA3 /* madlib.h */,
+				4C2DC0B01CEAD65800167DA3 /* madlib.c */,
 			);
 			name = MAD;
 			sourceTree = "<group>";
@@ -1444,6 +1450,7 @@
 				4C401DE11BAE3BD700BAE5FC /* MTQueryDefinitionField.h in Headers */,
 				4CC2840B1BADE93500775B72 /* RptqDocumentObjectBarcode.h in Headers */,
 				4C401DE51BAE3BD800BAE5FC /* MTQueryDefinitionLinks.h in Headers */,
+				4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */,
 				4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */,
 				4C401D3C1BAE3AF800BAE5FC /* MTPaperB0.h in Headers */,
 				4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */,
@@ -1719,6 +1726,7 @@
 				4C401D6D1BAE3AF800BAE5FC /* MTPaperLegal.m in Sources */,
 				4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */,
 				4CC284751BADE9A200775B72 /* RptqDocumentObject+Extras.m in Sources */,
+				4C2DC0B21CEAD65800167DA3 /* madlib.c in Sources */,
 				4CC284771BADE9A600775B72 /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4CC2848A1BADE9CB00775B72 /* RptqDocumentSection+Extras.m in Sources */,
 				4CC282741BADE82000775B72 /* MADFont.m in Sources */,

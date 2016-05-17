@@ -10,6 +10,7 @@
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
 #import "MTResizeHandleView.h"
+#import "UITapGestureRecognizer+Designer.h"
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
 #import <MAD/RptqDocumentObjectImage.h>
@@ -20,12 +21,17 @@
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 #define kAnimationTranslateX 2.0
 #define kAnimationTranslateY 2.0
 
+static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnimationOptions)
+                                                    (UIViewAnimationOptionAllowUserInteraction |
+                                                        UIViewAnimationOptionRepeat |
+                                                        UIViewAnimationOptionAutoreverse);
 
 #pragma mark - MTElementView
 
@@ -41,10 +47,29 @@
 
 @implementation MADDesignerElementView
 
++ (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
+                                     tapGestureDelegate:(id<UIGestureRecognizerDelegate>)tapGestureDelegate
+                                            tapSelector:(SEL)selector {
+
+    id elementView = [[self alloc] initWithDocumentObject: documentObject];
+    [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
+    
+    UIGestureRecognizer *tapGestureRecognizer;
+    tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerElementTouchWithTarget: tapGestureDelegate
+                                                                                           action: selector
+                                                                                         delegate: tapGestureDelegate];
+    [elementView addGestureRecognizer:tapGestureRecognizer];
+    elementView = elementView;
+    return elementView;
+}
+
 #pragma mark - NSObject
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer; {
-    return [gestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] || [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] ? YES : NO;
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+    shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return [gestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] ||
+        [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] ?
+            YES : NO;
 }
 
 - (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
@@ -64,10 +89,6 @@
 }
 
 #pragma mark - UIView
-
-+ (NSStringDrawingOptions)drawingOptions {
-    return NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
-}
 
 - (id)displayObject {
     if (self.displayImage != nil) {
@@ -97,22 +118,19 @@
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:alpha];
     
-    UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
+    UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f
+                                                     blue:1.0000f alpha:alpha];
     self.backgroundColor = labelBackgroundColor;
 }
 
 - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject {
     
-    CGRect viewFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObject.size.width, documentObject.size.height);
-    self = [self initWithFrame: viewFrame];
-
-    if (self) {
+    if (self = [self initWithFrame: MADRectOfSize(documentObject.size)]) {
         
-        MTElementCanvas *canvasView = [[MTElementCanvas alloc] initWithFrame:viewFrame];
+        MTElementCanvas *canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(documentObject.size)];
         canvasView.autoresizingMask = MADViewAutoresizingFlexable();
         canvasView.backgroundColor = [UIColor clearColor];
         canvasView.canvasDelegate = self;
-        
         [self addSubview:canvasView];
         self.canvasView = canvasView;
         
@@ -246,8 +264,9 @@
         CGAffineTransform rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
         
         self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
-        
-        [UIView animateWithDuration:0.3500 delay:0 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse animations:^{
+
+        [UIView animateWithDuration:0.3500 delay:0 options: MADViewAnimationOptionsWobble
+                         animations: ^{
             [UIView setAnimationRepeatCount:NSNotFound];
             self.transform = rightWobble;
         } completion:nil];
@@ -283,7 +302,7 @@
                 break;
                 
             case MTDocumentObjectTypeBarcode: {
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:documentObject.isBarcode];
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:documentObject.isBarcode];
                 self.displayBarcode = displayBarcode;
                 break;
             }

@@ -246,7 +246,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
 
-    MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject];
+    MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:barcodeDocumentObject];
     self.barcode = barcode;
     
     self.queryField1 = barcodeDocumentObject.referencesField1;

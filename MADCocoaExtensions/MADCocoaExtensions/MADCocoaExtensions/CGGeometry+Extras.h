@@ -97,6 +97,16 @@ typedef NS_ENUM(NSUInteger, MADDirection) {
     noDirection
 };
 
+static inline CGSize MADSizeSquare(CGFloat length);
+static inline CGSize MADSizeSquare(CGFloat length) {
+    CGSize s; s.width = length; s.height = length; return s;
+}
+
+static inline CGRect MADRectOfSize(CGSize size);
+static inline CGRect MADRectOfSize(CGSize size) {
+    CGRect r; r.origin = CGPointZero; r.size = size; return r;
+}
+
 static inline CGPoint CGRectTopLeft(CGRect rect);
 static inline CGPoint CGRectTopLeft(CGRect rect) {
     return rect.origin;

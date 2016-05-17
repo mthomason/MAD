@@ -38,19 +38,20 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectAggregate class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    [request setSortDescriptors: sortDescriptors];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObjectAggregate class])];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
+                                                                   ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     [request setFetchLimit:1];
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqDocumentObjectAggregate *lastObject = [fetchResults lastObject];
+        RptqDocumentObjectAggregate *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierObj = @(identifier);
+    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;
 }
 

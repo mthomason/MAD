@@ -58,14 +58,16 @@
     // MARK: Auto increment row counter.
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
+                                                                   ascending: NO];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqDocumentSection *lastObject = [fetchResults lastObject];
+        RptqDocumentSection *lastObject = fetchResults.lastObject;
         identifier = [[lastObject identifier] unsignedIntegerValue] + 1;
     }
     NSNumber *identiferNumber = @(identifier);
@@ -115,12 +117,12 @@
     self.wrappingStyle = wrappingStyle;
 }
 
-- (NSString *)sectionKey {
-    return [self keyForIdentifier];
+- (NSString *)copySectionKey {
+    return [self copyKeyForIdentifier];
 }
 
 + (NSNumber *)defaultHeight {
-    return @(44.0000f);
+    return @44.0000f;
 }
 
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
@@ -143,15 +145,16 @@
     }
 }
 
-- (NSString *)keyForIdentifier {
-    return self.objectID.key;
+- (NSString *)copyKeyForIdentifier {
+    return self.objectID.copyKey;
 }
 
 - (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO];
-    request.sortDescriptors = @[sortDescriptor];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
 
     NSError *error = nil;

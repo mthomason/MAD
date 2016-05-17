@@ -19,6 +19,7 @@
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MAD/MTPaper.h>
 #import <MAD/MADocument.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 static const CGFloat PageEdgeInsetMargin = 3.0000f;
 
@@ -210,7 +211,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
         self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
                                                                                                               insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         self.documentScroller.contentOffset = nextContentOffset;
-        self.documentScroller.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
+        self.documentScroller.bounds = MADRectOfSize(size);
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         MADocument *document = self.document;
         self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);

@@ -9,6 +9,7 @@
 #import "UIButton+FollowTwitter.h"
 #import "NSAttributedString+Common.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <UIKit/UIAccessibility.h>
 #import <QuartzCore/CALayer.h>
 
@@ -26,16 +27,16 @@
     b.clipsToBounds = YES;
     switch (size) {
         case small:
-            b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 66.0000f, 28.0000f);
+            b.frame = MADRectOfSize(CGSizeMake(66.0000f, 28.0000f));
             break;
         case medium:
-            b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 32.0000f);
+            b.frame = MADRectOfSize(CGSizeMake(100.0000f, 32.0000f));
             break;
         case large:
-            b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 120.0000f, 44.0000f);
+            b.frame = MADRectOfSize(CGSizeMake(120.0000f, 44.0000f));
             break;
         default:
-            b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 32.0000f);
+            b.frame = MADRectOfSize(CGSizeMake(100.0000f, 32.0000f));
             break;
     }
     b.accessibilityLabel = NSLocalizedString(@"Twitter Follow", @"Twitter Follow");

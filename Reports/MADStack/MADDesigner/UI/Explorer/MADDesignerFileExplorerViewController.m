@@ -372,10 +372,12 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)reloadAfterClose {
     UICollectionView *weakCollectionView __weak = self.collectionView;
     [UIView performWithoutAnimation:^{
-        UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-        [collectionView.backgroundView setNeedsDisplay];
-        [collectionView reloadItemsAtIndexPaths:paths];
+        @autoreleasepool {
+            UICollectionView *collectionView = weakCollectionView;
+            NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+            [collectionView.backgroundView setNeedsDisplay];
+            [collectionView reloadItemsAtIndexPaths:paths];
+        }
     }];
 }
 

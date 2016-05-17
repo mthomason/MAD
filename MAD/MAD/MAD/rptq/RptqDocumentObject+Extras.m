@@ -134,19 +134,20 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     [super awakeFromInsert];
     
     // MARK: Auto increment row counter
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObject class])];
 
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     
-    request.sortDescriptors = @[sortDescriptor];
+    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger idNumber = 0;
     NSUInteger lastDropIndex = 0;
     if (error == nil) {
-        RptqDocumentObject *lastObject = [fetchResults lastObject];
+        RptqDocumentObject *lastObject = fetchResults.lastObject;
         idNumber = [[lastObject identifier] unsignedIntegerValue] + 1;
         lastDropIndex = [[lastObject dropIndex] unsignedIntegerValue] + 1;
     }
@@ -517,7 +518,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             result = [NSString stringWithFormat:@"%@", value];
             break;
         default:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
     }
     if (result == nil) {

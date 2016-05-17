@@ -10,6 +10,7 @@
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <UIKit/UINibLoading.h>
 #import <UIKit/UILabel.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADTableViewCellBase ()
 
@@ -29,7 +30,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         
-        CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 320.0000f);
+        CGRect rect = MADRectOfSize(MADSizeSquare(320.0000f));
         
         UIView *visualEffectsView = [[UIView alloc] initWithFrame:rect];
         UILabel *label = [[UILabel alloc] initWithFrame:rect];

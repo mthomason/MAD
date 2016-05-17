@@ -84,7 +84,7 @@ typedef NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *>
     - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
     - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
-    - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
+    - (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId;
 
     - (NSString *)newFilenameMDCache;
 
