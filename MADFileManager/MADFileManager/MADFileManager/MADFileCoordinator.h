@@ -14,15 +14,17 @@
 
 @class MADFile;
 
+typedef NSArray <NSURL *> MADURLArray;
+
 @protocol MADFileCoordinatorDelegate <NSObject>
 
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (NSArray *)insertedURLs
-                                                 removedURLs: (NSArray *)removedURLs
-                                                 updatedURLs: (NSArray *)updatedURLs;
+    - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (MADURLArray *)insertedURLs
+                                                 removedURLs: (MADURLArray *)removedURLs
+                                                 updatedURLs: (MADURLArray *)updatedURLs;
 
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (NSArray *)insertedMetaDatum
-                                                 removedMetaDatum: (NSArray *)removedMetaDatum
-                                                 updatedMetaDatum: (NSArray *)updatedMetaDatum
+    - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (MADURLArray *)insertedMetaDatum
+                                                 removedMetaDatum: (MADURLArray *)removedMetaDatum
+                                                 updatedMetaDatum: (MADURLArray *)updatedMetaDatum
                                                        completion: (void (^)(BOOL success,
                                                                              NSError *error))completion;
 

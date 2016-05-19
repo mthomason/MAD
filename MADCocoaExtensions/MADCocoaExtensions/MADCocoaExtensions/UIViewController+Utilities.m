@@ -12,33 +12,34 @@
 @implementation UIViewController (Utilities)
 
 
-+ (instancetype)topmostViewController:(UIViewController*)vc {
++ (instancetype)copyTopmostViewController:(UIViewController *)vc {
     
     if (vc.presentedViewController) {
         
-        return [UIViewController topmostViewController:vc.presentedViewController];
+        return [UIViewController copyTopmostViewController:vc.presentedViewController];
         
     } else if ([vc isKindOfClass:[UISplitViewController class]]) {
         
-        UISplitViewController* svc = (UISplitViewController*) vc;
+        UISplitViewController* svc = (UISplitViewController *) vc;
+        
         if (svc.viewControllers.count > 0)
-            return [UIViewController topmostViewController:svc.viewControllers.lastObject];
+            return [UIViewController copyTopmostViewController:svc.viewControllers.lastObject];
         else
             return vc;
         
     } else if ([vc isKindOfClass:[UINavigationController class]]) {
         
-        UINavigationController* svc = (UINavigationController*) vc;
+        UINavigationController* svc = (UINavigationController *) vc;
         if (svc.viewControllers.count > 0)
-            return [UIViewController topmostViewController:svc.topViewController];
+            return [UIViewController copyTopmostViewController:svc.topViewController];
         else
             return vc;
         
     } else if ([vc isKindOfClass:[UITabBarController class]]) {
         
-        UITabBarController* svc = (UITabBarController*) vc;
+        UITabBarController* svc = (UITabBarController *) vc;
         if (svc.viewControllers.count > 0)
-            return [UIViewController topmostViewController:svc.selectedViewController];
+            return [UIViewController copyTopmostViewController:svc.selectedViewController];
         else
             return vc;
         
@@ -47,9 +48,9 @@
     }
 }
 
-+ (instancetype)topmostViewController {
++ (instancetype)copyTopmostViewController {
     UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return [UIViewController topmostViewController:viewController];
+    return [UIViewController copyTopmostViewController:viewController];
     
 }
 

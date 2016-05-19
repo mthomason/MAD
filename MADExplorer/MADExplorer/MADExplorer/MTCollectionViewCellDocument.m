@@ -11,9 +11,6 @@
 #endif
 
 #import "MTCollectionViewCellDocument.h"
-#import "MADBackgroundViewSelected.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
 
 #import <UIKit/UINibLoading.h>
 #import <UIKit/NSAttributedString.h>
@@ -26,6 +23,11 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
 #import <QuartzCore/CALayer.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
+
+#import "MADBackgroundViewSelected.h"
 
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
@@ -45,6 +47,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
     @property (nonatomic, assign) BOOL wobbling;
+    @property (nonatomic, assign) bool addedGestures;
 
 @end
 
@@ -53,7 +56,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 + (UIActivityIndicatorView *)newActivityIndicatorView {
     
     UIActivityIndicatorView *activityIndicatorView;
-    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
+    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                                                                UIActivityIndicatorViewStyleGray];
     [activityIndicatorView stopAnimating];
     activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
                                                 UIViewAutoresizingFlexibleRightMargin |
@@ -75,12 +79,44 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     return result;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self commonInitWithFrame:self.frame];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self commonInitWithFrame:frame];
+    }
+    return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self commonInitWithFrame:self.frame];
+    }
+    return self;
+}
+
+- (void)commonInitWithFrame:(CGRect)frame {
+    _addedGestures = false;
+    UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:frame];
+    self.selectedBackgroundView = selectedBackground;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+}
+
 - (void)awakeFromNib {
     
-    self.wobbling = NO;
-    
-    UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
-    self.selectedBackgroundView = selectedBackground;
+    _wobbling = NO;
     
     UIColor *colorTextSelected = [UIColor lightTextColor];
     self.colorTextSelected = colorTextSelected.copy;
@@ -95,39 +131,43 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     UIColor *clearColor = [UIColor clearColor];
     UIColor *lightGrayColor = [UIColor lightGrayColor];
 
+    if (!_addedGestures) {
+        SEL actionEdit = @selector(activateEditMode:);
+        bool gotActionEdit = false, gotActionRename = false;
+        SEL actionRename = @selector(rename:);
+        for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
+            if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = true;
+            if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = true;
+            if (gotActionEdit && gotActionRename) break;
+        }
+        
+        if (!gotActionEdit) {
+            id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                                action: actionEdit];
+            [self addGestureRecognizer: longPressGesture];
+            self.longPressGestureRecognizer = longPressGesture;
+        }
+        
+        if (!gotActionRename) {
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                                  action: actionRename];
+            tap.numberOfTapsRequired = 1;
+            tap.numberOfTouchesRequired = 1;
+            
+            [self.labelTitle addGestureRecognizer:tap];
+            self.tapGestureRecognizer = tap;
+        }
+        _addedGestures = true;
+    }
+    
     /*
     self.imagePreview.layer.shadowColor = color.CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     */
+    
     self.labelTitle.userInteractionEnabled = YES;
-
-    SEL actionEdit = @selector(activateEditMode:);
-    bool gotActionEdit = false, gotActionRename = false;
-    SEL actionRename = @selector(rename:);
-    for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
-        if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = true;
-        if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = true;
-        if (gotActionEdit && gotActionRename) break;
-    }
-    
-    if (!gotActionEdit) {
-        id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                            action: actionEdit];
-        [self addGestureRecognizer: longPressGesture];
-        self.longPressGestureRecognizer = longPressGesture;
-    }
-    
-    if (!gotActionRename) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                              action: actionRename];
-        tap.numberOfTapsRequired = 1;
-        tap.numberOfTouchesRequired = 1;
-        
-        [self.labelTitle addGestureRecognizer:tap];
-        self.tapGestureRecognizer = tap;
-    }
     
     self.labelTitle.textColor = self.colorTextNormal.copy;
     self.labelTitle.clipsToBounds = NO;
@@ -136,7 +176,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     self.labelTitle.font = font;
-    [self.labelTitle setNeedsLayout];
+    //[self.labelTitle setNeedsLayout];
     
     self.labelTitleSub.textColor = lightGrayColor;
     self.labelTitleSub.clipsToBounds = NO;
@@ -145,7 +185,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.labelTitleSub.font = font;
-    [self.labelTitleSub setNeedsLayout];
+    //[self.labelTitleSub setNeedsLayout];
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 

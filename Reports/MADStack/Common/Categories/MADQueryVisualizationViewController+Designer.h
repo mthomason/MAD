@@ -13,7 +13,7 @@
 
 @interface MADQueryVisualizationViewController (Designer)
 
-    + (instancetype) QueryVisualizationViewController;
+    + (instancetype) newQueryVisualizationViewController;
 
 @end
 

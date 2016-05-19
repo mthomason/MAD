@@ -15,7 +15,8 @@
 @implementation UIApplication (Extras)
 
 + (NSString *)version {
-    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                                                             kCFBundleVersionKey);
     return version;
 }
 

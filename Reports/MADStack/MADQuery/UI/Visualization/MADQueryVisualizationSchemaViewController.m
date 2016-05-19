@@ -143,8 +143,8 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
     
-    NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
-    NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
+    NSLayoutConstraint *width = [NSLayoutConstraint newLayoutConstraintSchemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
+    NSLayoutConstraint *height = [NSLayoutConstraint newLayoutConstraintSchemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
     NSArray *constraints = [[NSArray alloc] initWithObjects: width, height, nil];
     [self.view addConstraints:constraints];
 }

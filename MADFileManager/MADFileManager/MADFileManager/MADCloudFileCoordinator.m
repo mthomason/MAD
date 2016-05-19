@@ -48,12 +48,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         [self addObserversToQuery:metadataQuery];
         self.metadataQuery = metadataQuery;
         
+        __block NSURL *cloudContainerURL;
         dispatch_barrier_async(self.documentsDirectoryQueue, ^{
-        
-            NSURL *cloudContainerURL = [MADFileUtilities cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
-            _documentsDirectory = cloudContainerURL;
-        
+            cloudContainerURL = [MADFileUtilities cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
         });
+        _documentsDirectory = cloudContainerURL.copy;
         
     }
     
@@ -127,8 +126,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (NSURL *)documentsDirectory {
     __block NSURL *documentsDirectory;
     
+    MADCloudFileCoordinator * __weak weakself = self;
     dispatch_sync(self.documentsDirectoryQueue, ^{
-        documentsDirectory = _documentsDirectory;
+        documentsDirectory = weakself.documentsDirectory;
     });
     
     return documentsDirectory;
@@ -137,43 +137,60 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - MADFileCoordinator
 
 - (void)startQuery {
-    // \c NSMetadataQuery should always be started on the main thread.
+    NSMetadataQuery *__weak metadataQuery = self.metadataQuery;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.metadataQuery startQuery];
+        [metadataQuery startQuery];
     });
 }
 
 - (void)stopQuery {
-    // \c NSMetadataQuery should always be stopped on the main thread.
+    NSMetadataQuery *__weak metadataQuery = self.metadataQuery;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.metadataQuery stopQuery];
+        [metadataQuery stopQuery];
     });
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention
+               fileGroup:(NSString *)fileGroup {
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
+    typeof(_delegate) wdelegate = _delegate;
     [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
+    
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            [self.delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
-        }
-        else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[documentURL]
-                                                                removedURLs:@[]
-                                                                updatedURLs:@[]];
+            NSURL *errorUrl = documentURL.copy;
+            [delegate fileCoordinatorDidFailCreatingFileAtURL: errorUrl
+                                                    withError: error];
+        } else {
+            NSURL *insertedURL = documentURL.copy;
+            NSArray *inserted = [[NSArray alloc] initWithObjects:insertedURL, nil];
+            NSArray *removed = [[NSArray alloc] init];
+            NSArray *updated = [[NSArray alloc] init];
+            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserted
+                                                           removedURLs: updated
+                                                           updatedURLs: removed];
+            
         }
     }];
 }
 
 - (void)removeFileAtURL:(NSURL *)URL {
+
+    typeof(_delegate) wdelegate = _delegate;
     [MADFileUtilities removeFileAtURL:URL withCompletionHandler:^(NSError *error) {
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            [self.delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
+            [delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
         }
         else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[]
-                                                                removedURLs:@[URL]
-                                                                updatedURLs:@[]];
+            NSURL *removedURL = URL.copy;
+            NSArray *removedURLs = [[NSArray alloc] initWithObjects:removedURL, nil];
+            NSArray *inserted = [[NSArray alloc] init];
+            NSArray *updated = [[NSArray alloc] init];
+            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserted
+                                                           removedURLs: removedURLs
+                                                           updatedURLs: updated];
         }
     }];
 }

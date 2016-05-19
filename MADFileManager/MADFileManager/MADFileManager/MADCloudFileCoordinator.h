@@ -10,7 +10,6 @@
 #define MADDesigner_MADCloudFileCoordinator_h
 
 #import <Foundation/Foundation.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADFileCoordinator.h"
 
 extern NSString * const MADNotificationCloudActivityStarted;

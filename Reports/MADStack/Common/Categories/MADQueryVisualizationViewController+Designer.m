@@ -13,7 +13,7 @@ static NSString * const identifier = @"MADStoryboardIDQueryVisulization";
 
 @implementation MADQueryVisualizationViewController (Designer)
 
-+ (instancetype) QueryVisualizationViewController {
++ (instancetype) newQueryVisualizationViewController {
     return [[UIStoryboard QueryVisualization] instantiateViewControllerWithIdentifier:identifier];
 }
 

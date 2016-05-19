@@ -35,7 +35,7 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (event.subtype == UIEventSubtypeMotionShake) {
 
-        UIViewController *topMostController = [UIViewController topmostViewController];
+        UIViewController *topMostController = [UIViewController copyTopmostViewController];
         UIAlertController *alertController = [UIAlertController solicateFeedbackWithHandler:^(UIAlertAction *action) {
             
             
@@ -58,7 +58,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 
-    UIViewController *topMostController = [UIViewController topmostViewController];
+    UIViewController *topMostController = [UIViewController copyTopmostViewController];
     if (error) {
         UIAlertController *alertController = [UIAlertController error:error];
         [topMostController showViewController:alertController sender:self];
