@@ -208,14 +208,22 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     CGPoint nextContentOffset = CGPointMake( (size.width != self.documentScroller.contentSize.width)?(size.width - self.documentScroller.contentSize.width) / 2 : 0.0f, currentContentOffset.y);
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
-                                                                                                              insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+    
+        self.documentScroller.scrollIndicatorInsets =
+            [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
+                                                                    insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         self.documentScroller.contentOffset = nextContentOffset;
         self.documentScroller.bounds = MADRectOfSize(size);
+    
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    
         MADocument *document = self.document;
-        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
-        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
+        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize,
+                                                                                     self.documentScroller.bounds.size,
+                                                                                     PageEdgeInsetMargin);
+        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(document.paper.paperSize,
+                                                                                     self.documentScroller.bounds.size,
+                                                                                     PageEdgeInsetMargin);
         
     }];
 }

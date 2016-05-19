@@ -39,14 +39,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
 #pragma mark - Lazy Load
 
 - (NSMutableArray *)internalErrors {
-    return (_internalErrors == nil) ? _internalErrors = [[NSMutableArray alloc] init] : _internalErrors;
+    return (_internalErrors == nil) ?
+        _internalErrors = [[NSMutableArray alloc] init] : _internalErrors;
 }
 
-- (NSMutableArray <__kindof NSObject <MADOperationCondition> *> *)conditions {
+- (MADMutableOperationConditions *)conditions {
     return (_conditions == nil) ? _conditions = [[NSMutableArray alloc] init] : _conditions;
 }
 
-- (NSMutableArray <__kindof NSObject <MADOperationObserver> *> *)observers {
+- (MADMutableOperationObservers *)observers {
     return (_observers == nil) ? _observers = [[NSMutableArray alloc] init] : _observers;
 }
 
@@ -54,7 +55,9 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 // use the KVO mechanism to indicate that changes to "state" affect other properties as well
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
-    NSArray *keys = [[NSArray alloc] initWithObjects:MADOperatorSelectorIsReady, MADOperatorSelectorIsExecuting, MADOperatorSelectorIsFinished, nil];
+    NSArray *keys = [[NSArray alloc] initWithObjects: MADOperatorSelectorIsReady,
+                                                      MADOperatorSelectorIsExecuting,
+                                                      MADOperatorSelectorIsFinished, nil];
     if ([keys containsObject:key]) {
         NSSet *result = [[NSSet alloc] initWithObjects:MADOperatorSelectorState, nil];
         return result;
@@ -137,7 +140,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
     
     self.state = evaluatingConditions;
     
-    [MADOperationConditionResult evaluateConditions:self.conditions operation:self completion:^(NSArray * failures) {
+    [MADOperationConditionResult evaluateConditions: self.conditions operation: self
+                                         completion: ^(NSArray * failures) {
         [self.internalErrors addObjectsFromArray:failures];
         self.state = ready;
     }];
@@ -297,7 +301,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
         app, as incentive for you to find a more appropriate way to express
         the behavior you're wishing to create.
      */
-    //NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
+    //NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this
+        // ONLY if you're absolutely sure there is No Other Way™.");
 }
 
 - (void)finishIfCancelled {

@@ -30,6 +30,7 @@ extern NSString * const MTDocumentObjectDefinationField1;
 extern NSString * const MTDocumentObjectDefinationField2;
 
 @class MADSectionLayoutManager;
+@class UIFontDescriptor;
 
 @interface RptqDocumentObject (Extras) <MTProtocolLog, RptqDocumentObjectFactory>
 
@@ -42,7 +43,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     @property (readonly) CGRect frame;
     
     - (CGSize)size;
-    - (NSString *)designerRepresentationText;
+    - (NSString *)copyDesignerRepresentationText;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;
@@ -56,6 +57,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGFloat)spacingBottom;
     - (CGFloat)spacingRight;
 
+    - (UIFontDescriptor *)newFontDescriptor;
+    - (NSDictionary *)newDictionaryOfTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor;
     - (NSDictionary *)newDictionaryOfTextAttributes;
 
 @end

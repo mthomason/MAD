@@ -25,12 +25,15 @@ typedef NS_ENUM(char, MADOperationState) {
     finished,
 };
 
+typedef NSMutableArray <__kindof NSObject <MADOperationCondition> *> MADMutableOperationConditions;
+typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOperationObservers;
+
 @interface MADOperation : NSOperation
 
     @property (nonatomic, assign, readonly) MADOperationState state;
 
-    @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationCondition> *> *conditions;
-    @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationObserver> *> *observers;
+    @property (nonatomic, strong) MADMutableOperationConditions *conditions;
+    @property (nonatomic, strong) MADMutableOperationObservers *observers;
 
     - (void)addObserver:(NSObject <MADOperationObserver> *)observer;
     - (void)addCondition:(NSObject <MADOperationCondition> *)condition;

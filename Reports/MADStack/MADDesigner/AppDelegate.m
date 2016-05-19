@@ -58,12 +58,21 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                     //  load window in willFinishLaunchingWithOptions
                                                     //  otherwise load window in didFinishLaunchingWithOptions
 
+static inline UIUserNotificationType MADUserNotificationType();
+static inline UIUserNotificationType MADUserNotificationType() {
+    return (UIUserNotificationType)(UIUserNotificationTypeAlert |
+                                    UIUserNotificationTypeBadge |
+                                    UIUserNotificationTypeSound);
+}
+
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
     @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
     @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
+
+    @property (nonatomic, strong, readwrite) MADOperationQueue *operationQueueBackground;
 
 @end
 
@@ -131,15 +140,14 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return version;
 }
 
-#pragma mark - Initialization
-
-- (instancetype)init {
-    if (self = [super init]) {
-        dispatch_queue_t appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
-        self.appDelegateQueueSerial = appDelegateQueueSerial;
-    }
-    return self;
+- (dispatch_queue_t)appDelegateQueueSerial {
+    return !_appDelegateQueueSerial ?
+        (_appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate,
+                                                         DISPATCH_QUEUE_SERIAL)) :
+        _appDelegateQueueSerial;
 }
+
+#pragma mark - Initialization
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -165,13 +173,14 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                         @NO, MADUpgradeInstalledChinook,
                                         @NO, MADUpgradeInstalledSamples,
                                         @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+    
     [defaults registerDefaults:defaultsToRegister];
     self.applicationUserDefaults = defaults;
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
-                                                                                             categories: nil];
-        [application registerUserNotificationSettings:notificationSettings];
+        id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
+                                                            categories: nil];
+        [application registerUserNotificationSettings:notification];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -186,48 +195,40 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self initalizeAppearance];
     
-    [self runOperations];
-    
-    // MAD Designer Install
-    // Google iOS first open tracking snippet
-    // Add this code to your application delegate's
-    // application:didFinishLaunchingWithOptions: method.
-    //[ACTConversionReporter reportWithConversionID: @"1010527409"
-    //                                        label: @"IK1iCOW3gmQQsdnt4QM"
-    //                                        value: @"10.00"
-    //                                 isRepeatable: NO];
-    
-    return YES;
-}
-
-- (void)runOperations {
     MADOperationQueue *operationQueueBackground = [[MADOperationQueue alloc] init];
-    
     NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
                                                                                 selector: @selector(getUserCloudPrefs)
                                                                                   object: NULL];
     
     MADInstallOperationSampleDatabase *sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
     
-    MADInstallOperationSampleDocument *sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
-                                                                                                           fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                                                         groupIdentifier: MADIdentifierGroup
-                                                                                                             installFlag: MADUpgradeInstalledSamplesLondon];
+    MADInstallOperationSampleDocument *sampleDocumentMusic;
+    sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+                                                                        fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                      groupIdentifier: MADIdentifierGroup
+                                                                          installFlag: MADUpgradeInstalledSamplesLondon];
     
-    MADInstallOperationSampleDocument *sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
-                                                                                                            fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                                                          groupIdentifier: MADIdentifierGroup
-                                                                                                              installFlag: MADUpgradeInstalledSamplesMusic];
+    MADInstallOperationSampleDocument *sampleDatabaseLondon;
+    sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                       groupIdentifier: MADIdentifierGroup
+                                                                           installFlag: MADUpgradeInstalledSamplesMusic];
     
     NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
                                                                      selector: @selector(resetReceipt)
                                                                        object: NULL];
+
     NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
-                                                               sampleDatabase,
-                                                               sampleDocumentMusic,
-                                                               sampleDatabaseLondon,
-                                                               resetReceipt, nil];
+                              sampleDatabase,
+                              sampleDocumentMusic,
+                              sampleDatabaseLondon,
+                              resetReceipt, nil];
+
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
+
+    self.operationQueueBackground = operationQueueBackground;
+    
+    return YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

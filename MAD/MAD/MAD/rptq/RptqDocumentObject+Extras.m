@@ -338,14 +338,14 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return self.type.shortValue;
 }
 
-- (NSString *)designerRepresentationText {
+- (NSString *)copyDesignerRepresentationText {
 
     NSString *result = nil;
     
     switch (self.type.integerValue) {
     
         case MTDocumentObjectTypeAggregate: {
-            result = [self.isAggregate designerRepresentationText];
+            result = [self.isAggregate copyDesignerRepresentationText];
             break;
         }
 
@@ -358,7 +358,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             break;
         
         case MTDocumentObjectTypeGroupKey: {
-            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: @(self.isGroupKey.groupNumber.integerValue)
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: self.isGroupKey.groupNumber
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
             result = [NSString stringWithFormat:gorupFormatString, [groupNumberText uppercaseString]];
@@ -381,8 +381,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            NSString *barcodeName = [MTBarcode barcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
-            result = [NSString stringWithFormat:@"Barcode (%@)", barcodeName];
+            NSString *barcodeName = [MTBarcode newBarcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
+            result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }
         default:
@@ -527,31 +527,30 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return result;
 }
 
-- (NSDictionary *)newDictionaryOfTextAttributes {
+- (UIFontDescriptor *)newFontDescriptor {
 
-    UIFontDescriptorSymbolicTraits traits;
+    UIFontDescriptorSymbolicTraits traits = 0;
     UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname
                                                               size:self.fontsize.floatValue];
-
-    bool gotTraits = false;
+    
+    //bool gotTraits = false;
     if (self.italic.boolValue && self.bold.boolValue) {
-        traits = UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold;
-        gotTraits = true;
+        f = [f fontDescriptorWithSymbolicTraits:(UIFontDescriptorSymbolicTraits)
+                                        (UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold)];
     } else if (self.italic.boolValue) {
         traits = UIFontDescriptorTraitItalic;
-        gotTraits = true;
+        f = [f fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
     } else if (self.bold.boolValue) {
-        traits = UIFontDescriptorTraitBold;
-        gotTraits = true;
+        f = [f fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
     }
-    UIFont *customFont;
-    if (gotTraits) {
-        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits:traits];
-        customFont = [UIFont fontWithDescriptor:fontWithTraits size:0.0];
-    } else {
-        customFont = [UIFont fontWithDescriptor:f size:0.0];
-    }
+    return f;
+}
 
+- (NSDictionary *)newDictionaryOfTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor {
+    
+    UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
+                                               size: 0.0];
+    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -583,15 +582,23 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                                          NSUnderlineStyleSingle : NSUnderlineStyleNone];
     NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ?
                                              NSUnderlineStyleSingle : NSUnderlineStyleNone];
-
+    
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    customFont, NSFontAttributeName,
-                                    baselineOffset, NSBaselineOffsetAttributeName,
-                                    underlineStyle, NSUnderlineStyleAttributeName,
-                                    strikethroughStyle, NSStrikethroughStyleAttributeName,
-                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
-
+                                customFont, NSFontAttributeName,
+                                baselineOffset, NSBaselineOffsetAttributeName,
+                                underlineStyle, NSUnderlineStyleAttributeName,
+                                strikethroughStyle, NSStrikethroughStyleAttributeName,
+                                paragraphStyle, NSParagraphStyleAttributeName, nil];
+    
     return  attributes;
+}
+
+- (NSDictionary *)newDictionaryOfTextAttributes {
+
+    UIFontDescriptor *f = [self newFontDescriptor];
+    id attributes = [self newDictionaryOfTextAttributesWithFontDescriptor: f];
+    return attributes;
+    
 }
 
 #pragma mark - MTProtocolLog
@@ -601,11 +608,11 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat: @"%@-%@", self, [self designerRepresentationText]];
+    return [NSString stringWithFormat: @"%@-%@", self, [self copyDesignerRepresentationText]];
 }
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat: @"%@", [self designerRepresentationText]];
+    return [NSString stringWithFormat: @"%@", [self copyDesignerRepresentationText]];
 }
 
 - (NSAttributedString *)toAttributedString {

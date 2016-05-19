@@ -293,7 +293,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         self.displayImage = nil;
         
         
-        NSString *string = [documentObject designerRepresentationText];
+        NSString *string = [documentObject copyDesignerRepresentationText];
         
         switch ([documentObject getType]) {
                 
@@ -311,9 +311,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 break;
         }
         
-        NSDictionary *attributes = [documentObject newDictionaryOfTextAttributes];
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
-                                                                                attributes:attributes];
+        UIFontDescriptor *fontDescriptor = [documentObject newFontDescriptor];
+        NSDictionary *attributes = [documentObject newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString :string
+                                                                                attributes: attributes];
         self.displayStringAttributed = attributtedString;
         
         /*

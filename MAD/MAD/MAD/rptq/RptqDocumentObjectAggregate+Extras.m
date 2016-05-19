@@ -79,13 +79,18 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     }
 }
 
-+ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)getElementForObjectID: (NSManagedObjectID *)objectId
+                    fromObjectContext: (NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return (RptqDocumentObjectAggregate *)result;
 }
 
-- (NSString *)designerRepresentationText {
-    return [NSString stringWithFormat:@"%@(%@)", [self functionNameShort], [self.aggregateField toStringHumanReadable]];
+- (NSString *)copyDesignerRepresentationText {
+    NSString *toStringHumanReadable = [self.aggregateField toStringHumanReadable];
+    NSString *functionNameShort = [self functionNameShort];
+    id result = [[NSString alloc] initWithFormat:@"%@(%@)",
+                                                 functionNameShort, toStringHumanReadable];
+    return result;
 }
 
 - (NSString *)functionName {
@@ -198,13 +203,13 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                 aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
                                     groupNumber:(NSUInteger)groupNumber {
     
-    NSNumber *function = @(functionType);
+    NSNumber *function = [[NSNumber alloc] initWithUnsignedInteger: functionType];
     self.function = function;
     
-    NSNumber *group = @(groupNumber);
+    NSNumber *group = [[NSNumber alloc] initWithUnsignedInteger: groupNumber];
     self.groupNumber = group;
     
-    NSNumber *gType = @(groupType);
+    NSNumber *gType = [[NSNumber alloc] initWithUnsignedInteger: groupType];
     self.groupType = gType;
     
     switch (inputType) {

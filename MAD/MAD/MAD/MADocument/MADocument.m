@@ -102,6 +102,8 @@
 #import <UIKit/UIPrintPaper.h>
 #import <UIKit/UILabel.h>
 
+#import <MADBarcodes/png.h>
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 typedef struct _iodata_stream {
@@ -336,11 +338,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
         
-        NSURL *urlGuts = [MADocument newArchiveUrlForMadUrl:self.fileURL];
-        NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
+        _urlGuts = [MADocument newArchiveUrlForMadUrl: url];
+        _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
         
-        _urlMetaPlaylist = urlMetaPlaylist.copy;
-        _urlGuts = urlGuts.copy;
         
         [self initalizeMainDataTable];
         
@@ -371,7 +371,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                               name: UIDocumentStateChangedNotification
                             object: self];
 
-        self.didRefresh = false;
+        _didRefresh = false;
     }
     return self;
 }
@@ -383,7 +383,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
     BOOL success = NO;
-    NSURL * __weak urlGuts;
+    NSURL *urlGuts;
     
     if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
     
@@ -394,10 +394,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
             
             NSData *data = [NSData dataWithContentsOfURL:url];
-            NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+            NSFileWrapper *fileWrapper;
+            fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
             NSError * __autoreleasing *error = NULL;
             success = [fileWrapper writeToURL: urlGuts
-                                      options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
+                                      options: (NSFileWrapperWritingOptions)
+                                                    (NSFileWrapperWritingAtomic |
+                                                        NSFileWrapperWritingWithNameUpdating)
                           originalContentsURL: url
                                         error: error];
             
@@ -492,8 +495,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     NSData *imageData = nil;
     NSURL *thumbnailURL = [self copyThumbnailURL];
-    if ([[NSFileManager defaultManager] fileExistsAtPath: thumbnailURL.path]) {
-        imageData = [NSData dataWithContentsOfURL: thumbnailURL options:NSDataReadingUncached error:&readError];
+    NSString *path = thumbnailURL.path;
+    if (path) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
+            imageData = [NSData dataWithContentsOfURL: thumbnailURL options: NSDataReadingUncached
+                                                error: &readError];
+        }
     }
     
     if (imageData != nil) {

@@ -18,8 +18,8 @@ extern NSString * const MADUpgradeInstalledSamplesMusic;
 
 @interface MADInstallOperationSampleDatabase : MADOperation
 
-    + (NSURL *)applicationBundleSampleDatabaseChinook;
-    + (NSURL *)applicationSupportSampleDatabaseChinook;
+    + (NSURL *)newApplicationBundleSampleDatabaseChinook;
+    + (NSURL *)newApplicationSupportSampleDatabaseChinook;
 
 @end
 

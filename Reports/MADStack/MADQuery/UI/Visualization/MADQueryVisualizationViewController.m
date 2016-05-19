@@ -133,15 +133,21 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         
         for (UIViewController *subviewController in self.childViewControllers) {
+        
             [self didMoveFieldRect: subviewController animated: YES];
+            
         }
         
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
             [self.view setNeedsDisplay];
+            
         } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+        
     }
 }
 

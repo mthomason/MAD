@@ -12,11 +12,14 @@
 #import <Foundation/NSObject.h>
 
 @class NSMetadataItem;
+@class MADMetaData;
+
+typedef NSArray <MADMetaData *> MADMetaDataArray;
 
 @interface MADMetaData : NSObject
     <NSCopying>
 
-    + (NSArray <MADMetaData *> *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
+    + (MADMetaDataArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
 
     - (instancetype)initWithURL:(NSURL *)url;
     - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;

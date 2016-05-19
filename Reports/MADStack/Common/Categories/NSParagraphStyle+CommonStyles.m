@@ -10,7 +10,7 @@
 
 @implementation NSParagraphStyle (CommonStyles)
 
-+ (NSParagraphStyle *)titleBarStyle {
++ (NSParagraphStyle *)newParagraphStyleTitleBar {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;

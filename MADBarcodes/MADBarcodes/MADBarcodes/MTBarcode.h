@@ -74,7 +74,7 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
 
     - (void)drawInRect:(CGRect)rect;
 
-    + (NSString *)barcodeNameForType:(MTBarcodeType)type;
+    + (NSString *)newBarcodeNameForType:(MTBarcodeType)type;
     + (NSDictionary *)names;
 
 @end

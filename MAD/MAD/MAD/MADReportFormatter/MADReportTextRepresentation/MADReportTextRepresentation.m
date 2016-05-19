@@ -11,9 +11,11 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSValue.h>
 
+typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *> MADReportPageMap;
+
 @interface MADReportTextRepresentation ()
 
-    @property (nonatomic, strong, getter=hasPages, readwrite) NSMutableDictionary <__kindof NSNumber *, __kindof MADReportPageRepresentation *> *pages;
+    @property (nonatomic, strong, getter=hasPages, readwrite) MADReportPageMap *pages;
 
 @end
 
@@ -26,30 +28,27 @@
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        NSMutableDictionary *pages = [[NSMutableDictionary alloc] init];
-        self.pages = pages;
-    }
-    return self;
+    id r = [self initWithPageCount: 0];
+    return r;
 }
 
 - (instancetype)initWithPageCount:(NSUInteger)pageCount {
     if (self = [super init]) {
-        NSMutableDictionary *pages = pageCount > 0 ? [[NSMutableDictionary alloc] initWithCapacity:pageCount] :
-                                                     [[NSMutableDictionary alloc] init];
-        self.pages = pages;
+        id pages = pageCount > 0 ? [[MADReportPageMap alloc] initWithCapacity:pageCount] :
+                                   [[MADReportPageMap alloc] init];
+        _pages = pages;
     }
     return self;
 }
 
 - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex {
-    NSNumber *p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+    id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
     MADReportPageRepresentation *result = self.pages[p];
     return result;
 }
 
 - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex {
-    NSNumber *p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+    id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
     [self.pages setObject:page forKey:p];
 }
 

@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateGroupByType) {
                                           groupType:(MTAggregateGroupByType)groupType
                                     aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
                                         groupNumber:(NSUInteger)groupNumber;
-    - (NSString *)designerRepresentationText;
+    - (NSString *)copyDesignerRepresentationText;
 
 @end
 

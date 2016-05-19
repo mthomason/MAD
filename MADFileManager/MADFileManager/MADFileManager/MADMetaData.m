@@ -29,10 +29,14 @@
 
     if (self = [super init]) {
         
-        NSError *__autoreleasing * error = nil;
-
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:error];
-        self.attributes = attributes;
+        NSString *path;
+        if ((path = url.path)) {
+            NSDictionary *attributes;
+            NSError *__autoreleasing * error = nil;
+            attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+                                                                          error: error];
+            _attributes = attributes;
+        }
 
         _URL = url.copy;
         
@@ -46,41 +50,58 @@
         self.metadataItem = item;
         
         NSURL *url = [item valueForAttribute: NSMetadataItemURLKey];
-        self.URL = url.copy;
+        _URL = url.copy;
         
     }
     return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = self.metadataItem == nil ? [[[self class] alloc] initWithURL: self.URL] :
-                                         [[[self class] alloc] initWithMetadataItem:self.metadataItem];
+    id copy = self.metadataItem == nil ?
+                [[[self class] alloc] initWithURL: self.URL] :
+                [[[self class] alloc] initWithMetadataItem:self.metadataItem];
     return copy;
 }
 
 - (NSData *)fileSystemFileCreationDate {
-    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] : [self.attributes objectForKey:NSFileCreationDate];
+    id date = _metadataItem ? [_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] :
+                              [_attributes objectForKey:NSFileCreationDate];
+    return date;
 }
 
 - (NSData *)fileSystemContentChangeDate {
-    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] : [self.attributes objectForKey:NSFileModificationDate];
+    id date = _metadataItem ?
+                [_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] :
+                [_attributes objectForKey:NSFileModificationDate];
+    return date;
 }
 
 - (bool)isUbiquitous {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataItemIsUbiquitousKey]).boolValue ? true : false) :
-                                false;
+    if (_metadataItem) {
+        NSNumber *isUbiquitous;
+        isUbiquitous = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
+        return isUbiquitous.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (NSError *)ubiquitousItemUploadingError {
-    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey] : nil;
+    return self.metadataItem ?
+        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey] :
+        nil;
 }
 
 - (NSError *)ubiquitousItemDownloadingError {
-    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey] : nil;
+    return self.metadataItem ?
+        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey] :
+        nil;
 }
 
 - (NSString *)ubiquitousItemDownloadingStatus {
-    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] : NSMetadataUbiquitousItemDownloadingStatusCurrent;
+    return self.metadataItem ?
+        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] :
+        NSMetadataUbiquitousItemDownloadingStatusCurrent;
 }
 
 - (NSString *)name {
@@ -88,76 +109,170 @@
     if (self.metadataItem) {
         displayName = [self.metadataItem valueForAttribute: NSMetadataItemDisplayNameKey];
     } else {
-        displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
+        NSString *path;
+        if ((path = _URL.path)) {
+            displayName = [[NSFileManager defaultManager] displayNameAtPath:path];
+        } else {
+            displayName = @"";
+        }
     }
     return [displayName stringByDeletingPathExtension];
 }
 
 - (NSString *)fileSystemName {
-    return self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSNameKey] : self.URL.path.lastPathComponent;
+    id name = _metadataItem ? [_metadataItem valueForAttribute: NSMetadataItemFSNameKey] :
+                              _URL.path.lastPathComponent;
+    return  name;
 }
 
 - (unsigned long long)fileSystemFileSize {
-    return self.metadataItem ? ((NSNumber *)[self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey]).unsignedLongLongValue :
-                                ((NSNumber *)[self.attributes objectForKey:NSFileSize]).unsignedLongLongValue;
+    NSNumber *fileSize;
+    fileSize = _metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey] :
+                               [self.attributes objectForKey:NSFileSize];
+    return fileSize.unsignedLongLongValue;
 }
 
 - (NSString *)contentType {
-    return self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey] :
-                                    CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(self.URL.pathExtension), NULL));
+    if (_metadataItem) {
+        id key = [self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey];
+        return key;
+    } else {
+        NSString * __nonnull pathExtension = (_URL.pathExtension) ?
+                                (NSString * __nonnull)_URL.pathExtension :@"";
+        __nullable CFStringRef cfkey;
+        cfkey = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
+                                                      (__bridge CFStringRef)pathExtension,
+                                                      NULL);
+        id key = CFBridgingRelease(cfkey);
+        return key;
+    }
 }
 
 - (NSString *)ubiquitousItemContainerDisplayName {
-    return self.metadataItem ? ((NSString *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey]) : self.URL.path.lastPathComponent;
+    if (_metadataItem) {
+        NSString *name;
+        name = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
+        return name;
+    } else {
+        NSString *path = _URL.path;
+        return path.lastPathComponent;
+    }
 }
 
 - (NSURL *)ubiquitousItemURLInLocalContainer {
-    return self.metadataItem ? ((NSURL *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey]) : self.URL;
+    id url;
+    url = _metadataItem ?
+        [_metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey] :
+        _URL;
+    return url;
 }
 
 - (bool)ubiquitousItemDownloadRequested {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey]).boolValue ? true : false) : false;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
+        return result.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (bool)ubiquitousItemIsDownloading {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey]).boolValue ? true : false) : false;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
+        return result.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (bool)ubiquitousItemIsUploading {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey]).boolValue ? true : false) : false;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey];
+        return result.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (bool)ubiquitousItemIsUploaded {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue ? true : false) : false;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey];
+        return result.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (double)ubiquitousItemPercentUploaded {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue) : 100.0;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
+        return result.doubleValue;
+    } else {
+        return 100.0;
+    }
 }
 
 - (double)ubiquitousItemPercentDownloaded {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
+        return result.doubleValue;
+    } else {
+        return 100.0;
+    }
 }
 
 - (bool)ubiquitousItemIsExternalDocument {
-    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey]).boolValue ? true : false) : false;
+    if (_metadataItem) {
+        NSNumber *result;
+        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
+        return result.boolValue ? true : false;
+    } else {
+        return false;
+    }
 }
 
 - (bool)isUbiquitousItemDownloadingStatusNotDownloaded {
-    return self.isUbiquitous ? ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ? true : false) : false;
+    if ([self isUbiquitous]) {
+        NSString *status = [self ubiquitousItemDownloadingStatus];
+        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
+                true : false;
+    } else {
+        return false;
+    }
 }
+
 - (bool)isUbiquitousItemDownloadingStatusDownloaded {
-    return self.isUbiquitous ? ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ? true : false) : false;
+    if ([self isUbiquitous]) {
+        NSString *status = [self ubiquitousItemDownloadingStatus];
+        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
+                true : false;
+    } else {
+        return false;
+    }
 }
+
 - (bool)isUbiquitousItemDownloadingStatusCurrent {
-    return self.isUbiquitous ? ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ? true : false) : false;
+    if ([self isUbiquitous]) {
+        NSString *status = [self ubiquitousItemDownloadingStatus];
+        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
+                true : false;
+    } else {
+        return false;
+    }
 }
 
 - (bool)isSyncing {
-    return self.isUbiquitous && (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
+    return [self isUbiquitous] &&
+            ([self ubiquitousItemIsDownloading] || [self ubiquitousItemIsUploading]);
 }
 
-+ (NSArray <MADMetaData *> *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
++ (MADMetaDataArray *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
     NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
     for (NSMetadataItem *metadataItem in metadataItems) {
         MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
@@ -167,36 +282,52 @@
 }
 
 - (unsigned long long)fileSystemFileNumber {
-    NSError *error = nil;
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
-    NSNumber * __weak fsfn = [attributes objectForKey:NSFileSystemFileNumber];
-    return fsfn.unsignedLongLongValue;
+    NSString *path;
+    if ((path = _URL.path)) {
+        NSError *error = nil;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+                                                                                    error: &error];
+        NSNumber *fsfn = [attributes objectForKey:NSFileSystemFileNumber];
+        return fsfn.unsignedLongLongValue;
+    } else {
+        return 0;
+    }
 }
 
 - (unsigned long long)fileSystemNumber {
-    NSError *error = nil;
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
-    NSNumber * __weak fsf = [attributes objectForKey:NSFileSystemNumber];
-    return fsf.unsignedLongLongValue;
+    NSString *path;
+    if ((path = _URL.path)) {
+        NSError *error = nil;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+                                                                                    error: &error];
+        NSNumber * __weak fsf = [attributes objectForKey:NSFileSystemNumber];
+        return fsf.unsignedLongLongValue;
+    } else {
+        return 0;
+    }
 }
 
 - (unsigned long long)st_ino {
     struct stat sa;
-    if (stat(self.URL.path.UTF8String, &sa) < 0) return 0;
+    if (stat(self.URL.path.UTF8String, &sa) < 0)
+        return 0;
     return sa.st_ino;
 }
 
 - (BOOL)sameFile:(MADMetaData *)unknown {
-    return self.fileSystemNumber == unknown.fileSystemNumber && self.fileSystemFileNumber == self.fileSystemFileNumber;
+    return [self fileSystemNumber] == [unknown fileSystemNumber] &&
+           [self fileSystemFileNumber] == [unknown fileSystemFileNumber];
 }
 
 - (unsigned long long)sameFileHash {
-    return self.fileSystemNumber * 2 + self.fileSystemFileNumber * 3;
+    return [self fileSystemNumber] * 2 + [self fileSystemFileNumber] * 3;
 }
 
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[MADMetaData class]]) {
-        return [self.fileSystemName compare:((MADMetaData *)object).fileSystemName] == NSOrderedSame;
+        NSString *fileSystemNameUnknown = [((MADMetaData *)object) fileSystemName];
+        NSString *fileSystemName = [self fileSystemName];
+        return [fileSystemName compare:fileSystemNameUnknown] == NSOrderedSame;
     }
     return  NO;
 }

@@ -13,7 +13,7 @@
 
 + (MADLogoString *)newLogoStringForTitle:(NSString *)title {
     
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
+    NSParagraphStyle *paragraphStyle = [NSParagraphStyle newParagraphStyleTitleBar];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     
     NSRange range = NSMakeRange(0, attributedStringMadDesigner.string.length);

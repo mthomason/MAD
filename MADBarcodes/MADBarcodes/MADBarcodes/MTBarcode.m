@@ -705,8 +705,11 @@
     return names;
 }
 
-+ (NSString *)barcodeNameForType:(MTBarcodeType)type {
-    return [[MTBarcode names] objectForKey:@(type)];
++ (NSString *)newBarcodeNameForType:(MTBarcodeType)type {
+    id t = [[NSNumber alloc] initWithUnsignedInteger: type];
+    NSDictionary *names = [MTBarcode names];
+    NSString *name = [names objectForKey: t];
+    return name.copy;
 }
 
 - (void)initSampleData {

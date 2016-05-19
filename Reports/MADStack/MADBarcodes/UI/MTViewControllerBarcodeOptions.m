@@ -321,7 +321,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeType forIndexPath:indexPath];
-                NSString *barcodeName = [MTBarcode barcodeNameForType:[barcode barcodeType]];
+                NSString *barcodeName = [MTBarcode newBarcodeNameForType:[barcode barcodeType]];
                 [[cell detailTextLabel] setText:barcodeName];
                 break;
             }
@@ -336,7 +336,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                     [cell setAccessoryType:accessory];
                 } else {
                     if (barcode.hasOptionalInput) {
-                        NSString *barcodeName = [MTBarcode barcodeNameForType:[barcode barcodeType]];
+                        NSString *barcodeName = [MTBarcode newBarcodeNameForType:[barcode barcodeType]];
                         NSString *textLabel = [NSString stringWithFormat:@"%@ detail", barcodeName];
                         [[cell textLabel] setText:textLabel];
                         UITableViewCellAccessoryType accessory = UITableViewCellAccessoryDisclosureIndicator;

@@ -424,20 +424,27 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)openDocumentAtURL:(NSURL *)url {
-    MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-    document.documentDelegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(documentStateChanged:)
-                                                 name: UIDocumentStateChangedNotification
-                                               object: document];
-    
-    self.reportState = MTReportStateClosed;
-    self.fileManager.openDocument = document;
+
+    @autoreleasepool {
+
+        MADocument *document = [[MADocument alloc] initWithFileURL:url];
+        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+        document.documentDelegate = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(documentStateChanged:)
+                                                     name: UIDocumentStateChangedNotification
+                                                   object: document];
+        
+        self.reportState = MTReportStateClosed;
+        self.fileManager.openDocument = document;
+        
+    }
+
     
     id __weak wself = self;
-    [document openWithCompletionHandler:^(BOOL success) {
+    MADocument *allocatedDocument = self.fileManager.openDocument;
+    [allocatedDocument openWithCompletionHandler:^(BOOL success) {
         if (success) {
             MADDesignerFileExplorerViewController *sself = wself;
             @synchronized (sself) {

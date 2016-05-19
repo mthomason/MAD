@@ -353,13 +353,19 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UIViewController
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            
             [self.collectionView.backgroundView setNeedsDisplay];
+            
         } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
     }
+
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

@@ -10,33 +10,34 @@
 #import "MADReportSectionRepresentation.h"
 #import <Foundation/NSArray.h>
 
+typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSectionArray;
+
 @interface MADReportPageRepresentation ()
 
-    @property (nonatomic, strong, getter=hasSections) NSMutableArray <__kindof MADReportSectionRepresentation *> *sections;
+    @property (nonatomic, strong, getter=hasSections) MADReportSectionArray *sections;
 
 @end
 
 @implementation MADReportPageRepresentation
 
-@synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
+@synthesize elementOffset = _elementOffset;
+@synthesize characterOffset = _characterOffset;
 
 - (void)dealloc {
     [_sections removeAllObjects];
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        NSMutableArray *sections = [[NSMutableArray alloc] init];
-        self.sections = sections;
-    }
-    return self;
+    id r = [self initWithNumberOfSections: 0];
+    return r;
 }
 
-- (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
+- (instancetype)initWithNumberOfSections:(NSUInteger)count {
     if (self = [super init]) {
-        NSMutableArray *sections = numberOfSections > 0 ? [[NSMutableArray alloc] initWithCapacity:numberOfSections] :
-                                                            [NSMutableArray new];
-        self.sections = sections;
+        id sections;
+        sections = count > 0 ? [[MADReportSectionArray alloc] initWithCapacity:count] :
+                               [[MADReportSectionArray alloc] init];
+        _sections = sections;
     }
     return self;
 }

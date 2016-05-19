@@ -40,8 +40,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 
     @property (nonatomic, weak) MADSliderPageVertical *slider;
 
-    @property (nonatomic, weak)   UIVibrancyEffect *effectVibrancy;
-    @property (nonatomic, strong) UIVisualEffectView *vibrancyView;
+    @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
 
     @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
     @property (nonatomic, assign) CGFloat stringHeight;
@@ -83,42 +82,47 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 - (instancetype)initWithEffect:(UIBlurEffect *)effect {
     if (self = [super initWithEffect:effect]) {
+    
         self.contentView.tintColor = [UIColor blueColor];
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
-        self.effectVibrancy = vibrancy;
         
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
         UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
         vibrancyView.frame = self.frame;
         vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
         vibrancyView.contentView.tintColor = [UIColor redColor];
         [self.contentView addSubview:vibrancyView];
-        self.vibrancyView = vibrancyView;
+        _vibrancyView = vibrancyView;
         
         MADSliderPageVertical *vertSlider = [[MADSliderPageVertical alloc] init];
-        [vertSlider addTarget:self action:@selector(handleSliderChangedPage:) forControlEvents:UIControlEventValueChanged];
-        [vertSlider addTarget:self action:@selector(handleSliderDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
+        [vertSlider addTarget: self action: @selector(handleSliderChangedPage:)
+             forControlEvents: UIControlEventValueChanged];
         
-        UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureTapSlider:)];
-        [vertSlider addGestureRecognizer:sliderTapped];
+        [vertSlider addTarget: self action: @selector(handleSliderDidFinishDrag:)
+             forControlEvents: UIControlEventTouchUpInside];
+        
+        UITapGestureRecognizer *tapGestureRecognizer;
+        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                       action: @selector(handleGestureTapSlider:)];
+        [vertSlider addGestureRecognizer:tapGestureRecognizer];
         
         vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
         self.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
         [self.contentView addSubview:vertSlider];
         
-        self.backgroundColor = [[MADColorEverydayApps newColorBlueLight] colorWithAlphaComponent:0.3333f];
+        UIColor *lightBlue = [MADColorEverydayApps newColorBlueLight];
+        self.backgroundColor = [lightBlue colorWithAlphaComponent:0.3333f];
         self.slider = vertSlider;
         
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
         NSNumber *strokeWidth = @-1.0000f;
-        NSDictionary *attributes = @{
-                                     NSFontAttributeName : font,
-                                     NSStrokeWidthAttributeName : strokeWidth,
-                                     };
-        
+        NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        font, NSFontAttributeName,
+                                        strokeWidth, NSStrokeWidthAttributeName, nil];
+
         NSAttributedString *testString = [[NSAttributedString alloc] initWithString: ConstTestStringValue
                                                                          attributes: attributes];
 
-        self.stringHeight = [self boundsForAttributedString:testString].height;
+        self.stringHeight = [MADPageSlider boundsForAttributedString:testString].height;
         self.labels = nil;
 
     }
@@ -128,15 +132,23 @@ static inline CGFloat MaxDimension(CGSize size) {
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
-    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
+    self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth,
+                            CGPointZero.y,
+                            MADSliderPaginationWidth,
+                            self.superview.frame.size.height);
+    
+    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                       MADSliderPaginationWidth, self.superview.frame.size.height);
 
     if (self.labels == nil) {
         return;
     }
     
     CGRect rect = self.bounds;
-    unsigned long numberOfTicks = availableLabelSlots(rect.size.height, self.stringHeight, self.maximumValue);
+    unsigned long numberOfTicks = availableLabelSlots(rect.size.height,
+                                                      self.stringHeight,
+                                                      self.maximumValue);
+    
     if (CGRectEqualToRect(rect, self.lastRect) && numberOfTicks == self.lastNumberOfTicks) {
         return;
     }
@@ -151,56 +163,67 @@ static inline CGFloat MaxDimension(CGSize size) {
     
     static CGFloat offsetTopBottom = 8.0000f;
     CGFloat distanceBetweenTicks = numberOfTicks > 1 ?
-    ((rect.size.height - offsetTopBottom*2) / numberOfTicks) - self.stringHeight : CGSizeZero.height;
+                            ((rect.size.height - offsetTopBottom * 2) / numberOfTicks) - _stringHeight :
+                            CGSizeZero.height;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
     
     double tickValue = self.maximumValue / (numberOfTicks - 1);
     
-    UIColor *darkTextColor = [UIColor darkTextColor];
-    UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
-    UIColor *clearColor = [UIColor clearColor];
-    UIColor *drawingColor = [self drawingColor];
-    UIColor *blueColor = [MADColorEverydayApps newColorBlue];
-    
-    UIFont *boldFont = [UIFont boldSystemFontOfSize:9.0000f];
-    
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-            
-            NSString *pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
-            
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
-            label.backgroundColor = clearColor;
-            label.textAlignment = NSTextAlignmentRight;
-            label.text = pageNumber;
-            label.font = boldFont;
-            label.textColor = textColor;
-            label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            label.translatesAutoresizingMaskIntoConstraints = YES;
-            label.tintColor = drawingColor;
+        
+            @autoreleasepool {
 
-            label.transform = CGAffineTransformTranslate(label.transform,
-                                                         label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
-                                                         label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
-            
-            label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x , drawingPoint.y + offsetTopBottom);
-            
-            label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            label.translatesAutoresizingMaskIntoConstraints = YES;
-            label.layer.shadowOpacity = 6.0;
-            label.layer.shadowRadius = 0.0;
-            label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-            label.layer.shadowColor = blueColor.CGColor;
-            
-            [self.vibrancyView addSubview:label];
-            [self.labels addObject:label];
+                NSString *pageNumber;
+                pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
+                
+                UILabel *label;
+                label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                  rect.size.width, _stringHeight)];
+                UIColor *clearColor = [UIColor clearColor];
+                label.backgroundColor = clearColor;
+                label.textAlignment = NSTextAlignmentRight;
+                label.text = pageNumber;
+                label.font = [UIFont boldSystemFontOfSize:9.0000f];
+                UIColor *darkTextColor = [UIColor darkTextColor];
+                UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
+                label.textColor = textColor;
+                label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+                label.translatesAutoresizingMaskIntoConstraints = YES;
+                UIColor *drawingColor = [self copyDrawingColor];
+                label.tintColor = drawingColor;
+                
+                label.transform = CGAffineTransformTranslate(label.transform,
+                                                             label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
+                                                             label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
+                
+                label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x ,
+                                                             drawingPoint.y + offsetTopBottom);
+                
+                label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+                label.translatesAutoresizingMaskIntoConstraints = YES;
+                label.layer.shadowOpacity = 6.0;
+                label.layer.shadowRadius = 0.0;
+                label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
+
+                UIColor *blueColor = [MADColorEverydayApps newColorBlue];
+                label.layer.shadowColor = blueColor.CGColor;
+                
+                [self.vibrancyView addSubview:label];
+                [self.labels addObject:label];
+
+            }
         }
-        drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + self.stringHeight + distanceBetweenTicks);
+        drawingPoint = CGPointMake(drawingPoint.x,
+                                   drawingPoint.y + _stringHeight + distanceBetweenTicks);
     }
 }
 
-- (UIColor *)drawingColor {
-    return self.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
+
+
+- (UIColor *)copyDrawingColor {
+    return self.enabledColor ? [MADColorEverydayApps newColorRed] :
+                               [UIColor lightGrayColor];
 }
 
 - (void)setDisplayEnabled {
@@ -227,18 +250,20 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)handleSliderChangedPage:(UISlider *)sender {
-    [self.sliderDelegate sliderDidChangeToPage:(NSUInteger)abs(lroundf(sender.value))];
+    [self.sliderDelegate sliderDidChangeToPage:(NSUInteger)lroundf(sender.value)];
 }
 
 - (void)handleSliderDidFinishDrag:(UISlider *)sender {
     sender.value = lroundf(sender.value);               // Sets your slider to this value
 }
 
-- (CGSize)boundsForAttributedString:(NSAttributedString *)string {
-    CGRect boundingRect = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
-                                               options: (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
++ (CGSize)boundsForAttributedString:(NSAttributedString *)string {
+    CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
+                                         options: (NSStringDrawingOptions)
+                                                    (NSStringDrawingUsesLineFragmentOrigin |
+                                                        NSStringDrawingUsesFontLeading)
                                                context: nil];
-    return CGSizeMake(boundingRect.size.width, boundingRect.size.height);
+    return CGSizeMake(bounds.size.width, bounds.size.height);
 }
 
 - (float)value {
@@ -249,13 +274,15 @@ static inline CGFloat MaxDimension(CGSize size) {
     self.pageSlider.value = value;
 }
 
--(float)minimumValue {
+- (float)minimumValue {
     return self.pageSlider.minimumValue;
 }
 
 - (void)setMinimumValue:(float)minimumValue {
-    self.pageSlider.minimumValue = minimumValue;
-    [self setNeedsLayout];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.pageSlider.minimumValue = minimumValue;
+        [self setNeedsLayout];
+    }];
 }
 
 - (float)maximumValue {
@@ -263,16 +290,21 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (NSUInteger)maximumNumberOfLabels {
-    return availableLabelSlots(MaxDimension(self.frame.size), self.stringHeight, self.maximumValue) / 2 + 1;
+    return availableLabelSlots(MaxDimension(self.frame.size),
+                               self.stringHeight,
+                               self.maximumValue) / 2 + 1;
 }
 
 - (void)setMaximumValue:(float)maximumValue {
-    if (self.labels == nil) {
-        NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
-        self.labels = labels;
+    if (_labels == nil) {
+        NSMutableArray *labels;
+        labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
+        _labels = labels;
     }
-    self.pageSlider.maximumValue = maximumValue;
-    [self setNeedsLayout];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.pageSlider.maximumValue = maximumValue;
+        [self setNeedsLayout];
+    }];
 }
 
 
@@ -291,16 +323,18 @@ static inline CGFloat MaxDimension(CGSize size) {
         [self setDisplayDisabled];
     }
     self.tintColor = tintColor;
-    [self.pageSlider setThumbImage:thumbImage forState:UIControlStateNormal];
+    [self.pageSlider setThumbImage: thumbImage
+                          forState: UIControlStateNormal];
 }
 
 - (BOOL)isEnabled {
     return self.pageSlider.isEnabled;
 }
 
-- (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point inContext:(CGContextRef)context {
+- (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
+           inContext:(CGContextRef)context {
     CGContextSaveGState(context);
-    CGSize boundingSize = [self boundsForAttributedString:string];
+    CGSize boundingSize = [MADPageSlider boundsForAttributedString:string];
     [self rotateBoundingSize:boundingSize inContext:context];
     [string drawAtPoint:point];
     CGContextRestoreGState(context);
@@ -308,13 +342,14 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {
-    CGAffineTransform affineTransformTranslate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f, boundingSize.width / 2.0000f);
+    CGAffineTransform translate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f,
+                                                                    boundingSize.width / 2.0000f);
     CGAffineTransform rotate = CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
-    CGAffineTransform affineTransformTranslateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f, -boundingSize.width / 2.0000f);
-    CGContextConcatCTM(context, affineTransformTranslate1);
+    CGAffineTransform translateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f,
+                                                                       -boundingSize.width / 2.0000f);
+    CGContextConcatCTM(context, translate1);
     CGContextConcatCTM(context, rotate);
-    CGContextConcatCTM(context, affineTransformTranslateBack);
-    
+    CGContextConcatCTM(context, translateBack);
 }
 
 @end

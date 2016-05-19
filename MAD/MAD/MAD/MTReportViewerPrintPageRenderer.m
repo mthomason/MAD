@@ -444,6 +444,8 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
         MADReportSectionRowsRepresentation * _Nonnull rowRepresentation;
         NSOrderedSet *items;
         MADReportLineRepresentation * _Nonnull line;
+        
+        NSMutableDictionary *fontDescriptors = [[NSMutableDictionary alloc] init];
 
         for (RptqDocumentSectionRows *row in rows) {
             @autoreleasepool {
@@ -454,15 +456,36 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
                 for (RptqDocumentObject *item in items) {
                     @autoreleasepool {
                     
-                        id drawingObject = [self drawingObjectForDatabase: database
-                                                                pageIndex: pageIndex
-                                                           groupLevelKeys: groupLevelKeys
-                                                              detailRowId: pageSection.detailRowId
-                                                                  andItem: item];
+                        id drawingObject = [self newDrawingObjectForDatabase: database
+                                                                   pageIndex: pageIndex
+                                                              groupLevelKeys: groupLevelKeys
+                                                                 detailRowId: pageSection.detailRowId
+                                                                     andItem: item];
                         
-                        [MTReportViewerPrintPageRenderer displayDrawingObject: drawingObject
-                                                                      forItem: item
-                                                                inSectionRect: sectionRect];
+                        
+                        CGRect elementCanvasRect = item.frame;
+                        elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
+                        elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
+                        
+                        if ([drawingObject isKindOfClass:[NSString class]]) {
+                            
+                            UIFontDescriptor *fontDescriptor;
+                            fontDescriptor = fontDescriptors[item.objectID];
+                            if (!fontDescriptor) {
+                                fontDescriptor = [item newFontDescriptor];
+                                fontDescriptors[item.objectID] = fontDescriptor;
+                            }
+
+                            NSDictionary *attributes = [item newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
+                            
+                            [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
+                                                                elementCanvasRect: &elementCanvasRect
+                                                                   withAttributes: &attributes];
+                            
+                        } else {
+                            [MTReportViewerPrintPageRenderer displayDrawingObject: &drawingObject
+                                                                elementCanvasRect: &elementCanvasRect];
+                        }
                         
                         line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
                                                                               type: item.getType
@@ -480,6 +503,8 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
                 [sectionRepresentation addRow:rowRepresentation];
             }
         }
+        [fontDescriptors removeAllObjects];
+        
         rowRepresentation = nil;
     }
     return sectionRepresentation;
@@ -540,7 +565,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                 for (RptqDocumentSectionRows *row in documentSection.hasRows) {
                     for (RptqDocumentObject *item in row.hasObjects) {
                         @autoreleasepool {
-                            id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
+                            id drawingObject = [self newDrawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
                             MADAccessibilityLine *line = [[MADAccessibilityLine alloc] initWithValue:drawingObject
                                                                                                 type:item.getType
                                                                                             andFrame:CGRectMake(item.originx.floatValue + sectionRect.origin.x + item.spacingLeft,
@@ -606,8 +631,23 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     return CGRectMake(pageRect.origin.x, *originY, pageRect.size.width, sizeHeight);
 }
 
-+ (void)displayDrawingObject:(id)drawingObject forItem:(RptqDocumentObject *)item
-               inSectionRect:(CGRect)sectionRect {
++ (void)displayDrawingObject: (id __autoreleasing *)drawingObject
+           elementCanvasRect: (CGRect *)elementCanvasFrame {
+    [*drawingObject drawInRect: *elementCanvasFrame];
+}
+
++ (void)displayDrawingString: (NSString * __autoreleasing *)drawingString
+           elementCanvasRect: (CGRect *)elementCanvasFrame
+              withAttributes: (NSDictionary * __autoreleasing *)attributes {
+    [*drawingString drawWithRect: *elementCanvasFrame
+                         options: NSStringDrawingUsesLineFragmentOrigin
+                      attributes: *attributes
+                         context: nil];
+}
+/*
++ (void)displayDrawingObject: (id *)drawingObject
+                     forItem: (CGRect)itemFrame
+               inSectionRect: (CGRect)sectionRect {
 
     CGRect elementCanvasRect = item.frame;
     elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
@@ -615,7 +655,8 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     
     if ([drawingObject isKindOfClass:[NSString class]]) {
         
-        NSDictionary *attributes = [item newDictionaryOfTextAttributes];
+        UIFontDescriptor *fontDescriptor = [item newFontDescriptor];
+        NSDictionary *attributes = [item newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
         [drawingObject drawWithRect: elementCanvasRect
                             options: NSStringDrawingUsesLineFragmentOrigin
                          attributes: attributes context: nil];
@@ -625,13 +666,13 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
         [drawingObject drawInRect:elementCanvasRect];
     }
 }
-
-- (id)documentObjectForDocumentImage:(RptqDocumentObjectImage *)item {
+*/
+- (id)newDocumentObjectForDocumentImage:(RptqDocumentObjectImage *)item {
     return item.image;
 }
 
-- (NSString *)documentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item
-                                forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
+- (NSString *)newDocumentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item
+                                   forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
     NSString *drawingObject;
     NSDictionary *rowData = [self.dataTable copyDataForCacheId:rowID];
     if (rowData != nil) {
@@ -651,11 +692,11 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     return drawingObject;
 }
 
-- (NSString *)documentObjectForLabelStatic:(RptqDocumentObjectLabel *)item {
+- (NSString *)newDocumentObjectForLabelStatic:(RptqDocumentObjectLabel *)item {
     return [NSString stringWithString:item.text];
 }
 
-- (MTBarcode *)documentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
+- (MTBarcode *)newDocumentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
     NSDictionary *rowData = [self.dataTable copyDataForCacheId:rowID];
     
     NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
@@ -709,9 +750,9 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     return dictionary;
 }
 
-- (id)drawingObjectForDatabase:(MTDatabase *)database pageIndex:(NSUInteger)pageIndex
-                groupLevelKeys:(NSArray *)groupLevelKeys detailRowId:(NSNumber *)detailRowId
-                       andItem:(RptqDocumentObject *)item {
+- (id)newDrawingObjectForDatabase:(MTDatabase *)database pageIndex:(NSUInteger)pageIndex
+                   groupLevelKeys:(NSArray *)groupLevelKeys detailRowId:(NSNumber *)detailRowId
+                          andItem:(RptqDocumentObject *)item {
 
     id drawingObject = nil;
     switch (item.getType) {
@@ -862,8 +903,8 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                 aggregateResult = dataOfInterest[fieldKey];
             }
             
-            NSString *formattedString = [item formattedString:aggregateType
-                                                     forValue:aggregateResult];
+            NSString *formattedString = [item formattedString: aggregateType
+                                                     forValue: aggregateResult];
             
             drawingObject = [[NSString alloc] initWithString:formattedString];
             if ([drawingObject isEqualToString:MTNullIdentifier]) {
@@ -874,22 +915,22 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
         }
             
         case MTDocumentObjectTypeImage:
-            drawingObject = [self documentObjectForDocumentImage: item.isImage];
+            drawingObject = [self newDocumentObjectForDocumentImage: item.isImage];
             break;
             
         case MTDocumentObjectTypeBarcode:
-            drawingObject = [self documentObjectForBarcode:item.isBarcode
-                                               forDatabase:database forRowID:detailRowId];
+            drawingObject = [self newDocumentObjectForBarcode: item.isBarcode
+                                                  forDatabase: database forRowID: detailRowId];
             break;
             
         case MTDocumentObjectTypeLabelDynamic:
-            drawingObject = [self documentObjectForLabelDynamic:item.isLabelDataField
-                                                    forDatabase:database
-                                                       forRowID:detailRowId];
+            drawingObject = [self newDocumentObjectForLabelDynamic: item.isLabelDataField
+                                                       forDatabase: database
+                                                          forRowID: detailRowId];
             break;
             
         case MTDocumentObjectTypeLabelStatic:
-            drawingObject = [self documentObjectForLabelStatic:item.isLabel];
+            drawingObject = [self newDocumentObjectForLabelStatic:item.isLabel];
             break;
             
         default:

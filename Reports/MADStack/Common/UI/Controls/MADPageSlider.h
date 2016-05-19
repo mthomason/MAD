@@ -12,9 +12,7 @@
 #import <UIKit/UIVisualEffectView.h>
 
 @protocol MADPageSliderProtocol <NSObject>
-
     - (void)sliderDidChangeToPage:(NSUInteger)page;
-
 @end
 
 @class MADSliderPageVertical;
@@ -24,11 +22,11 @@
     @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
     @property (readonly) MADSliderPageVertical *pageSlider;
 
-    @property(nonatomic,getter=isEnabled) BOOL enabled;
+    @property (nonatomic, getter=isEnabled) BOOL enabled;
 
-    @property(nonatomic) float value;
-    @property(nonatomic) float minimumValue;
-    @property(nonatomic) float maximumValue;
+    @property (nonatomic) float value;
+    @property (nonatomic) float minimumValue;
+    @property (nonatomic) float maximumValue;
 
 @end
 

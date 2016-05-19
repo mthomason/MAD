@@ -25,6 +25,10 @@
 
 @implementation MADInstallOperationSampleDocument
 
+- (void)dealloc {
+    NSLog(@"dealloc MADInstallOperationSampleDocument");
+}
+
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension
                  groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
 
@@ -56,7 +60,8 @@
         
         // !!!: Do an extra check to hanle the case of upgrades.
         BOOL isDirectory;
-        installed = [[NSFileManager defaultManager] fileExistsAtPath: destination.path
+        NSString *path = destination.path;
+        installed = [[NSFileManager defaultManager] fileExistsAtPath: path
                                                          isDirectory: &isDirectory];
         
         if (!installed) {

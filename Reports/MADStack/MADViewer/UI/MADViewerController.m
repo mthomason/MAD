@@ -324,7 +324,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageSlider.sliderDelegate = self;
     [self.view addSubview:pageSlider];
     [self.view bringSubviewToFront:pageSlider];
-    self.toolbarSlider = pageSlider;
 
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
@@ -362,7 +361,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                        frame: self.view.bounds
                                                                  andDelegate: self];
     
-    NSArray *viewControllers = @[pageOne];
+    NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
     [self setViewControllers: viewControllers
                    direction: UIPageViewControllerNavigationDirectionForward
                     animated: NO completion: nil];
@@ -383,8 +382,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.printPageRendererReport = prtingPageRendererReport;
     }
     
-    [self.toolbarSlider setNeedsLayout];
+    [pageSlider setNeedsLayout];
 
+    self.toolbarSlider = pageSlider;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -720,7 +720,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
@@ -734,6 +736,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [coordinator animateAlongsideTransition:transition completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self adjustContextOffsetForOpenPopover];
     }];
+
 }
 
 #pragma mark - UIAccessibility

@@ -25,6 +25,7 @@ const NSInteger currentMajorVersion = 8;
 @implementation MADUpgradeManager
 
 - (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion {
+
     BOOL upgradeRequired = NO;
     BOOL upgradeVersion7 = NO;
     BOOL installChinook = NO;
@@ -33,9 +34,11 @@ const NSInteger currentMajorVersion = 8;
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:MADUpgradeLastVersionRun];
     
-    NSURL *chinookUrl = [MADInstallOperationSampleDatabase applicationSupportSampleDatabaseChinook];
+    NSURL *chinookUrl = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
     BOOL isDirectory;
-    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:chinookUrl.path isDirectory:&isDirectory];
+    NSString *path = chinookUrl.path;
+    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath: path
+                                                           isDirectory: &isDirectory];
     if (gotChinook == NO) {
         installChinook = YES;
     } else {
@@ -58,14 +61,13 @@ const NSInteger currentMajorVersion = 8;
         
         if (lastVersionRun.integerValue <= 1) {
             upgradeRequired = YES;
-            //upgradeVersion1 = YES;
         } else if (lastVersionRun.integerValue <= 7) {
             upgradeRequired = YES;
             upgradeVersion7 = YES;
         }
     }
     
-    NSNumber *majorVersion = @(currentMajorVersion);
+    NSNumber *majorVersion =  [[NSNumber alloc] initWithUnsignedInteger: currentMajorVersion];
     [standardUserDefault setObject: majorVersion forKey: MADUpgradeLastVersionRun];
     
     if (installChinook || installSamples) {

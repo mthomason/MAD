@@ -475,13 +475,18 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            
             [self.tableView.backgroundView setNeedsDisplay];
+        
         } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
     }
+    
 }
 
 #pragma mark - MTQueryBuilderPredicateFormatDelegate
@@ -1473,10 +1478,11 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
 - (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
     
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
+    NSParagraphStyle *paragraphStyle = [NSParagraphStyle newParagraphStyleTitleBar];
     
     NSString *firstPart = @"Data Sample";
-    NSString *titleString = [NSString stringWithFormat:@"%1@ %2@", firstPart, tableName];
+    NSString *titleString = [[NSString alloc] initWithFormat:@"%1@ %2@",
+                                                             firstPart, tableName];
     
     NSRange rangeFirstPart = NSMakeRange(0, firstPart.length);
     NSRange rangeSecondPart = NSMakeRange(firstPart.length, titleString.length - firstPart.length);
@@ -1487,9 +1493,11 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     UIColor *foregroundColor = [UIColor whiteColor];
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                                 paragraphStyle, NSParagraphStyleAttributeName,
-                                                foregroundColor, NSForegroundColorAttributeName, nil];
-    NSMutableAttributedString *titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
-                                                                                      attributes:attributes];
+                                                foregroundColor, NSForegroundColorAttributeName,
+                                                nil];
+    NSMutableAttributedString *titleViewText;
+    titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
+                                                           attributes:attributes];
     
     [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
     [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
