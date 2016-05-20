@@ -8,13 +8,11 @@
 
 #import "MADCredential.h"
 #import <Foundation/NSString.h>
-#import <localcharset.h>
 
 @implementation MADCredential
 
 - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password {
     if (self = [super init]) {
-        locale_charset();
 
         NSString *u = [[NSString alloc] initWithString:username];
         self.username = u;
@@ -31,7 +29,6 @@
     id username = [self.username copyWithZone:zone];
     id password = [self.password copyWithZone:zone];
     id copy = [[[self class] alloc] initWithUsername:username andPassword:password];
-
     return copy;
 }
 

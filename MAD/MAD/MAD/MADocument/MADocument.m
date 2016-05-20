@@ -12,6 +12,9 @@
 
 #import "MADocument.h"
 
+#import "MADSortOrder.h"
+#import "MADConstants.h"
+
 #import <Foundation/NSException.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <MAD/MADErrorUserInfo.h>
@@ -102,7 +105,12 @@
 #import <UIKit/UIPrintPaper.h>
 #import <UIKit/UILabel.h>
 
-#import <MADBarcodes/png.h>
+#import "png.h"
+
+#import <archive.h>
+#import <archive_entry.h>
+//#include <zlib.h>
+//#include <bzlib.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -195,7 +203,49 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
 
+void write_archive(const char *outname, const char **filename);
+void write_archive(const char *outname, const char **filename) {
+    struct archive *a;
+    struct archive_entry *entry;
+    struct stat st;
+    char buff[8192];
+    ssize_t len;
+    int fd;
+    
+    a = archive_write_new();
+    archive_write_add_filter_bzip2(a);
+    archive_write_set_format_pax_restricted(a); // Note 1
+    archive_write_open_filename(a, outname);
+    while (*filename) {
+        stat(*filename, &st);
+        entry = archive_entry_new(); // Note 2
+        archive_entry_set_pathname(entry, *filename);
+        archive_entry_set_size(entry, st.st_size); // Note 3
+        archive_entry_set_filetype(entry, AE_IFREG);
+        archive_entry_set_perm(entry, 0644);
+        archive_write_header(a, entry);
+        fd = open(*filename, O_RDONLY);
+        len = read(fd, buff, sizeof(buff));
+        while ( len > 0 ) {
+            archive_write_data(a, buff, (size_t)len);
+            len = read(fd, buff, sizeof(buff));
+        }
+        close(fd);
+        archive_entry_free(entry);
+        filename++;
+    }
+    archive_write_close(a); // Note 4
+    archive_write_free(a); // Note 5
+}
 
+//int main(int argc, const char **argv)
+//{
+//    const char *outname;
+//    argv++;
+//    outname = argv++;
+//    write_archive(outname, argv);
+//    return 0;
+//}
 
 @interface MADocument ()
 
@@ -1185,7 +1235,8 @@ typedef struct png_control
         
         const int kPngSignatureLength = 8;
 
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+        
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * sizeof(Byte));
         [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
         if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
