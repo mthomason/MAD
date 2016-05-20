@@ -98,10 +98,10 @@
         };
 
         id keyLimit = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersLimit];
-        NSNumber * __weak limitO = object[keyLimit];
+        NSNumber *limitO = object[keyLimit];
         
         id keyOffset = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersOffset];
-        NSNumber * __weak offsetO = object[keyOffset];
+        NSNumber *offsetO = object[keyOffset];
 
         NSUInteger limit = limitO ? limitO.unsignedIntegerValue : NSNotFound;     // Careful not to fuck this up!
         NSUInteger offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
@@ -124,23 +124,25 @@
         id keyRowID = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
         NSNumber *dropRowid = object[keyRowID];
         
+        dispatch_queue_t queueHigh = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_t group = dispatch_group_create();
-        
+        dispatch_group_enter(group);
         __block NSString *sqlSelectText;
-        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_group_async(group, queueHigh, ^{
             sqlSelectText = sqlSelect(tableName, columnKeys, dropRowid.boolValue ? true : false);
         });
 
         __block NSString *sqlOrderByText;
-        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_group_async(group, queueHigh, ^{
             sqlOrderByText = sqlOrderBy(sortDesc, columns);
         });
         
         __block NSString *sqlWhereText;
-        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_group_async(group, queueHigh, ^{
             sqlWhereText = sqlWhere(whereClause);
         });
         
+        dispatch_group_leave(group);
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         
         NSMutableString *sql = [[NSMutableString alloc] initWithString:sqlSelectText];

@@ -292,11 +292,11 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
                                 scale: traits.displayScale];
 }
 
-+ (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
++ (void)DrawWhiteCanvas:(CGContextRef *)ctx pageRect:(CGRect)pageRect {
     [[UIColor whiteColor] setFill];
     CGPathRef path = CGPathCreateWithRect(pageRect, NULL);
-    CGContextAddPath(ctx, path);
-    CGContextDrawPath(ctx, kCGPathFill);
+    CGContextAddPath(*ctx, path);
+    CGContextDrawPath(*ctx, kCGPathFill);
     CGPathRelease(path);
 }
 
@@ -304,12 +304,12 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
                        withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
+    [MTReportViewerPrintPageRenderer DrawWhiteCanvas: &ctx pageRect: pageRect];
     
     [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 
     if (self.showWaterMark) {
-        [self drawWatermarkWithContext: ctx inPageRect: pageRect];
+        [MTReportViewerPrintPageRenderer DrawWatermarkWithContext: &ctx inPageRect: pageRect];
     }
 
 }
@@ -1045,7 +1045,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                                                                   andDataTable: dataTable];
 }
 
-- (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
++ (void)DrawWatermarkWithContext:(CGContextRef *)ctx inPageRect:(CGRect)pageRect {
 
     UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -1082,17 +1082,17 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
             logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
             
-            CGContextSaveGState(ctx);
+            CGContextSaveGState(*ctx);
             {
                 static CGFloat angle315Degrees = 7.0000f * (CGFloat)M_PI / 4.0000f;
-                CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
+                CGContextTranslateCTM(*ctx, x, columnCounter % 2 == 0 ?
                                       y :
                                       y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
-                CGContextRotateCTM(ctx, angle315Degrees);
+                CGContextRotateCTM(*ctx, angle315Degrees);
                 [getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y,
                                               logoRect.size.width, logoRect.size.height)];
             }
-            CGContextRestoreGState(ctx);
+            CGContextRestoreGState(*ctx);
             columnCounter++;
         } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
         rowCounter++;

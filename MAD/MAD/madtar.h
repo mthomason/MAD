@@ -11,4 +11,6 @@
 
 #include <stdio.h>
 
+void write_archive(const char *outname, const char **filename);
+
 #endif /* madtar_h */

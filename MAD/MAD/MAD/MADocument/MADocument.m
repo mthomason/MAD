@@ -194,6 +194,9 @@ NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
 NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
+
+
+
 @interface MADocument ()
 
     @property (nonatomic, strong, readwrite) NSManagedObjectModel *madManagedObjectModel;
@@ -216,6 +219,34 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 //@synthesize managedObjectModel = _managedObjectModel;
 //@synthesize persistentStoreOptions = _persistentStoreOptions;
+
++ (bool)wrapFileOverwrite:(BOOL)overwrite urlGuts:(NSURL *)urlGuts fileURL:(NSURL *)fileURL {
+    NSError *fileWrapperError = nil;
+    bool success = false;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: urlGuts
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    NSURL *resultUrl;
+    
+    if (fileWrapperError == nil) {
+        if (overwrite) {
+            NSData *data = [fileWrapper serializedRepresentation];
+            NSError *errorWriting = nil;
+            success = [data writeToURL: fileURL
+                               options: (NSDataWritingOptions)
+                       (NSDataWritingAtomic |
+                        NSFileWrapperWritingWithNameUpdating)
+                                 error: &errorWriting] ? true : false;
+        } else {
+            resultUrl = [fileURL uniqueUrl];
+            NSData *data = [fileWrapper serializedRepresentation];
+            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
+        }
+    }
+    
+    return success;
+}
 
 + (instancetype)newManagedDocumentForURL:(NSURL *)url {
     id document = [[self alloc] initWithFileURL:url];
@@ -382,28 +413,28 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
-    BOOL success = NO;
+    bool success = false;
     NSURL *urlGuts;
+    urlGuts = self.urlGuts.copy;
     
-    if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
+    NSString *pathExtension = url.pathExtension;
+    if ([pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
     
         @autoreleasepool {
 
-            urlGuts = self.urlGuts.copy;
             
             [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
-            
-            NSData *data = [NSData dataWithContentsOfURL:url];
+
+            NSError * __autoreleasing *errorReading = NULL;
+            NSData *data = [[NSData alloc] initWithContentsOfURL:url options:NSDataReadingUncached
+                                                           error:errorReading];
             NSFileWrapper *fileWrapper;
             fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
             NSError * __autoreleasing *error = NULL;
             success = [fileWrapper writeToURL: urlGuts
-                                      options: (NSFileWrapperWritingOptions)
-                                                    (NSFileWrapperWritingAtomic |
-                                                        NSFileWrapperWritingWithNameUpdating)
+                                      options: NSFileWrapperWritingWithNameUpdating
                           originalContentsURL: url
-                                        error: error];
-            
+                                        error: error] ? true : false;
             NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
             
         }
@@ -450,8 +481,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     //}
 }
 
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                                       error:(NSError * __autoreleasing *)outError {
+- (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
+                            forSaveOperation: (UIDocumentSaveOperation)saveOperation
+                                       error: (NSError * __autoreleasing *)outError {
     
     UIImage *thumbnail = [self newFullyRenderedThumbnail];
     NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -465,7 +497,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 
-- (NSString *)fileNameExtensionForType: (NSString *)typeName saveOperation: (UIDocumentSaveOperation)saveOperation {
+- (NSString *)fileNameExtensionForType: (NSString *)typeName
+                         saveOperation: (UIDocumentSaveOperation)saveOperation {
     return MADFileExtentionMobleApplicationDocument;
 }
 
@@ -489,7 +522,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return self.madManagedObjectModel;
 }
 
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL
+                               error:(NSError * __autoreleasing *)error {
 
     NSError *readError = nil;
 
@@ -649,7 +683,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder; {
+- (void)addQueryGroupWithQueryField: (NSManagedObjectID *)queryFieldObjectID
+                       andSortOrder: (MNSSortOrder)sortOrder; {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
@@ -659,13 +694,15 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         
         
-        RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder:sortOrder andManagedObjectContext:private];
+        RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder: sortOrder
+                                                             andManagedObjectContext: private];
         
         queryGroup.hasField = queryField;   //Retain cycle
         
         
         //Create group header (contains a retain cycle)
-        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupHeader forManagedObjectContext: private];
+        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupHeader
+                                                                   forManagedObjectContext: private];
         RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
         headerSectionRow.inSection = headerSection;
         
@@ -675,8 +712,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [queryGroup addHasSectionObject:headerSection];
         
         //Create group footer (contains a retain cycle)
-        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupFooter forManagedObjectContext: private];
-        RptqDocumentSectionRows *footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
+        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupFooter
+                                                                   forManagedObjectContext: private];
+        RptqDocumentSectionRows *footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: private];
         footerSectionRow.inSection = footerSection;
         
         NSMutableOrderedSet *footerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: footerSectionRow];
@@ -870,7 +908,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (void)removeDocumentObjectWithObjectID: (NSManagedObjectID *)objectID
+                    managedObjectContext: (NSManagedObjectContext *)managedObjectContext {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = managedObjectContext;
@@ -887,7 +926,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 }
 
-- (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
+- (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
+                                 inContent: (NSManagedObjectContext *)context {
     NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
@@ -905,7 +945,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
+- (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
+                             inContent: (NSManagedObjectContext *)context {
     
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
@@ -1132,7 +1173,9 @@ typedef struct png_control
     BOOL contentChanged = NO;
     if (!path) contentChanged = YES;
     if (!contentChanged) {
-        contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned) && [self.reportFormatter numberOfPages] > 0;
+        contentChanged = [self activeDocumentModel] != nil &&
+                         (self.documentStatus.contextChagned) &&
+                         [self.reportFormatter numberOfPages] > 0;
     }
     contentChanged = YES;
     if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {
@@ -1149,7 +1192,7 @@ typedef struct png_control
 
         iodata_stream dstream;
         
-        png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);// (struct png_struct_def *)pngImage.bytes;
+        png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
         png_infop info =  png_create_info_struct(p);
         
         if (info == NULL) {
@@ -1223,7 +1266,6 @@ typedef struct png_control
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
                                                        isDirectory: &isDirectory];
     if (exists) {
-        NSError *deleteError = nil;
         if (isDirectory) {
             
             BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
@@ -1236,30 +1278,40 @@ typedef struct png_control
                                                                      includingPropertiesForKeys: requestedKeys
                                                                                         options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                                    errorHandler: ErrorHandler];
-            for (NSURL *file in enumerator) {
-                NSError *error = nil;
-                
-                [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
-                if (error != nil) {
-                    NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
-                    [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
-                }
-                
+
+            dispatch_queue_t queueHigh = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0);
+            dispatch_group_t group = dispatch_group_create();
+            dispatch_group_enter(group);
+            
+            for (NSURL *fileURL in enumerator) {
+                NSURL *file = fileURL.copy;
+                dispatch_group_async(group, queueHigh, ^{
+                    //@autoreleasepool {
+                        [MADocument removeItemAtURL:file];
+                    //}
+                });
             }
             
-            [[NSFileManager defaultManager] removeItemAtURL:destinationUrl error:&deleteError];
-            if (deleteError != nil) {
-                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
-                [[NSFileManager defaultManager] removeItemAtURL:destinationUrl error:&deleteError];
-            }
+            NSURL *file = destinationUrl.copy;
+            dispatch_group_async(group, queueHigh, ^{
+                //@autoreleasepool {
+                    [MADocument removeItemAtURL:file];
+                //}
+            });
+            dispatch_group_leave(group);
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
             
-        } else {
-            [[NSFileManager defaultManager] removeItemAtURL:destinationUrl error:&deleteError];
-            if (deleteError != nil) {
-                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
-                [[NSFileManager defaultManager] removeItemAtURL:destinationUrl error:&deleteError];
-            }
         }
+    }
+}
+
++ (void)removeItemAtURL:(NSURL *)url {
+    NSError * __autoreleasing *deleteError = NULL;
+    [[NSFileManager defaultManager] removeItemAtURL:url error:deleteError];
+    if (deleteError != nil) {
+        NSAssert(*deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, *deleteError);
+        *deleteError = NULL;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:deleteError];
     }
 }
 
@@ -1379,45 +1431,22 @@ typedef struct png_control
     return thumbnail;
 }
 
-+ (bool)wrapFileOverwrite:(BOOL)overwrite urlGuts:(NSURL *)urlGuts fileURL:(NSURL *)fileURL {
-    NSError *fileWrapperError = nil;
-    bool success = false;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: urlGuts
-                                                            options: NSFileWrapperReadingImmediate
-                                                              error: &fileWrapperError];
-    
-    NSURL *resultUrl;
-    
-    if (fileWrapperError == nil) {
-        if (overwrite) {
-            NSData *data = [fileWrapper serializedRepresentation];
-            NSError *errorWriting = nil;
-            success = [data writeToURL:fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
-        } else {
-            resultUrl = [fileURL uniqueUrl];
-            NSData *data = [fileWrapper serializedRepresentation];
-            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
-        }
-    }
-    
-    return success;
-}
-
 #pragma mark File Name
 
 + (void)RemoveGutsAtUrl:(NSURL *)url {
     NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
-    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
-                                                             includingPropertiesForKeys: propertyKeys
-                                                                                options: NSNotFound
-                                                                           errorHandler: ^BOOL(NSURL *url, NSError *error) {
-                                                                               return YES;
-                                                                           }];
+    NSDirectoryEnumerator *enumerator;
+    enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
+                                      includingPropertiesForKeys: propertyKeys options: NSNotFound
+                                                    errorHandler: ^BOOL(NSURL *errorUrl,
+                                                                        NSError *error) {
+        return YES;
+    }];
     
     NSError *error;
-    for (NSURL *url in enumerator) {
+    for (NSURL *fileURL in enumerator) {
         error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&error];
     }
     
     error = nil;
