@@ -27,6 +27,7 @@ print_help() {
    printf "  %s\n" "--gettext                Build Gettext.\n"
    printf "  %s\n" "--acl                    Build Gettext.\n"
 #printf "  %s\n" "--attr                   Build Gettext.\n"
+   printf "  %s\n" "--libarchive             Build Archive.\n"
    printf "  %s\n" "--classpath              Build Classpath.\n"
    printf "  %s\n" "--openssl                Build OpenSSL.\n"
    printf "  %s\n" "--freetds                Build FreeTds.\n"
@@ -53,6 +54,7 @@ build_libffi=$false
 build_gettext=$false
 build_attr=$false
 build_gettext=$false
+build_libarchive=$false
 show_help=$false
 
 #
@@ -97,7 +99,8 @@ do
 
         --classpath)
             build_classpath=$true;;
-
+        --libarchive)
+            build_libarchive=$true;;
       #don't build unixodbc for iOS, lol
         --unixodbc)
             build_unixodbc=$false;;
@@ -208,6 +211,9 @@ readonly version_gettext="0.18.3.1"
 readonly version_libffi="3.0.14RC0"
 readonly version_acl="2.2.52"
 readonly version_attr="2.4.47"
+readonly version_libarchive="3.2.0"
+readonly version_bzip="1.0.6"
+
 
 readonly version_mysql_6_0="6.0.2"  #do not change
 readonly version_mysql_6_1="6.1.6"
@@ -236,9 +242,17 @@ readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
 
+readonly archive_bzip_base_url="http://www.bzip.org/${version_bzip}/"
+readonly archive_name_bzip="bzip2-${version_bzip}"
+readonly archive_bzip="${archive_name_bzip}.tar.gz"
+
 readonly archive_openssl_base_url="http://www.openssl.org/source/"
 readonly archive_name_openssl="openssl-${version_openssl}"
 readonly archive_openssl="${archive_name_openssl}.tar.gz"
+
+readonly archive_libarchive_base_url="http://libarchive.org/downloads/"
+readonly archive_name_libarchive="libarchive-${version_libarchive}"
+readonly archive_libarchive="${archive_name_libarchive}.tar.gz"
 
 readonly archive_autoconf_base_url="http://ftp.gnu.org/gnu/autoconf/"
 readonly archive_name_autoconf="autoconf-${version_autoconf}"
@@ -287,6 +301,7 @@ readonly path_library="$path_base/library"
 
 readonly path_build="${path_base}/build"
 readonly path_build_openssl="${path_build}/openssl"
+readonly path_build_libarchive="${path_build}/libarchive"
 readonly path_build_mysql="${path_build}/mysqlclient"
 readonly path_build_zint="${path_build}/zint"
 readonly path_build_tds="${path_build}/tds"
@@ -294,14 +309,17 @@ readonly path_build_png="${path_build}/libpng"
 readonly path_build_unixodbc="${path_build}/unixodbc"
 readonly path_build_classpath="${path_build}/classpath"
 readonly path_build_glib="${path_build}/glib"
+readonly path_build_bzip="${path_build}/bzip"
 readonly path_build_autoconf="${path_build}/autoconf"
 readonly path_build_automake="${path_build}/automake"
 
 readonly path_media_ssl="$path_media/$archive_openssl"
+readonly path_media_libarchive="$path_media/$archive_libarchive"
 readonly path_media_mysql="$path_media/$archive_mysql"
 readonly path_media_tds="$path_media/$archive_freetds"
 readonly path_media_zint="$path_media/$archive_zint"
 readonly path_media_png="$path_media/$archive_png"
+readonly path_media_bzip="$path_media/$archive_bzip"
 readonly path_media_unixodbc="$path_media/$archive_unixodbc"
 readonly path_media_classpath="$path_media/$archive_classpath"
 readonly path_media_glib="$path_media/$archive_glib"
@@ -329,19 +347,19 @@ addtional_work_libsybdb() {
 
 config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make
 
-   local version_sdk=$1
-   local version_sdk_min=$2
-   local architecture=$3
-   local additional_config=$4
-   local path_make=$5
-   local log=$6
-   local additional_work=$7
+    local version_sdk=$1
+    local version_sdk_min=$2
+    local architecture=$3
+    local additional_config=$4
+    local path_make=$5
+    local log=$6
+    local additional_work=$7
 
-printf "%s\t\t%s\n" "architecture" $architecture
-printf "%s\t\t%s\n" "additional_config" $additional_config
-printf "%s\t\t%s\n" "path_make" $path_make
-printf "%s\t\t%s\n" "log" $log
-printf "%s\t\t%s\n" "additional_work" $additional_work
+    printf "%s\t\t%s\n" "architecture" $architecture
+    printf "%s\t\t%s\n" "additional_config" $additional_config
+    printf "%s\t\t%s\n" "path_make" $path_make
+    printf "%s\t\t%s\n" "log" $log
+    printf "%s\t\t%s\n" "additional_work" $additional_work
 
     if [[ "${#additional_config}" > 0 ]];
     then
@@ -436,10 +454,12 @@ printf "%s\t\t%s\n" "additional_work" $additional_work
 }
 
 path_source_openssl="$path_source/$archive_name_openssl"
+path_source_libarchive="$path_source/$archive_name_libarchive"
 path_source_mysql="$path_source/$archive_name_mysql"
 path_source_tds="$path_source/$archive_name_freetds"
 path_source_zint="$path_source/$archive_name_zint"
 path_source_png="$path_source/$archive_name_png"
+path_source_bzip="$path_source/$archive_name_bzip"
 path_source_unixodbc="$path_source/$archive_name_unixodbc"
 path_source_classpath="$path_source/$archive_name_classpath"
 path_source_glib="$path_source/$archive_name_glib"
@@ -454,13 +474,15 @@ mkdir -p media;
 # Download source if it doesn’t exist
 #
 
-download_archive $archive_glib      $archive_glib_base_url
-download_archive $archive_classpath $archive_classpath_base_url
-download_archive $archive_openssl   $archive_openssl_base_url
-download_archive $archive_mysql     $archive_mysql_base_url
-download_archive $archive_freetds   $archive_freetds_base_url
-download_archive $archive_zint      $archive_zint_base_url
-download_archive $archive_png       $archive_png_base_url
+download_archive $archive_glib          $archive_glib_base_url
+download_archive $archive_classpath     $archive_classpath_base_url
+download_archive $archive_openssl       $archive_openssl_base_url
+download_archive $archive_mysql         $archive_mysql_base_url
+download_archive $archive_freetds       $archive_freetds_base_url
+download_archive $archive_zint          $archive_zint_base_url
+download_archive $archive_png           $archive_png_base_url
+download_archive $archive_bzip          $archive_bzip_base_url
+download_archive $archive_libarchive    $archive_libarchive_base_url
 
 cd "${path_base}"
 
@@ -1528,49 +1550,37 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
    command_lipo_png="${command_lipo_create}"
    path_library_png="${path_library}/libpng"
 
-additional_config=""
+   additional_config=""
 
-   for arch in ${archs}
-   do
+    for arch in ${archs}
+    do
       
-      #printf "Starting arch: %s\n" "${arch}"
-      platform=$( platform_for_architecture arch )
+        #printf "Starting arch: %s\n" "${arch}"
+        platform=$( platform_for_architecture arch )
 
-      printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
+        printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
 
-      if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-      then
-         platform="iPhoneSimulator"
-         additional_config="--enable-arm-neon=no "
-      else
-         platform="iPhoneOS"
+        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+        then
+            platform="iPhoneSimulator"
+            additional_config="--enable-arm-neon=no "
+        else
+            platform="iPhoneOS"
 
-         #additional_config="--enable-arm-neon=no "
-         #if [[ "${architecture}" == "armv7" ]];
-         #then
             #additional_config="--enable-arm-neon=no "
-         #elif [[ "${architecture}" == "arm64" ]];
-         #then
-            additional_config="--enable-arm-neon=yes "
-         #else
-         #   additional_config="--enable-arm-neon=yes "
-         #fi
-      fi
+            #if [[ "${architecture}" == "armv7" ]];
+            #then
+                #additional_config="--enable-arm-neon=no "
+            #elif [[ "${architecture}" == "arm64" ]];
+            #then
+                additional_config="--enable-arm-neon=yes "
+            #else
+                #additional_config="--enable-arm-neon=yes "
+            #fi
+        fi
 
-      platform_version_arch="${platform}${version_ios}-${arch}"
-      path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
-
-
-
-
-
-
-
-
-
-
-
-
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
 
         printf "Extracting libpng source code.\n"
         rm -rf -- "${path_source_png}"
@@ -1580,57 +1590,198 @@ additional_config=""
         platform_version_arch="${platform}${version_ios}-${arch}"
         path_build_unixodbc_arch="${path_build_png}/$platform_version_arch.sdk"
 
-	printf "Make directory build_png_arch\n";
+        printf "Make directory build_png_arch\n";
         mkdir -p "${path_build_png_arch}"
         rm -rf -- "${path_build_png_arch}"
         printf "Make directory build_png_arch again\n";
-	mkdir -p "${path_build_png_arch}"
+        mkdir -p "${path_build_png_arch}"
         log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
         > "$log_build_png"
 
         cd "${path_base}"
 
-	printf "Extract source.\n"
+        printf "Extract source.\n"
         extract_source $path_media_png $path_source &
         spinner $!
 
 
 
-      #mkdir -p "${path_build_png_arch}"
-      #rm -rf -- "${path_build_png_arch}"
-      #log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
-      #> "$log_build_png"
+        #mkdir -p "${path_build_png_arch}"
+        #rm -rf -- "${path_build_png_arch}"
+        #log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
+        #> "$log_build_png"
 
-      #cd "${path_base}"
+        #cd "${path_base}"
 
-      #extract_source $path_media_png $path_source &
-      #spinner $!
-	printf "Changing to source directory.\n"
+        #extract_source $path_media_png $path_source &
+        #spinner $!
+        printf "Changing to source directory.\n"
 
-      cd "${path_source_png}"
-export CFLAGS=""
-export CPPFLAGS=""
+        cd "${path_source_png}"
+        export CFLAGS=""
+        export CPPFLAGS=""
 
-	printf "lipo\n"
-      command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
+        printf "lipo\n"
+        command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
 
-	printf "config_make_install\n\t" "${arch}" "${path_build_png_arch}" "${log_build_png}"
+        printf "config_make_install\n\t" "${arch}" "${path_build_png_arch}" "${log_build_png}"
 
-      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
+        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
+
+    done
+
+    printf "mkdir -p" "${path_library_png}"
+    mkdir -p "${path_library_png}"
+    rm -rf -- "${path_library_png}"
+    mkdir -p "${path_library_png}"
+
+    cp -R "${path_build_png_arch}/include" "${path_library_png}"
+    command_lipo_png="${command_lipo_png} -output ${path_library_png}/libpng16.a"
+    ln -s "${path_library_png}/libpng16.a" "${path_library_png}/libpng.a"
+    $command_lipo_png
+fi
+
+#
+# bzip2 - build when libarchive is built
+#
+
+if [[ $build_libarchive == $true  && $show_help == $false ]]; then
+
+   set -e
+
+    command_lipo_bzip="${command_lipo_create}"
+    command_lipo_ct="${command_lipo_create}"
+    path_library_bzip="${path_library}/bzip"
+
+    for arch in ${archs}
+    do
+        platform=$( platform_for_architecture arch )
+
+        printf "\n\nBuilding bzip for %s %s." "${arch}" "${platform}"
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_bzip_arch="${path_build_bzip}/$platform_version_arch.sdk"
+
+        #printf "mkdir %s\n" "${path_build_bzip_arch}"
+
+        mkdir -p "${path_build_bzip_arch}"
+        rm -rf -- "${path_build_bzip_arch}"
+        mkdir -p "${path_build_bzip_arch}"
+        log_build_bzip="${path_build_bzip}/build-bzip-${version_bzip}-${arch}.log"
+        > "$log_build_bzip"
+
+        cd "${path_base}"
+
+        extract_source $path_media_bzip $path_source &
+        spinner $!
+
+        cd "${path_source_bzip}"
+        export CFLAGS=""
+        export CPPFLAGS=""
+
+        command_lipo_bzip="${command_lipo_bzip} ${path_build_bzip_arch}/lib/bzip.a"
+        command_lipo_ct="${command_lipo_ct} ${path_build_bzip_arch}/lib/libct.a"
+        additional_config="${additional_config_blank}"
+        additional_work=""
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_bzip_arch $log_build_bzip $additional_work
 
    done
 
-   printf "mkdir -p" "${path_library_png}"
-   mkdir -p "${path_library_png}"
-   rm -rf -- "${path_library_png}"
-   mkdir -p "${path_library_png}"
+   #printf "mkdir %s\n" "${path_library_bzip}"
 
-   cp -R "${path_build_png_arch}/include" "${path_library_png}"
-   command_lipo_png="${command_lipo_png} -output ${path_library_png}/libpng16.a"
-   ln -s "${path_library_png}/libpng16.a" "${path_library_png}/libpng.a"
-   $command_lipo_png
+   #mkdir -p "${path_library_bzip}"
+   #rm -rf -- "${path_library_bzip}"
+   #mkdir -p "${path_library_bzip}"
+
+   #printf "cp -R %s\n" "${path_build_bzip_arch}/include\" \"${path_library_bzip}"
+
+   #cp -R $path_build_bzip_arch/include $path_library_bzip
+
+   #command_lipo_bzip="${command_lipo_bzip} -output ${path_library_bzip}/bzip.a"
+   #command_lipo_ct="${command_lipo_ct} -output ${path_library_bzip}/libct.a"
+
+   #echo ""
+   #echo "${command_lipo_bzip}"
+   #echo ""
+   #echo "${command_lipo_ct}"
+   #echo ""
+
+   #$command_lipo_bzip
+   #$command_lipo_ct
 
 fi
+
+#
+# libarchive
+#
+
+if [[ $build_libarchive == $true  && $show_help == $false ]]; then
+
+   set -e
+
+    command_lipo_libarchive="${command_lipo_create}"
+    command_lipo_ct="${command_lipo_create}"
+    path_library_libarchive="${path_library}/libarchive"
+
+    for arch in ${archs}
+    do
+        platform=$( platform_for_architecture arch )
+
+        printf "\n\nBuilding Libarchive for %s %s." "${arch}" "${platform}"
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_libarchive_arch="${path_build_libarchive}/$platform_version_arch.sdk"
+
+        #printf "mkdir %s\n" "${path_build_libarchive_arch}"
+
+        mkdir -p "${path_build_libarchive_arch}"
+        rm -rf -- "${path_build_libarchive_arch}"
+        mkdir -p "${path_build_libarchive_arch}"
+        log_build_libarchive="${path_build_libarchive}/build-libarchive-${version_libarchive}-${arch}.log"
+        > "$log_build_libarchive"
+
+        cd "${path_base}"
+
+        extract_source $path_media_libarchive $path_source &
+        spinner $!
+
+        cd "${path_source_libarchive}"
+        export CFLAGS=""
+        export CPPFLAGS=""
+
+        command_lipo_libarchive="${command_lipo_libarchive} ${path_build_libarchive_arch}/lib/libarchive.a"
+        additional_config="${additional_config_blank}"
+        additional_work=""
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_libarchive_arch $log_build_libarchive $additional_work
+
+   done
+
+   #printf "mkdir %s\n" "${path_library_libarchive}"
+
+   #mkdir -p "${path_library_libarchive}"
+   #rm -rf -- "${path_library_libarchive}"
+   #mkdir -p "${path_library_libarchive}"
+
+   #printf "cp -R %s\n" "${path_build_libarchive_arch}/include\" \"${path_library_libarchive}"
+
+   #cp -R $path_build_libarchive_arch/include $path_library_libarchive
+
+   #command_lipo_libarchive="${command_lipo_libarchive} -output ${path_library_libarchive}/libarchive.a"
+   #command_lipo_ct="${command_lipo_ct} -output ${path_library_libarchive}/libct.a"
+
+   #echo ""
+   #echo "${command_lipo_libarchive}"
+   #echo ""
+   #echo "${command_lipo_ct}"
+   #echo ""
+
+   #$command_lipo_libarchive
+   #$command_lipo_ct
+
+fi
+
 
 #
 # TDS
@@ -1640,40 +1791,40 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
    set -e
 
-   command_lipo_tds="${command_lipo_create}"
-   command_lipo_ct="${command_lipo_create}"
-   path_library_tds="${path_library}/libsybdb"
+    command_lipo_tds="${command_lipo_create}"
+    command_lipo_ct="${command_lipo_create}"
+    path_library_tds="${path_library}/libsybdb"
 
-   for arch in ${archs}
-   do
-      platform=$( platform_for_architecture arch )
+    for arch in ${archs}
+    do
+        platform=$( platform_for_architecture arch )
 
-      printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
+        printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
 
-      platform_version_arch="${platform}${version_ios}-${arch}"
-      path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
 
 #printf "mkdir %s\n" "${path_build_tds_arch}"
 
-      mkdir -p "${path_build_tds_arch}"
-      rm -rf -- "${path_build_tds_arch}"
-      mkdir -p "${path_build_tds_arch}"
-      log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
-      > "$log_build_tds"
+        mkdir -p "${path_build_tds_arch}"
+        rm -rf -- "${path_build_tds_arch}"
+        mkdir -p "${path_build_tds_arch}"
+        log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
+        > "$log_build_tds"
 
-      cd "${path_base}"
+        cd "${path_base}"
 
-      extract_source $path_media_tds $path_source &
-      spinner $!
+        extract_source $path_media_tds $path_source &
+        spinner $!
 
-      cd "${path_source_tds}"
+        cd "${path_source_tds}"
 
-      command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
-      command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
-      additional_config=" -with-tdsver=${version_tds} "
+        command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
+        command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
+        additional_config=" -with-tdsver=${version_tds} "
         additional_work="addtional_work_libsybdb"
 
-      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
+        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
 
    done
 
