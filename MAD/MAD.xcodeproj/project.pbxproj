@@ -215,35 +215,22 @@
 		4C401E711BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */; };
 		4C401E721BAE4F4000BAE5FC /* NSObject+DebugDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */; };
 		4C401E731BAE4F4000BAE5FC /* NSObject+DebugDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */; };
-		4C6B01491CEF625E00D29F3A /* archive_cmdline_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B012E1CEF625E00D29F3A /* archive_cmdline_private.h */; };
+		4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EA1CEF77040058986B /* libz.1.dylib */; };
+		4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */; };
 		4C6B014A1CEF625E00D29F3A /* archive_crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B012F1CEF625E00D29F3A /* archive_crc32.h */; };
-		4C6B014B1CEF625E00D29F3A /* archive_cryptor_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01301CEF625E00D29F3A /* archive_cryptor_private.h */; };
-		4C6B014C1CEF625E00D29F3A /* archive_digest_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01311CEF625E00D29F3A /* archive_digest_private.h */; };
 		4C6B014D1CEF625E00D29F3A /* archive_endian.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01321CEF625E00D29F3A /* archive_endian.h */; };
 		4C6B014E1CEF625E00D29F3A /* archive_entry_locale.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01331CEF625E00D29F3A /* archive_entry_locale.h */; };
-		4C6B014F1CEF625E00D29F3A /* archive_entry_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01341CEF625E00D29F3A /* archive_entry_private.h */; };
 		4C6B01501CEF625E00D29F3A /* archive_entry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01351CEF625E00D29F3A /* archive_entry.h */; };
 		4C6B01511CEF625E00D29F3A /* archive_getdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01361CEF625E00D29F3A /* archive_getdate.h */; };
-		4C6B01521CEF625E00D29F3A /* archive_hmac_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01371CEF625E00D29F3A /* archive_hmac_private.h */; };
-		4C6B01531CEF625E00D29F3A /* archive_options_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01381CEF625E00D29F3A /* archive_options_private.h */; };
 		4C6B01541CEF625E00D29F3A /* archive_pack_dev.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01391CEF625E00D29F3A /* archive_pack_dev.h */; };
 		4C6B01551CEF625E00D29F3A /* archive_pathmatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013A1CEF625E00D29F3A /* archive_pathmatch.h */; };
 		4C6B01561CEF625E00D29F3A /* archive_platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013B1CEF625E00D29F3A /* archive_platform.h */; };
-		4C6B01571CEF625E00D29F3A /* archive_ppmd_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013C1CEF625E00D29F3A /* archive_ppmd_private.h */; };
-		4C6B01581CEF625E00D29F3A /* archive_ppmd7_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013D1CEF625E00D29F3A /* archive_ppmd7_private.h */; };
 		4C6B01591CEF625E00D29F3A /* archive_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013E1CEF625E00D29F3A /* archive_private.h */; };
-		4C6B015A1CEF625E00D29F3A /* archive_random_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B013F1CEF625E00D29F3A /* archive_random_private.h */; };
 		4C6B015B1CEF625E00D29F3A /* archive_rb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01401CEF625E00D29F3A /* archive_rb.h */; };
-		4C6B015C1CEF625E00D29F3A /* archive_read_disk_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01411CEF625E00D29F3A /* archive_read_disk_private.h */; };
-		4C6B015D1CEF625E00D29F3A /* archive_read_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01421CEF625E00D29F3A /* archive_read_private.h */; };
 		4C6B015E1CEF625E00D29F3A /* archive_string_composition.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01431CEF625E00D29F3A /* archive_string_composition.h */; };
 		4C6B015F1CEF625E00D29F3A /* archive_string.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01441CEF625E00D29F3A /* archive_string.h */; };
-		4C6B01601CEF625E00D29F3A /* archive_write_disk_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01451CEF625E00D29F3A /* archive_write_disk_private.h */; };
-		4C6B01611CEF625E00D29F3A /* archive_write_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01461CEF625E00D29F3A /* archive_write_private.h */; };
 		4C6B01621CEF625E00D29F3A /* archive_xxhash.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01471CEF625E00D29F3A /* archive_xxhash.h */; };
 		4C6B01631CEF625E00D29F3A /* filter_fork.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B01481CEF625E00D29F3A /* filter_fork.h */; };
-		4C6B01651CEF630300D29F3A /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6B01641CEF630300D29F3A /* libbz2.tbd */; };
-		4C6B01671CEF691100D29F3A /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6B01661CEF691100D29F3A /* libarchive.a */; };
 		4C744EF81CE9B67400243830 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF71CE9B67400243830 /* MADDataStructures.framework */; };
 		4C744EFA1CE9B67D00243830 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF91CE9B67D00243830 /* MADSqlite3.framework */; };
 		4C744EFC1CE9B68400243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EFB1CE9B68400243830 /* MADCocoaExtensions.framework */; };
@@ -251,7 +238,7 @@
 		4C744F001CE9B69200243830 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EFF1CE9B69200243830 /* MADTdsClient.framework */; };
 		4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744F011CE9B69800243830 /* MADMySQL.framework */; };
 		4C7F44751CEF4C1D00A57655 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44581CEF4C1D00A57655 /* archive.h */; };
-		4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F44741CEF4C1D00A57655 /* libarchive.a */; };
+		4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F44741CEF4C1D00A57655 /* libarchive.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4C7F449D1CEF504F00A57655 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44921CEF504F00A57655 /* png.h */; };
 		4C7F449E1CEF504F00A57655 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44931CEF504F00A57655 /* pngconf.h */; };
 		4C7F449F1CEF504F00A57655 /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44941CEF504F00A57655 /* pnglibconf.h */; };
@@ -260,7 +247,6 @@
 		4C7F44A21CEF504F00A57655 /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44981CEF504F00A57655 /* pnglibconf.h */; };
 		4C7F44A31CEF504F00A57655 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F449A1CEF504F00A57655 /* libpng.a */; };
 		4C7F44A51CEF550C00A57655 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F449B1CEF504F00A57655 /* libpng16.a */; };
-		4C7F44A71CEF559300A57655 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F44A61CEF559300A57655 /* libz.tbd */; };
 		4C994F261BDD96E40058627A /* MADReportLineRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */; };
 		4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */; };
 		4C994F281BDD96E40058627A /* MADReportPageRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */; };
@@ -427,6 +413,7 @@
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
+		4CFE08F71CEF7A90007871D4 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6B01661CEF691100D29F3A /* libarchive.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -648,31 +635,20 @@
 		4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectID+Extras.m"; path = "MAD/Categories/NSManagedObjectID+Extras.m"; sourceTree = "<group>"; };
 		4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+DebugDescription.h"; path = "MAD/Categories/NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+DebugDescription.m"; path = "MAD/Categories/NSObject+DebugDescription.m"; sourceTree = "<group>"; };
-		4C6B012E1CEF625E00D29F3A /* archive_cmdline_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_cmdline_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_cmdline_private.h"; sourceTree = "<group>"; };
+		4C6652EA1CEF77040058986B /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
+		4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = ../../../../../usr/lib/libbz2.1.0.dylib; sourceTree = "<group>"; };
 		4C6B012F1CEF625E00D29F3A /* archive_crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_crc32.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_crc32.h"; sourceTree = "<group>"; };
-		4C6B01301CEF625E00D29F3A /* archive_cryptor_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_cryptor_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_cryptor_private.h"; sourceTree = "<group>"; };
-		4C6B01311CEF625E00D29F3A /* archive_digest_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_digest_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_digest_private.h"; sourceTree = "<group>"; };
 		4C6B01321CEF625E00D29F3A /* archive_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_endian.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_endian.h"; sourceTree = "<group>"; };
 		4C6B01331CEF625E00D29F3A /* archive_entry_locale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_entry_locale.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_entry_locale.h"; sourceTree = "<group>"; };
-		4C6B01341CEF625E00D29F3A /* archive_entry_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_entry_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_entry_private.h"; sourceTree = "<group>"; };
 		4C6B01351CEF625E00D29F3A /* archive_entry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_entry.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_entry.h"; sourceTree = "<group>"; };
 		4C6B01361CEF625E00D29F3A /* archive_getdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_getdate.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_getdate.h"; sourceTree = "<group>"; };
-		4C6B01371CEF625E00D29F3A /* archive_hmac_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_hmac_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_hmac_private.h"; sourceTree = "<group>"; };
-		4C6B01381CEF625E00D29F3A /* archive_options_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_options_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_options_private.h"; sourceTree = "<group>"; };
 		4C6B01391CEF625E00D29F3A /* archive_pack_dev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_pack_dev.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_pack_dev.h"; sourceTree = "<group>"; };
 		4C6B013A1CEF625E00D29F3A /* archive_pathmatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_pathmatch.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_pathmatch.h"; sourceTree = "<group>"; };
 		4C6B013B1CEF625E00D29F3A /* archive_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_platform.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_platform.h"; sourceTree = "<group>"; };
-		4C6B013C1CEF625E00D29F3A /* archive_ppmd_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_ppmd_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_ppmd_private.h"; sourceTree = "<group>"; };
-		4C6B013D1CEF625E00D29F3A /* archive_ppmd7_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_ppmd7_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_ppmd7_private.h"; sourceTree = "<group>"; };
 		4C6B013E1CEF625E00D29F3A /* archive_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_private.h"; sourceTree = "<group>"; };
-		4C6B013F1CEF625E00D29F3A /* archive_random_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_random_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_random_private.h"; sourceTree = "<group>"; };
 		4C6B01401CEF625E00D29F3A /* archive_rb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_rb.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_rb.h"; sourceTree = "<group>"; };
-		4C6B01411CEF625E00D29F3A /* archive_read_disk_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_read_disk_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_read_disk_private.h"; sourceTree = "<group>"; };
-		4C6B01421CEF625E00D29F3A /* archive_read_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_read_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_read_private.h"; sourceTree = "<group>"; };
 		4C6B01431CEF625E00D29F3A /* archive_string_composition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_string_composition.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_string_composition.h"; sourceTree = "<group>"; };
 		4C6B01441CEF625E00D29F3A /* archive_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_string.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_string.h"; sourceTree = "<group>"; };
-		4C6B01451CEF625E00D29F3A /* archive_write_disk_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_write_disk_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_write_disk_private.h"; sourceTree = "<group>"; };
-		4C6B01461CEF625E00D29F3A /* archive_write_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_write_private.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_write_private.h"; sourceTree = "<group>"; };
 		4C6B01471CEF625E00D29F3A /* archive_xxhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_xxhash.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_xxhash.h"; sourceTree = "<group>"; };
 		4C6B01481CEF625E00D29F3A /* filter_fork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filter_fork.h; path = "../../../../../source/libarchive-3.2.0/libarchive/filter_fork.h"; sourceTree = "<group>"; };
 		4C6B01641CEF630300D29F3A /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
@@ -693,7 +669,6 @@
 		4C7F44981CEF504F00A57655 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C7F449A1CEF504F00A57655 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../Compressor/library/libpng/libpng.a; sourceTree = "<group>"; };
 		4C7F449B1CEF504F00A57655 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
-		4C7F44A61CEF559300A57655 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportLineRepresentation.h; sourceTree = "<group>"; };
 		4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportLineRepresentation.m; sourceTree = "<group>"; };
 		4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportPageRepresentation.h; sourceTree = "<group>"; };
@@ -875,7 +850,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C6B01651CEF630300D29F3A /* libbz2.tbd in Frameworks */,
 				4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */,
 				4C744F001CE9B69200243830 /* MADTdsClient.framework in Frameworks */,
 				4C744EFE1CE9B68C00243830 /* MADFoundation.framework in Frameworks */,
@@ -884,11 +858,12 @@
 				4C744EF81CE9B67400243830 /* MADDataStructures.framework in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
 				4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */,
-				4C6B01671CEF691100D29F3A /* libarchive.a in Frameworks */,
+				4CFE08F71CEF7A90007871D4 /* libarchive.a in Frameworks */,
 				4C7F44A31CEF504F00A57655 /* libpng.a in Frameworks */,
 				4C7F44A51CEF550C00A57655 /* libpng16.a in Frameworks */,
+				4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */,
+				4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */,
 				4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */,
-				4C7F44A71CEF559300A57655 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1196,31 +1171,18 @@
 			isa = PBXGroup;
 			children = (
 				4C7F44581CEF4C1D00A57655 /* archive.h */,
-				4C6B012E1CEF625E00D29F3A /* archive_cmdline_private.h */,
 				4C6B012F1CEF625E00D29F3A /* archive_crc32.h */,
-				4C6B01301CEF625E00D29F3A /* archive_cryptor_private.h */,
-				4C6B01311CEF625E00D29F3A /* archive_digest_private.h */,
 				4C6B01321CEF625E00D29F3A /* archive_endian.h */,
 				4C6B01331CEF625E00D29F3A /* archive_entry_locale.h */,
-				4C6B01341CEF625E00D29F3A /* archive_entry_private.h */,
 				4C6B01351CEF625E00D29F3A /* archive_entry.h */,
 				4C6B01361CEF625E00D29F3A /* archive_getdate.h */,
-				4C6B01371CEF625E00D29F3A /* archive_hmac_private.h */,
-				4C6B01381CEF625E00D29F3A /* archive_options_private.h */,
 				4C6B01391CEF625E00D29F3A /* archive_pack_dev.h */,
 				4C6B013A1CEF625E00D29F3A /* archive_pathmatch.h */,
 				4C6B013B1CEF625E00D29F3A /* archive_platform.h */,
-				4C6B013C1CEF625E00D29F3A /* archive_ppmd_private.h */,
-				4C6B013D1CEF625E00D29F3A /* archive_ppmd7_private.h */,
 				4C6B013E1CEF625E00D29F3A /* archive_private.h */,
-				4C6B013F1CEF625E00D29F3A /* archive_random_private.h */,
 				4C6B01401CEF625E00D29F3A /* archive_rb.h */,
-				4C6B01411CEF625E00D29F3A /* archive_read_disk_private.h */,
-				4C6B01421CEF625E00D29F3A /* archive_read_private.h */,
 				4C6B01431CEF625E00D29F3A /* archive_string_composition.h */,
 				4C6B01441CEF625E00D29F3A /* archive_string.h */,
-				4C6B01451CEF625E00D29F3A /* archive_write_disk_private.h */,
-				4C6B01461CEF625E00D29F3A /* archive_write_private.h */,
 				4C6B01471CEF625E00D29F3A /* archive_xxhash.h */,
 				4C6B01481CEF625E00D29F3A /* filter_fork.h */,
 			);
@@ -1527,8 +1489,9 @@
 		4CF7813A1BADE5EA0050A67D = {
 			isa = PBXGroup;
 			children = (
+				4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */,
+				4C6652EA1CEF77040058986B /* libz.1.dylib */,
 				4C6B01641CEF630300D29F3A /* libbz2.tbd */,
-				4C7F44A61CEF559300A57655 /* libz.tbd */,
 				4C9A35BE1CEF01F70048B71E /* libiconv.2.dylib */,
 				4CF781461BADE5EA0050A67D /* MAD */,
 				4CF781521BADE5EA0050A67D /* MADTests */,
@@ -1585,7 +1548,6 @@
 				4C6B014E1CEF625E00D29F3A /* archive_entry_locale.h in Headers */,
 				4C401E011BAE3CAD00BAE5FC /* MTReportFormatter.h in Headers */,
 				4C401DB51BAE3BD500BAE5FC /* MTQuery.h in Headers */,
-				4C6B014B1CEF625E00D29F3A /* archive_cryptor_private.h in Headers */,
 				4C401E391BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h in Headers */,
 				4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */,
 				4CC283B71BADE8C400775B72 /* MTReportViewerPrintPageRenderer.h in Headers */,
@@ -1648,17 +1610,13 @@
 				4C401DE51BAE3BD800BAE5FC /* MTQueryDefinitionLinks.h in Headers */,
 				4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */,
 				4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */,
-				4C6B015D1CEF625E00D29F3A /* archive_read_private.h in Headers */,
 				4C401D3C1BAE3AF800BAE5FC /* MTPaperB0.h in Headers */,
 				4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */,
-				4C6B015C1CEF625E00D29F3A /* archive_read_disk_private.h in Headers */,
 				4CC2846C1BADE99200775B72 /* RptqDatabase+Extras.h in Headers */,
-				4C6B01521CEF625E00D29F3A /* archive_hmac_private.h in Headers */,
 				4C6B015E1CEF625E00D29F3A /* archive_string_composition.h in Headers */,
 				4CC284851BADE9C100775B72 /* RptqDocumentObjectLabelDataField+Extras.h in Headers */,
 				4C401DCB1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.h in Headers */,
 				4CC284271BADE95D00775B72 /* RptqQueryLinks.h in Headers */,
-				4C6B01581CEF625E00D29F3A /* archive_ppmd7_private.h in Headers */,
 				4C401D5A1BAE3AF800BAE5FC /* MTPaperC4.h in Headers */,
 				4C6B01631CEF625E00D29F3A /* filter_fork.h in Headers */,
 				4C401E6A1BAE4F4000BAE5FC /* MTDataTable+Factory.h in Headers */,
@@ -1671,7 +1629,6 @@
 				4CC284761BADE9A300775B72 /* RptqDocumentObjectAggregate+Extras.h in Headers */,
 				4C401DBB1BAE3BD600BAE5FC /* MTQueryCacheAddRow.h in Headers */,
 				4C401E061BAE3CAD00BAE5FC /* MTReportFormatterPageDefinition.h in Headers */,
-				4C6B015A1CEF625E00D29F3A /* archive_random_private.h in Headers */,
 				4C401E031BAE3CAD00BAE5FC /* MTReportFormatterCache.h in Headers */,
 				4C401DF71BAE3BDA00BAE5FC /* MTQueryTest.h in Headers */,
 				4CC2848F1BADE9D400775B72 /* RptqQuery+Extras.h in Headers */,
@@ -1683,9 +1640,7 @@
 				4CC284131BADE94000775B72 /* RptqDocumentObjectImage.h in Headers */,
 				4CC284911BADE9D900775B72 /* RptqQueryCache+Extras.h in Headers */,
 				4C401E2B1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.h in Headers */,
-				4C6B014C1CEF625E00D29F3A /* archive_digest_private.h in Headers */,
 				4CC284311BADE96D00775B72 /* RptqUserCredentals.h in Headers */,
-				4C6B01531CEF625E00D29F3A /* archive_options_private.h in Headers */,
 				4CC284971BADE9E400775B72 /* RptqQueryLinks+Extras.h in Headers */,
 				4CC2841D1BADE94D00775B72 /* RptqDocumentSectionRows.h in Headers */,
 				4C994F281BDD96E40058627A /* MADReportPageRepresentation.h in Headers */,
@@ -1693,7 +1648,6 @@
 				4C401D2A1BAE3AF800BAE5FC /* MTPaperA2.h in Headers */,
 				4C401DF31BAE3BD900BAE5FC /* MTQuerySampleDataTable.h in Headers */,
 				4CC284191BADE94800775B72 /* RptqDocumentObjectLabelLink.h in Headers */,
-				4C6B01601CEF625E00D29F3A /* archive_write_disk_private.h in Headers */,
 				4C401DDB1BAE3BD700BAE5FC /* MTQueryCacheSyncOff.h in Headers */,
 				4C401DEF1BAE3BD900BAE5FC /* MTQueryMaxFieldLength.h in Headers */,
 				4C7F44751CEF4C1D00A57655 /* archive.h in Headers */,
@@ -1777,22 +1731,18 @@
 				4C401D4A1BAE3AF800BAE5FC /* MTPaperB7.h in Headers */,
 				4C401DD11BAE3BD600BAE5FC /* MTQueryCacheSelectGroupKeys.h in Headers */,
 				4C401E2D1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.h in Headers */,
-				4C6B01611CEF625E00D29F3A /* archive_write_private.h in Headers */,
 				4CC2846B1BADE98F00775B72 /* rptq.h in Headers */,
 				4C401D501BAE3AF800BAE5FC /* MTPaperB10.h in Headers */,
 				4C401D361BAE3AF800BAE5FC /* MTPaperA8.h in Headers */,
 				4C401DD71BAE3BD700BAE5FC /* MTQueryCacheSelectRowIds.h in Headers */,
 				4C401E5B1BAE4E9400BAE5FC /* MTDataTableVirtual.h in Headers */,
 				4C7F44A21CEF504F00A57655 /* pnglibconf.h in Headers */,
-				4C6B01571CEF625E00D29F3A /* archive_ppmd_private.h in Headers */,
 				4C401D681BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h in Headers */,
 				4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */,
 				4C401DEB1BAE3BD800BAE5FC /* MTQueryDefinitionTable.h in Headers */,
-				4C6B014F1CEF625E00D29F3A /* archive_entry_private.h in Headers */,
 				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
 				4C401DE71BAE3BD800BAE5FC /* MTQueryDefinitionPredicate.h in Headers */,
 				4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */,
-				4C6B01491CEF625E00D29F3A /* archive_cmdline_private.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2189,6 +2139,7 @@
 		4CF781591BADE5EA0050A67D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_WARN_ASSIGN_ENUM = YES;
@@ -2219,6 +2170,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Compressor/library/libarchive/products/Release",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;
@@ -2230,6 +2182,7 @@
 		4CF7815A1BADE5EA0050A67D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_WARN_ASSIGN_ENUM = YES;
@@ -2260,6 +2213,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Compressor/library/libarchive/products/Release",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;

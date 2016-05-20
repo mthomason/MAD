@@ -107,8 +107,8 @@
 
 #import "png.h"
 
-#import <archive.h>
-#import <archive_entry.h>
+#import "archive.h"
+#import "archive_entry.h"
 //#include <zlib.h>
 //#include <bzlib.h>
 
@@ -213,7 +213,7 @@ void write_archive(const char *outname, const char **filename) {
     int fd;
     
     a = archive_write_new();
-    archive_write_add_filter_bzip2(a);
+    archive_write_add_filter_gzip(a);
     archive_write_set_format_pax_restricted(a); // Note 1
     archive_write_open_filename(a, outname);
     while (*filename) {
