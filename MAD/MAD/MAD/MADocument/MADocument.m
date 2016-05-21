@@ -272,12 +272,14 @@ void write_archive_mad(const char *outname, const char **filename) {
 
 // Static helpers
 
-+ (bool)wrapFileOverwrite:(BOOL)overwrite urlGuts:(NSURL *)urlGuts fileURL:(NSURL *)fileURL {
++ (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
+                overwrite:(BOOL)overwrite {
     NSError *fileWrapperError = nil;
     bool success = false;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: urlGuts
-                                                            options: NSFileWrapperReadingImmediate
-                                                              error: &fileWrapperError];
+    NSFileWrapper *fileWrapper;
+    fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
+                                             options: NSFileWrapperReadingImmediate
+                                               error: &fileWrapperError];
     
     NSURL *resultUrl;
     
@@ -285,13 +287,13 @@ void write_archive_mad(const char *outname, const char **filename) {
         if (overwrite) {
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
-            success = [data writeToURL: fileURL
+            success = [data writeToURL: archiveURL
                                options: (NSDataWritingOptions)
                        (NSDataWritingAtomic |
                         NSFileWrapperWritingWithNameUpdating)
                                  error: &errorWriting] ? true : false;
         } else {
-            resultUrl = [fileURL uniqueUrl];
+            resultUrl = [archiveURL uniqueUrl];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
@@ -686,9 +688,9 @@ void write_archive_mad(const char *outname, const char **filename) {
     
     if (!success) return NO;
 
-    return [MADocument wrapFileOverwrite: YES
-                                 urlGuts: self.urlGuts
-                                 fileURL: self.fileURL] ? YES : NO;
+    return [MADocument ArchiveFilesAtURL: self.urlGuts
+                                   toURL: self.fileURL
+                               overwrite: YES] ? YES : NO;
     
 }
 
