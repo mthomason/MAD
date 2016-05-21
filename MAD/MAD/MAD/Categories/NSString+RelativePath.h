@@ -6,8 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSString.h>
 
 @interface NSString (RelativePath)
+
+- (NSString *)stringWithPathRelativeTo:(NSString *)anchorPath;
 
 @end

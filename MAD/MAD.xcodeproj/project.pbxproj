@@ -239,14 +239,8 @@
 		4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744F011CE9B69800243830 /* MADMySQL.framework */; };
 		4C7F44751CEF4C1D00A57655 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44581CEF4C1D00A57655 /* archive.h */; };
 		4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F44741CEF4C1D00A57655 /* libarchive.a */; settings = {ATTRIBUTES = (Weak, ); }; };
-		4C7F449D1CEF504F00A57655 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44921CEF504F00A57655 /* png.h */; };
-		4C7F449E1CEF504F00A57655 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44931CEF504F00A57655 /* pngconf.h */; };
-		4C7F449F1CEF504F00A57655 /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44941CEF504F00A57655 /* pnglibconf.h */; };
-		4C7F44A01CEF504F00A57655 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44961CEF504F00A57655 /* png.h */; };
-		4C7F44A11CEF504F00A57655 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44971CEF504F00A57655 /* pngconf.h */; };
-		4C7F44A21CEF504F00A57655 /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44981CEF504F00A57655 /* pnglibconf.h */; };
-		4C7F44A31CEF504F00A57655 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F449A1CEF504F00A57655 /* libpng.a */; };
-		4C7F44A51CEF550C00A57655 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F449B1CEF504F00A57655 /* libpng16.a */; };
+		4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */; };
+		4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */; };
 		4C994F261BDD96E40058627A /* MADReportLineRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */; };
 		4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */; };
 		4C994F281BDD96E40058627A /* MADReportPageRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */; };
@@ -661,14 +655,8 @@
 		4C744F011CE9B69800243830 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../Debug-iphonesimulator/MADMySQL.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7F44581CEF4C1D00A57655 /* archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = archive.h; sourceTree = "<group>"; };
 		4C7F44741CEF4C1D00A57655 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = ../../Compressor/library/libarchive/products/Release/libarchive.a; sourceTree = "<group>"; };
-		4C7F44921CEF504F00A57655 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
-		4C7F44931CEF504F00A57655 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
-		4C7F44941CEF504F00A57655 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
-		4C7F44961CEF504F00A57655 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
-		4C7F44971CEF504F00A57655 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
-		4C7F44981CEF504F00A57655 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
-		4C7F449A1CEF504F00A57655 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../Compressor/library/libpng/libpng.a; sourceTree = "<group>"; };
-		4C7F449B1CEF504F00A57655 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
+		4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+RelativePath.h"; path = "MAD/Categories/NSString+RelativePath.h"; sourceTree = "<group>"; };
+		4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+RelativePath.m"; path = "MAD/Categories/NSString+RelativePath.m"; sourceTree = "<group>"; };
 		4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportLineRepresentation.h; sourceTree = "<group>"; };
 		4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportLineRepresentation.m; sourceTree = "<group>"; };
 		4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportPageRepresentation.h; sourceTree = "<group>"; };
@@ -859,8 +847,6 @@
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
 				4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */,
 				4CFE08F71CEF7A90007871D4 /* libarchive.a in Frameworks */,
-				4C7F44A31CEF504F00A57655 /* libpng.a in Frameworks */,
-				4C7F44A51CEF550C00A57655 /* libpng16.a in Frameworks */,
 				4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */,
 				4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */,
 				4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */,
@@ -1145,6 +1131,8 @@
 				4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */,
 				4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */,
 				4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */,
+				4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */,
+				4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1188,39 +1176,6 @@
 			);
 			name = include;
 			path = ../../Compressor/library/libarchive/products/Release/include;
-			sourceTree = "<group>";
-		};
-		4C7F44951CEF504F00A57655 /* libpng16 */ = {
-			isa = PBXGroup;
-			children = (
-				4C7F44921CEF504F00A57655 /* png.h */,
-				4C7F44931CEF504F00A57655 /* pngconf.h */,
-				4C7F44941CEF504F00A57655 /* pnglibconf.h */,
-			);
-			path = libpng16;
-			sourceTree = "<group>";
-		};
-		4C7F44991CEF504F00A57655 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4C7F44951CEF504F00A57655 /* libpng16 */,
-				4C7F44961CEF504F00A57655 /* png.h */,
-				4C7F44971CEF504F00A57655 /* pngconf.h */,
-				4C7F44981CEF504F00A57655 /* pnglibconf.h */,
-			);
-			name = include;
-			path = ../Compressor/library/libpng/include;
-			sourceTree = "<group>";
-		};
-		4C7F449C1CEF504F00A57655 /* libpng */ = {
-			isa = PBXGroup;
-			children = (
-				4C7F44991CEF504F00A57655 /* include */,
-				4C7F449A1CEF504F00A57655 /* libpng.a */,
-				4C7F449B1CEF504F00A57655 /* libpng16.a */,
-			);
-			name = libpng;
-			path = ../../MADBarcodes;
 			sourceTree = "<group>";
 		};
 		4C95C84F1BADE77100459CB0 /* MAD */ = {
@@ -1479,7 +1434,6 @@
 		4CC284D51BADEC8600775B72 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4C7F449C1CEF504F00A57655 /* libpng */,
 				4C7F44561CEF4BF700A57655 /* libarchive */,
 				4C7F44551CEF4BEA00A57655 /* libtds */,
 			);
@@ -1540,7 +1494,6 @@
 				4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */,
 				4C401E311BAE3DCB00BAE5FC /* MTDatabaseField.h in Headers */,
 				4C6B015F1CEF625E00D29F3A /* archive_string.h in Headers */,
-				4C7F449F1CEF504F00A57655 /* pnglibconf.h in Headers */,
 				4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */,
 				4C401E251BAE3DCB00BAE5FC /* MTDatabaseCache.h in Headers */,
 				4CC282421BADE81A00775B72 /* MADSectionLayoutManager.h in Headers */,
@@ -1583,7 +1536,6 @@
 				4CC284701BADE99800775B72 /* RptqDatabaseSchemaTable+Extras.h in Headers */,
 				4C6B01561CEF625E00D29F3A /* archive_platform.h in Headers */,
 				4CC284811BADE9B800775B72 /* RptqDocumentObjectImage+Extras.h in Headers */,
-				4C7F449E1CEF504F00A57655 /* pngconf.h in Headers */,
 				4C401D301BAE3AF800BAE5FC /* MTPaperA5.h in Headers */,
 				4C401DC71BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.h in Headers */,
 				4C6B015B1CEF625E00D29F3A /* archive_rb.h in Headers */,
@@ -1606,7 +1558,6 @@
 				4C401DE11BAE3BD700BAE5FC /* MTQueryDefinitionField.h in Headers */,
 				4C6B01541CEF625E00D29F3A /* archive_pack_dev.h in Headers */,
 				4CC2840B1BADE93500775B72 /* RptqDocumentObjectBarcode.h in Headers */,
-				4C7F44A11CEF504F00A57655 /* pngconf.h in Headers */,
 				4C401DE51BAE3BD800BAE5FC /* MTQueryDefinitionLinks.h in Headers */,
 				4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */,
 				4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */,
@@ -1652,7 +1603,6 @@
 				4C401DEF1BAE3BD900BAE5FC /* MTQueryMaxFieldLength.h in Headers */,
 				4C7F44751CEF4C1D00A57655 /* archive.h in Headers */,
 				4CC284071BADE93000775B72 /* RptqDocumentObject.h in Headers */,
-				4C7F44A01CEF504F00A57655 /* png.h in Headers */,
 				4CC284951BADE9E000775B72 /* RptqQueryGroup+Extras.h in Headers */,
 				4CC284011BADE92900775B72 /* RptqDatabaseSchemaField.h in Headers */,
 				4CC284171BADE94500775B72 /* RptqDocumentObjectLabelDataField.h in Headers */,
@@ -1679,7 +1629,6 @@
 				4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */,
-				4C7F449D1CEF504F00A57655 /* png.h in Headers */,
 				4C6B014A1CEF625E00D29F3A /* archive_crc32.h in Headers */,
 				4C401E291BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h in Headers */,
 				4C401DC11BAE3BD600BAE5FC /* MTQueryCacheDeleteAllFromTable.h in Headers */,
@@ -1721,6 +1670,7 @@
 				4CF781481BADE5EA0050A67D /* MAD.h in Headers */,
 				4C401E351BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.h in Headers */,
 				4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */,
+				4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */,
 				4C401DC31BAE3BD600BAE5FC /* MTQueryCacheDropTable.h in Headers */,
 				4C401D5E1BAE3AF800BAE5FC /* MTPaperC6.h in Headers */,
 				4CC281F91BADE80500775B72 /* MADArrayCaching.h in Headers */,
@@ -1736,7 +1686,6 @@
 				4C401D361BAE3AF800BAE5FC /* MTPaperA8.h in Headers */,
 				4C401DD71BAE3BD700BAE5FC /* MTQueryCacheSelectRowIds.h in Headers */,
 				4C401E5B1BAE4E9400BAE5FC /* MTDataTableVirtual.h in Headers */,
-				4C7F44A21CEF504F00A57655 /* pnglibconf.h in Headers */,
 				4C401D681BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h in Headers */,
 				4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */,
 				4C401DEB1BAE3BD800BAE5FC /* MTQueryDefinitionTable.h in Headers */,
@@ -1917,6 +1866,7 @@
 				4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */,
 				4C401E6D1BAE4F4000BAE5FC /* NSData+Comparson.m in Sources */,
 				4C401E361BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.m in Sources */,
+				4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */,
 				4C994F471BE2B1320058627A /* MADReportSectionRepresentation.m in Sources */,
 				4C401D571BAE3AF800BAE5FC /* MTPaperC2.m in Sources */,
 				4C401E381BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m in Sources */,

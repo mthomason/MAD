@@ -15,8 +15,12 @@
 #import "MADSortOrder.h"
 #import "MADConstants.h"
 
-#import <Foundation/NSException.h>
 #import <MADFoundation/NSURL+Document.h>
+
+#import <Foundation/NSException.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPathUtilities.h>
+
 #import <MAD/MADErrorUserInfo.h>
 
 #import "MTQueryFull.h"
@@ -105,11 +109,15 @@
 #import <UIKit/UIPrintPaper.h>
 #import <UIKit/UILabel.h>
 
-#import "png.h"
+#import <MADBarcodes/png.h>
+
+#import "NSString+RelativePath.h"
 
 #import "archive.h"
 #import "archive_entry.h"
-//#include <zlib.h>
+#include <zlib.h>
+#import <copyfile.h>
+#import <unistd.h>
 //#include <bzlib.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
@@ -274,33 +282,113 @@ void write_archive_mad(const char *outname, const char **filename) {
 
 + (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
-    
-    NSString *origionalPath = originURL.path;
-    const char *origionalFile = origionalPath.UTF8String;
-    
-    NSArray *keys = @[NSURLNameKey, NSURLIsDirectoryKey];
+
     NSDirectoryEnumerator<NSURL *> * directory =
-        [[NSFileManager defaultManager] enumeratorAtURL:originURL
-                         includingPropertiesForKeys:keys
-                                            options:NSDirectoryEnumerationSkipsHiddenFiles
-                                       errorHandler:^BOOL(NSURL * _Nonnull url, NSError * _Nonnull error) {
-        //Handle error;
-        return YES;
-    }];
+        [[NSFileManager defaultManager] enumeratorAtURL: originURL
+                             includingPropertiesForKeys: nil
+                                                options: NSDirectoryEnumerationSkipsHiddenFiles
+                                           errorHandler: nil];
     
-    char **files;
-    files = malloc( sizeof(char *));
-    NSUInteger counter = 0;
-    for (NSURL *file in directory) {
-        NSString *path = file.path;
-        const char *p = path.UTF8String;
-        size_t psize = strlen(p);
-        char *pfile = malloc(sizeof(char *) * psize);
-        strlcpy(pfile, p, psize);
-        files[counter] = pfile;
-        realloc(&files, sizeof(char *) * (counter + 1));
-        counter++;
+    struct archive *archive;
+    struct archive_entry *entry;
+    struct stat st;
+    char buff[8192];
+    ssize_t len;
+    int fd;
+    
+    NSString *archivePath = archiveURL.path;
+    const char *archiveFilename = archivePath.fileSystemRepresentation;
+    const char *tarGzExt = ".tar.gz";
+    char *outname = malloc( (strlen(archiveFilename) + strlen(tarGzExt)) * sizeof(char *));
+    char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) );
+    strcat(outname, archivePath.fileSystemRepresentation);
+    strcat(outname, tarGzExt);
+    strcat(backup, archivePath.fileSystemRepresentation);
+    strcat(backup, "~");
+    
+    //Remove backup if it exist
+    if (access(backup, F_OK) == 0) {
+        int successRemove = remove(backup);
+        if (!successRemove) {
+            remove(backup);
+        }
     }
+    
+    NSURL *baseURL = [originURL URLByDeletingLastPathComponent];
+    NSURLComponents *urlComponentsOfFile = nil;
+    NSURLComponents *urlComponents = nil;
+    NSURL *relativeURL = nil;
+
+    NSString *relativePath = nil;
+    int successBackup = copyfile(archivePath.fileSystemRepresentation,
+                                 backup, NULL, COPYFILE_SECURITY |
+                                               COPYFILE_ALL |
+                                               COPYFILE_COPY_DATA |
+                                               COPYFILE_COPY_XATTR |
+                                               COPYFILE_DATA);
+    if (successBackup < 0) goto ARCHIVE_FILE_AT_URL_SHORT;
+    
+    archive = archive_write_new();
+
+    int awsfprr = archive_write_set_format_pax_restricted(archive);   // Note 1
+    if (awsfprr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+
+    int awafbr = archive_write_add_filter_bzip2(archive);
+    if (awafbr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+
+    int awofr = archive_write_open_filename(archive, outname);
+    if (awofr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+    
+    for (NSURL *url in directory) {
+        
+        urlComponents = [[NSURLComponents alloc] initWithURL:url
+                                                      resolvingAgainstBaseURL:NO];
+        relativePath = [url.path stringWithPathRelativeTo:baseURL.path];
+        //relativeURL = [urlComponents URLRelativeToURL:baseURL];
+        
+        const char *filename = url.fileSystemRepresentation;
+        stat(filename, &st);
+        
+        entry = archive_entry_new2(archive);
+        archive_entry_copy_stat(entry, &st);
+
+        archive_entry_set_pathname(entry, relativePath.fileSystemRepresentation);
+        
+        if (S_ISREG(st.st_mode)) {
+            archive_entry_set_filetype(entry, AE_IFREG);
+            archive_entry_set_perm(entry, 0644);
+        } else if (S_ISDIR(st.st_mode)) {
+            archive_entry_set_filetype(entry, AE_IFDIR);
+            archive_entry_set_perm(entry, 0755);
+        } else if (S_ISCHR(st.st_mode)) {
+            archive_entry_set_filetype(entry, AE_IFCHR);
+            archive_entry_set_perm(entry, 0644);
+        } else if (S_ISLNK(st.st_mode)) {
+            archive_entry_set_filetype(entry, AE_IFLNK);
+            archive_entry_set_perm(entry, 0644);
+        } else if (S_ISBLK(st.st_mode)) {
+            archive_entry_set_filetype(entry, AE_IFBLK);
+            archive_entry_set_perm(entry, 0644);
+        } else {
+            archive_entry_set_filetype(entry, AE_IFREG);
+            archive_entry_set_perm(entry, 0644);
+        }
+        
+        archive_write_header(archive, entry);
+        fd = open(filename, O_RDONLY);
+        len = read(fd, buff, sizeof(buff));
+        while ( len > 0 ) {
+            archive_write_data(archive, buff, (size_t)len);
+            len = read(fd, buff, sizeof(buff));
+        }
+        close(fd);
+        archive_entry_free(entry);
+    }
+    archive_write_close(archive);
+    archive_write_free(archive);
+
+    ARCHIVE_FILE_AT_URL_SHORT:;
+    
     
     NSError *fileWrapperError = nil;
     bool success = false;
@@ -326,6 +414,7 @@ void write_archive_mad(const char *outname, const char **filename) {
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
     }
+    
     
     return success;
 }
@@ -525,10 +614,13 @@ void write_archive_mad(const char *outname, const char **filename) {
     [document regenThumbnail];
     [document removeObservers];
     NSURL *gutsUrl = document.urlGuts.copy;
-    
-    [document closeWithCompletionHandler:^(BOOL success) {
-        [self RemoveGutsAtUrl:gutsUrl];
-        completion(YES);
+    [document saveToURL:[document fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            [document closeWithCompletionHandler:^(BOOL successClose) {
+                //[self RemoveGutsAtUrl:gutsUrl];
+                completion(successClose);
+            }];
+        }
     }];
 }
 
@@ -688,6 +780,8 @@ void write_archive_mad(const char *outname, const char **filename) {
             NSError * __autoreleasing *errorReading = NULL;
             NSData *data = [[NSData alloc] initWithContentsOfURL:url options:NSDataReadingUncached
                                                            error:errorReading];
+            NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
+                     url, *errorReading, __PRETTY_FUNCTION__);
             NSFileWrapper *fileWrapper;
             fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
             NSError * __autoreleasing *error = NULL;
@@ -707,8 +801,17 @@ void write_archive_mad(const char *outname, const char **filename) {
     return NO;
 }
 
-- (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes
-          safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
+- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completionHandler {
+    if ([self hasUnsavedChanges]) {
+        [self saveToURL:[self fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:completionHandler];
+    }
+    //completionHandler(YES);
+}
+
+- (BOOL)writeContents:(id)contents
+        andAttributes:(NSDictionary *)additionalFileAttributes
+          safelyToURL:(NSURL *)url
+     forSaveOperation:(UIDocumentSaveOperation)saveOperation
                 error:(NSError * __autoreleasing *)outError {
     
     BOOL success = [super writeContents:contents andAttributes:additionalFileAttributes
@@ -1398,9 +1501,9 @@ void write_archive_mad(const char *outname, const char **filename) {
         size_t newImageSize = 0;
         
         const int kPngSignatureLength = 8;
-
+//BYTE_SIZE
         
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * sizeof(Byte));
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
         [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
         if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;

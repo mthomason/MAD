@@ -7,10 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <MAD/MTQuery.h>
-#import <MAD/MTQueryTest.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTQueryTest.h>
 
 @interface MADDesignerUnitTests : XCTestCase
 

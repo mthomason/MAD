@@ -303,7 +303,9 @@ NSString * const MADUtiType                                     = @"com.everyday
         self.reportState = MTReportStateClosed;
         MADOpenDocumentManager * __unsafe_unretained fileManager = self.fileManager;
         [MADocument close:openDocument completion:^(BOOL success) {
-            [fileManager unload];
+            if (success) {
+                //[fileManager unload];
+            }
         }];
     }
 

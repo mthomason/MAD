@@ -9,11 +9,11 @@
 #ifndef MAD_MTReportFormatter_h
 #define MAD_MTReportFormatter_h
 
-#import <MAD/MTTableFormatter.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSectionPlist.h>
+#import <MAD/MTTableFormatter.h>
 
 typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone    = 0,
