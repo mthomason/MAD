@@ -282,7 +282,7 @@ void write_archive_mad(const char *outname, const char **filename) {
 
 + (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
-
+/*
     NSDirectoryEnumerator<NSURL *> * directory =
         [[NSFileManager defaultManager] enumeratorAtURL: originURL
                              includingPropertiesForKeys: nil
@@ -389,10 +389,10 @@ void write_archive_mad(const char *outname, const char **filename) {
 
     ARCHIVE_FILE_AT_URL_SHORT:;
     
-    
-    NSError *fileWrapperError = nil;
+    */
     bool success = false;
     NSFileWrapper *fileWrapper;
+    NSError *fileWrapperError = nil;
     fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
                                              options: NSFileWrapperReadingImmediate
                                                error: &fileWrapperError];
@@ -405,8 +405,8 @@ void write_archive_mad(const char *outname, const char **filename) {
             NSError *errorWriting = nil;
             success = [data writeToURL: archiveURL
                                options: (NSDataWritingOptions)
-                                            (NSDataWritingAtomic |
-                                                NSFileWrapperWritingWithNameUpdating)
+                                            (
+                                                NSDataWritingAtomic)
                                  error: &errorWriting] ? true : false;
         } else {
             resultUrl = [archiveURL uniqueUrl];
@@ -614,10 +614,11 @@ void write_archive_mad(const char *outname, const char **filename) {
     [document regenThumbnail];
     [document removeObservers];
     NSURL *gutsUrl = document.urlGuts.copy;
-    [document saveToURL:[document fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+    [document saveToURL:[document fileURL] forSaveOperation:UIDocumentSaveForOverwriting
+      completionHandler:^(BOOL success) {
         if (success) {
             [document closeWithCompletionHandler:^(BOOL successClose) {
-                //[self RemoveGutsAtUrl:gutsUrl];
+                [self RemoveGutsAtUrl:gutsUrl];
                 completion(successClose);
             }];
         }
@@ -778,15 +779,14 @@ void write_archive_mad(const char *outname, const char **filename) {
             [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
 
             NSError * __autoreleasing *errorReading = NULL;
-            NSData *data = [[NSData alloc] initWithContentsOfURL:url options:NSDataReadingUncached
-                                                           error:errorReading];
+            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
             NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
                      url, *errorReading, __PRETTY_FUNCTION__);
             NSFileWrapper *fileWrapper;
             fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
             NSError * __autoreleasing *error = NULL;
             success = [fileWrapper writeToURL: urlGuts
-                                      options: NSFileWrapperWritingWithNameUpdating
+                                      options: NSFileWrapperWritingAtomic
                           originalContentsURL: url
                                         error: error] ? true : false;
             NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);

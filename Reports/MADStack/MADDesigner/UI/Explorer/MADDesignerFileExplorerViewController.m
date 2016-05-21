@@ -304,7 +304,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         MADOpenDocumentManager * __unsafe_unretained fileManager = self.fileManager;
         [MADocument close:openDocument completion:^(BOOL success) {
             if (success) {
-                //[fileManager unload];
+                [fileManager unload];
             }
         }];
     }
