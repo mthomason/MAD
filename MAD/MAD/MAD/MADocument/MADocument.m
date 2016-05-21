@@ -274,6 +274,34 @@ void write_archive_mad(const char *outname, const char **filename) {
 
 + (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
+    
+    NSString *origionalPath = originURL.path;
+    const char *origionalFile = origionalPath.UTF8String;
+    
+    NSArray *keys = @[NSURLNameKey, NSURLIsDirectoryKey];
+    NSDirectoryEnumerator<NSURL *> * directory =
+        [[NSFileManager defaultManager] enumeratorAtURL:originURL
+                         includingPropertiesForKeys:keys
+                                            options:NSDirectoryEnumerationSkipsHiddenFiles
+                                       errorHandler:^BOOL(NSURL * _Nonnull url, NSError * _Nonnull error) {
+        //Handle error;
+        return YES;
+    }];
+    
+    char **files;
+    files = malloc( sizeof(char *));
+    NSUInteger counter = 0;
+    for (NSURL *file in directory) {
+        NSString *path = file.path;
+        const char *p = path.UTF8String;
+        size_t psize = strlen(p);
+        char *pfile = malloc(sizeof(char *) * psize);
+        strlcpy(pfile, p, psize);
+        files[counter] = pfile;
+        realloc(&files, sizeof(char *) * (counter + 1));
+        counter++;
+    }
+    
     NSError *fileWrapperError = nil;
     bool success = false;
     NSFileWrapper *fileWrapper;
@@ -289,8 +317,8 @@ void write_archive_mad(const char *outname, const char **filename) {
             NSError *errorWriting = nil;
             success = [data writeToURL: archiveURL
                                options: (NSDataWritingOptions)
-                       (NSDataWritingAtomic |
-                        NSFileWrapperWritingWithNameUpdating)
+                                            (NSDataWritingAtomic |
+                                                NSFileWrapperWritingWithNameUpdating)
                                  error: &errorWriting] ? true : false;
         } else {
             resultUrl = [archiveURL uniqueUrl];
