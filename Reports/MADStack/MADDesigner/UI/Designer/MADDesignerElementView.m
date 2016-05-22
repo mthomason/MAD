@@ -312,8 +312,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         }
         
         UIFontDescriptor *fontDescriptor = [documentObject newFontDescriptor];
-        NSDictionary *attributes = [documentObject newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString :string
+        NSDictionary *attributes = [documentObject newTextAttributesWithFontDescriptor:fontDescriptor];
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
                                                                                 attributes: attributes];
         self.displayStringAttributed = attributtedString;
         

@@ -14,7 +14,6 @@
 @interface MADFilename : NSObject
 
     + (NSString *)newFilenameId:(NSUInteger)tag;
-    + (NSString *)newFilenameForMadUrl:(NSURL *)madUrl;
 
 @end
 

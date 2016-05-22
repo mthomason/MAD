@@ -17,7 +17,6 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;
 
@@ -49,6 +48,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;
+    - (CGRect)elementViewFrameDesigner;
     - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
     - (CGSize)sizeContentView;
     - (void)setOrigin:(CGPoint)origin;
@@ -60,7 +60,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGFloat)spacingRight;
 
     - (UIFontDescriptor *)newFontDescriptor;
-    - (NSDictionary *)newDictionaryOfTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor;
+    - (NSDictionary *)newTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor;
     - (NSDictionary *)newDictionaryOfTextAttributes;
 
 @end

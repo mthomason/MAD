@@ -27,11 +27,7 @@ typedef NSMutableSet <__kindof MADReportLineRepresentation *>  MADMutableSetRepo
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        MADMutableSetReportLines *lines = [[MADMutableSetReportLines alloc] init];
-        self.lines = lines;
-    }
-    return self;
+    return [self initWithNumberOfSectionRowElements:0];
 }
 
 - (instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount {

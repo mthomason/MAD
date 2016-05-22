@@ -117,7 +117,7 @@
     self.wrappingStyle = wrappingStyle;
 }
 
-- (NSString *)copySectionKey {
+- (NSManagedObjectID *)copySectionKey {
     return [self copyKeyForIdentifier];
 }
 
@@ -145,8 +145,8 @@
     }
 }
 
-- (NSString *)copyKeyForIdentifier {
-    return self.objectID.copyKey;
+- (NSManagedObjectID *)copyKeyForIdentifier {
+    return self.objectID;
 }
 
 - (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

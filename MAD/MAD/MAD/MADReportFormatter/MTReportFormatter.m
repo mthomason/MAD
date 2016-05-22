@@ -239,7 +239,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
-            ![datasource cacheExist] ? YES : NO;
+            ![self.datasource cacheExist] ? YES : NO;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
@@ -259,7 +259,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
     if (contextChanged == NO || self.needsFormat) {
-        //@synchronized(self) {
+        @synchronized(self) {
             [self setLayoutSize:printableSize];
             [self loadLayoutAndIndexesFromCache];
             if (self.needsFormat) {
@@ -269,7 +269,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
                 }
                 [self formatDocument];
             }
-        //}
+        }
     } else {
         [self formatForSize:printableSize contentChanged:NO];
     }
@@ -485,7 +485,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
-    NSString *key = [documentSection copySectionKey];
+    id __unsafe_unretained key = documentSection.objectID;
     NSNumber * __unsafe_unretained sectionHeight = self.layoutHeightsBySectionKey[key];
     return sectionHeight.floatValue;
 }

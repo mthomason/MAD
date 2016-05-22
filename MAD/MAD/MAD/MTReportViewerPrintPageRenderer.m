@@ -90,6 +90,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 @end
 
 typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggregate;
+typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutableFontDescriptorMap;
 
 @interface MTReportViewerPrintPageRenderer ()
 
@@ -167,7 +168,9 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
 
 - (MADReportTextRepresentation *)textRepresentation {
     if (_textRepresentation == nil) {
-        _textRepresentation = [[MADReportTextRepresentation alloc] initWithPageCount:(NSUInteger)self.reportFormatter.reportLayout.count];
+        _textRepresentation =
+            [[MADReportTextRepresentation alloc] initWithPageCount:
+                                            (NSUInteger)self.reportFormatter.reportLayout.count];
     }
     return _textRepresentation;
 }
@@ -353,58 +356,76 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
 
 }
 
-- (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+- (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx
+             inPageRect:(CGRect)pageRect {
+
     MTReportFormatter *reportFormatter = self.reportFormatter;
     if (pageIndex >= reportFormatter.numberOfPages) {
         return;
     }
 
-    NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
-    RptqDocument *document = [reportFormatter.layout activeDocumentModel];
-    RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
-
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
-    
     CGFloat originY = pageRect.origin.y;
+    NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
     NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
+    CGRect sectionRect;
+    
+    RptqDocument *document;
+    RptqDatabase *databaseSchemas;
+    MTDatabaseConnection *databaseConnection;
+    
+    document = [reportFormatter.layout activeDocumentModel];
+    databaseSchemas = document.hasDatabaseSchemas.anyObject;
+    
+    RptqUserCredentals *credentals = databaseSchemas.ownedByUser;
+    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals: credentals];
+    
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
     NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
     NSArray *pageSections = layoutEnumerator.allObjects;
     MADReportPageRepresentation *pageRepresentation =
             [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
+    
+    RptqDocumentSection *documentSection;
+    MADReportSectionRepresentation *sectionRepresentation;
+    
     for (MADSectionPlist *pageSection in pageSections) {
         
-        RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
-                                                                       andLevel: pageSection.groupLevel];
+        documentSection = [document documentSectionForType: pageSection.sectionType
+                                                  andLevel: pageSection.groupLevel];
         
-        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection
-                                                     pageSection:pageSection inDocument:document
-                                                        pageRect:pageRect
-                                                   numberOfPages:reportFormatter.numberOfPages
-                                                       pageIndex:pageIndex offset:&originY];
+        sectionRect = [self sectionRectForDocumentSection: documentSection
+                                              pageSection: pageSection
+                                               inDocument: document
+                                                 pageRect: pageRect
+                                            numberOfPages: reportFormatter.numberOfPages
+                                                pageIndex: pageIndex
+                                                   offset: originY];
         
-        [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
+        [self setBackgroundColorForDocumentSection: documentSection
+                                            inRect: sectionRect];
         
         if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter &&
             pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
             readGroupCounter++;
         }
         
-        MADReportSectionRepresentation *sectionRepresentation = [self drawSection: documentSection
-                                                                         pageRect: pageRect
-                                                                      pageSection: pageSection
-                                                                         document: document
-                                                                           onPage: pageIndex
-                                                                     withDatabase: database
-                                                                           offset: &originY
-                                                                    offsetElement: &offsetElement
-                                                                  offsetCharacter: &offsetCharacter];
+        sectionRepresentation = [self drawSection: documentSection
+                                         pageRect: pageRect
+                                      pageSection: pageSection
+                                         document: document
+                                           onPage: pageIndex
+                                     withDatabase: database
+                                           offset: originY
+                                    offsetElement: offsetElement
+                                  offsetCharacter: offsetCharacter];
+        
         [pageRepresentation addSection:sectionRepresentation];
         
         if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
             rowIndex++;
         }
+        
         originY += sectionRect.size.height;
         layoutSectionCounter++;
     }
@@ -420,93 +441,107 @@ typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggr
                                        document: (RptqDocument *)document
                                          onPage: (NSUInteger)pageIndex
                                    withDatabase: (MTDatabase *)database
-                                         offset: (CGFloat *)originY
-                                  offsetElement: (NSUInteger *)offsetElement
-                                offsetCharacter: (NSUInteger *)offsetCharacter {
+                                         offset: (CGFloat)originY
+                                  offsetElement: (NSUInteger)offsetElement
+                                offsetCharacter: (NSUInteger)offsetCharacter {
     
     NSOrderedSet *rows = documentSection.hasRows;
-    MADReportSectionRepresentation * _Nonnull sectionRepresentation =
-                        [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
+    MADReportSectionRepresentation * _Nonnull sectionRepresentation;
+    CGRect sectionRect, elementCanvasRect;
+    NSArray *groupLevelKeys;
+    MADReportSectionRowsRepresentation * _Nonnull rowRepresentation;
+    NSOrderedSet *items;
+    MADReportLineRepresentation * _Nonnull line;
+    MADMutableFontDescriptorMap *fontDescriptors;
+    RptqDocumentSectionRows *row;
+    RptqDocumentObject *item;
+    id drawingObject;
+    UIFontDescriptor *fontDescriptor;
+    NSDictionary *attributes;
+
+    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
     sectionRepresentation.type = pageSection.sectionType;
-    sectionRepresentation.elementOffset = *(offsetElement);
+    sectionRepresentation.elementOffset = offsetElement;
     
-    if ((sectionRepresentation.visibility = documentSection.visibility.boolValue)) {
+    if (!((sectionRepresentation.visibility =
+           documentSection.visibility.boolValue))) goto END_DrawSection;
     
-        CGRect sectionRect = [self sectionRectForDocumentSection: documentSection
-                                                     pageSection: pageSection
-                                                      inDocument: document
-                                                        pageRect: pageRect
-                                                   numberOfPages: self.reportFormatter.numberOfPages
-                                                       pageIndex: pageIndex
-                                                          offset: originY];
+    
         
-        NSArray *groupLevelKeys = [self newObjectArrayOfGroupLevelKeysForDetailRow:pageSection.detailRowId];
-        MADReportSectionRowsRepresentation * _Nonnull rowRepresentation;
-        NSOrderedSet *items;
-        MADReportLineRepresentation * _Nonnull line;
+    sectionRect = [self sectionRectForDocumentSection: documentSection
+                                          pageSection: pageSection
+                                           inDocument: document
+                                             pageRect: pageRect
+                                        numberOfPages: self.reportFormatter.numberOfPages
+                                            pageIndex: pageIndex
+                                               offset: originY];
+    
+    groupLevelKeys = [self newObjectArrayOfGroupLevelKeysForDetailRow:pageSection.detailRowId];
+    
+    for (row in rows) {
         
-        NSMutableDictionary *fontDescriptors = [[NSMutableDictionary alloc] init];
-
-        for (RptqDocumentSectionRows *row in rows) {
-            @autoreleasepool {
-                items = row.hasObjects;
-                rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
-                                                    initWithNumberOfSectionRowElements:items.count];
-                
-                for (RptqDocumentObject *item in items) {
-                    @autoreleasepool {
+        @autoreleasepool {
+            
+            items = row.hasObjects;
+            
+            rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
+                                 initWithNumberOfSectionRowElements:items.count];
+            
+            fontDescriptors = [[MADMutableFontDescriptorMap alloc] initWithCapacity:items.count];
+            
+            for (item in items) {
+                @autoreleasepool {
                     
-                        id drawingObject = [self newDrawingObjectForDatabase: database
-                                                                   pageIndex: pageIndex
-                                                              groupLevelKeys: groupLevelKeys
-                                                                 detailRowId: pageSection.detailRowId
-                                                                     andItem: item];
+                    drawingObject = [self newDrawingObjectForDatabase: database
+                                                            pageIndex: pageIndex
+                                                       groupLevelKeys: groupLevelKeys
+                                                          detailRowId: pageSection.detailRowId
+                                                              andItem: item];
+                    
+                    elementCanvasRect = item.frame;
+                    elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
+                    elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
+                    
+                    if ([drawingObject isKindOfClass:[NSString class]]) {
                         
-                        
-                        CGRect elementCanvasRect = item.frame;
-                        elementCanvasRect.origin.x = elementCanvasRect.origin.x + sectionRect.origin.x;
-                        elementCanvasRect.origin.y = elementCanvasRect.origin.y + sectionRect.origin.y;
-                        
-                        if ([drawingObject isKindOfClass:[NSString class]]) {
-                            
-                            UIFontDescriptor *fontDescriptor;
-                            fontDescriptor = fontDescriptors[item.objectID];
-                            if (!fontDescriptor) {
-                                fontDescriptor = [item newFontDescriptor];
-                                fontDescriptors[item.objectID] = fontDescriptor;
-                            }
-
-                            NSDictionary *attributes = [item newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
-                            
-                            [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
-                                                                elementCanvasRect: &elementCanvasRect
-                                                                   withAttributes: &attributes];
-                            
-                        } else {
-                            [MTReportViewerPrintPageRenderer displayDrawingObject: &drawingObject
-                                                                elementCanvasRect: &elementCanvasRect];
+                        fontDescriptor = fontDescriptors[item.objectID];
+                        if (!fontDescriptor) {
+                            fontDescriptor = [item newFontDescriptor];
+                            fontDescriptors[item.objectID] = fontDescriptor;
                         }
                         
-                        line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
-                                                                              type: item.getType
-                                                                             frame: item.frame];
-                        line.elementOffset = *(offsetElement);
-                        (*(offsetElement))++;
+                        attributes = [item newTextAttributesWithFontDescriptor:fontDescriptor];
                         
-                        [rowRepresentation addLine:line];
+                        [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
+                                                            elementCanvasRect: &elementCanvasRect
+                                                               withAttributes: &attributes];
                         
+                    } else {
+                        [MTReportViewerPrintPageRenderer displayDrawingObject: &drawingObject
+                                                            elementCanvasRect: &elementCanvasRect];
                     }
+                    
+                    line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
+                                                                          type: item.getType
+                                                                         frame: item.frame];
+                    line.elementOffset = offsetElement;
+                    offsetElement++;
+                    
+                    [rowRepresentation addLine:line];
                     
                 }
                 
-                line = nil;
-                [sectionRepresentation addRow:rowRepresentation];
             }
+            
+            line = nil;
+            [sectionRepresentation addRow:rowRepresentation];
+            [fontDescriptors removeAllObjects];
         }
-        [fontDescriptors removeAllObjects];
-        
-        rowRepresentation = nil;
     }
+    rowRepresentation = nil;
+
+END_DrawSection:;
+
     return sectionRepresentation;
 }
 
@@ -610,25 +645,31 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                                pageRect: (CGRect)pageRect
                           numberOfPages: (NSUInteger)numberOfPages
                               pageIndex: (NSUInteger)pageIndex
-                                 offset: (CGFloat *)originY {
+                                 offset: (CGFloat)originY {
 
     MTReportFormatter * __unsafe_unretained reportFormatter = self.reportFormatter;
-    CGFloat sizeHeight = documentSection.visibility.boolValue ? [reportFormatter heightForSection:documentSection] : CGSizeZero.height;
+    CGFloat sizeHeight = documentSection.visibility.boolValue ?
+                [reportFormatter heightForSection:documentSection] : CGSizeZero.height;
+    
     switch (pageSection.sectionType) {
+    
         case MNSDocumentSectionTypePageFooter:
-            *originY = pageIndex == numberOfPages - 1 ?  // last page?
-                            pageRect.origin.y + pageRect.size.height - sizeHeight - [reportFormatter heightForSection:document.hasReportFooterSection] :
+            originY = pageIndex == numberOfPages - 1 ?  // last page?
+                            pageRect.origin.y + pageRect.size.height - sizeHeight -
+                                [reportFormatter heightForSection:document.hasReportFooterSection] :
                             pageRect.origin.y + pageRect.size.height - sizeHeight;
             break;
+            
         case MNSDocumentSectionTypeReportFooter:
-            *originY = pageRect.origin.y + pageRect.size.height - [reportFormatter heightForSection:documentSection];
+            originY = pageRect.origin.y + pageRect.size.height -
+                        [reportFormatter heightForSection:documentSection];
             break;
             
         default:
             break;
     }
     
-    return CGRectMake(pageRect.origin.x, *originY, pageRect.size.width, sizeHeight);
+    return CGRectMake(pageRect.origin.x, originY, pageRect.size.width, sizeHeight);
 }
 
 + (void)displayDrawingObject: (id __autoreleasing *)drawingObject
@@ -656,7 +697,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     if ([drawingObject isKindOfClass:[NSString class]]) {
         
         UIFontDescriptor *fontDescriptor = [item newFontDescriptor];
-        NSDictionary *attributes = [item newDictionaryOfTextAttributesWithFontDescriptor:fontDescriptor];
+        NSDictionary *attributes = [item newTextAttributesWithFontDescriptor:fontDescriptor];
         [drawingObject drawWithRect: elementCanvasRect
                             options: NSStringDrawingUsesLineFragmentOrigin
                          attributes: attributes context: nil];

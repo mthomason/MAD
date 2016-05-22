@@ -38,10 +38,11 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
     - (CGFloat)layoutHeightCalculated;
     - (NSString *)localizedDisplayName;
-    - (NSString *)copySectionKey;
+    - (NSManagedObjectID *)copySectionKey;
     - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
-    - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin
+         managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (void)setInterfaceHeight:(CGFloat)height;
     - (MNSDocumentSectionType)getDocumentSectionType;
     - (BOOL)producesFormFeed;

@@ -309,22 +309,35 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 
 - (CGRect)paddingViewBounds {
     return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      paddingViewBoundsSizeWidth(self.paddingLeft, self.paddingRight, self.sizewidth),
-                      paddingViewBoundsSizeHeight(self.paddingTop, self.paddingBottom, self.sizeheight));
+                      paddingViewBoundsSizeWidth(self.paddingLeft,
+                                                 self.paddingRight,
+                                                 self.sizewidth),
+                      paddingViewBoundsSizeHeight(self.paddingTop,
+                                                  self.paddingBottom,
+                                                  self.sizeheight));
 }
 
 - (CGRect)paddingViewFrame {
     CGRect paddingViewBounds = [self paddingViewBounds];
-    return CGRectMake(CGPointZero.x + self.marginLeft.floatValue, CGPointZero.y + self.marginTop.floatValue, paddingViewBounds.size.width, paddingViewBounds.size.height);
+    return CGRectMake(CGPointZero.x + self.marginLeft.floatValue,
+                      CGPointZero.y + self.marginTop.floatValue,
+                      paddingViewBounds.size.width, paddingViewBounds.size.height);
 }
 
 - (CGRect)elementViewBounds {
     return CGRectMake(CGPointZero.x, CGPointZero.y, self.sizewidth.floatValue, self.sizeheight.floatValue);
 }
 
+- (CGRect)elementViewFrameDesigner {
+    return CGRectMake(self.originx.floatValue, self.originy.floatValue,
+                      self.size.width, self.size.height);
+}
+
 - (CGRect)elementViewFrame {
     CGRect elementViewBounds = [self elementViewBounds];
-    return CGRectMake(CGPointZero.x + self.paddingLeft.floatValue, CGPointZero.y + self.paddingTop.floatValue, elementViewBounds.size.width, elementViewBounds.size.height);
+    return CGRectMake(CGPointZero.x + self.paddingLeft.floatValue,
+                      CGPointZero.y + self.paddingTop.floatValue,
+                      elementViewBounds.size.width, elementViewBounds.size.height);
 }
 
 - (CGRect)frame {
@@ -546,7 +559,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return f;
 }
 
-- (NSDictionary *)newDictionaryOfTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor {
+- (NSDictionary *)newTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor {
     
     UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
                                                size: 0.0];
@@ -596,7 +609,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 - (NSDictionary *)newDictionaryOfTextAttributes {
 
     UIFontDescriptor *f = [self newFontDescriptor];
-    id attributes = [self newDictionaryOfTextAttributesWithFontDescriptor: f];
+    id attributes = [self newTextAttributesWithFontDescriptor: f];
     return attributes;
     
 }
