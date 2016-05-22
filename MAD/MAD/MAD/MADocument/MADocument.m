@@ -219,76 +219,11 @@ static NSString * const MADManagedObjectModelExtention                  = @"momd
 static NSString * const MADDocumentErrorDomain                          = @"MADocument";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
-NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
+  NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
 #elif MAD_VIEWER == 1
-NSString * const MADUbiquitousPeerToken = "MADVIEWER";
+  NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
-/*
-static void extract_mad(const char *filename, int flags);
-static void extract_mad(const char *filename, int flags) {
-    struct archive *a;
-    struct archive *ext;
-    struct archive_entry *entry;
-    int r, awdsor, arsftr, arsfbr;
-    
-    a = archive_read_new();
-    ext = archive_write_disk_new();
-    awdsor = archive_write_disk_set_options(ext, flags);
-    if (awdsor != ARCHIVE_OK) goto EXTRACT_MAD_EXIT;
 
-    arsfbr = archive_read_support_filter_bzip2(a);
-    if (arsfbr != ARCHIVE_OK) goto EXTRACT_MAD_EXIT;
-
-    arsftr = archive_read_support_format_tar(a);
-    if (arsftr != ARCHIVE_OK) goto EXTRACT_MAD_EXIT;
-
-    //archive_write_disk_set_standard_lookup(ext);
-    
-    const char * error_message = NULL;
-    if (filename != NULL && strcmp(filename, "-") == 0)
-        filename = NULL;
-    
-    if ((r = archive_read_open_filename(a, filename, 10240))) {
-        error_message = archive_error_string(a);
-        goto EXTRACT_MAD_ERROR;
-    }
-    
-    for (;;) {
-        
-        r = archive_read_next_header(a, &entry);
-        
-        if (r == ARCHIVE_EOF)
-            break;
-        
-        if (r != ARCHIVE_OK) {
-            error_message = archive_error_string(a);
-            goto EXTRACT_MAD_ERROR;
-        }
-        
-        NSLog(@"%s\\n", archive_entry_pathname(entry));
-        
-        r = archive_write_header(ext, entry);
-        if (r != ARCHIVE_OK) {
-            error_message = archive_error_string(a);
-            NSLog(@"%s", error_message);
-
-        } else {
-            archive_read_extract2(a, entry, ext);
-        }
-    }
-
-    goto EXTRACT_MAD_EXIT;
-    
-    EXTRACT_MAD_ERROR:;
-    NSLog(@"%s", error_message);
-    
-    EXTRACT_MAD_EXIT:;
-    
-    archive_read_close(a);
-    archive_read_free(a);
-
-}
-*/
 void fail(char *err, const char*err2, int n);
 void fail(char *err, const char*err2, int n) { }
 void msg(const char *err);
@@ -298,7 +233,10 @@ void madwarn(char *err,  const char*err2) { }
 
 static int mad_copy_data(struct archive *ar, struct archive *aw);
 
-static void extract(const char *filename) {
+static bool mad_extract(const char *filename);
+static bool mad_extract(const char *filename) {
+    
+    bool success = true;
     struct archive *a, *ext;
     struct archive_entry *entry;
     int flags, r, ar;
@@ -318,49 +256,39 @@ static void extract(const char *filename) {
     ar = archive_write_disk_set_standard_lookup(ext);
     
     if ((r = archive_read_open_filename(a, filename, 10240)))
-        exit(1);
-    for (;;) {
-
-        r = archive_read_next_header(a, &entry);
-
-        if (r == ARCHIVE_EOF)
-            break;
-
-        if (r < ARCHIVE_OK)
-            fprintf(stderr, "%s\n", archive_error_string(a));
-        
-        if (r < ARCHIVE_WARN)
-            exit(1);
+        goto EXTRACT_MAD_FAIL;
+    
+    while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&
+           r != ARCHIVE_EOF) {
 
         r = archive_write_header(ext, entry);
         
-        if (r < ARCHIVE_OK)
-            fprintf(stderr, "%s\n", archive_error_string(ext));
-        
-        else if (archive_entry_size(entry) > 0) {
-        
+        if (r >= ARCHIVE_OK && archive_entry_size(entry) > 0) {
+                
             r = mad_copy_data(a, ext);
-
-            if (r < ARCHIVE_OK)
-                fprintf(stderr, "%s\n", archive_error_string(ext));
-
+            
             if (r < ARCHIVE_WARN)
-                exit(1);
-        
+                goto EXTRACT_MAD_FAIL;
+            
         }
+        
         r = archive_write_finish_entry(ext);
 
-        if (r < ARCHIVE_OK)
-            fprintf(stderr, "%s\n", archive_error_string(ext));
-
-        if (r < ARCHIVE_WARN)
-            exit(1);
-
     }
+    
+    goto EXTRACT_MAD_FINISH;
+
+EXTRACT_MAD_FAIL:;
+    success = false;
+
+EXTRACT_MAD_FINISH:;
+    
     archive_read_close(a);
     archive_read_free(a);
     archive_write_close(ext);
     archive_write_free(ext);
+    
+    return success;
 }
 
 static int mad_copy_data(struct archive *ar, struct archive *aw) {
@@ -507,6 +435,7 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
                                            errorHandler: nil];
     
     
+    bool success = false;
     struct archive *archive;
     struct archive_entry *entry;
     struct stat st;
@@ -527,6 +456,7 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
     strcpy(archiveFilename, archivePath.fileSystemRepresentation);
     
     const char *tarGzExt = ".tar.gz";
+    tarGzExt = "";
     
     char *outname = malloc( (strlen(archiveFilename) + strlen(tarGzExt)) * sizeof(char *));
     char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) );
@@ -593,13 +523,16 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
         close(fd);
         archive_entry_free(entry);
     }
+    
+    success = true;
+    
     archive_write_close(archive);
     archive_write_free(archive);
 
     ARCHIVE_FILE_AT_URL_SHORT:;
     
     free(backup); free(outname);
- 
+ /*
     bool success = false;
     NSFileWrapper *fileWrapper;
     NSError *fileWrapperError = nil;
@@ -622,7 +555,7 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
     }
-    
+   */
     
     return success;
 }
@@ -951,40 +884,46 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
         if (!success || !isDirectory) goto READ_FAIL;
     }
     
-    urlArchive = [url URLByAppendingPathExtension:@"tar.gz"];
+    urlArchive = url;// [url URLByAppendingPathExtension:@"tar.gz"];
     
     const char *fileWrapperDirectoryCString = urlGuts.fileSystemRepresentation;
     r = chdir(fileWrapperDirectoryCString);
     if (r != 0) goto READ_FAIL;
     
     const char *madArchivePathCString = urlArchive.fileSystemRepresentation;
-    extract(madArchivePathCString);
+
+    success = mad_extract(madArchivePathCString);
+    if (!success) goto READ_FAIL;
+
     goto READ_END;
 
     
 READ_FAIL:;
     
-    NSLog(@"%s", strerror(errno));
+    //Try lagecy read
+    {
+        NSLog(@"%s", strerror(errno));
+        
+        NSError * __autoreleasing *errorReading = NULL;
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        
+        NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
+                 url, *errorReading, __PRETTY_FUNCTION__);
+        
+        NSFileWrapper *fileWrapper;
+        fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+        
+        NSError * __autoreleasing *error = NULL;
+        success = [fileWrapper writeToURL: urlGuts
+                                  options: NSFileWrapperWritingAtomic
+                      originalContentsURL: url
+                                    error: error] ? true : false;
+        
+        NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
+    }
     
 READ_END:;
-    /*
-    NSError * __autoreleasing *errorReading = NULL;
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-    
-    NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
-             url, *errorReading, __PRETTY_FUNCTION__);
-    
-    NSFileWrapper *fileWrapper;
-    fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    
-    NSError * __autoreleasing *error = NULL;
-    success = [fileWrapper writeToURL: urlGuts
-                              options: NSFileWrapperWritingAtomic
-                  originalContentsURL: url
-                                error: error] ? true : false;
-    
-    NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
-*/
+
     
     if (success) {
         return [super readFromURL:urlGuts error:outError];
