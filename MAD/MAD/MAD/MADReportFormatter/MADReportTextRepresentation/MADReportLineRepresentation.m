@@ -7,6 +7,7 @@
 //
 
 #import "MADReportLineRepresentation.h"
+#import "MADDocumentObjectTypeDescriptor.h"
 
 @interface MADReportLineRepresentation ()
 
@@ -39,7 +40,7 @@
     if ([self.object isKindOfClass:[NSString class]]) {
         return (NSString *)self.object;
     } else {
-        return [MADDocumentObjectType localizedStringForType:self.type];
+        return [MADDocumentObjectTypeDescriptor localizedStringForType:self.type];
     }
 }
 

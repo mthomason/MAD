@@ -12,10 +12,17 @@
 #endif
 
 #import "MTQueryBuilderAddGroupViewController.h"
-#import "MTQueryBuilderSortTypeViewController.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
+
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
+
+#import "MTQueryBuilderSortTypeViewController.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 
 static NSString * const TextAccending = @"Accending";
 static NSString * const TextDecending = @"Decending";
@@ -96,7 +103,8 @@ static NSString * const TextDefault = @"Default";
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+                                      withField:(RptqQueryField *)queryField {
     [self.navigationController popToViewController:self animated:YES];
 
     NSString *fieldName = [queryField tableFieldKey];

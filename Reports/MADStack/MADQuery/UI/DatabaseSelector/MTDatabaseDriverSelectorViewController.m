@@ -15,6 +15,8 @@
 #import <MAD/MTDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import "MUIViewControllerDelegate.h"
+
 #import "MADVibrantTableViewCellImage.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
@@ -30,7 +32,9 @@ NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
 @interface MTDatabaseDriverSelectorViewController ()
-    <MTViewControllerProtocol, MADVibrantTableViewCellDelegate, UITableViewDelegate>
+    <MTViewControllerProtocol,
+        MADVibrantTableViewCellDelegate,
+        UITableViewDelegate>
 
     @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
 

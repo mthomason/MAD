@@ -11,14 +11,21 @@
 #endif
 
 #import "MTDocumentObjectNewAggregateViewController.h"
+#import "MTQueryBuilderChooseFieldDelegate.h"
+
+#import <UIKit/UIStoryboardSegue.h>
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MTAggregateFunctionsViewController.h"
 #import "MADNavigationBarTitleView.h"
 
-#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
 NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";

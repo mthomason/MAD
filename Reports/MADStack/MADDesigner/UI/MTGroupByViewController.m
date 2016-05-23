@@ -11,12 +11,21 @@
 #endif
 
 #import "MTGroupByViewController.h"
-#import "MADNavigationBarTitleView.h"
+
 #import <CoreData/NSManagedObjectContext.h>
-#import <MAD/MADocument.h>
-#import <MAD/RptqQueryGroup.h>
-#import <MAD/RptqQueryGroup+Extras.h>
+
+#import <UIKit/UITableView.h>
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
+
+#import <MAD/MADocument.h>
+#import <MAD/RptqQueryGroup+Extras.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 

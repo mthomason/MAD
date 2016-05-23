@@ -9,9 +9,10 @@
 #ifndef MAD_MADTableController_h
 #define MAD_MADTableController_h
 
-#import "MADViewController.h"
+#import "MADCollectionViewController.h"
 
-@class MADDataFormatter, MTQuery;
+@class MADDataFormatter;
+@class MTQuery;
 
 @interface MADTableController : MADCollectionViewController
 

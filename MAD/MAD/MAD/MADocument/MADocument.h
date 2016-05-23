@@ -23,6 +23,8 @@ extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
+@protocol MADActivityProtocol;
+
 @class NSManagedObjectID;
 @class UIImage;
 @class UIPrintPageRenderer;
@@ -32,28 +34,26 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @class RptqDatabaseSchemaTable;
 @class RptqDocumentSection;
 @class RptqDocumentObject;
+@class MADCredential;
+@class MADocumentState;
+@class MADSectionLayoutManager;
+@class MADActivityIndicator;
+@class MADocument;
 @class MTDatabaseConnection;
 @class MTReportFormatter;
 @class MTDataTableFast;
 @class MTQuery;
-@class MADActivityIndicator;
-@class MADocument;
 @class MTQueryFull;
 @class MTDatabase;
 @class MTPaper;
 @class MTReportViewerPrintPageRenderer;
-@class MADCredential;
-@class MADocumentState;
-@class MADSectionLayoutManager;
 
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
 
-@protocol MADActivityProtocol;
-
 @protocol MADocumentDelegate
-@required
-@optional
+  @required
+  @optional
     - (MADCredential *)getCredentialsForKey:(NSString *)key;
 @end
 

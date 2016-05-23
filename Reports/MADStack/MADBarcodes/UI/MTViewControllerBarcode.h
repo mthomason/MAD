@@ -37,6 +37,7 @@
     @property (nonatomic, strong, readwrite) RptqQueryField *queryField2;
     @property (nonatomic, strong, readwrite) MTBarcode *barcode;
     @property (nonatomic, strong, readonly) MTViewControllerBarcodeOptions *optionsViewController;
+
     @property (nonatomic, assign) BOOL editmode;
 
     - (void)updateBarcode;

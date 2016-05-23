@@ -9,9 +9,11 @@
 #ifndef MADDesigner_MADConnectionViewController_h
 #define MADDesigner_MADConnectionViewController_h
 
-#import "MADViewController.h"
-#import "MUIViewControllerDelegate.h"
-#import <MADExplorer/MADSaveFileProtocol.h>
+#import "MADTableViewController.h"
+#import <UIKit/UIViewControllerTransitioning.h>
+
+@protocol MTViewControllerProtocol;
+@protocol MADSaveFileProtocol;
 
 @interface MADConnectionViewController : MADTableViewController
     <UITableViewDelegate,

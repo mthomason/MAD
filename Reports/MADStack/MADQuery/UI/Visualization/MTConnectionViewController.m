@@ -11,6 +11,18 @@
 #endif
 
 #import "MTConnectionViewController.h"
+
+#import "MUIViewControllerDelegate.h"
+#import <MADExplorer/MADSaveFileProtocol.h>
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIProgressView.h>
+#import <UIKit/UILocalNotification.h>
+
 #import <MAD/MADConstants.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 

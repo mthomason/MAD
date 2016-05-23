@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqDocumentObjectAggregate+Extras.h"
+
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqQueryField.h"

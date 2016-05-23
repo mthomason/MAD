@@ -11,7 +11,12 @@
 #endif
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MADNavigationBarTitleView.h"
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UITableView.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
@@ -30,7 +35,11 @@
 
 #import <MAD/MADocument.h>
 
+#import "MADNavigationBarTitleView.h"
+
 #import "MTQueryBuilderChooseFieldDelegate.h"
+
+#import "MADDatabaseTableSectionHeaderView.h"
 
 typedef NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoArray;
 

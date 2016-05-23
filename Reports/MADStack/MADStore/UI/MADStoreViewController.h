@@ -9,8 +9,9 @@
 #ifndef MAD_Designer_MADStoreViewController_h
 #define MAD_Designer_MADStoreViewController_h
 
-#import "MADViewController.h"
+#import "MADCollectionViewController.h"
 #import "MUIViewControllerDelegate.h"
+#import <UIKit/UICollectionViewFlowLayout.h>
 
 @interface MADStoreViewController : MADCollectionViewController
     <MTViewControllerProtocol, UICollectionViewDelegateFlowLayout>

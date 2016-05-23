@@ -12,13 +12,18 @@
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
 
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UILabel.h>
+
+#import <MAD/MADocument.h>
 
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 
-#import <MAD/MADocument.h>
+#import "MTQueryBuilderChooseFieldViewController.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 

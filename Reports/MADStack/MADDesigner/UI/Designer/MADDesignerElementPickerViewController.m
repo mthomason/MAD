@@ -11,6 +11,17 @@
 #endif
 
 #import "MADDesignerElementPickerViewController.h"
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIImagePickerController.h>
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+
 #import "MADNavigationBarTitleView.h"
 
 #import "MTAggregateFunctionsViewController.h"

@@ -7,10 +7,21 @@
 //
 
 #import "MADToolboxViewController.h"
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIPresentationController.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UISegmentedControl.h>
+#import <UIKit/UITableViewController.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIGraphics.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADStoryboard.h"
 #import "UINavigationController+Designer.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
@@ -23,16 +34,16 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 @interface MADToolboxViewController ()
 
-@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
-@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format;
-@property (nonatomic, strong) UINavigationController *styleNavigationController;
+    @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
+    @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format;
+    @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
-@property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
-@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
+    @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
+    @property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
-@property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
+    @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
-@property (nonatomic, weak) UIViewController *currentViewController;
+    @property (nonatomic, weak) UIViewController *currentViewController;
 
 @end
 

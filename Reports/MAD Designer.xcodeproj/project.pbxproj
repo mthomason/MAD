@@ -425,6 +425,10 @@
 		4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */; };
 		4C4021001BAE98C300BAE5FC /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FC1BAE98C300BAE5FC /* MTReportViewerReportPageView.m */; };
 		4C4021011BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */; };
+		4C4754401CF362AE00BC9E02 /* MADTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47543F1CF362AE00BC9E02 /* MADTableViewController.m */; };
+		4C4754431CF362CB00BC9E02 /* MADCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754421CF362CB00BC9E02 /* MADCollectionViewController.m */; };
+		4C4754461CF362DB00BC9E02 /* MADSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */; };
+		4C4754491CF362E900BC9E02 /* MADPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754481CF362E900BC9E02 /* MADPageViewController.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA5711C92C3D2008558E4 /* MADOperation.m */; };
@@ -1845,6 +1849,14 @@
 		4C434B2218B5F3E800750B6B /* x509v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
 		4C434B2318B5F3E800750B6B /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = /Users/mthomason/Desktop/Reports/Reports/../Compressor/library/openssl/libcrypto.a; sourceTree = "<absolute>"; };
 		4C434B2418B5F3E800750B6B /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		4C47543E1CF362AE00BC9E02 /* MADTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewController.h; sourceTree = "<group>"; };
+		4C47543F1CF362AE00BC9E02 /* MADTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewController.m; sourceTree = "<group>"; };
+		4C4754411CF362CB00BC9E02 /* MADCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewController.h; sourceTree = "<group>"; };
+		4C4754421CF362CB00BC9E02 /* MADCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewController.m; sourceTree = "<group>"; };
+		4C4754441CF362DB00BC9E02 /* MADSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSplitViewController.h; sourceTree = "<group>"; };
+		4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewController.m; sourceTree = "<group>"; };
+		4C4754471CF362E900BC9E02 /* MADPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewController.h; sourceTree = "<group>"; };
+		4C4754481CF362E900BC9E02 /* MADPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewController.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
@@ -3502,6 +3514,7 @@
 		4C401F031BAE6DF100BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C47543D1CF3628800BC9E02 /* Standard */,
 				4C2F3B3C1CA2910E002CF271 /* MADAlertController.h */,
 				4C2F3B3D1CA2910E002CF271 /* MADAlertController.m */,
 				4C401F041BAE6DF100BAE5FC /* About */,
@@ -3518,11 +3531,6 @@
 				4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */,
 				4C8DE2501BAFA92C00AD1111 /* MADNavigationBarFixedSize.h */,
 				4C8DE2511BAFA92C00AD1111 /* MADNavigationBarFixedSize.m */,
-				4C26BA8D1BAF9B9B00456DC8 /* MADViewController.h */,
-				4C26BA8E1BAF9B9B00456DC8 /* MADViewController.m */,
-				4C26BA8F1BAF9B9B00456DC8 /* MADViewControllerBase.h */,
-				4C26BA901BAF9B9B00456DC8 /* MADViewControllerBase.m */,
-				4C26BA911BAF9B9B00456DC8 /* MADViewControllerBaseInterfacePrivate.h */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -3913,6 +3921,26 @@
 				4C434B2218B5F3E800750B6B /* x509v3.h */,
 			);
 			path = openssl;
+			sourceTree = "<group>";
+		};
+		4C47543D1CF3628800BC9E02 /* Standard */ = {
+			isa = PBXGroup;
+			children = (
+				4C26BA8D1BAF9B9B00456DC8 /* MADViewController.h */,
+				4C26BA8E1BAF9B9B00456DC8 /* MADViewController.m */,
+				4C26BA8F1BAF9B9B00456DC8 /* MADViewControllerBase.h */,
+				4C26BA901BAF9B9B00456DC8 /* MADViewControllerBase.m */,
+				4C26BA911BAF9B9B00456DC8 /* MADViewControllerBaseInterfacePrivate.h */,
+				4C47543E1CF362AE00BC9E02 /* MADTableViewController.h */,
+				4C47543F1CF362AE00BC9E02 /* MADTableViewController.m */,
+				4C4754411CF362CB00BC9E02 /* MADCollectionViewController.h */,
+				4C4754421CF362CB00BC9E02 /* MADCollectionViewController.m */,
+				4C4754441CF362DB00BC9E02 /* MADSplitViewController.h */,
+				4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */,
+				4C4754471CF362E900BC9E02 /* MADPageViewController.h */,
+				4C4754481CF362E900BC9E02 /* MADPageViewController.m */,
+			);
+			name = Standard;
 			sourceTree = "<group>";
 		};
 		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
@@ -6203,6 +6231,7 @@
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MTRulerView.m in Sources */,
+				4C4754491CF362E900BC9E02 /* MADPageViewController.m in Sources */,
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
 				4C8DE24E1BAFA88400AD1111 /* MTCollectionViewCellElement.m in Sources */,
@@ -6263,6 +6292,7 @@
 				4C40203A1BAE92F200BAE5FC /* MADQueryVisualizationViewController+Designer.m in Sources */,
 				4C401F291BAE703200BAE5FC /* MADTableViewCellQueryInput.m in Sources */,
 				4C4020581BAE92F200BAE5FC /* UINavigationController+Designer.m in Sources */,
+				4C4754401CF362AE00BC9E02 /* MADTableViewController.m in Sources */,
 				4C26B9CD1BAF123A00456DC8 /* MADToolboxStyleLayoutViewController.m in Sources */,
 				4C26B9531BAF0D4300456DC8 /* MADTableViewControllerCoreDataResults.m in Sources */,
 				4C26B9C41BAF123A00456DC8 /* MADFontPickerNavigationController.m in Sources */,
@@ -6287,6 +6317,7 @@
 				4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */,
 				4CC886171C7AADC0003E18D2 /* UIStoryboard+Query.m in Sources */,
 				4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */,
+				4C4754461CF362DB00BC9E02 /* MADSplitViewController.m in Sources */,
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
 				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,
 				4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */,
@@ -6321,6 +6352,7 @@
 				4C40203D1BAE92F200BAE5FC /* MTQueryBuilderChooseFieldViewController+Designer.m in Sources */,
 				4C59BDC01C9AA7C10031BC6C /* MADBlockOperation.m in Sources */,
 				4C26BA641BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
+				4C4754431CF362CB00BC9E02 /* MADCollectionViewController.m in Sources */,
 				4C26BA9B1BAF9B9B00456DC8 /* MTTitleView.m in Sources */,
 				4C401F0C1BAE6DF100BAE5FC /* MADAboutTableView.m in Sources */,
 				4C4020851BAE966000BAE5FC /* MADQueryNavigationController.m in Sources */,

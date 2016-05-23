@@ -30,20 +30,17 @@
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/NSManagedObjectID+Extras.h>
 
-#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
-
-#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqDocumentObject+Extras.h>
-
-#import <MAD/RptqDocumentObjectBarcode.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MAD/RptqDocumentObjectLabel.h>
+
 #import <MAD/RptqDocumentObjectLabelDataField.h>
 
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+
 
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+Extras.h>

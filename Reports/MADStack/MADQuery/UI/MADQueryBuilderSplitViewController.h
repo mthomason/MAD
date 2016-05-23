@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryBuilderContainerController_h
 #define Reports_MTQueryBuilderContainerController_h
 
-#import "MADViewController.h"
+#import "MADSplitViewController.h"
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 

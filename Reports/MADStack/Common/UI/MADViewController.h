@@ -10,38 +10,10 @@
 #define MAD_MADViewController_h
 
 #import <UIKit/UIViewController.h>
-#import <UIKit/UITableViewController.h>
-#import <UIKit/UICollectionViewController.h>
-#import <UIKit/UISplitViewController.h>
-#import <UIKit/UIPageViewController.h>
 
 @class MADTabBarController;
 
 @interface MADViewController : UIViewController
-
-#include "MADViewControllerBase.h"
-
-@end
-
-@interface MADTableViewController : UITableViewController
-
-#include "MADViewControllerBase.h"
-
-@end
-
-@interface MADCollectionViewController : UICollectionViewController
-
-#include "MADViewControllerBase.h"
-
-@end
-
-@interface MADSplitViewController : UISplitViewController
-
-#include "MADViewControllerBase.h"
-
-@end
-
-@interface MADPageViewController : UIPageViewController
 
 #include "MADViewControllerBase.h"
 

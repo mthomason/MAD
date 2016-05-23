@@ -11,6 +11,12 @@
 #endif
 
 #import "MTViewControllerBarcode.h"
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UIStoryboardSegue.h>
+
 #import "MADNavigationBarTitleView.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
 

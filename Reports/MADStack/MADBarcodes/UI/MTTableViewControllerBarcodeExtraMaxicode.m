@@ -12,6 +12,8 @@
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 
+#import <UIKit/UIStoryboardSegue.h>
+
 #import <CoreData/NSManagedObjectID.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
@@ -24,13 +26,11 @@
 
 #import <MAD/MTQuery.h>
 
-#import "MTQueryBuilderChooseFieldViewController.h"
-
-#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADNavigationControllerSplitParentViewController.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 

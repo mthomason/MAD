@@ -9,7 +9,7 @@
 #ifndef Reports_MADQueryViewController_h
 #define Reports_MADQueryViewController_h
 
-#import "MADViewController.h"
+#import "MADTableViewController.h"
 #import <MAD/MTQueryTest.h>
 #import <MAD/NSManagedObject+Extras.h>
 #import "MADocumentProtocol.h"

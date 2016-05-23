@@ -11,6 +11,11 @@
 #endif
 
 #import "MADFontSelectorViewController.h"
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UILabel.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADFonts.h>
@@ -84,7 +89,10 @@
 
     self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 680.0000f);
 
-    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
+                                                               self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height,
+                                                               self.navigationController.navigationBar.frame.size.width,
+                                                               self.navigationController.navigationBar.frame.size.height);
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     if (self.firstTimeViewWillLayoutSubviews) {

@@ -11,7 +11,8 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class NSManagedObjectID, RptqDocument;
+@class NSManagedObjectID;
+@class RptqDocument;
 
 @interface RptqDocumentSectionEnumerator : NSEnumerator
 

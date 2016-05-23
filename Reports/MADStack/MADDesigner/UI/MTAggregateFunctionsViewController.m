@@ -11,6 +11,12 @@
 #endif
 
 #import "MTAggregateFunctionsViewController.h"
+
+#import <UIKit/UIStoryboardSegue.h>
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
 #import "MADNavigationBarTitleView.h"
 
 NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFunctionsViewControllerIdentifier";

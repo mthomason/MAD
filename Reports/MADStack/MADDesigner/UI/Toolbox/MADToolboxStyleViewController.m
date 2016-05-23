@@ -11,6 +11,16 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
+
+#import <QuartzCore/CALayer.h>
+
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIStepper.h>
+#import <UIKit/UISegmentedControl.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UIStoryboardSegue.h>
+
 #import "MADControlState.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>

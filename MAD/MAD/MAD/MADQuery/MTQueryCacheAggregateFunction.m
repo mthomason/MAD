@@ -10,6 +10,8 @@
 #import <Foundation/NSException.h>
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
+#import <MAD/MADAggregateFunctionType.h>
+
 static inline const char *functionName(MTAggregateFunctionType functionType);
 static inline const char *functionName(MTAggregateFunctionType functionType) {
     

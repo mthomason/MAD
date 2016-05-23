@@ -9,10 +9,12 @@
 #ifndef Reports_MTGroupByViewController_h
 #define Reports_MTGroupByViewController_h
 
-#import "MADViewController.h"
+#import "MADTableViewController.h"
+#import <UIKit/UITableView.h>
+
 #import <CoreData/NSFetchedResultsController.h>
-#import <MAD/RptqDocumentObjectAggregate.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+
+#import <MAD/MADAggregateFunctionGroupByType.h>
 
 extern NSString * const MTGroupByViewControllerIdentifier;
 

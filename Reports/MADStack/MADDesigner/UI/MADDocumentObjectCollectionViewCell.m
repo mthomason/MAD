@@ -7,10 +7,12 @@
 //
 
 #import "MADDocumentObjectCollectionViewCell.h"
+
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UINibLoading.h>
-#import <MAD/MADDocumentObjectType.h>
+
+#import <MAD/MADDocumentObjectTypeDescriptor.h>
 
 @implementation MADDocumentObjectCollectionViewCell
 

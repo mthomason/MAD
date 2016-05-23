@@ -9,10 +9,12 @@
 #ifndef Reports_MTReportDesignerFontSelectorViewController_h
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
-#import "MADViewController.h"
+#import "MADTableViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 
-@class MADocument, MADFontSelectorViewController, MADFont;
+@class MADocument;
+@class MADFontSelectorViewController;
+@class MADFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
     - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;

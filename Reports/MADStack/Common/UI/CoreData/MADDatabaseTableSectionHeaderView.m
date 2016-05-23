@@ -15,6 +15,8 @@
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UITapGestureRecognizer.h>
 
+#import "MADSectionHeaderViewDelegate.h"
+
 static NSString * const TextAccessibilityHint = @"Toggles database field visibility.";
 static const CGFloat ButtonSize = 35.00000f;
 static const CGFloat PaddingSize = 5.00000f;

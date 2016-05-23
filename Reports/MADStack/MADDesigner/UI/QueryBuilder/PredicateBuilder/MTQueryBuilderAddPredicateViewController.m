@@ -14,6 +14,11 @@
 
 #import <CoreData/NSManagedObjectID.h>
 
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIStoryboardSegue.h>
+
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import <MAD/RptqQueryField.h>

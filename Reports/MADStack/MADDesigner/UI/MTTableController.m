@@ -12,12 +12,20 @@
 
 #import "MTTableController.h"
 #import <CoreData/NSManagedObjectID.h>
+
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/NSStringDrawing.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 #import <MAD/MTDataTable+Factory.h>
 #import <MAD/MTDatabaseConnection.h>
-
-#import "MADTableLayout.h"
-#import "MTTableCell.h"
-#import "MTTableCellHeader.h"
 #import <MAD/RptqQuery.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MAD/MTDatabase.h>
@@ -25,9 +33,10 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import "MADTableLayout.h"
+#import "MTTableCell.h"
+#import "MTTableCellHeader.h"
 
 @interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
@@ -56,7 +65,8 @@
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
-    MADTableLayout *tableLayout = [[MADTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
+    MADTableLayout *tableLayout = [[MADTableLayout alloc] initWithColumnCount: columnCount
+                                                                  andRowCount: rowCount];
     
     if (self = [super initWithCollectionViewLayout:tableLayout]) {
         _firstTimeViewDidAppear = true;

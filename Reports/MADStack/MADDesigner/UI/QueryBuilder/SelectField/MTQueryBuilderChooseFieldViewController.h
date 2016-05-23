@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryBuilderChooseFieldViewController_h
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
-#import "MADDatabaseTableSectionHeaderView.h"
-#import "MADViewController.h"
+#import "MADTableViewController.h"
 #import "MTUnwindProtocol.h"
+#import "MADSectionHeaderViewDelegate.h"
 
 @protocol MTQueryBuilderChooseFieldDelegate;
 

@@ -11,7 +11,7 @@
 
 @interface MADAccessibilityLine ()
 
-    @property (nonatomic, strong) NSValue *rect;
+    @property (nonatomic, copy) NSValue *rect;
     @property (nonatomic, strong) id value;
     @property (nonatomic, assign, readwrite) MTDocumentObjectType type;
 
@@ -27,7 +27,9 @@
     if (self = [super init]) {
 
         NSValue *r = [NSValue valueWithCGRect:frame];
-        self.rect = r;
+        _rect = r.copy;
+        
+// FIXME: :Maybe make weak or copy, ect
         self.value = value;
         self.type = type;
     }

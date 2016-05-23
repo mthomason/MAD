@@ -12,7 +12,6 @@
 @protocol MADToolboxDisplayProtocol <NSObject>
 
 @required
-
     - (void)setClearsBackground:(BOOL)clearsBackground;
 
 @end

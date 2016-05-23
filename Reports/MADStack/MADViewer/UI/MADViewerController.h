@@ -9,7 +9,9 @@
 #ifndef Reports_MTReportViewerController_h
 #define Reports_MTReportViewerController_h
 
-#import "MADViewController.h"
+#import "MADPageViewController.h"
+#import <UIKit/UIDocumentInteractionController.h>
+
 #import <MAD/MADActivityProtocol.h>
 #import "MADocumentProtocol.h"
 

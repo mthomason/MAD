@@ -12,7 +12,7 @@
 #import <UIKit/UIActivityItemProvider.h>
 
 @protocol MTActivityItemProviderDelegate <NSObject>
-- (void)showPrintDialog;
+    - (void)showPrintDialog;
 @end
 
 @class MADocument;

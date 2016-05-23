@@ -12,6 +12,14 @@
 
 #import "MTViewControllerBarcodeOptions.h"
 
+#import <UIKit/UINavigationController.h>
+//#import <UIKit/UINavigationBar.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UIStepper.h>
+#import <UIKit/UILabel.h>
+
+
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
 #import <MADBarcodes/MTBarcodeAztec.h>

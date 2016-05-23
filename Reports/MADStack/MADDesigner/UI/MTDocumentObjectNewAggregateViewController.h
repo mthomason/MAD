@@ -9,12 +9,21 @@
 #ifndef Reports_MTDocumentObjectNewAggregateViewController_h
 #define Reports_MTDocumentObjectNewAggregateViewController_h
 
-#import "MADViewController.h"
-#import <MAD/RptqDocumentObjectAggregate.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import "MADTableViewController.h"
 #import "MTUnwindProtocol.h"
+#import <UIKit/UITableView.h>
 
-@class MADocument, RptqQueryField, RptqDocumentObjectAggregate;
+#import <MAD/MADAggregateFunctionType.h>
+#import <MAD/MADAggregateFunctionInputType.h>
+#import <MAD/MADAggregateFunctionGroupByType.h>
+
+@class NSManagedObject;
+@class NSManagedObjectID;
+
+@class MADocument;
+
+@class RptqQueryField;
+@class RptqDocumentObjectAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 
@@ -27,7 +36,7 @@
 @end
 
 @interface MTDocumentObjectNewAggregateViewController : MADTableViewController
-    <UITableViewDelegate, MTUnwindProtocol>
+    <MTUnwindProtocol, UITableViewDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;

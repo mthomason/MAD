@@ -9,12 +9,12 @@
 #ifndef Reports_MADDesignerElementPIckerViewController_h
 #define Reports_MADDesignerElementPIckerViewController_h
 
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
-
+#import "MADCollectionViewController.h"
 #import "MUIViewControllerDelegate.h"
-#import "MADViewController.h"
 
-@class MADocument, NSManagedObjectID, RptqQueryField;
+#import <MAD/MADAggregateFunctionType.h>
+#import <MAD/MADAggregateFunctionInputType.h>
+#import <MAD/MADAggregateFunctionGroupByType.h>
 
 extern const NSInteger MTViewTagAggregateFunctions;
 extern const NSInteger MTViewTagGroupByOptions;
@@ -22,7 +22,12 @@ extern const NSInteger MTViewTagDocumentObjectNewAggregate;
 extern const NSInteger MTViewTagDocumentObjectNewLabelStatic;
 extern const NSInteger MTViewTagFieldOrFormulaSelector;
 
-@protocol MADDesignerElementPickerDelegate <MTViewControllerProtocol>
+@class MADocument;
+@class NSManagedObjectID;
+@class RptqQueryField;
+
+@protocol MADDesignerElementPickerDelegate
+    <MTViewControllerProtocol>
 
     - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
     - (void)insertDocumentObjectDataField:(RptqQueryField *)field;

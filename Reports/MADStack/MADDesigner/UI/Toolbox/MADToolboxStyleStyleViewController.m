@@ -8,9 +8,8 @@
 
 #import "MADToolboxStyleStyleViewController.h"
 
-@interface MADToolboxStyleStyleViewController ()
-
-@end
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
 
 @implementation MADToolboxStyleStyleViewController
 

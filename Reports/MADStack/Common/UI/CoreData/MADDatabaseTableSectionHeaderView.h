@@ -10,7 +10,8 @@
 #define Reports_MADDatabaseTableSectionHeaderView_h
 
 #import <UIKit/UIView.h>
-#import "MADSectionHeaderViewDelegate.h"
+
+@protocol MADSectionHeaderViewDelegate;
 
 @interface MADDatabaseTableSectionHeaderView : UIView
 
