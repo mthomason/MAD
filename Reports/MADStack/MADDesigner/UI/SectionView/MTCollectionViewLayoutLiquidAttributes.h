@@ -9,7 +9,7 @@
 #ifndef Reports_MTCollectionViewLayoutLiquidAttributes_h
 #define Reports_MTCollectionViewLayoutLiquidAttributes_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewLayout.h>
 
 @interface MTCollectionViewLayoutLiquidAttributes : UICollectionViewLayoutAttributes
 

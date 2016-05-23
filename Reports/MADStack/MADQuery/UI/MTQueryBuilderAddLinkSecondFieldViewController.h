@@ -9,8 +9,6 @@
 #ifndef Reports_MTQueryBuilderAddLinkSecondFieldViewController_h
 #define Reports_MTQueryBuilderAddLinkSecondFieldViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
 #import "MADTableViewControllerCoreDataResults.h"
 #import "MUIViewControllerDelegate.h"
 

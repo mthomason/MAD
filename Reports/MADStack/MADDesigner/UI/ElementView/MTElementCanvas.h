@@ -10,10 +10,13 @@
 #define MAD_Designer_MTElementCanvas_h
 
 #import <MADBarcodes/MADBarcodes.h>
+#import <UIKit/NSStringDrawing.h>
 
 @protocol MTElementCanvasDelegate <NSObject>
     - (id)displayObject;
 @end
+
+@class NSParagraphStyle;
 
 @interface MTElementCanvas : UIView
 

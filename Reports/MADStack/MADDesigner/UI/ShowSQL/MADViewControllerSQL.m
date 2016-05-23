@@ -11,9 +11,15 @@
 #endif
 
 #import "MADViewControllerSQL.h"
+
+#import <UIKit/UITextView.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTQueryFull.h>
+
+#import "MUIViewControllerDelegate.h"
 
 @implementation MADViewControllerSQL
 

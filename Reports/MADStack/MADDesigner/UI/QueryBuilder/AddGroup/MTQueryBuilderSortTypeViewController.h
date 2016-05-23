@@ -9,21 +9,21 @@
 #ifndef Reports_MTQueryBuilderSortTypeViewController_h
 #define Reports_MTQueryBuilderSortTypeViewController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 #import <MAD/MADSortOrder.h>
 
 @class MTQueryBuilderSortTypeViewController;
 
 @protocol MTQueryBuilderSortTypeDelegate
-- (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller;
-- (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType;
+    - (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller;
+    - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType;
 @end
 
 @interface MTQueryBuilderSortTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
-@property (nonatomic, assign) MNSSortOrder initalSortOrder;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
+    @property (nonatomic, assign) MNSSortOrder initalSortOrder;
 
 @end
 

@@ -9,7 +9,7 @@
 #ifndef Reports_MTBorderedView_h
 #define Reports_MTBorderedView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface MTBorderedView : UIView
 

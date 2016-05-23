@@ -9,7 +9,7 @@
 #ifndef Reports_MTCollectionReuseableViewDefault_h
 #define Reports_MTCollectionReuseableViewDefault_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @interface MTCollectionReuseableViewDefault : UICollectionReusableView
 

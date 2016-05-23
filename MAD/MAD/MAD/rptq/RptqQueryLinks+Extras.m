@@ -22,13 +22,7 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
-NSString * const MNSJoinTypeInnerJoin           = @"MNSJoinTypeInnerJoin";
-NSString * const MNSJoinTypeEquiJoin            = @"MNSJoinTypeEquiJoin";
-NSString * const MNSJoinTypeNaturalJoin         = @"MNSJoinTypeNaturalJoin";
-NSString * const MNSJoinTypeCrossJoin           = @"MNSJoinTypeCrossJoin";
-NSString * const MNSJoinTypeLeftOuterJoin       = @"MNSJoinTypeLeftOuterJoin";
-NSString * const MNSJoinTypeRightOuterJoin      = @"MNSJoinTypeRightOuterJoin";
-NSString * const MNSJoinTypeFullOuterJoin       = @"MNSJoinTypeFullOuterJoin";
+#import "MADSQLJoinType.h"
 
 NSString * const MTLinkTypeNameInnerJoin        = @"Inner-Join";
 NSString * const MTLinkTypeNameEquiJoin         = @"Equi-Join";

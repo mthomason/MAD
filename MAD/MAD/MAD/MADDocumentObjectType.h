@@ -9,7 +9,9 @@
 #ifndef MAD_MADDocumentObjectType_h
 #define MAD_MADDocumentObjectType_h
 
-#import <Foundation/NSString.h>
+#import <Foundation/NSObject.h>
+
+@class NSString;
 
 extern NSString * const MADDocumentObjectTypeTitleDynamic;
 extern NSString * const MADDocumentObjectTypeTitleStatic;

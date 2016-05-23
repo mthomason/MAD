@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_UIFont_Helpers_h
 #define MAD_Designer_UIFont_Helpers_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIFont.h>
 
 @interface UIFont (Helpers)
 

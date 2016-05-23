@@ -11,7 +11,9 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQuery, MTQuery, MTDataTable;
+@class RptqQuery;
+@class MTQuery;
+@class MTDataTable;
 
 @interface MADDataFormatter : NSObject
 

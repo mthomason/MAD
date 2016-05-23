@@ -9,7 +9,7 @@
 #ifndef Reports_UIViewController_Designer_h
 #define Reports_UIViewController_Designer_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 
 @class MADQueryVisualizationSchemaViewController;
 

@@ -7,6 +7,11 @@
 //
 
 #import "NSAttributedString+Logo.h"
+
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIFont.h>
+#import <UIKit/UIColor.h>
+
 #import "NSParagraphStyle+CommonStyles.h"
 
 @implementation NSAttributedString (Logo)

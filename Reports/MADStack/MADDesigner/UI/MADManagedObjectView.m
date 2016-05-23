@@ -10,9 +10,3 @@
 
 @implementation MADManagedObjectView
 @end
-
-@implementation MADManagedObjectCollectionView
-@end
-
-@implementation MADManagedObjectCollectionViewCell
-@end

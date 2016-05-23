@@ -9,27 +9,32 @@
 #ifndef Reports_MTViewControllerValueBasedOnField_h
 #define Reports_MTViewControllerValueBasedOnField_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UIPickerView.h>
+
 #import <MAD/MTQuery.h>
 #import <MAD/MTKeyChain.h>
 #import <MADFoundation/MTDataTable.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
-@class MADocument, NSManagedObjectID;
+
+@class NSManagedObjectID;
+
+@class MADocument;
 
 @protocol MTViewControllerValueBasedOnFieldDelegate
-- (void)enterStringDidFinishWithString:(NSString *)userInput;
+    - (void)enterStringDidFinishWithString:(NSString *)userInput;
 @end
 
 @interface MTViewControllerValueBasedOnField : UIViewController
-    <UITableViewDataSource, UITableViewDelegate,
-        UIPickerViewDataSource, UIPickerViewDelegate>
+    <UITableViewDataSource,
+        UITableViewDelegate,
+        UIPickerViewDataSource,
+        UIPickerViewDelegate>
 
-@property (nonatomic, weak) id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
-@property (nonatomic, weak) MADocument *document;
-@property (nonatomic, strong) NSManagedObjectID *schemaFieldObjectId;
+    @property (nonatomic, weak) id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
+    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, copy) NSManagedObjectID *schemaFieldObjectId;
 
 @end
 

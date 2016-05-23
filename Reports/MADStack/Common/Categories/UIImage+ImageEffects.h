@@ -96,7 +96,7 @@
 #ifndef Reports_UIImage_ImageEffects_h
 #define Reports_UIImage_ImageEffects_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIImage.h>
 
 @interface UIImage (ImageEffects)
 

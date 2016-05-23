@@ -13,9 +13,12 @@
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSDate.h>
 #import <CoreGraphics/CGGeometry.h>
-#import <MADCocoaExtensions/MADNumericConstants.h>
 #import <stdlib.h>
 #import <math.h>
+
+#import <MADCocoaExtensions/MADNumericConstants.h>
+#import <MADCocoaExtensions/MADCompassDirection.h>
+#import <MADCocoaExtensions/MADMathAlgebra.h>
 
 extern const double MADZero;
 extern const double MAD_2;
@@ -30,6 +33,7 @@ extern const double MADHeaderHeight;
 
 extern const CGFloat MADFloatZero;
 extern const CGFloat MADFloat_64;
+extern const CGFloat MADFloat_320;
 extern const CGFloat MADFloat_1024;
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
@@ -40,23 +44,6 @@ static inline double square (double x) {
 }
 
 /* Lines. */
-
-typedef NS_ENUM(NSUInteger, MAD2dDirection) {
-    horizontal,
-    vertical,
-    diagonal
-};
-
-typedef NS_ENUM(NSUInteger, MADAspectRatio) {
-    stretch,
-    skew,
-    fixed
-};
-
-struct MADResizeAspect {
-    MADAspectRatio aspectRatio;
-    MAD2dDirection direction;
-};
 
 struct CGLine {
     CGFloat m;
@@ -71,23 +58,6 @@ struct MTCorners {
     CGPoint bottomRight;
 };
 typedef struct MTCorners MTCorners;
-
-struct CGLineSegment {
-    CGPoint start;
-    CGPoint end;
-};
-typedef struct CGLineSegment CGLineSegment;
-
-typedef NS_ENUM(NSUInteger, MADCompusDirection) {
-    north = 1,
-    south,
-    east,
-    west,
-    northEast,
-    northWest,
-    southEast,
-    southWest
-};
 
 typedef NS_ENUM(NSUInteger, MADDirection) {
     left = 1,
@@ -144,35 +114,6 @@ static inline CGRect CGRectFlushTop(CGRect rect) {
     return CGRectMake(rect.origin.x, CGPointZero.y, rect.size.width, rect.size.height);
 }
 
-static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompusDirection direction);
-static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompusDirection direction) {
-    struct MADResizeAspect resizeAspect;
-    switch (direction) {
-        case south:
-        case north:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = vertical;
-            break;
-        case east:
-        case west:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = horizontal;
-            break;
-        case northEast:
-        case northWest:
-        case southEast:
-        case southWest:
-            resizeAspect.aspectRatio = fixed;
-            resizeAspect.direction = diagonal;
-            break;
-        default:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = horizontal;
-            break;
-    }
-    return resizeAspect;
-}
-
 CG_INLINE MTCorners
 MTCornersMake(CGRect rect) {
     MTCorners corners;
@@ -209,8 +150,8 @@ CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
     return d == up || d == down;
 }
 
-CG_INLINE MADCompusDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
-CG_INLINE MADCompusDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
+CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
+CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
     while (degrees < 0.0000f) {
         degrees += 360.0000f;
     }
@@ -232,27 +173,6 @@ CG_INLINE MADCompusDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
     } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
         return east;
     } else if ( degrees > 150.0000f && degrees < 210.0000f) {
-        return west;
-    } else {
-        return north;
-    }
-}
-
-CG_INLINE MADCompusDirection MADSpecificDirectionOfDegrees(double degrees);
-CG_INLINE MADCompusDirection MADSpecificDirectionOfDegrees(double degrees) {
-    while (degrees < 0.0) {
-        degrees += 360.0;
-    }
-    while (degrees > 360.0) {
-        degrees -= 360.0;
-    }
-    if (degrees >= 45.0 && degrees <= 135.0) {
-        return north;
-    } else if ( degrees >= 225.0 && degrees <= 315.0 ) {
-        return south;
-    } else if ((degrees >= 315.0 && degrees <= 360.0) || (degrees >= 0.0 && degrees <= 45.0)) {
-        return east;
-    } else if ( degrees >= 135.0 && degrees <= 225.0) {
         return west;
     } else {
         return north;
@@ -299,11 +219,6 @@ CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect) {
 
 CG_INLINE CGFloat CGDelta(CGFloat f1, CGFloat f2) {
     return f2 - f1;
-}
-
-CG_INLINE double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
-CG_INLINE double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
-    return atan2(p2.y - p1.y, p2.x - p1.x) * (180.0000 / M_PI);
 }
 
 CG_INLINE double CGDirectionInDegreesFromVelocity(CGPoint velocity);
@@ -502,74 +417,11 @@ CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches) {
     return inches * 2.5400f;
 }
 
-CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
-	//y = m x + b;
-	CGFloat m = ((p2.y - p1.y) / (p2.x - p1.x));
-	CGFloat b = p1.y - (m * p1.x);
-	return (y - b) / m;
-}
-
-CG_INLINE double MADDistance(CGPoint p1, CGPoint p2);
-CG_INLINE double MADDistance(CGPoint p1, CGPoint p2) {
-	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
-}
-
-CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2) {
-    CGFloat d = (p2.x - p1.x);
-	return d > FLT_EPSILON ? ((p2.y - p1.y) / d) : 0.0000f;
-}
-
-CG_INLINE CGFloat CGLineSegmentSlope(CGLineSegment lineSegment);
-CG_INLINE CGFloat CGLineSegmentSlope(CGLineSegment lineSegment) {
-	return CGSlope(lineSegment.start, lineSegment.end);
-}
-
-CG_INLINE double CGInterceptBySlope(CGPoint p2, double m);
-CG_INLINE double CGInterceptBySlope(CGPoint p2, double m) {
-	return (p2.y - (m * p2.x));
-}
-
 CG_INLINE double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
 CG_INLINE double
 CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 	if (t2 - t1 != 0) return (MADDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
-}
-
-CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d);
-CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
-	CGPoint returnVal = CGPointZero;
-	double m = -1 * MADDistance(p1, p2);
-	double b = CGInterceptBySlope(p2, m);
-    double x = p2.x;
-    double y = p2.y;
-    bool movingUp = p1.y < p2.y ? true : false;
-    
-    if (d >= 0) {
-        double mPow2 = pow(m, 2);
-        double bPow2 = pow(b, 2);
-        double dPow2 = pow(d, 2);
-        double u = p2.x;
-        double v = p2.y;
-        double sqrtPart = 0.0;
-        sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
-        if (!isnan(sqrtPart)) {
-            if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
-            else y = ((b)+((m)*(u))+((mPow2)*(v))-sqrt(sqrtPart)) / (1+mPow2);
-            
-            x=(y-b)/m;
-        }
-        if (!isnan(x) && !isnan(y)) {
-            returnVal.x = (CGFloat)x;
-            returnVal.y = (CGFloat)y;
-        } else {
-            returnVal.x = p2.x;
-            returnVal.y = p2.y;
-        }
-    }
-	return returnVal;
 }
 
 CG_INLINE CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2);

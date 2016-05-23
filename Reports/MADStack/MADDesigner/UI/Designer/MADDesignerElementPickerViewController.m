@@ -29,6 +29,9 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
 const NSInteger MTViewTagAggregateFunctions             = 2003;
 const NSInteger MTViewTagGroupByOptions                 = 2011;
 const NSInteger MTViewTagDocumentObjectNewAggregate     = 2017;

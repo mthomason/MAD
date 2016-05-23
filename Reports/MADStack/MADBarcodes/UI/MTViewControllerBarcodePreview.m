@@ -12,14 +12,20 @@
 
 #import "MTViewControllerBarcodePreview.h"
 
+#import <UIKit/UIPickerView.h>
+
+#import <MADBarcodes/MTBarcode.h>
+#import <MADBarcodes/MTBarcodeView.h>
+
+
 @interface MTViewControllerBarcodePreview ()
 
-@property (nonatomic, weak) IBOutlet UIPickerView *barcodePicker;
-@property (nonatomic, weak) IBOutlet MTBarcodeView *barcodeView;
+    @property (nonatomic, weak) IBOutlet UIPickerView *barcodePicker;
+    @property (nonatomic, weak) IBOutlet MTBarcodeView *barcodeView;
 
-@property (nonatomic, strong) NSDictionary *barcodeNamesByType;
-@property (nonatomic, strong) NSArray *barcodeNamesOrdered;
-@property (nonatomic, strong) MTBarcode *barcode;
+    @property (nonatomic, strong) NSDictionary *barcodeNamesByType;
+    @property (nonatomic, strong) NSArray *barcodeNamesOrdered;
+    @property (nonatomic, strong) MTBarcode *barcode;
 
 @end
 
@@ -28,12 +34,14 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        NSDictionary *namesByType = [MTBarcode names];
+        NSDictionary *namesByType = [MTBarcode newDictionaryNames];
+        NSArray *names = namesByType.allValues;
+
         self.barcodeNamesByType = namesByType;
         
-        NSArray *allNames = [[self barcodeNamesByType] allValues];
-        NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        self.barcodeNamesOrdered = allNamesSorted;
+        NSArray *namesSorted = [names sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        namesSorted = [[NSArray alloc] initWithArray: namesSorted];
+        self.barcodeNamesOrdered = namesSorted;
     }
     return self;
 }

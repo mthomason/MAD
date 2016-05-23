@@ -11,14 +11,18 @@
 #endif
 
 #import "RptqDocumentObjectLabelDataField+Extras.h"
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSSortDescriptor.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 
@@ -76,7 +80,8 @@
 
 #pragma mark - RptqDocumentObjectFactory
 
-+ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
+                    fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return (RptqDocumentObjectLabelDataField *)result;
 }

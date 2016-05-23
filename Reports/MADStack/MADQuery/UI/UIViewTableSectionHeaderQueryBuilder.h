@@ -9,7 +9,7 @@
 #ifndef Reports_UIViewTableSectionHeaderQueryBuilder_h
 #define Reports_UIViewTableSectionHeaderQueryBuilder_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface UIViewTableSectionHeaderQueryBuilder : UIView
 

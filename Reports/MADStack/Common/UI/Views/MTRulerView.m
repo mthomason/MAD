@@ -7,6 +7,15 @@
 //
 
 #import "MTRulerView.h"
+
+#import <QuartzCore/CALayer.h>
+
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/NSParagraphStyle.h>
+#import <UIKit/NSStringDrawing.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import "UIView+Extras.h"
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
@@ -78,12 +87,11 @@ static inline CGFloat xPoint(NSInteger i, double offsetInPoints) {
                                                     fontStandard, NSFontAttributeName,
                                                     paragraphStyle, NSParagraphStyleAttributeName, nil];
     
-    CGFloat length = 0.0000f;
+    CGFloat length;
     CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
     static const CGFloat lineWidth = 1.0000f;
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / eigthInchInPoints(); i++) {
         @autoreleasepool {
-            length = 0.0000f;
             if ((i % 8) == 0) {
                 CGRect locationRect = CGRectMake(xPoint(i, eigthInchInPoints()) - 5.000f,
                                                  rect.size.height - 8.0000f,
@@ -115,7 +123,6 @@ static inline CGFloat xPoint(NSInteger i, double offsetInPoints) {
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
-            length = 0.0000f;
             if ((i % 10) == 0) {
                 CGRect locationRect = CGRectMake(xPoint(i, cmInPoints() / 10.0000f) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
                 NSString *s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 10];

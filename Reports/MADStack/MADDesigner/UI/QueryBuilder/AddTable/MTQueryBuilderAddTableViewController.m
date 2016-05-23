@@ -12,6 +12,10 @@
 
 #import "MTQueryBuilderAddTableViewController.h"
 
+#import <MAD/RptqDatabaseSchemaTable.h>
+
+#import <UIKit/UILabel.h>
+
 @implementation MTQueryBuilderAddTableViewController
 
 #pragma mark - View lifecycle

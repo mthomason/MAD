@@ -11,14 +11,7 @@
 
 #import "RptqQueryLinks.h"
 #import <MADDataStructures/MTProtocolLog.h>
-
-extern NSString * const MNSJoinTypeInnerJoin;
-extern NSString * const MNSJoinTypeEquiJoin;
-extern NSString * const MNSJoinTypeNaturalJoin;
-extern NSString * const MNSJoinTypeCrossJoin;
-extern NSString * const MNSJoinTypeLeftOuterJoin;
-extern NSString * const MNSJoinTypeRightOuterJoin;
-extern NSString * const MNSJoinTypeFullOuterJoin;
+#import "MADQueryLinkType.h"
 
 extern NSString * const MTLinkTypeNameInnerJoin;
 extern NSString * const MTLinkTypeNameEquiJoin;
@@ -36,31 +29,20 @@ extern NSString * const MTLinkSqlLeftOuterJoin;
 extern NSString * const MTLinkSqlRightOuterJoin;
 extern NSString * const MTLinkSqlFullOuterJoin;
 
-typedef NS_ENUM(short, MNSLinkType) {
-    MNSLinkTypeInnerJoin = 0,
-    MNSLinkTypeEquiJoin = 1,
-    MNSLinkTypeNaturalJoin = 2,
-    MNSLinkTypeCrossJoin = 3,
-    MNSLinkTypeLeftOuterJoin = 4,
-    MNSLinkTypeRightOuterJoin = 5,
-    MNSLinkTypeFullOuterJoin = 6,
-    MNSLinkTypeUnknown = 7,
-};
-
 @class RptqDocument, RptqQueryLinks;
 
 @interface RptqQueryLinks (Extras) <MTProtocolLog>
 
-+ (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
-                                rightField:(RptqQueryField *)fieldRight
-                                  joinType:(MNSLinkType)joinType
-                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
+                                    rightField:(RptqQueryField *)fieldRight
+                                      joinType:(MNSLinkType)joinType
+                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (NSString *)copyLinkDescription;
+    - (NSString *)copyLinkDescription;
 
-+ (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
-+ (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type;
-+ (NSString *)SqlForLinkType:(MNSLinkType)type;
+    + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
+    + (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type;
+    + (NSString *)SqlForLinkType:(MNSLinkType)type;
 
 @end
 

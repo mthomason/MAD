@@ -8,9 +8,13 @@
 
 #import "MTBlurView.h"
 
+#import <QuartzCore/CALayer.h>
+
+#import <UIKit/UIToolbar.H>
+
 @interface MTBlurView ()
 
-@property (nonatomic, strong) UIToolbar *toolbar;
+    @property (nonatomic, strong) UIToolbar *toolbar;
 
 @end
 

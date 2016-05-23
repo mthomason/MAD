@@ -9,9 +9,9 @@
 #ifndef MADCocoaExtensions_MADColor_h
 #define MADCocoaExtensions_MADColor_h
 
+#import <Foundation/NSObject.h>
 #import <UIKit/UIColor.h>
-#import <Foundation/Foundation.h>
-#import <CoreGraphics/CGBase.h>
+//#import <CoreGraphics/CGBase.h>
 
 extern const CGFloat MADF255;
 

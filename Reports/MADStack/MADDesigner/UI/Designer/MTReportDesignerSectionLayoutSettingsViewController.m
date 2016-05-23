@@ -11,6 +11,14 @@
 #endif
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UISwitch.h>
+#import <UIKit/UIStepper.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import "UIViewController+Designer.h"
@@ -63,8 +71,10 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorBlue];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top, self.tableView.scrollIndicatorInsets.left,
-                                                            CGSizeZero.height, self.tableView.scrollIndicatorInsets.right);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
+                                                            self.tableView.scrollIndicatorInsets.left,
+                                                            CGSizeZero.height,
+                                                            self.tableView.scrollIndicatorInsets.right);
     [self updateDisplay];
 }
 

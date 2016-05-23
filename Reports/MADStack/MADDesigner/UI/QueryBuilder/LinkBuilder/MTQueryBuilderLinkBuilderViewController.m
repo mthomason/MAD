@@ -14,6 +14,12 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqQueryLinks+Extras.h>
+
+#import <MAD/MADocument.h>
+
 @interface MTQueryBuilderLinkBuilderViewController ()
 
     @property (nonatomic, strong) RptqQueryTable *firstTable;
@@ -47,48 +53,65 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
     if ([segue.identifier isEqualToString:@"showSelectJoinType"]) {
 
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
-            MTQueryBuilderAddLinkJoinTypeViewController *vcFf = segue.destinationViewController;
-            vcFf.delegate = self;
-            vcFf.document = self.document;
+        if ([segue.destinationViewController isKindOfClass:
+                                        [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
+            [self setupJoinController:segue.destinationViewController];
         }
+        
     } else {
         
         if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldOne"]) {
             
             self.currentlyEditingPart = MNSLinkLeft;
-            
-            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
-            
-            if (dvc != nil) {
-                dvc.excludeTables = self.secondTable.alias ? @[self.secondTable.alias] : @[];
-                dvc.delegate = self;
-                dvc.document = self.document;
-            }
+            [self setupFieldController2:segue.destinationViewController];
 
         } else if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldTwo"]) {
             
             [self setCurrentlyEditingPart: MNSLinkRight];
+            [self setupFieldController1:segue.destinationViewController];
             
-            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
-            if (dvc != nil) {
-                dvc.excludeTables = self.firstTable.alias ? @[self.firstTable.alias] : @[];
-                dvc.delegate = self;
-                dvc.document = self.document;
-            }
         }
     }
 }
 
+- (void)setupJoinController:(MTQueryBuilderAddLinkJoinTypeViewController *)controller {
+    controller.delegate = self;
+    controller.document = self.document;
+}
+
+- (void)setupFieldController1:(MTQueryBuilderChooseFieldViewController *)controller {
+    [self setupFieldController:controller excludeTable:self.firstTable];
+}
+
+- (void)setupFieldController2:(MTQueryBuilderChooseFieldViewController *)controller {
+    [self setupFieldController:controller excludeTable:self.secondTable];
+}
+
+- (void)setupFieldController:(MTQueryBuilderChooseFieldViewController *)controller
+                 excludeTable:(RptqQueryTable *)excludeTable {
+    if (controller == nil) return;
+    id alias = excludeTable.alias.copy;
+    NSArray *excludeTables = alias != nil ?
+                                [[NSArray alloc] initWithObjects:alias, nil] :
+                                [[NSArray alloc] init];
+    controller.excludeTables = excludeTables;
+    controller.delegate = self;
+    controller.document = self.document;
+}
 
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
     if (self.firstField && self.secondField) {
-        RptqQueryLinks *queryLink = [RptqQueryLinks newQueryLinksWithLeftField:self.firstField rightField:self.secondField joinType:[self linkType] managedObjectContext:self.document.managedObjectContext];
-        [self.delegate viewControllerSchemaAddLinkDidAdd:queryLink];
+        RptqQueryLinks *links;
+        links = [RptqQueryLinks newQueryLinksWithLeftField: self.firstField
+                                                rightField: self.secondField
+                                                  joinType: self.linkType
+                                      managedObjectContext: self.document.managedObjectContext];
+        [self.delegate viewControllerSchemaAddLinkDidAdd: links];
     } else {
         [self cancel:sender];
     }
@@ -119,10 +142,12 @@
             
             [self updateRightLabelState];
 
-            
-            NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];
+            NSString *required = NSLocalizedString(@"Required",
+                                                   @"Shows that this field is required.");
+            required = [required lowercaseString];
             self.tableViewCellTableFieldTwo.detailTextLabel.text = required;
-            self.tableViewCellTableFieldTwo.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            self.tableViewCellTableFieldTwo.accessoryType =
+                                                    UITableViewCellAccessoryDisclosureIndicator;
             break;
         }
         case MNSLinkRight: {

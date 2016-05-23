@@ -9,14 +9,15 @@
 #ifndef Reports_MTQueryBuilderChooseFieldViewController_h
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
-#import <UIKit/UIKit.h>
 #import "MADDatabaseTableSectionHeaderView.h"
 #import "MADViewController.h"
 #import "MTUnwindProtocol.h"
-#import "MTQueryBuilderChooseFieldDelegate.h"
-#import <MAD/MAD.h>
 
-@class MTQueryBuilderChooseFieldViewController, RptqQueryField, MADocument;
+@protocol MTQueryBuilderChooseFieldDelegate;
+
+@class MTQueryBuilderChooseFieldViewController;
+@class RptqQueryField;
+@class MADocument;
 
 @interface MTQueryBuilderChooseFieldViewController : MADTableViewController
     <UITableViewDataSource,

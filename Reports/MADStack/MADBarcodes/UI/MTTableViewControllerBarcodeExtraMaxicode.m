@@ -11,11 +11,26 @@
 #endif
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+
+#import <CoreData/NSManagedObjectID.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
+
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable+Factory.h>
+
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
+
 #import <MAD/MTQuery.h>
+
+#import "MTQueryBuilderChooseFieldViewController.h"
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 

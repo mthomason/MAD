@@ -9,14 +9,19 @@
 #ifndef Reports_NSLayoutConstraint_Designer_h
 #define Reports_NSLayoutConstraint_Designer_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/NSLayoutConstraint.h>
 
+@class UIView;
 @class MTRulerView;
+@class UIScrollView;
 
 @interface NSLayoutConstraint (Designer)
 
-    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
-    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer sideMargin:(CGFloat)sideMargin;
+    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
+                          marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
+                          
+    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
+                         sideMargin:(CGFloat)sideMargin;
 
     + (instancetype)viewScrollerTop:(id)item view:(id)item;
     + (instancetype)viewLeft:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;

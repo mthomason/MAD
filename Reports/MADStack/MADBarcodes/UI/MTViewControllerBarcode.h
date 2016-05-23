@@ -10,12 +10,13 @@
 #define Barcodes_MTViewControllerBarcode_h
 
 #import "MADViewController.h"
-
+#import "MTViewControllerBarcodePreviewDelegate.h"
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"
 
 @class RptqDocumentObjectBarcode;
+@class NSManagedObjectID;
 
 @protocol MTViewControllerBarcodeDelegate
     - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID

@@ -11,15 +11,24 @@
 #endif
 
 #import "MTReportViewerReportPageViewController.h"
-#import "MTReportViewerReportPageView.h"
-#import "NSDate+Extras.h"
-#import "MADDocumentScroller.h"
-#import "MADPageViewAttributes.h"
+
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UINavigationController.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MAD/MTPaper.h>
 #import <MAD/MADocument.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import "MTPrintingProtocol.h"
+
+#import "MADTabBarController.h"
+
+#import "MTReportViewerReportPageView.h"
+#import "NSDate+Extras.h"
+#import "MADDocumentScroller.h"
+#import "MADPageViewAttributes.h"
 
 static const CGFloat PageEdgeInsetMargin = 3.0000f;
 
@@ -64,7 +73,9 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 @interface MADReportPageViewController ()
-    <UIAccessibilityReadingContent, UIScrollViewDelegate, MADReportPageViewProtocol>
+    <UIAccessibilityReadingContent,
+        UIScrollViewDelegate,
+        MADReportPageViewProtocol>
 
     @property (nonatomic, weak, readwrite) UIView *documentView;
 

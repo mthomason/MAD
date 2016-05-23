@@ -9,8 +9,6 @@
 #ifndef Reports_MTQueryBuilderAddLinkFirstTableViewController_h
 #define Reports_MTQueryBuilderAddLinkFirstTableViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
 #import "MADTableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkFirstTableViewController, RptqQueryTable;

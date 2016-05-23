@@ -12,16 +12,24 @@
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 
+#import <UIKit/UILabel.h>
+
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/RptqUserCredentals+Extras.h>
+
+#import <MAD/MADSQLJoinType.h>
+
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellEquiJoin;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellEquiJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
 
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCrossJoin;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellInnerJoin;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellLeftOuterJoin;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellRightOuterJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCrossJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellInnerJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellLeftOuterJoin;
+    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellRightOuterJoin;
 
 @end
 

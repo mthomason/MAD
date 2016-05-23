@@ -9,21 +9,22 @@
 #ifndef Reports_UITableViewControllerOpperators_h
 #define Reports_UITableViewControllerOpperators_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
+#import <UIKit/UITableView.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
 
 @class UITableViewControllerOpperators;
 
 @protocol UITableViewControllerOpperatorsDelegate
-- (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType;
-@optional
-- (void)uITableViewControllerOpperatorsDidFinish:(UITableViewControllerOpperators *)controller;
+    - (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType;
+  @optional
+    - (void)uITableViewControllerOpperatorsDidFinish:(UITableViewControllerOpperators *)controller;
 @end
 
 @interface UITableViewControllerOpperators : UITableViewController
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <UITableViewControllerOpperatorsDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <UITableViewControllerOpperatorsDelegate> delegate;
 
 @end
 

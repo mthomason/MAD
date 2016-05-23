@@ -7,21 +7,26 @@
 //
 
 #import "MADDesignerElementView.h"
-#import "MTElementCanvas.h"
-#import "MADResizeHandles.h"
-#import "MTResizeHandleView.h"
-#import "UITapGestureRecognizer+Designer.h"
+
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
+
+#import <QuartzCore/CALayer.h>
+
+#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
 #import <MAD/RptqDocumentObjectImage.h>
 #import <MAD/RptqDocumentObjectBarcode.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <MADCocoaExtensions/UIView+Animations.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import "MTElementCanvas.h"
+#import "MADResizeHandles.h"
+#import "MTResizeHandleView.h"
+#import "UITapGestureRecognizer+Designer.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -239,7 +244,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
     NSError * __autoreleasing *error = NULL;
     [managedObjectContext save:error];
-    NSAssert(*error == nil, @"Error: %@", *error);
+    NSAssert(error == NULL, @"Error: %@", *error);
     
 }
 #pragma mark - Members

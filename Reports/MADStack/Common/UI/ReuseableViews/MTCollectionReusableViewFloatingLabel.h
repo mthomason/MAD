@@ -9,7 +9,7 @@
 #ifndef Reports_MTCollectionReusableViewFloatingLabel_h
 #define Reports_MTCollectionReusableViewFloatingLabel_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @interface MTCollectionReusableViewFloatingLabel : UICollectionReusableView
 

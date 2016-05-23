@@ -7,6 +7,7 @@
 //
 
 #import "MTBarcodeMaxicodeIso16023.h"
+#import <Foundation/NSString.h>
 
 @interface MTBarcode ()
 

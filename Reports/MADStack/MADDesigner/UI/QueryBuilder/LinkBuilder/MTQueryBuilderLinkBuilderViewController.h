@@ -9,9 +9,6 @@
 #ifndef Reports_MTQueryBuilderLinkBuilderViewController_h
 #define Reports_MTQueryBuilderLinkBuilderViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
-
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"

@@ -976,7 +976,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         
     } confirm:^(UIAlertAction *action, NSString *text) {
         
-        NSString *name = [NSURL fileNameFilter:text];
+        NSString *name = [NSURL newStringFileNameFilter:text];
         if (name.length > 0) {
             NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent
                                             URLByAppendingPathComponent:name isDirectory:NO];

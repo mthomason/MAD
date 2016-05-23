@@ -9,18 +9,18 @@
 #ifndef Barcodes_MTViewControllerBarcodePreview_h
 #define Barcodes_MTViewControllerBarcodePreview_h
 
-#import <UIKit/UIKit.h>
-#import <MADBarcodes/MADBarcodes.h>
-#import "MTViewControllerBarcodePreviewDelegate.h"
+#import <UIKit/UIViewController.h>
+
+@protocol MTViewControllerBarcodePreviewDelegate;
 
 @class MTBarcode;
 
 @interface MTViewControllerBarcodePreview : UIViewController
 
-@property (nonatomic, weak) id <MTViewControllerBarcodePreviewDelegate> delegate;
+    @property (nonatomic, weak) id <MTViewControllerBarcodePreviewDelegate> delegate;
 
-- (void)setBarcodeToPreview:(MTBarcode *)barcode;
-- (void)update;
+    - (void)setBarcodeToPreview:(MTBarcode *)barcode;
+    - (void)update;
 
 @end
 

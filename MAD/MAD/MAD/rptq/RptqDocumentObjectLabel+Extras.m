@@ -14,6 +14,7 @@
 #import "RptqDocumentObject+Extras.h"
 #import <CoreData/NSFetchRequest.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
 #import <CoreData/NSManagedObjectContext.h>
 
 @implementation RptqDocumentObjectLabel (Extras)

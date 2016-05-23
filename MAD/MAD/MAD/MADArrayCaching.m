@@ -7,22 +7,29 @@
 //
 
 #import "MADArrayCaching.h"
-#import <MADDataStructures/MADIndex.h>
-#import <MAD/MADConstants.h>
-#import <MADSqlite3/MADSqlite3.h>
-#import <MADFoundation/MADDataColumn.h>
-#import "MTQuery.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseCache.h"
-#import "MTQueryCacheAddColumn.h"
-#import <MADFileManager/MADFileUtilities.h>
+
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
-
 #import <Foundation/NSException.h>
 #import <Foundation/NSPropertyList.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSSortDescriptor.h>
+
+#import <MADSqlite3/sqlite3.h>
+
+#import <MADDataStructures/MADIndex.h>
+
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataColumn.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
+#import "MADConstants.h"
+
+#import "MTQuery.h"
+#import "MTDatabaseConnection.h"
+#import "MTDatabaseCache.h"
+#import "MTQueryCacheAddColumn.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -125,7 +132,8 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 - (void)initializeDatabase {
     
     NSURL *url = [self url];
-    BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath:url.path];
+    NSString *path = url.path.copy;
+    BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath: path];
     [self reopenDatabaseAtUrl:url];
     if (!createDatabase) {
         createDatabase = ![self.database tableExist:MTArrayCachedTableName];
@@ -365,11 +373,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (MADQueryDefinition *)queryDefinatinSelect {
-    NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey];
+    NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey, nil];
     NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
                                                             ascending: NO
                                                              selector: @selector(compare:)];
-    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn];
+    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
     MADQueryDefinition *queryDefinitionSelect = [MTQuery newQueryDefinitionSelect: columnNameIndex
                                                                         tableName: MTArrayCachedTableName
                                                                   sortDescriptors: sortdesc];
@@ -381,7 +389,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
                                                             ascending: NO
                                                              selector: @selector(compare:)];
-    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn];
+    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
     MADQueryDefinition *queryDefinition = [MTQuery newQueryDefinitionSelect: columnNameIndex
                                                                   tableName: MTArrayCachedTableName
                                                             sortDescriptors: sortdesc];

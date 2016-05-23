@@ -11,7 +11,18 @@
 #endif
 
 #import "MTQueryBuilderAddPredicateViewController.h"
+
+#import <CoreData/NSManagedObjectID.h>
+
 #import "MTQueryBuilderChooseFieldViewController.h"
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import <MAD/MADocument.h>
 
 @implementation MTQueryBuilderAddPredicateViewController
 
@@ -84,7 +95,7 @@
 
             ((MTViewControllerValueBasedOnField *)segue.destinationViewController).enterStringDelegate = self;
             ((MTViewControllerValueBasedOnField *)segue.destinationViewController).document = self.document;
-            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID;
+            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID.copy;
         }
     }
 }

@@ -14,6 +14,7 @@
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
+#import <UIKit/NSStringDrawing.h>
 
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"

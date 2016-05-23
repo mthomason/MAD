@@ -9,7 +9,8 @@
 #ifndef Reports_MTViewControllerDynamicItem_h
 #define Reports_MTViewControllerDynamicItem_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIDynamicBehavior.h>
 
 @interface MTViewControllerDynamicItem : UIViewController
     <UIDynamicItem>

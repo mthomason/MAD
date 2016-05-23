@@ -10,7 +10,6 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import <UIKit/UIKit.h>
 #import "MADViewerAppDelegate.h"
 
 int main(int argc, char *argv[]) {

@@ -9,12 +9,13 @@
 #ifndef MAD_Designer_MADVibrantTableViewCellImage_h
 #define MAD_Designer_MADVibrantTableViewCellImage_h
 
-#import <UIKit/UIKit.h>
 #import "MADVibrantTableViewCellBase.h"
+
+@class UIImageView;
 
 @interface MADVibrantTableViewCellImage : MADVibrantTableViewCellBase
 
-@property (nonatomic, strong) UIImageView *imageViewMain;
+    @property (nonatomic, strong) UIImageView *imageViewMain;
 
 @end
 

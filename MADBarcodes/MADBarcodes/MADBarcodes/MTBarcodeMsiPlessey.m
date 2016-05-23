@@ -7,6 +7,7 @@
 //
 
 #import "MTBarcodeMsiPlessey.h"
+#import <Foundation/NSException.h>
 
 @interface MTBarcode ()
 

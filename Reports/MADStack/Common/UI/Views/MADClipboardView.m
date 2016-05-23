@@ -8,7 +8,7 @@
 
 #import "MADClipboardView.h"
 #import <UIKit/UIGraphics.h>
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>
 
 static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor);
 static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse);

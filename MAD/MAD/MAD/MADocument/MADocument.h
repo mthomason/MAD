@@ -59,8 +59,10 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
 
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
-        MTReportFormatterDataSource, MTDatabaseProtocol,
-        MTCacheProtocol, MADDataProtocol>
+        MTReportFormatterDataSource,
+        MTDatabaseProtocol,
+        MTCacheProtocol,
+        MADDataProtocol>
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;

@@ -20,6 +20,7 @@ const double MADHeaderHeight                = MAD_45;
 
 const CGFloat MADFloatZero                  =    0.00000000f;
 const CGFloat MADFloat_64                   =   64.00000000f;
+const CGFloat MADFloat_320                  =  320.00000000f;
 const CGFloat MADFloat_1024                 = 1024.00000000f;
 const CGFloat MTDefaultFingerSizeWidth      =   44.00000000f;
 const CGFloat MTDefaultFingerSizeHeight     = MTDefaultFingerSizeWidth;

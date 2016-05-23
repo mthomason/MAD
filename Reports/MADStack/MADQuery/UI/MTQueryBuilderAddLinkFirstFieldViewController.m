@@ -11,6 +11,9 @@
 #endif
 
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
+#import <UIKit/UILabel.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController
 
@@ -21,17 +24,21 @@
 #pragma mark -
 #pragma mark Table View Data Source Protocol
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     static NSString *CellIdentifier = @"UITableViewCellFirstField";
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1
+                                      reuseIdentifier: CellIdentifier];
     }
     
     RptqDatabaseSchemaField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
-    [[cell textLabel] setText: [field name]];
-    [[cell detailTextLabel] setText: [field fieldTypeDisplay]];
+    cell.textLabel.text = field.name.copy;
+    cell.detailTextLabel.text = field.fieldTypeDisplay.copy;
     
     return cell;
 }

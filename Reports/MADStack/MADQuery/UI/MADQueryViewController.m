@@ -12,11 +12,38 @@
 
 #import "MADQueryViewController.h"
 
+#import <CoreData/NSManagedObjectID.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MAD/MADocument.h>
+#import <MAD/MTQuery.h>
+
+#import <MAD/RptqQueryGroup+Extras.h>
+
+#import <MAD/RptqDocument+Extras.h>
+
+#import <MAD/RptqDatabase+Extras.h>
+
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQuery+Extras.h>
+
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqQueryLinks+Extras.h>
+
+#import <MAD/RptqUserCredentals+Extras.h>
+
+#import <MAD/RptqDocumentSection.h>
+
+#import <MAD/RptqDatabaseSchemaTable.h>
+
 #import "MADNavigationBarTitleView.h"
 #import "MADTabBarController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
-#import <MAD/MTQuery.h>
+
+
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
@@ -185,7 +212,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
-                    MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables reportingEnabled:[[MTStoreKitController sharedObject] isReportingEnabled]];
+                    MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables
+                                                                                                          reportingEnabled:[[MTStoreKitController sharedObject] isReportingEnabled]];
                     self.datamodel = datamodel;
                 }
             }
@@ -668,7 +696,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
+      toIndexPath:(NSIndexPath *)toIndexPath {
     MTQuerySections ts = [self.datamodel sectionAtIndex:(short)toIndexPath.section];
     switch (ts) {
         case MTQuerySectionsGroups: {

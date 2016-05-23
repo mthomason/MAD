@@ -9,12 +9,11 @@
 #ifndef MAD_Designer_UIView_Extras_h
 #define MAD_Designer_UIView_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface UIView (Extras)
 
     - (CGRect)popoverRectForSelectedViews:(NSSet *)views;
-    - (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer;
 
     + (CGFloat)borderWidthThin;
 

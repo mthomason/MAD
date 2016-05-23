@@ -11,10 +11,10 @@
 
 #import <Foundation/NSArray.h>
 #import <CoreGraphics/CGGeometry.h>
-#import <CoreData/NSManagedObjectID.h>
 #import <UIKit/UICollectionViewLayout.h>
 
 @class MADSectionLayoutManager;
+@class NSManagedObjectID;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
     <NSCopying>

@@ -8,6 +8,9 @@
 
 #import "UIView+Extras.h"
 
+#import <UIKit/UIApplication.h>
+#import <UIKit/UIGestureRecognizer.h>
+
 @implementation UIView (Extras)
 
 - (CGRect)popoverRectForSelectedViews:(NSSet *)views {
@@ -40,14 +43,6 @@
         result = CGRectMake(minx, miny, maxx - minx, maxy - miny);
     }
     return result;
-}
-
-- (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    CGPoint gestureLocation = [gestureRecognizer locationInView:window];
-    return [self convertPoint: gestureLocation
-                     fromView: window];
-    
 }
 
 + (CGFloat)borderWidthThin { return 1.0000f; }

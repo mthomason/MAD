@@ -29,6 +29,8 @@
     return mailComposer;
 }
 
+
+
 + (instancetype)body:(NSString *)body
           attachment:(NSURL *)attachmentURL
             mimeType:(NSString *)mimeType
@@ -40,7 +42,10 @@
     
     MFMailComposeViewController	*mailComposer = [self title:documentTitle body:body userInterfaceIdiom:userInterfaceIdiom];
 
-    [mailComposer addAttachmentData:data mimeType:mimeType fileName:attachmentURL.lastPathComponent];
+    NSString *lastPathComponent = attachmentURL.lastPathComponent.copy ?: @"";
+    [mailComposer addAttachmentData:data
+                           mimeType:mimeType
+                           fileName:lastPathComponent];
     return mailComposer;
 }
 

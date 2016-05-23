@@ -7,6 +7,11 @@
 //
 
 #import "NSDate+Extras.h"
+
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSCalendar.h>
+#import <Foundation/NSNumberFormatter.h>
+
 #import <MADDataStructures/MTPair.h>
 
 static NSString * const FormatYear          = @"%@ year ";
@@ -221,7 +226,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
                            andLatter: resultType];
 }
 
-+ (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution {
++ (double)timeIntervalForResolution:(MTDateResolution)resolution {
     switch (resolution) {
         case MTDateResolutionDay:
             return 86400.0;

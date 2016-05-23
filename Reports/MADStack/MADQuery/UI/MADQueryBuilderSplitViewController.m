@@ -11,8 +11,14 @@
 #endif
 
 #import "MADQueryBuilderSplitViewController.h"
-#import "MADTabBarController.h"
+
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <MAD/MADocument.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import "MADTabBarController.h"
 
 #import "MADNavigationBarTitleView.h"
 
@@ -24,9 +30,6 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
 #import "MADStoryboard.h"
-
-#import <UIKit/UIManagedDocument.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
 

@@ -7,6 +7,7 @@
 //
 
 #import "MADTabBar.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADTabBar
 

@@ -7,9 +7,16 @@
 //
 
 #import "MADInformationTableViewController.h"
-#import "MADTableViewCellAuto.h"
+
+#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
+
+#import <MessageUI/MFMailComposeViewController.h>
+
+#import "MADTableViewCellAuto.h"
 #import "ACAccountStore+Social.h"
 #import "UIButton+FollowTwitter.h"
 #import "NSAttributedString+Common.h"

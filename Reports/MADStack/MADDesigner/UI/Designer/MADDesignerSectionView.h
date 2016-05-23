@@ -9,7 +9,7 @@
 #ifndef Reports_MTDocumentSectionView_h
 #define Reports_MTDocumentSectionView_h
 
-#import "MADManagedObjectView.h"
+#import "MADManagedObjectCollectionView.h"
 #import <UIKit/UIGestureRecognizer.h>
 
 @class MADDesignerSectionLabel;
@@ -28,8 +28,11 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
     @property (nonatomic, assign) BOOL visible;
     @property (nonatomic, assign) BOOL selected;
 
-    - (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
-    - (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+    - (void)removeItemAtIndex:(NSIndexPath *)deletePath
+                       update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+                       
+    - (void)insertItemAtIndex:(NSIndexPath *)path
+                       update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
 
 @end
 

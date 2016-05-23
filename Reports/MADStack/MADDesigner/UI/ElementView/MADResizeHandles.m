@@ -7,22 +7,26 @@
 //
 
 #import "MADResizeHandles.h"
+
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 #import "MTResizeHandleView.h"
 
 @interface MADResizeHandles ()
     <MTResizeHandleViewDelegate>
-@property (nonatomic, strong, readwrite) NSArray *resizeHandles;
 
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeRight;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeLeft;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeTop;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeBottom;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerTopRight;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerTopLeft;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerBottomRight;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerBottomLeft;
+    @property (nonatomic, strong, readwrite) NSArray *resizeHandles;
 
-@property (nonatomic, assign) CGRect frame;
+    @property (nonatomic, strong) MTResizeHandleView *handleEdgeRight;
+    @property (nonatomic, strong) MTResizeHandleView *handleEdgeLeft;
+    @property (nonatomic, strong) MTResizeHandleView *handleEdgeTop;
+    @property (nonatomic, strong) MTResizeHandleView *handleEdgeBottom;
+    @property (nonatomic, strong) MTResizeHandleView *handleCornerTopRight;
+    @property (nonatomic, strong) MTResizeHandleView *handleCornerTopLeft;
+    @property (nonatomic, strong) MTResizeHandleView *handleCornerBottomRight;
+    @property (nonatomic, strong) MTResizeHandleView *handleCornerBottomLeft;
+
+    @property (nonatomic, assign) CGRect frame;
 
 @end
 
@@ -94,14 +98,14 @@
 }
 
 - (void)positionAroundRect:(CGRect)rect {
-    self.handleEdgeLeft.center = CGEdgeLeftPointInRect(rect);
-    self.handleEdgeRight.center = CGEdgeRightPointInRect(rect);
-    self.handleEdgeBottom.center = CGEdgeBottomPointInRect(rect);
-    self.handleEdgeTop.center = CGEdgeTopPointInRect(rect);
-    self.handleCornerBottomLeft.center = CGCornerBottomLeftPointInRect(rect);
+    self.handleEdgeLeft.center          = CGEdgeLeftPointInRect(rect);
+    self.handleEdgeRight.center         = CGEdgeRightPointInRect(rect);
+    self.handleEdgeBottom.center        = CGEdgeBottomPointInRect(rect);
+    self.handleEdgeTop.center           = CGEdgeTopPointInRect(rect);
+    self.handleCornerBottomLeft.center  = CGCornerBottomLeftPointInRect(rect);
     self.handleCornerBottomRight.center = CGCornerBottomRightPointInRect(rect);
-    self.handleCornerTopRight.center = CGCornerTopRightPointInRect(rect);
-    self.handleCornerTopLeft.center = CGCornerTopLeftPointInRect(rect);
+    self.handleCornerTopRight.center    = CGCornerTopRightPointInRect(rect);
+    self.handleCornerTopLeft.center     = CGCornerTopLeftPointInRect(rect);
     
     self.frame = CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, rect.size.height);
 }

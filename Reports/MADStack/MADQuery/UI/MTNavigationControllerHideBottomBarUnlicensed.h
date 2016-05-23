@@ -9,7 +9,6 @@
 #ifndef Reports_MTNavigationControllerHideBottomBarUnlicensed_h
 #define Reports_MTNavigationControllerHideBottomBarUnlicensed_h
 
-#import <UIKit/UIKit.h>
 #import "MADNavigationController.h"
 
 @interface MTNavigationControllerHideBottomBarUnlicensed : MADNavigationController

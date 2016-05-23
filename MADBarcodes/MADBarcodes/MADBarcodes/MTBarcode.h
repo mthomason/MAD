@@ -10,21 +10,18 @@
 #define Barcodes_MTBarcode_h
 
 #import <Foundation/NSObject.h>
-#import <UIKit/UIKit.h>
+#import <CoreGraphics/CGGeometry.h>
+
 #import "MTBarcodeProtocol.h"
 #import "MADBarcodeType.h"
 #import "zint.h"
+
+#import "MADBarcodeBorderStyle.h"
 
 typedef NS_ENUM(unsigned char, MTBarcodeSizingMode) {
     MTBarcodeSizingModeAutomaticResizing     = 1,
     MTBarcodeSizingModeSpecificSize          = 2,
     MTBarcodeSizingModeSpecificErrorLevel    = 3
-};
-
-typedef NS_ENUM(unsigned char, MTBarcodeBorderStyle) {
-    MTBarcodeBorderStyleNone    = 0,
-    MTBarcodeBorderStyleBind    = BARCODE_BIND,
-    MTBarcodeBorderStyleBox     = BARCODE_BOX
 };
 
 typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
@@ -70,12 +67,12 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
     @property (nonatomic, assign) BOOL has2dComponentEnabled;
     @property (nonatomic, assign) NSInteger has2dComponentType;
 
-    @property (nonatomic, assign) CGFloat scale;
+    @property (nonatomic, assign) float scale;
 
     - (void)drawInRect:(CGRect)rect;
 
     + (NSString *)newBarcodeNameForType:(MTBarcodeType)type;
-    + (NSDictionary *)names;
+    + (NSDictionary *)newDictionaryNames;
 
 @end
 

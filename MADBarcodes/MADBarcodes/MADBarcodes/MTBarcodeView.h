@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeView_h
 #define Barcodes_MTBarcodeView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @class MTBarcode;
 

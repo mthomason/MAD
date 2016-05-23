@@ -7,6 +7,7 @@
 //
 
 #import "MADFeedbackUncaughtExceptionHandler.h"
+#import <UIKit/UIAlertView.h>
 
 NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
 NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
@@ -52,7 +53,8 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     NSString *message = [NSString stringWithFormat:format, exception.reason,
                          [exception.userInfo objectForKey:UncaughtExceptionHandlerAddressesKey]];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Unhandled exception", nil)
-                                                    message: message delegate: self
+                                                    message: message
+                                                   delegate: self
                                           cancelButtonTitle: NSLocalizedString(@"Quit", nil)
                                           otherButtonTitles: NSLocalizedString(@"Continue", nil), nil];
     [alert show];

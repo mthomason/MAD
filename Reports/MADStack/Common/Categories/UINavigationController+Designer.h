@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_UINavigationController_Extras_h
 #define MAD_Designer_UINavigationController_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UINavigationController.h>
 
 @interface UINavigationController (Designer)
 

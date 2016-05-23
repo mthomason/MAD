@@ -9,7 +9,7 @@
 #ifndef Reports_MTDocumentStatusView_h
 #define Reports_MTDocumentStatusView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface MTDocumentStatusView : UIView
 

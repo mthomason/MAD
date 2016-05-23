@@ -9,7 +9,7 @@
 #ifndef MAD_NSLayoutConstraint_Extras_h
 #define MAD_NSLayoutConstraint_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/NSLayoutConstraint.h>
 
 @interface NSLayoutConstraint (Extras)
 

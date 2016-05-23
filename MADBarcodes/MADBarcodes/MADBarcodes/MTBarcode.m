@@ -73,6 +73,9 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
+#import <UIKit/UIGraphics.h>
+#import <UIKit/NSStringDrawing.h>
+
 #import <MADCocoaExtensions/MADColor.h>
 
 @interface MTBarcode ()
@@ -632,7 +635,7 @@
     }
 }
 
-+ (NSDictionary *)names {
++ (NSDictionary *)newDictionaryNames {
     
     NSDictionary *names = @{
                   @BARCODE_AUSREDIRECT      : @"Australia Post Redirect Code",
@@ -707,7 +710,7 @@
 
 + (NSString *)newBarcodeNameForType:(MTBarcodeType)type {
     id t = [[NSNumber alloc] initWithUnsignedInteger: type];
-    NSDictionary *names = [MTBarcode names];
+    NSDictionary *names = [MTBarcode newDictionaryNames];
     NSString *name = [names objectForKey: t];
     return name.copy;
 }

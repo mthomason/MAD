@@ -9,7 +9,7 @@
 #ifndef Reports_UIViewController_tabBarItem_h
 #define Reports_UIViewController_tabBarItem_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 
 @protocol MTTabBarImageProtocol <NSObject>
 

@@ -9,7 +9,7 @@
 #ifndef Reports_UIStoryboard_About_h
 #define Reports_UIStoryboard_About_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (About)
 

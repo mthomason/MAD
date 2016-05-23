@@ -10,7 +10,7 @@
 #define MAD_MADAccessibilityLine_h
 
 #import <Foundation/NSObject.h>
-#import <UIKit/UIGeometry.h>
+#import <CoreGraphics/CGGeometry.h>
 #import "MADDocumentObjectType.h"
 
 @interface MADAccessibilityLine : NSObject

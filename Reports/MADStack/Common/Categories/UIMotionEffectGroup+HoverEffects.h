@@ -9,7 +9,7 @@
 #ifndef Reports_UIMotionEffectGroup_Shared_h
 #define Reports_UIMotionEffectGroup_Shared_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIMotionEffect.h>
 
 @interface UIMotionEffectGroup (HoverEffects)
 

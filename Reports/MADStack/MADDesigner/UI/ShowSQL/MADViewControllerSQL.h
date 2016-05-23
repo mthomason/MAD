@@ -9,18 +9,23 @@
 #ifndef Reports_MTShowSqlViewController_h
 #define Reports_MTShowSqlViewController_h
 
-#import "MUIViewControllerDelegate.h"
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIViewController.h>
+//#import "MUIViewControllerDelegate.h"
+//#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
-@class  MADocument, MTQuery;
+@protocol MTViewControllerProtocol;
+
+@class MADocument;
+@class MTQuery;
+@class UITextView;
 
 @interface MADViewControllerSQL : UIViewController
 
-@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MADocument *document;
-@property (nonatomic, weak) IBOutlet UITextView *textView;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) IBOutlet UITextView *textView;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 

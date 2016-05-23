@@ -9,9 +9,8 @@
 #ifndef Reports_MTCollectionViewCellElement_h
 #define Reports_MTCollectionViewCellElement_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
-#import "MADManagedObjectView.h"
+#import <MAD/MADDocumentObjectType.h>
+#import "MADManagedObjectCollectionViewCell.h"
 
 @class MTCollectionViewCellElement, MADDesignerElementView;
 

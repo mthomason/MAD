@@ -11,6 +11,17 @@
 #endif
 
 #import "MADAboutTableViewController.h"
+
+#import <MessageUI/MFMailComposeViewController.h>
+
+#import <CoreText/CTStringAttributes.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
 #import "MADTableViewCellBase.h"
 
 #import "UIButton+FollowTwitter.h"
@@ -19,11 +30,6 @@
 #import "MADOperationQueue.h"
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
-
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
-#import <CoreText/CTStringAttributes.h>
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,

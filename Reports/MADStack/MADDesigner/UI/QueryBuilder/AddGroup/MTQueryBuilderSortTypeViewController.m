@@ -11,6 +11,8 @@
 #endif
 
 #import "MTQueryBuilderSortTypeViewController.h"
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
 
 #define MNSSortTypeReuseIds [NSArray arrayWithObjects: @"MTTableViewCellSortOrderAccending", @"MTTableViewCellSortOrderDecending", nil]
 
@@ -18,8 +20,8 @@
 
 @interface MTQueryBuilderSortTypeViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
-@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
 
 @end
 
@@ -44,14 +46,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    UITableViewCell *cellAccending = self.tableViewCellAccending;
+    UITableViewCell *cellDecending = self.tableViewCellDecending;
+    
     if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderAccending]]) {
         [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderAccending];
-        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryNone];
+        [cellAccending setAccessoryType: UITableViewCellAccessoryCheckmark];
+        [cellDecending setAccessoryType: UITableViewCellAccessoryNone];
+        
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderDecending]]) {
         [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderDecending];
-        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        [cellAccending setAccessoryType: UITableViewCellAccessoryNone];
+        [cellDecending setAccessoryType: UITableViewCellAccessoryCheckmark];
 
     }
 }

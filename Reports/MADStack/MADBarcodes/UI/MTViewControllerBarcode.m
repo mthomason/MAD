@@ -13,7 +13,38 @@
 #import "MTViewControllerBarcode.h"
 #import "MADNavigationBarTitleView.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+
 #import <MAD/MTDataTable+Factory.h>
+
+#import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
+#import <MADBarcodes/MTBarcodeCode39Iso16388.h>
+#import <MADBarcodes/MTBarcodeAztec.h>
+#import <MADBarcodes/MTBarcodeQrCodeIso18004.h>
+#import <MADBarcodes/MTBarcodeGridMatrix.h>
+#import <MADBarcodes/MTBarcodeMicroQrCode.h>
+#import <MADBarcodes/MTBarcodeMaxicodeIso16023.h>
+#import <MADBarcodes/MTBarcodePdf417Iso15438.h>
+#import <MADBarcodes/MTBarcodeCodeOne.h>
+#import <MADBarcodes/MTBarcodeDatabarStacked.h>
+#import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
+#import <MADBarcodes/MTBarcodeMsiPlessey.h>
+#import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
+#import <MADBarcodes/MTBarcodeChannelCode.h>
+#import <MADBarcodes/MTBarcodeCode39Extended.h>
+
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+
+#import <CoreData/NSManagedObjectID.h>
 
 static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";

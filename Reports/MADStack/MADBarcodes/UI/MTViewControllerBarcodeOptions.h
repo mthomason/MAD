@@ -9,12 +9,11 @@
 #ifndef Barcodes_MTViewControllerBarcodeOptions_h
 #define Barcodes_MTViewControllerBarcodeOptions_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTQuery.h>
 #import <MADFoundation/MTDataTable.h>
+
+#import <MADBarcodes/MADBarcodeBorderStyle.h>
 
 #import "MTViewControllerBarcodeType.h"
 #import "MTTableViewControllerBarcodeExtraAztec.h"
@@ -24,6 +23,8 @@
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTTableViewControllerBarcodeExtraDataMatrix.h"
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
+
+@class MTBarcode;
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 

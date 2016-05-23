@@ -11,6 +11,14 @@
 #endif
 
 #import "RptqDocumentObject+Extras.h"
+
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UITextView.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
 #import "MTAlignment.h"
 #import "MADFont.h"
 #import "RptqQueryField.h"
@@ -26,13 +34,13 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows.h"
+
 #import <MADBarcodes/MTBarcode.h>
-#import <Foundation/NSNumberFormatter.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSBundle.h>
+
+//#import <Foundation/NSNumberFormatter.h>
+//#import <Foundation/NSSortDescriptor.h>
+//#import <Foundation/NSBundle.h>
+
 #import "MADSectionLayoutManager.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";

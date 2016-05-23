@@ -9,7 +9,7 @@
 #ifndef Reports_NSDate_Extras_h
 #define Reports_NSDate_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(short, MTDateResolution) {
 	MTDateResolutionYear = 1,
@@ -27,7 +27,7 @@ typedef NS_ENUM(short, MTDateResolution) {
 @interface MADDateFromTimeFormatter : NSObject
 
     - (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
-    + (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution;
+    + (double)timeIntervalForResolution:(MTDateResolution)resolution;
 
 @end
 

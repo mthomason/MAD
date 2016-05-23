@@ -9,7 +9,9 @@
 #ifndef MAD_Designer_NSLayoutConstraint_QueryVisualization_h
 #define MAD_Designer_NSLayoutConstraint_QueryVisualization_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/NSLayoutConstraint.h>
+
+@class UIView;
 
 @interface NSLayoutConstraint (QueryVisualization)
 

@@ -14,6 +14,8 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
 
+#import <MAD/MADDatabaseProtocol.h>
+
 typedef NSString MADSafeQueryField;
 
 extern NSString * const MADSqlTextFromPart;
@@ -27,13 +29,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 };
 
 @class MADCredential, MTDatabaseConnection, MTDatabase, MTDatabaseTable, MTQuery, MTDataTable;
-
-@protocol MTDatabaseProtocol <NSObject>
-@required
-@optional
-    - (MADCredential *)getCredentialsForKey:(NSString *)key;
-    - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
-@end
 
 @protocol MADErrorHandler <NSObject>
 @required

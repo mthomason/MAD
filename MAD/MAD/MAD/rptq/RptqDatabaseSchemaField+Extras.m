@@ -116,7 +116,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MADDataType selectorForSorting:self.dataType.unsignedIntegerValue];
+    return [MADDataType selectorForSorting:self.dataType.shortValue];
 }
 
 #pragma mark - MTProtocolLog
@@ -207,7 +207,8 @@
             result = NSLocalizedString(@"Year", @"Number data type.");
             break;
         default:
-            result = [NSString stringWithFormat:@"Type %ld", (long)[[self dataType] integerValue]];
+            result = [[NSString alloc] initWithFormat:@"Type %hd",
+                                                      self.dataType.shortValue];
             break;
     }
     return result;

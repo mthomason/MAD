@@ -10,7 +10,6 @@
 #define MAD_Feedback_MADFeedbackUncaughtExceptionHandler_h
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import <libkern/OSAtomic.h>
 #import <execinfo.h>
 

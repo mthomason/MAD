@@ -9,8 +9,14 @@
 #ifndef MAD_Designer_MADQueryViewControllerLayoutSection_h
 #define MAD_Designer_MADQueryViewControllerLayoutSection_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
+
+@class NSArray <__covariant ObjectType>;
+@class NSSet <__covariant ObjectType>;
+@class NSNumber;
+@class NSIndexSet;
+@class MADQueryViewControllerLayoutSection;
 
 typedef NS_ENUM(short, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,

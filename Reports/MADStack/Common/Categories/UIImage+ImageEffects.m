@@ -94,6 +94,10 @@
  */
 
 #import "UIImage+ImageEffects.h"
+
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UIScreen.h>
+
 #import <Accelerate/Accelerate.h>
 #import <float.h>
 

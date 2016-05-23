@@ -10,7 +10,8 @@
 #define Reports_MTReportViewerReportPageViewController_h
 
 #import <UIKit/UIViewController.h>
-#import "MTPrintingProtocol.h"
+
+@protocol MTPrintingProtocol;
 
 @class MADocument;
 @class MADPageViewAttributes;

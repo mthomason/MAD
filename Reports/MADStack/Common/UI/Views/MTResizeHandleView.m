@@ -20,7 +20,7 @@ static const CGFloat colors[] = {
     0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
 };
 
-- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
+- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompassDirection)position {
 
     if (self = [self initWithFrame:frame]) {
 

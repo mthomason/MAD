@@ -9,7 +9,7 @@
 #ifndef MADFileManager_MADStorageState_h
 #define MADFileManager_MADStorageState_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(short, MADAppStorage) {
     MADAppStorageNotSet = 0,

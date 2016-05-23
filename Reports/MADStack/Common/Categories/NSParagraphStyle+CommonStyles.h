@@ -9,11 +9,11 @@
 #ifndef Reports_NSParagraphStyle_CommonStyles_h
 #define Reports_NSParagraphStyle_CommonStyles_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/NSParagraphStyle.h>
 
 @interface NSParagraphStyle (CommonStyles)
 
-+ (instancetype)newParagraphStyleTitleBar;
+    + (instancetype)newParagraphStyleTitleBar;
 
 @end
 

@@ -1075,6 +1075,8 @@
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
+		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
+		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
 		4CF6AFC01CAFB55C00D3AD11 /* MADRefreshReloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFBF1CAFB55C00D3AD11 /* MADRefreshReloadOperation.m */; };
 		4CF6AFC31CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC21CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m */; };
 		4CF6AFC61CAFC14200D3AD11 /* MADRefreshOperationInitalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC51CAFC14200D3AD11 /* MADRefreshOperationInitalize.m */; };
@@ -2436,6 +2438,11 @@
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentsAlt20.png; path = Reports/UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentsAlt20@2x.png"; path = "Reports/UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectCollectionView.m; sourceTree = "<group>"; };
+		4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectCollectionView.h; sourceTree = "<group>"; };
+		4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectCollectionViewCell.h; sourceTree = "<group>"; };
+		4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectCollectionViewCell.m; sourceTree = "<group>"; };
+		4CF46DCF1CF2EDD400D93406 /* MADManagedObjectViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectViewProtocol.h; sourceTree = "<group>"; };
 		4CF6AFBE1CAFB55C00D3AD11 /* MADRefreshReloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshReloadOperation.h; sourceTree = "<group>"; };
 		4CF6AFBF1CAFB55C00D3AD11 /* MADRefreshReloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshReloadOperation.m; sourceTree = "<group>"; };
 		4CF6AFC11CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationInitalizeMainDataTable.h; sourceTree = "<group>"; };
@@ -3314,8 +3321,13 @@
 		4C401EEC1BAE61F700BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CF46DCF1CF2EDD400D93406 /* MADManagedObjectViewProtocol.h */,
 				4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */,
 				4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */,
+				4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */,
+				4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */,
+				4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */,
+				4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */,
 				4CFEE7F31BB773D800AFAA0A /* QueryBuilder */,
 				4C26BA041BAF14F200456DC8 /* About */,
 				4C26B9931BAF123A00456DC8 /* Designer */,
@@ -6211,6 +6223,7 @@
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,
 				4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */,
 				4C26B9CB1BAF123A00456DC8 /* MADToolboxNavigationController.m in Sources */,
+				4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */,
 				4C3DCBCD1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m in Sources */,
 				4C40204B1BAE92F200BAE5FC /* NSString+Encryption.m in Sources */,
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
@@ -6376,6 +6389,7 @@
 				4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */,
 				4CFEE80F1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
 				4C26BA9A1BAF9B9B00456DC8 /* MADNavigationBarTitleView.m in Sources */,
+				4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */,
 				4C401F281BAE703200BAE5FC /* MADTableViewCellQueryGroup.m in Sources */,
 				4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */,
 				4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */,
@@ -6871,7 +6885,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
@@ -6943,7 +6957,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;

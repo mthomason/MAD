@@ -12,44 +12,29 @@
 
 #import "MADQueryVisualizationViewController.h"
 
-#import "MADManagedObjectView.h"
-#import "MADViewControllerSQL.h"
-#import "MADConnectorView.h"
+#import <QuartzCore/CALayer.h>
 
-#import "MADQueryVisualizationSchemaViewController.h"
-#import "MADQueryVisualizationSchemaViewController+Designer.h"
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
-#import "CGAffineTransform+Common.h"
+#import <UIKit/UIPopoverController.h>
+#import <UIKit/UIPanGestureRecognizer.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UIWindow.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/UIManagedDocument.h>
 
-#import "UIViewController+Designer.h"
-#import "NSLayoutConstraint+QueryVisualization.h"
-#import "MADQueryVisualizationTableDefination.h"
-
-#import "MADQueryVisualizationDefination.h"
-#import "MADQueryVisualizationCacheData.h"
-
-#import "MADOperationArchiveData.h"
-
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADFileManager/MADFileUtilities.h>
-
-#import "UIGestureRecognizer+AnchorPoint.h"
-
-#import "MADQueryVisualizationSchemaPresentationController.h"
-
-#import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
-#import "MADQueryVisualizationContentView.h"
-#import "MADQueryVisualizationScrollView.h"
-
-#import "MADOperationQueue.h"
-
-#import "MADCacheManager.h"
-
-#import <MAD/MADConstants.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTLinkedList.h>
+
+#import <MADFoundation/MADApplicationProtocol.h>
+
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
+#import <MAD/MADConstants.h>
 
 #import <MAD/MADocument.h>
 
@@ -71,10 +56,37 @@
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryTable+Extras.h>
 
-#import <UIKit/UIManagedDocument.h>
+#import "MUIViewControllerDelegate.h"
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
+#import "MADManagedObjectView.h"
+#import "MADViewControllerSQL.h"
+#import "MADConnectorView.h"
+
+#import "MADQueryVisualizationSchemaViewController.h"
+#import "MADQueryVisualizationSchemaViewController+Designer.h"
+
+#import "CGAffineTransform+Common.h"
+
+#import "UIViewController+Designer.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
+#import "MADQueryVisualizationTableDefination.h"
+
+#import "MADQueryVisualizationDefination.h"
+#import "MADQueryVisualizationCacheData.h"
+
+#import "MADOperationArchiveData.h"
+
+#import "UIGestureRecognizer+AnchorPoint.h"
+
+#import "MADQueryVisualizationSchemaPresentationController.h"
+
+#import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
+#import "MADQueryVisualizationContentView.h"
+#import "MADQueryVisualizationScrollView.h"
+
+#import "MADOperationQueue.h"
+
+#import "MADCacheManager.h"
 
 typedef void(^MTBlockResultVoid)(void);
 

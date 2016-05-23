@@ -10,17 +10,8 @@
 #define MAD_MADReportSectionRepresentation_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/MADReportTextRepresentation.h>
-
-typedef NS_ENUM(short, MNSDocumentSectionType) {
-    MNSDocumentSectionTypeReportHeader = 1,
-    MNSDocumentSectionTypeReportFooter = 2,
-    MNSDocumentSectionTypePageHeader = 3,
-    MNSDocumentSectionTypePageFooter = 4,
-    MNSDocumentSectionTypeBody = 5,
-    MNSDocumentSectionTypeGroupHeader = 6,
-    MNSDocumentSectionTypeGroupFooter = 7,
-};
+#import "MADDocumentTextRepresentationProtocol.h"
+#import "MADocumentSectionType.h"
 
 @class MADReportSectionRowsRepresentation;
 

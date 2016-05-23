@@ -9,7 +9,7 @@
 #ifndef Reports_MTBlurView_h
 #define Reports_MTBlurView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface MTBlurView : UIView
 

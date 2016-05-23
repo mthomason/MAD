@@ -9,7 +9,10 @@
 #ifndef Reports_UIGestureRecognizer_Designer_h
 #define Reports_UIGestureRecognizer_Designer_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/UIPanGestureRecognizer.h>
+#import <UIKit/UIPinchGestureRecognizer.h>
+
 
 @interface MADTapGestureRecognizer : UITapGestureRecognizer
 

@@ -9,7 +9,7 @@
 #ifndef Reports_UIStoryboard_DocumentInformation_h
 #define Reports_UIStoryboard_DocumentInformation_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (DocumentInformation)
 

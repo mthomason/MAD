@@ -9,8 +9,6 @@
 #ifndef Reports_MTQueryBuilderAddLinkFirstFieldViewController_h
 #define Reports_MTQueryBuilderAddLinkFirstFieldViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
 #import "MADTableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkFirstFieldViewController, RptqQueryField;

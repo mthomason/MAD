@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryBuilderPredicateFormatViewController.h"
+#import <UIKit/UIStoryboardSegue.h>
 
 @implementation MTQueryBuilderPredicateFormatViewController
 

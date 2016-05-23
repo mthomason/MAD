@@ -9,16 +9,17 @@
 #ifndef Reports_MTDocumentObjectNewStaticLabelViewController_h
 #define Reports_MTDocumentObjectNewStaticLabelViewController_h
 
-#import <UIKit/UIKit.h>
-#import "MTUnwindProtocol.h"
 #import "MADViewController.h"
+#import "MTUnwindProtocol.h"
+#import <UIKit/UITableView.h>
+#import <UIKit/UITextField.h>
 
 extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 
 @interface MTDocumentObjectNewStaticLabelViewController : MADTableViewController
     <UITableViewDelegate, UITextFieldDelegate, MTUnwindProtocol>
 
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+    @property (nonatomic, weak) IBOutlet UITextField *textField;
 
 @end
 

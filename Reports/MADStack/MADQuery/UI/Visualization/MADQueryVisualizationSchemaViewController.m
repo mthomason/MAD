@@ -13,6 +13,16 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 
 #import <UIKit/UIManagedDocument.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIViewControllerTransitionCoordinator.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UICollectionView.h>
+
+#import <QuartzCore/CALayer.h>
 
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
@@ -37,7 +47,9 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 @interface MADQueryVisualizationSchemaViewController ()
-    <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
+    <UITableViewDataSource,
+        UITableViewDelegate,
+        MTSchemaFieldCellDelegate>
 
     @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
     @property (nonatomic, weak) IBOutlet UIView *containerView;

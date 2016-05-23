@@ -9,12 +9,13 @@
 #ifndef Reports_MTQueryBuilderAddGroupViewController_h
 #define Reports_MTQueryBuilderAddGroupViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import "MTQueryBuilderChooseFieldDelegate.h"
 
-@class MTQueryBuilderAddGroupViewController, NSManagedObjectID, MADocument;
+@class MTQueryBuilderAddGroupViewController;
+@class NSManagedObjectID;
+@class MADocument;
 
 @protocol MTQueryBuilderAddGroupDelegate
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField andSortOrder:(MNSSortOrder)sortOrder;

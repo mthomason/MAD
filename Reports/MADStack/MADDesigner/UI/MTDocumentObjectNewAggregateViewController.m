@@ -17,6 +17,9 @@
 #import "MTAggregateFunctionsViewController.h"
 #import "MADNavigationBarTitleView.h"
 
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
 NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";
 NSString * const MTSegueAggregateFunctionLast       = @"MTSegueAggregateFunctionLast";

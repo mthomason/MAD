@@ -10,33 +10,13 @@
 #define Reports_NSManagedObjectID_NSObjectIdTag_h
 
 #import <UIKit/UIView.h>
-#import <UIKit/UICollectionView.h>
-#import <UIKit/UICollectionViewCell.h>
+#import "MADManagedObjectViewProtocol.h"
 
-@class NSManagedObjectID;
-
-@protocol MADManagedObjectViewProtocol <NSObject>
-@required;
-    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
-@end
 
 @interface MADManagedObjectView : UIView
         <MADManagedObjectViewProtocol>
     @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
 
 @end
-
-@interface MADManagedObjectCollectionView : UICollectionView
-        <MADManagedObjectViewProtocol>
-    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
-
-@end
-
-@interface MADManagedObjectCollectionViewCell : UICollectionViewCell
-        <MADManagedObjectViewProtocol>
-    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
-
-@end
-
 
 #endif

@@ -11,6 +11,12 @@
 #endif
 
 #import "MTDatabaseConnection.h"
+
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
 #import "MADConstants.h"
 #import "RptqUserCredentals.h"
 #import "MTDatabase.h"
@@ -20,9 +26,7 @@
 #import "MTDatabaseConnectionSqlServer.h"
 #import "MTQuery.h"
 #import "MTQueryTest.h"
-#import <Foundation/NSURL.h>
-#import <Foundation/NSException.h>
-#import <MADFileManager/MADFileManager.h>
+
 
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";

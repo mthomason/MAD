@@ -16,6 +16,7 @@
 
     @property (nonatomic, strong) UIGestureRecognizer *dismissGestureReconizer;
     @property (nonatomic, weak) UIViewController <MADViewControllerProtocol> *designerViewController;
+    @property (nonatomic, strong) MADDimmingView *dimmingView;
 
 @end
 

@@ -7,14 +7,21 @@
 //
 
 #import "MADDesignerSectionView.h"
+
+#import <QuartzCore/CALayer.h>
+
+#import <UIKit/UIAccessibilityCustomAction.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIAccessibilityConstants.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MTCollectionViewCellElement.h"
 #import "MTReportDesignerSectionBackgroundView.h"
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
@@ -200,7 +207,8 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
     NSString *toggleAccessibilityName = NSLocalizedString(@"Access section elements.", @"Access section elements.");
-    UIAccessibilityCustomAction *toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName:toggleAccessibilityName target:self selector:@selector(toggleAccessibility:)];
+    UIAccessibilityCustomAction *toggleAccessibility;
+    toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName:toggleAccessibilityName target:self selector:@selector(toggleAccessibility:)];
     return @[toggleAccessibility];
 }
 

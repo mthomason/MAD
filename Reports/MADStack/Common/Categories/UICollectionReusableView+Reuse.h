@@ -9,7 +9,7 @@
 #ifndef Reports_UICollectionReusableView_Reuse_h
 #define Reports_UICollectionReusableView_Reuse_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @interface UICollectionReusableView (Reuse)
 

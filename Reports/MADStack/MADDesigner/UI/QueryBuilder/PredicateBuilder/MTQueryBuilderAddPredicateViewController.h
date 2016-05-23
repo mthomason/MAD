@@ -9,9 +9,6 @@
 #ifndef Reports_MTQueryBuilderAddPredicateViewController_h
 #define Reports_MTQueryBuilderAddPredicateViewController_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
 #import "MUIViewControllerDelegate.h"
 #import "MTViewControllerValueBasedOnField.h"
 #import "UITableViewControllerOpperators.h"

@@ -400,9 +400,10 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 + (instancetype)error:(NSError *)error {
-    NSString *title = error.localizedDescription ?: @"";
-    NSString *messageStart = error.localizedFailureReason ?: @"";
-    NSString *message = [messageStart stringByAppendingString:error.localizedRecoverySuggestion ?: @""];
+    NSString *title = error.localizedDescription.copy ?: @"";
+    NSString *messageStart = error.localizedFailureReason.copy ?: @"";
+    NSString *localizedRecoverySuggestion = error.localizedRecoverySuggestion.copy ?: @"";
+    NSString *message = [messageStart stringByAppendingString:localizedRecoverySuggestion];
     return [self errorDisplayErrorWithTitle:title message:message andCompletion:nil];
 }
 
@@ -435,7 +436,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (void)configureTextFieldForPassword:(UITextField **)textField {
++ (void)configureTextFieldForPassword:(UITextField * __autoreleasing *)textField {
     UILabel *password = [[UILabel alloc] init];
     password.textColor = [UIColor lightGrayColor];
     password.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
@@ -449,7 +450,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     (*textField).clearButtonMode = UITextFieldViewModeAlways;
 }
 
-+ (void)configureTextFieldForUsername:(UITextField **)textField {
++ (void)configureTextFieldForUsername:(UITextField * __autoreleasing *)textField {
     UILabel *username = [[UILabel alloc] init];
     username.textColor = [UIColor lightGrayColor];
     username.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];

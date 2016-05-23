@@ -7,6 +7,18 @@
 //
 
 #import "MADCloudFileCoordinator.h"
+
+#import <Foundation/NSMetadata.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSNotification.h>
+#import <Foundation/NSNotificationQueue.h>
+
+#import <dispatch/dispatch.h>
+
 #import "MADFileUtilities.h"
 #import "MADMetaData.h"
 
@@ -30,9 +42,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)ubiquityIdentifier firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
-    self = [super init];
-    
-    if (self) {
+    if (self = [super init]) {
         
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         

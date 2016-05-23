@@ -11,6 +11,31 @@
 #endif
 
 #import "MTViewControllerBarcodeOptions.h"
+
+#import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
+#import <MADBarcodes/MTBarcodeCode39Iso16388.h>
+#import <MADBarcodes/MTBarcodeAztec.h>
+#import <MADBarcodes/MTBarcodeQrCodeIso18004.h>
+#import <MADBarcodes/MTBarcodeGridMatrix.h>
+#import <MADBarcodes/MTBarcodeMicroQrCode.h>
+#import <MADBarcodes/MTBarcodeMaxicodeIso16023.h>
+#import <MADBarcodes/MTBarcodePdf417Iso15438.h>
+#import <MADBarcodes/MTBarcodeCodeOne.h>
+#import <MADBarcodes/MTBarcodeDatabarStacked.h>
+#import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
+#import <MADBarcodes/MTBarcodeMsiPlessey.h>
+#import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
+#import <MADBarcodes/MTBarcodeChannelCode.h>
+#import <MADBarcodes/MTBarcodeCode39Extended.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+
+#import <MAD/MADDatabaseProtocol.h>
+
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
+
+#import <MAD/RptqQueryField+Extras.h>
+
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"
@@ -19,33 +44,8 @@
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
-#import <MADCocoaExtensions/NSError+Constructors.h>
-
 static NSString * const SetDatasource = @"Set Datasource";
 static NSString * const StringEmpty = @"";
-
-@interface MTViewControllerBarcodeOptions ()
-    <MTDatabaseProtocol, MTTableViewControllerStaticSelectRowDelegate>
-
-@property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
-@property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
-@property (nonatomic, assign) NSUInteger sampleBarcodeData2dComponentIndex;
-
-@property (nonatomic, strong) UIFont *mainFont;
-@property (nonatomic, strong) UIFont *detailFont;
-
-@property (nonatomic, assign) NSInteger borderWidth;
-
-@property (nonatomic, assign) BOOL selectingField1;
-@property (nonatomic, assign) BOOL selectingField2;
-
-@property (nonatomic, assign) BOOL selecting2dComponentType;
-
-@property (nonatomic, strong) MTDataTable *sampleDataTable;
-
-@end
-
-@implementation MTViewControllerBarcodeOptions
 
 static inline NSInteger tvsDefination();
 static inline NSInteger tvsDefination() { return 0; }
@@ -62,6 +62,30 @@ static inline NSInteger tvs2dComponent(bool has2dComponent);
 static inline NSInteger tvs2dComponent(bool has2dComponent) {
     return has2dComponent ? 1 : -1;
 }
+
+@interface MTViewControllerBarcodeOptions ()
+    <MTDatabaseProtocol,
+        MTTableViewControllerStaticSelectRowDelegate>
+
+    @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
+    @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
+    @property (nonatomic, assign) NSUInteger sampleBarcodeData2dComponentIndex;
+
+    @property (nonatomic, strong) UIFont *mainFont;
+    @property (nonatomic, strong) UIFont *detailFont;
+
+    @property (nonatomic, assign) NSInteger borderWidth;
+
+    @property (nonatomic, assign) BOOL selectingField1;
+    @property (nonatomic, assign) BOOL selectingField2;
+
+    @property (nonatomic, assign) BOOL selecting2dComponentType;
+
+    @property (nonatomic, strong) MTDataTable *sampleDataTable;
+
+@end
+
+@implementation MTViewControllerBarcodeOptions
 
 #pragma mark - Exit
 

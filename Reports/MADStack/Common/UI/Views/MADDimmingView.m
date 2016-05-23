@@ -25,14 +25,16 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     id hitview = nil;
-    
-    CGPoint pointNormalized = [self.container convertPoint: point fromView: self];
+    UIView *container = _container,
+           *foundView;
+    CGPoint pointNormalized = [container convertPoint: point fromView: self];
     CGRect rectNormalized;
     
-    for (UIView *foundView in self.passthroughViews) {
+    NSSet *passthroughViews = self.passthroughViews;
+    for (foundView in passthroughViews) {
         
         rectNormalized = [foundView convertRect: foundView.bounds
-                                         toView: self.container];
+                                         toView: container];
 
         if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
             
@@ -43,10 +45,11 @@
     }
     
     if (hitview == nil) {
-        
-        for (UIView *passthroughContainer in self.passthroughContainers) {
+        UIView *passthroughContainer;
+        NSSet *passthroughContainers = self.passthroughContainers;
+        for (passthroughContainer in passthroughContainers) {
             rectNormalized = [passthroughContainer convertRect: passthroughContainer.bounds
-                                                      toView: self.container];
+                                                        toView: container];
             if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
                 hitview = passthroughContainer;
                 goto shortThisB;

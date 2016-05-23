@@ -12,6 +12,10 @@
 
 #import "MTViewControllerBarcodeType.h"
 
+#import <UIKit/NSAttributedString.h>
+
+#import <MADBarcodes/MTBarcode.h>
+
 @interface MTViewControllerBarcodeType ()
 
     @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
@@ -38,7 +42,7 @@
 }
 
 - (void)customInit {
-    NSDictionary *namesByType = [MTBarcode names];
+    NSDictionary *namesByType = [MTBarcode newDictionaryNames];
     self.barcodeNamesByType = namesByType;
     
     NSArray *allNames = [self.barcodeNamesByType allValues];
@@ -69,18 +73,21 @@
 
 #pragma mark - UIPickerView Delegate
 
-- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView
+             attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    
     NSArray *names = self.barcodeNamesOrdered;
     NSString *tableName = names[(NSUInteger)row];
     UIColor *strokeColor = [UIColor whiteColor];
     UIColor *forgroundColor = [UIColor blackColor];
-    NSMutableParagraphStyle *paragraph = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [paragraph setAlignment:NSTextAlignmentCenter];
-    NSDictionary *attributes = @{
-                                 NSStrokeColorAttributeName : strokeColor,
-                                 NSForegroundColorAttributeName : forgroundColor,
-                                 NSParagraphStyleAttributeName : paragraph,
-                                 };
+    NSParagraphStyle *defaultParagraph = [[NSParagraphStyle alloc] init];
+    NSMutableParagraphStyle *paragraph = defaultParagraph.mutableCopy;
+    paragraph.alignment = NSTextAlignmentCenter;
+    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    strokeColor,    NSStrokeColorAttributeName,
+                                    forgroundColor, NSForegroundColorAttributeName,
+                                    paragraph,      NSParagraphStyleAttributeName, nil];
+
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:tableName attributes:attributes];
     return  attributedString;
 }

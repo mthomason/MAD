@@ -9,11 +9,11 @@
 #ifndef Reports_UIViewController_Viewer_h
 #define Reports_UIViewController_Viewer_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 
 @interface UIViewController (Viewer)
 
-+ (instancetype)initalViewController;
+    + (instancetype)initalViewController;
 
 @end
 

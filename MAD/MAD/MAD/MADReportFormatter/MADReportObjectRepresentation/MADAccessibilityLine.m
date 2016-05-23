@@ -7,12 +7,13 @@
 //
 
 #import "MADAccessibilityLine.h"
+#import <UIKit/UIGeometry.h>
 
 @interface MADAccessibilityLine ()
 
-@property (nonatomic, strong) NSValue *rect;
-@property (nonatomic, strong) id value;
-@property (nonatomic, assign, readwrite) MTDocumentObjectType type;
+    @property (nonatomic, strong) NSValue *rect;
+    @property (nonatomic, strong) id value;
+    @property (nonatomic, assign, readwrite) MTDocumentObjectType type;
 
 @end
 

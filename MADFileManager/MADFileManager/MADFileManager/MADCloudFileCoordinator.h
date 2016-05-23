@@ -9,11 +9,13 @@
 #ifndef MADDesigner_MADCloudFileCoordinator_h
 #define MADDesigner_MADCloudFileCoordinator_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import "MADFileCoordinator.h"
 
 extern NSString * const MADNotificationCloudActivityStarted;
 extern NSString * const MADNotificationCloudActivityCompleted;
+
+@class NSPredicate;
 
 @interface MADCloudFileCoordinator : NSObject <MADFileCoordinator>
 

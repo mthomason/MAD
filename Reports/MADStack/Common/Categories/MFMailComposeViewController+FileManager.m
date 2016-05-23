@@ -8,6 +8,8 @@
 
 #import "MFMailComposeViewController+FileManager.h"
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 @implementation MFMailComposeViewController (FileManager)
 
 + (instancetype)contactUs:(id<MFMailComposeViewControllerDelegate>) mailComposeDelegate {

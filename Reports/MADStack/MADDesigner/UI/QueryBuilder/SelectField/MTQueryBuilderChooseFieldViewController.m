@@ -12,30 +12,52 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MADNavigationBarTitleView.h"
-//#import <MADCocoaExtensions/MADNumericConstants.h>
+
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import <MAD/RptqFieldSelectorManager.h>
+
+#import <MAD/RptqQueryTable.h>
+
+#import <MAD/RptqDocument.h>
+
+#import <MAD/RptqDatabase.h>
+
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQueryField.h>
+
+#import <MAD/MADocument.h>
+
+#import "MTQueryBuilderChooseFieldDelegate.h"
 
 typedef NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoArray;
 
-static inline CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
-static inline  CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
-    return (numTables * MADHeaderHeight) + (numFields * MAD_44);
+static inline double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
+static inline  double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
+    return ((numTables * MADHeaderHeight) + (numFields * MAD_44));
 }
 
-static inline CGFloat PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                      RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
-static inline CGFloat PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                      RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
+static inline double
+PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
+                                RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
+static inline double
+PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
+                                RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
     return heightForSectionInfo(sectionInfoArray.count,
                                 sectionInfo == nil ?
                                 0 : sectionInfo.table.hasQueryFields.count);
 }
 
-static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                   RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
-static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                   RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
-    return CGSizeMake(MAD_320, PreferredContentHeightForUpdate(sectionInfoArray, sectionInfo));
+static inline CGSize
+PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
+                              RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
+static inline CGSize
+PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
+                              RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
+    return CGSizeMake(MADFloat_320,
+                      (CGFloat)PreferredContentHeightForUpdate(sectionInfoArray, sectionInfo));
 }
 
 @interface MTQueryBuilderChooseFieldViewController ()

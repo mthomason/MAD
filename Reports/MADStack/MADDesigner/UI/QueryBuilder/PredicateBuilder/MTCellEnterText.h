@@ -9,11 +9,11 @@
 #ifndef Reports_MTCellEnterText_h
 #define Reports_MTCellEnterText_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewCell.h>
 
 @interface MTCellEnterText : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+    @property (nonatomic, weak) IBOutlet UITextField *textField;
 
 @end
 

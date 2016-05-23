@@ -10,7 +10,7 @@
 #define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIView.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADCocoaExtensions/MADCompassDirection.h>
 
 @class MTResizeHandleView;
 
@@ -21,11 +21,11 @@
 @interface MTResizeHandleView : UIView
 
     @property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;
-    @property (assign) MADCompusDirection type;
+    @property (assign) MADCompassDirection type;
     @property (assign) CGPoint initalPoint;
     @property (assign, getter = isHighlighted) BOOL highlighted;
 
-    - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position;
+    - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompassDirection)position;
 
 @end
 

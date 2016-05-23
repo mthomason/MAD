@@ -7,18 +7,19 @@
 //
 
 #import "MTDatabaseProcessSqlServer.h"
+#import <MADTdsClient/sybdb.h>
 
 @implementation MTDatabaseProcessSqlServer {
     DBPROCESS *dbconn;
 }
 
-- (instancetype)initWithProcess:(DBPROCESS *)process {
+- (instancetype)initWithProcess:(void *)process {
     if (self = [self init]) {
-        dbconn = process;
+        dbconn = (DBPROCESS *)process;
     }
     return self;
 }
 
-- (DBPROCESS *)process { return dbconn; }
+- (void *)process { return dbconn; }
 
 @end

@@ -12,16 +12,34 @@
 
 #import "MADocument.h"
 
-#import "MADSortOrder.h"
-#import "MADConstants.h"
+#import <CoreData/NSManagedObjectModel.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSPersistentStoreCoordinator.h>
+
+#import <UIKit/UIScreen.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIPrintPaper.h>
+#import <UIKit/UILabel.h>
+
+#import <setjmp.h>
+#import <copyfile.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADFilename.h>
+#import <MADCocoaExtensions/MADThread.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MADFoundation/NSURL+Document.h>
 
-#import <Foundation/NSException.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSPathUtilities.h>
+#import <MADBarcodes/png.h>
 
-#import <MAD/MADErrorUserInfo.h>
+#import "MADSortOrder.h"
+#import "MADConstants.h"
+
+#import "MADErrorUserInfo.h"
 
 #import "MTQueryFull.h"
 
@@ -83,44 +101,22 @@
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
-#import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MADFilename.h>
-#import <MADCocoaExtensions/MADThread.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-
-#import <MADFileManager/MADFileUtilities.h>
-
 #import "MTDataTableFast.h"
 #import "MTDatabase.h"
 #import "MTReportViewerPrintPageRenderer.h"
 
-#import <MAD/miniz.h>
+//#import "madpng.h"
 
-#import <MADBarcodes/png.h>
-#import <setjmp.h>
-
-#import <CoreData/NSManagedObjectModel.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSPersistentStoreCoordinator.h>
-
-#import <UIKit/UIScreen.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIPrintPaper.h>
-#import <UIKit/UILabel.h>
-
-#import <MADBarcodes/png.h>
 
 #import "NSString+RelativePath.h"
 
 #import "archive.h"
 #import "archive_entry.h"
 
-#include <zlib.h>
-#import <copyfile.h>
-#import <unistd.h>
-#import <pwd.h>
-//#include <bzlib.h>
+
+#import "miniz.h"
+#import "madtar.h"
+#import "madpath.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -231,128 +227,6 @@ void msg(const char *err) { }
 void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
-static int mad_copy_data(struct archive *ar, struct archive *aw);
-
-static bool mad_extract(const char *filename);
-static bool mad_extract(const char *filename) {
-    
-    bool success = true;
-    struct archive *a, *ext;
-    struct archive_entry *entry;
-    int flags, r, ar;
-    
-    /* Select which attributes we want to restore. */
-    flags = ARCHIVE_EXTRACT_TIME;
-    flags |= ARCHIVE_EXTRACT_PERM;
-    flags |= ARCHIVE_EXTRACT_ACL;
-    flags |= ARCHIVE_EXTRACT_FFLAGS;
-    
-    a = archive_read_new();
-    ar = archive_read_support_format_all(a);
-    ar = archive_read_support_filter_bzip2(a);
-    
-    ext = archive_write_disk_new();
-    ar = archive_write_disk_set_options(ext, flags);
-    ar = archive_write_disk_set_standard_lookup(ext);
-    
-    if ((r = archive_read_open_filename(a, filename, 10240)))
-        goto EXTRACT_MAD_FAIL;
-    
-    while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&
-           r != ARCHIVE_EOF) {
-
-        r = archive_write_header(ext, entry);
-        
-        if (r >= ARCHIVE_OK && archive_entry_size(entry) > 0) {
-                
-            r = mad_copy_data(a, ext);
-            
-            if (r < ARCHIVE_WARN)
-                goto EXTRACT_MAD_FAIL;
-            
-        }
-        
-        r = archive_write_finish_entry(ext);
-
-    }
-    
-    goto EXTRACT_MAD_FINISH;
-
-EXTRACT_MAD_FAIL:;
-    success = false;
-
-EXTRACT_MAD_FINISH:;
-    
-    archive_read_close(a);
-    archive_read_free(a);
-    archive_write_close(ext);
-    archive_write_free(ext);
-    
-    return success;
-}
-
-static int mad_copy_data(struct archive *ar, struct archive *aw) {
-    int r;
-    const void *buff;
-    size_t size;
-#if ARCHIVE_VERSION_NUMBER >= 3000000
-    int64_t offset;
-#else
-    off_t offset;
-#endif
-    
-    for (;;) {
-        r = archive_read_data_block(ar, &buff, &size, &offset);
-        if (r == ARCHIVE_EOF)
-            return (ARCHIVE_OK);
-        if (r != ARCHIVE_OK)
-            return (r);
-        r = archive_write_data_block(aw, buff, size, offset);
-        if (r != ARCHIVE_OK) {
-            madwarn("archive_write_data_block()",
-                 archive_error_string(aw));
-            return (r);
-        }
-    }
-}
-
-static void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st);
-static void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st) {
-    archive_entry_set_gid(*e, (*st).st_gid);
-    archive_entry_set_uid(*e, (*st).st_uid);
-    archive_entry_set_dev(*e, (*st).st_dev);
-    archive_entry_set_mode(*e, (*st).st_mode);
-    archive_entry_set_nlink(*e, (*st).st_nlink);
-    archive_entry_set_mtime(*e, (*st).st_mtimespec.tv_sec, (*st).st_mtimespec.tv_nsec);
-    archive_entry_set_birthtime(*e, (*st).st_birthtimespec.tv_sec, (*st).st_birthtimespec.tv_nsec);
-    
-    if (S_ISREG((*st).st_mode)) {
-        archive_entry_set_filetype(*e, AE_IFREG);
-        archive_entry_set_perm(*e, 0644);
-        
-    } else if (S_ISDIR((*st).st_mode)) {
-        archive_entry_set_filetype(*e, AE_IFDIR);
-        archive_entry_set_perm(*e, 0755);
-        
-    } else if (S_ISCHR((*st).st_mode)) {
-        archive_entry_set_filetype(*e, AE_IFCHR);
-        archive_entry_set_perm(*e, 0644);
-        
-    } else if (S_ISLNK((*st).st_mode)) {
-        archive_entry_set_filetype(*e, AE_IFLNK);
-        archive_entry_set_perm(*e, 0644);
-        
-    } else if (S_ISBLK((*st).st_mode)) {
-        archive_entry_set_filetype(*e, AE_IFBLK);
-        archive_entry_set_perm(*e, 0644);
-        
-    } else {
-        archive_entry_set_filetype(*e, AE_IFREG);
-        archive_entry_set_perm(*e, 0644);
-    }
-    
-}
-
 @interface MADocument ()
 
     @property (nonatomic, strong, readwrite) NSManagedObjectModel *madManagedObjectModel;
@@ -425,6 +299,7 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
 #pragma mark -
 #pragma mark Static Helpers
 
+
 + (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
 
@@ -433,106 +308,91 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
                              includingPropertiesForKeys: nil
                                                 options: NSDirectoryEnumerationSkipsHiddenFiles
                                            errorHandler: nil];
-    
-    
+
     bool success = false;
+    int r;
     struct archive *archive;
-    struct archive_entry *entry;
-    struct stat st;
-    char buff[8192];
-    ssize_t len;
-    int fd;
 
-    //originURL NSFileWrapper
-    //Create tmp directory to be file wrapper.
-    //Copy files to tmp directory
+    char *relativePathFileSystem;
+    char *origionalURLFileSystem;
+    char *archiveFilename;
+    char *filename;
+    
+    NSString *basePath = originURL.path;
+    NSString *relativePath;
 
-    const char *origionalURLFileSystemRepresentation = originURL.fileSystemRepresentation;
-    chdir(origionalURLFileSystemRepresentation);
     
-    NSString *archivePath = archiveURL.path;
+    origionalURLFileSystem = strdup(originURL.fileSystemRepresentation);
+    chdir(origionalURLFileSystem);
     
-    char *archiveFilename = malloc(sizeof(char *) * strlen(archivePath.fileSystemRepresentation));
-    strcpy(archiveFilename, archivePath.fileSystemRepresentation);
+    archiveFilename = strdup(archiveURL.fileSystemRepresentation);
     
-    const char *tarGzExt = ".tar.gz";
-    tarGzExt = "";
     
-    char *outname = malloc( (strlen(archiveFilename) + strlen(tarGzExt)) * sizeof(char *));
-    char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) );
+    char *outname = malloc( (strlen(archiveFilename) + 1 ) * sizeof(char *) + 1 );
+    char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) + 2 );
     
     strcpy(outname, archiveFilename);
-    strcat(outname, tarGzExt);
     strcpy(backup, archiveFilename);
-    strcat(backup, "~");
+    strcat(backup, "~\0");
     
-    //Remove backup if it exist
-    if (access(backup, F_OK) == 0) {
-        int successRemove = remove(backup);
-        if (!successRemove) {
-            remove(backup);
-        }
-    }
+    mad_file_remove_if_exist(backup);
     
-    //NSURL *baseURL = [originURL URLByDeletingLastPathComponent];
-    NSString *basePath = originURL.path;
     
-    NSString *relativePath = nil;
-    int successBackup = copyfile(archiveFilename,
-                                 backup, NULL, COPYFILE_SECURITY |
-                                               COPYFILE_ALL |
-                                               COPYFILE_COPY_DATA |
-                                               COPYFILE_COPY_XATTR |
-                                               COPYFILE_DATA);
+    r = copyfile(archiveFilename, backup, NULL,
+                 COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
+                 COPYFILE_COPY_XATTR | COPYFILE_DATA);
     
-    if (successBackup < 0) goto ARCHIVE_FILE_AT_URL_SHORT;
+    if (r < 0) goto ARCHIVE_FILE_AT_URL_SHORT;
     
     archive = archive_write_new();
 
-    int awsfprr = archive_write_set_format_pax_restricted(archive);   // Note 1
-    if (awsfprr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+    r = archive_write_set_format_pax_restricted(archive);   // Note 1
+    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
 
-    int awafbr = archive_write_add_filter_bzip2(archive);
-    if (awafbr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+    r = archive_write_add_filter_bzip2(archive);
+    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
 
-    int awofr = archive_write_open_filename(archive, outname);
-    if (awofr != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
+    r = archive_write_open_filename(archive, outname);
+    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
     
     for (NSURL *url in directory) {
 
         relativePath = [url.path stringWithPathRelativeTo:basePath];
         
-        const char *filename = url.fileSystemRepresentation;
-        stat(filename, &st);
+        filename = strdup(url.fileSystemRepresentation);
+        relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
         
-        entry = archive_entry_new2(archive);
-        archive_entry_copy_stat(entry, &st);
+        mad_archive_write_file(archive, filename, relativePathFileSystem);
+
+        free(relativePathFileSystem); free(filename);
         
-        const char *relativePathFileSystemRepresentation = relativePath.fileSystemRepresentation;
-        archive_entry_set_pathname(entry, relativePathFileSystemRepresentation);
-        
-        mad_archive_entry_set_attributes(&entry, &st);
-        
-        archive_write_header(archive, entry);
-        fd = open(filename, O_RDONLY);
-        len = read(fd, buff, sizeof(buff));
-        while ( len > 0 ) {
-            archive_write_data(archive, buff, (size_t)len);
-            len = read(fd, buff, sizeof(buff));
-        }
-        close(fd);
-        archive_entry_free(entry);
     }
     
     success = true;
     
+    mad_file_remove_if_exist(backup);
+    
     archive_write_close(archive);
     archive_write_free(archive);
 
-    ARCHIVE_FILE_AT_URL_SHORT:;
+ARCHIVE_FILE_AT_URL_SHORT:;
+    
+    //restore backup on error
+    if (!success && access(backup, F_OK)) {
+        copyfile(backup, archiveFilename, NULL,
+                 COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
+                 COPYFILE_COPY_XATTR | COPYFILE_DATA);
+    }
     
     free(backup); free(outname);
- /*
+    free(origionalURLFileSystem);
+    free(archiveFilename);
+    
+    return success;
+}
+
++ (bool)RestoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
+                 overwrite:(bool)overwrite {
     bool success = false;
     NSFileWrapper *fileWrapper;
     NSError *fileWrapperError = nil;
@@ -555,8 +415,6 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
     }
-   */
-    
     return success;
 }
 
@@ -634,12 +492,13 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
         
         NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
         
-        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: document.fileURL
-                                                                 includingPropertiesForKeys: properties
-                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles
-                                                                               errorHandler: ^BOOL(NSURL *url, NSError *error) {
-                                                                                   return YES;
-                                                                               }];
+        NSDirectoryEnumerator *enumerator;
+        enumerator = [[NSFileManager defaultManager] enumeratorAtURL: document.fileURL
+                                          includingPropertiesForKeys: properties
+                                                             options: NSDirectoryEnumerationSkipsHiddenFiles
+                                                        errorHandler: ^BOOL(NSURL *url, NSError *error) {
+                                                            return YES;
+                                                        }];
         for (NSURL *file in enumerator) {
             NSError *error = nil;
             [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
@@ -892,7 +751,7 @@ static void mad_archive_entry_set_attributes(struct archive_entry **e, struct st
     
     const char *madArchivePathCString = urlArchive.fileSystemRepresentation;
 
-    success = mad_extract(madArchivePathCString);
+    success = mad_extract(madArchivePathCString) == 0;
     if (!success) goto READ_FAIL;
 
     goto READ_END;
@@ -1068,7 +927,7 @@ READ_END:;
     }
     
     NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
-    NSString * __weak infoKeyGenerator = dicionary[MADDocumentInfoKeyGenerator];
+    NSString *infoKeyGenerator = dicionary[MADDocumentInfoKeyGenerator];
     NSString *lastGenerator = infoKeyGenerator.copy;
     NSNumber *lastVersion = ((NSNumber *)dicionary[MADDocumentInfoKeyVersion]).copy;
     

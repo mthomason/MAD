@@ -10,12 +10,11 @@
 #define Reports_MADFont_h
 
 #import <Foundation/NSObject.h>
-#import <CoreGraphics/CGBase.h>
 
 @interface MADFont : NSObject
 
     + (NSString *)defaultFamily;
-    + (CGFloat)defaultSize;
+    + (double)defaultSize;
 
 @end
 

@@ -11,14 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@protocol MADTextRepresentationProtocol <NSObject>
-
-@property (nonatomic, assign) NSUInteger elementOffset;
-@property (nonatomic, assign) NSUInteger characterOffset;
-- (NSUInteger)elementCount;
-- (NSUInteger)characterCount;
-
-@end
+#import "MADDocumentTextRepresentationProtocol.h"
 
 @class MADReportPageRepresentation;
 

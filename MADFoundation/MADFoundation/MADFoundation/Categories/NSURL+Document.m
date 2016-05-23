@@ -12,37 +12,45 @@
 
 @implementation NSURL (Document)
 
-- (NSString *)filenameMinusExtention {
-    return self.lastPathComponent.stringByDeletingPathExtension;
-}
-
 - (NSURL *)uniqueUrl {
 
     NSInteger ctr = 0;
     
-    NSURL * uniqueUrl = self;
-    while ([[NSFileManager defaultManager] fileExistsAtPath:uniqueUrl.path]) {
-        NSString *maybe = [self.lastPathComponent.stringByDeletingPathExtension stringByAppendingFormat:@" %ld", (long)ctr];
-        [maybe stringByAppendingPathExtension:self.pathExtension];
+    NSString *pathExtension = self.pathExtension.copy;
+    NSString *name = self.lastPathComponent.stringByDeletingPathExtension.copy;
+    NSURL *unqiueURL = self.copy;
+    NSString *path = unqiueURL.path.copy;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+
+        NSString *maybe = [name stringByAppendingFormat:@" %ld", (long)ctr];
+        [maybe stringByAppendingPathExtension: pathExtension];
+
         NSURL *result = [self.baseURL URLByAppendingPathComponent:maybe isDirectory:NO];
-        uniqueUrl = result;
+        unqiueURL = result.copy;
+        
         ctr++;
+        
+        path = unqiueURL.path.copy;
     }
-    return uniqueUrl;
+    return unqiueURL;
 }
 
-- (NSString *)key {
-    return self.absoluteString;
-}
+- (NSString *)key { return self.absoluteString; }
 
-+ (NSString *)fileNameFilter:(NSString *)desiredName {
++ (NSString *)newStringFileNameFilter:(NSString *)desiredName {
     
     NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
-    [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
-    [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSCharacterSet *invertedSet = characterSet.invertedSet;
-    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:invertedSet];
-    return [components componentsJoinedByString:@""];
+
+    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+
+    unionSet = [NSCharacterSet whitespaceCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = characterSet.invertedSet;
+    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
+    NSString *result = [components componentsJoinedByString:@""];
+    return result.copy;
     
 }
 

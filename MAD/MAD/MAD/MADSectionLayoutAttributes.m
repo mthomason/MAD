@@ -7,6 +7,7 @@
 //
 
 #import "MADSectionLayoutAttributes.h"
+#import <CoreData/NSManagedObjectID.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @implementation MADSectionLayoutAttributes

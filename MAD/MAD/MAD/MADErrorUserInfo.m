@@ -12,9 +12,7 @@
 #import <Foundation/NSError.h>
 
 @interface MADErrorUserInfo ()
-
     @property (nonatomic, strong, readwrite) NSDictionary *userinfo;
-
 @end
 
 @implementation MADErrorUserInfo

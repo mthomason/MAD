@@ -7,7 +7,7 @@
 //
 
 #import "MADCreateDocumentOperationFirstTimeSetup.h"
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADocument.h>

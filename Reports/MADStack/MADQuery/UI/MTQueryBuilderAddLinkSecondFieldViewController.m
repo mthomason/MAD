@@ -11,6 +11,11 @@
 #endif
 
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
+
+#import <UIKit/UIlabel.h>
+
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 
 @implementation MTQueryBuilderAddLinkSecondFieldViewController
@@ -19,9 +24,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-
-}
+- (IBAction)done:(id)sender { }
 
 #pragma mark -
 #pragma mark Table View Data Source Protocol

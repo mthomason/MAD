@@ -11,16 +11,29 @@
 #endif
 
 #import "MADViewerController.h"
-#import "MUIViewControllerDelegate.h"
 
 #import <CoreData/CoreData.h>
+
+#import <MADDataStructures/MTPair.h>
+
+#import <MADFoundation/MTDataTable.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MADFoundation/MTDataTable.h>
+#import <MAD/MTReportViewerPrintPageRenderer.h>
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDataTableFast.h>
 
-#import <MADDataStructures/MTPair.h>
+#import <MAD/MTActivityItemProviderPdf.h>
+#import <MAD/MADNotificationDidFormatPage.h>
+#import <MAD/MADNotificationDidReadRows.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTPaper.h>
+
+#import "MTPrintingProtocol.h"
+#import "MUIViewControllerDelegate.h"
 
 #import "MADTabBarController.h"
 
@@ -47,17 +60,6 @@
 #import "MADBlockOperation.h"
 
 #import "MADStoryboard.h"
-
-#import <MAD/MTReportViewerPrintPageRenderer.h>
-#import <MAD/MADocument.h>
-#import <MAD/MTDatabaseConnection.h>
-#import <MAD/MTDataTableFast.h>
-
-#import <MAD/MTActivityItemProviderPdf.h>
-#import <MAD/MADNotificationDidFormatPage.h>
-#import <MAD/MADNotificationDidReadRows.h>
-#import <MAD/MTKeyChain.h>
-#import <MAD/MTPaper.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";

@@ -12,7 +12,7 @@
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
-#import <MADFileManager/MADFileManager.h>
+#import <MADFileManager/MADFileUtilities.h>
 
 @interface MADInstallOperationSampleDocument ()
 

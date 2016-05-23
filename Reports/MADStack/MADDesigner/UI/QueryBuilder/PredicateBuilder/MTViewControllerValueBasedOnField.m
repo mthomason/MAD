@@ -11,21 +11,36 @@
 #endif
 
 #import "MTViewControllerValueBasedOnField.h"
+
+#import <UIKit/UIWindow.h>
+#import <CoreData/NSManagedObjectContext.h>
+
+#import <MADCocoaExtensions/NSError+Constructors.h>
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+
 #import "MTCellEnterText.h"
 
 @interface MTViewControllerValueBasedOnField ()
     <UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
-@property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
-@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
-@property (nonatomic, strong) UITextField *textField;
-@property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
-@property (nonatomic, strong) NSArray *pickerData;
-@property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
+    @property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
+    @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
+    @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+    @property (nonatomic, strong) UITextField *textField;
+    @property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
+    @property (nonatomic, strong) NSArray *pickerData;
+    @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
-@property (nonatomic, strong) MTQuery *querySampleDataField;
-@property (nonatomic, strong) MTDataTable *dataTable;
+    @property (nonatomic, strong) MTQuery *querySampleDataField;
+    @property (nonatomic, strong) MTDataTable *dataTable;
 
 @end
 
@@ -129,8 +144,7 @@
 
 - (void)loadPickerView {
 
-    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField managedObjectForObjectID: [self schemaFieldObjectId]
-                                                               andManagedObjectContext: self.document.managedObjectContext];
+    RptqDatabaseSchemaField *field = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField
                                                                 object:field];
@@ -168,18 +182,26 @@
             
             if ([NSThread isMainThread]) {
                 UIViewController * __weak weak1 = strongself2;
+                
                 [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
+                
                     [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
+                    
                 }];
+                
             } else {
                 NSError *serror = error;
                 UIViewController * __weak weak1 = strongself2;
                 dispatch_sync(dispatch_get_main_queue(), ^{
+                
                     [NSError presentError: serror
                          onViewController: weak1
                                completion:^(BOOL presentErrorSuccess) {
+                               
                                    [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
+                                   
                                }];
+                    
                 });
             }
         }

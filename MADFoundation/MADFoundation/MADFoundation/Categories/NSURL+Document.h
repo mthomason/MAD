@@ -13,10 +13,9 @@
 
 @interface NSURL (Document)
 
-- (NSString *)filenameMinusExtention;
-- (NSURL *)uniqueUrl;
-- (NSString *)key;
-+ (NSString *)fileNameFilter:(NSString *)desiredName;
+    - (NSURL *)uniqueUrl;
+    - (NSString *)key;
+    + (NSString *)newStringFileNameFilter:(NSString *)desiredName;
 
 @end
 

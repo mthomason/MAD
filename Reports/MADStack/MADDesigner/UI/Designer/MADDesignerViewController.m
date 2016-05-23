@@ -12,15 +12,52 @@
 
 #import "MADDesignerViewController.h"
 
-#include <math.h>
+#import <math.h>
+
+#import <MADCocoaExtensions/MADCompassDirection.h>
+#import <MADCocoaExtensions/MADResizeAspect.h>
+
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>   //Sucks... drags in UIKit
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADMathAlgebra.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
+
+#import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
+
 #import <MAD/MADSectionLayoutManager.h>
+
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/NSManagedObjectID+Extras.h>
+
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+
+#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+Extras.h>
+
+#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+
+#import <MAD/RptqDocumentObjectLabel.h>
+#import <MAD/RptqDocumentObjectLabelDataField.h>
+
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
+
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+
+#import <MAD/RptqQueryField.h>
+
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+
+#import <MAD/RptqDocumentSectionRows.h>
+
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADTabBarController.h"
-
 #import "MADManagedObjectView.h"
 
 #import "MTRulerView.h"
@@ -37,7 +74,7 @@
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
-#import "MTViewControllerBarcode.h"
+
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
@@ -68,6 +105,8 @@
 #import "UIView+Extras.h"
 
 #import "MADStoryboard.h"
+
+#import "MTViewControllerBarcode.h"
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -1914,22 +1953,35 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:piece.objectIdTag];
 
     if (gestureRecognizer.numberOfTouches > 1) {
-
+        NSNumber *length;
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
-        MADCompusDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
+        MADCompassDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
         struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
+
         switch (resizeAspect.direction) {
+
             case horizontal:
-                documentObject.sizewidth = @(documentObject.sizewidth.floatValue * gestureRecognizer.scale);
+                length = [[NSNumber alloc] initWithFloat:documentObject.sizewidth.floatValue *
+                                                            gestureRecognizer.scale];
+                documentObject.sizewidth = length;
                 break;
+
             case vertical:
-                documentObject.sizeheight = @(documentObject.sizeheight.floatValue * gestureRecognizer.scale);
+                length = [[NSNumber alloc] initWithFloat:documentObject.sizeheight.floatValue *
+                                                            gestureRecognizer.scale];
+                documentObject.sizeheight = length;
                 break;
+                
             default:
-                documentObject.sizewidth = @(documentObject.sizewidth.floatValue * gestureRecognizer.scale);
-                documentObject.sizeheight = @(documentObject.sizeheight.floatValue * gestureRecognizer.scale);
+                length = [[NSNumber alloc] initWithFloat:documentObject.sizewidth.floatValue *
+                                                            gestureRecognizer.scale];
+                documentObject.sizewidth = length;
+                length = [[NSNumber alloc] initWithFloat:documentObject.sizeheight.floatValue *
+                                                            gestureRecognizer.scale];
+                documentObject.sizeheight = length;
                 break;
+        
         }
 
     }

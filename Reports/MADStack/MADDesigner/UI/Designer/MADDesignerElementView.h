@@ -11,9 +11,17 @@
 
 #import "MADManagedObjectView.h"
 #import <UIKit/UIGestureRecognizer.h>
-#import <UIKit/NSStringDrawing.h>
 
-@class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
+@class UIPanGestureRecognizer;
+
+@class NSManagedObjectID;
+@class NSManagedObjectContext;
+
+@class MADDesignerElementView;
+
+@class MTBarcode;
+
+@class RptqDocumentObject;
 
 @interface MADDesignerElementView : MADManagedObjectView
     <UIGestureRecognizerDelegate>

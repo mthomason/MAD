@@ -9,11 +9,12 @@
 #ifndef MAD_MTQueryBuilderChooseFieldDelegate_h
 #define MAD_MTQueryBuilderChooseFieldDelegate_h
 
-@class MTQueryBuilderChooseFieldViewController, RptqQueryField;
+@class MTQueryBuilderChooseFieldViewController;
+@class RptqQueryField;
 
 @protocol MTQueryBuilderChooseFieldDelegate
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
-                                      withField: (RptqQueryField *)field;
+    - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+                                          withField: (RptqQueryField *)field;
 @end
 
 #endif

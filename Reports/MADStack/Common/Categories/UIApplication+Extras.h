@@ -9,7 +9,7 @@
 #ifndef Reports_UIApplication_Extras_h
 #define Reports_UIApplication_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIApplication.h>
 
 @interface UIApplication (Extras)
 

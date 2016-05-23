@@ -12,9 +12,10 @@
 #endif
 
 #import "MTQueryBuilderAddGroupViewController.h"
-#import <CoreData/CoreData.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
 
 static NSString * const TextAccending = @"Accending";
 static NSString * const TextDecending = @"Decending";
