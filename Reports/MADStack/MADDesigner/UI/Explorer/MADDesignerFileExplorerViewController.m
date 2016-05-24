@@ -391,11 +391,13 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)openViewerWithDocument:(MADocument *)document {
-    MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
+
+    MADTabBarController *tabBarController = [MADTabBarController newTabBarControllerMain];
     tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     tabBarController.viewControllerDelegate = self;
+    
     NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
              @"Controller to conform to MADocumentProtocol.");
     

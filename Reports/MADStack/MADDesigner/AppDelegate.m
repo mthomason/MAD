@@ -12,8 +12,6 @@
 
 
 #import "AppDelegate.h"
-
-#import <UIKit/UIApplication.h>
 #import <QuickLook/QLPreviewController.h>
 #import <Foundation/NSString.h>
 
@@ -64,7 +62,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 @interface AppDelegate()
-    <UIApplicationDelegate, UIDocumentInteractionControllerDelegate>
+    <UIDocumentInteractionControllerDelegate>
 
     @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;

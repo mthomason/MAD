@@ -25,11 +25,7 @@
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        NSMutableArray *rows = [[NSMutableArray alloc] init];
-        self.rows = rows;
-    }
-    return self;
+    return [self initWithNumberOfRows:0];
 }
 
 - (instancetype)initWithNumberOfRows:(NSUInteger)capacity {

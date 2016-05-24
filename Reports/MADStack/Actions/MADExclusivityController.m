@@ -13,8 +13,6 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 
-static id _sharedInstance = nil;
-
 @interface MADExclusivityController () {
     dispatch_queue_t _serialQueue;
     NSMutableDictionary * _operations;
@@ -24,28 +22,32 @@ static id _sharedInstance = nil;
 
 @implementation MADExclusivityController
 
-- (void)dealloc {
-    NSAssert(NO, @"Don't dealloc the singleton.");
-}
-
 + (instancetype)sharedExclusivityController {
     
+    static id _sharedInstance;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[self alloc] init];
+        _sharedInstance = [[self alloc] initPrivate];
     });
     return _sharedInstance;
 }
 
-- (instancetype)init {
-    if (_sharedInstance) {
-        return nil;
-    }
-    if (self = [super init]){
-        _serialQueue = dispatch_queue_create("Operations.ExclusivityController",DISPATCH_QUEUE_SERIAL);
-        _operations = [NSMutableDictionary dictionary];
+- (void)dealloc {
+    NSAssert(NO, @"Don't dealloc the singleton.");
+}
+
+- (instancetype)initPrivate {
+    if (self = [super init]) {
+        if (self = [super init]){
+            _serialQueue = dispatch_queue_create("Operations.ExclusivityController",DISPATCH_QUEUE_SERIAL);
+            _operations = [NSMutableDictionary dictionary];
+        }
     }
     return self;
+}
+
+- (instancetype)init {
+    return [[self class] sharedExclusivityController];
 }
 
 /// Registers an operation as being mutually exclusive

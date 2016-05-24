@@ -29,7 +29,7 @@ extern const int8_t MADIndexViewer;
     @property (nullable, readonly) MADQueryBuilderSplitViewController * querySplitViewController;
     @property (nullable, readonly) MADDesignerViewController * designerViewController;
     @property (nullable, readonly) MADViewerController * viewerViewController;
-    @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+    @property (nullable, nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;

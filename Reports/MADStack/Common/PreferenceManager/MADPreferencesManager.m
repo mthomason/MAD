@@ -16,6 +16,15 @@
 
 @implementation MADPreferencesManager
 
++ (instancetype)sharedManager {
+    static id *_sharedManager;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedManager = [[self alloc] initPrivate];
+    });
+    return _sharedManager;
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
@@ -27,6 +36,11 @@
 }
 
 - (instancetype)init {
+    return [[self class] sharedManager];
+}
+
+
+- (instancetype)initPrivate {
     if (self = [super init]) {
         
         NSMutableArray *preferences = [NSMutableArray new];
@@ -47,15 +61,6 @@
         
     }
     return self;
-}
-
-+ (instancetype)sharedManager {
-    static MADPreferencesManager *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedMyManager = [[self alloc] init];
-    });
-    return sharedMyManager;
 }
 
 - (void)addPreference:(MADPreference *)preference {
