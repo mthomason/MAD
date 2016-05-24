@@ -20,36 +20,41 @@
 
 @implementation MADCacheManager
 
-- (void)dealloc {
-    assert(NO);
-}
+@synthesize queueForCachingData = _queueForCachingData;
 
 + (instancetype)sharedManager {
     
     static id _sharedManager;
-
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-            _sharedManager = [[self alloc] init];
-            assert(_sharedManager != nil);
+        _sharedManager = [[self alloc] initPrivate];
+        assert(_sharedManager != nil);
     });
     
     return _sharedManager;
 }
 
+- (void)dealloc {
+    assert(NO);
+}
 
 - (instancetype)init {
-    if (self == [super init]) {
-        self->_queueForCachingData = [[MADOperationQueue alloc] init];
-        self->_queueForCachingData.name = @"com.everydayapps.mad.cache";
-        self->_queueForCachingData.qualityOfService = NSQualityOfServiceBackground;
-        self->_queueForCachingData.maxConcurrentOperationCount = 2;
-        assert(self->_queueForCachingData != nil);
+    return [[self class] sharedManager];
+}
+
+- (instancetype)initPrivate {
+    self = [super init];
+    if (self = [super init]) {
+        id queue = [[MADOperationQueue alloc] init];
+        _queueForCachingData = queue;
+        _queueForCachingData.name = @"com.everydayapps.mad.cache";
+        _queueForCachingData.qualityOfService = NSQualityOfServiceBackground;
+        _queueForCachingData.maxConcurrentOperationCount = 2;
+        assert(_queueForCachingData != nil);
     }
     return self;
 }
-
-@synthesize queueForCachingData = _queueForCachingData;
 
 - (void)addOperation:(NSOperation *)operation {
     [self.queueForCachingData addOperation:operation];

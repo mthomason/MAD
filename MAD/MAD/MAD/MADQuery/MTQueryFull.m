@@ -89,13 +89,12 @@
         NSAssert([object isKindOfClass:[NSDictionary class]],
                  @"MTQueryFull expects NSDictionary with parameters.");
 
-        NSDictionary * __weak parameters = (NSDictionary *)object;
         NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
         
-        NSNumber *numberOfResults = parameters[@"MADQueryLimit"];
+        NSNumber *numberOfResults = object[@"MADQueryLimit"];
         self.limitResults = numberOfResults.integerValue;
         
-        RptqQuery *queryObject = parameters[parameterScheam];
+        RptqQuery *queryObject = object[parameterScheam];
         _objectID = queryObject.objectID.copy;
 
         
@@ -114,8 +113,8 @@
                                error: (NSError * __autoreleasing *)error {
     
     RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *queryObject = database.hasQueries.anyObject;
+    RptqDatabase *databaseSchema = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *queryObject = databaseSchema.hasQueries.anyObject;
 
     NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
     

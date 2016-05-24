@@ -217,10 +217,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
                                                                        object: NULL];
 
     NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
-                              sampleDatabase,
-                              sampleDocumentMusic,
-                              sampleDatabaseLondon,
-                              resetReceipt, nil];
+                                                               sampleDatabase,
+                                                               sampleDocumentMusic,
+                                                               sampleDatabaseLondon,
+                                                               resetReceipt, nil];
 
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
 

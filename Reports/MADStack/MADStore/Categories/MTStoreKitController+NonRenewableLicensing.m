@@ -145,6 +145,8 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
                 refunded = YES;
             }
             
+            [dateFormat release];
+            
             return !refunded;
         }];
         [inAppPurchases filterUsingPredicate:nonRefundedReceipts];

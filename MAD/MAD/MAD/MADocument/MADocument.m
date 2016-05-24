@@ -232,8 +232,6 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
     @property (nonatomic, strong, readwrite) NSDictionary *madPersistentStoreOptions;
 
-    @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
-
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 
     @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
@@ -1567,22 +1565,6 @@ READ_END:;
         [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
     }
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.database];
-}
-
-- (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
-                                                                                 options: MTReportFormatterOptionsMargin];
-    reportFormatter.overrideIdentifier = @"madprinter";
-    reportFormatter.dataDelegate = self;
-    reportFormatter.datasource = self;
-    reportFormatter.cachedDelegate = self;
-    [reportFormatter initalize];
-    
-    id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                dataTable: self.mainDataTable];
-    self.printingReportFormatter = reportFormatter;
-    return printPageRender;
-    
 }
 
 - (NSURL *)copyPersistentStoreURL {

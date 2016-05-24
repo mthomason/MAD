@@ -112,18 +112,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @implementation MTReportViewerPrintPageRenderer
 
-/*- (MTReportViewerPrintPageRenderer *)newReportViewerPrintPageRenderWithDocument:(MADocument *)layout
-                                                                      dataTable:(MTDataTableFast *)dataTable {
-
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: layout
-                                                                                 options: MTReportFormatterOptionsMargin];
-    [reportFormatter initalize];
-    
-    id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                dataTable: dataTable];
-    return printPageRender;
-}*/
-
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
                               dataTable:(MTDataTableFast *)dataTable {
     if (self = [super init]) {
@@ -143,6 +131,22 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         self.reportFormatter = reportFormatter;
     }
     return self;
+}
+
++ (MTReportViewerPrintPageRenderer *)newReportViewerPrintPageRenderWithDocument:(MADocument *)document {
+    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: document
+                                                                                 options: MTReportFormatterOptionsMargin];
+    reportFormatter.overrideIdentifier = @"madprinter";
+    reportFormatter.dataDelegate = document;
+    reportFormatter.datasource = document;
+    reportFormatter.cachedDelegate = document;
+    [reportFormatter initalize];
+    
+    id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                                dataTable: document.mainDataTable];
+    document.printingReportFormatter = reportFormatter;
+    return printPageRender;
+    
 }
 
 - (void)initCommon {

@@ -111,27 +111,42 @@
 	 forChangeType:(NSFetchedResultsChangeType)type
 	  newIndexPath:(NSIndexPath *)newIndexPath {
 
-    NSArray <NSIndexPath *> *indexPaths = indexPath ? @[indexPath] : nil;
-    NSArray <NSIndexPath *> *newIndexPaths = newIndexPath ? @[newIndexPath] : nil;
+    NSArray <NSIndexPath *> *indexPaths, *newIndexPaths;
+    NSIndexPath *indexPathCopy;
     
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        indexPathCopy = indexPath.copy;
+        indexPaths = indexPath ?
+                            [[NSArray alloc] initWithObjects:indexPathCopy, nil] :
+                            [[NSArray alloc] init];
+
+        indexPathCopy = newIndexPath.copy;
+        newIndexPaths = newIndexPath ?
+                            [[NSArray alloc] initWithObjects:indexPathCopy, nil] :
+                            [[NSArray alloc] init];
+
         switch(type) {
 
             case NSFetchedResultsChangeInsert:
-                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths: newIndexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
                 break;
 
             case NSFetchedResultsChangeDelete:
-                [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
                 break;
 
             case NSFetchedResultsChangeUpdate:
-                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView reloadRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
                 break;
             
             case NSFetchedResultsChangeMove:
-                [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths: newIndexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
                 break;
         }
     }

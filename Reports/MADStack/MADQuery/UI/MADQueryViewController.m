@@ -14,12 +14,12 @@
 
 #import <CoreData/NSManagedObjectID.h>
 
+#import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UISwitch.h>
 #import <UIKit/UILabel.h>
-#import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIImage.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -51,7 +51,6 @@
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
-
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
@@ -63,15 +62,16 @@
 #import "MADTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 
-#import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
 
-#import "MADDesignerViewController.h"
-
 #import "MADTableViewHeader.h"
+
 #import "MTStoreKitController+NonRenewableLicensing.h"
+
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
+
 #import "MADNavigationController.h"
+
 #import "MADViewControllerSQL.h"
 
 #import "UIViewController+tabBarItem.h"
@@ -101,6 +101,8 @@ static NSString * const NSFetchedResultsCacheTables                        = @"N
 static NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
 static NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
 static NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
+
+static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
 
 #pragma mark - Private Category
 
@@ -132,7 +134,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     @property (nonatomic, assign) BOOL beganUpdates;
     @property (nonatomic, assign) BOOL toolbarIconShown;
 
-    @property (atomic, assign) NSInteger lastSelectedRowNumber;
+    @property (nonatomic, assign) NSInteger lastSelectedRowNumber;
 
     @property (nonatomic, assign) CGFloat headerSectionHeight;
 
@@ -546,21 +548,25 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
 }
 
-- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
+- (void)sectionLayoutDidUpdateVisibility:(bool)isVisible {
     MADocument *document = self.document;
-    [document.activeDocumentModel setVisibility: isVisible forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document.activeDocumentModel setVisibility: isVisible
+                                forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+          newPageAfter:(bool)newPageAfter {
     MADocument *document = self.document;
-    [document.activeDocumentModel setNewPageAfter: newPageAfter forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document.activeDocumentModel setNewPageAfter: newPageAfter
+                                  forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     MADocument *document = self.document;
-    [document.activeDocumentModel setNumberOfRows: numberOfRows forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document.activeDocumentModel setNumberOfRows: numberOfRows
+                                  forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
 }
 
@@ -631,7 +637,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 #pragma mark - Table View Data Source Protocol
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return (NSInteger)self.datamodel.count; }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return (NSInteger)self.datamodel.count;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -683,7 +691,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView
+                                commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+                                 forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MTQuerySections querySection = [self.datamodel sectionAtIndex:(short)indexPath.section];
 
@@ -706,6 +716,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
       toIndexPath:(NSIndexPath *)toIndexPath {
+    
     MTQuerySections ts = [self.datamodel sectionAtIndex:(short)toIndexPath.section];
     switch (ts) {
         case MTQuerySectionsGroups: {
@@ -729,8 +740,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView { return nil; }
-
-static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -1583,15 +1592,17 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             if ([queryLink.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId] ||
                 [queryLink.hasRightField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
                 [context deleteObject:queryLink];
-                NSIndexPath *deleteCellAtIndex = linkIndexPath.copy;
-                [cellsToDelete addObject:deleteCellAtIndex];
+                
+                [cellsToDelete addObject:linkIndexPath];
+                
             }
         }
     }
     return cellsToDelete;
 }
 
-- (NSArray <__kindof NSIndexPath *> *)deleteGroupsRelatedToSectionIndex:(NSInteger)section table:(NSManagedObjectID *)deleatedTableObjectId
+- (NSArray <__kindof NSIndexPath *> *)deleteGroupsRelatedToSectionIndex:(NSInteger)section
+                                                                  table:(NSManagedObjectID *)deleatedTableObjectId
                                                             inTableView:(UITableView *)tableView
                                                               inContext:(NSManagedObjectContext *)context {
     
@@ -1611,8 +1622,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                 
                 if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
                     [self.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:context];
-                    NSIndexPath *deleteCellAtIndex = groupIndexPath.copy;
-                    [cellsToDelete addObject:deleteCellAtIndex];
+                    [cellsToDelete addObject:groupIndexPath];
                 }
             }
 
@@ -1774,28 +1784,36 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         
         for (short section = 0; section < numberOfSections; section++) {
             
-            NSArray *cells;
+            NSArray *cells = nil;
             
             switch ([self.datamodel sectionAtIndex:section]) {
                 case MTQuerySectionsLinks:
-                    cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                       inTableView: tableView inContext: private];
+                    cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section
+                                                             table: deleatedTableObjectId
+                                                       inTableView: tableView
+                                                         inContext: private];
                     break;
 
                 case MTQuerySectionsGroups:
-                    cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                        inTableView: tableView inContext: private];
+                    cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section
+                                                              table: deleatedTableObjectId
+                                                        inTableView: tableView
+                                                          inContext: private];
                     break;
 
                 case MTQuerySectionsPredicate:
-                    cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                           inTableView: tableView inContext: private];
+                    cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section
+                                                                 table: deleatedTableObjectId
+                                                           inTableView: tableView
+                                                             inContext: private];
                     break;
                     
                 default:
                     break;
             }
-            [cellsToDelete addObjectsFromArray:cells];
+            if (cells) {
+                [cellsToDelete addObjectsFromArray:cells];
+            }
         }
         
         NSError * __autoreleasing *error = nil;

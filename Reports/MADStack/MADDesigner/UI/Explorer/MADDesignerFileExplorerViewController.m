@@ -601,7 +601,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.aboutViewControllerOnScreen = false;
 }
 
-- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view { }
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
+          willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view { }
 
 #pragma mark - Convenience
 

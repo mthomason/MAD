@@ -63,6 +63,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
         MADDataProtocol>
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
+    @property (nonatomic, strong, readwrite)    MTReportFormatter *printingReportFormatter;   //Used only when printing
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
     @property (nonatomic, strong, readwrite)    MTDatabase *database;
 
@@ -89,8 +90,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
-
-    - (MTReportViewerPrintPageRenderer *)newPrinterPrintPageRender;
 
     + (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl;
     + (BOOL)isRetnaDisplay;

@@ -49,6 +49,7 @@
 #import "UIApplication+Extras.h"
 #import "UIViewController+tabBarItem.h"
 #import "NSDate+Extras.h"
+
 #import "MTStoreKitController+Features.h"
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
@@ -57,7 +58,8 @@
 #import "MADRefreshReloadOperation.h"
 
 #import "MADPromptOperationDisplayError.h"
-#import "MADBlockOperation.h"
+
+#import "MADOperationObserver.h"
 
 #import "MADStoryboard.h"
 
@@ -86,6 +88,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, assign) NSUInteger numberOfPages;
     @property (nonatomic, assign) NSUInteger currentPageIndex;
     @property (nonatomic, assign, readwrite) CGFloat zoomScale;
+
     @property (nonatomic, strong) NSDate *lastCacheDate;
 
 #pragma mark Timer (Updates last refresh date on tick)
@@ -144,6 +147,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
 
+            
             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
                 
                 MADocument *document = self.document;
@@ -643,7 +647,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     if (sharedController) {
                         sharedController.delegate = sself;
                         
-                        MTReportViewerPrintPageRenderer *printPageRender = [sself.document newPrinterPrintPageRender];
+                        MTReportViewerPrintPageRenderer *printPageRender;
+                        printPageRender = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: sself.document];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         
@@ -1095,9 +1100,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         MADocument *document = sself.document;
                         document.activityDelegate = sself;
                         
-                        UIPrintPageRenderer *printPageRender = [document newPrinterPrintPageRender];
+                        UIPrintPageRenderer *printPageRender;
+                        printPageRender = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: document];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = document;
+                        
                         MADViewerController * __weak weakself2 = sself;
                         
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
