@@ -13,11 +13,11 @@
 
 @interface MADocumentState : NSObject
 
-    @property (nonatomic, assign, readwrite, getter = isSuspended) BOOL suspended;
-    @property (nonatomic, assign, readwrite) BOOL saveInProgress;
-    @property (nonatomic, assign, readwrite) BOOL saveInProgressLock;
-    @property (nonatomic, assign, readwrite) BOOL needsSave;
-    @property (nonatomic, assign, readwrite) BOOL contextChagned;
+    @property (nonatomic, assign, readwrite, getter = isSuspended) bool suspended;
+    @property (nonatomic, assign, readwrite) bool saveInProgress;
+    @property (nonatomic, assign, readwrite) bool saveInProgressLock;
+    @property (nonatomic, assign, readwrite) bool needsSave;
+    @property (nonatomic, assign, readwrite) bool contextChagned;
 
 @end
 

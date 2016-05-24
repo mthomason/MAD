@@ -16,24 +16,7 @@
 
 typedef NSArray <NSURL *> MADURLArray;
 
-@protocol MADFileCoordinatorDelegate <NSObject>
-
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (MADURLArray *)insertedURLs
-                                                 removedURLs: (MADURLArray *)removedURLs
-                                                 updatedURLs: (MADURLArray *)updatedURLs;
-
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (MADURLArray *)insertedMetaDatum
-                                                 removedMetaDatum: (MADURLArray *)removedMetaDatum
-                                                 updatedMetaDatum: (MADURLArray *)updatedMetaDatum
-                                                       completion: (void (^)(BOOL success,
-                                                                             NSError *error))completion;
-
-    - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-
-@end
+@protocol MADFileCoordinatorDelegate;
 
 @protocol MADFileCoordinator <NSObject>
 

@@ -12,9 +12,9 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.saveInProgress = NO;
-        self.needsSave = NO;
-        self.contextChagned = NO;
+        self.saveInProgress = false;
+        self.needsSave = false;
+        self.contextChagned = false;
     }
     return self;
 }

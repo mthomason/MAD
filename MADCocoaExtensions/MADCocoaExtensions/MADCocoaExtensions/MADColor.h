@@ -11,7 +11,6 @@
 
 #import <Foundation/NSObject.h>
 #import <UIKit/UIColor.h>
-//#import <CoreGraphics/CGBase.h>
 
 extern const CGFloat MADF255;
 

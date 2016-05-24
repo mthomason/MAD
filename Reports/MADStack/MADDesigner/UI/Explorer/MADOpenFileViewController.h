@@ -10,22 +10,17 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UICollectionViewController.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADExplorer/MADDocumentState.h>
-#import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
+#import <MADFileManager/MADFilesControllerDelegate.h>
 #import <MADExplorer/MADSaveFileProtocol.h>
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
+#import <MADExplorer/MADDocumentState.h>
 
-@class MADMetaData;
-@class MADFileLocationManager, MADOpenDocumentManager;
 @class UIManagedDocument;
+@class MADMetaData;
+@class MADFileLocationManager;
+@class MADOpenDocumentManager;
 
-@protocol MADOpenFileViewControllerDelegate <NSObject>
-
-    - (void)openDocumentAtURL:(NSURL *)url;
-    - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
-    - (NSArray *)supportedUTIs;
-
-@end
+@protocol MADOpenFileViewControllerDelegate;
 
 @interface MADOpenFileViewController : UICollectionViewController
     <MADFilesControllerDelegate,
@@ -42,7 +37,7 @@
 
     @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 
-    - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
+    - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)visible
                                                  animated:(BOOL)animated;
 
 

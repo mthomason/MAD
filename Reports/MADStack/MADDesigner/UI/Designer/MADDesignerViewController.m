@@ -105,6 +105,15 @@
 
 #import "MTViewControllerBarcode.h"
 
+typedef NS_ENUM(NSUInteger, MTToolboxType) {
+    MTToolboxTypeElement = 2,
+    MTToolboxTypeSection = 3,
+    MTToolboxTypeNone = 4,
+};
+
+typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionView *> MADMutableMapSectionViews;
+typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionLabel *> MADMutableMapSectionLabels;
+
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -128,9 +137,6 @@ static const CGFloat MTReportDesignerBorderPaddingDetail        =  3.0000f;
 static const CGFloat MTReportDesignerBorderPaddingVertical      =  3.0000f;
 static const CGFloat MTReportDesignerBufferPaddingVertical      =  2.0000f;
 static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
-
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionView *> MADMutableMapSectionViews;
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionLabel *> MADMutableMapSectionLabels;
 
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
@@ -1902,13 +1908,23 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     MADocument *document = self.document;
     MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
     NSManagedObjectContext *objectContext = document.managedObjectContext;
+    RptqDocumentObject *documentObject;
+    
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
-        documentObject.originx = @(attributes.frame.origin.x);
-        documentObject.originy = @(attributes.frame.origin.y);
+
+        documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+
+        NSNumber *n = [[NSNumber alloc] initWithFloat: attributes.frame.origin.x];
+        documentObject.originx = n;
+
+        n = [[NSNumber alloc] initWithFloat: attributes.frame.origin.y];
+        documentObject.originy = n;
+
         //documentObject.sizewidth = @(attributes.frame.size.width);
         //documentObject.sizeheight = @(attributes.frame.size.height);
+
     }
+
     //[objectContext save:nil];
 }
 

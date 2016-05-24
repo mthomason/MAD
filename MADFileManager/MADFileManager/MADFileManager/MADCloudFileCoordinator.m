@@ -22,6 +22,8 @@
 #import "MADFileUtilities.h"
 #import "MADMetaData.h"
 
+#import "MADFileCoordinatorProtocol.h"
+
 NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
 NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
 

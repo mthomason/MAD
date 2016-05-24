@@ -10,14 +10,13 @@
 #define Reports_MADQueryViewController_h
 
 #import "MADTableViewController.h"
-#import <MAD/MTQueryTest.h>
-#import <MAD/NSManagedObject+Extras.h>
 #import "MADocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const MADSegueShowSql;
+
+@protocol MTViewControllerProtocol;
 
 @class MADocument;
 

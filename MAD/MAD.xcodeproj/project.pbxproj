@@ -222,6 +222,7 @@
 		4C47544B1CF3665300BC9E02 /* MADAggregateFunctionType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544A1CF3665300BC9E02 /* MADAggregateFunctionType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C47544D1CF3672500BC9E02 /* MADAggregateFunctionInputType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C47544F1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EA1CEF77040058986B /* libz.1.dylib */; };
 		4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */; };
 		4C6B014A1CEF625E00D29F3A /* archive_crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B012F1CEF625E00D29F3A /* archive_crc32.h */; };
@@ -651,6 +652,7 @@
 		4C47544A1CF3665300BC9E02 /* MADAggregateFunctionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionType.h; path = MAD/MADAggregateFunctionType.h; sourceTree = "<group>"; };
 		4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionInputType.h; path = MAD/MADAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionGroupByType.h; path = MAD/MADAggregateFunctionGroupByType.h; sourceTree = "<group>"; };
+		4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentProtocol.h; path = MAD/MADocument/MADDocumentProtocol.h; sourceTree = "<group>"; };
 		4C6652EA1CEF77040058986B /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = ../../../../../usr/lib/libbz2.1.0.dylib; sourceTree = "<group>"; };
 		4C6B012F1CEF625E00D29F3A /* archive_crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_crc32.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_crc32.h"; sourceTree = "<group>"; };
@@ -1126,11 +1128,12 @@
 		4C401E431BAE4D7800BAE5FC /* MADocument */ = {
 			isa = PBXGroup;
 			children = (
+				4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */,
+				4C3622BC1CF34FB6002B8649 /* MADocumentSectionType.h */,
 				4C401E441BAE4D8C00BAE5FC /* MADocument.h */,
 				4C401E451BAE4D8C00BAE5FC /* MADocument.m */,
 				4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */,
 				4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */,
-				4C3622BC1CF34FB6002B8649 /* MADocumentSectionType.h */,
 				4C3622BE1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h */,
 			);
 			name = MADocument;
@@ -1756,6 +1759,7 @@
 				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
 				4C401DE71BAE3BD800BAE5FC /* MTQueryDefinitionPredicate.h in Headers */,
 				4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */,
+				4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

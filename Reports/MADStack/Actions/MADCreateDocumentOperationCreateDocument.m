@@ -7,6 +7,8 @@
 //
 
 #import "MADCreateDocumentOperationCreateDocument.h"
+#import <MAD/MADDocumentProtocol.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
 #import "MADOperationUniqueUrlForFilename.h"

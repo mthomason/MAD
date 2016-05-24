@@ -1857,6 +1857,7 @@
 		4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewController.m; sourceTree = "<group>"; };
 		4C4754471CF362E900BC9E02 /* MADPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewController.h; sourceTree = "<group>"; };
 		4C4754481CF362E900BC9E02 /* MADPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewController.m; sourceTree = "<group>"; };
+		4C4754581CF41FF000BC9E02 /* MADOpenFileViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOpenFileViewControllerProtocol.h; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
@@ -2836,6 +2837,7 @@
 				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
 				4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */,
 				4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */,
+				4C4754581CF41FF000BC9E02 /* MADOpenFileViewControllerProtocol.h */,
 				4C26B99C1BAF123A00456DC8 /* MADOpenFileViewController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADOpenFileViewController.m */,
 				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,

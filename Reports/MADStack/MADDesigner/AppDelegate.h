@@ -10,13 +10,10 @@
 #define MAD_Designer_AppDelegate_h
 
 #import <UIKit/UIResponder.h>
-#import <UIKit/UIApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 @interface AppDelegate : UIResponder
-    <UIApplicationDelegate, MADApplicationProtocol>
-
-    @property (nonatomic, strong) UIWindow *window;
+    <MADApplicationProtocol>
 
 @end
 

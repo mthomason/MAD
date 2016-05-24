@@ -40,6 +40,20 @@
 
 @implementation MADAboutTableViewController
 
++ (void)initialize {
+    if (self == [MADAboutTableViewController self]) {
+    
+        UINavigationBar *navigationBarMailAppearance =      [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
+        
+        UIColor *color = [MADColorEverydayApps newColorAnalogous4];
+        navigationBarMailAppearance.barTintColor = color;
+        
+        color = [MADColorEverydayApps newColorRed];
+        navigationBarMailAppearance.tintColor = color;
+
+    }
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToAbout:(UIStoryboardSegue *)action { }

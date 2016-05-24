@@ -13,21 +13,7 @@
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 
-@class  MADMetaData;
-
-@protocol MADCollectionViewLayoutFilesDelegate <NSObject>
-  @required
-
-    - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (BOOL)isFileViewEditing;
-
-  @optional
-    - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (void)selectionsUpdated;
-
-@end
+@protocol MADCollectionViewLayoutFilesDelegate;
 
 @interface MADCollectionViewLayoutGroupedDelegate : NSObject
     <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>

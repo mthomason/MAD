@@ -12,6 +12,7 @@
 #import "MADOperationCondition.h"
 #import "MADOperationConditionResult.h"
 #import "MADOperationObserver.h"
+#import "MADBlockObserver.h"
 
 static NSString * const MADOperatorSelectorIsReady      = @"isReady";
 static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
@@ -71,7 +72,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }
 }
 
-- (void)willEnqueue { self.state = pending; }
+- (void)willEnqueue { self.state = MADOperationStatePending; }
 
 - (void)setState:(MADOperationState)newState {
     // Manually fire the KVO notifications for state change, since this is "private".
@@ -79,7 +80,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     
     @synchronized(self) {
             
-        if (_state == finished) {
+        if (_state == MADOperationStateFinished) {
             return;
         }
         NSAssert([self canTransitionToState:newState], @"Performing invalid state transition.");
@@ -92,11 +93,11 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (BOOL)isReady {
     switch (self.state) {
 
-        case initialized:
+        case MADOperationStateInitialized:
             // If the operation has been cancelled, "isReady" should return true
             return self.cancelled;
 
-        case pending:
+        case MADOperationStatePending:
             if (self.cancelled) {                                   // If the operation has been cancelled, "isReady" should return true
                 return YES;
             } else {
@@ -105,7 +106,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
                 return NO;                                          // Until conditions have been evaluated, "isReady" returns false
             }
 
-        case ready:
+        case MADOperationStateReady:
             return super.ready || self.cancelled;
         
         default:
@@ -113,56 +114,56 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }
 }
 
-- (BOOL)isExecuting {return self.state == executing; }
+- (BOOL)isExecuting {return self.state == MADOperationStateExecuting; }
 
-- (BOOL)isFinished { return self.state == finished; }
+- (BOOL)isFinished { return self.state == MADOperationStateFinished; }
 
 
 - (BOOL)userInitiated { return self.qualityOfService == NSQualityOfServiceUserInitiated; }
 
 - (void)setUserInitiated:(BOOL)newValue {
-    NSAssert(self.state < executing, @"Cannot modify userInitiated after execution has begun.");
+    NSAssert(self.state < MADOperationStateExecuting, @"Cannot modify userInitiated after execution has begun.");
     self.qualityOfService = newValue ? NSQualityOfServiceUserInitiated : NSQualityOfServiceDefault;
 }
 
 - (bool)canTransitionToState:(MADOperationState)target {
-    return (target == pending               && self.state == initialized)
-        || (target == evaluatingConditions  && self.state == pending)
-        || (target == ready                 && self.state == evaluatingConditions)
-        || (target == executing             && self.state == ready)
-        || (target == finishing             && self.state == ready)
-        || (target == finishing             && self.state == executing)
-        || (target == finished              && self.state == finishing);
+    return (target == MADOperationStatePending               && self.state == MADOperationStateInitialized)
+        || (target == MADOperationStateEvaluatingConditions  && self.state == MADOperationStatePending)
+        || (target == MADOperationStateReady                 && self.state == MADOperationStateEvaluatingConditions)
+        || (target == MADOperationStateExecuting             && self.state == MADOperationStateReady)
+        || (target == MADOperationStateFinishing             && self.state == MADOperationStateReady)
+        || (target == MADOperationStateFinishing             && self.state == MADOperationStateExecuting)
+        || (target == MADOperationStateFinished              && self.state == MADOperationStateFinishing);
 }
 
 - (void)evaluateConditions {
-    NSAssert(self.state == pending && !self.cancelled, @"evaluateConditions() was called out-of-order");
+    NSAssert(self.state == MADOperationStatePending && !self.cancelled, @"evaluateConditions() was called out-of-order");
     
-    self.state = evaluatingConditions;
+    self.state = MADOperationStateEvaluatingConditions;
     
     [MADOperationConditionResult evaluateConditions: self.conditions operation: self
                                          completion: ^(NSArray * failures) {
         [self.internalErrors addObjectsFromArray:failures];
-        self.state = ready;
+        self.state = MADOperationStateReady;
     }];
 }
 
 #pragma mark - Conditions
 
 - (void)addCondition:(NSObject <MADOperationCondition> *)condition {
-    NSAssert(self.state < evaluatingConditions, @"Cannot modify observers after execution has begun.");
+    NSAssert(self.state < MADOperationStateEvaluatingConditions, @"Cannot modify observers after execution has begun.");
     [self.conditions addObject:condition];
 }
 
 - (void)addDependency:(NSOperation *)op {
-    NSAssert(self.state < executing, @"Dependencies cannot be modified after execution has begun.");
+    NSAssert(self.state < MADOperationStateExecuting, @"Dependencies cannot be modified after execution has begun.");
     [super addDependency:op];
 }
 
 #pragma mark - Observers
 
 - (void)addObserver:(NSObject <MADOperationObserver> *)observer {
-    NSAssert(self.state < executing, @"Cannot modify observers after execution has begun.");
+    NSAssert(self.state < MADOperationStateExecuting, @"Cannot modify observers after execution has begun.");
     [self.observers addObject:observer];
 }
 
@@ -179,11 +180,11 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (void)main {
-    NSAssert(self.state == ready, @"This operation must be performed on an operation queue.");
+    NSAssert(self.state == MADOperationStateReady, @"This operation must be performed on an operation queue.");
     
     if (!self.cancelled && self.internalErrors.count == 0) {
 
-        self.state = executing;
+        self.state = MADOperationStateExecuting;
 
         NSArray *observers = self.observers;
         for (NSObject <MADOperationObserver> *observer in observers) {
@@ -258,7 +259,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (void)finish:(NSArray *)errors {
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = true;
-        self.state = finishing;
+        self.state = MADOperationStateFinishing;
         
         NSArray *combinedErrors;
         if (errors) {
@@ -274,7 +275,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
             [observer operationDidFinish:self errors:combinedErrors];
         }
         
-        self.state = finished;
+        self.state = MADOperationStateFinished;
     }
 }
 

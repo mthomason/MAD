@@ -7,6 +7,8 @@
 //
 
 #import "MADLocalFileCoordinator.h"
+#import "MADFileCoordinatorProtocol.h"
+
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>

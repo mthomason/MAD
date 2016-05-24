@@ -10,20 +10,22 @@
 #define MAD_Designer_MADOperation_h
 
 #import <Foundation/NSOperation.h>
-#import "MADBlockObserver.h"
-#import "MADOperationCondition.h"
+
 
 @class NSMutableArray<ObjectType>;
 
 typedef NS_ENUM(char, MADOperationState) {
-    initialized,
-    pending,
-    evaluatingConditions,
-    ready,
-    executing,
-    finishing,
-    finished,
+    MADOperationStateInitialized,
+    MADOperationStatePending,
+    MADOperationStateEvaluatingConditions,
+    MADOperationStateReady,
+    MADOperationStateExecuting,
+    MADOperationStateFinishing,
+    MADOperationStateFinished,
 };
+
+@protocol MADOperationCondition;
+@protocol MADOperationObserver;
 
 typedef NSMutableArray <__kindof NSObject <MADOperationCondition> *> MADMutableOperationConditions;
 typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOperationObservers;

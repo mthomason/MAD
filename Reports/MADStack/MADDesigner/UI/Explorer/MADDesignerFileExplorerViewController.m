@@ -7,8 +7,24 @@
 //
 
 #import "MADDesignerFileExplorerViewController.h"
+#import <MAD/MADDocumentProtocol.h>
 
 #import <StoreKit/SKPaymentQueue.h>
+
+#import <MAD/MADCredential.h>
+#import <MAD/MADConstants.h>
+#import <MAD/MADocument.h>
+
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MADExplorer/MADFileLocationManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
+
+#import <MADFileManager/MADFilesController.h>
 
 #import "MADStoryboard.h"
 
@@ -16,6 +32,7 @@
 
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
+
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADViewerController.h"
@@ -35,24 +52,14 @@
 #import "UIStoryboard+Query.h"
 #import "UINavigationController+MADQuery.h"
 #import "UINavigationController+Designer.h"
+
 #import "UITabBarController+Shared.h"
 #import "UITableViewController+Designer.h"
+
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
+
 #import "MADTabBarController.h"
-
-#import <MAD/MADCredential.h>
-#import <MAD/MADConstants.h>
-#import <MAD/MADocument.h>
-
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import <MADExplorer/MADFileLocationManager.h>
-#import <MADExplorer/MADOpenDocumentManager.h>
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";

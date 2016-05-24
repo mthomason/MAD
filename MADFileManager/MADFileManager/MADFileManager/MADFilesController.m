@@ -7,6 +7,9 @@
 //
 
 #import "MADFilesController.h"
+#import "MADFileCoordinatorProtocol.h"
+#import "MADFilesControllerDelegate.h"
+
 #import "MADFileCoordinator.h"
 #import "MADMetaData.h"
 #import <Foundation/NSTimer.h>
@@ -36,7 +39,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.information";
 
-@interface MADFilesController () <MADFileCoordinatorDelegate>
+@interface MADFilesController ()
+    <MADFileCoordinatorDelegate>
 
     @property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
     @property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;

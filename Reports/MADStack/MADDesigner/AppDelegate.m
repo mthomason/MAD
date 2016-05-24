@@ -12,13 +12,15 @@
 
 
 #import "AppDelegate.h"
+
+#import <UIKit/UIApplication.h>
 #import <QuickLook/QLPreviewController.h>
 #import <Foundation/NSString.h>
+
 #import <MAD/MADConstants.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
-#import <MessageUI/MFMailComposeViewController.h>
 
 #import "MADOperationQueue.h"
 #import "MADDesignerFileExplorerViewController.h"
@@ -37,6 +39,7 @@
 #import "MADInstallOperationSampleDocument.h"
 
 @class MADTransparentPresentationController;
+@class MFMailComposeViewController;
 
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
@@ -53,11 +56,6 @@ NSString *s = @"";
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
-const NSInteger MADTagAlertViewNewDocument = 3838;
-const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
-                                                    //  load window in willFinishLaunchingWithOptions
-                                                    //  otherwise load window in didFinishLaunchingWithOptions
-
 static inline UIUserNotificationType MADUserNotificationType();
 static inline UIUserNotificationType MADUserNotificationType() {
     return (UIUserNotificationType)(UIUserNotificationTypeAlert |
@@ -66,7 +64,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 @interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate>
+    <UIApplicationDelegate, UIDocumentInteractionControllerDelegate>
 
     @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
@@ -318,7 +316,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
     UINavigationBar *navigationBarAppearance =          [UINavigationBar appearance];
     
     UINavigationBar *navigationBarQLPreviewAppearance = [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil];
-    UINavigationBar *navigationBarMailAppearance =      [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
     UINavigationBar *navigationBarViewController =      [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil];
     UINavigationBar *navigationBarNavigationBar =       [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
     UIBarButtonItem *barButtonItemToolbar =             [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil];
@@ -330,7 +327,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
 
     navigationBarQLPreviewAppearance.barTintColor   = madColor4;
-    navigationBarMailAppearance.barTintColor        = madColor4;
     
     UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
     navigationBarViewController.tintColor           = whiteColor;
@@ -347,7 +343,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
     UIColor *redColor = [MADColorEverydayApps newColorRed];
     navigationBarQLPreviewAppearance.tintColor = redColor;
-    navigationBarMailAppearance.tintColor = redColor;
     
     #ifndef MADWATCHKIT
         [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor = whiteColor;

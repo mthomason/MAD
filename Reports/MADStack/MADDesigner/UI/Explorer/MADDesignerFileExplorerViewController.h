@@ -10,6 +10,7 @@
 #define MAD_Designer_MADDesignerFileExplorerViewController_h
 
 #import "MADOpenFileViewController.h"
+#import "MADOpenFileViewControllerProtocol.h"
 
 @interface MADDesignerFileExplorerViewController : MADOpenFileViewController
     <MADOpenFileViewControllerDelegate>

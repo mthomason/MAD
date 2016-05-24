@@ -12,28 +12,27 @@
 #define Reports_MADocument_h
 
 #import <UIKit/UIManagedDocument.h>
+
 #import <UIKit/UIPrintInteractionController.h>
+
 #import <MAD/MTReportFormatter.h>
 #import <MAD/MTDatabase.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
 
-extern NSString * const MADMimeType;
-extern NSString * const MADDocumentInfoKeyThumbnail;
-extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
-
 @protocol MADActivityProtocol;
+@protocol MADocumentDelegate;
 
 @class NSManagedObjectID;
 @class UIImage;
 @class UIPrintPageRenderer;
-@class MADErrorContainer;
 @class RptqDocument;
 @class RptqQueryGroup;
 @class RptqDatabaseSchemaTable;
 @class RptqDocumentSection;
 @class RptqDocumentObject;
+@class MADErrorContainer;
 @class MADCredential;
 @class MADocumentState;
 @class MADSectionLayoutManager;
@@ -51,11 +50,10 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
 
-@protocol MADocumentDelegate
-  @required
-  @optional
-    - (MADCredential *)getCredentialsForKey:(NSString *)key;
-@end
+extern NSString * const MADMimeType;
+extern NSString * const MADDocumentInfoKeyThumbnail;
+extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
+
 
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,

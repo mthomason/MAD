@@ -36,6 +36,8 @@
 
 #import <MADBarcodes/png.h>
 
+#import "MADDocumentProtocol.h"
+
 #import "MADSortOrder.h"
 #import "MADConstants.h"
 
@@ -104,9 +106,6 @@
 #import "MTDataTableFast.h"
 #import "MTDatabase.h"
 #import "MTReportViewerPrintPageRenderer.h"
-
-//#import "madpng.h"
-
 
 #import "NSString+RelativePath.h"
 
@@ -1159,17 +1158,17 @@ READ_END:;
     NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
     
     //NSPredicate *p = [[NSPredicate alloc] init
-    self.documentStatus.needsSave = YES;
-    self.documentStatus.contextChagned = YES;
+    self.documentStatus.needsSave = true;
+    self.documentStatus.contextChagned = true;
 }
 
 - (void)handleManagedObjectContextDidSave:(NSNotification *)notification {
-    self.documentStatus.saveInProgress = NO;
-    self.documentStatus.needsSave = NO;
+    self.documentStatus.saveInProgress = false;
+    self.documentStatus.needsSave = false;
 }
 
 - (void)handleManagedObjectContextWillSave:(NSNotification *)notification {
-    self.documentStatus.saveInProgress = YES;
+    self.documentStatus.saveInProgress = true;
 }
 
 #pragma mark - UIDocument Notifications

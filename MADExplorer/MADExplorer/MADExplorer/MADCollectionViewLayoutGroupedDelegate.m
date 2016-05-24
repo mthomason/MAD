@@ -7,6 +7,8 @@
 //
 
 #import "MADCollectionViewLayoutGroupedDelegate.h"
+#import "MADCollectionViewLayoutGroupedDelegateProtocol.h"
+
 #import "MTCollectionViewCellDocument.h"
 #import <MADCocoaExtensions/MADLabel.h>
 

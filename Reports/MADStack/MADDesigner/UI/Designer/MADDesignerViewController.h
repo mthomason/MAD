@@ -11,14 +11,9 @@
 
 #import "MADViewController.h"
 #import "MADocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
 #import "MADViewControllerProtocol.h"
 
-typedef NS_ENUM(NSUInteger, MTToolboxType) {
-    MTToolboxTypeElement = 2,
-    MTToolboxTypeSection = 3,
-    MTToolboxTypeNone = 4,
-};
+@protocol MTViewControllerProtocol;
 
 @interface MADDesignerViewController : MADViewController
     <MADViewControllerDocumentProtocol, MADViewControllerProtocol>

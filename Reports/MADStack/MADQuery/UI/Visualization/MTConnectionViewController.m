@@ -11,6 +11,7 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import <MAD/MADDocumentProtocol.h>
 
 #import "MUIViewControllerDelegate.h"
 #import <MADExplorer/MADSaveFileProtocol.h>

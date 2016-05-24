@@ -9,7 +9,7 @@
 #ifndef MADApplicationProtocol_h
 #define MADApplicationProtocol_h
 
-#import <Foundation/NSObject.h>
+#include <objc/NSObject.h>
 
 @class NSUserDefaults;
 

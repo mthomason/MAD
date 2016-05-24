@@ -11,16 +11,19 @@
 #endif
 
 #import "MADOpenFileViewController.h"
+#import "MADOpenFileViewControllerProtocol.h"
 
 #import <MessageUI/MessageUI.h>
 
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
 
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFileManager/MADAppLaunchContext.h>
+#import <MADFileManager/MADFilesController.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
