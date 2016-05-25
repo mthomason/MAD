@@ -11,14 +11,8 @@
 #endif
 
 #import "MTQueryCacheVacuum.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
-
-@interface MTQueryCacheVacuum ()
-    @property (nonatomic, strong) MTDatabaseConnection *connection;
-@end
 
 @implementation MTQueryCacheVacuum
 
@@ -38,6 +32,5 @@
 - (BOOL)returnsResults {
     return NO;
 }
-
 
 @end

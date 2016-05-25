@@ -14,6 +14,10 @@
 
 #import <MessageUI/MFMailComposeViewController.h>
 
+#import "MUIViewControllerDelegate.h"
+
+#import <MAD/MADConstants.h>
+
 #import <CoreText/CTStringAttributes.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -251,15 +255,15 @@
     [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController error:error];
+            alert = [UIAlertController newAlertControllerError:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController errorDisplayErrorWithTitle: title
-                                                          message: message
-                                                    andCompletion: ^(UIAlertAction *action) { }];
+            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                            message: message
+                                                                      andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

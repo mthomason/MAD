@@ -73,8 +73,10 @@
 #import <MADCocoaExtensions/MADImage.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MAD/MTDataTableFast.h>
 #import <MADBarcodes/MTBarcode.h>
+
+#import <MTDataTableFast.h>
+#import <MADQueryCacheAggregateFunctionParamaters.h>
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
@@ -1001,7 +1003,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     if (columnKey) {
         NSDictionary *queryParameters;
         
-        MTQueryType queryType = MTQueryTypeCacheAggregateFunction;
+        MADQueryType queryType = MADQueryTypeCacheAggregateFunction;
         switch (groupByType) {
             case MTAggregateGroupByTypePage: {
                 NSDictionary *d = [MTReportViewerPrintPageRenderer newParamatersAggregateByPageWithFieldKey: columnKey
@@ -1011,7 +1013,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                 queryParameters = [[NSMutableDictionary alloc] initWithDictionary:d copyItems:NO];
                 
                 NSNumber *groupByTypeNumber = [[NSNumber alloc] initWithUnsignedInteger: groupByType];
-                NSNumber *groupByTypeKey = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersGroupByType];
+                NSNumber *groupByTypeKey = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersGroupByType];
                 ((NSMutableDictionary *)queryParameters)[groupByTypeKey] = groupByTypeNumber;
                 
                 break;
@@ -1045,10 +1047,10 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                                      andFunctionType:(MTAggregateFunctionType)functionType
                                         andDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
     
-    id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersTableName];
-    id keyFieldKey = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersFieldKey];
-    id keyAggregateFunctionType = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersAggregateFunctionType];
-    id keyFieldDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersFieldDescriptors];
+    id keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersTableName];
+    id keyFieldKey = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersFieldKey];
+    id keyAggregateFunctionType = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersAggregateFunctionType];
+    id keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersFieldDescriptors];
     NSNumber *objFunctionType = [[NSNumber alloc] initWithUnsignedInteger: functionType];
     NSString *tableName = [dataTable tableName].copy;
     NSDictionary *paramaters = [[NSDictionary alloc] initWithObjectsAndKeys:tableName, keyTableName,
@@ -1066,7 +1068,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                                                                           andFunctionType: functionType
                                                                              andDataTable: dataTable];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:d];
-    NSNumber *keyRowids = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersRowids];
+    NSNumber *keyRowids = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersRowids];
     parameters[keyRowids] = rowids;
     return parameters;
 }
@@ -1078,7 +1080,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     id d = [MTReportViewerPrintPageRenderer newParamatersAggregateWithFieldKey:fieldKey andFunctionType:functionType
                                     andDataTable:dataTable];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:d];
-    NSNumber *keyWhereClause = [[NSNumber alloc] initWithShort: MTQueryCacheAggregateFunctionParamatersPredicates];
+    NSNumber *keyWhereClause = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersPredicates];
     parameters[keyWhereClause] = [dataTable whereClauseForGroupKeys:groupKeys];
     return parameters;
 }

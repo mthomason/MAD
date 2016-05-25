@@ -24,7 +24,8 @@
 
 @implementation MTDatabaseConnectionMySql
 
-- (instancetype)initWithHost:(NSString *)host database:(NSString *)database andPort:(NSInteger)port {
+- (instancetype)initWithHost:(NSString *)host database:(NSString *)database
+                     andPort:(NSInteger)port {
     if (self = [super init]) {
         NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         NSString *internalServer = [host stringByTrimmingCharactersInSet: whitespace];
@@ -38,7 +39,9 @@
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host database:self.database andPort:self.port];
+    id copy = [[[self class] allocWithZone:zone] initWithHost: self.host
+                                                     database: self.database
+                                                      andPort: self.port];
     return copy;
 }
 
@@ -51,19 +54,23 @@
 }
 
 - (NSString *)connectionString {
-    NSString * __autoreleasing connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+    NSString *connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
+                                                                self.databaseTypeIdentifier,
+                                                                self.server,
+                                                                (long)_port,
+                                                                _database];
     return connectionString;
 }
 
 - (NSInteger)port { return _port; }
 
 - (NSString *)database {
-    NSString * __autoreleasing database = _database.copy;
+    NSString *database = _database.copy;
     return database;
 }
 
 - (NSString *)server {
-    NSString * __autoreleasing internalServer = _internalServer.copy;
+    NSString *internalServer = _internalServer.copy;
     return internalServer;
 }
 

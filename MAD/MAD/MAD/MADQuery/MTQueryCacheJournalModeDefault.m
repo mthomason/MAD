@@ -19,9 +19,7 @@
 @implementation MTQueryCacheJournalModeDefault
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) { }
-    return self;
+    return self = [super initWithObject:object];
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {

@@ -9,9 +9,6 @@
 #ifndef Reports_RptqDocumentObjectFactory_h
 #define Reports_RptqDocumentObjectFactory_h
 
-#import "RptqDocument.h"
-#import "RptqDocumentObject.h"
-
 @protocol RptqDocumentObjectFactory <NSObject>
   @required
   @optional

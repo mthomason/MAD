@@ -12,9 +12,11 @@
 #import "MTDatabase.h"
 #import <MADFoundation/MADDataType.h>
 
-@interface MTDatabaseCache : MTDatabase
+@interface MTDatabaseCache : MTDatabase {
+  @public
+    void * /* sqlite3 * */ _database;
+}
 
-    - (void *)databaseHandle;
     - (BOOL)tableExist:(NSString *)tablename;
     - (NSString *)newNativeTypeForDataType:(MTDataType)dataType;
     - (void)beginBulkInsert;

@@ -251,7 +251,8 @@ static MTKeyChain *sharedSingleton = nil;
             ![username isEqualToString:keyUsername] ||
             ![password isEqualToString:keyPassword]) {
             
-            UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
+            UIAlertController *alertController;
+            alertController = [UIAlertController newAlertControllerSaveCredentials:^(UIAlertAction *action) {
                 
                 [MTKeyChain saveUsername: self.saveUsername
                              andPassword: self.savePassword
@@ -390,7 +391,8 @@ static MTKeyChain *sharedSingleton = nil;
     self.credentialsUsername = username;
     
     
-    UIAlertController *prompt = [UIAlertController promptForPasswordGivenUsername:username password:^(UITextField *textField) {
+    UIAlertController *prompt = [UIAlertController newAlertControllerPromptForPasswordGivenUsername:username
+                                                                                           password:^(UITextField *textField) {
         textField.delegate = self;
     } submit:^(NSString *password) {
         self.credentialsCompletion(YES, nil, username, password, NO);
@@ -408,7 +410,7 @@ static MTKeyChain *sharedSingleton = nil;
 
 - (void)promptForUsernameAndPassword {
     
-    UIAlertController *prompt = [UIAlertController promptForUsername:^(UITextField *textField) {
+    UIAlertController *prompt = [UIAlertController newAlertControllerPromptForUsername:^(UITextField *textField) {
         textField.delegate = self;
     } password:^(UITextField *textField) {
         textField.delegate = self;

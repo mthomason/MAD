@@ -22,8 +22,14 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MAD/MTReportViewerPrintPageRenderer.h>
+
 #import <MAD/MADocument.h>
+#import <MAD/MTDatabase.h>
+
+#import <MAD/MTReportFormatter.h>
+
 #import <MAD/MTDatabaseConnection.h>
+
 #import <MAD/MTDataTableFast.h>
 
 #import <MAD/MTActivityItemProviderPdf.h>
@@ -71,7 +77,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADViewerController ()
     <UIPopoverControllerDelegate,
-        UIPrintInteractionControllerDelegate,
         UIStateRestoring,
         MADOperationObserver,
         MADPageSliderProtocol,
@@ -645,12 +650,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
 
                     if (sharedController) {
-                        sharedController.delegate = sself;
                         
                         MTReportViewerPrintPageRenderer *printPageRender;
                         printPageRender = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: sself.document];
                         sharedController.printPageRenderer = printPageRender;
-                        sharedController.delegate = self.document;
+                        sharedController.delegate = _document;
                         
                         
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {

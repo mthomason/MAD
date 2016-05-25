@@ -1,27 +1,27 @@
 //
-//  MTQuerySelectParameters.h
+//  MADQuerySelectParameters.h
 //  MAD
 //
 //  Created by Michael Thomason on 5/25/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MTQuerySelectParameters_h
-#define MTQuerySelectParameters_h
+#ifndef MADQuerySelectParameters_h
+#define MADQuerySelectParameters_h
 
-typedef NS_ENUM(short, MTQuerySelectParameters) {
-    MTQuerySelectConnection,
-    MTQuerySelectTableName,
-    MTQuerySelectFieldKeys,
-    MTQuerySelectFieldDescriptors,
-    MTQuerySelectLimit,
-    MTQuerySelectOffset,
-    MTQuerySelectSortDescriptors,
-    MTQuerySelectPredicates,
-    MTQuerySelectRowId,
-    MTQuerySelectRowIds,
-    MTQuerySelectSortAccending,
-    MTQuerySelectColumns
+typedef NS_ENUM(short, MADQuerySelectParameters) {
+    MADQuerySelectConnection,
+    MADQuerySelectTableName,
+    MADQuerySelectFieldKeys,
+    MADQuerySelectFieldDescriptors,
+    MADQuerySelectLimit,
+    MADQuerySelectOffset,
+    MADQuerySelectSortDescriptors,
+    MADQuerySelectPredicates,
+    MADQuerySelectRowId,
+    MADQuerySelectRowIds,
+    MADQuerySelectSortAccending,
+    MADQuerySelectColumns
 };
 
-#endif /* MTQuerySelectParameters_h */
+#endif /* MADQuerySelectParameters_h */

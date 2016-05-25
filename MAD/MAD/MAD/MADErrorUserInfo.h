@@ -13,10 +13,8 @@
 
 @interface MADErrorUserInfo : NSObject
 
-    - (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message;
+    - (instancetype)initWithTitle: (NSString *)title andMessage: (NSString *)message;
     - (NSError *)errorWithDomain: (NSString *)domain code: (NSInteger)code;
-
-    //@property (nonatomic, strong, readonly) NSDictionary *userinfo;
 
 @end
 

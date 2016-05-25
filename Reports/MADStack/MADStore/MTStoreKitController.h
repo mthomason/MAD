@@ -10,7 +10,7 @@
 #define Reports_MTStoreKitController_h
 
 #import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
+//#import <Foundation/NSArray.h>
 
 extern NSString * const MTStoreKitTransactionReceipt;
 extern NSString * const MTStoreKitTransactionDate;
@@ -48,6 +48,7 @@ extern NSString * const MTStoreKitIdentifierReceiptExpirationDate;
 typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
 @class SKProduct;
+@class NSArray<ObjectType>;
 
 @interface MTStoreKitController : NSObject
 

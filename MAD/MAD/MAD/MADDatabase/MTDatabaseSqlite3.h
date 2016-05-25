@@ -10,16 +10,14 @@
 #define Reports_MTDatabaseSqlite3_h
 
 #import "MTDatabaseCache.h"
-#import <MADSqlite3/sqlite3.h>
 
 @class MTDatabaseDataBinding;
 
-typedef struct sqlite3_stmt sqlite3_stmt;
 typedef NSString MADSqlite3SortDescription;
 
 @interface MTDatabaseSqlite3 : MTDatabaseCache
 
-    @property (nonatomic, readwrite, assign) sqlite3 *database;
+    //@property (nonatomic, readwrite, assign) sqlite3 *database;
 
     - (void *)databaseHandle;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
@@ -31,7 +29,8 @@ typedef NSString MADSqlite3SortDescription;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-    + (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
+    + (void)bindStatement:(void ** /* sqlite3_stmt ** */)statement
+             withBindings:(MTDatabaseDataBinding *)databinding;
 
     - (void)openDatabase;
     - (void)openDatabaseWithFlags:(int)flags;
@@ -43,12 +42,13 @@ typedef NSString MADSqlite3SortDescription;
     + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MTDataType)columnType
                                                                 ascending:(BOOL)ascending;
 
-    + (id)newValueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber;
-    + (id)newObject:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter
+    + (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement
+                  columnNumber:(int)columnNumber;
+    + (id)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
            withType:(MTDataType)type;
 
     + (void)executeQueryWithSql:(NSString *)queryString
-                       database:(sqlite3 *)_database
+                       database:(void * /* sqlite3 * */)database
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
       queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;

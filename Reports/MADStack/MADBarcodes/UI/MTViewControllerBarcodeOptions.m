@@ -830,7 +830,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
         [delegate didSetField2:field];
     }
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: field.databaseSchemaField];
     NSError * __autoreleasing error = NULL;
     bool success = [querySampleDataField performQueryWithError:&error];

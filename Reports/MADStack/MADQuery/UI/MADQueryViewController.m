@@ -1510,7 +1510,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
 - (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
-    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
+    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
     MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
     
     MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];

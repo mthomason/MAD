@@ -11,6 +11,16 @@
 #endif
 
 #import "MTQuery.h"
+
+#import <Foundation/NSNull.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+
+#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+
+#import <MADFoundation/MADDataColumn.h>
+
 #import "MTQueryCacheSelectRowId.h"
 #import "MTQuerySampleDataField.h"
 #import "MTQuerySampleDataTable.h"
@@ -37,29 +47,14 @@
 #import "MTQueryCacheSelectRowIds.h"
 #import "MTQueryCacheAggregateFunction.h"
 
-#import "RptqDatabaseSchemaTable.h"
+#import "MADQueryCacheDeleteAllFromTableParameters.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-
-#import "RptqQuery.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryLinks+Extras.h"
-#import "RptqQueryField.h"
-#import "RptqQueryPredicate.h"
-#import "RptqQueryPredicate+Extras.h"
-
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MADDataColumn.h>
 
 #import "MTDatabaseDataBinding.h"
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
-#import <Foundation/NSNull.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSException.h>
+#import "MADQueryCacheFullParameters.h"
 
 NSString * const MTQueryKeyType             = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject           = @"MTQueryKeyObject";
@@ -69,113 +64,113 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
 
-@property (nonatomic, assign, readwrite) MTQueryType type;
+@property (nonatomic, assign, readwrite) MADQueryType type;
 
 @end
 
 @implementation MTQuery
 
-- (id)initWithQueryType:(MTQueryType)type object:(id)object {
+- (id)initWithQueryType:(MADQueryType)type object:(id)object {
 
     switch (type) {
             
-        case MTQueryTypeCacheSelectRowIds:
+        case MADQueryTypeCacheSelectRowIds:
             self = [[MTQueryCacheSelectRowIds alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheSelectItemsForGroupKeys:
-            self = [[MTQuerySelectItemsForGroup alloc] initWithObject:object];
+        case MADQueryTypeCacheSelectItemsForGroupKeys:
+            self = [[MADQuerySelectItemsForGroup alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheAggregateFunction:
+        case MADQueryTypeCacheAggregateFunction:
             self = [[MTQueryCacheAggregateFunction alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheSelectGroupKeys:
+        case MADQueryTypeCacheSelectGroupKeys:
             self = [[MTQueryCacheSelectGroupKeys alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheSelectRowId:
+        case MADQueryTypeCacheSelectRowId:
             self = [[MTQueryCacheSelectRowId alloc] initWithObject:object];
             break;
 
-        case MTQueryTypeMaxFieldLength:
+        case MADQueryTypeMaxFieldLength:
             self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
             break;
 
-        case MTQueryTypeCustomSql:
+        case MADQueryTypeCustomSql:
             self = [[MTQueryCustomNoResults alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeFull:
+        case MADQueryTypeFull:
             self = [[MTQueryFull alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeConnectionTest:
+        case MADQueryTypeConnectionTest:
             self = [[MTQueryTest alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeSampleDataField:
+        case MADQueryTypeSampleDataField:
             self = [[MTQuerySampleDataField alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeSampleDataTable:
+        case MADQueryTypeSampleDataTable:
             self = [[MTQuerySampleDataTable alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheAddColumn:
+        case MADQueryTypeCacheAddColumn:
             self = [[MTQueryCacheAddColumn alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheAddRow:
+        case MADQueryTypeCacheAddRow:
             self = [[MTQueryCacheAddRow alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheDropTable:
+        case MADQueryTypeCacheDropTable:
             self = [[MTQueryCacheDropTable alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheDeleteAllFromTable:
+        case MADQueryTypeCacheDeleteAllFromTable:
             self = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheVacuum:
+        case MADQueryTypeCacheVacuum:
             self = [[MTQueryCacheVacuum alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheBeginTransaction:
+        case MADQueryTypeCacheBeginTransaction:
             self = [[MTQueryCacheBeginTransaction alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheEndTransaction:
+        case MADQueryTypeCacheEndTransaction:
             self = [[MTQueryCacheEndTransaction alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheSyncModeOff:
+        case MADQueryTypeCacheSyncModeOff:
             self = [[MTQueryCacheSyncOff alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheSyncModeDefault:
+        case MADQueryTypeCacheSyncModeDefault:
             self = [[MTQueryCacheSyncDefault alloc] initWithObject:object];
             break;
         
-        case MTQueryTypeCacheJournalModeOverride:
+        case MADQueryTypeCacheJournalModeOverride:
             self = [[MTQueryCacheJournalModeOverride alloc] initWithObject:object];
             break;
 
-        case MTQueryTypeCacheJournalModeDefault:
+        case MADQueryTypeCacheJournalModeDefault:
             self = [[MTQueryCacheJournalModeDefault alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheIndexCreateParameters:
+        case MADQueryTypeCacheIndexCreateParameters:
             self = [[MTQueryCacheIndexCreate alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheIndexDropParameters:
+        case MADQueryTypeCacheIndexDropParameters:
             self = [[MTQueryCacheIndexDrop alloc] initWithObject:object];
             break;
             
-        case MTQueryTypeCacheSelectLimitOffset:
+        case MADQueryTypeCacheSelectLimitOffset:
             self = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:object];
             break;
             
@@ -291,15 +286,19 @@ NSString * const MADIdentifierROWID         = @"ROWID";
         NSUInteger sortCounter = 0;
         [sql appendString:@" ORDER BY "];
         
+        NSString *key;
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
             MADDataColumn *dataColumn = nil;
             if (self.columns) {
-                dataColumn = self.columns[[sortDescriptor key]];
+                if ((key = sortDescriptor.key)) {
+                    dataColumn = self.columns[key];
+                }
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            MADSqlite3SortDescription *sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-                                                                                                       ascending: sortDescriptor.ascending];
+            MADSqlite3SortDescription *sortDirection;
+            sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
+                                                                            ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
         }
@@ -327,10 +326,14 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return column.type;
 }
 
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
++ (MADQueryDefinition *)newQueryDefinitionSelect: (NSArray *)columnKeys
+                                       tableName: (NSString *)tableName
+                                 sortDescriptors: (NSArray *)sortDescriptors {
+
     NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
     NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
     NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
+
     id definition = [[MADQueryDefinition alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
                                                                 tableName, keyTableName,
                                                                 sortDescriptors, keySortDescriptors,
@@ -341,6 +344,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
                                  withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
                                  dropRowid:(BOOL)droprowid {
+    
     NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
     NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
     NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
@@ -354,6 +358,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
         queryDefination[keyDropRow] = dropRowidObj;
     }
     return  queryDefination;
+
 }
 + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
                                  withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {

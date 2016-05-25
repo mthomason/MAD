@@ -14,7 +14,7 @@
 		4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */; };
 		4C2DC0B21CEAD65800167DA3 /* madlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC0B01CEAD65800167DA3 /* madlib.c */; };
-		4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2DC0B11CEAD65800167DA3 /* madlib.h */; };
+		4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2DC0B11CEAD65800167DA3 /* madlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3622BD1CF34FB6002B8649 /* MADocumentSectionType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3622BC1CF34FB6002B8649 /* MADocumentSectionType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3622BF1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3622BE1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C39D0241C9284F800C70B10 /* MADCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C39D0221C9284F800C70B10 /* MADCredential.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -121,8 +121,6 @@
 		4C401DCC1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D881BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.m */; };
 		4C401DCD1BAE3BD600BAE5FC /* MTQueryCacheJournalModeOverride.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D891BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.h */; };
 		4C401DCE1BAE3BD600BAE5FC /* MTQueryCacheJournalModeOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D8A1BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.m */; };
-		4C401DCF1BAE3BD600BAE5FC /* MTQueryCacheSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D8B1BAE3BD500BAE5FC /* MTQueryCacheSelect.h */; };
-		4C401DD01BAE3BD600BAE5FC /* MTQueryCacheSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D8C1BAE3BD500BAE5FC /* MTQueryCacheSelect.m */; };
 		4C401DD11BAE3BD600BAE5FC /* MTQueryCacheSelectGroupKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D8D1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.h */; };
 		4C401DD21BAE3BD600BAE5FC /* MTQueryCacheSelectGroupKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D8E1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.m */; };
 		4C401DD31BAE3BD600BAE5FC /* MTQueryCacheSelectLimitOffset.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D8F1BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.h */; };
@@ -223,6 +221,7 @@
 		4C47544D1CF3672500BC9E02 /* MADAggregateFunctionInputType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C47544F1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5EBD021CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EA1CEF77040058986B /* libz.1.dylib */; };
 		4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */; };
 		4C6B014A1CEF625E00D29F3A /* archive_crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6B012F1CEF625E00D29F3A /* archive_crc32.h */; };
@@ -416,6 +415,22 @@
 		4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C31BADEBA500775B72 /* CoreText.framework */; };
 		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; };
 		4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD90DC31CE6C47A00B56B90 /* miniz.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CEFDCF71CF5A8710092C148 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCF61CF5A8710092C148 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CEFDCF91CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCF81CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h */; };
+		4CEFDCFB1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCFA1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h */; };
+		4CEFDCFD1CF5ABE40092C148 /* MADQueryCacheFullParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCFC1CF5ABE40092C148 /* MADQueryCacheFullParameters.h */; };
+		4CEFDD041CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCFE1CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h */; };
+		4CEFDD051CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCFF1CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h */; };
+		4CEFDD061CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD001CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h */; };
+		4CEFDD071CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD011CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h */; };
+		4CEFDD081CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD021CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h */; };
+		4CEFDD091CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD031CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h */; };
+		4CEFDD0B1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD0A1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h */; };
+		4CEFDD0D1CF5AE510092C148 /* MADQuerySelectParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD0C1CF5AE510092C148 /* MADQuerySelectParameters.h */; };
+		4CEFDD121CF5B2050092C148 /* madsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFDD101CF5B2050092C148 /* madsqlite3.c */; };
+		4CEFDD131CF5B2050092C148 /* madsqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD111CF5B2050092C148 /* madsqlite3.h */; };
+		4CEFDD161CF61EE80092C148 /* madmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFDD141CF61EE80092C148 /* madmath.c */; };
+		4CEFDD171CF61EE80092C148 /* madmath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDD151CF61EE80092C148 /* madmath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD21CF2F98100D93406 /* MADDatabaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD31CF2FC9800D93406 /* MADQueryLinkType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD71CF32D1C00D93406 /* MADSQLJointType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */; };
@@ -653,6 +668,7 @@
 		4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionInputType.h; path = MAD/MADAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionGroupByType.h; path = MAD/MADAggregateFunctionGroupByType.h; sourceTree = "<group>"; };
 		4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentProtocol.h; path = MAD/MADocument/MADDocumentProtocol.h; sourceTree = "<group>"; };
+		4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportFormatterDataSourceProtocol.h; path = MAD/MADReportFormatter/MADReportFormatterDataSourceProtocol.h; sourceTree = "<group>"; };
 		4C6652EA1CEF77040058986B /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = ../../../../../usr/lib/libbz2.1.0.dylib; sourceTree = "<group>"; };
 		4C6B012F1CEF625E00D29F3A /* archive_crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive_crc32.h; path = "../../../../../source/libarchive-3.2.0/libarchive/archive_crc32.h"; sourceTree = "<group>"; };
@@ -853,6 +869,22 @@
 		4CC284C31BADEBA500775B72 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4CD90DC21CE6C47A00B56B90 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniz.c; path = ../../Reports/MADStack/Packages/miniz.c; sourceTree = "<group>"; };
 		4CD90DC31CE6C47A00B56B90 /* miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniz.h; path = ../../Reports/MADStack/Packages/miniz.h; sourceTree = "<group>"; };
+		4CEFDCF61CF5A8710092C148 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryType.h; path = MAD/MADQuery/MADQueryType.h; sourceTree = "<group>"; };
+		4CEFDCF81CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheAggregateFunctionParamaters.h; path = MAD/MADQuery/MADQueryCacheAggregateFunctionParamaters.h; sourceTree = "<group>"; };
+		4CEFDCFA1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheSelectLimitOffsetParamaters.h; path = MAD/MADQuery/MADQueryCacheSelectLimitOffsetParamaters.h; sourceTree = "<group>"; };
+		4CEFDCFC1CF5ABE40092C148 /* MADQueryCacheFullParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheFullParameters.h; path = MAD/MADQuery/MADQueryCacheFullParameters.h; sourceTree = "<group>"; };
+		4CEFDCFE1CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheAddColumnParameters.h; path = MAD/MADQuery/MADQueryCacheAddColumnParameters.h; sourceTree = "<group>"; };
+		4CEFDCFF1CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheAddRowParameters.h; path = MAD/MADQuery/MADQueryCacheAddRowParameters.h; sourceTree = "<group>"; };
+		4CEFDD001CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheIndexDropParameters.h; path = MAD/MADQuery/MADQueryCacheIndexDropParameters.h; sourceTree = "<group>"; };
+		4CEFDD011CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheIndexCreateParameters.h; path = MAD/MADQuery/MADQueryCacheIndexCreateParameters.h; sourceTree = "<group>"; };
+		4CEFDD021CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheDeleteAllFromTableParameters.h; path = MAD/MADQuery/MADQueryCacheDeleteAllFromTableParameters.h; sourceTree = "<group>"; };
+		4CEFDD031CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheVacuumParameters.h; path = MAD/MADQuery/MADQueryCacheVacuumParameters.h; sourceTree = "<group>"; };
+		4CEFDD0A1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheConnectionParameters.h; path = MAD/MADQuery/MADQueryCacheConnectionParameters.h; sourceTree = "<group>"; };
+		4CEFDD0C1CF5AE510092C148 /* MADQuerySelectParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuerySelectParameters.h; path = MAD/MADQuery/MADQuerySelectParameters.h; sourceTree = "<group>"; };
+		4CEFDD101CF5B2050092C148 /* madsqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = madsqlite3.c; path = MAD/madsqlite3.c; sourceTree = "<group>"; };
+		4CEFDD111CF5B2050092C148 /* madsqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = madsqlite3.h; path = MAD/madsqlite3.h; sourceTree = "<group>"; };
+		4CEFDD141CF61EE80092C148 /* madmath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = madmath.c; path = MAD/madmath.c; sourceTree = "<group>"; };
+		4CEFDD151CF61EE80092C148 /* madmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = madmath.h; path = MAD/madmath.h; sourceTree = "<group>"; };
 		4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryLinkType.h; sourceTree = "<group>"; };
 		4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProtocol.h; sourceTree = "<group>"; };
 		4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSQLJointType.m; path = MAD/MADSQLJointType.m; sourceTree = "<group>"; };
@@ -1012,74 +1044,10 @@
 		4C401D701BAE3BC100BAE5FC /* MADQuery */ = {
 			isa = PBXGroup;
 			children = (
+				4CEFDD0F1CF5AEA80092C148 /* Subclasses */,
+				4CEFDCF61CF5A8710092C148 /* MADQueryType.h */,
 				4C401D711BAE3BD500BAE5FC /* MTQuery.h */,
 				4C401D721BAE3BD500BAE5FC /* MTQuery.m */,
-				4C401D731BAE3BD500BAE5FC /* MTQueryCache.h */,
-				4C401D741BAE3BD500BAE5FC /* MTQueryCache.m */,
-				4C401D751BAE3BD500BAE5FC /* MTQueryCacheAddColumn.h */,
-				4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */,
-				4C401D771BAE3BD500BAE5FC /* MTQueryCacheAddRow.h */,
-				4C401D781BAE3BD500BAE5FC /* MTQueryCacheAddRow.m */,
-				4C401D791BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.h */,
-				4C401D7A1BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.m */,
-				4C401D7B1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.h */,
-				4C401D7C1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.m */,
-				4C401D7D1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.h */,
-				4C401D7E1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.m */,
-				4C401D7F1BAE3BD500BAE5FC /* MTQueryCacheDropTable.h */,
-				4C401D801BAE3BD500BAE5FC /* MTQueryCacheDropTable.m */,
-				4C401D811BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.h */,
-				4C401D821BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.m */,
-				4C401D831BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.h */,
-				4C401D841BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.m */,
-				4C401D851BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.h */,
-				4C401D861BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.m */,
-				4C401D871BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.h */,
-				4C401D881BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.m */,
-				4C401D891BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.h */,
-				4C401D8A1BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.m */,
-				4C401D8B1BAE3BD500BAE5FC /* MTQueryCacheSelect.h */,
-				4C401D8C1BAE3BD500BAE5FC /* MTQueryCacheSelect.m */,
-				4C401D8D1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.h */,
-				4C401D8E1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.m */,
-				4C401D8F1BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.h */,
-				4C401D901BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.m */,
-				4C401D911BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.h */,
-				4C401D921BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.m */,
-				4C401D931BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.h */,
-				4C401D941BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.m */,
-				4C401D951BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.h */,
-				4C401D961BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.m */,
-				4C401D971BAE3BD500BAE5FC /* MTQueryCacheSyncOff.h */,
-				4C401D981BAE3BD500BAE5FC /* MTQueryCacheSyncOff.m */,
-				4C401D991BAE3BD500BAE5FC /* MTQueryCacheVacuum.h */,
-				4C401D9A1BAE3BD500BAE5FC /* MTQueryCacheVacuum.m */,
-				4C401D9B1BAE3BD500BAE5FC /* MTQueryCustomNoResults.h */,
-				4C401D9C1BAE3BD500BAE5FC /* MTQueryCustomNoResults.m */,
-				4C401D9D1BAE3BD500BAE5FC /* MTQueryDefinitionField.h */,
-				4C401D9E1BAE3BD500BAE5FC /* MTQueryDefinitionField.m */,
-				4C401D9F1BAE3BD500BAE5FC /* MTQueryDefinitionGroup.h */,
-				4C401DA01BAE3BD500BAE5FC /* MTQueryDefinitionGroup.m */,
-				4C401DA11BAE3BD500BAE5FC /* MTQueryDefinitionLinks.h */,
-				4C401DA21BAE3BD500BAE5FC /* MTQueryDefinitionLinks.m */,
-				4C401DA31BAE3BD500BAE5FC /* MTQueryDefinitionPredicate.h */,
-				4C401DA41BAE3BD500BAE5FC /* MTQueryDefinitionPredicate.m */,
-				4C401DA51BAE3BD500BAE5FC /* MTQueryDefinitionSort.h */,
-				4C401DA61BAE3BD500BAE5FC /* MTQueryDefinitionSort.m */,
-				4C401DA71BAE3BD500BAE5FC /* MTQueryDefinitionTable.h */,
-				4C401DA81BAE3BD500BAE5FC /* MTQueryDefinitionTable.m */,
-				4C401DA91BAE3BD500BAE5FC /* MTQueryFull.h */,
-				4C401DAA1BAE3BD500BAE5FC /* MTQueryFull.m */,
-				4C401DAB1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.h */,
-				4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */,
-				4C401DAD1BAE3BD500BAE5FC /* MTQuerySampleDataField.h */,
-				4C401DAE1BAE3BD500BAE5FC /* MTQuerySampleDataField.m */,
-				4C401DAF1BAE3BD500BAE5FC /* MTQuerySampleDataTable.h */,
-				4C401DB01BAE3BD500BAE5FC /* MTQuerySampleDataTable.m */,
-				4C401DB11BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.h */,
-				4C401DB21BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.m */,
-				4C401DB31BAE3BD500BAE5FC /* MTQueryTest.h */,
-				4C401DB41BAE3BD500BAE5FC /* MTQueryTest.m */,
 			);
 			name = MADQuery;
 			sourceTree = "<group>";
@@ -1089,6 +1057,7 @@
 			children = (
 				4C994F2C1BDD9A550058627A /* MADReportObjectRepresentation */,
 				4C994F1F1BDD96E40058627A /* MADReportTextRepresentation */,
+				4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */,
 				4C401DFA1BAE3CAD00BAE5FC /* MTReportFormatter.h */,
 				4C401DFB1BAE3CAD00BAE5FC /* MTReportFormatter.m */,
 				4C401DFC1BAE3CAD00BAE5FC /* MTReportFormatterCache.h */,
@@ -1110,6 +1079,7 @@
 			children = (
 				4C04EE6C1CA9589200582422 /* Drivers */,
 				4C04EE6B1CA9587700582422 /* Connection */,
+				4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */,
 				4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */,
 				4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */,
 				4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */,
@@ -1120,7 +1090,6 @@
 				4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */,
 				4C401E151BAE3DCB00BAE5FC /* MTDatabaseDataBinding.h */,
 				4C401E161BAE3DCB00BAE5FC /* MTDatabaseDataBinding.m */,
-				4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */,
 			);
 			name = MADDatabase;
 			sourceTree = "<group>";
@@ -1176,6 +1145,10 @@
 		4C4754381CF35C3800BC9E02 /* c */ = {
 			isa = PBXGroup;
 			children = (
+				4CEFDD151CF61EE80092C148 /* madmath.h */,
+				4CEFDD141CF61EE80092C148 /* madmath.c */,
+				4CEFDD111CF5B2050092C148 /* madsqlite3.h */,
+				4CEFDD101CF5B2050092C148 /* madsqlite3.c */,
 				4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */,
 				4C994F501BE485F80058627A /* MADDocumentObjectType.m */,
 				4C2DC0B11CEAD65800167DA3 /* madlib.h */,
@@ -1248,6 +1221,7 @@
 				4C401CD71BAE3AD600BAE5FC /* MADPaper */,
 				4CC283C91BADE90600775B72 /* rptq */,
 				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
+				4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */,
 				4CC2820D1BADE81A00775B72 /* MTAlignment.h */,
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
 				4CC283C51BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h */,
@@ -1270,7 +1244,6 @@
 				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
 				4C39D0221C9284F800C70B10 /* MADCredential.h */,
 				4C39D0231C9284F800C70B10 /* MADCredential.m */,
-				4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */,
 				4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */,
 				4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */,
 				4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */,
@@ -1496,6 +1469,90 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		4CEFDD0F1CF5AEA80092C148 /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				4CEFDD0C1CF5AE510092C148 /* MADQuerySelectParameters.h */,
+				4CEFDCFE1CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h */,
+				4CEFDCFF1CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h */,
+				4CEFDD001CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h */,
+				4CEFDD011CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h */,
+				4CEFDD021CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h */,
+				4CEFDD031CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h */,
+				4CEFDD0A1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h */,
+				4CEFDCF81CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h */,
+				4CEFDCFA1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h */,
+				4CEFDCFC1CF5ABE40092C148 /* MADQueryCacheFullParameters.h */,
+				4C401D731BAE3BD500BAE5FC /* MTQueryCache.h */,
+				4C401D741BAE3BD500BAE5FC /* MTQueryCache.m */,
+				4C401D751BAE3BD500BAE5FC /* MTQueryCacheAddColumn.h */,
+				4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */,
+				4C401D771BAE3BD500BAE5FC /* MTQueryCacheAddRow.h */,
+				4C401D781BAE3BD500BAE5FC /* MTQueryCacheAddRow.m */,
+				4C401D791BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.h */,
+				4C401D7A1BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.m */,
+				4C401D7B1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.h */,
+				4C401D7C1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.m */,
+				4C401D7D1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.h */,
+				4C401D7E1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.m */,
+				4C401D7F1BAE3BD500BAE5FC /* MTQueryCacheDropTable.h */,
+				4C401D801BAE3BD500BAE5FC /* MTQueryCacheDropTable.m */,
+				4C401D811BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.h */,
+				4C401D821BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.m */,
+				4C401D831BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.h */,
+				4C401D841BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.m */,
+				4C401D851BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.h */,
+				4C401D861BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.m */,
+				4C401D871BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.h */,
+				4C401D881BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.m */,
+				4C401D891BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.h */,
+				4C401D8A1BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.m */,
+				4C401D8B1BAE3BD500BAE5FC /* MTQueryCacheSelect.h */,
+				4C401D8C1BAE3BD500BAE5FC /* MTQueryCacheSelect.m */,
+				4C401D8D1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.h */,
+				4C401D8E1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.m */,
+				4C401D8F1BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.h */,
+				4C401D901BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.m */,
+				4C401D911BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.h */,
+				4C401D921BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.m */,
+				4C401D931BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.h */,
+				4C401D941BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.m */,
+				4C401D951BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.h */,
+				4C401D961BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.m */,
+				4C401D971BAE3BD500BAE5FC /* MTQueryCacheSyncOff.h */,
+				4C401D981BAE3BD500BAE5FC /* MTQueryCacheSyncOff.m */,
+				4C401D991BAE3BD500BAE5FC /* MTQueryCacheVacuum.h */,
+				4C401D9A1BAE3BD500BAE5FC /* MTQueryCacheVacuum.m */,
+				4C401D9B1BAE3BD500BAE5FC /* MTQueryCustomNoResults.h */,
+				4C401D9C1BAE3BD500BAE5FC /* MTQueryCustomNoResults.m */,
+				4C401D9D1BAE3BD500BAE5FC /* MTQueryDefinitionField.h */,
+				4C401D9E1BAE3BD500BAE5FC /* MTQueryDefinitionField.m */,
+				4C401D9F1BAE3BD500BAE5FC /* MTQueryDefinitionGroup.h */,
+				4C401DA01BAE3BD500BAE5FC /* MTQueryDefinitionGroup.m */,
+				4C401DA11BAE3BD500BAE5FC /* MTQueryDefinitionLinks.h */,
+				4C401DA21BAE3BD500BAE5FC /* MTQueryDefinitionLinks.m */,
+				4C401DA31BAE3BD500BAE5FC /* MTQueryDefinitionPredicate.h */,
+				4C401DA41BAE3BD500BAE5FC /* MTQueryDefinitionPredicate.m */,
+				4C401DA51BAE3BD500BAE5FC /* MTQueryDefinitionSort.h */,
+				4C401DA61BAE3BD500BAE5FC /* MTQueryDefinitionSort.m */,
+				4C401DA71BAE3BD500BAE5FC /* MTQueryDefinitionTable.h */,
+				4C401DA81BAE3BD500BAE5FC /* MTQueryDefinitionTable.m */,
+				4C401DA91BAE3BD500BAE5FC /* MTQueryFull.h */,
+				4C401DAA1BAE3BD500BAE5FC /* MTQueryFull.m */,
+				4C401DAB1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.h */,
+				4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */,
+				4C401DAD1BAE3BD500BAE5FC /* MTQuerySampleDataField.h */,
+				4C401DAE1BAE3BD500BAE5FC /* MTQuerySampleDataField.m */,
+				4C401DAF1BAE3BD500BAE5FC /* MTQuerySampleDataTable.h */,
+				4C401DB01BAE3BD500BAE5FC /* MTQuerySampleDataTable.m */,
+				4C401DB11BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.h */,
+				4C401DB21BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.m */,
+				4C401DB31BAE3BD500BAE5FC /* MTQueryTest.h */,
+				4C401DB41BAE3BD500BAE5FC /* MTQueryTest.m */,
+			);
+			name = Subclasses;
+			sourceTree = "<group>";
+		};
 		4CF7813A1BADE5EA0050A67D = {
 			isa = PBXGroup;
 			children = (
@@ -1545,6 +1602,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CEFDD091CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h in Headers */,
 				4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */,
 				4C401E271BAE3DCB00BAE5FC /* MTDatabaseConnection.h in Headers */,
 				4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */,
@@ -1576,7 +1634,6 @@
 				4CC284871BADE9C500775B72 /* RptqDocumentObjectLabelLink+Extras.h in Headers */,
 				4CC284991BADE9E800775B72 /* RptqQueryPredicate+Extras.h in Headers */,
 				4CC284031BADE92B00775B72 /* RptqDatabaseSchemaTable.h in Headers */,
-				4C401DCF1BAE3BD600BAE5FC /* MTQueryCacheSelect.h in Headers */,
 				4CC284831BADE9BD00775B72 /* RptqDocumentObjectLabel+Extras.h in Headers */,
 				4C401D2E1BAE3AF800BAE5FC /* MTPaperA4.h in Headers */,
 				4CC284291BADE96000775B72 /* RptqQueryPredicate.h in Headers */,
@@ -1585,6 +1642,8 @@
 				4C24809C1C8B20E00058E6B4 /* MADFonts.h in Headers */,
 				4CC284211BADE95400775B72 /* RptqQueryCache.h in Headers */,
 				4CC2841B1BADE94B00775B72 /* RptqDocumentSection.h in Headers */,
+				4CEFDD051CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h in Headers */,
+				4C5EBD021CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h in Headers */,
 				4C401DBD1BAE3BD600BAE5FC /* MTQueryCacheAggregateFunction.h in Headers */,
 				4C401E2F1BAE3DCB00BAE5FC /* MTDatabaseDataBinding.h in Headers */,
 				4CC2842D1BADE96600775B72 /* RptqQueryTable.h in Headers */,
@@ -1608,6 +1667,7 @@
 				4CF46DD21CF2F98100D93406 /* MADDatabaseProtocol.h in Headers */,
 				4CC283FF1BADE92600775B72 /* RptqDatabase.h in Headers */,
 				4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */,
+				4CEFDD061CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h in Headers */,
 				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */,
 				4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */,
@@ -1625,10 +1685,12 @@
 				4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */,
 				4CC2846C1BADE99200775B72 /* RptqDatabase+Extras.h in Headers */,
 				4C6B015E1CEF625E00D29F3A /* archive_string_composition.h in Headers */,
+				4CEFDD171CF61EE80092C148 /* madmath.h in Headers */,
 				4CC284851BADE9C100775B72 /* RptqDocumentObjectLabelDataField+Extras.h in Headers */,
 				4C401DCB1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.h in Headers */,
 				4CC284271BADE95D00775B72 /* RptqQueryLinks.h in Headers */,
 				4C401D5A1BAE3AF800BAE5FC /* MTPaperC4.h in Headers */,
+				4CEFDD0B1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h in Headers */,
 				4C6B01631CEF625E00D29F3A /* filter_fork.h in Headers */,
 				4C401E6A1BAE4F4000BAE5FC /* MTDataTable+Factory.h in Headers */,
 				4C401E6E1BAE4F4000BAE5FC /* NSManagedObject+Extras.h in Headers */,
@@ -1668,6 +1730,7 @@
 				4CC284951BADE9E000775B72 /* RptqQueryGroup+Extras.h in Headers */,
 				4CC284011BADE92900775B72 /* RptqDatabaseSchemaField.h in Headers */,
 				4CC284171BADE94500775B72 /* RptqDocumentObjectLabelDataField.h in Headers */,
+				4CEFDD071CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h in Headers */,
 				4CC2848D1BADE9D000775B72 /* RptqFieldSelectorManager.h in Headers */,
 				4CC2840D1BADE93800775B72 /* RptqDocumentObjectChart.h in Headers */,
 				4C401DDD1BAE3BD700BAE5FC /* MTQueryCacheVacuum.h in Headers */,
@@ -1708,10 +1771,13 @@
 				4C401D581BAE3AF800BAE5FC /* MTPaperC3.h in Headers */,
 				4C401DED1BAE3BD800BAE5FC /* MTQueryFull.h in Headers */,
 				4C401D4C1BAE3AF800BAE5FC /* MTPaperB8.h in Headers */,
+				4CEFDCF71CF5A8710092C148 /* MADQueryType.h in Headers */,
 				4C401D281BAE3AF800BAE5FC /* MTPaperA1.h in Headers */,
+				4CEFDD0D1CF5AE510092C148 /* MADQuerySelectParameters.h in Headers */,
 				4C401D461BAE3AF800BAE5FC /* MTPaperB5.h in Headers */,
 				4C401D661BAE3AF800BAE5FC /* MTPaperC10.h in Headers */,
 				4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */,
+				4CEFDD131CF5B2050092C148 /* madsqlite3.h in Headers */,
 				4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */,
 				4C6B014D1CEF625E00D29F3A /* archive_endian.h in Headers */,
 				4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */,
@@ -1722,8 +1788,11 @@
 				4C6B01621CEF625E00D29F3A /* archive_xxhash.h in Headers */,
 				4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */,
 				4C994F461BE2B1320058627A /* MADReportSectionRepresentation.h in Headers */,
+				4CEFDCFB1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h in Headers */,
+				4CEFDCFD1CF5ABE40092C148 /* MADQueryCacheFullParameters.h in Headers */,
 				4C994F2F1BDD9A7E0058627A /* MADSectionPlist.h in Headers */,
 				4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */,
+				4CEFDD041CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h in Headers */,
 				4C401DC91BAE3BD600BAE5FC /* MTQueryCacheIndexDrop.h in Headers */,
 				4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */,
 				4C401D601BAE3AF800BAE5FC /* MTPaperC7.h in Headers */,
@@ -1757,8 +1826,10 @@
 				4CF46DD91CF32D5700D93406 /* MADSQLJoinType.h in Headers */,
 				4C401DEB1BAE3BD800BAE5FC /* MTQueryDefinitionTable.h in Headers */,
 				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
+				4CEFDD081CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h in Headers */,
 				4C401DE71BAE3BD800BAE5FC /* MTQueryDefinitionPredicate.h in Headers */,
 				4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */,
+				4CEFDCF91CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h in Headers */,
 				4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
 			);
@@ -1890,6 +1961,7 @@
 				4CC284101BADE93C00775B72 /* RptqDocumentObjectFormula.m in Sources */,
 				4C401D691BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m in Sources */,
 				4CC2841A1BADE94A00775B72 /* RptqDocumentObjectLabelLink.m in Sources */,
+				4CEFDD121CF5B2050092C148 /* madsqlite3.c in Sources */,
 				4CC282781BADE82100775B72 /* MADNotificationDidFormatPage.m in Sources */,
 				4CC2842C1BADE96500775B72 /* RptqQuerySort.m in Sources */,
 				4CC284841BADE9C000775B72 /* RptqDocumentObjectLabel+Extras.m in Sources */,
@@ -2043,10 +2115,10 @@
 				4C401DD61BAE3BD700BAE5FC /* MTQueryCacheSelectRowId.m in Sources */,
 				4C994F361BDDD85D0058627A /* MADAccessibilityLine.m in Sources */,
 				4C401DC81BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.m in Sources */,
-				4C401DD01BAE3BD600BAE5FC /* MTQueryCacheSelect.m in Sources */,
 				4CC284141BADE94200775B72 /* RptqDocumentObjectImage.m in Sources */,
 				4CC284731BADE99E00775B72 /* RptqDocument+Extras.m in Sources */,
 				4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */,
+				4CEFDD161CF61EE80092C148 /* madmath.c in Sources */,
 				4C401E2E1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

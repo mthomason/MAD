@@ -17,10 +17,11 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)copyKey {
-    char buf[18];
-    ultoa(self.hash, buf);
-    snprintf(buf, 18, "s%lu", (unsigned long)self.hash);
-    id result = [[NSString alloc] initWithUTF8String:buf];
+    char buf[12];
+    buf[0] = 's';
+    uitoa(self.hash, (buf+1));
+    char *ptr = buf;
+    id result = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     return result;
 }
 

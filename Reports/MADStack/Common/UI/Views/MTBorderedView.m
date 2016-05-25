@@ -7,6 +7,7 @@
 //
 
 #import "MTBorderedView.h"
+#import <UIKit/UIGraphics.h>
 
 @interface MTBorderedView ()
 

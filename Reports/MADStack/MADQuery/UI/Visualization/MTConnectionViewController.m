@@ -335,7 +335,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
     NSArray *remaningErrors = [errors subarrayWithRange:range];
     
-    UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle:error.localizedDescription message:error.localizedFailureReason
+    UIAlertController *alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle:error.localizedDescription message:error.localizedFailureReason
                                                                andCompletion:^(UIAlertAction *action) {
         if (remaningErrors.count > 0) {
             [MADConnectionViewController viewController:viewController displayErrors:remaningErrors completion:^(BOOL success) {

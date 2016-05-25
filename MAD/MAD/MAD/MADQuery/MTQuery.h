@@ -10,131 +10,14 @@
 #define Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataType.h>
-
-#pragma mark Types of queries
-
-typedef NS_ENUM(NSUInteger, MTQueryType) {
-	MTQueryTypeMaxFieldLength,
-    MTQueryTypeCustomSql,
-    MTQueryTypeFull,
-    MTQueryTypeConnectionTest,
-    MTQueryTypeSampleDataField,
-    MTQueryTypeSampleDataTable,
-    MTQueryTypeCacheAddColumn,
-    MTQueryTypeCacheAddRow,
-    MTQueryTypeCacheDeleteAllFromTable,
-    MTQueryTypeCacheDropTable,
-    MTQueryTypeCacheVacuum,
-    MTQueryTypeCacheBeginTransaction,
-    MTQueryTypeCacheEndTransaction,
-    MTQueryTypeCacheSyncModeOff,
-    MTQueryTypeCacheSyncModeDefault,
-    MTQueryTypeCacheJournalModeOverride,
-    MTQueryTypeCacheJournalModeDefault,
-    MTQueryTypeCacheIndexCreateParameters,
-    MTQueryTypeCacheIndexDropParameters,
-    MTQueryTypeCacheSelectLimitOffset,
-    MTQueryTypeCacheSelectRowId,
-    MTQueryTypeCacheSelectRowIds,
-    MTQueryTypeCacheSelectGroupKeys,
-    MTQueryTypeCacheSelectItemsForGroupKeys,
-    MTQueryTypeCacheAggregateFunction
-};
+#import "MADQueryType.h"
 
 #pragma mark Types of specific paramamters accepted for each query
 
-typedef NS_ENUM(short, MTQueryCacheAggregateFunctionParamaters) {
-    MTQueryCacheAggregateFunctionParamatersTableName,
-    MTQueryCacheAggregateFunctionParamatersGroupByType,
-    MTQueryCacheAggregateFunctionParamatersRowids,
-    MTQueryCacheAggregateFunctionParamatersAggregateFunctionType,
-    MTQueryCacheAggregateFunctionParamatersFieldKey,
-    MTQueryCacheAggregateFunctionParamatersPredicates,
-    MTQueryCacheAggregateFunctionParamatersFieldDescriptors,
-    
-};
-
-typedef NS_ENUM(short, MTQueryCacheSelectLimitOffsetParamaters) {
-    MTQueryCacheSelectLimitOffsetParamatersLimit,
-    MTQueryCacheSelectLimitOffsetParamatersOffset,
-    MTQueryCacheSelectLimitOffsetParamatersTableNames,
-    MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
-    MTQueryCacheSelectLimitOffsetParamatersColumns,
-    MTQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MTQueryCacheSelectLimitOffsetParamatersWhere,
-    MTQueryCacheSelectLimitOffsetParamatersDropRowid
-};
-
-typedef NS_ENUM(short, MTQueryCacheFullParameters) {
-	MTQueryCacheFullReportName,
-    MTQueryCacheFullQuerySchema,
-};
-
-typedef NS_ENUM(short, MTQueryCacheAddColumnParameters) {
-	MTQueryCacheAddColumnDataColumn,
-    MTQueryCacheAddColumnTableName,
-    MTQueryCacheAddColumnUrl,
-    MTQueryCacheAddColumnColumnName,
-    MTQueryCacheAddColumnCreateTable,
-    MTQueryCacheAddColumnUnique,
-    MTQueryCacheAddColumnAffinity
-};
-
-typedef NS_ENUM(short, MTQueryCacheAddRowParameters) {
-	MTQueryCacheAddRowUrl,
-    MTQueryCacheAddRowData,
-    MTQueryCacheAddRowTableName,
-    MTQueryCacheAddRowColumns,
-    MTQueryCacheAddRowColumnKeys
-};
-
-typedef NS_ENUM(NSUInteger, MTQueryCacheIndexDropParameters) {
-    MTQueryCacheIndexDropIndexName,
-};
-
-typedef NS_ENUM(short, MTQueryCacheIndexCreateParameters) {
-    MTQueryCacheIndexCreateIndexName,
-    MTQueryCacheIndexCreateTableName,
-    MTQueryCacheIndexCreateSortDescriptors,
-    MTQueryCacheIndexCreateColumns,
-};
-
-typedef NS_ENUM(short, MTQueryCacheDeleteAllFromTableParameters) {
-    MTQueryCacheDeleteAllFromTableConnection,
-    MTQueryCacheDeleteAllFromTableTableName
-};
-
-typedef NS_ENUM(NSUInteger, MTQueryCacheDropTableParameters) {
-    MTQueryCacheDropTableConnection,
-    MTQueryCacheDropTableTableName
-};
-
-typedef NS_ENUM(short, MTQueryCacheVacuumParameters) {
-    MTQueryCacheVacuumConnection,
-};
-
-typedef NS_ENUM(NSUInteger, MTQueryCacheConnectionParameters) {
-    MTQueryCacheConnection,
-};
-
-typedef NS_ENUM(short, MTQuerySelectParameters) {
-	MTQuerySelectConnection,
-    MTQuerySelectTableName,
-    MTQuerySelectFieldKeys,
-    MTQuerySelectFieldDescriptors,
-    MTQuerySelectLimit,
-    MTQuerySelectOffset,
-    MTQuerySelectSortDescriptors,
-    MTQuerySelectPredicates,
-    MTQuerySelectRowId,
-    MTQuerySelectRowIds,
-    MTQuerySelectSortAccending,
-    MTQuerySelectColumns
-};
-
 typedef NSDictionary MADQueryDefinition;
+
+@protocol MADDataProtocol;
 
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
@@ -143,8 +26,14 @@ extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class MTDatabase, MTDataTable, RptqQuery, NSMutableArray, NSMutableDictionary;
 @class NSManagedObjectContext;
+@class NSMutableArray;
+@class NSMutableDictionary;
+
+@class MTDatabase;
+@class MTDataTable;
+
+@class RptqQuery;
 
 @interface MTQuery : NSObject
 
@@ -156,13 +45,13 @@ extern NSString * const MADIdentifierROWID;
     @property (nonatomic, strong) id queryObject;
     @property (nonatomic, strong) NSMutableDictionary *fields;
     @property (nonatomic, strong) NSMutableArray *fieldKeys;
-    @property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind NSData to insert statements
+    @property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind
+                                                                    //   NSData to insert statements
     @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
 
-    @property (nonatomic, assign, readonly) MTQueryType type;
+    @property (nonatomic, assign, readonly) MADQueryType type;
 
-
-    - (id)initWithQueryType:(MTQueryType)type object:(id)object;
+    - (id)initWithQueryType:(MADQueryType)type object:(id)object;
 
     - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
     - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
@@ -175,28 +64,28 @@ extern NSString * const MADIdentifierROWID;
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
-- (instancetype)initWithObject:(id)object;
+    - (instancetype)initWithObject:(id)object;
 
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
+    - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
+    - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
+    - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
+    - (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
-- (NSString *)fieldKeyForIndex:(NSUInteger)index;
+    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
-- (BOOL)returnsResults;
-- (BOOL)partOfTransactionSet;
+    - (BOOL)returnsResults;
+    - (BOOL)partOfTransactionSet;
 
-+ (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query;
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                       withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
-                                       dropRowid:(BOOL)droprowid;
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSArray *)columnKeys
-                                       tableName:(NSString *)tableName
-                                 sortDescriptors:(NSArray *)sortDescriptors;
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                       withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-+ (MADQueryDefinition *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
+    + (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query;
+    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                           withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
+                                           dropRowid:(BOOL)droprowid;
+    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSArray *)columnKeys
+                                           tableName:(NSString *)tableName
+                                     sortDescriptors:(NSArray *)sortDescriptors;
+    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                           withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
+    + (MADQueryDefinition *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

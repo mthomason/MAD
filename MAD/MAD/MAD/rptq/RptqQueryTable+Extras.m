@@ -12,20 +12,6 @@
 
 #import "RptqQueryTable+Extras.h"
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
-
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -33,6 +19,13 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <stdio.h>
+#import "madlib.h"
+
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqQuery+Extras.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqQueryTable (Extras)
 
@@ -84,17 +77,15 @@
 
 + (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
                                        database:(RptqDatabase *)database
-                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
+                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
 
     RptqQuery *query = [database defaultQuery];
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;
     for (RptqQueryTable *queryTable in queryTables) {
-        @autoreleasepool {
-            if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
-                dupeCtr++;
-            }
+        if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
+            dupeCtr++;
         }
     }
     
@@ -119,9 +110,10 @@
 }
 
 - (NSString *)copyQueryAlias {
-    char buf[12];
-    sprintf(buf, "%d", self.dropIndex.integerValue);
-    NSString *indexString = [[NSString alloc]  initWithUTF8String:buf];
+    char buf[12]; char *ptr;
+    itoa(self.dropIndex.integerValue, buf);
+    ptr = buf;
+    NSString *indexString = [[NSString alloc]  initWithCString:ptr encoding:NSUTF8StringEncoding];
     NSString *databaseName = self.databaseSchemaTable.name.copy;
     NSString *alias = [databaseName stringByAppendingString:indexString];
     return alias;

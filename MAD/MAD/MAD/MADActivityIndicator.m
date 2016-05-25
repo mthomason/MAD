@@ -24,15 +24,21 @@
                                       UIViewAutoresizingFlexibleRightMargin |
                                       UIViewAutoresizingFlexibleTopMargin |
                                       UIViewAutoresizingFlexibleBottomMargin;
+        
         UIViewAutoresizing maskIndicatorView = UIViewAutoresizingFlexibleLeftMargin |
                                                UIViewAutoresizingFlexibleRightMargin |
                                                UIViewAutoresizingFlexibleTopMargin;
+        
         UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
                                            UIViewAutoresizingFlexibleWidth;
+        
         self.layer.cornerRadius = 5.0000f;
+        
         UIColor *bgColor = [MADColorEverydayApps newColorBlueLightBackground];
         self.backgroundColor = bgColor;
-        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        UIActivityIndicatorView *activityIndicator;
+        activityIndicator= [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                                                        UIActivityIndicatorViewStyleWhiteLarge];
         
         self.autoresizingMask = maskView;
         activityIndicator.autoresizingMask = maskIndicatorView;

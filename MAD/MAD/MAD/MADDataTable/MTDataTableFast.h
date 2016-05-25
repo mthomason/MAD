@@ -10,10 +10,12 @@
 #define Reports_MTDataTableFast_h
 
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTCacheProtocol.h>
-#import <MADFoundation/MADDataProtocol.h>
 
-@class MTDatabaseCache, MTQuery;
+@protocol MTCacheProtocol;
+@protocol MADDataProtocol;
+
+@class MTDatabaseCache;
+@class MTQuery;
 
 @interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>

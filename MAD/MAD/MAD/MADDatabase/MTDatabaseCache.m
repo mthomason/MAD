@@ -13,7 +13,7 @@
 
 @implementation MTDatabaseCache
 
-+ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection {
     
     NSString *identifier = [connection databaseTypeIdentifier];
     

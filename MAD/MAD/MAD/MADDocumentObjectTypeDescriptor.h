@@ -10,7 +10,6 @@
 #define MAD_MADDocumentObjectTypeDescriptor_h
 
 #import <Foundation/NSString.h>
-
 #import <MAD/MADDocumentObjectType.h>
 
 extern NSString * const MADDocumentObjectTypeTitleDynamic;

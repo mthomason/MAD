@@ -9,5 +9,15 @@
 #ifndef MADQueryCacheAggregateFunctionParamaters_h
 #define MADQueryCacheAggregateFunctionParamaters_h
 
+typedef NS_ENUM(short, MADQueryCacheAggregateFunctionParamaters) {
+    MADQueryCacheAggregateFunctionParamatersTableName,
+    MADQueryCacheAggregateFunctionParamatersGroupByType,
+    MADQueryCacheAggregateFunctionParamatersRowids,
+    MADQueryCacheAggregateFunctionParamatersAggregateFunctionType,
+    MADQueryCacheAggregateFunctionParamatersFieldKey,
+    MADQueryCacheAggregateFunctionParamatersPredicates,
+    MADQueryCacheAggregateFunctionParamatersFieldDescriptors,
+    
+};
 
 #endif /* MADQueryCacheAggregateFunctionParamaters_h */

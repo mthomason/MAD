@@ -14,28 +14,23 @@
 @interface UIAlertController (Constructors)
 
     + (instancetype)newAlertControlerNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler;
-
     + (instancetype)newAlertControllerPromptStorageOptionLocal:(void (^)())handlerLocal
                                                          cloud:(void (^)())handlerCloud;
+    + (instancetype)newAlertControllerAddedDocument;
+    + (instancetype)newAlertControllerNotConfiguredForEmail;
+    + (instancetype)newAlertControllerErrorEmptyQuery;
+    + (instancetype)newAlertControllerErrorFileExist;
+    + (instancetype)newAlertControllerErrorValidationFilename;
+    + (instancetype)newAlertControllerError:(NSError *)error;
+    + (instancetype)newAlertControllerNofityTransactionComplete;
 
-    + (instancetype)addedDocument;
-
-    + (instancetype)alertNotConfiguredForEmail;
-
-    + (instancetype)errorEmptyQuery;
-
-    + (instancetype)errorFileExist;
-
-    + (instancetype)errorValidationFilename;
-
-    + (instancetype)errorDisplayErrorWithTitle:(NSString *)title
+    + (instancetype)newAlertControllerErrorDisplayErrorWithTitle:(NSString *)title
                                        message:(NSString *)message
                                  andCompletion:(void (^)(UIAlertAction *action))handlerContinue;
 
-    + (instancetype)nofityTransactionComplete;
 
-    + (instancetype)editLabel:(void (^)(UITextField *textField))textFieldConfig
-                   completion:(void (^)(UIAlertAction *action, NSString *text))completion;
+    + (instancetype)newAlertControllerEditLabel:(void (^)(UITextField *textField))textFieldConfig
+                                     completion:(void (^)(UIAlertAction *action, NSString *text))completion;
 
     + (instancetype)deleteItems:(NSUInteger)itemCount
                         confirm:(void (^)(UIAlertAction *action))handlerConfirm
@@ -45,24 +40,23 @@
                            confirm:(void (^)(UIAlertAction *action, NSString *text))handlerConfirm
                             cancel:(void (^)(UIAlertAction *action))handlerCancel;
 
-    + (instancetype)saveCredentials:(void (^)(UIAlertAction *action))handlerContinue
-                             cancel:(void (^)(UIAlertAction *action))handlerCancel;
+    + (instancetype)newAlertControllerSaveCredentials:(void (^)(UIAlertAction *action))handlerContinue
+                                               cancel:(void (^)(UIAlertAction *action))handlerCancel;
 
     + (instancetype)removeCredentials:(void (^)(UIAlertAction *action))handlerDestructive
                                cancel:(void (^)(UIAlertAction *action))handlerCancel;
 
-    + (instancetype)promptForUsername:(void (^)(UITextField *textField))usernameSetup
+    + (instancetype)newAlertControllerPromptForUsername:(void (^)(UITextField *textField))usernameSetup
                              password:(void (^)(UITextField *textField))passwordSetup
                                submit:(void (^)(NSString *username,
                                                 NSString *password))handlerContinue
                                cancel:(void (^)())handlerCancel;
 
-    + (instancetype)promptForPasswordGivenUsername:(NSString *)username
+    + (instancetype)newAlertControllerPromptForPasswordGivenUsername:(NSString *)username
                                           password:(void (^)(UITextField *textField))passwordSetup
                                             submit:(void (^)(NSString *password))handlerContinue
                                             cancel:(void (^)())handlerCancel;
 
-    + (instancetype)error:(NSError *)error;
 
 @end
 

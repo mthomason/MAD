@@ -11,6 +11,9 @@
 #endif
 
 #import "MTReportFormatter.h"
+#import "MADReportFormatterDataSourceProtocol.h"
+
+#import "MADSectionPlist.h"
 
 #import "MTReportFormatterState.h"
 #import "MADocument.h"

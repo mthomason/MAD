@@ -26,6 +26,7 @@
 #import <MAD/MADFont.h>
 
 #import <MAD/MADSectionLayoutManager.h>
+#import <MAD/MADSectionLayoutAttributes.h>
 
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/NSManagedObjectID+Extras.h>
@@ -425,15 +426,15 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     self.scroller.delegate = self;
     
-    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint view:self.view containerLeft:self.scroller.container];
+    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint newLayoutConstraintView:self.view containerLeft:self.scroller.container];
     constraintContentLeft.priority = 999;
     
-    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint view:self.view containerRight:self.scroller.container];
+    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint newLayoutConstraintView:self.view containerRight:self.scroller.container];
     constraintContentRight.priority = 999;
     
-    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint view:self.scroller containerTop:self.scroller.container];
-    NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint scroller:self.scroller bottom:self.bottomLayoutGuide];
-    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
+    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint newLayoutConstraintView:self.scroller containerTop:self.scroller.container];
+    NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint newLayoutConstraintScroller:self.scroller bottom:self.bottomLayoutGuide];
+    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint newLayoutConstraintContent: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
     
     self.layoutConstraintContainerWidth = constraintWidth;
     
@@ -452,7 +453,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     self.settingsTransitioningDelegate = settingsTransitioningDelegate;
     
-    NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint viewScrollerTop: self.scroller view: self.topLayoutGuide];
+    NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
+                                                                                            view: self.topLayoutGuide];
 
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
     self.selectedObjectIds = selectedObjectIds;
@@ -539,13 +541,13 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             NSManagedObjectID *lastKey = reportSectionKeyTracker.lastObject;
             UIView *constraintItem =  sectionCounter == 0 ? self.ruler : sectionViewsDictionary[lastKey];
             NSManagedObjectID *key = sectionView.objectIdTag;
-            NSLayoutConstraint *lc1a = [NSLayoutConstraint viewTop: constraintItem viewBottom: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            NSLayoutConstraint *lc1b = [NSLayoutConstraint view: sectionView height: reportSection.height.floatValue];
-            NSLayoutConstraint *lc1c = [NSLayoutConstraint labelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
-            NSLayoutConstraint *lc1d = [NSLayoutConstraint labelBottom:sectionViewLabel container: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            NSLayoutConstraint *lc1e = [NSLayoutConstraint label: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
-            NSLayoutConstraint *lc1 = [NSLayoutConstraint viewLeft:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
-            NSLayoutConstraint *lc2 = [NSLayoutConstraint viewRight:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
+            NSLayoutConstraint *lc1a = [NSLayoutConstraint newLayoutConstraintViewTop: constraintItem viewBottom: sectionView padding: MTReportDesignerBufferPaddingVertical];
+            NSLayoutConstraint *lc1b = [NSLayoutConstraint newLayoutConstraintView: sectionView height: reportSection.height.floatValue];
+            NSLayoutConstraint *lc1c = [NSLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
+            NSLayoutConstraint *lc1d = [NSLayoutConstraint newLayoutConstraintLabelBottom:sectionViewLabel container: sectionView padding: MTReportDesignerBufferPaddingVertical];
+            NSLayoutConstraint *lc1e = [NSLayoutConstraint newLayoutConstraintLabel: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
+            NSLayoutConstraint *lc1 = [NSLayoutConstraint newLayoutConstraintViewLeft:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
+            NSLayoutConstraint *lc2 = [NSLayoutConstraint newLayoutConstraintViewRight:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
             NSArray *collectionViewConstraints = @[lc1, lc2];
             NSArray *sectionViewLabelConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
 
@@ -590,14 +592,14 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.container height: sectionHeights];
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container height: sectionHeights];
 
     [scrollerLayoutConstraints addObject:layoutConstraintDesignerContentViewHeight];
 
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
     
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint view: self.scroller.container containerBottom: self.scroller];
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container containerBottom: self.scroller];
     
     [scrollerLayoutConstraints addObject:layoutConstraintContentToScollerBottom];
     
@@ -1521,7 +1523,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
     
-    UIAlertController *alert = [UIAlertController editLabel:^(UITextField *textField) {
+    UIAlertController *alert = [UIAlertController newAlertControllerEditLabel:^(UITextField *textField) {
         textField.text = object.isLabel.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
     } completion:^(UIAlertAction *action, NSString *text) {
@@ -1538,9 +1540,13 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark -
 #pragma mark - MTViewControllerBarcodeDelegate
 
-- (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID barcodeObject:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
+- (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
+                       barcodeObject:(MTBarcode *)barcode
+                        withFieldOne:(RptqQueryField *)fieldOne
+                         andFieldTwo:(RptqQueryField *)fieldTwo {
     
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
     NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
@@ -1574,7 +1580,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark -
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller withField: (RptqQueryField *)field {
+- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+                                      withField: (RptqQueryField *)field {
 
     RptqDocumentObject *documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
     documentObject.isLabelDataField.referencesQueryField = field;
@@ -1590,7 +1597,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark -
 #pragma mark UICollectionViewDataSource
 
-- (UICollectionViewCell *)collectionView: (MADDesignerSectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView: (MADDesignerSectionView *)collectionView
+                  cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADocument *document = self.document;
     MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
@@ -1605,15 +1613,18 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     }];
     
 
-    RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:attributes.objectID];
+    RptqDocumentObject *documentObject;
+    documentObject = [document.managedObjectContext objectWithID:attributes.objectID];
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
     NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
     
-    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
+    MTCollectionViewCellElement *cell;
+    cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
     cell.delegate = self;
     
     CGSize documentObjectSize = [documentObject size];
-    CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
+    CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                  documentObjectSize.width, documentObjectSize.height);
     
     switch ([documentObject getType]) {
         case MTDocumentObjectTypeFormula:
@@ -1632,14 +1643,18 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             
-            UIGestureRecognizer *panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement:self action: @selector(handlePanPiece:) delegate:self];
-            
-            UIGestureRecognizer *pinchGesture = [MADPinchGestureRecognizer newPinchGestureRecognizerElement: self action: @selector(handlePinchPiece:) delegate:self];
-
+            UIGestureRecognizer *panGesture, *pinchGesture;
+            panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
+                                                                          action: @selector(handlePanPiece:)
+                                                                        delegate: self];
             [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
-            [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
-            
             [elementView addGestureRecognizer:panGesture];
+
+            pinchGesture = [MADPinchGestureRecognizer newPinchGestureRecognizerElement: self
+                                                                                action: @selector(handlePinchPiece:)
+                                                                              delegate: self];
+
+            [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
             [elementView addGestureRecognizer:pinchGesture];
             
             elementView.frame = cellFrame;
@@ -2388,7 +2403,12 @@ END_deselectElementView:;
         NSArray *indexPathsInserted;
         MADSectionLayoutAttributes *la;
         RptqDocumentObject *documentObject = [rptqDocument addDocumentObject:documentObjectDefination];
-        [documentObject obtainPermanentID];
+
+        NSArray *objects = @[documentObject];
+
+        NSError * __autoreleasing *error = NULL;
+        [rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
+                                                                  error: error];
         
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
@@ -2642,7 +2662,7 @@ END_deselectElementView:;
         [private performBlockAndWait:^{
 
             RptqDocumentSection *documentSection = [private objectRegisteredForID:sectionViewObjectIdTag];
-            NSString *documentSectionKey = [documentSection copySectionKey];
+            NSManagedObjectID *documentSectionKey = [documentSection copySectionKey];
             CGFloat documentSectionHeight = documentSection.height.floatValue;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{

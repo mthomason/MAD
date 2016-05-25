@@ -10,6 +10,7 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <UIKit/UIGraphics.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/NSStringDrawing.h>

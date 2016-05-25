@@ -7,13 +7,14 @@
 //
 
 #import "MADDatabaseTableSectionHeaderView.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <UIKit/UIFont.h>
 #import <UIKit/UIButton.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UITapGestureRecognizer.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MADSectionHeaderViewDelegate.h"
 
@@ -36,7 +37,6 @@ static const CGFloat PaddingSize = 5.00000f;
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <MADSectionHeaderViewDelegate>)delegate {
     
     if (self = [self initWithFrame:frame]) {
-        
         
         _delegate =  delegate;
         _section = sectionNumber;

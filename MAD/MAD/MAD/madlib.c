@@ -6,12 +6,21 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#include "madlib.h"
+#import "madlib.h"
 #import <stdlib.h>
 #import <stdio.h>
 #import <strings.h>
 
 void ultoa(unsigned long n, char s[]) {
+    int i = 0;
+    do {                            /* generate digits in reverse order */
+        s[i++] = n % 10 + '0';      /* get next digit */
+    } while ((n /= 10) > 0);        /* delete it */
+    s[i] = '\0';
+    reverse(s);
+}
+
+void uitoa(unsigned int n, char s[]) {
     int i = 0;
     do {                            /* generate digits in reverse order */
         s[i++] = n % 10 + '0';      /* get next digit */

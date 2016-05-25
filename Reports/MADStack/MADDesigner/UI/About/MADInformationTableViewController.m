@@ -110,7 +110,10 @@
 }
 
 - (void)actionEmailUs {
-    MFMailComposeViewController *controller = [MFMailComposeViewController title:@"" body:@"" userInterfaceIdiom:self.traitCollection.userInterfaceIdiom];
+    MFMailComposeViewController *controller;
+    controller = [MFMailComposeViewController newMailComposeViewControllerWithTitle: @""
+                                                                               body: @""
+                                                                 userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
     controller.toRecipients = @[@"admin@everydayapps.com"];
     controller.subject = @"MAD Designer";
     if (self.popoverPresentationController != nil) {
@@ -183,15 +186,15 @@
     [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController error:error];
+            alert = [UIAlertController newAlertControllerError:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController errorDisplayErrorWithTitle: title
-                                                          message: message
-                                                    andCompletion: ^(UIAlertAction *action) { }];
+            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                            message: message
+                                                                      andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

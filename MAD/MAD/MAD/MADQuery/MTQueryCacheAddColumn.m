@@ -11,11 +11,10 @@
 #endif
 
 #import "MTQueryCacheAddColumn.h"
-#import <MADFoundation/MADDataColumn.h>
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseSqlite3.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <MADFoundation/MADDataColumn.h>
+#import "MADQueryCacheAddColumnParameters.h"
 
 @class MTDatabaseSqlite3;
 
@@ -48,7 +47,7 @@
         NSString *columnAffinity = object[keyColumnAffinity];
         
         id keyColumnUnique = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnUnique];
-        NSNumber * __weak uniqueObj = object[keyColumnUnique];
+        NSNumber *uniqueObj = object[keyColumnUnique];
         bool uniqueValue = false;
         if (uniqueObj != nil) {
             uniqueValue = uniqueObj.boolValue ? true : false;

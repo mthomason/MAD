@@ -11,6 +11,10 @@
 #endif
 
 #import "MTDatabase.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSArray.h>
+
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseSqlServer.h"
@@ -19,8 +23,6 @@
 #import "MADNotificationDidReadRows.h"
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
-#import <Foundation/NSString.h>
-#import <Foundation/NSException.h>
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
@@ -46,7 +48,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return self;
 }
 
-+ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection {
     
     id result = nil;
     

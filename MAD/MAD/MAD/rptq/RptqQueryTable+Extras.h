@@ -12,15 +12,20 @@
 #import "RptqQueryTable.h"
 #import <MADDataStructures/MTProtocolCompare.h>
 
-@class RptqDocument, RptqDatabase, RptqDatabaseSchemaTable, NSManagedObjectID;
+@class NSManagedObjectID;
+@class RptqDocument;
+@class RptqDatabase;
+@class RptqDatabaseSchemaTable;
 
-@interface RptqQueryTable (Extras) <MTProtocolCompare>
+@interface RptqQueryTable (Extras)
+    <MTProtocolCompare>
 
-+ (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+    + (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
                                        database:(RptqDatabase *)database
-                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED;
+                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (NSString *)copyQueryAlias;
     - (NSString *)tableAlias;

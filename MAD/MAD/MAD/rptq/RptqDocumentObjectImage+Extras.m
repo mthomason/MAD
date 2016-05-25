@@ -11,12 +11,12 @@
 #endif
 
 #import "RptqDocumentObjectImage+Extras.h"
-#import "RptqDocument.h"
-#import "RptqDocumentObject+Extras.h"
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
+#import "RptqDocument.h"
+#import "RptqDocumentObject+Extras.h"
 
 @implementation RptqDocumentObjectImage (Extras)
 

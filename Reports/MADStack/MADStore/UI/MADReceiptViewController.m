@@ -125,7 +125,7 @@
 - (IBAction)actionRefresh:(id)sender {
     [[MTVerificationController sharedInstance] refreshReceipt:^(BOOL success, NSError *error) {
         if (error != nil) {
-            UIAlertController *alert = [UIAlertController error:error];
+            UIAlertController *alert = [UIAlertController newAlertControllerError:error];
             [self presentViewController:alert animated:YES completion:^{
                 
             }];

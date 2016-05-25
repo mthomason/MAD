@@ -15,6 +15,8 @@
 #import <dispatch/dispatch.h>
 #import "MTDatabaseSqlite3.h"
 
+#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+
 @interface MTQueryCacheSelectLimitOffset ()
     @property (nonatomic, strong) NSString *sql;
 @end
@@ -107,19 +109,19 @@
         NSUInteger offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
         
         id keyTableNames = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
-        NSString * __weak tableName = object[keyTableNames];
+        NSString *tableName = object[keyTableNames];
         
         id keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
-        NSArray * __weak columnKeys = object[keyColumnKeys];
+        NSArray *columnKeys = object[keyColumnKeys];
         
         id keySortDesc = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
-        NSArray * __weak sortDesc = object[keySortDesc];
+        NSArray *sortDesc = object[keySortDesc];
         
         id keyWhere = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersWhere];
-        NSArray * __weak whereClause = object[keyWhere];
+        NSArray *whereClause = object[keyWhere];
 
         id keyColumns = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumns];
-        NSDictionary * __weak columns = object[keyColumns];
+        NSDictionary *columns = object[keyColumns];
         
         id keyRowID = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
         NSNumber *dropRowid = object[keyRowID];

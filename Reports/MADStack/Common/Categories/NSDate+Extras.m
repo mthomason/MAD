@@ -14,6 +14,8 @@
 
 #import <MADDataStructures/MTPair.h>
 
+#import <math.h>
+
 static NSString * const FormatYear          = @"%@ year ";
 static NSString * const FormatYears         = @"%@ years ";
 static NSString * const FormatMonth         = @"%@ month ";

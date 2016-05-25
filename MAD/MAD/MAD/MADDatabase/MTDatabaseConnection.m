@@ -15,6 +15,8 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
 
+#import <MADCocoaExtensions/BDHost.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MADConstants.h"

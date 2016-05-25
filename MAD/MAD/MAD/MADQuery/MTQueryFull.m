@@ -12,47 +12,6 @@
 
 #import "MTQueryFull.h"
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-
-#import "RptqDatabase.h"
-
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "RptqQueryLinks.h"
-#import "RptqQueryLinks+Extras.h"
-
-#import "RptqQueryField.h"
-
-#import "RptqQueryPredicate.h"
-#import "RptqQueryPredicate+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqQueryGroup.h"
-
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
-
-#import "MTQuerySampleDataField.h"
-
-#import <MADDataStructures/MTGraph.h>
-#import <MADDataStructures/MTLinkedList.h>
-#import <MADDataStructures/MTPair.h>
-#import <MADDataStructures/MTVertex.h>
-#import <MADDataStructures/MTEdge.h>
-#import <MADDataStructures/MADAlgorithmElementProperties.h>
-
-#import "MTDatabaseConnection.h"
-
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
@@ -64,6 +23,36 @@
 #import <Foundation/NSCharacterSet.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSException.h>
+
+#import <MADDataStructures/MTGraph.h>
+#import <MADDataStructures/MTLinkedList.h>
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTEdge.h>
+#import <MADDataStructures/MADAlgorithmElementProperties.h>
+
+#import <MADFoundation/MADDataProtocol.h>
+
+#import "MADQueryCacheFullParameters.h"
+
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqQuery+Extras.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryLinks+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqQueryPredicate+Extras.h"
+#import "RptqQueryGroup.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectAggregate.h"
+
+#import "MTDatabase.h"
+#import "MTDatabaseField.h"
 
 @interface MTQueryFull ()
 

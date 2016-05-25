@@ -10,12 +10,16 @@
 #define Reports_MADReportDesignerSectionLayoutAttributes_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/MADSectionLayoutAttributes.h>
 
+@class NSMutableDictionary <KeyType, ObjectType>;
+@class NSManagedObjectID;
+@class MADSectionLayoutManager;
+@class MADSectionLayoutAttributes;
+@class RptqDocumentSection;
+
+typedef struct CGSize CGSize;
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutAttributes *>
-                                                        MADSectionLayoutAttributesMutableMap;
-
-@class MADSectionLayoutManager, RptqDocumentSection, NSManagedObjectID;
+                                                            MADSectionLayoutAttributesMutableMap;
 
 @interface MADSectionLayoutManager : NSObject
 

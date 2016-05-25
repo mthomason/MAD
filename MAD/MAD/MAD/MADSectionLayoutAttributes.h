@@ -9,10 +9,9 @@
 #ifndef Reports_MADSectionLayoutAttributes_h
 #define Reports_MADSectionLayoutAttributes_h
 
-#import <Foundation/NSArray.h>
-#import <CoreGraphics/CGGeometry.h>
 #import <UIKit/UICollectionViewLayout.h>
 
+@class NSArray <__covariant ObjectType>;
 @class MADSectionLayoutManager;
 @class NSManagedObjectID;
 

@@ -10,11 +10,12 @@
 #define Reports_RptqDocumentObjectFormula_Extras_h
 
 #import "RptqDocumentObjectFormula.h"
-#import <MADDataStructures/MTProtocolLog.h>
 #import "RptqDocumentObjectFactory.h"
+#import <MADDataStructures/MTProtocolLog.h>
 #import <MADFoundation/MADDataType.h>
 
-@interface RptqDocumentObjectFormula (Extras) <RptqDocumentObjectFactory, MTProtocolLog>
+@interface RptqDocumentObjectFormula (Extras)
+        <RptqDocumentObjectFactory, MTProtocolLog>
 
     - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 

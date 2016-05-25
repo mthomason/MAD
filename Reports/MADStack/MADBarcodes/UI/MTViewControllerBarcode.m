@@ -163,7 +163,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         
         if (self.queryField1 != nil) {
 
-            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                         object: self.queryField1.databaseSchemaField];
             [querySampleDataField database].delegate = self;
             self.query = querySampleDataField;
@@ -187,7 +187,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         
         if (self.queryField2 != nil) {
             
-            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                         object: self.queryField2.databaseSchemaField];
             [querySampleDataField database].delegate = self;
             self.query2 = querySampleDataField;

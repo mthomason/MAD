@@ -36,6 +36,9 @@
 #import "MADInstallOperationSampleDatabase.h"
 #import "MADInstallOperationSampleDocument.h"
 
+#import <MAD/madlib.h>
+#import <MAD/madmath.h>
+
 @class MADTransparentPresentationController;
 @class MFMailComposeViewController;
 
@@ -162,7 +165,55 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+/*
+    srand((unsigned)time(NULL));
+    char *cr;
+    int i=0, r;
 
+    NSDate *methodStart, *methodFinish;
+    NSTimeInterval executionTime;
+
+    for (i=0; i<9000; i++) {
+        r = abs(rand())%INT32_MAX;
+        cr = tes1(r);
+    }
+    for (i=0; i<9000; i++) {
+        r = abs(rand())%INT32_MAX;
+        cr = tes2(r);
+    }
+
+
+
+    r = abs(rand())%INT32_MAX;
+    methodStart = [NSDate date];
+    
+    for (i=0; i<90000000; i++) {
+        cr = tes2(r);
+    }
+    
+    
+    methodFinish = [NSDate date];
+    executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime = %f", executionTime);
+
+
+    i=0;
+    r = abs(rand())%INT32_MAX;
+    methodStart = [NSDate date];
+    
+    for (i=0; i<90000000; i++) {
+        cr = tes1(r);
+    }
+    
+    
+    methodFinish = [NSDate date];
+    executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime = %f", executionTime);
+
+    //NSUInteger i = UINT64_MAX;
+    NSLog(@"%llu", UINT64_MAX);
+
+*/
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     
     NSDictionary *defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -192,9 +243,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
     [self initalizeAppearance];
     
     MADOperationQueue *operationQueueBackground = [[MADOperationQueue alloc] init];
-    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
-                                                                                selector: @selector(getUserCloudPrefs)
-                                                                                  object: NULL];
+    NSOperation *getUserCloudPreferences;
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
+                                                                   selector: @selector(getUserCloudPrefs)
+                                                                     object: NULL];
     
     MADInstallOperationSampleDatabase *sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
     
@@ -260,14 +312,14 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     if (success) {
         
-        UIAlertController *alert = success ? [UIAlertController addedDocument] : [UIAlertController error:error];
+        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [UIAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
         
     } else {
         
-        UIAlertController *alert = [UIAlertController error:error];
+        UIAlertController *alert = [UIAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
@@ -278,7 +330,8 @@ static inline UIUserNotificationType MADUserNotificationType() {
     return NO;
 }
 
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+- (UIInterfaceOrientationMask)application:(UIApplication *)application
+  supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
         UIInterfaceOrientationMaskAllButUpsideDown :
         UIInterfaceOrientationMaskAll;
@@ -362,14 +415,16 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
     
-        UINavigationController * __weak navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+        UINavigationController *navController;
+        navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
         [navController popToRootViewControllerAnimated:YES];
         
         UIAlertController *signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
             [self.openFileViewController getUserCloudPrefs];
         }];
 
-        [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
+        [self.openFileViewController presentViewController:signedOutController
+                                                  animated:YES completion:nil];
     }];
 
 }

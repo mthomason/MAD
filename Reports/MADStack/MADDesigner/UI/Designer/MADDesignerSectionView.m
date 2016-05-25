@@ -10,6 +10,8 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <UIKit/UIGraphics.h>
+
 #import <UIKit/UIAccessibilityCustomAction.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 #import <UIKit/UIAccessibilityConstants.h>

@@ -10,7 +10,9 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSArray.h>
 #import "MTDatabaseSqlite3.h"
+#import "MADQuerySelectParameters.h"
 
 static NSString * const JoinPredicateWhere = @" WHERE ";
 
@@ -33,12 +35,12 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *keySelectTableName = @(MTQuerySelectTableName);
+        NSNumber *keySelectTableName = @(MADQuerySelectTableName);
         NSString *selectTableName = object[keySelectTableName];
         NSString *tableName = [NSString stringWithString:selectTableName];
         self.tableName = tableName;
         
-        NSNumber *keySelectPredicates = @(MTQuerySelectPredicates);
+        NSNumber *keySelectPredicates = @(MADQuerySelectPredicates);
         
         NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
         int i = 0;
@@ -55,16 +57,16 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         }
         self.sqlSpeedPredicate = sqlPredicate;
         
-        NSNumber *keySelectFieldNames = @(MTQuerySelectFieldKeys);
+        NSNumber *keySelectFieldNames = @(MADQuerySelectFieldKeys);
         NSArray *fieldNames = object[keySelectFieldNames];
         NSString *columnName = fieldNames.firstObject;
         self.columnName = columnName;
         
-        NSNumber *keySelectSortAccending = @(MTQuerySelectSortAccending);
+        NSNumber *keySelectSortAccending = @(MADQuerySelectSortAccending);
         NSNumber *sortValue = object[keySelectSortAccending];
         self.accending = sortValue.boolValue;
         
-        NSNumber *keyColumns = @(MTQuerySelectColumns);
+        NSNumber *keyColumns = @(MADQuerySelectColumns);
         NSDictionary * __weak columns = object[keyColumns];
         MADDataColumn * __weak dataColumn = columns[columnName];
 

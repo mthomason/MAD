@@ -12,14 +12,7 @@
 
 #import "MTQueryTest.h"
 #import "MTDatabase.h"
-#import "RptqUserCredentals.h"
-#import "MTDataTable+Factory.h"
-#import "MTDatabaseConnection.h"
 #import <Foundation/NSString.h>
-
-@interface MTQueryTest ()
-
-@end
 
 @implementation MTQueryTest
 
@@ -34,7 +27,8 @@
     [super getSqlWithError:error];
     
     MADSafeQueryField *key = [self.database newSafeIdentifier:@"f1"];
-    NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self.database selectPart], key];
+    NSString *selectPart = [self.database selectPart];
+    NSString *sql = [[NSString alloc] initWithFormat:@"%@ 255 AS %@", selectPart, key];
     return sql;
 }
 

@@ -10,7 +10,6 @@
 #define Reports_MTDatabaseConnection_h
 
 #import <Foundation/NSObject.h>
-#import <MADCocoaExtensions/BDHost.h>
 
 extern NSString * const MADIdentifierDatabaseMySQL;
 extern NSString * const MADIdentifierDatabaseTDS;

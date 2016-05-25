@@ -21,8 +21,7 @@
 @implementation MTQueryCacheEndTransaction
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super init]) { }
-    return self;
+    return self = [super init];
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {

@@ -77,7 +77,8 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 - (UIImage *)activityViewController:(UIActivityViewController *)activityViewController
       thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {
     self.activityViewController = activityViewController;
-    return [super activityViewController:activityViewController thumbnailImageForActivityType:activityType suggestedSize:size];
+    return [super activityViewController: activityViewController
+           thumbnailImageForActivityType: activityType suggestedSize: size];
 }
 
 - (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {

@@ -10,14 +10,13 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import "MADQuerySelectParameters.h"
 
 @interface MTQueryCacheSelectRowIds ()
 
 @property (nonatomic, strong) NSString *tableName;
 @property (nonatomic, strong) NSArray *rowids;
 @property (nonatomic, strong) NSArray *sortDescriptors;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -28,16 +27,22 @@
     if (self) {
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        self.rowids = object[@(MTQuerySelectRowIds)];
+        id key;
+
+        key = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
+        self.rowids = object[key];
         
-        NSString *tableName = object[@(MTQuerySelectTableName)];
+        key = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+        NSString *tableName = object[key];
         [self setTableName:tableName];
         
-        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
+        key = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
+        NSArray *array = object[key];
+        NSArray *sortDescriptors = [NSArray arrayWithArray:array];
         [self setSortDescriptors:sortDescriptors];
         
-        NSNumber *keyColumns = @(MTQuerySelectColumns);
-        NSDictionary *columns = object[keyColumns];
+        key = [[NSNumber alloc] initWithShort: MADQuerySelectColumns];
+        NSDictionary *columns = object[key];
         [self setColumns:columns];
     }
     return self;

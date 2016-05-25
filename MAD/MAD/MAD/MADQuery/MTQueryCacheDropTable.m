@@ -16,9 +16,7 @@
 #import <Foundation/NSString.h>
 
 @interface MTQueryCacheDropTable ()
-
-@property (nonatomic, copy) NSString *tableName;
-
+    @property (nonatomic, copy) NSString *tableName;
 @end
 
 @implementation MTQueryCacheDropTable

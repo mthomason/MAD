@@ -28,8 +28,6 @@
         - (NSString *)fileExtention;
 
 
-        - (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
-                                                  cloud:(void (^)())handlerCloud;
         - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
 
 

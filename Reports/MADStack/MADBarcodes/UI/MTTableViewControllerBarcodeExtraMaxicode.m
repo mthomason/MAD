@@ -65,7 +65,7 @@
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
     MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
     [self setDataTableSampleData:dataTable];
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: schemaField];
     NSError * __autoreleasing error = NULL;
     bool success = [querySampleDataField performQueryWithError:&error];

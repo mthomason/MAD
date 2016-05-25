@@ -10,13 +10,13 @@
 #define Reports_MTQueryTest_h
 
 #import <MAD/MTQuery.h>
-#import <MADFoundation/MTDataTable.h>
 
 @class MTDatabaseConnection;
 
 @interface MTQueryTest : MTQuery
 
     @property (nonatomic, weak) MTDatabase *database;
+    
     - (instancetype)initWithObject:(MTDatabaseConnection *)object;
 
 @end

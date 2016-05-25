@@ -11,20 +11,27 @@
 #endif
 
 #import "MTDataTableFastObjectEnumerator.h"
-#import <MADFoundation/MADDataColumn.h>
-#import <MADCocoaExtensions/MTLog.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSKeyValueCoding.h>
+
+#import <MADFoundation/MADDataColumn.h>
+
+#import <MADCocoaExtensions/MTLog.h>
+
+#import <MADSqlite3/sqlite3.h>
+
 #import "MTQuery.h"
+
 #import "MTDatabaseSqlite3.h"
 
-@interface MTDataTableFastObjectEnumerator ()
+@interface MTDataTableFastObjectEnumerator () {
+    sqlite3_stmt *_statement;
+}
 
-    @property (atomic, assign) sqlite3_stmt *statement;
     @property (atomic, assign) bool empty;
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
@@ -62,7 +69,7 @@ void sqliteCallback(void *foo, const char* statement) {
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
             char *queryString = sqlite3_mprintf(sql.UTF8String);
-            sqlite3_prepare_v2(self.databaseForQuery.databaseHandle, queryString, -1, &_statement, NULL);
+            sqlite3_prepare_v2(self.databaseForQuery->_database, queryString, -1, &_statement, NULL);
             sqlite3_free(queryString);
         }
         
@@ -146,15 +153,21 @@ void sqliteCallback(void *foo, const char* statement) {
 }
 
 - (id)currentObject {
-    NSMutableDictionary *currentObject = self.singleColumnNoWrapper ?
-                                            nil : [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
+
+    NSMutableDictionary *currentObject;
+    currentObject = _singleColumnNoWrapper ?
+                    nil :
+                    [[NSMutableDictionary alloc] initWithCapacity:_columns.count];
+    
     int columnCounter = 0;
-    id columnValue;
-    for (id key in self.columnKeys) {
+
+    id columnValue, key;
+
+    for (key in _columnKeys) {
         
         @autoreleasepool {
             
-            MADDataColumn *dataColumn = self.columns[key];
+            MADDataColumn *dataColumn = _columns[key];
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
             if (sqlite3DataType == SQLITE_NULL) {
@@ -167,18 +180,20 @@ void sqliteCallback(void *foo, const char* statement) {
             if (columnValue == nil) {
                 columnValue = [NSNull null];
             }
-            if (columnValue != nil && self.singleColumnNoWrapper == NO) {
+            if (columnValue != nil && _singleColumnNoWrapper == NO) {
                 [currentObject setValue:columnValue forKey:dataColumn.identifier];
             }
             columnCounter++;
 
         }
     }
-    if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
-        NSNumber *rowid = @(sqlite3_column_int(_statement, columnCounter));
+    if (_addRowId && _singleColumnNoWrapper == NO &&
+        sqlite3_column_count(_statement) >= columnCounter) {
+        NSNumber *rowid;
+        rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
         [currentObject setValue:rowid forKey:MADIdentifierROWID];
     }
-    return self.singleColumnNoWrapper ? columnValue : currentObject;
+    return _singleColumnNoWrapper ? columnValue : currentObject;
 }
 
 @end

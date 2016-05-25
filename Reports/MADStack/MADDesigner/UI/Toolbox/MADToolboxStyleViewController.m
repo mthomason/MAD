@@ -27,7 +27,7 @@
 #import <MAD/MADFont.h>
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/NSManagedObject+Extras.h>
+//#import <MAD/NSManagedObject+Extras.h>
 
 static const CGFloat CornerRadius = 6.6666f;
 static const CGFloat BorderWidth = 1.0000f;
@@ -922,9 +922,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [doc saveContext];
 }
 
-- (void)emptySelector:(id)whofuckingCares {
-    
-}
+- (void)emptySelector:(id)whofuckingCares { }
 
 - (void)updateLabelFontSize:(double)pointSize {
     UILabel *labelFontSize = _labelFontSize;
@@ -933,24 +931,26 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                                              withFontSize: labelFontSize.font.pointSize];
     labelFontSize.attributedText = attributedString;
     NSNumber *value = [[NSNumber alloc] initWithDouble: pointSize];
+    MADocument *document = _document;
     RptqDocumentObject *documentObject;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.fontsize = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updateLabelSizeHeight:(double)height {
     NSNumber *value = [[NSNumber alloc] initWithDouble: height];
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:value];
     self.labelSizeHeight.attributedText = displayHeight;
+    MADocument *document = _document;
     RptqDocumentObject *documentObject;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.sizeheight = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updateLabelSizeWidth:(double)width {
@@ -958,113 +958,129 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:value];
     self.labelSizeWidth.attributedText = displayWidth;
     RptqDocumentObject *documentObject;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.sizewidth = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
     NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.horizontalAlignment = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
     NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.verticalAlignment = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingTop:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:value];
     self.labelPaddingTop.attributedText = display;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingTop = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingBottom:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingBottom = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
+
 - (void)updatePaddingLeft:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue:value];
     self.labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingLeft = value;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
+
 - (void)updatePaddingRight:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
     NSAttributedString *labelPaddingRight = [MADToolboxStrings newMarginRightForValue:value];
     self.labelPaddingRight.attributedText = labelPaddingRight;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingRight = value.copy;
-        [documentObject saveContext];
     }
+    [document.managedObjectContext save:nil];
 }
 
 - (void)updateMarginTop:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: value];
     self.labelMarginTop.attributedText = display;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginTop = value.copy;
-        [documentObject saveContext];
+        [document.managedObjectContext save:nil];
     }
 }
+
 - (void)updateMarginBottom:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelMarginBottom.attributedText = display;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginBottom = value.copy;
-        [documentObject saveContext];
+        [document.managedObjectContext save:nil];
     }
 }
+
 - (void)updateMarginLeft:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: value];
     self.labelMarginLeft.attributedText = labelMarginLeftAttributedText;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginLeft = value.copy;
-        [documentObject saveContext];
+        [document.managedObjectContext save:nil];
     }
 }
+
 - (void)updateMarginRight:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
     NSAttributedString *labelMarginRight = [MADToolboxStrings newMarginRightForValue: value];
     self.labelMarginRight.attributedText = labelMarginRight;
+    MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginRight = value.copy;
-        [documentObject saveContext];
+        [document.managedObjectContext save:nil];
     }
 }
 

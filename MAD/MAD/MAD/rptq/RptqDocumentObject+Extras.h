@@ -10,12 +10,11 @@
 #define Reports_RptqDocumentObject_Extras_h
 
 #import <MAD/RptqDocumentObject.h>
+#import <CoreGraphics/CGGeometry.h>
+#import <MADDataStructures/MTProtocolLog.h>
 #import <MAD/RptqDocumentObjectFactory.h>
 #import <MADFoundation/MADDataType.h>
 #import <MAD/MADDocumentObjectType.h>
-#import <MADDataStructures/MTProtocolLog.h>
-#import <Foundation/NSObject.h>
-#import <CoreGraphics/CGGeometry.h>
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;
@@ -32,7 +31,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @class UIFontDescriptor;
 @class RptqDocumentSection;
 
-@interface RptqDocumentObject (Extras) <MTProtocolLog, RptqDocumentObjectFactory>
+@interface RptqDocumentObject (Extras)
+    <MTProtocolLog, RptqDocumentObjectFactory>
 
     + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
 

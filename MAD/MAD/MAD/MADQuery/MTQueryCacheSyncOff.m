@@ -12,15 +12,10 @@
 
 #import "MTQueryCacheSyncOff.h"
 
-@interface MTQueryCacheSyncOff ()
-
-@end
-
 @implementation MTQueryCacheSyncOff
 
 - (instancetype)initWithObject:(id)object {
-    self = [super init];
-    return self;
+    return self = [super init];
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {

@@ -10,6 +10,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import "MADQuerySelectParameters.h"
 
 static NSString * const WildCard = @"*";
 static NSString * const SqlDelimitor = @", ";
@@ -19,7 +20,7 @@ static NSString * const SqlFormat = @", %@";
 @interface MTQueryCacheSelectRowId ()
 
 @property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, copy) NSNumber *rowId;
+@property (nonatomic, copy)   NSNumber *rowId;
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (nonatomic, strong) NSString *columnNames;
 
@@ -32,10 +33,10 @@ static NSString * const SqlFormat = @", %@";
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *key = @(MTQuerySelectFieldKeys);
-        NSNumber *keyRowId = @(MTQuerySelectRowId);
-        NSNumber *keyTableName = @(MTQuerySelectTableName);
-        NSNumber *keyFieldDescriptors = @(MTQuerySelectFieldDescriptors);
+        NSNumber *key = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
+        NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
+        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
         
         NSArray *columnKeys = object[key];
         if (columnKeys) {

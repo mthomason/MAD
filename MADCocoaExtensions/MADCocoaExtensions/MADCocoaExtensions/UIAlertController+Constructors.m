@@ -79,7 +79,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 
 @implementation UIAlertController (Constructors)
 
-+ (instancetype)addedDocument {
++ (instancetype)newAlertControllerAddedDocument {
     NSString *newdoc = NSLocalizedString(MADTitleNewDocument, MADTitleNewDocument);
     NSString *addeddoc = NSLocalizedString(MADMessageNewDocument, MADMessageNewDocument);
     NSString *continueb = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -94,10 +94,10 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)promptForPasswordGivenUsername:(NSString *)username
-                                      password:(void (^)(UITextField *textField))passwordSetup
-                                        submit:(void (^)(NSString *password))handlerContinue
-                                        cancel:(void (^)())handlerCancel {
++ (instancetype)newAlertControllerPromptForPasswordGivenUsername:(NSString *)username
+                                                        password:(void (^)(UITextField *textField))passwordSetup
+                                                          submit:(void (^)(NSString *password))handlerContinue
+                                                          cancel:(void (^)())handlerCancel {
     
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
@@ -126,10 +126,10 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alertController;
     
 }
-+ (instancetype)promptForUsername:(void (^)(UITextField *textField))usernameSetup
-                         password:(void (^)(UITextField *textField))passwordSetup
-                           submit:(void (^)(NSString *username, NSString *password))handlerContinue
-                           cancel:(void (^)())handlerCancel {
++ (instancetype)newAlertControllerPromptForUsername:(void (^)(UITextField *textField))usernameSetup
+                                           password:(void (^)(UITextField *textField))passwordSetup
+                                             submit:(void (^)(NSString *username, NSString *password))handlerContinue
+                                             cancel:(void (^)())handlerCancel {
 
     NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
     NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
@@ -141,16 +141,18 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: ok
-                                                       style: UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction *action) {
-                                                         handlerContinue(((UITextField *)alertController.textFields.firstObject).text, ((UITextField *)[alertController.textFields objectAtIndex:1]).text);
-                                                     }];
+                                                            style: UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *action) {
+        NSString *t1 = ((UITextField *)alertController.textFields.firstObject).text.copy,
+                 *t2 = ((UITextField *)[alertController.textFields objectAtIndex:1]).text.copy;
+        handlerContinue(t1, t2);
+    }];
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
                                                            style: UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action) {
-                                                             handlerCancel();
-                                                         }];
+        handlerCancel();
+    }];
     
     [alertController addAction:actionConfirm];
     [alertController addAction:actionCancel];
@@ -192,8 +194,8 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)saveCredentials:(void (^)(UIAlertAction *action))handlerContinue
-                         cancel:(void (^)(UIAlertAction *action))handlerCancel {
++ (instancetype)newAlertControllerSaveCredentials:(void (^)(UIAlertAction *action))handlerContinue
+                                           cancel:(void (^)(UIAlertAction *action))handlerCancel {
 
     NSString *title = NSLocalizedString(MADTitleSaveCredentials, MADTitleSaveCredentials);
     NSString *message = NSLocalizedString(MADMessageSaveCredentials, MADMessageSaveCredentials);
@@ -250,8 +252,8 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return storageController;
 }
 
-+ (instancetype)editLabel:(void (^)(UITextField *textField))textFieldConfig
-               completion:(void (^)(UIAlertAction *action, NSString *text))completion {
++ (instancetype)newAlertControllerEditLabel:(void (^)(UITextField *textField))textFieldConfig
+                                 completion:(void (^)(UIAlertAction *action, NSString *text))completion {
     
     NSString *title = NSLocalizedString(MADTitleEditLabel, MADTitleEditLabel);
     NSString *message = NSLocalizedString(MADMessageEditLabel, MADMessageEditLabel);
@@ -280,7 +282,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)alertNotConfiguredForEmail {
++ (instancetype)newAlertControllerNotConfiguredForEmail {
     NSString *title = NSLocalizedString(MADTitleEmailConfigNot, MADTitleEmailConfigNot);
     NSString *message = NSLocalizedString(MADMessageEmailConfigNot, MADMessageEmailConfigNot);
     NSString *titleButton = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -356,7 +358,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)errorValidationFilename {
++ (instancetype)newAlertControllerErrorValidationFilename {
     NSString *title = NSLocalizedString(MADTitleErrorValidation, MADTitleErrorValidation);
     NSString *message = NSLocalizedString(MADMessageErrorValidFileName, MADMessageErrorValidFileName);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
@@ -371,7 +373,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)errorFileExist {
++ (instancetype)newAlertControllerErrorFileExist {
     NSString *title = NSLocalizedString(MADTitleErrorFileExist, MADTitleErrorFileExist);
     NSString *message = NSLocalizedString(MADMessageErrorFileExist, MADMessageErrorFileExist);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
@@ -385,7 +387,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 
-+ (instancetype)errorEmptyQuery {
++ (instancetype)newAlertControllerErrorEmptyQuery {
     NSString *title = NSLocalizedString(MADTitleEmptyQuery, MADTitleEmptyQuery);
     NSString *message = NSLocalizedString(MADMessageEmptyQuery, MADMessageEmptyQuery);
     NSString *buttonTitle = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -399,17 +401,18 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     [alert addAction: ok];
     return alert;
 }
-+ (instancetype)error:(NSError *)error {
+
++ (instancetype)newAlertControllerError:(NSError *)error {
     NSString *title = error.localizedDescription.copy ?: @"";
     NSString *messageStart = error.localizedFailureReason.copy ?: @"";
     NSString *localizedRecoverySuggestion = error.localizedRecoverySuggestion.copy ?: @"";
     NSString *message = [messageStart stringByAppendingString:localizedRecoverySuggestion];
-    return [self errorDisplayErrorWithTitle:title message:message andCompletion:nil];
+    return [self newAlertControllerErrorDisplayErrorWithTitle:title message:message andCompletion:nil];
 }
 
-+ (instancetype)errorDisplayErrorWithTitle:(NSString *)title
-                                   message:(NSString *)message
-                             andCompletion:(void (^)(UIAlertAction *action))handlerContinue {
++ (instancetype)newAlertControllerErrorDisplayErrorWithTitle:(NSString *)title
+                                                     message:(NSString *)message
+                                               andCompletion:(void (^)(UIAlertAction *action))handlerContinue {
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
                                                                              message: message
@@ -422,7 +425,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     
 }
 
-+ (instancetype)nofityTransactionComplete {
++ (instancetype)newAlertControllerNofityTransactionComplete {
     NSString *title = NSLocalizedString(MADTitleTransactionComplete, MADTitleTransactionComplete);
     NSString *message = NSLocalizedString(MADMessageSoftwareActivated, MADMessageSoftwareActivated);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);

@@ -9,8 +9,6 @@
 #ifndef MAD_DataStructures_MTProtocolCompare_h
 #define MAD_DataStructures_MTProtocolCompare_h
 
-#import <Foundation/NSObject.h>
-
 @protocol MTProtocolCompare <NSObject>
 
 @required

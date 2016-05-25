@@ -16,7 +16,8 @@
 @interface MADDatabaseTableSectionHeaderView : UIView
 
     - (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title
-                          section:(NSInteger)sectionNumber delegate:(id <MADSectionHeaderViewDelegate>)delegate;
+                          section:(NSInteger)sectionNumber
+                         delegate:(id <MADSectionHeaderViewDelegate>)delegate;
     - (void)toggleOpenWithUserAction:(bool)userAction;
 
 @end

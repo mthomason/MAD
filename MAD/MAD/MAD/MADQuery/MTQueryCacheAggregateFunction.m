@@ -8,9 +8,8 @@
 
 #import "MTQueryCacheAggregateFunction.h"
 #import <Foundation/NSException.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
-
-#import <MAD/MADAggregateFunctionType.h>
+#import <RptqDocumentObjectAggregate+Extras.h>
+#import <MADQueryCacheAggregateFunctionParamaters.h>
 
 static inline const char *functionName(MTAggregateFunctionType functionType);
 static inline const char *functionName(MTAggregateFunctionType functionType) {
@@ -74,31 +73,31 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *keyRowIds = @(MTQueryCacheAggregateFunctionParamatersRowids);
+        NSNumber *keyRowIds = @(MADQueryCacheAggregateFunctionParamatersRowids);
         NSArray *rowids = object[keyRowIds];
         [self setRowids:rowids];
        
-        NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
+        NSNumber *keyFieldDescriptors = @(MADQueryCacheAggregateFunctionParamatersFieldDescriptors);
         NSDictionary *fieldDescriptors = [NSDictionary dictionaryWithDictionary:object[keyFieldDescriptors]];
         [self setColumns:fieldDescriptors];
         
-        NSNumber *keyTableName = @(MTQueryCacheAggregateFunctionParamatersTableName);
+        NSNumber *keyTableName = @(MADQueryCacheAggregateFunctionParamatersTableName);
         NSString *tableName = [NSString stringWithString:object[keyTableName]];
         [self setTableName:tableName];
         
-        NSNumber *keyGroupByType = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
+        NSNumber *keyGroupByType = @(MADQueryCacheAggregateFunctionParamatersGroupByType);
         NSNumber *groupBy = object[keyGroupByType];
         [self setGroupByType:[groupBy unsignedIntegerValue]];
         
-        NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
+        NSNumber *keyAggregateFunctionType = @(MADQueryCacheAggregateFunctionParamatersAggregateFunctionType);
         NSNumber *functionType = object[keyAggregateFunctionType];
         [self setFunctionType:[functionType unsignedIntegerValue]];
         
-        NSNumber *keyParametersFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
+        NSNumber *keyParametersFieldKey = @(MADQueryCacheAggregateFunctionParamatersFieldKey);
         NSString *columnKey = [NSString stringWithString:object[keyParametersFieldKey]];
         [self setColumnKey:columnKey];
         
-        NSNumber *keyWhere = @(MTQueryCacheAggregateFunctionParamatersPredicates);
+        NSNumber *keyWhere = @(MADQueryCacheAggregateFunctionParamatersPredicates);
         NSArray *whereClause = [NSArray arrayWithArray:object[keyWhere]];
         [self setWhereClause:whereClause];
         

@@ -24,6 +24,8 @@
 
 #import <MADFileManager/MADFileUtilities.h>
 
+#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+
 #import "MADConstants.h"
 
 #import "MTQuery.h"
@@ -179,51 +181,75 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (BOOL)prepareStatementEnum {
-    NSString *sql = [[NSString alloc] initWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *sql = [[NSString alloc] initWithFormat: MTArrayCachedQueryEnumer,
+                                                      MTArrayCachedColumnValue,
+                                                      MTArrayCachedTableName,
+                                                      MTArrayCachedColumnKey];
     if (_statementEnumer != NULL) {
         sqlite3_finalize(_statementEnumer);
         _statementEnumer = NULL;
     }
     BOOL success = YES;
-    if (_statementEnumer == NULL)
-        success = sqlite3_prepare_v2([[self database] databaseHandle], sql.UTF8String, -1, &_statementEnumer, NULL) == SQLITE_OK;
+    if (_statementEnumer == NULL) {
+        MTDatabaseCache * __unsafe_unretained database = self.database;
+        success = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1, &_statementEnumer,
+                                     NULL) == SQLITE_OK;
+    }
     return success;
 }
 
 - (BOOL)prepareStatementInsert {
-    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
+    NSString *queryString = [[NSString alloc] initWithFormat: MTArrayCachedQueryInsert,
+                                                              MTArrayCachedTableName,
+                                                              MTArrayCachedColumnKey,
+                                                              MTArrayCachedColumnValue];
     if (_statementInsert != NULL) {
         sqlite3_finalize(_statementInsert);
         _statementInsert = NULL;
     }
     BOOL success = YES;
-    if (_statementInsert == NULL)
-        success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementInsert, NULL) == SQLITE_OK;
+    if (_statementInsert == NULL) {
+        MTDatabaseCache * __unsafe_unretained database = self.database;
+        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String], -1,
+                                     &_statementInsert, NULL) == SQLITE_OK;
+    }
     return success;
 }
 
 - (BOOL)prepareStatementSelect {
-    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *queryString = [[NSString alloc] initWithFormat: MTArrayCachedQuerySelect,
+                                                              MTArrayCachedColumnValue,
+                                                              MTArrayCachedTableName,
+                                                              MTArrayCachedColumnKey];
     if (_statementSelect != NULL) {
         sqlite3_finalize(_statementSelect);
         _statementSelect = NULL;
     }
     BOOL success = YES;
-    if (_statementSelect == NULL)
-        success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementSelect, NULL) == SQLITE_OK;
+    if (_statementSelect == NULL) {
+        MTDatabaseCache * __unsafe_unretained database = self.database;
+        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String], -1,
+                                     &_statementSelect, NULL) == SQLITE_OK;
+    }
     return success;
 
 }
 
 - (BOOL)prepareStatementCount {
-    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *queryString = [[NSString alloc] initWithFormat: MTArrayCachedQueryLastId,
+                                                              MTArrayCachedColumnKey,
+                                                              MTArrayCachedTableName,
+                                                              MTArrayCachedColumnKey];
     if (_statementCount != NULL) {
         sqlite3_finalize(_statementCount);
         _statementCount = NULL;
     }
     BOOL success = YES;
-    if (_statementCount == NULL)
-        success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementCount, NULL) == SQLITE_OK;
+    if (_statementCount == NULL) {
+        MTDatabaseCache * __unsafe_unretained database = self.database;
+        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String],
+                                     -1, &_statementCount, NULL) == SQLITE_OK;
+    }
     return success;
 }
 
@@ -235,7 +261,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 #endif
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
-    NSURL *cachedArrayDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:identifer];
+    NSURL *cachedArrayDirectories;
+    cachedArrayDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:identifer];
     NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -363,7 +390,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     [self setLastObjectSelected:nil];
     self.numberOrRows = 0;
     NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
-    MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
+    MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
     NSError * __autoreleasing error = NULL;

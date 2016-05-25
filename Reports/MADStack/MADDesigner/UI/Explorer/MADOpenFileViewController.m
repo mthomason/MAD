@@ -13,7 +13,13 @@
 #import "MADOpenFileViewController.h"
 #import "MADOpenFileViewControllerProtocol.h"
 
-#import <MessageUI/MessageUI.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
+#import <MADCocoaExtensions/MTMath.h>
+
+#import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
@@ -24,17 +30,6 @@
 #import <MADFileManager/MADMetaData.h>
 #import <MADFileManager/MADAppLaunchContext.h>
 #import <MADFileManager/MADFilesController.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
-#import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
-#import <MADCocoaExtensions/MTMath.h>
-
-#import <MADDataStructures/MTPair.h>
-#import <MADDataStructures/MADIndex.h>
-
-#import <MADFoundation/NSURL+Document.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
@@ -108,9 +103,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
     @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 
-    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchInserts;
-    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchRemoves;
-    @property (nonatomic, strong) NSMutableArray <MADIndex *> *batchUpdates;
+    @property (nonatomic, strong) NSMutableIndexSet *batchInserts;
+    @property (nonatomic, strong) NSMutableIndexSet *batchRemoves;
+    @property (nonatomic, strong) NSMutableIndexSet *batchUpdates;
 
     @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
@@ -121,9 +116,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 @implementation MADOpenFileViewController
 
 - (void)dealloc {
-    [_batchInserts removeAllObjects];
-    [_batchUpdates removeAllObjects];
-    [_batchRemoves removeAllObjects];
+    [_batchInserts removeAllIndexes];
+    [_batchUpdates removeAllIndexes];
+    [_batchRemoves removeAllIndexes];
     _subtitleNumberFormatter = nil;
     [self removeObservers];
 }
@@ -193,17 +188,18 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
         self.fileManager = openFiles;
 
-        MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+        MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
         self.progressViewFileManager = progressView;
         
-        NSMutableArray *batchInserts = [[NSMutableArray alloc] init];
-        self.batchInserts = batchInserts;
+        NSMutableIndexSet *indexSet;
+        indexSet = [[NSMutableIndexSet alloc] init];
+        self.batchInserts = indexSet;
         
-        NSMutableArray *batchRemoves = [[NSMutableArray alloc] init];
-        self.batchRemoves = batchRemoves;
+        indexSet = [[NSMutableIndexSet alloc] init];
+        self.batchRemoves = indexSet;
         
-        NSMutableArray *batchUpdates = [[NSMutableArray alloc] init];
-        self.batchUpdates = batchUpdates;
+        indexSet = [[NSMutableIndexSet alloc] init];
+        self.batchUpdates = indexSet;
 
     }
     return self;
@@ -630,59 +626,60 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - MADFilesControllerDelegate
 
 - (void)filesControllerWillChangeContent:(MADFilesController *)filesController {
-    [self.batchInserts removeAllObjects];
-    [self.batchRemoves removeAllObjects];
-    [self.batchUpdates removeAllObjects];
+    [self.batchInserts removeAllIndexes];
+    [self.batchRemoves removeAllIndexes];
+    [self.batchUpdates removeAllIndexes];
 }
 
 - (void)filesController:(MADFilesController *)filesController
       didInsertFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
-    
-    id fi = fileInfo.copy;
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
-    [self.batchInserts addObject:i];
+
+    [self.batchInserts addIndex:index];
 
 }
 
 - (void)filesController:(MADFilesController *)filesController
       didRemoveFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
 
-    id fi = fileInfo.copy;
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
-    [self.batchRemoves addObject:i];
+    [self.batchRemoves addIndex:index];
 
 }
 
 - (void)filesController:(MADFilesController *)filesController
       didUpdateFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
 
-    id fi = fileInfo.copy;
-    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:fi];
-    [self.batchUpdates addObject:i];
+    [self.batchUpdates addIndex:index];
 
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL, NSError *))completion {
+
+    NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity: _batchInserts.count],
+                   *removes = [[NSMutableArray alloc] initWithCapacity: _batchRemoves.count],
+                   *updates = [[NSMutableArray alloc] initWithCapacity: _batchUpdates.count];
+
     NSIndexPath *path;
-    NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity:self.batchInserts.count];
-    NSArray *batchInserts = self.batchInserts;
-    for (MADIndex *index in batchInserts) {
-        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
+    NSUInteger i;
+
+    i = [_batchInserts firstIndex];
+    while (i != NSNotFound) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [inserts addObject:path];
+        i = [_batchInserts indexGreaterThanIndex: i];
     }
-
-    NSMutableArray *removes = [[NSMutableArray alloc] initWithCapacity:self.batchRemoves.count];
-    NSArray *batchRemoves = self.batchRemoves;
-    for (MADIndex *index in batchRemoves) {
-        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
+    
+    i = [_batchRemoves firstIndex];
+    while (i != NSNotFound) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [removes addObject:path];
+        i = [_batchRemoves indexGreaterThanIndex: i];
     }
 
-    NSMutableArray *updates = [[NSMutableArray alloc] initWithCapacity:self.batchUpdates.count];
-    NSArray *batchUpdates = self.batchUpdates;
-    for (MADIndex *index in batchUpdates) {
-        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
+    i = [_batchUpdates firstIndex];
+    while (i != NSNotFound) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [updates addObject:path];
+        i = [_batchUpdates indexGreaterThanIndex: i];
     }
 
     [updates removeObjectsInArray:inserts];
@@ -1003,11 +1000,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                 }
             } else {
-                UIAlertController *alertFileExist = [UIAlertController errorFileExist];
+                UIAlertController *alertFileExist = [UIAlertController newAlertControllerErrorFileExist];
                 [self showViewController:alertFileExist sender:self];
             }
         } else {
-            UIAlertController *alertFilename = [UIAlertController errorValidationFilename];
+            UIAlertController *alertFilename = [UIAlertController newAlertControllerErrorValidationFilename];
             [self showViewController:alertFilename sender:self];
         }
         
@@ -1021,7 +1018,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     if ([MFMailComposeViewController canSendMail] == NO) {
         
-        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+        UIAlertController *alert = [UIAlertController newAlertControllerNotConfiguredForEmail];
         [self showViewController:alert sender:self];
         
     } else {
@@ -1044,10 +1041,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                                                              @"The attached document can be opened with MAD Viewer.");
             NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController body: messageBody
-                                                                               attachment: metadata.URL
-                                                                                 mimeType: mimeType
-                                                                       userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+            MFMailComposeViewController	*mailComposer;
+            mailComposer = [MFMailComposeViewController newMailComposeViewControllerWithBody: messageBody
+                                                                                  attachment: metadata.URL
+                                                                                    mimeType: mimeType
+                                                                          userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
             mailComposer.mailComposeDelegate = self;
             [self showViewController:mailComposer sender:self];
         }

@@ -60,7 +60,7 @@
 
     UIViewController *topMostController = [UIViewController copyTopmostViewController];
     if (error) {
-        UIAlertController *alertController = [UIAlertController error:error];
+        UIAlertController *alertController = [UIAlertController newAlertControllerError:error];
         [topMostController showViewController:alertController sender:self];
     } else {
         [topMostController dismissViewControllerAnimated:YES completion:^{ }];

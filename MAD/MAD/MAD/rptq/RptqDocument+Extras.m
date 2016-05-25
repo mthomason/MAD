@@ -10,50 +10,6 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocument+Extras.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
-#import "MTDatabaseSqlite3.h"
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
-
-#import "RptqDocumentSectionRows.h"
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
-
-#import "RptqUserCredentals.h"
-#import "RptqUserCredentals+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-#import "RptqDocumentObjectChart.h"
-#import "RptqDocumentObjectFormula.h"
-#import "RptqDocumentObjectFormula+Extras.h"
-#import "RptqDocumentObjectGroupKey.h"
-#import "RptqDocumentObjectImage.h"
-#import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectLabelLink.h"
-
-#import "MADErrorContainer.h"
-#import "MTDatabaseTable.h"
-
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
@@ -64,6 +20,36 @@
 #import <Foundation/NSError.h>
 
 #import <UIKit/UIImage.h>
+
+#import "RptqDocument+Extras.h"
+#import "MTDatabaseConnection.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
+#import "MTDatabaseSqlite3.h"
+
+#import "RptqDocumentSectionRows.h"
+#import "RptqQuery+Extras.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqUserCredentals+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectChart.h"
+#import "RptqDocumentObjectGroupKey.h"
+#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectLabelLink.h"
+
+#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentObjectFormula+Extras.h"
+
+#import "MADErrorContainer.h"
+#import "MTDatabaseTable.h"
 
 @implementation RptqDocument (Extras)
 
@@ -464,7 +450,9 @@
                 status(name, (counter + 1) / numberOfTables);
                 
                 NSError *getFieldsError = NULL;
-                NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
+                NSArray *fieldsForTable = [database fieldsForTable: databaseTable.name
+                                                        connection: dbconnection
+                                                             error: &getFieldsError];
                 
                 NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
                 tablesAndFields[databaseTable.name] = fields;

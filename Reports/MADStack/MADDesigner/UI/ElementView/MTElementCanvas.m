@@ -7,6 +7,8 @@
 //
 
 #import "MTElementCanvas.h"
+#import <UIKit/UIGraphics.h>
+
 #import <MADCocoaExtensions/MADColor.h>
 @implementation MTElementCanvas
 

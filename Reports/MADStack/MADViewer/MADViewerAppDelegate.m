@@ -233,14 +233,14 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     if (success) {
         
-        UIAlertController *alert = success ? [UIAlertController addedDocument] : [UIAlertController error:error];
+        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [UIAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
         
     } else {
         
-        UIAlertController *alert = [UIAlertController error:error];
+        UIAlertController *alert = [UIAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
@@ -294,7 +294,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     #endif
     
     [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [MADColorEverydayApps newColorAnalogous4];
-    //[UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [MADColorEverydayApps newColorAnalogous4];
     
     #ifndef MADWATCHKIT
         [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                  = [MADColorEverydayApps newColorWhite];
@@ -303,12 +302,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = [MADColorEverydayApps newColorWhite];
     [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = [MADColorEverydayApps newColorWhite];
     [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor                          = [MADColorEverydayApps newColorRed];
-    //[UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor                  = [MADColorEverydayApps newColorRed];
     [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                                    = [MADColorEverydayApps newColorWhite];
     [UIBarButtonItem appearance].tintColor                                                                          = [MADColorEverydayApps newColorWhite];
-    //[UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor                           = [UIColor edaOrange];
-    //[UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor                      = [UIColor edaOrange];
-    //[UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [UIColor edaOrange];
     [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = [MADColorEverydayApps newColorWhite];
     [[UINavigationBar appearance] setTitleTextAttributes:
     [NSDictionary dictionaryWithObjectsAndKeys: [MADColorEverydayApps newColorWhite], NSForegroundColorAttributeName, nil]];

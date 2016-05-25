@@ -9,26 +9,21 @@
 #ifndef MAD_MTReportFormatter_h
 #define MAD_MTReportFormatter_h
 
-#import <CoreGraphics/CGGeometry.h>
-#import <MADFoundation/MTCacheProtocol.h>
-#import <MADFoundation/MADDataProtocol.h>
-#import <MAD/MADSectionPlist.h>
 #import <MAD/MTTableFormatter.h>
+
+#import <CoreGraphics/CGGeometry.h>
+#import <MAD/MADSectionPlist.h>
 
 typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone    = 0,
     MTReportFormatterOptionsMargin  = 1 << 0,
 };
 
-@protocol MTReportFormatterDataSource <NSObject>
-
-    - (BOOL)cacheExist;
-    - (NSEnumerator *)enumeratorForReportData;
-    - (NSDictionary *)copyDataForCacheId:(NSNumber *)cachedID;
-
-@end
-
 extern NSString * const MTNullIdentifier;
+
+@protocol MTReportFormatterDataSource;
+@protocol MADDataProtocol;
+@protocol MTCacheProtocol;
 
 @class MADocument;
 @class RptqDocumentSection;

@@ -11,26 +11,21 @@
 #endif
 
 #import "MTQueryMaxFieldLength.h"
-#import <MADFoundation/MTDataTable.h>
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
-#import "RptqDatabase.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "MTDatabaseConnection.h"
+
 #import <Foundation/NSException.h>
 
-@interface MTQueryMaxFieldLength ()
+#import "MTDatabase.h"
+#import "MTDatabaseConnection.h"
 
-@end
+#import "RptqDatabase.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation MTQueryMaxFieldLength
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object respondsToSelector:@selector(array)], @"MTQueryMaxFieldLength expects to respond to array (hint, send an order set..");
 
@@ -58,16 +53,16 @@
     NSString *sql = nil;
     NSArray *fields = [[NSArray alloc] initWithArray:[self queryObject]];
     
-    if ([fields count] > 0) {
+    if (fields.count > 0) {
 
         NSMutableSet *tables = [[NSMutableSet alloc] init];
-        
         NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
         
         for (RptqDatabaseSchemaField *field in fields) {
             
             MTDatabaseField *dbField = [field databaseFieldWrapper];
             RptqDatabaseSchemaTable *table = [field inTable];
+            
             [tables addObject:table];
 
             NSString *fieldAliasSafe = [self.database fieldAliasForField:field.name
@@ -104,7 +99,9 @@
         
         NSString *selectPart = [self.database selectPart];
         
-        sql = [NSString stringWithFormat:@"%@ %@ %@ %@;", selectPart, fieldsPart, MADSqlTextFromPart, tableNamePart];
+        sql = [[NSString alloc] initWithFormat: @"%@ %@ %@ %@;",
+                                                selectPart, fieldsPart,
+                                                MADSqlTextFromPart, tableNamePart];
 
     }
 

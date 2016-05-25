@@ -13,6 +13,7 @@
 #import "MTViewControllerValueBasedOnField.h"
 
 #import <UIKit/UIWindow.h>
+
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
@@ -24,6 +25,9 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/MADocument.h>
+
+#import <MAD/MTDatabase.h>
+
 #import <MAD/MTDatabaseConnection.h>
 
 #import "MTCellEnterText.h"
@@ -146,8 +150,8 @@
 
     RptqDatabaseSchemaField *field = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField
-                                                                object:field];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                object: field];
 
     [self setQuerySampleDataField:querySampleDataField];
     

@@ -11,6 +11,19 @@
 //#endif
 
 #import "MTDatabaseSqlite3.h"
+
+#import <Foundation/NSException.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSNULL.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSCalendar.h>
+#import <Foundation/NSBundle.h>
+#import <dispatch/time.h>
+#import <dispatch/semaphore.h>
+#import <string.h>
+#import <stdlib.h>
+
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MADErrorUserInfo.h"
 #import "MTQuery.h"
@@ -24,25 +37,16 @@
 #import "MTQueryCacheBeginTransaction.h"
 #import "MTQueryCacheEndTransaction.h"
 #import "MTQueryCacheSyncDefault.h"
-#import <Foundation/NSException.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSNULL.h>
-#import <Foundation/NSData.h>
-#import <Foundation/NSCalendar.h>
-#import <Foundation/NSBundle.h>
-#import <dispatch/time.h>
-#import <dispatch/semaphore.h>
-#import <string.h>
-#import <stdlib.h>
+
+#import <MADSqlite3/sqlite3.h>
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
 NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
-@interface MTDatabaseSqlite3 ()
-
-@property (atomic, assign) sqlite3_stmt *bulkStatement;
+@interface MTDatabaseSqlite3 () {
+    sqlite3_stmt *_bulkStatement;
+}
 
     @property (nonatomic, assign, getter=isOpen) bool open;
     @property (nonatomic, strong) MTDatabaseConnectionSqlite3 *databaseConnection;
@@ -73,7 +77,7 @@ void sqliteLog(void *foo, const char* statement) {
 #endif
 
 - (void *)databaseHandle {
-    return self.database;
+    return _database;
 }
 
 - (instancetype)init {
@@ -86,7 +90,8 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (void)openDatabase {
-    [self openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
+    [self openDatabaseWithFlags: SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE |
+                                    SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
 }
 
 - (void)openDatabaseWithFlags:(int)flags {
@@ -94,14 +99,13 @@ void sqliteLog(void *foo, const char* statement) {
     //Open conneciton... closed in dealloc.
     if (!self.isOpen) {
        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-        bool isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
-        if (isOpen) {
-            sqlite3_extended_result_codes(_database, true);
-            sqlite3_create_collation(_database, "LSASC",
-                                        SQLITE_UTF8, _database,
+        if (sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK) {
+            sqlite3_extended_result_codes((struct sqlite3 *)_database, true);
+            sqlite3_create_collation((struct sqlite3 *)_database, "LSASC",
+                                        SQLITE_UTF8, (struct sqlite3 *)_database,
                                         compare_string_utf8_localized_asc_collation);
 #ifdef MAD_MTDatabaseSqlite3_DEBUG
-            sqlite3_trace(_database, sqliteLog, NULL);
+            sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
 #endif
 
         } else {
@@ -109,7 +113,8 @@ void sqliteLog(void *foo, const char* statement) {
             //NSString *message = @(errorMessage);
             //NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
             //NSString *domain = @"MTSqlite3";
-            //MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+            //MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
+            //                                                               andMessage: message];
             //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
         }
         self.open = true;
@@ -119,23 +124,29 @@ void sqliteLog(void *foo, const char* statement) {
 - (void)dealloc {
     
     if (_bulkStatement != NULL && sqlite3_finalize(_bulkStatement)) {
-        NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+        NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.",
+                    __PRETTY_FUNCTION__,
+                    sqlite3_errmsg((struct sqlite3 *)_database));
     }
     
     if (_database != NULL && sqlite3_close_v2(_database) != SQLITE_OK) {
-        NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+        NSAssert(0, @"Error: failed to close database with message '%s, %s'.",
+                    __PRETTY_FUNCTION__,
+                    sqlite3_errmsg((struct sqlite3 *)_database));
     }
 
 }
 
-- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MTDatabaseConnection *)connection
+                 credentals:(MADCredential *)credentals {
     [self openDatabase];
     return nil;
 }
 
 - (BOOL)tableExist:(NSString *)tablename {
     BOOL exist = NO;
-	NSString *query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
+	NSString *query;
+    query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
     sqlite3_stmt *statement = NULL;
     const char *queryc = query.UTF8String;
 	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
@@ -163,7 +174,8 @@ void sqliteLog(void *foo, const char* statement) {
             const unsigned char *resultString = sqlite3_column_text(statement, 0);
             NSString *tableName = @((char *)resultString);
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            MTDatabaseTable *databaseTable;
+            databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
             [result addObject:databaseTable];
 		}
 	}
@@ -347,7 +359,7 @@ void sqliteLog(void *foo, const char* statement) {
     return partOfTransactionSet ? _bulkStatement : statement;
 }
 
-+ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
++ (void)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MTDatabaseDataBinding *)databinding {
 
     int success = 0;
     if ([databinding.value isEqual:[NSNull null]]) {
@@ -416,7 +428,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (void)executeQueryWithSql:(NSString *)queryString
-                   database:(sqlite3 *)_database
+                   database:(void * /* sqlite3 * */)_database
         queryBinaryBindings:(NSArray *)queryBinaryBindings
              queryFieldKeys:(NSArray *)queryFieldKeys
   queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
@@ -434,22 +446,19 @@ void sqliteLog(void *foo, const char* statement) {
             success = SQLITE_OK == prepare_result;
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
-                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:(void **)&statement withBindings:databinding];
                 }
             }
         } else if (queryPartOfTransactionSet) {
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
-                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:(void **)&statement withBindings:databinding];
                 }
             }
         }
         NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
         
-        int sqlite3_step_result = sqlite3_step(statement);
-        
-//        sqlite3_reset(statement);
-        
+        sqlite3_step(statement);
 
         sqlite3_finalize(statement);
         statement = NULL;
@@ -465,9 +474,12 @@ void sqliteLog(void *foo, const char* statement) {
        partOfTransactionSet:NO returnsResults:YES binaryBindings:nil withError:error];
 }
 
-- (BOOL)executeSql:(NSString *)queryString fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MTDataTable *)dataTable partOfTransactionSet:(BOOL)partOfTransactionSet returnsResults:(BOOL)returnsResults
-    binaryBindings:(NSArray *)binaryBindings withError:(NSError * __autoreleasing *)resultError {
+- (BOOL)executeSql: (NSString *)queryString
+         fieldKeys: (NSArray *)fieldKeys onConnection: (id)dbconn
+   intoResultTable: (MTDataTable *)dataTable partOfTransactionSet: (BOOL)partOfTransactionSet
+    returnsResults: (BOOL)returnsResults
+    binaryBindings: (NSArray *)binaryBindings
+         withError: (NSError * __autoreleasing *)resultError {
    
     sqlite3_stmt *statement = NULL;
     statement = [self statementForQueryInTransactionSet:partOfTransactionSet andStatement:statement];
@@ -492,7 +504,6 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     
-    int sqlite3_step_result = SQLITE_OK;
     if (returnsResults) {
         
         if (success) {
@@ -514,7 +525,8 @@ void sqliteLog(void *foo, const char* statement) {
 
                             NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
                             
-                            MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
+                            MADDataColumn *dataColumn;
+                            dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
                             
                             int affentyType = sqlite3_column_type(statement, (int)columnCounter);
 
@@ -529,7 +541,9 @@ void sqliteLog(void *foo, const char* statement) {
                             int *pAutoinc = 0;
                             
                             if (tableName != NULL) {
-                                sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
+                                sqlite3_table_column_metadata(_database, databaseName, tableName,
+                                                              columnName, pzDataType, pzCollSeq,
+                                                              pNotNull, pPrimaryKey, pAutoinc);
                             }
                             
                             [dataColumn setFieldName: fieldName];
@@ -626,7 +640,7 @@ void sqliteLog(void *foo, const char* statement) {
             returnsResults: query.returnsResults binaryBindings: query.binaryBindings withError: resultError];
 }
 
-+ (id)newValueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
++ (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement columnNumber:(int)columnNumber {
     id value = nil;
     int affentyType = sqlite3_column_type(statement, columnNumber);   //http://www.sqlite.org/c3ref/c_blob.html
     switch (affentyType) {
@@ -665,23 +679,29 @@ void sqliteLog(void *foo, const char* statement) {
     return value;
 }
 
-+ (id)newObject:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter
-    withType:(MTDataType)type {
++ (id)newObject: (void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
+       withType: (MTDataType)type {
+
     id columnValue;
     switch (type) {
+
         case MTDataTypeLong:
-            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
+            columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
+
         case MTDataTypeLongLong:
-            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
+            columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
+
         case MTDataTypeInt24:
         case MTDataTypeInteger:
-            columnValue = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnCounter)];
+            columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
+
         case MTDataTypeShort:
             columnValue = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, columnCounter)];
             break;
+
         case MTDataTypeImage:
         case MTDataTypeBlob: {
             const void *blob = sqlite3_column_blob(statement, columnCounter);
@@ -689,14 +709,17 @@ void sqliteLog(void *foo, const char* statement) {
                                                  length: (NSUInteger)sqlite3_column_bytes(statement, columnCounter)];
             break;
         }
+
         case MTDataTypeFloat:
             columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
+
         case MTDataTypeNumber:
         case MTDataTypeDouble:
         case MTDataTypeDecimal:
             columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
+
         case MTDataTypeBit:
         case MTDataTypeVarChar:
         case MTDataTypeString:
@@ -712,11 +735,13 @@ void sqliteLog(void *foo, const char* statement) {
             }
             break;
         }
+
         case MTDataTypeUnknown:
         case MTDataTypeNull: {
             columnValue = [NSNull null];
             break;
         }
+
         case MTDataTypeTimeStamp:
         case MTDataTypeTime:
         case MTDataTypeDate:
@@ -774,7 +799,7 @@ void sqliteLog(void *foo, const char* statement) {
         
         for (MTDatabaseTable *table in tables) {
             NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
-            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
+            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheDeleteAllFromTable object:queryDefination];
             NSError * __autoreleasing error = NULL;
             bool success = false;
             success = [self executeQuery:dropTable withError:&error];
@@ -815,7 +840,7 @@ void sqliteLog(void *foo, const char* statement) {
 
     /*
      NSError * __autoreleasing errorJournalMode = NULL;
-     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
+     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheJournalModeDefault object:@{}];
      [queryJournalMode performQueryWithDatabase:self withError:&errorJournalMode];
     */
     

@@ -105,13 +105,6 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)didConfigureFilesController:(MADFilesController *)filesController { filesController.delegate = self; }
 
-- (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
-                                          cloud:(void (^)())handlerCloud {
-    UIAlertController *alert = [UIAlertController newAlertControllerPromptStorageOptionLocal:handlerLocal
-                                                                                       cloud:handlerCloud];
-    return alert;
-}
-
 - (void)didDisconnectFromCloud:(id)sender {
     typeof(self) __weak weakself = self;
 

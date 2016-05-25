@@ -7,6 +7,7 @@
 //
 
 #import "MTResizeHandleView.h"
+#import <UIKit/UIGraphics.h>
 
 @interface MTResizeHandleView()
 

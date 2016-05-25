@@ -10,8 +10,8 @@
 #define Reports_MTTableViewControllerAbout_h
 
 #import <UIKit/UITableViewController.h>
-#import <MAD/MADConstants.h>
-#import "MUIViewControllerDelegate.h"
+
+@protocol MTViewControllerProtocol;
 
 @interface MADAboutTableViewController : UITableViewController
 

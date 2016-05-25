@@ -1220,7 +1220,7 @@ READ_END:;
 
     switch (query.type) {
         
-        case MTQueryTypeFull:
+        case MADQueryTypeFull:
             self.mainDataTable.dataDelegate = self;
             return self.mainDataTable;
             break;

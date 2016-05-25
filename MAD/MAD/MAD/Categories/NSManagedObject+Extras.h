@@ -13,7 +13,6 @@
 
 @interface NSManagedObject (Extras)
 
-    - (void)obtainPermanentID;
     - (BOOL)saveContext;
 
 @end

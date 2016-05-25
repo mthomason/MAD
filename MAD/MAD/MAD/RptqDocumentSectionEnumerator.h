@@ -13,6 +13,7 @@
 
 @class NSManagedObjectID;
 @class RptqDocument;
+@class NSArray;
 
 @interface RptqDocumentSectionEnumerator : NSEnumerator
 

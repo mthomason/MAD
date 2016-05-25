@@ -11,7 +11,18 @@
 #endif
 
 #import "RptqDocumentSection+Extras.h"
-#import <objc/runtime.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSIndexPath.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSIndexPath.h>
+
+#import <UIKit/UICollectionView.h>
+
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
 
@@ -35,15 +46,6 @@
 
 #import "NSManagedObjectID+Extras.h"
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSIndexPath.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSIndexPath.h>
-#import <UIKit/UICollectionView.h>
-
 @interface RptqDocumentSection ()
 
 @end
@@ -56,10 +58,14 @@
     [super awakeFromInsert];
     
     // MARK: Auto increment row counter.
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
+    NSString *queryField = NSStringFromSelector(@selector(identifier)),
+             *entityName = NSStringFromClass([RptqDocumentSection class]);
+    
+    NSFetchRequest *request;
+    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
                                                                    ascending: NO];
+    
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
@@ -113,12 +119,14 @@
 }
 
 - (void)setProducesFormFeed:(BOOL)producesFormFeed {
-    NSNumber *wrappingStyle = [[NSNumber alloc] initWithShort: producesFormFeed ? RptqDocumentSectionWrappingStyleNewPageAfter : RptqDocumentSectionWrappingStyleStandard];
+    NSNumber *wrappingStyle = [[NSNumber alloc] initWithShort: producesFormFeed ?
+                                                    RptqDocumentSectionWrappingStyleNewPageAfter :
+                                                    RptqDocumentSectionWrappingStyleStandard];
     self.wrappingStyle = wrappingStyle;
 }
 
 - (NSManagedObjectID *)copySectionKey {
-    return [self copyKeyForIdentifier];
+    return self.objectID.copy;
 }
 
 + (NSNumber *)defaultHeight {
@@ -146,7 +154,7 @@
 }
 
 - (NSManagedObjectID *)copyKeyForIdentifier {
-    return self.objectID;
+    return self.objectID.copy;
 }
 
 - (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -158,7 +166,8 @@
     request.fetchLimit = 1;
 
     NSError *error = nil;
-    NSArray *fetchResults = [managedObjectContext executeFetchRequest: request error: &error];
+    NSArray *fetchResults = [managedObjectContext executeFetchRequest: request
+                                                                error: &error];
     NSUInteger dropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = fetchResults.lastObject;
@@ -169,14 +178,16 @@
     return dropIndex;
 }
 
-- (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin
+     managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     [documentObject setOrigin: origin];
     
     NSUInteger sectionZero = 0;
     RptqDocumentSectionRows *sectionRow = self.hasRows.firstObject;
     
-    NSIndexPath *indexPathForInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count inSection:(NSInteger)sectionZero];
+    NSIndexPath *indexPathForInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count
+                                                          inSection:(NSInteger)sectionZero];
     
     NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger:[self nextDropIndexForSectionWithManagedObjectContext:managedObjectContext]];
     documentObject.dropIndex = dropIndex;
@@ -273,7 +284,8 @@
                 CGFloat originPointY        = [element.dropPointY floatValue];
                 
                 CGSize marginSize           = [element size];
-                CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
+                CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY,
+                                                         marginSize.width, marginSize.height);
                 
                 CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
                 if (totalHeight > resultHeight) {
@@ -350,11 +362,15 @@
     return result;
 }
 
-+ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type
+                 forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: managedObjectContext];
+    NSEntityDescription *entity;
+    entity = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentSection class])
+                         inManagedObjectContext: managedObjectContext];
 
-    RptqDocumentSection *section = [[self alloc] initWithEntity: entityDescriptionDocumentSection insertIntoManagedObjectContext: managedObjectContext];
+    RptqDocumentSection *section = [[self alloc] initWithEntity: entity
+                                 insertIntoManagedObjectContext: managedObjectContext];
     NSNumber *sectionType = [[NSNumber alloc] initWithShort:type];
     section.visibility = @YES;
     section.type = sectionType;
@@ -364,37 +380,53 @@
 
 #pragma mark - Handling Rows
 
-+ (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
+static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger body);
+static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger body) {
+    return (row <= body) ? row : body - (row - body);
+}
+
++ (NSString *)getDocumentSectionNameForRow: (NSInteger)row
+                        withNumberOfGroups: (NSInteger)numberOfGroups {
+    
     NSInteger documentHeader    = 0;
     NSInteger pageHeader        = 1;
     NSInteger body              = 2 + numberOfGroups;       //6
     NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
     NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
+
     NSString *groupText = nil;
     if (row == documentHeader) {
         groupText = NSLocalizedString(@"Report Header", @"Report Header");
+        
     } else if (row == pageHeader) {
         groupText = NSLocalizedString(@"Page Header", @"Page Header");
+        
     } else if (row == body) {
         groupText = NSLocalizedString(@"Report Detail", @"Report Detail");
+        
     } else if (row == pageFooter) {
         groupText = NSLocalizedString(@"Page Footer", @"Page Footer");
+        
     } else if (row == documentFooter) {
         groupText = NSLocalizedString(@"Report Footer", @"Report Footer");
+        
     } else {
+
         NSInteger locationRelitaveToGroup = row - pageHeader;
         BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
-        NSInteger indentLevel = (row <= body) ? row : body - (row - body);
-        if (isGroupHeader) {
-            groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @""), indentLevel - 1];
-        } else {
-            groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @""), indentLevel - 1];
-        }
+
+        NSString *format = isGroupHeader ? NSLocalizedString(@"Group Header %d", @"") :
+                                           NSLocalizedString(@"Group Footer %d", @"");
+        groupText = [[NSString alloc] initWithFormat:format,
+                                                     MADDocumentSectionIndexLevel(row, body) - 1];
+        
+
     }
     return groupText;
 }
 
-+ (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
++ (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row
+                              withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger body = 2 + numberOfGroups;
     return (row <= body) ? row : body - (row - body);
 }
@@ -404,7 +436,9 @@
     NSInteger result = 0;
     BOOL breakNow = NO;
     RptqDocument *document = [section inRptqDocument];
-    RptqDocumentSectionEnumerator *enumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
+    RptqDocumentSectionEnumerator *enumerator;
+    enumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
+
     NSURL *urlNeedle = [[section objectID] URIRepresentation];
     for (RptqDocumentSection *sec in enumerator) {
         @autoreleasepool {

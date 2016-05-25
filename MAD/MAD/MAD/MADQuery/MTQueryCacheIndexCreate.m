@@ -11,13 +11,14 @@
 #endif
 
 #import "MTQueryCacheIndexCreate.h"
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseSqlite3.h"
 #import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
+#import "MTDatabase.h"
+#import "MTDatabaseConnection.h"
+#import "MTDatabaseSqlite3.h"
+#import "MADQueryCacheIndexCreateParameters.h"
 
 @interface MTQueryCacheIndexCreate ()
 
@@ -75,8 +76,8 @@
 
                 if (sortCounter != 0) [sql appendString:@", "];
                 
-                NSString * __weak keySortDescriptor = sortDescriptor.key;
-                MADDataColumn * __weak column = self.columns[keySortDescriptor];
+                NSString *keySortDescriptor = sortDescriptor.key;
+                MADDataColumn *column = self.columns[keySortDescriptor];
                 
                 NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
                 MADSqlite3SortDescription *sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: column.nativeType

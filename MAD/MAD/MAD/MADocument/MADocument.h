@@ -12,13 +12,14 @@
 #define Reports_MADocument_h
 
 #import <UIKit/UIManagedDocument.h>
+#import "MADReportFormatterDataSourceProtocol.h"
 
 #import <UIKit/UIPrintInteractionController.h>
 
-#import <MAD/MTReportFormatter.h>
-#import <MAD/MTDatabase.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
+
+#import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADSortOrder.h>
 
 @protocol MADActivityProtocol;
@@ -58,12 +59,14 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
         MTReportFormatterDataSource,
-        MTDatabaseProtocol,
         MTCacheProtocol,
+        MTDatabaseProtocol,
         MADDataProtocol>
 
+    @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
+
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
-    @property (nonatomic, strong, readwrite)    MTReportFormatter *printingReportFormatter;   //Used only when printing
+    @property (nonatomic, strong, readwrite)    MTReportFormatter *printingReportFormatter;
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
     @property (nonatomic, strong, readwrite)    MTDatabase *database;
 
@@ -81,8 +84,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (readonly)                        NSString *filename;
     @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
 
-
-    @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
     @property (nonatomic, strong)               MTPaper *paper;
     @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
     @property (nonatomic, assign)               BOOL limitResultsDesignMode;

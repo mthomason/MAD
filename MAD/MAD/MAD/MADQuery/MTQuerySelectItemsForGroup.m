@@ -1,5 +1,5 @@
 //
-//  MTQuerySelectItemsForGroup.m
+//  MADQuerySelectItemsForGroup.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/22/14.
@@ -12,8 +12,9 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
 #import "MTDatabaseDataBinding.h"
+#import "MADQuerySelectParameters.h"
 
-@interface MTQuerySelectItemsForGroup ()
+@interface MADQuerySelectItemsForGroup ()
 
     @property (nonatomic, strong) NSString *tableName;
     @property (nonatomic, strong) NSString *columnName;
@@ -23,33 +24,33 @@
 
 @end
 
-@implementation MTQuerySelectItemsForGroup
+@implementation MADQuerySelectItemsForGroup
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQuerySelectTableName];
+        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[keyTableName];
         self.tableName = tableName;
         
-        NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectSortDescriptors];
+        NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
         NSArray *sortDescriptors = object[keySortDescriptors];
         self.sortDescriptors = sortDescriptors;
         
-        NSNumber *keyFieldKeys = [[NSNumber alloc] initWithShort: MTQuerySelectFieldKeys];
+        NSNumber *keyFieldKeys = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
         NSArray *columnKeys = object[keyFieldKeys];
         
         NSMutableArray *mutableColumnKeys = [[NSMutableArray alloc] initWithArray: columnKeys];
         [mutableColumnKeys addObject:MADIdentifierROWID];
         self.columnKeys = mutableColumnKeys;
         
-        NSNumber *keyPredicates = [[NSNumber alloc] initWithShort: MTQuerySelectPredicates];
+        NSNumber *keyPredicates = [[NSNumber alloc] initWithShort: MADQuerySelectPredicates];
         NSArray *whereClause = object[keyPredicates];
         self.whereClause = whereClause;
         
-        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MTQuerySelectFieldDescriptors];
+        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
         NSDictionary *columns = object[keyFieldDescriptors];
         NSMutableDictionary *mutableColumns = [NSMutableDictionary dictionaryWithDictionary:columns];
         

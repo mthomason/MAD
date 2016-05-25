@@ -11,19 +11,11 @@
 #endif
 
 #import "MTQueryCacheBeginTransaction.h"
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
-
-@interface MTQueryCacheBeginTransaction ()
-
-@end
 
 @implementation MTQueryCacheBeginTransaction
 
 - (instancetype)initWithObject:(id)object {
-    self = [super init];
-    if (self) { }
-    return self;
+    return self = [super init];
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {

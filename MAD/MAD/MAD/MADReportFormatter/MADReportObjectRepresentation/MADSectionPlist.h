@@ -9,11 +9,8 @@
 #ifndef MAD_MADSectionPlist_MADReportObjectRepresentation_h
 #define MAD_MADSectionPlist_MADReportObjectRepresentation_h
 
-#import <Foundation/NSObject.h>
-#import <MAD/MADReportSectionRepresentation.h>
 #import <Foundation/NSDictionary.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSValue.h>
+#import "MADocumentSectionType.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;

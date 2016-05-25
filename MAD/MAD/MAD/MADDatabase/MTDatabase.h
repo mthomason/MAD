@@ -12,8 +12,6 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
-
 #import <MAD/MADDatabaseProtocol.h>
 
 typedef NSString MADSafeQueryField;
@@ -28,11 +26,17 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeVerify
 };
 
-@class MADCredential, MTDatabaseConnection, MTDatabase, MTDatabaseTable, MTQuery, MTDataTable;
+@class NSMutableArray;
+@class MADCredential;
+@class MTDatabaseConnection;
+@class MTDatabase;
+@class MTDatabaseTable;
+@class MTDataTable;
+@class MTQuery;
 
 @protocol MADErrorHandler <NSObject>
-@required
-- (void)displayError:(NSError *)error;
+  @required
+    - (void)displayError:(NSError *)error;
 @end
 
 @interface MTDatabase : NSObject
@@ -43,14 +47,18 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
     @property (nonatomic, strong) NSMutableArray *errors;
 
-    + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection;
 
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-    - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+       intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
 
-    - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion;
-    - (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error;
+    - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL,
+                                                                    NSError *,
+                                                                    NSArray *))completion;
+    - (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn
+                          error:(NSError * __autoreleasing *)error;
 
     - (void)closeProcess:(id)process;
 

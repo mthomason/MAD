@@ -11,17 +11,20 @@
 #endif
 
 #import "MTQueryCacheAddRow.h"
+#import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseDataBinding.h"
 #import "MTDatabaseConnection.h"
 
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"
+#import "MADQueryCacheAddRowParameters.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <stdio.h>
+#import "madlib.h"
 
 static NSString * const SqlDelimitor = @", ";
 static NSString * const SqlDelimitorObject = @", %@";
@@ -135,7 +138,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     
     NSUInteger columnCounter = 0;
 
-    char colCtrBuf[19];
+    char buf[12];
 
     NSArray *row = self.rowData;
     
@@ -156,8 +159,12 @@ static NSString * const SqlDelimitorObject = @", %@";
                                                                   fieldIndex: columnCounter
                                                                        value: object];
             [self.binaryBindings addObject:databinding];
-            snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
-            NSString *columnValue = [[NSString alloc] initWithUTF8String:colCtrBuf];
+            buf[0] = '?';
+            ultoa((unsigned int)columnCounter + 1, &*(buf+1));
+            char *ptr = buf;
+
+            
+            NSString *columnValue = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
             [values appendString:columnValue];
         }
         

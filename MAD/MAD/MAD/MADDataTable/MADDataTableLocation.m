@@ -16,9 +16,9 @@
 
 @interface MADDataTableLocation ()
 
-    - (instancetype)init NS_DESIGNATED_INITIALIZER;
-    - (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
-    - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column NS_DESIGNATED_INITIALIZER;
+    - (instancetype)init;
+    - (instancetype)initWithCoder:(NSCoder *)decoder;
+    - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column;
 
 @end
 
@@ -62,7 +62,7 @@
     return self;
 }
 
-+ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column NS_RETURNS_RETAINED {
++ (instancetype)newDataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
     id result = [[MADDataTableLocation alloc] initWithRow:row inColumn:column];
     return result;
 }
