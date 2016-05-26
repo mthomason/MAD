@@ -23,7 +23,6 @@
 
 - (void)execute {
 
-    [self finishIfCancelled];
 
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -34,7 +33,6 @@
         }
     }
 
-    [self finishIfCancelled];
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;

@@ -2019,8 +2019,6 @@
 		4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageJustified@2x.png"; path = "Reports/UIImageJustified@2x.png"; sourceTree = "<group>"; };
 		4C994F081BDC3B440058627A /* MADDocumentObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentObjectCollectionViewCell.h; sourceTree = "<group>"; };
 		4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectCollectionViewCell.m; sourceTree = "<group>"; };
-		4C994F0E1BDC9FDB0058627A /* MADToggleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToggleTableViewCell.h; sourceTree = "<group>"; };
-		4C994F0F1BDC9FDB0058627A /* MADToggleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToggleTableViewCell.m; sourceTree = "<group>"; };
 		4C994F371BE082730058627A /* MADLabelStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelStatus.h; sourceTree = "<group>"; };
 		4C994F381BE082730058627A /* MADLabelStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelStatus.m; sourceTree = "<group>"; };
 		4C994F3A1BE28CF50058627A /* MADTextPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextPosition.h; sourceTree = "<group>"; };
@@ -2815,8 +2813,6 @@
 				4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */,
 				4C26B9F61BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.h */,
 				4C26B9F71BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m */,
-				4C994F0E1BDC9FDB0058627A /* MADToggleTableViewCell.h */,
-				4C994F0F1BDC9FDB0058627A /* MADToggleTableViewCell.m */,
 			);
 			path = Designer;
 			sourceTree = "<group>";

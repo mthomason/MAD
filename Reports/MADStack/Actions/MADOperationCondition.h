@@ -47,7 +47,7 @@
     - (NSOperation *)dependencyForOperation:(MADOperation *)operation;
 
     // Evaluate the condition, to see if it has been satisfied or not.
-    - (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
+    - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation;
 
 @end
 

@@ -73,7 +73,9 @@
             [exclusivityController addOperation: op categories: concurrencyCategories];
             
             MADBlockObserver * obs = [[MADBlockObserver alloc] initWithStartHandler:nil produceHandler:nil finishHandler:^(MADOperation * oper, NSArray * error) {
+            
                 [exclusivityController removeOperation:oper categories:concurrencyCategories];
+                
             }];
             
             [op addObserver:obs];
@@ -101,7 +103,9 @@
             if (queue && op) {
                 
                 if ([sdelegate respondsToSelector:@selector(operationQueue:operationDidFinish:withErrors:)]) {
+                
                     [sdelegate operationQueue:queue operationDidFinish:op withErrors:nil];
+                    
                 }
                 
             }

@@ -20,8 +20,7 @@
     - (NSString *)name;
     - (BOOL)isMutuallyExclusive;
     - (NSOperation *)dependencyForOperation:(MADOperation *)operation;
-    - (void)evaluateForOperation:(MADOperation *)operation
-                      completion:(void(^)(MADOperationConditionResult *))completion;
+    - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation;
 
 @end
 

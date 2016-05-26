@@ -94,9 +94,10 @@
 }
 
 - (void)execute {
-    [self finishIfCancelled];
+    if (self.cancelled) goto CANCEL_execute;
     self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];
+CANCEL_execute:;
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {

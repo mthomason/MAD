@@ -48,7 +48,8 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     }
 }
 
-+ (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion {
++ (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation
+                completion:(void(^)(NSArray * errors))completion {
     // Check conditions.
     dispatch_group_t conditionGroup = dispatch_group_create();
     
@@ -59,12 +60,9 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     for (NSObject <MADOperationCondition> *condition in conditions) {
 
         dispatch_group_enter(conditionGroup);
-        [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
-
-            [results addObject:result];
-            dispatch_group_leave(conditionGroup);
-
-        }];
+        MADOperationConditionResult * result = [condition evaluateForOperation: operation];
+        [results addObject:result];
+        dispatch_group_leave(conditionGroup);
 
     }
     

@@ -50,8 +50,7 @@
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
     if (!installed) {
         
-        [self finishIfCancelled];
-        
+    
         NSURL *localDocumentsDirectory;
         localDocumentsDirectory =
             [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:_groupIdentifier];

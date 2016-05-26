@@ -108,7 +108,9 @@
 
 }
 
--(void)operationQueue:(MADOperationQueue *)operationQueue operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+-(void)operationQueue:(MADOperationQueue *)operationQueue
+   operationDidFinish:(NSOperation *)operation
+           withErrors:(NSArray *)errors {
     [self.aggregatedErrors addObjectsFromArray:errors];
     
     if (operation == self.finishingOperation){

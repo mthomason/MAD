@@ -44,14 +44,11 @@
 
 - (void)execute {
 
-    [self finishIfCancelled];
-
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory: self.documentsDirectory
                                             withDesiredHandle: self.desiredFilename
                                                  andExtension: self.pathExtension];
 
-    [self finishIfCancelled];
 
     if (uniqueUrl != nil) {
         self.uniqueUrl = uniqueUrl;

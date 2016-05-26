@@ -22,7 +22,9 @@ extern NSString * MADOperationConditionKey;
 
     + (instancetype)newOperationConditionResultSatisfied;
     + (instancetype)newOperationConditionResultFailed:(NSError *)error;
-    + (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion;
+    + (void)evaluateConditions:(NSArray *)conditions
+                     operation:(MADOperation *)operation
+                    completion:(void(^)(NSArray * errors))completion;
 
 @end
 

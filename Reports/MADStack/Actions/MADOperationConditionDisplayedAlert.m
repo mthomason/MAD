@@ -7,11 +7,16 @@
 //
 
 #import "MADOperationConditionDisplayedAlert.h"
+
 #import "MADOperationConditionResult.h"
 #import "MADOperation.h"
+
 #import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
+
 #import "MADOperationConditionResult.h"
 #import "NSError+MADOperationErrors.h"
+
 #import <MAD/MADErrorUserInfo.h>
 
 @interface MADOperationConditionDisplayedAlert ()
@@ -45,34 +50,41 @@
 
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
-- (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+- (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+    MADOperationConditionResult *result = nil;
+    NSString *domain = self.name.copy;
     if (dependencies.count == 0) {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        completion(result);
-        return;
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: @"Not Satisified"
+                                                                       andMessage: @"Not satisified."];
+        NSError *error = [errorUserInfo errorWithDomain: domain
+                                                   code: MADConditionFailed];
+        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        return result;
     }
 
-    MADOperationConditionResult *result = nil;
     for (NSOperation *dependency in dependencies) {
         
-        if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] && dependency.hash == self.tag) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] &&
+            dependency.hash == self.tag) {
             
             bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
             
-            if (self.reverseCondition) {
-                condition = !condition;
-            }
+            if (self.reverseCondition) { condition = !condition; }
             
             if (condition) {
+                
                 result = [MADOperationConditionResult newOperationConditionResultSatisfied];
+                
             } else {
-                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-                NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
+            
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: @"Not Satisified"
+                                                                               andMessage: @"Not satisified."];
+                NSError *error = [errorUserInfo errorWithDomain: domain
+                                                           code: MADConditionFailed];
                 result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+            
             }
             
             break;
@@ -80,12 +92,22 @@
     }
     
     if (result != nil) {
-        completion(result);
+        
+        return result;
+    
     } else {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        MADOperationConditionResult *cresult = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        completion(cresult);
+        
+        MADErrorUserInfo *errorUserInfo;
+        NSError *error;
+        
+        errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: @"Not Satisified"
+                                                     andMessage: @"Not satisified."];
+        error = [errorUserInfo errorWithDomain: domain
+                                          code: MADConditionFailed];
+        
+        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        return result;
+    
     }
 }
 

@@ -52,7 +52,8 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (BOOL)freeForCharterMemembers:(NSString *)productID {
-    return [MTVerificationController charterMemberGiftLookup:productID] && self.receipt.charterMembership;
+    return [MTVerificationController charterMemberGiftLookup:productID] &&
+                self.receipt.charterMembership;
 }
 
 - (BOOL)purchasedProductWithID:(NSString *)productID {
@@ -74,39 +75,58 @@ static MTVerificationController *sharedSingleton;
 
 - (void)reloadReceipt {
     MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
+    
     NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
     NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
+    NSUUID *identifierForVendor = [[UIDevice currentDevice] identifierForVendor].copy;
+    
     self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: bundleID
                                                      bundleVersion: globalBundleVersion
-                                                       andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
+                                                       andDeviceID: identifierForVendor];
     if (self.modernReceiptIsValid) {
         self.receipt = receipt;
     }
 }
 
 - (void)resetReceipt {
+
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
+    NSString *receiptPath = receiptUrl.path;
+    
+    
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath: receiptPath]) {
+    
         MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
+        
         NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
+        
         NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
+        NSUUID *identifierForVendor = [[UIDevice currentDevice] identifierForVendor].copy;
+        
         BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: bundleID
                                                    bundleVersion: globalBundleVersion
-                                                     andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
+                                                     andDeviceID: identifierForVendor];
+        
         if ((self.modernReceiptIsValid = isValidReceipt)) {
             self.receipt = receipt;
         } else {
             //Invalid receipt!!! Gerr, blast it, and download from APPL
             NSError *error = nil;
             [[NSFileManager defaultManager] removeItemAtURL:receiptUrl error:&error];
+
+            MTVerificationController * __weak weakself = self;
             [self refreshReceipt:^(BOOL refreshReceiptSuccess, NSError *refreshReceiptError) {
-                if (refreshReceiptSuccess) [self reloadReceipt];
+                MTVerificationController *strongself = weakself;
+                if (strongself && refreshReceiptSuccess) [strongself reloadReceipt];
             }];
         }
     } else {
         // No receipt!!! Download it from APPL!
+        MTVerificationController * __weak weakself = self;
         [self refreshReceipt:^(BOOL success, NSError *error) {
-            if (success) [self reloadReceipt];
+            MTVerificationController *strongself = weakself;
+            if (success && strongself) [strongself reloadReceipt];
         }];
     }
 }
@@ -474,7 +494,7 @@ outLabel:
 #pragma mark
 #pragma mark Base 64 encoding
 
-- (NSString *)encodeBase64:(const uint8_t *)input length:(NSInteger)length {
+- (NSString *)encodeBase64:(const uint8_t *)input length:(NSUInteger)length {
     NSData *dataToEncode = [NSData dataWithBytes:input length:length];
     //MTLog(@"encodeBase64: %@", [dataToEncode base64EncodedString]);
     return [dataToEncode base64EncodedString];
@@ -499,13 +519,16 @@ outLabel:
     [result appendString:b];
     [result appendString:d];
     [self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    
         NSString *debuggingString = [NSString stringWithFormat:@"%@\t\t\t%@", key, obj];
         [result appendString:debuggingString];
         if ([obj isKindOfClass:[NSDictionary class]]) {
-            [obj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                NSString *debuggingString = [NSString stringWithFormat:@"\t%@\t\t%@", key, obj];
-                [result appendString:debuggingString];
+        
+            [obj enumerateKeysAndObjectsUsingBlock:^(id key1, id obj1, BOOL *stop1) {
+                NSString *debuggingString1 = [[NSString alloc] initWithFormat:@"\t%@\t\t%@", key1, obj1];
+                [result appendString:debuggingString1];
             }];
+            
         }
     }];
     return result;

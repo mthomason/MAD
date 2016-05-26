@@ -90,14 +90,14 @@ static inline UIUserNotificationType MADUserNotificationType() {
 - (NSString *)name {
     NSString *trademark = [self trademark];
     NSString *appName = [self applicationNameSufixPart];
-    NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
+    NSString *name = [[NSString alloc] initWithFormat:@"%@ %@", trademark, appName];
     return name;
 }
 
 - (NSString *)localizedName {
     NSString *trademark = [self trademark];
     NSString *appName = [self localizedApplicationNameSufixPart];
-    NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
+    NSString *name = [[NSString alloc] initWithFormat:@"%@ %@", trademark, appName];
     return name;
 }
 
@@ -217,9 +217,9 @@ static inline UIUserNotificationType MADUserNotificationType() {
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     
     NSDictionary *defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        @NO, MADUpgradeInstalledChinook,
-                                        @NO, MADUpgradeInstalledSamples,
-                                        @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+                                            @NO, MADUpgradeInstalledChinook,
+                                            @NO, MADUpgradeInstalledSamples,
+                                            @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
     
     [defaults registerDefaults:defaultsToRegister];
     self.applicationUserDefaults = defaults;
@@ -242,38 +242,41 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     [self initalizeAppearance];
     
-    MADOperationQueue *operationQueueBackground = [[MADOperationQueue alloc] init];
+    MADOperationQueue *operationQueueBackground;
+    operationQueueBackground = [[MADOperationQueue alloc] init];
+    
     NSOperation *getUserCloudPreferences;
+    MADInstallOperationSampleDatabase *sampleDatabase;
+    MADInstallOperationSampleDocument *sampleDocumentMusic;
+    MADInstallOperationSampleDocument *sampleDatabaseLondon;
+    NSOperation *resetReceipt;
+    
     getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
                                                                    selector: @selector(getUserCloudPrefs)
                                                                      object: NULL];
     
-    MADInstallOperationSampleDatabase *sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
+    sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
     
-    MADInstallOperationSampleDocument *sampleDocumentMusic;
     sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
                                                                       groupIdentifier: MADIdentifierGroup
                                                                           installFlag: MADUpgradeInstalledSamplesLondon];
     
-    MADInstallOperationSampleDocument *sampleDatabaseLondon;
     sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
                                                                          fileExtension: MADFileExtentionMobleApplicationDocument
                                                                        groupIdentifier: MADIdentifierGroup
                                                                            installFlag: MADUpgradeInstalledSamplesMusic];
     
-    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
-                                                                     selector: @selector(resetReceipt)
-                                                                       object: NULL];
-
-    NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
-                                                               sampleDatabase,
-                                                               sampleDocumentMusic,
-                                                               sampleDatabaseLondon,
-                                                               resetReceipt, nil];
-
-    [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
-
+    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
+                                                        selector: @selector(resetReceipt)
+                                                          object: NULL];
+    
+    [operationQueueBackground addOperation:getUserCloudPreferences];
+    [operationQueueBackground addOperation:sampleDatabase];
+    [operationQueueBackground addOperation:sampleDocumentMusic];
+    [operationQueueBackground addOperation:sampleDatabaseLondon];
+    [operationQueueBackground addOperation:resetReceipt];
+    
     self.operationQueueBackground = operationQueueBackground;
     
     return YES;
@@ -348,12 +351,16 @@ static inline UIUserNotificationType MADUserNotificationType() {
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return self.window.rootViewController;
+    UIWindow *window = self.window;
+    UIViewController *rootViewController = window.rootViewController;
+    return rootViewController;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
+    NSURL *itemToRemove = controller.URL;
+    if (itemToRemove)
+        [[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
 }
 
 - (void)initalizeAppearance {

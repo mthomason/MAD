@@ -11,6 +11,8 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSData.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
 #import <Foundation/NSUUID.h>
 #import <Foundation/NSPathUtilities.h>
 
@@ -180,19 +182,23 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 @implementation MADSalesReceipt
 
 - (NSString *)bundleID {
-    return self.data[MTStoreKitIdentifierReceiptBid];
+    NSString *bundleID = _data[MTStoreKitIdentifierReceiptBid];
+    return bundleID.copy;
 }
 
 - (NSString *)purcahseDate {
-    return self.data[MTStoreKitIdentifierReceiptPurchaseDate];
+    NSString *purchaseDate = _data[MTStoreKitIdentifierReceiptPurchaseDate];
+    return purchaseDate.copy;
 }
 
 - (NSString *)version {
-    return  self.data[MTStoreKitIdentifierReceiptVersion];
+    NSString *version = _data[MTStoreKitIdentifierReceiptVersion];
+    return  version.copy;
 }
 
 - (NSString *)originalVersion {
-    return  self.data[MTStoreKitIdentifierReceiptOriginalVersion];
+    NSString *originalVersion = _data[MTStoreKitIdentifierReceiptOriginalVersion];
+    return originalVersion.copy;
 }
 
 - (BOOL)charterMembership {
@@ -208,43 +214,60 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 + (NSData *)appleRootCert {
     // Obtain the Apple Inc. root certificate from http://www.apple.com/certificateauthority/
-    // Download the Apple Inc. Root Certificate ( http://www.apple.com/appleca/AppleIncRootCertificate.cer )
+    // Download the Apple Inc. Root Certificate
+    //  ( http://www.apple.com/appleca/AppleIncRootCertificate.cer )
     // Add the AppleIncRootCertificate.cer to your app's resource bundle.
-    
-    NSData *cert = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"]];
+    NSURL *rootCertificate = [[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate"
+                                                     withExtension:@"cer"];
+    NSData *cert = [[NSData alloc] initWithContentsOfURL:rootCertificate.copy];
     return cert;
 }
 
-- (BOOL)verifyReceiptWithBundleID:(NSString *)bundleID bundleVersion:(NSString *)bundleVersion andDeviceID:(NSUUID *)vendorUUID {
+- (BOOL)verifyReceiptWithBundleID:(NSString *)bundleID bundleVersion:(NSString *)bundleVersion
+                      andDeviceID:(NSUUID *)vendorUUID {
     BOOL validReceipt = NO;
     
     NSDictionary *receipt = dictionaryWithAppStoreReceipt(self.path);
-    self.data = [NSDictionary dictionaryWithDictionary: receipt];
+    self.data = [[NSDictionary alloc] initWithDictionary: receipt];
     
-    if (!receipt) {
-        validReceipt = NO;
+    NSMutableData *hashData, *input, *hashReceiptData;
+    
+    NSString *bid, *version;
+    id data;
+
+    if (receipt == nil) goto END_verifyReceiptWithBundleID;
+    
+    unsigned char uuidBytes[16];
+    [vendorUUID getUUIDBytes:uuidBytes];
+    
+    input = [[NSMutableData alloc] initWithBytes:uuidBytes length:sizeof(uuidBytes)];
+    [input appendBytes:uuidBytes length:sizeof(uuidBytes)];
+    
+    data = receipt[MTStoreKitIdentifierReceiptOpaqueValue];
+    [input appendData:data];
+
+    data = receipt[MTStoreKitIdentifierReceiptBidData];
+    [input appendData:data];
+    
+    hashData = [NSMutableData dataWithLength:SHA_DIGEST_LENGTH];
+    
+    SHA1([input bytes], [input length], [hashData mutableBytes]);
+    
+    bid = receipt[MTStoreKitIdentifierReceiptBid],
+    version = receipt[MTStoreKitIdentifierReceiptVersion],
+    hashReceiptData = receipt[MTStoreKitIdentifierReceiptHash];
+    
+    if ([bundleID isEqualToString:bid] &&
+        [bundleVersion isEqualToString:version] &&
+        [hashData isEqualToData:hashReceiptData]) {
+        validReceipt = YES;
     } else {
         
-        unsigned char uuidBytes[16];
-        [vendorUUID getUUIDBytes:uuidBytes];
-        
-        NSMutableData *input = [NSMutableData data];
-        [input appendBytes:uuidBytes length:sizeof(uuidBytes)];
-        [input appendData:receipt[MTStoreKitIdentifierReceiptOpaqueValue]];
-        [input appendData:receipt[MTStoreKitIdentifierReceiptBidData]];
-        
-        NSMutableData *hash = [NSMutableData dataWithLength:SHA_DIGEST_LENGTH];
-        SHA1([input bytes], [input length], [hash mutableBytes]);
-        
-        if ([bundleID isEqualToString:receipt[MTStoreKitIdentifierReceiptBid]] &&
-            [bundleVersion isEqualToString:receipt[MTStoreKitIdentifierReceiptVersion]] &&
-            [hash isEqualToData:receipt[MTStoreKitIdentifierReceiptHash]]) {
-            validReceipt = YES;
-        } else {
-            
-            validReceipt = NO;
-        }
+        validReceipt = NO;
     }
+
+END_verifyReceiptWithBundleID:;
+
     self.validReceipt = validReceipt;
     return validReceipt;
     

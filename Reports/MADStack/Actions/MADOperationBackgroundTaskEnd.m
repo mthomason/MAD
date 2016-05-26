@@ -23,7 +23,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    [self finishIfCancelled];
 
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;

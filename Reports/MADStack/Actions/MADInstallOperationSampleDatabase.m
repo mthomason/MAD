@@ -14,13 +14,13 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSUserDefaults.h>
 
-NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
-NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgradeInstalledSamplesLondon";
-NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
-NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
+NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
+NSString * const MADUpgradeInstalledSamplesLondon   = @"MADUpgradeInstalledSamplesLondon";
+NSString * const MADUpgradeInstalledSamplesMusic    = @"MADUpgradeInstalledSamplesMusic";
+NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
 
-NSString * const MTSampleDatabaseChinook                            = @"chinook";
-NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3";
+NSString * const MTSampleDatabaseChinook            = @"chinook";
+NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 @implementation MADInstallOperationSampleDatabase
 
@@ -32,34 +32,40 @@ NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3"
 
 - (void)execute {
 
-    if (self.cancelled) {
-        goto FINISH;
-    }
+    NSURL *fileURL, *databaseURL;
+
+    if (self.cancelled) goto FINISH;
 
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
-    if (installed == NO) {
+    if (!installed) goto FINISH;
 
-        [self finishIfCancelled];
-        
-        NSURL *fileUrl = [MADInstallOperationSampleDatabase newApplicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
-        
-        if (chinookAppSupportUrl != nil) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] copyItemAtURL: fileUrl toURL: chinookAppSupportUrl
-                                                    error: &error];
-            NSString *path = chinookAppSupportUrl.path;
-            installed = [[NSFileManager defaultManager] fileExistsAtPath:path];
-            if (installed) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MADUpgradeInstalledChinook];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        }
-    }
+    
+    fileURL = [MADInstallOperationSampleDatabase newApplicationBundleSampleDatabaseChinook];
+    databaseURL = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
+    
+    if (databaseURL != nil) goto FINISH;
+    
+    [MADInstallOperationSampleDatabase copyItemAtURL:fileURL toURL:databaseURL];
 
     FINISH:;
     [self finish];
 
+}
+
++ (BOOL)copyItemAtURL:(NSURL *)fromURL toURL:(NSURL *)toURL {
+    BOOL installed;
+    NSError *error = nil;
+    [[NSFileManager defaultManager] copyItemAtURL: fromURL
+                                            toURL: toURL
+                                            error: &error];
+    NSString *path = toURL.path;
+    installed = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    if (installed) {
+        [[NSUserDefaults standardUserDefaults] setBool: YES
+                                                forKey: MADUpgradeInstalledChinook];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    return installed;
 }
 
 + (NSURL *)newApplicationBundleSampleDatabaseChinook {
