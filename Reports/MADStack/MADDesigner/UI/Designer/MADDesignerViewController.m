@@ -37,22 +37,12 @@
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MAD/RptqDocumentObjectLabel.h>
-
 #import <MAD/RptqDocumentObjectLabelDataField.h>
-
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
-
-
-#import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+Extras.h>
-
 #import <MAD/RptqQueryField.h>
-
-#import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
-
 #import <MAD/RptqDocumentSectionRows.h>
-
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADTabBarController.h"
@@ -60,6 +50,7 @@
 
 #import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
+
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
@@ -69,6 +60,7 @@
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
+
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
@@ -76,6 +68,7 @@
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
+
 #import "MADPopoverBackgroundView.h"
 
 #import "MADToolboxPresentationController.h"
@@ -115,6 +108,20 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionView *> MADMutableMapSectionViews;
 typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionLabel *> MADMutableMapSectionLabels;
 
+typedef NSMutableDictionary <NSNumber *, NSNumber *> MADMutableMapNumbersByNumber;
+
+typedef NSMutableArray  <__kindof MADDesignerSectionView *> MADMutableSectionViews;
+typedef NSMutableSet    <__kindof MADDesignerSectionView *> MADMutableSetSectionViews;
+
+typedef NSMutableSet    <__kindof MADDesignerElementView *> MADMutableSetElementViews;
+
+typedef NSMutableArray  <NSLayoutConstraint *>              MADMutableLayoutConstraints;
+typedef NSArray         <NSLayoutConstraint *>              MADLayoutConstraints;
+
+typedef NSMutableArray  <NSManagedObjectID *>               MADMutableManagedObjectIDs;
+typedef NSMutableSet    <NSManagedObjectID *>               MADMutableSetManagedObjectIDs;
+
+
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -137,7 +144,20 @@ static const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 static const CGFloat MTReportDesignerBorderPaddingDetail        =  3.0000f;
 static const CGFloat MTReportDesignerBorderPaddingVertical      =  3.0000f;
 static const CGFloat MTReportDesignerBufferPaddingVertical      =  2.0000f;
-static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
+static const CGFloat MTReportDesignerSectionLabelPaddingRight   =  8.0000f;
+
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
+    return scrollView.contentSize.width * 0.5000f +
+            MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+}
+
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
+    return scrollView.contentSize.height * 0.5000f +
+            MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+}
+
 
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
@@ -160,24 +180,24 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
-    @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerElementView *>                         *visibleElementViews;
-    @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerSectionView *>                         *passthroughContainers;
-    @property (nonatomic, strong) NSMutableSet          <__kindof NSManagedObjectID *>                              *selectedObjectIds;
+    @property (nonatomic, strong) MADMutableSetElementViews *visibleElementViews;
+    @property (nonatomic, strong) MADMutableSetSectionViews *passthroughContainers;
+    @property (nonatomic, strong) MADMutableSetManagedObjectIDs *selectedObjectIds;
 
-    @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
+    @property (nonatomic, strong) MADMutableSectionViews        *sectionViewsArray;
 
-    @property (nonatomic, strong) MADMutableMapSectionViews *sectionViewsDictionary;
-    @property (nonatomic, strong) MADMutableMapSectionLabels *sectionControlViewsDictionary;
+    @property (nonatomic, strong) MADMutableMapSectionViews     *sectionViewsDictionary;
+    @property (nonatomic, strong) MADMutableMapSectionLabels    *sectionControlViewsDictionary;
 
-    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerScrollViewConstraints;
-    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerContentViewConstraints;
-    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintSectionLabelHeightContainer;
-    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintsSectionsSidesBorder;
-    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintsSectionsVerticalBuffer;
+    @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerScrollViewConstraints;
+    @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerContentViewConstraints;
+    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintSectionLabelHeightContainer;
+    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsSidesBorder;
+    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsVerticalBuffer;
 
-    @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof NSLayoutConstraint *>          *layoutConstraintsReportSectionHeight;
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
 
-    @property (nonatomic, strong) NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *>                    *borderAppliedToView;
+    @property (nonatomic, strong) MADMutableMapNumbersByNumber *borderAppliedToView;
 
     @property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
@@ -236,16 +256,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark - Static Helpers
 
-static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
-    return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
-}
-
-static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
-    return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
-}
-
 + (NSString *)MADDesigner {
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
@@ -272,7 +282,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         [self saveWhiteSpace];
         
     } else if ([action.identifier isEqualToString:MTIdentifierSegueEditFieldExit]) {
-        [self tableViewControllerChooseFieldDidFinish: action.sourceViewController withField: [action.sourceViewController queryField]];
+        [self tableViewControllerChooseFieldDidFinish: action.sourceViewController
+                                            withField: [action.sourceViewController queryField]];
         
     } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         [self saveDynamicLabel: action.sourceViewController];
@@ -288,14 +299,19 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self setDisplayActive];
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return action == @selector(unwindToDesigner:);
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
     
     return action == @selector(unwindToDesigner:) ?
-            self : [super viewControllerForUnwindSegueAction: action fromViewController: fromViewController withSender: sender];
+            self : [super viewControllerForUnwindSegueAction: action
+                                          fromViewController: fromViewController
+                                                  withSender: sender];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -306,16 +322,19 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
         self.numberFormatterPercentage = numberFormatter;
         
-        NSMutableSet <__kindof MADDesignerElementView *> *visibleElementViews = [NSMutableSet new];
+        MADMutableSetElementViews *visibleElementViews;
+        visibleElementViews = [[MADMutableSetElementViews alloc] init];
         self.visibleElementViews = visibleElementViews;
 
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
         self.ruler = viewRuler;
         
-        NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *> *borderAppliedToView = [[NSMutableDictionary alloc] init];
+        MADMutableMapNumbersByNumber *borderAppliedToView;
+        borderAppliedToView = [[MADMutableMapNumbersByNumber alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
-        MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
+        MADDesignerStatusLabel *detailDisplay;
+        detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
         
     }
@@ -372,19 +391,23 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     self.hidesStatusBar = false;
     
-    MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+    MADToolboxTransitioningDelegate *transitioningDelegate;
+    transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     transitioningDelegate.popoverPresentationControllerDelegate = self;
     transitioningDelegate.passthroughContainer = self.scroller;
 
-    MADToolboxTransitioningDelegate *settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+    MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
+    settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
 
-    UINavigationController *navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
+    UINavigationController *navigationControllerToolbox;
+    navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
 
-    MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
+    MADToolboxViewController *viewControllerToolbox;
+    viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
     viewControllerToolbox.clearsBackground = [self padLike];
     viewControllerToolbox.document = document;
     viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
@@ -393,7 +416,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     self.navigationControllerToolbox = navigationControllerToolbox;
     self.toolboxTransitioningDelegate = transitioningDelegate;
     
-    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:document.fileURL.lastPathComponent];
+    MADPromptManager *promptManager;
+    NSString *lastPathComponent = document.fileURL.lastPathComponent.copy;
+    promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:lastPathComponent];
     self.promptManager = promptManager;
     
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
@@ -419,32 +444,46 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
-    UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
+    UIGestureRecognizer *tap;
+    tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget: self
+                                                                        action: @selector(handleStrayTouch:)
+                                                                      delegate: self];
     [tap requireGestureRecognizerToFail:tapGestureDoubleTap];
     [self.scroller addGestureRecognizer:tap];
     self.strayTouchGesture = tap;
     
     self.scroller.delegate = self;
     
-    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint newLayoutConstraintView:self.view containerLeft:self.scroller.container];
+    NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
+                       *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
+
+    constraintContentLeft = [NSLayoutConstraint newLayoutConstraintView: self.view
+                                                          containerLeft: self.scroller.container];
+    
+    constraintContentRight = [NSLayoutConstraint newLayoutConstraintView: self.view
+                                                          containerRight: self.scroller.container];
+    
+    constraintContentTop = [NSLayoutConstraint newLayoutConstraintView: self.scroller
+                                                          containerTop: self.scroller.container];
+    constraintScrollerBottom = [NSLayoutConstraint newLayoutConstraintScroller: self.scroller
+                                                                        bottom: self.bottomLayoutGuide];
+    constraintWidth = [NSLayoutConstraint newLayoutConstraintContent: self.scroller.container
+                                                               width: self.view.frame.size.width / self.scroller.zoomScale];
+    
     constraintContentLeft.priority = 999;
-    
-    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint newLayoutConstraintView:self.view containerRight:self.scroller.container];
     constraintContentRight.priority = 999;
-    
-    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint newLayoutConstraintView:self.scroller containerTop:self.scroller.container];
-    NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint newLayoutConstraintScroller:self.scroller bottom:self.bottomLayoutGuide];
-    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint newLayoutConstraintContent: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
-    
+
     self.layoutConstraintContainerWidth = constraintWidth;
     
     
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+    viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
     
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewControllerSectionLayoutSettings];
+    UINavigationController *navigationController;
+    navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
     navigationController.transitioningDelegate = settingsTransitioningDelegate;
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
     
@@ -453,17 +492,24 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     self.settingsTransitioningDelegate = settingsTransitioningDelegate;
     
-    NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
-                                                                                            view: self.topLayoutGuide];
+    viewScrollerTop = [NSLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
+                                                                        view: self.topLayoutGuide];
 
-    NSMutableSet *selectedObjectIds = [NSMutableSet new];
+    MADMutableSetManagedObjectIDs *selectedObjectIds;
+    selectedObjectIds = [[MADMutableSetManagedObjectIDs alloc] init];
     self.selectedObjectIds = selectedObjectIds;
     
-    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom, constraintWidth, viewScrollerTop];
+    NSArray *constraints;
+    constraints = [[NSArray alloc] initWithObjects: constraintContentLeft,
+                                                    constraintContentRight,
+                                                    constraintContentTop,
+                                                    constraintScrollerBottom,
+                                                    constraintWidth,
+                                                    viewScrollerTop, nil];
     [self.view addConstraints:constraints];
     
-    self.scroller.container.backgroundColor = [UIColor clearColor];
-    self.scroller.backgroundColor = [UIColor clearColor];
+    self.scroller.container.backgroundColor =   [UIColor clearColor];
+    self.scroller.backgroundColor =             [UIColor clearColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -486,42 +532,81 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
     
-    NSArray <__kindof NSLayoutConstraint *> *rulerConstraints = [NSLayoutConstraint constraintForRuler: self.ruler designer: self.scroller.container marginTop: MTReportDesignerBorderPaddingVertical heigh: MTReportDesignerRulerHeight];
-    NSArray <__kindof NSLayoutConstraint *> *rulerSideConstraints = [NSLayoutConstraint constraintForRuler: self.ruler designer: self.scroller.container sideMargin: MTReportDesignerBorderPaddingSides];
+    MADLayoutConstraints *rulerConstraints, *rulerSideConstraints;
+    rulerConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
+                                                     designer: self.scroller.container
+                                                    marginTop: MTReportDesignerBorderPaddingVertical
+                                                        heigh: MTReportDesignerRulerHeight];
     
-    NSMutableArray <NSManagedObjectID *> *reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    NSMutableArray <__kindof NSLayoutConstraint *> *scrollerLayoutConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 6];
-
-    NSMutableArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 5];
+    rulerSideConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
+                                                         designer: self.scroller.container
+                                                       sideMargin: MTReportDesignerBorderPaddingSides];
     
-    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 2];
-    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    NSMutableArray <__kindof MADDesignerSectionView *> *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    MADMutableManagedObjectIDs *reportSectionKeyTracker;
+    
+    MADMutableLayoutConstraints *scrollerLayoutConstraints,
+                                *viewDidAppearDesignerContentViewConstraints,
+                                *layoutConstraintsSectionsSidesBorder,
+                                *layoutConstraintSectionLabelHeightContainer,
+                                *layoutConstraintsSectionsVerticalBuffer;
+    
+    MADMutableSectionViews *sectionViewsArray;
+    NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
 
-    NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    MADMutableMapSectionViews *sectionViewsDictionary = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    MADMutableMapSectionLabels *sectionControlViewsDictionary = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+    reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    
+    scrollerLayoutConstraints = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 2 + 6];
+    viewDidAppearDesignerContentViewConstraints = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 5];
+    layoutConstraintsSectionsSidesBorder = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 2 + 2];
+    layoutConstraintSectionLabelHeightContainer = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections];
+    layoutConstraintsSectionsVerticalBuffer = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections];
+    
+    sectionViewsArray = [[MADMutableSectionViews alloc] initWithCapacity:numberOfSections];
+    
+    layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+    
+    MADMutableMapSectionViews *sectionViewsDictionary;
+    MADMutableMapSectionLabels *sectionControlViewsDictionary;
 
-    NSMutableSet <__kindof MADDesignerSectionView *> *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:numberOfSections];
+    sectionViewsDictionary          = [[MADMutableMapSectionViews alloc] initWithCapacity:numberOfSections];
+    sectionControlViewsDictionary   = [[MADMutableMapSectionLabels alloc] initWithCapacity:numberOfSections];
+
+    MADMutableSetSectionViews *passthroughContainers;
+    passthroughContainers = [[MADMutableSetSectionViews alloc] initWithCapacity:numberOfSections];
 
     [layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
     [scrollerLayoutConstraints addObjectsFromArray:rulerConstraints];
     [scrollerLayoutConstraints addObjectsFromArray:rulerSideConstraints];
     
-    CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
+    CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight +
+                                                 MTReportDesignerBorderPaddingVertical;
     
     CGFloat borderWidthThin = [UIView borderWidthThin];
+    NSLayoutConstraint *layoutConstraintViewTop,
+                       *layoutConstraintView,
+                       *layoutConstraintLabelRight,
+                       *layoutConstraintLabelBottom,
+                       *layoutConstraintLabel,
+                       *layoutConstraintViewLeft,
+                       *layoutConstraintViewRight;
+    NSArray *collectionViewConstraints, *sectionViewLabelConstraints;
+
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         @autoreleasepool {
             
-            NSManagedObjectID *reportSectionKey = [reportSection copySectionKey];
+            NSManagedObjectID *reportSectionKey;
+            MADDesignerSectionView *sectionView;
+            MADDesignerSectionLabel *sectionViewLabel;
+            UIGestureRecognizer *tapGestureRecognizer;
+            
+            reportSectionKey = [reportSection copySectionKey];
 
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
             
-            MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection delegate: self];
+            sectionView = [MADDesignerViewController documentSectionView: reportSection
+                                                                delegate: self];
             sectionView.delegate = self;
             sectionView.dataSource = self;
             sectionView.layer.borderWidth = borderWidthThin;
@@ -529,39 +614,72 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             
             ((MTReportDesignerSectionViewLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
             
-            MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
+            sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
             
-            UIGestureRecognizer *tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
+            tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
+                                                                                                    action:@selector(handleToggleSectionControlPanel:)
+                                                                                                  delegate:self];
             
             [self.strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
             
             sectionViewLabel.tag = sectionCounter;
             
-            NSManagedObjectID *lastKey = reportSectionKeyTracker.lastObject;
-            UIView *constraintItem =  sectionCounter == 0 ? self.ruler : sectionViewsDictionary[lastKey];
-            NSManagedObjectID *key = sectionView.objectIdTag;
-            NSLayoutConstraint *lc1a = [NSLayoutConstraint newLayoutConstraintViewTop: constraintItem viewBottom: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            NSLayoutConstraint *lc1b = [NSLayoutConstraint newLayoutConstraintView: sectionView height: reportSection.height.floatValue];
-            NSLayoutConstraint *lc1c = [NSLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
-            NSLayoutConstraint *lc1d = [NSLayoutConstraint newLayoutConstraintLabelBottom:sectionViewLabel container: sectionView padding: MTReportDesignerBufferPaddingVertical];
-            NSLayoutConstraint *lc1e = [NSLayoutConstraint newLayoutConstraintLabel: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
-            NSLayoutConstraint *lc1 = [NSLayoutConstraint newLayoutConstraintViewLeft:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
-            NSLayoutConstraint *lc2 = [NSLayoutConstraint newLayoutConstraintViewRight:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
-            NSArray *collectionViewConstraints = @[lc1, lc2];
-            NSArray *sectionViewLabelConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
+            NSManagedObjectID *key;
+            UIView *constraintItem;
+            
+            key = reportSectionKeyTracker.lastObject;
+            constraintItem = sectionCounter == 0 ?
+                                        self.ruler : sectionViewsDictionary[key];
+            
+            
+            layoutConstraintViewTop = [NSLayoutConstraint newLayoutConstraintViewTop: constraintItem
+                                                                          viewBottom: sectionView
+                                                                             padding: MTReportDesignerBufferPaddingVertical];
+            
+            layoutConstraintView = [NSLayoutConstraint newLayoutConstraintView: sectionView
+                                                                        height: reportSection.height.floatValue];
+            
+            layoutConstraintLabelRight = [NSLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel
+                                                                                 container: sectionView
+                                                                                   padding: MTReportDesignerSectionLabelPaddingRight];
+            
+            layoutConstraintLabelBottom = [NSLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel
+                                                                                   container: sectionView
+                                                                                     padding: MTReportDesignerBufferPaddingVertical];
+            layoutConstraintLabel = [NSLayoutConstraint newLayoutConstraintLabel: sectionViewLabel
+                                                                        toHeight: MTReportDesignerSectionLabelHeight];
+
+            layoutConstraintViewLeft = [NSLayoutConstraint newLayoutConstraintViewLeft:sectionView
+                                                                               content:self.scroller.container
+                                                                               padding:MTReportDesignerBorderPaddingSides];
+
+            layoutConstraintViewRight = [NSLayoutConstraint newLayoutConstraintViewRight:sectionView
+                                                                                 content:self.scroller.container
+                                                                                 padding:MTReportDesignerBorderPaddingSides];
+
+            collectionViewConstraints = [[NSArray alloc] initWithObjects: layoutConstraintViewLeft,
+                                                                          layoutConstraintViewRight, nil];
+
+            sectionViewLabelConstraints = [[NSArray alloc] initWithObjects: layoutConstraintViewTop,
+                                                                            layoutConstraintView,
+                                                                            layoutConstraintLabelRight,
+                                                                            layoutConstraintLabelBottom,
+                                                                            layoutConstraintLabel, nil];
 
             [viewDidAppearDesignerContentViewConstraints addObjectsFromArray:sectionViewLabelConstraints];
             
 
-            [layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
-            [layoutConstraintSectionLabelHeightContainer addObject:lc1e];
+            [layoutConstraintsSectionsVerticalBuffer addObject:layoutConstraintViewTop];
+            [layoutConstraintSectionLabelHeightContainer addObject:layoutConstraintLabel];
             
             [layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
 
             [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
 
-            [layoutConstraintsReportSectionHeight setObject:lc1b forKey:key];
+            [layoutConstraintsReportSectionHeight setObject: layoutConstraintView
+                                                     forKey: sectionView.objectIdTag];
+            
             [sectionViewsDictionary setObject:sectionView forKey:reportSectionKey];
             [sectionControlViewsDictionary setObject:sectionViewLabel forKey:reportSectionKey];
             
@@ -572,7 +690,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             
             [self.scroller.container addSubview:sectionView];
             [self.scroller.container addSubview:sectionViewLabel];
+            
             [passthroughContainers addObject:sectionView];
+            
             sectionView.sectionLabel = sectionViewLabel;
         }
     }
@@ -592,14 +712,16 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container height: sectionHeights];
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container
+                                                                                                         height: sectionHeights];
 
     [scrollerLayoutConstraints addObject:layoutConstraintDesignerContentViewHeight];
 
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
     
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container containerBottom: self.scroller];
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint newLayoutConstraintView: self.scroller.container
+                                                                                             containerBottom: self.scroller];
     
     [scrollerLayoutConstraints addObject:layoutConstraintContentToScollerBottom];
     
@@ -608,7 +730,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self.scroller addConstraints: scrollerLayoutConstraints];
     [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
     
-    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAdd:)];
+    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                      target:self
+                                                                                      action:@selector(actionAdd:)];
     [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItemAdd animated:NO];
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
@@ -676,18 +800,23 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     // FIXME: This is not choosing the correct scroll inset...
     
     if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
-        self.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil &&
+        self.presentedViewController.childViewControllers.count > 0 &&
+        self.toolboxTransitioningDelegate.presentationController != nil &&
         ![self showOnSide]) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
+                                  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
+                                  CGSizeZero.width);
         
     } else if (self.settingsTransitioningDelegate.presentationController.presentedView.superview != nil &&
-               self.presentedViewController.childViewControllers.count > 0 && self.settingsTransitioningDelegate.presentationController != nil &&
+               self.presentedViewController.childViewControllers.count > 0 &&
+               self.settingsTransitioningDelegate.presentationController != nil &&
                ![self showOnSide]) {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                  self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                  CGSizeZero.width,
+                                  self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
+                                  CGSizeZero.width);
         
     } else {
         
@@ -722,7 +851,10 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         
         
         for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
-            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height,
+                                                        CGSizeZero.width,
+                                                        CGSizeZero.height,
+                                                        presentedRect.size.width - MTReportDesignerBorderPaddingSides);
             sectionView.scrollIndicatorInsets = sectionView.contentInset;
         }
         
@@ -910,7 +1042,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         CGFloat pointsize = captionFont.pointSize;
         
         NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
-        [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
+        [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent
+                                                   usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView,
+                                                                NSUInteger idx, BOOL * _Nonnull stop) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 controlView.font = [captionFont fontWithSize:pointsize / scale];
                 controlView.contentScaleFactor = scaleWithScreen;
@@ -931,7 +1065,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)updateDisplayDetailZoomValue {
-    NSNumber *number = @(self.scroller.zoomScale);
+    NSNumber *number = [[NSNumber alloc] initWithDouble: self.scroller.zoomScale];
     NSString *zoomScaleText = [self.numberFormatterPercentage stringFromNumber:number];
     [self.statusLabelZoomScale setText: zoomScaleText];
 }
@@ -1154,11 +1288,15 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark - NSManagedObjectContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
+    
     NSSet *managedObjectsUpdated = notification.userInfo[NSUpdatedObjectsKey];
-    for (NSManagedObject *managedObject in managedObjectsUpdated) {
+
+    NSManagedObject *managedObject;
+    for (managedObject in managedObjectsUpdated) {
         MADDesignerElementView *elementView = [self elementViewForManagedObject:managedObject];
         [elementView updateForManagedObjectContent:managedObject.managedObjectContext];
     }
+    
 }
 
 #pragma mark - Menu Notifications
@@ -1187,7 +1325,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imagePickerController:(UIImagePickerController *)picker
+                didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     // FIXME: Add ability to edit image fields.  84848422
     
@@ -1234,9 +1373,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                         viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
     
     UIViewController *result;
-
-    if (style != UIModalPresentationPopover &&
-        [controller.presentedViewController isKindOfClass:[UINavigationController class]] == NO) {
+    Class navigationClass = [UINavigationController class];
+    id presented = controller.presentedViewController;
+    if (style != UIModalPresentationPopover && [presented isKindOfClass:navigationClass] == NO) {
         
         UIBarButtonItem *cancelButton;
         cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
@@ -1246,21 +1385,28 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                                                                        animated: NO];
         controller.presentedViewController.view.backgroundColor = [UIColor clearColor];
         
-        UINavigationController *navigationController;
-        navigationController = [[UINavigationController alloc] initWithRootViewController: controller.presentedViewController];
-        navigationController.navigationBar.translucent = YES;
-        navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-        navigationController.view.backgroundColor = [UIColor clearColor];
-        result = navigationController;
+        UINavigationController *navigation;
+        navigation = [[UINavigationController alloc] initWithRootViewController: presented];
+        navigation.navigationBar.translucent = YES;
+        navigation.navigationBar.backgroundColor = [UIColor clearColor];
+        navigation.view.backgroundColor = [UIColor clearColor];
+        result = navigation;
         
     } else if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]) {
     
-        if ([((UINavigationController *)controller.presentedViewController).topViewController isKindOfClass:[MADDesignerElementPickerViewController class]]) {
+        if ([((UINavigationController *)controller.presentedViewController).topViewController
+                isKindOfClass:[MADDesignerElementPickerViewController class]]) {
         
-            UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
+            UINavigationController *navigationController;
+            navigationController = (UINavigationController *)controller.presentedViewController;
+
+//???: Test one function, and uses another (topViewController)?
             if (navigationController.navigationItem.leftBarButtonItem == nil) {
-                UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(actionCancel:)];
-                [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
+                UIBarButtonItem *cancel;
+                cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                       target:self
+                                                                       action:@selector(actionCancel:)];
+                [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancel animated:NO];
             }
             
             UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
@@ -1331,12 +1477,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     NSManagedObjectContext *private;
     NSManagedObjectID *elementViewId;
-    
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     elementViewId = cell.objectIdTag.copy;
     private.parentContext = self.document.managedObjectContext;
     
     [private performBlock:^{
+    
         RptqDocumentObject *documentObject;
         RptqDocumentSection *documentObjectInSection;
         MADDesignerSectionView *designerSectionView;
@@ -1417,33 +1563,46 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark MTCollectionViewCellElement Helpers
 
 - (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
+    
     self.aggregateToEditObjectID = objectID.copy;
     self.editAggregate = true;
 
+    MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        MADDesignerViewController *strongself = weakself;
+        if (!strongself) return;
 
-        UIView *viewToEdit = [self viewForObjectID: objectID];
+        UIView *viewToEdit = [strongself viewForObjectID: objectID];
         UINavigationController *navigationController = [UINavigationController aggregateAdd];
         
-        MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
-        aggregateViewController.document = self.document;
-        aggregateViewController.delegate = self;
-        [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
+        MTDocumentObjectNewAggregateViewController *aggregateViewController;
+        aggregateViewController = navigationController.viewControllers.firstObject;
+        aggregateViewController.document = strongself.document;
+        aggregateViewController.delegate = strongself;
+        [aggregateViewController setAggregateObjectToEdit:strongself.aggregateToEdit];
         
-        UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionCancel:)];
+        UIBarButtonItem *dismiss;
+        dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                target: strongself
+                                                                action: @selector(actionCancel:)];
+        
         [aggregateViewController.navigationItem setRightBarButtonItem:dismiss animated:NO];
         [aggregateViewController.navigationItem setLeftBarButtonItem:nil animated:NO];
         
         navigationController.modalPresentationStyle = UIModalPresentationPopover;
         navigationController.preferredContentSize = sizePopoverFonts();
         
-        UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
-        popoverController.delegate = self;
-        popoverController.sourceRect = [viewToEdit convertRect:viewToEdit.bounds toView:self.scroller.container];
-        popoverController.sourceView = self.scroller.container;
+        UIPopoverPresentationController *popoverController;
+        popoverController = navigationController.popoverPresentationController;
+        popoverController.delegate = strongself;
+        popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
+                                                        toView: strongself.scroller.container];
+        
+        popoverController.sourceView = strongself.scroller.container;
         popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-        [self presentViewController:navigationController animated:YES completion:nil];
-        [self setDisplayInactive];
+        [strongself presentViewController:navigationController animated:YES completion:nil];
+        [strongself setDisplayInactive];
 
     }];
     
@@ -1453,23 +1612,31 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                            andBarcodeID:(NSManagedObjectID *)barcodeID {
     
     self.barcodeToEditObjectID = barcodeID.copy;
+    
+    MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        UIView *viewToEdit = [self viewForObjectID:objectID];
+    
+        MADDesignerViewController *strongself = weakself;
+        if (!strongself) return;
+        
+        UIView *viewToEdit = [strongself viewForObjectID:objectID];
 
         MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
-        barcodeViewController.document = self.document;
-        barcodeViewController.delegate = self;
+        barcodeViewController.document = strongself.document;
+        barcodeViewController.delegate = strongself;
         barcodeViewController.preferredContentSize = sizePopoverFonts();
         barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
         barcodeViewController.bartcodeToEditObjectID = barcodeID;
 
-        UIPopoverPresentationController *popoverController = barcodeViewController.popoverPresentationController;
-        popoverController.delegate = self;
-        popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds toView: self.scroller.container];
-        popoverController.sourceView = self.scroller.container;
+        UIPopoverPresentationController *popoverController;
+        popoverController = barcodeViewController.popoverPresentationController;
+        popoverController.delegate = strongself;
+        popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
+                                                        toView: strongself.scroller.container];
+        popoverController.sourceView = strongself.scroller.container;
         popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-        [self presentViewController:barcodeViewController animated:YES completion:nil];
-        [self setDisplayInactive];
+        [strongself presentViewController:barcodeViewController animated:YES completion:nil];
+        [strongself setDisplayInactive];
     }];
     
 }
@@ -1524,13 +1691,17 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
     
     UIAlertController *alert = [UIAlertController newAlertControllerEditLabel:^(UITextField *textField) {
+    
         textField.text = object.isLabel.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
+    
     } completion:^(UIAlertAction *action, NSString *text) {
+    
         NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
         documentObject.isLabel.text = text;
         [managedObjectContext save:nil];
+    
     }];
     
     [self presentViewController:alert animated:YES completion:nil];
@@ -1551,6 +1722,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
     [private performBlock:^{
+    
         RptqDocumentObjectBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
         [barcodeToEdit updateWithBarcode: barcode fieldOne: fieldOne fieldTwo: fieldTwo];
 
@@ -1676,12 +1848,31 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                 }
                 
             }
+            
+            MTCollectionViewCellElement * __weak weakcell = cell;
+            MADDesignerElementView * __weak weakElementView = elementView;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [cell setContentScaleFactor:contextScale];
-                    [cell.contentView setContentScaleFactor:contextScale];
-                    [elementView setContentScaleFactor:contextScale];
-                });
+            
+                MTCollectionViewCellElement * strongcell = weakcell;
+                MADDesignerElementView *strongElementView = weakElementView;
+                
+                if (strongcell) {
+                    MTCollectionViewCellElement * __weak weakcell1 = strongcell;
+                    MADDesignerElementView * __weak weakElementView1 = strongElementView;
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                        MTCollectionViewCellElement *strongcell1 = weakcell1;
+                        if (strongcell1) {
+                            [strongcell1 setContentScaleFactor:contextScale];
+                            [strongcell1.contentView setContentScaleFactor:contextScale];
+                        }
+                        
+                        [weakElementView1 setContentScaleFactor:contextScale];
+                        
+                    });
+
+                }
             });
             break;
         }
@@ -1731,12 +1922,14 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
     id elementView = nil;
+
     for (UIView *view in cell.contentView.subviews) {
         if ([view isKindOfClass:[MADDesignerElementView class]]) {
             elementView = view;
             break;
         }
     }
+    
     NSAssert(elementView != nil, @"We need an element view people.");
     [self.visibleElementViews addObject:elementView];
     [self adjustPassthroughViews];
@@ -1745,8 +1938,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)collectionView: (UICollectionView *)collectionView didEndDisplayingCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    //MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
-    NSSet <__kindof MADDesignerElementView *> *elementViewSet = [self.visibleElementViews objectsPassingTest:^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
+    NSSet <__kindof MADDesignerElementView *> *elementViewSet;
+    
+    elementViewSet = [self.visibleElementViews objectsPassingTest:^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([obj.objectIdTag isEqual:cell.objectIdTag]) {
             *stop = YES;
             return YES;
@@ -1754,12 +1948,18 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             return NO;
         }
     }];
+    
     [self.visibleElementViews minusSet:elementViewSet];
     [self adjustPassthroughViews];
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView
+    didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
+                     forElementOfKind:(NSString *)elementKind
+                          atIndexPath:(NSIndexPath *)indexPath {
+    
+}
 
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
     
@@ -1822,9 +2022,13 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
     [self setDisplayActive];
-    [self insertDocumentObjectWithDefination:
-     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-       MTDocumentObjectDefinationObject : field.objectID}];
+    NSNumber *objTypeKey;
+    NSDictionary *parameters;
+    objTypeKey = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
+    parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            objTypeKey,     MTDocumentObjectDefinationType,
+                            field.objectID, MTDocumentObjectDefinationObject, nil];
+    [self insertDocumentObjectWithDefination: parameters];
     self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -1837,17 +2041,18 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     NSNumber *groupTypeNumber = @(groupType);
     NSNumber *inputTypeNumber = @(inputType);
     NSNumber *objectType = @(MTDocumentObjectTypeAggregate);
-    NSDictionary *documentObject = @{
-                                     MTDocumentObjectDefinationAggregateType : functionTypeNumber,
-                                     MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
-                                     MTDocumentObjectDefinationAggregatePivotType : groupTypeNumber,
-                                     MTDocumentObjectDefinationAggregateObjectId : inputObject,
-                                     MTDocumentObjectDefinationAggregateFunctionInputType : inputTypeNumber
-                                     };
-    NSDictionary *documentObjectDefination = @{
-                                               MTDocumentObjectDefinationType : objectType,
-                                               MTDocumentObjectDefinationObject :  documentObject
-                                               };
+    NSDictionary *documentObject;
+    documentObject = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                     functionTypeNumber,    MTDocumentObjectDefinationAggregateType,
+                                     groupNumber,           MTDocumentObjectDefinationAggregatePivotNumber,
+                                     groupTypeNumber,       MTDocumentObjectDefinationAggregatePivotType,
+                                     inputObject,           MTDocumentObjectDefinationAggregateObjectId,
+                                     inputTypeNumber,       MTDocumentObjectDefinationAggregateFunctionInputType, nil
+                                     ];
+    NSDictionary *documentObjectDefination;
+    documentObjectDefination = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                               objectType, MTDocumentObjectDefinationType,
+                                               documentObject, MTDocumentObjectDefinationObject, nil];
     
     [self insertDocumentObjectWithDefination: documentObjectDefination];
     self.hidesStatusBar = false;
@@ -2173,25 +2378,38 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)saveWhiteSpace {
-    NSNumber *type = @(MTDocumentObjectTypeWhtiespace);
-    NSDictionary *options = @{MTDocumentObjectDefinationType: type};
+    NSNumber *type;
+    NSDictionary *options;
+
+    type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeWhtiespace];
+    options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            type, MTDocumentObjectDefinationType, nil];
+                                            
     [self insertDocumentObjectWithDefination: options];
     [self scrollToDetailSectionView];
 }
 
 - (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {
     
-    MTQueryBuilderChooseFieldViewController *dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
+    MTQueryBuilderChooseFieldViewController *dynamicFieldController;
+    dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
+ 
     RptqQueryField *queryField = [dynamicFieldController queryField];
-    NSDictionary *definations = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-                                  MTDocumentObjectDefinationObject : queryField.objectID};
+
+    NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
+    NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    keyDynamic, MTDocumentObjectDefinationType,
+                                    queryField.objectID, MTDocumentObjectDefinationObject, nil];
+    
     [self insertDocumentObjectWithDefination: definations];
     
     [self scrollToDetailSectionView];
 }
 
 - (void)saveAggregateLabel:(MTDocumentObjectNewAggregateViewController *)viewController {
-    if (self.aggregateToEdit && self.editAggregate) {
+    
+    if (_aggregateToEdit && _editAggregate) {
+        
         if ([viewController fieldObject] != nil) {
             [self.aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
                                                                 inputType: MTAggregateFunctionInputTypeField
@@ -2199,14 +2417,19 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                                                           aggregateObject: viewController.fieldObject
                                                               groupNumber: (NSUInteger)viewController.groupTypeSectionNumber];
         }
+        
     } else {
         if ([viewController fieldObjectId] != nil) {
-            NSNumber *groupNumber = @([viewController groupTypeSectionNumber]);
+        
+            NSNumber *groupNumber;
+            groupNumber = [[NSNumber alloc] initWithInteger:[viewController groupTypeSectionNumber]];
+            
             [self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType
                                                          inputType: MTAggregateFunctionInputTypeField
                                                        inputObject: viewController.fieldObjectId
                                                          groupType: viewController.aggregateGroupByType
                                                        groupNumber: groupNumber];
+            
         }
     }
     [self scrollToDetailSectionView];
@@ -2439,17 +2662,23 @@ END_deselectElementView:;
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *objectId = cell.objectIdTag;
     
-    MADocument *document = self.document;
-    RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+    MADocument *document;
+    RptqDocumentObject *documentObject;
+    MADDesignerSectionView *sectionView;
+    MADSectionLayoutManager *layoutManager;
+    MADSectionLayoutAttributes *itemToRemove;
     
-    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
-    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:objectId];
+    document = _document;
+    documentObject  = [document.managedObjectContext objectWithID:objectId];
+    sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
+    layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
+    itemToRemove = [layoutManager.items objectForKey:objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
         MADocument *maDocument = self.document;
-        [maDocument removeDocumentObjectWithObjectID: objectId managedObjectContext:maDocument.managedObjectContext];
+        [maDocument removeDocumentObjectWithObjectID: objectId
+                                managedObjectContext: maDocument.managedObjectContext];
     
     } animationComplete:^() {
 
@@ -2459,8 +2688,10 @@ END_deselectElementView:;
     } completion:^() {
 
         [self redrawAllElementViewsInCollectionView:sectionView];
-        RptqDocumentObject *documentObjectFinished = [document.managedObjectContext objectWithID:objectId];
-        [RptqDocument removeDocumentObject:documentObjectFinished fromManagedObjectContext:document.managedObjectContext];
+        RptqDocumentObject *documentObjectFinished;
+        documentObjectFinished = [document.managedObjectContext objectWithID:objectId];
+        [RptqDocument removeDocumentObject: documentObjectFinished
+                  fromManagedObjectContext: document.managedObjectContext];
         [document.managedObjectContext save:nil];
 
     }];
@@ -2494,13 +2725,13 @@ END_deselectElementView:;
 - (void)adjustPassthroughViews {
     
     if (self.sectionSettingsVisible) {
-        self.settingsTransitioningDelegate.passthroughContainers = self.passthroughContainers;
-        self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
-        self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
+        self.settingsTransitioningDelegate.passthroughContainers =  self.passthroughContainers;
+        self.settingsTransitioningDelegate.passthroughViews =       [self passthroughViews];
+        self.settingsTransitioningDelegate.passthroughContainer =   self.scroller;
     } else if (self.toolboxVisible) {
-        self.toolboxTransitioningDelegate.passthroughContainers = self.passthroughContainers;
-        self.toolboxTransitioningDelegate.passthroughViews = [self passthroughViews];
-        self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+        self.toolboxTransitioningDelegate.passthroughContainers =   self.passthroughContainers;
+        self.toolboxTransitioningDelegate.passthroughViews =        [self passthroughViews];
+        self.toolboxTransitioningDelegate.passthroughContainer =    self.scroller;
     }
     
 }
@@ -2537,11 +2768,13 @@ END_deselectElementView:;
 
 - (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
     CGPoint translation = [gestureRecognizer translationInView:self.view];
-    gestureRecognizer.view.center = CGPointMake(gestureRecognizer.view.center.x + translation.x, gestureRecognizer.view.center.y + translation.y);
+    gestureRecognizer.view.center = CGPointMake(gestureRecognizer.view.center.x + translation.x,
+                                                gestureRecognizer.view.center.y + translation.y);
     [gestureRecognizer setTranslation:CGPointZero inView:self.view];
 }
 
-- (void)beginPanPiece:(MADManagedObjectView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
+- (void)beginPanPiece: (MADManagedObjectView *)piece transition: (void (^)(void))transition
+           completion: (void (^)(void))completion {
     
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
     
@@ -2560,12 +2793,14 @@ END_deselectElementView:;
     
     NSManagedObjectID *pieceObjectIDTag = piece.objectIdTag;
     
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = doc.managedObjectContext;
     [private performBlockAndWait:^{
         
         RptqDocumentObject *documentObject = [private objectWithID:pieceObjectIDTag];
-        NSManagedObjectID *documentObjectSectionKey = [documentObject.inSectionRow.inSection copySectionKey];
+        NSManagedObjectID *documentObjectSectionKey;
+        documentObjectSectionKey = [documentObject.inSectionRow.inSection copySectionKey];
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
            
@@ -2586,13 +2821,13 @@ END_deselectElementView:;
             
             [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
             
-                MADocument *document = self.document;
-                NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
-                [document removeDocumentObjectWithObjectID: pieceObjectIDTag managedObjectContext:managedObjectContext];
+                MADocument *document = _document;
+                [document removeDocumentObjectWithObjectID: pieceObjectIDTag
+                                      managedObjectContext: document.managedObjectContext];
                 
             } animationComplete:^() {
 
-                    [self.scroller.container invalidateIntrinsicContentSize];
+                    [_scroller.container invalidateIntrinsicContentSize];
                     [self.view setNeedsUpdateConstraints];
 
             } completion:^() {
@@ -2634,7 +2869,7 @@ END_deselectElementView:;
         for (UICollectionView *view in self.scroller.container.subviews) {
             if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                 CGPoint p1 = [self.view convertPoint:gesture.view.frame.origin toView:self.view];
-                CGPoint p2 = [self.scroller.container convertPoint:view.frame.origin toView:self.view];
+                CGPoint p2 = [_scroller.container convertPoint:view.frame.origin toView:self.view];
                 if ((distance = MADDistance(p1, p2)) < minDistance) {
                     sectionView = (MADDesignerSectionView *)view;
                     minDistance = distance;
@@ -2657,7 +2892,8 @@ END_deselectElementView:;
     if (sectionView != nil) {
         
         NSManagedObjectID *sectionViewObjectIdTag = sectionView.objectIdTag;
-        NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        NSManagedObjectContext *private;
+        private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         private.parentContext = self.document.managedObjectContext;
         [private performBlockAndWait:^{
 
@@ -2667,12 +2903,16 @@ END_deselectElementView:;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
-                NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[documentSectionKey];
+                NSLayoutConstraint *layoutConstraint;
+                layoutConstraint = self.layoutConstraintsReportSectionHeight[documentSectionKey];
                 layoutConstraint.constant = documentSectionHeight;
                 [self.view setNeedsUpdateConstraints];
                 
-                MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionViewObjectIdTag];
-                NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count inSection: 0];
+                MADSectionLayoutManager *layoutManager;
+                layoutManager = self.document.sectionLayoutManagers[sectionViewObjectIdTag];
+                NSIndexPath *path;
+                path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
+                                           inSection: 0];
                 [sectionView insertItemAtIndex:path update:^(){
                     
                     MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
@@ -2690,7 +2930,9 @@ END_deselectElementView:;
                     [layoutManager layout];
                     [piece removeFromSuperview];
                     
-                    [documentSectionBlock addDocumentObject: documentObject withDropPoint: locationInSection managedObjectContext:managedObjectContext];
+                    [documentSectionBlock addDocumentObject: documentObject
+                                              withDropPoint: locationInSection
+                                       managedObjectContext: managedObjectContext];
                     NSError * __autoreleasing *error = nil;
                     [managedObjectContext save:error];
                     
@@ -2743,7 +2985,8 @@ END_deselectElementView:;
 
 - (void)relayoutSectionView:(MADDesignerSectionView *)documentSectionView {
     
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
@@ -2752,8 +2995,7 @@ END_deselectElementView:;
 
     [private performBlockAndWait:^{
         RptqDocumentSection *documentSection;
-        documentSection = [RptqDocumentSection documentSectionForObjectID: objectId
-                                                   inManagedObjectContext: private];
+        documentSection = [private objectRegisteredForID:objectId];
         key = [documentSection copySectionKey];
         height = documentSection.height.floatValue;
     }];
@@ -2767,30 +3009,38 @@ END_deselectElementView:;
     [self setHidesStatusBar: NO];
     self.sectionSettingsVisible = false;
     self.toolboxVisible = false;
-    self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+    
+    MADTabBarController *tabBarController = self.tabBarController;
+    tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    [self.tabBarController enableTabBarItems];
+    [tabBarController enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
-    self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+    MADTabBarController *tabBarController = self.tabBarController;
+    tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
-    [self.tabBarController disableTabBarItems];
+    [tabBarController disableTabBarItems];
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
-    @synchronized(self.scroller) {
-        if ([self.scroller respondsToSelector:@selector(setScrollEnabled:)]) {
-            self.scroller.scrollEnabled = enabled;
-            [self.scroller flashScrollIndicators];
-            for (UICollectionView *collectionView in [self.scroller.container subviews]) {
+
+    MADBackgroundScrollView *scroller = _scroller;
+    @synchronized(scroller) {
+        if ([scroller respondsToSelector:@selector(setScrollEnabled:)]) {
+            scroller.scrollEnabled = enabled;
+            [scroller flashScrollIndicators];
+            
+            for (UICollectionView *collectionView in [scroller.container subviews]) {
                 if ([collectionView isKindOfClass: [UICollectionView class]]) {
                     collectionView.scrollEnabled = enabled;
                     [collectionView flashScrollIndicators];
                 }
             }
+            
         }
     }
+
 }
 
 #pragma mark Element View helpers
@@ -2800,7 +3050,8 @@ END_deselectElementView:;
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         
-        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
+        if ([self popoverControllerObjectSelector] != nil)
+            [allpopovers addObject:[self popoverControllerObjectSelector]];
         
         for (UIPopoverController *popoverController in allpopovers) {
             if ([popoverController isPopoverVisible]) {
@@ -2816,7 +3067,8 @@ END_deselectElementView:;
 
 - (NSSet *)elementViews {
     
-    RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+    RptqDocumentSectionEnumerator *sectionEnumerator;
+    sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
@@ -2875,12 +3127,15 @@ END_deselectElementView:;
             RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
-                MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
+                MADDesignerSectionView *documentSectionView;
+                documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
                 
                 for (NSInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                
                     for (NSInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-                        MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
+                        MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
+                                                                          inCollectionView:documentSectionView];
                         if ([self.selectedObjectIds containsObject: [elementView objectIdTag]]) {
                             [results addObject:elementView];
                         }
@@ -2932,12 +3187,12 @@ END_deselectElementView:;
 - (void)displaySectionViewsRemoveBorder {
     
     //Remove border from the section views
-    [self.sectionControlViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
+    [_sectionControlViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
         [view normalView];
     }];
     
     //Remove border from the section views
-    [self.sectionViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
+    [_sectionViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
         view.selected = NO;
     }];
     
@@ -3005,14 +3260,15 @@ END_deselectElementView:;
 #pragma mark Constraints Helpers
 
 - (void)contentViewRemoveAllConstraints {
-    NSArray<__kindof NSLayoutConstraint *> *constraints = self.scroller.container.constraints;
+
+    MADLayoutConstraints *constraints = self.scroller.container.constraints;
     if (constraints.count > 0) {
         [self.scroller.container removeConstraints:constraints];
     }
 }
 
 - (void)scrollerRemoveAllConstraints {
-    NSArray<__kindof NSLayoutConstraint *> *constraints = self.scroller.constraints;
+    MADLayoutConstraints *constraints = self.scroller.constraints;
     if (constraints.count > 0) {
         [self.scroller removeConstraints:constraints];
     }
@@ -3041,17 +3297,22 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (CGSize)designerContentViewSize {
     
-    CGFloat height = (self.sectionViewsArray.count * MTReportDesignerBufferPaddingVertical) + (2 * MTReportDesignerBorderPaddingVertical) + self.ruler.intrinsicContentSize.height;
+    CGFloat height = (self.sectionViewsArray.count * MTReportDesignerBufferPaddingVertical) +
+                        (2 * MTReportDesignerBorderPaddingVertical) +
+                        self.ruler.intrinsicContentSize.height;
+    
     for (UIView *subview in self.sectionViewsArray) {
         height += subview.frame.size.height <= CGSizeZero.height ?
         ceil(subview.intrinsicContentSize.height) :
         [subview frame].size.height;
     }
+    
     return CGSizeMake(self.view.bounds.size.width, height);
 }
 
 - (bool)showOnSide {
-    return self.presentingViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+    return self.presentingViewController.traitCollection.verticalSizeClass ==
+                UIUserInterfaceSizeClassCompact;
 }
 
 - (void)scrollToDetailSectionView {
@@ -3064,7 +3325,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)self.sectionControlViewsDictionary[self.document.activeDocumentModel.hasDetailSection.objectID];
+    return (UIView *)_sectionControlViewsDictionary[_document.activeDocumentModel.hasDetailSection.objectID];
 }
 
 - (void)adjustSettingsLocation {

@@ -39,14 +39,19 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObjectAggregate class])];
+    NSString *entityName = NSStringFromClass([RptqDocumentObjectAggregate class]);
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
                                                                    ascending: NO];
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    
     request.sortDescriptors = sortDescriptors;
-    [request setFetchLimit:1];
+    request.fetchLimit = 1;
+    
     NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSArray *fetchResults;
+    fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentObjectAggregate *lastObject = fetchResults.lastObject;
@@ -204,14 +209,15 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                 aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
                                     groupNumber:(NSUInteger)groupNumber {
     
-    NSNumber *function = [[NSNumber alloc] initWithUnsignedInteger: functionType];
-    self.function = function;
+    id value;
+    value = [[NSNumber alloc] initWithUnsignedInteger: functionType];
+    self.function = value;
     
-    NSNumber *group = [[NSNumber alloc] initWithUnsignedInteger: groupNumber];
-    self.groupNumber = group;
+    value = [[NSNumber alloc] initWithUnsignedInteger: groupNumber];
+    self.groupNumber = value;
     
-    NSNumber *gType = [[NSNumber alloc] initWithUnsignedInteger: groupType];
-    self.groupType = gType;
+    value = [[NSNumber alloc] initWithUnsignedInteger: groupType];
+    self.groupType = value;
     
     switch (inputType) {
         case MTAggregateFunctionInputTypeField: {

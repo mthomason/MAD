@@ -43,17 +43,27 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @interface MADDesignerElementView ()
     <MTElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-    @property (nonatomic, strong) MTElementCanvas *canvasView;
-    @property (nonatomic, strong) MADResizeHandles *resizeHandles;
+    @property (nonatomic, weak)     MTElementCanvas *canvasView;
+    @property (nonatomic, strong)   MADResizeHandles *resizeHandles;
 
-    @property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, weak)     NSManagedObjectContext *managedObjectContext;
 
 @end
 
 @implementation MADDesignerElementView
 
+- (void)dealloc {
+    [_canvasView removeFromSuperview];
+    if (_resizeHandles) {
+        UIView *view;
+        for (view in _resizeHandles.resizeHandles) {
+            [view removeFromSuperview];
+        }
+    }
+}
+
 + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
-                                     tapGestureDelegate:(id<UIGestureRecognizerDelegate>)tapGestureDelegate
+                                     tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                             tapSelector:(SEL)selector {
 
     id elementView = [[self alloc] initWithDocumentObject: documentObject];
@@ -82,12 +92,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     return YES;
 }
 
-- (void)dealloc {
-    for (UIView *view in _resizeHandles.resizeHandles) {
-        [view removeFromSuperview];
-    }
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self.resizeHandles positionAroundRect:self.frame];
@@ -106,17 +110,17 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    [self.canvasView setContentScaleFactor:contentScaleFactor];
+    [_canvasView setContentScaleFactor:contentScaleFactor];
     [super setContentScaleFactor:contentScaleFactor];
 }
 
 - (void)setNeedsDisplay {
-    [self.canvasView  setNeedsDisplay];
+    [_canvasView  setNeedsDisplay];
     [super setNeedsDisplay];
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
-    self.canvasView.transform = transform;
+    _canvasView.transform = transform;
     [super setTransform:transform];
 }
 
@@ -132,7 +136,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     
     if (self = [self initWithFrame: MADRectOfSize(documentObject.size)]) {
         
-        MTElementCanvas *canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(documentObject.size)];
+        MTElementCanvas *canvasView;
+        canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(documentObject.size)];
         canvasView.autoresizingMask = MADViewAutoresizingFlexable();
         canvasView.backgroundColor = [UIColor clearColor];
         canvasView.canvasDelegate = self;

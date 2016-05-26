@@ -24,12 +24,17 @@
                          sideMargin:(CGFloat)sideMargin;
 
     + (instancetype)newLayoutConstraintViewScrollerTop:(id)item view:(id)item;
-    + (instancetype)newLayoutConstraintViewLeft:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintViewRight:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;
+    + (instancetype)newLayoutConstraintViewLeft:(UIView *)section content:(UIView *)content
+                                        padding:(CGFloat)padding;
+    + (instancetype)newLayoutConstraintViewRight:(UIView *)section content:(UIView *)content
+                                         padding:(CGFloat)padding;
     + (instancetype)newLayoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height;
-    + (instancetype)newLayoutConstraintLabelBottom:(UIView *)label container:(UIView *)section padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintLabelRight:(UIView *)label container:(UIView *)section padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintViewTop:(UIView *)item viewBottom:(UIView *)section padding:(CGFloat)padding;
+    + (instancetype)newLayoutConstraintLabelBottom:(UIView *)label container:(UIView *)section
+                                           padding:(CGFloat)padding;
+    + (instancetype)newLayoutConstraintLabelRight:(UIView *)label container:(UIView *)section
+                                          padding:(CGFloat)padding;
+    + (instancetype)newLayoutConstraintViewTop:(UIView *)item viewBottom:(UIView *)section
+                                       padding:(CGFloat)padding;
     + (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIScrollView *)scroller;
     + (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height;
     + (instancetype)newLayoutConstraintViewBottom:(id)item container:(id)toItem;

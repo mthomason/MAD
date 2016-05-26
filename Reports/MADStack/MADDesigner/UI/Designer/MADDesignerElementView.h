@@ -23,22 +23,24 @@
 
 @class RptqDocumentObject;
 
+typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
+
 @interface MADDesignerElementView : MADManagedObjectView
     <UIGestureRecognizerDelegate>
 
-    @property (assign, getter=isWobbling) bool displayWobbling;
-    @property (assign) bool displayHighlighted;
+    @property (nonatomic, readwrite, assign) bool displayHighlighted;
+    @property (nonatomic, readwrite, assign, getter=isWobbling) bool displayWobbling;
+    @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
 
-    @property (nonatomic, strong) NSAttributedString *displayStringAttributed;
-    @property (nonatomic, strong) UIImage *displayImage;
-    @property (nonatomic, strong) MTBarcode *displayBarcode;
+    @property (nonatomic, readwrite, strong) NSAttributedString *displayStringAttributed;
+    @property (nonatomic, readwrite, strong) UIImage *displayImage;
+    @property (nonatomic, readwrite, strong) MTBarcode *displayBarcode;
 
-    @property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
 
     - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
 
     + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
-                                         tapGestureDelegate:(id<UIGestureRecognizerDelegate>)tapGestureDelegate
+                                         tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                                 tapSelector:(SEL)selector;
 
     - (void)setWobbleRunning:(BOOL)running;
