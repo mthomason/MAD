@@ -341,7 +341,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
              unique:NO];
 }
 
-- (void)initalizeGroupKeys {
+- (void)initializeGroupKeys {
     NSArray * __unsafe_unretained sortDescriptors = self.sortDescriptors;
     NSArray * __weak columnKeys = self.columnKeys;
 
@@ -406,7 +406,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     self.rowCounter++;
     if (self.groupKeys == nil) {
         [self.groupKeys removeAllObjects];
-        [self initalizeGroupKeys];
+        [self initializeGroupKeys];
     }
     
     
@@ -722,7 +722,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
-    [self initalizeGroupKeys];
+    [self initializeGroupKeys];
     NSMutableArray * whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
     NSUInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
@@ -741,7 +741,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 // FIXME: Return error handler... remove credentals
 - (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
     
-    [self initalizeGroupKeys];
+    [self initializeGroupKeys];
 
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName];
@@ -928,7 +928,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
     [self.groupKeys removeAllObjects];
-    [self initalizeGroupKeys];
+    [self initializeGroupKeys];
     
     NSEnumerator *enumerator;
     NSArray *columnKeys = [self columnKeysForSortDescriptors];

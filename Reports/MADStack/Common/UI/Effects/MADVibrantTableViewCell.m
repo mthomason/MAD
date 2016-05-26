@@ -16,7 +16,7 @@
 @implementation MADVibrantTableViewCell
 
 - (void)awakeFromNib {
-    [self initalize];
+    [self initialize];
     [super awakeFromNib];
 }
 
@@ -28,9 +28,9 @@
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     self.updatingConstraints = NO;
-    [super initalize];
+    [super initialize];
 }
 
 

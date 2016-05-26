@@ -48,7 +48,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
     @property(atomic, assign) BOOL purchasingProduct;
 
     @property(copy) MTBlockCompletion    purchaseProductWithIdentifierCompletion;
-    @property(copy) MTBlockCompletion    initalizeProductsCompletion;
+    @property(copy) MTBlockCompletion    initializeProductsCompletion;
     @property(copy) MTBlockCompletion    restoringPurchasesCompletion;
 
     @property(nonatomic, strong) SKProduct *purchasingProductObject;
@@ -101,10 +101,10 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
     return self;
 }
 
-- (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
-    if ([self initalizeProductsCompletion] == nil && self.products.count == 0) {
+- (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
+    if ([self initializeProductsCompletion] == nil && self.products.count == 0) {
         
-        self.initalizeProductsCompletion = [completion copy];
+        self.initializeProductsCompletion = [completion copy];
         self.productIdentifiers = productIdentifiers;
         
         NSSet *productIdSet = [NSSet setWithArray:self.productIdentifiers];
@@ -169,14 +169,14 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 #pragma mark - SKRequestDelegate Protocol
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    if ([self initalizeProductsCompletion]) {
-        [self initalizeProductsCompletion](NO, error);
+    if ([self initializeProductsCompletion]) {
+        [self initializeProductsCompletion](NO, error);
     }
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
-    if ([self initalizeProductsCompletion]) {
-        [self initalizeProductsCompletion](YES, nil);
+    if ([self initializeProductsCompletion]) {
+        [self initializeProductsCompletion](YES, nil);
     }
 }
 

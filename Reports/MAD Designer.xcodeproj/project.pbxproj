@@ -1075,6 +1075,7 @@
 		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
 		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
 		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
+		4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */; };
 		4CF2BCB51CE9CAF400FB3FF3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744F201CE9C06700243830 /* MADExplorer.framework */; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
@@ -2448,6 +2449,8 @@
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocuments20@2x.png"; path = "Reports/UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentsAlt20.png; path = Reports/UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentsAlt20@2x.png"; path = "Reports/UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
+		4CEFDD181CF782C70092C148 /* NSUserDefaults+MADDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+MADDesigner.h"; sourceTree = "<group>"; };
+		4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+MADDesigner.m"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectCollectionView.m; sourceTree = "<group>"; };
 		4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectCollectionView.h; sourceTree = "<group>"; };
@@ -4030,6 +4033,8 @@
 		4C59BDC31C9AAA4E0031BC6C /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				4CEFDD181CF782C70092C148 /* NSUserDefaults+MADDesigner.h */,
+				4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */,
 				4C59BDB11C9A8D1A0031BC6C /* NSOperation+Advanced.h */,
 				4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */,
 				4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */,
@@ -6441,6 +6446,7 @@
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
 				4CFEE8121BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
+				4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */,
 				4C40204C1BAE92F200BAE5FC /* UIButton+FollowTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,
 				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,

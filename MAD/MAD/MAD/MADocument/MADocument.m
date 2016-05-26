@@ -259,7 +259,7 @@ void madwarn(char *err,  const char*err2) { }
         _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
         
         
-        [self initalizeMainDataTable];
+        [self initializeMainDataTable];
         
         id documentState = [[MADocumentState alloc] init];
         self.documentStatus = documentState;
@@ -1275,13 +1275,13 @@ READ_END:;
         self.paper = paper;
         
         if (self.database == nil) {
-            [self initalizeMainDatabase:document];
+            [self initializeMainDatabase:document];
         }
         
         if (self.reportFormatter == nil) {
-            [self initalizeMainQuery:document];
-            [self initalizeSectionLayoutManagers:document];
-            [self initalizeReportFormatter];
+            [self initializeMainQuery:document];
+            [self initializeSectionLayoutManagers:document];
+            [self initializeReportFormatter];
         }
 
     } else {
@@ -1290,7 +1290,7 @@ READ_END:;
     return document;
 }
 
-- (void)initalizeSectionLayoutManagers:(RptqDocument *)document {
+- (void)initializeSectionLayoutManagers:(RptqDocument *)document {
     NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
     RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
@@ -1418,7 +1418,7 @@ READ_END:;
 
 }
 
-- (void)initalizeMainQuery:(RptqDocument *)document {
+- (void)initializeMainQuery:(RptqDocument *)document {
     RptqDatabase *database = [document defaultDatabase];
     if (database) {
     
@@ -1438,7 +1438,7 @@ READ_END:;
     }
 }
 
-- (void)initalizeMainDataTable {
+- (void)initializeMainDataTable {
 
     NSString *filename = self.filename;
     MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
@@ -1451,18 +1451,18 @@ READ_END:;
     self.mainDataTable = datatable;
 }
 
-- (void)initalizeReportFormatter {
+- (void)initializeReportFormatter {
     MTReportFormatter *reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
                                                                              options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;
-    [reportFormatter initalize];
+    [reportFormatter initialize];
 
     self.reportFormatter = reportFormatter;
 }
 
-- (void)initalizeMainDatabase:(RptqDocument *)document {
+- (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
@@ -1562,7 +1562,7 @@ READ_END:;
 - (NSArray *)readCurrentSortDescriptors {
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     if (self.database == nil) {
-        [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
+        [self initializeMainDatabase:document];        // FIXME: I doubt this ever runs.
     }
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.database];
 }

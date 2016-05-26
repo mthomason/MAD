@@ -41,6 +41,8 @@
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
 
+#import <QuickLook/QLPreviewController.h>
+
 static NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
@@ -121,6 +123,54 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [_batchRemoves removeAllIndexes];
     _subtitleNumberFormatter = nil;
     [self removeObservers];
+}
+
++ (void)initialize {
+    if (self == [MADOpenFileViewController self]) {
+        
+        UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
+        
+        
+        UITabBarItem *tabBarItemAppearance =                [UITabBarItem appearance];
+        UIBarButtonItem *barButtonItem =                    [UIBarButtonItem appearance];
+        UINavigationBar *navigationBarAppearance =          [UINavigationBar appearance];
+        
+        UINavigationBar *navigationBarQLPreviewAppearance = [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil];
+        UINavigationBar *navigationBarViewController =      [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil];
+        UINavigationBar *navigationBarNavigationBar =       [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
+        UIBarButtonItem *barButtonItemToolbar =             [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil];
+        UISegmentedControl *segmentedControl =              [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil];
+        
+        
+        navigationBarQLPreviewAppearance.barTintColor   = madColor4;
+        
+        UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
+        navigationBarViewController.tintColor           = whiteColor;
+        navigationBarNavigationBar.tintColor            = whiteColor;
+        barButtonItemToolbar.tintColor                  = whiteColor;
+        barButtonItem.tintColor                         = whiteColor;
+        segmentedControl.tintColor                      = whiteColor;
+        
+        id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                  whiteColor, NSForegroundColorAttributeName, nil];
+        [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
+                                            forState: UIControlStateNormal];
+        navigationBarAppearance.titleTextAttributes = titleTextAttributes;
+        
+        UIColor *redColor = [MADColorEverydayApps newColorRed];
+        navigationBarQLPreviewAppearance.tintColor = redColor;
+                UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
+        UILabel *labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
+        labelInTableCell.highlightedTextColor       = orangeColor;
+        
+        UILabel *labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+        labelInCollectionCell.highlightedTextColor  = orangeColor;
+        
+        UIImageView *imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+        imageInCollectionViewCell.tintColor         = orangeColor;
+
+        
+    }
 }
 
 #pragma mark - UITextFieldDelegate

@@ -140,7 +140,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         reportFormatter.dataDelegate = weakdoc;
         reportFormatter.datasource = weakdoc;
         reportFormatter.overrideIdentifier = @"madpreview";
-        [reportFormatter initalize];
+        [reportFormatter initialize];
         reportFormatter.didRefresh = true;
         reportFormatter.layoutSize = letterRect.size;
         

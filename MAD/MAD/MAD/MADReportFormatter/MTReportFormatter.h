@@ -70,7 +70,7 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
                                          options: (MTReportFormatterOptions)options;
 
-    - (void)initalize;
+    - (void)initialize;
     
     - (void)formatForSize:(CGSize)printableSize;
     - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;

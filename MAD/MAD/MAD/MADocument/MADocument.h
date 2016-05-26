@@ -101,9 +101,9 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (void)regenThumbnail;
 
-    - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
-    - (void)initalizeMainDataTable;
-    - (void)initalizeMainQuery:(RptqDocument *)document;
+    - (void)initializeSectionLayoutManagers:(RptqDocument *)document;
+    - (void)initializeMainDataTable;
+    - (void)initializeMainQuery:(RptqDocument *)document;
 
     - (void)prepareForQuery;
 

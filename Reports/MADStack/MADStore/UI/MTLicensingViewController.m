@@ -176,7 +176,7 @@
         MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
             [weakself initalizationComplete:success error:error];
         };
-        [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIds
+        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: productIds
                                                                    completion: initalizationComplete];
     }
 }

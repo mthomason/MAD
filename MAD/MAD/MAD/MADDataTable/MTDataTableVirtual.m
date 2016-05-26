@@ -67,7 +67,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
@@ -97,13 +97,13 @@
     self = [super initWithId:objectId];
     if (self) {
         
-        [self initalize];
+        [self initialize];
         
     }
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
     [self setSortIndex:sortIndex];
 }

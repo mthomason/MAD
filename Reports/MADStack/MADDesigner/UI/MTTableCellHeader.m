@@ -26,7 +26,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
@@ -34,7 +34,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
@@ -42,12 +42,12 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
     UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
     UIColor *textColor = [MADColorEverydayApps newColorWhite];

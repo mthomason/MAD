@@ -21,19 +21,19 @@ static inline CGRect LabelRect(CGRect bounds) {
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     
     UILabel *label = [[UILabel alloc] initWithFrame:LabelRect(self.bounds)];
     label.textAlignment = NSTextAlignmentCenter;

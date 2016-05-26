@@ -84,7 +84,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         UIBarButtonItem *barButtonItem = [UIBarButtonItem ActivityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 
-        [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
+        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
             if (!success && error) {
                 UIAlertController *alert = [UIAlertController newAlertControllerError:error];
                 [self presentViewController:alert animated:YES completion:NULL];

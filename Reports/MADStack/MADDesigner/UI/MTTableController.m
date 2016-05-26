@@ -85,7 +85,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self initalize];
+    [self initialize];
     self.collectionView.backgroundColor = [MADColorEverydayApps newColorBlue];
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.alwaysBounceVertical = YES;
@@ -248,7 +248,7 @@
 
 }
 
-- (void)initalize {
+- (void)initialize {
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 }

@@ -19,7 +19,7 @@
     @property (atomic, assign) BOOL updatingConstraints;
 
     - (void)updateConstraints;
-    - (void)initalize;
+    - (void)initialize;
 
 @end
 

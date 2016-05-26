@@ -38,7 +38,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[super allocWithZone:NULL] init];
-        [sharedSingleton initalizeRowInterval];
+        [sharedSingleton initializeRowInterval];
     });
 }
 
@@ -54,7 +54,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
     return self;
 }
 
-- (void)initalizeRowInterval {
+- (void)initializeRowInterval {
     [self setPageInterval:PageIntervalInital];
 }
 
@@ -68,7 +68,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
 
 - (void)reportFormatter:(MTReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
     if (page % self.pageInterval == 0) {
-        if (page == 0) [self initalizeRowInterval];
+        if (page == 0) [self initializeRowInterval];
         NSDictionary *parameters = [self parametersWithNumberOfPages:page];
         NSNotification *notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName object:reportFormatter userInfo:parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];

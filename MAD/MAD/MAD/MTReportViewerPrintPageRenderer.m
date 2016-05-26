@@ -142,7 +142,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     reportFormatter.dataDelegate = document;
     reportFormatter.datasource = document;
     reportFormatter.cachedDelegate = document;
-    [reportFormatter initalize];
+    [reportFormatter initialize];
     
     id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
                                                                                 dataTable: document.mainDataTable];

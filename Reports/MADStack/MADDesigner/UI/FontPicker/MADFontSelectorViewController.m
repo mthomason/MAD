@@ -31,26 +31,26 @@
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     if (self = [super initWithStyle:style]) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
 -  (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self initalize];
+        [self initialize];
     }
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     MADFonts *fonts = [[MADFonts alloc] init];
     self.madFonts = fonts;
 }

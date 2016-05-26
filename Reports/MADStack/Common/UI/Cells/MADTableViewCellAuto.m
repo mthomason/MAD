@@ -21,7 +21,7 @@
 
 - (void)awakeFromNib {
     self.accessoryType = UITableViewCellAccessoryNone;
-    [self initalize];
+    [self initialize];
     [super awakeFromNib];
 }
 
@@ -79,7 +79,7 @@
     
 }
 
-- (void)initalize {
+- (void)initialize {
     self.initalSetupComplete = NO;
     self.updatingConstraints = NO;
 }

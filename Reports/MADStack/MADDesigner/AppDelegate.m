@@ -16,6 +16,7 @@
 #import <Foundation/NSString.h>
 
 #import <MAD/MADConstants.h>
+#import "NSUserDefaults+MADDesigner.h"
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
@@ -52,7 +53,7 @@ static NSString * const MADIDUser                                          = @"M
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 
 #if MAD_DESIGNER
-NSString *s = @"";
+    NSString *s = @"";
 #endif
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
@@ -69,7 +70,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
     @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
-    @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 
     @property (nonatomic, strong, readwrite) MADOperationQueue *operationQueueBackground;
 
@@ -130,12 +130,14 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 - (NSString *)versionNumber {
-    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                                                             kCFBundleVersionKey);
     return version;
 }
 
 - (NSString *)revisionNumber {
-    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), MADKeyRevision);
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                                                             MADKeyRevision);
     return version;
 }
 
@@ -160,11 +162,13 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                            willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                            didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 /*
     srand((unsigned)time(NULL));
     char *cr;
@@ -214,16 +218,17 @@ static inline UIUserNotificationType MADUserNotificationType() {
     NSLog(@"%llu", UINT64_MAX);
 
 */
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-    
-    NSDictionary *defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                            @NO, MADUpgradeInstalledChinook,
-                                            @NO, MADUpgradeInstalledSamples,
-                                            @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+    NSUserDefaults *defaults;
+    NSDictionary *defaultsToRegister;
+
+    defaults = [NSUserDefaults newUserDefaultsMADDesigner];
+    defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    @NO, MADUpgradeInstalledChinook,
+                                    @NO, MADUpgradeInstalledSamples,
+                                    @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
     
     [defaults registerDefaults:defaultsToRegister];
-    self.applicationUserDefaults = defaults;
-    
+
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
                                                             categories: nil];
@@ -239,8 +244,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
                                              selector: @selector(handleNotificationUbiquityIdentityDidChange:)
                                                  name: NSUbiquityIdentityDidChangeNotification
                                                object: nil];
-    
-    [self initalizeAppearance];
     
     MADOperationQueue *operationQueueBackground;
     operationQueueBackground = [[MADOperationQueue alloc] init];
@@ -286,8 +289,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [MTVerificationController sharedInstance];
-        [MADQueryViewController deleteCoreDataCache];
+        @autoreleasepool {
+            [MTVerificationController sharedInstance];
+            [MADQueryViewController deleteCoreDataCache];
+        }
     });
     
 }
@@ -305,17 +310,20 @@ static inline UIUserNotificationType MADUserNotificationType() {
     //[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 /*
     NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
     NSError *error = nil;
     
-    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url toURL:destination error:&error];
+    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url
+                                                           toURL:destination error:&error];
     
     if (success) {
         
-        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [UIAlertController newAlertControllerError:error];
+        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] :
+                                             [UIAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
@@ -363,61 +371,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
         [[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
 }
 
-- (void)initalizeAppearance {
-
-    //Make tab bar buttons white
-    UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
-    
-
-    UITabBarItem *tabBarItemAppearance =                [UITabBarItem appearance];
-    UIBarButtonItem *barButtonItem =                    [UIBarButtonItem appearance];
-    UINavigationBar *navigationBarAppearance =          [UINavigationBar appearance];
-    
-    UINavigationBar *navigationBarQLPreviewAppearance = [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil];
-    UINavigationBar *navigationBarViewController =      [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil];
-    UINavigationBar *navigationBarNavigationBar =       [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
-    UIBarButtonItem *barButtonItemToolbar =             [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil];
-    UISegmentedControl *segmentedControl =              [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil];
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [MADColorEverydayApps newColorBlue];
-    #endif
-    
-
-    navigationBarQLPreviewAppearance.barTintColor   = madColor4;
-    
-    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-    navigationBarViewController.tintColor           = whiteColor;
-    navigationBarNavigationBar.tintColor            = whiteColor;
-    barButtonItemToolbar.tintColor                  = whiteColor;
-    barButtonItem.tintColor                         = whiteColor;
-    segmentedControl.tintColor                      = whiteColor;
-
-    id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                    whiteColor, NSForegroundColorAttributeName, nil];
-    [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
-                                        forState: UIControlStateNormal];
-    navigationBarAppearance.titleTextAttributes = titleTextAttributes;
-
-    UIColor *redColor = [MADColorEverydayApps newColorRed];
-    navigationBarQLPreviewAppearance.tintColor = redColor;
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor = whiteColor;
-    #endif
-    
-    UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-    UILabel *labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
-    labelInTableCell.highlightedTextColor       = orangeColor;
-
-    UILabel *labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
-    labelInCollectionCell.highlightedTextColor  = orangeColor;
-    
-    UIImageView *imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
-    imageInCollectionViewCell.tintColor         = orangeColor;
-    
-}
-
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -426,7 +379,8 @@ static inline UIUserNotificationType MADUserNotificationType() {
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
         [navController popToRootViewControllerAnimated:YES];
         
-        UIAlertController *signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+        UIAlertController *signedOutController;
+        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
             [self.openFileViewController getUserCloudPrefs];
         }];
 
@@ -443,17 +397,20 @@ static inline UIUserNotificationType MADUserNotificationType() {
 #pragma mark - Convenience
 
 - (UIViewController *)openFileViewController {
-    UIViewController * viewController = ((UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController).topViewController;
-
+    UIViewController *viewController;
+    viewController = ((UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController).topViewController;
     return viewController;
 }
 
 - (BOOL)isSampleInstalled {
-    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
+    BOOL result = [userDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+    return result;
 }
 
 - (void)installedSample {
-    [self.applicationUserDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
+    [userDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
 }
 
 - (NSString *)bundleDisplayName {
@@ -462,12 +419,17 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 
 - (BOOL)isFirstLaunch {
-    BOOL firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
+    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
+    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
     if (firstLaunch) {
         dispatch_async(self.appDelegateQueueSerial, ^{
-            NSUUID *uuid = [NSUUID UUID];
-            [self.applicationUserDefaults setObject:uuid.UUIDString forKey:MADIDUser];
-            [self.applicationUserDefaults synchronize];
+            @autoreleasepool {
+                NSUserDefaults *userDefaultsBackground;
+                NSUUID *uuid = [NSUUID UUID];
+                userDefaultsBackground = [NSUserDefaults newUserDefaultsMADDesigner];
+                [userDefaultsBackground setObject:uuid.UUIDString forKey:MADIDUser];
+                [userDefaultsBackground synchronize];
+            }
         });
     }
     return firstLaunch;

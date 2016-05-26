@@ -37,7 +37,7 @@ static MADNotificationProgress *sharedSingleton = nil;
         sharedSingleton = [[super allocWithZone:NULL] init];
         NSDate *lastUpdate = [NSDate date].copy;
         sharedSingleton.lastUpdate = lastUpdate;
-        [sharedSingleton initalizeProgressNotification];
+        [sharedSingleton initializeProgressNotification];
     });
 }
 
@@ -53,7 +53,7 @@ static MADNotificationProgress *sharedSingleton = nil;
     return self;
 }
 
-- (void)initalizeProgressNotification { }
+- (void)initializeProgressNotification { }
 
 - (void)updateProgressOfObject:(id)object withMessage:(NSString *)message progress:(float)progress {
     if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {

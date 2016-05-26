@@ -31,7 +31,7 @@
     + (UIBlurEffectStyle)blurEffectStyle;
 
     - (void)updateConstraints;
-    - (void)initalize;
+    - (void)initialize;
 
 @end
 

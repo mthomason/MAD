@@ -37,26 +37,26 @@ typedef struct _ColumnWidth {
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self initalizeWithColumnCount:0 andRowCount:0];
+        [self initializeWithColumnCount:0 andRowCount:0];
     }
     return self;
 }
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self initalizeWithColumnCount:0 andRowCount:0];
+        [self initializeWithColumnCount:0 andRowCount:0];
     }
     return self;
 }
 
 - (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     if (self = [super init]) {
-        [self initalizeWithColumnCount:columnCount andRowCount:rowCount];
+        [self initializeWithColumnCount:columnCount andRowCount:rowCount];
     }
     return self;
 }
 
-- (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
+- (void)initializeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width,
                                                                  CGSizeZero.height,
@@ -239,7 +239,7 @@ typedef struct _ColumnWidth {
 
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     if (columnCount != self.columnWidth.count) {
-        [self initalizeWithColumnCount:columnCount andRowCount:rowCount];
+        [self initializeWithColumnCount:columnCount andRowCount:rowCount];
     }
     [self invalidateLayout];
 }

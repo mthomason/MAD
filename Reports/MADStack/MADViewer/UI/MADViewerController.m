@@ -231,17 +231,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Initalize
 
 - (instancetype)init {
-    if (self = [super init]) { [self initalize]; }
+    if (self = [super init]) { [self initialize]; }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { [self initalize]; }
+    if (self = [super initWithCoder:aDecoder]) { [self initialize]; }
     return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) { [self initalize]; }
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) { [self initialize]; }
     return self;
 }
 
@@ -251,13 +251,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     if (self = [super initWithTransitionStyle: style navigationOrientation: orientation
                                       options: options]) {
-        [self initalize];
+        [self initialize];
     }
 
     return self;
 }
 
-- (void)initalize {
+- (void)initialize {
     
     self.activityExporting = false;
     self.didRefreshBeforeReaload = false;
@@ -346,7 +346,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     RptqDocument *activeDocumentModel = [document activeDocumentModel];
 
-    [document initalizeMainQuery:activeDocumentModel];
+    [document initializeMainQuery:activeDocumentModel];
     [document activeDocumentModel];
     [document prepareForQuery];
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];

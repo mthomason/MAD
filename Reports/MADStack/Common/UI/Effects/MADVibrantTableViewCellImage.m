@@ -17,15 +17,15 @@
 @implementation MADVibrantTableViewCellImage
 
 - (void)awakeFromNib {
-    [self initalize];
+    [self initialize];
     [self layoutIfNeeded];
     [super awakeFromNib];
 }
 
-- (void)initalize {
+- (void)initialize {
     self.updatingConstraints = NO;
     self.initalSetupImageComplete = NO;
-    [super initalize];
+    [super initialize];
 }
 
 

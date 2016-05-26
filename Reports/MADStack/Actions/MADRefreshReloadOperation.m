@@ -70,19 +70,19 @@
 - (void)addAllOperations {
 
     MADocument *document = _document;
-    MADRefreshOperationInitalizeMainDataTable *initalizeMainDataTable = [[MADRefreshOperationInitalizeMainDataTable alloc] initWithDocument:document];
-    [initalizeMainDataTable addDependency:self.getCredentials];
+    MADRefreshOperationInitalizeMainDataTable *initializeMainDataTable = [[MADRefreshOperationInitalizeMainDataTable alloc] initWithDocument:document];
+    [initializeMainDataTable addDependency:self.getCredentials];
     
-    MADRefreshOperationInitalize *initalize = [[MADRefreshOperationInitalize alloc] initWithDocument:document];
-    [initalize addDependency: initalizeMainDataTable];
-    [initalize addDependency: self.getCredentials];
+    MADRefreshOperationInitalize *initialize = [[MADRefreshOperationInitalize alloc] initWithDocument:document];
+    [initialize addDependency: initializeMainDataTable];
+    [initialize addDependency: self.getCredentials];
     
     MADRefreshOperation *refresh = [[MADRefreshOperation alloc] initWithDocument:document];
-    [refresh addDependency: initalizeMainDataTable];
+    [refresh addDependency: initializeMainDataTable];
     [refresh addDependency: self.getCredentials];
-    [refresh addDependency: initalize];
+    [refresh addDependency: initialize];
     
-    NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: self.getCredentials, initalizeMainDataTable, initalize, refresh, nil];
+    NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: self.getCredentials, initializeMainDataTable, initialize, refresh, nil];
         
     MADRefreshReloadOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{

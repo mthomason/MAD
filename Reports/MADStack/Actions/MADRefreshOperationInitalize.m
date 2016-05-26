@@ -138,7 +138,7 @@
         formatter.dataDelegate = document;
         formatter.datasource = document;
         formatter.cachedDelegate = document;
-        [formatter initalize];
+        [formatter initialize];
 
         document.reportFormatter = formatter;
         

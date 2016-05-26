@@ -77,14 +77,14 @@ static NSString * const StringEmpty = @"";
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self initalizeWithObjectId:0 fromCache:NO];
+        [self initializeWithObjectId:0 fromCache:NO];
     }
     return self;
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     if (self = [super init]) {
-        [self initalizeWithObjectId:objectId fromCache:fromCache];
+        [self initializeWithObjectId:objectId fromCache:fromCache];
     }
     return self;
 }
@@ -105,7 +105,7 @@ static NSString * const StringEmpty = @"";
     return [self initWithId:objectId fromCache:YES];
 }
 
-- (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+- (void)initializeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     
     NSString *name = StringEmpty;
     self.name = name;

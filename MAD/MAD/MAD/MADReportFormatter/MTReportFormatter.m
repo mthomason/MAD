@@ -112,7 +112,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 @implementation MTReportFormatter
 
-- (void)initalizeStateMachine {
+- (void)initializeStateMachine {
     NSArray *sd = [self.dataDelegate sortDescriptors];
     NSArray *sortDescriptors = [NSArray arrayWithArray:sd];
 
@@ -189,7 +189,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     return name;
 }
 
-- (void)initalize {
+- (void)initialize {
     
     MTReportFormatterPageDefinition *page = [[MTReportFormatterPageDefinition alloc] init];
     self.page = page;
@@ -200,7 +200,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
     self.machineState = machineState;
 
-    [self initalizeStateMachine];
+    [self initializeStateMachine];
     
     MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
     self.reportFormatterCache = reportFormatterCache;
@@ -214,7 +214,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     MADocument * __unsafe_unretained layout = self.layout;
     if (layout) {
     
-        [layout initalizeSectionLayoutManagers: self.machineState.document];
+        [layout initializeSectionLayoutManagers: self.machineState.document];
         NSDictionary *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
         
@@ -280,7 +280,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (void)formatDocument {
 
-    [self initalizeStateMachine];
+    [self initializeStateMachine];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 

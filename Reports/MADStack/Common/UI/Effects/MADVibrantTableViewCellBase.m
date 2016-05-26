@@ -39,7 +39,7 @@
     }
 }
 
-- (void)initalize {
+- (void)initialize {
     
     self.initalSetupComplete = NO;
     self.updatingConstraints = NO;

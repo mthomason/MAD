@@ -12,7 +12,7 @@
 
 
 #import "MADViewerAppDelegate.h"
-#import <QuickLook/QLPreviewController.h>
+
 #import <Foundation/NSString.h>
 
 #import "MADNavigationController.h"
@@ -142,19 +142,24 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                                    willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                                    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     self.applicationUserDefaults = defaults;
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
-                                                                                             categories: nil];
-        [application registerUserNotificationSettings:notificationSettings];
+        UIUserNotificationSettings *notification;
+        notification = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert |
+                                                                     UIUserNotificationTypeBadge |
+                                                                     UIUserNotificationTypeSound
+                                                                 categories: nil];
+        [application registerUserNotificationSettings:notification];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -167,34 +172,37 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
                                                  name: NSUbiquityIdentityDidChangeNotification
                                                object: nil];
     
-    [self initalizeAppearance];
-    [self runOperations];
     
+    NSOperationQueue *operationQueueBackground;
+    NSOperation *getUserCloudPreferences, *resetReceipt;
+    
+    operationQueueBackground = [[NSOperationQueue alloc] init];
+    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground; //Guess app delegate
+    // can leak, but
+    // this should be
+    // removed from
+    // underlying queue
+    // at dealloc
+    
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
+                                                                   selector: @selector(getUserCloudPrefs)
+                                                                     object: NULL];
+    
+    
+    MTVerificationController *verificationController;
+    verificationController = [MTVerificationController sharedInstance];
+    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: verificationController
+                                                        selector: @selector(resetReceipt)
+                                                          object: NULL];
+    
+    [operationQueueBackground addOperation:getUserCloudPreferences];
+    [operationQueueBackground addOperation:resetReceipt];
+
     return YES;
 }
 
 - (void)runOperations {
 
-    NSOperationQueue *operationQueueBackground = [[NSOperationQueue alloc] init];
-    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground; //Guess app delegate
-                                                                                // can leak, but
-                                                                                // this should be
-                                                                                // removed from
-                                                                                // underlying queue
-                                                                                // at dealloc
-    
-    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController
-                                                                                selector:@selector(getUserCloudPrefs) object:NULL];
-    
-    
-    MTVerificationController * __weak verificationController = [MTVerificationController sharedInstance];
-    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: verificationController
-                                                                     selector: @selector(resetReceipt) object: NULL];
-    
-    NSArray *addSampleData = [[NSArray alloc] initWithObjects: getUserCloudPreferences,
-                                                               resetReceipt, nil];
-
-    [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -282,32 +290,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
-}
-
-- (void)initalizeAppearance {
-
-    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : [MADColorEverydayApps newColorWhite]};
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [MADColorEverydayApps newColorBlue];
-    #endif
-    
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [MADColorEverydayApps newColorAnalogous4];
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                  = [MADColorEverydayApps newColorWhite];
-    #endif
-    
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = [MADColorEverydayApps newColorWhite];
-    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = [MADColorEverydayApps newColorWhite];
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor                          = [MADColorEverydayApps newColorRed];
-    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                                    = [MADColorEverydayApps newColorWhite];
-    [UIBarButtonItem appearance].tintColor                                                                          = [MADColorEverydayApps newColorWhite];
-    [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = [MADColorEverydayApps newColorWhite];
-    [[UINavigationBar appearance] setTitleTextAttributes:
-    [NSDictionary dictionaryWithObjectsAndKeys: [MADColorEverydayApps newColorWhite], NSForegroundColorAttributeName, nil]];
-    
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {

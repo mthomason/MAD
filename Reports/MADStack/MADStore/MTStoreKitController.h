@@ -57,7 +57,7 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
     @property (nonatomic, readonly, retain) NSArray <SKProduct *> *products;
     @property (nonatomic, retain) NSDate *verifiedExperationDate;
 
-    - (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion;
+    - (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion;
     - (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion;
     - (void)restorePurchases:(MTBlockCompletion)completion;
 
