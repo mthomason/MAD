@@ -152,15 +152,20 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
     return action == @selector(unwindToQueryBuilder:);
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (UIViewController *)viewControllerForUnwindSegueAction: (SEL)action
+                                      fromViewController: (UIViewController *)fromViewController
+                                              withSender: (id)sender {
     
     return action == @selector(unwindToQueryBuilder:) ?
                         self :
-                        [super viewControllerForUnwindSegueAction: action fromViewController: fromViewController
+                        [super viewControllerForUnwindSegueAction: action
+                                               fromViewController: fromViewController
                                                        withSender: sender];
 }
 
@@ -181,11 +186,16 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [MADQueryViewController deleteCoreDataCache];
+        @autoreleasepool {
+            [MADQueryViewController deleteCoreDataCache];
+        }
     });
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    
+    [MADQueryViewController deleteCoreDataCache];
+    
     if (self = [super initWithCoder:aDecoder]) {
         [self setToolbarIconShown:NO];
     }
@@ -304,6 +314,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
+- (void)handleApplicationDidBecomeActive:(id)sender {
+    @autoreleasepool {
+        [MADQueryViewController deleteCoreDataCache];
+    }
+}
+
 - (void)viewDidLoad {
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
@@ -336,6 +352,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                   action: @selector(edit:)];
     
     self.barButtonItemEdit = barButtonItem;
+    
+    SEL resultHandler = @selector(handleApplicationDidBecomeActive:);
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: resultHandler
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

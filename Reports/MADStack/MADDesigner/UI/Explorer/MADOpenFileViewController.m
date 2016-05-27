@@ -1269,7 +1269,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString * const MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
+    static NSString *MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier
                                                                                    forIndexPath: indexPath];
     

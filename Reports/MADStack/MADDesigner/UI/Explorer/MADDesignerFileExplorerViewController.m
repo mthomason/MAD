@@ -174,7 +174,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     @autoreleasepool {
-        self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments] ? YES : NO;
+        BOOL canMakePayments;
+        canMakePayments = [SKPaymentQueue canMakePayments];
+        [_barButtonItemLicensing setEnabled:canMakePayments];
     }
     
 }

@@ -218,6 +218,19 @@ static inline UIUserNotificationType MADUserNotificationType() {
     NSLog(@"%llu", UINT64_MAX);
 
 */
+    SEL resultHandler;
+    NSNotificationCenter *defaultNotifications;
+    defaultNotifications = [NSNotificationCenter defaultCenter];
+    resultHandler = @selector(handleNotificationKeyValueStoreDidChange:);
+    [defaultNotifications addObserver: self selector: resultHandler
+                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                               object: nil];
+    
+    resultHandler= @selector(handleNotificationUbiquityIdentityDidChange:);
+    [defaultNotifications addObserver: self selector: resultHandler
+                                 name: NSUbiquityIdentityDidChangeNotification
+                               object: nil];
+    
     NSUserDefaults *defaults;
     NSDictionary *defaultsToRegister;
 
@@ -234,16 +247,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
                                                             categories: nil];
         [application registerUserNotificationSettings:notification];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotificationKeyValueStoreDidChange:)
-                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-                                                 name: NSUbiquityIdentityDidChangeNotification
-                                               object: nil];
     
     MADOperationQueue *operationQueueBackground;
     operationQueueBackground = [[MADOperationQueue alloc] init];
@@ -286,7 +289,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
+    /*
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         @autoreleasepool {
@@ -294,7 +297,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
             [MADQueryViewController deleteCoreDataCache];
         }
     });
-    
+    */
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
@@ -379,9 +382,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
         [navController popToRootViewControllerAnimated:YES];
         
+        AppDelegate * __unsafe_unretained appDelegate = self;
         UIAlertController *signedOutController;
         signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-            [self.openFileViewController getUserCloudPrefs];
+            [appDelegate.openFileViewController getUserCloudPrefs];
         }];
 
         [self.openFileViewController presentViewController:signedOutController
@@ -397,9 +401,9 @@ static inline UIUserNotificationType MADUserNotificationType() {
 #pragma mark - Convenience
 
 - (UIViewController *)openFileViewController {
-    UIViewController *viewController;
-    viewController = ((UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController).topViewController;
-    return viewController;
+    return ((UINavigationController *)
+            [UIApplication sharedApplication].windows.firstObject.rootViewController).
+                                                                    topViewController;
 }
 
 - (BOOL)isSampleInstalled {

@@ -8,8 +8,6 @@
 
 #import "MADUpgradeManager.h"
 #import "MADInstallOperationSampleDatabase.h"
-//#import <MADFoundation/MADApplicationProtocol.h>
-//#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
@@ -24,7 +22,8 @@ const NSInteger currentMajorVersion = 8;
 
 @implementation MADUpgradeManager
 
-- (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion {
+- (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error,
+                                          BOOL upgradePerformed))completion {
 
     BOOL upgradeRequired = NO;
     BOOL upgradeVersion7 = NO;
@@ -34,9 +33,10 @@ const NSInteger currentMajorVersion = 8;
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:MADUpgradeLastVersionRun];
     
-    NSURL *chinookUrl = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
+    NSURL *dbURL;
+    dbURL = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
     BOOL isDirectory;
-    NSString *path = chinookUrl.path;
+    NSString *path = dbURL.path;
     BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath: path
                                                            isDirectory: &isDirectory];
     if (gotChinook == NO) {

@@ -30,8 +30,15 @@
 - (instancetype)init {
     if (self = [super init]){
         // We need to know when the application moves to/from the background.
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterForeground:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(didEnterBackground:)
+                                                     name: UIApplicationDidEnterBackgroundNotification
+                                                   object: nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(didEnterForeground:)
+                                                     name: UIApplicationDidBecomeActiveNotification
+                                                   object: nil];
         _isInBackground = [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
         
         // If we're in the background already, immediately begin the background task.
@@ -58,7 +65,8 @@
 
 - (void)startBackgroundTask {
     if (self.identifier == UIBackgroundTaskInvalid) {
-        self.identifier = [UIApplication.sharedApplication beginBackgroundTaskWithName:@"BackgroundObserver" expirationHandler: ^{
+        self.identifier = [UIApplication.sharedApplication beginBackgroundTaskWithName: @"BackgroundObserver"
+                                                                     expirationHandler: ^{
             [self endBackgroundTask];
         }];
     }
