@@ -27,15 +27,14 @@
         MADCollectionViewLayoutFilesDelegate,
         MADSaveFileProtocol>
 
-    @property (nonatomic, assign) MTReportState reportState;
+    @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
+
     @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
     @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
 
-    - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
-
     @property (readonly) __kindof UIManagedDocument *openDocument;
 
-    @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
+    - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
 
     - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)visible
                                                  animated:(BOOL)animated;

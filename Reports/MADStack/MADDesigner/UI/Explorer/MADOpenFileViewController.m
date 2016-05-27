@@ -71,7 +71,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MTDocumentCellProtocol>
 
     @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
-    @property (nonatomic, strong) dispatch_queue_t queueCell;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
     @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
@@ -108,8 +107,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, strong) NSMutableIndexSet *batchInserts;
     @property (nonatomic, strong) NSMutableIndexSet *batchRemoves;
     @property (nonatomic, strong) NSMutableIndexSet *batchUpdates;
-
-    @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
     @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
@@ -203,12 +200,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return self.filesCoordnator.filesController.documentDirectory;
 }
 
-- (__kindof UIManagedDocument *)openDocument {
-    return self.reportState == MTReportStateOpen ? self.fileManager.openDocument : nil;
-}
-
-
-
 #pragma mark - Public
 
 - (void)getUserCloudPrefs {
@@ -224,16 +215,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
 
-        dispatch_queue_t queueCell = dispatch_queue_create("com.everydayapps.mad.cell.image",
-                                                           DISPATCH_QUEUE_SERIAL);
-        self.queueCell = queueCell;
-
-
         self.getUserCloudPrefsFirstCall = YES;
-        
-        dispatch_queue_t queueSerialOperations = dispatch_queue_create(MADQueueFileViewController,
-                                                                       DISPATCH_QUEUE_SERIAL);
-        self.queueSerialOperations = queueSerialOperations;
         
         MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
         self.fileManager = openFiles;
@@ -255,7 +237,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+#pragma mark -
+#pragma mark NSKeyValueObserving
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change context:(void *)context {
+    
     if ([keyPath isEqualToString:[MADOpenFileViewController keySubviews]]) {
         if ([object isKindOfClass:[UITextField class]]) {
             for (UIView *view in ((UITextField *)object).subviews) {
@@ -468,10 +455,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UIDocumentInteractionControllerDelegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
-    return self.navigationController;
+    id interactionController = self.navigationController;
+    return interactionController;
 }
-
-#pragma mark - Static functions
 
 #pragma mark - Custom Initalization
 
@@ -494,11 +480,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark -  NSFileManager delegate protocol
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldMoveItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldMoveItemAtURL:(NSURL *)srcURL
+              toURL:(NSURL *)dstURL {
     return YES;
 }
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error
+    movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
     
     //Only allow the thumbnails to proceed to after an error.
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
@@ -529,9 +517,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     if (self.isEditing) {
         [self.collectionView selectItemAtIndexPath:indexPath animated:YES
                                     scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        
         if (metadata.isUbiquitous) {
             if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
                 NSURL *url = metadata.URL.copy;
+                
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     NSError *error = nil;
                     [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url

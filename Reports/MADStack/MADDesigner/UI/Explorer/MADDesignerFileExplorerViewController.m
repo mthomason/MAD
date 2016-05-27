@@ -75,6 +75,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         MADFileLocationManagerDelegate>
 
     @property (nonatomic, weak)   MADQueryBuilderSplitViewController *splitViewController;
+    @property (nonatomic, weak)   MADTabBarController *tabController;
 
     @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
     @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemLicensing;
@@ -88,8 +89,6 @@ NSString * const MADUtiType                                     = @"com.everyday
 
     @property (nonatomic, assign)   bool shouldShowAddDocumentPopover;
     @property (nonatomic, assign)   bool aboutViewControllerOnScreen;
-
-    @property (nonatomic, weak)   MADTabBarController *tabController;
 
 @end
 
@@ -106,13 +105,14 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)didConfigureFilesController:(MADFilesController *)filesController { filesController.delegate = self; }
 
 - (void)didDisconnectFromCloud:(id)sender {
-    typeof(self) __weak weakself = self;
 
+    typeof(self) __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADDesignerFileExplorerViewController *sself = weakself;
         if (sself) {
             id __weak weakself2 = sself;
-            UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+            UIAlertController *alert;
+            alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
                 MADDesignerFileExplorerViewController *sself2 = weakself2;
                 [sself2 getUserCloudPrefs];
             }];
@@ -132,6 +132,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)completedLongRunningActivity { }
 
 #pragma mark -
+#pragma mark UINibLoading
 
 - (void)awakeFromNib {
     [self.barButtonItemAddNewDocument setEnabled:YES];
@@ -302,7 +303,6 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     MADocument *openDocument = self.fileManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
-        self.reportState = MTReportStateClosed;
         MADOpenDocumentManager * __unsafe_unretained fileManager = self.fileManager;
         [MADocument close:openDocument completion:^(BOOL success) {
             if (success) {
@@ -322,25 +322,15 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - MADOpenFileViewControllerDelegate
 
-- (void)documentStateChanged:(NSNotification *)notification {
+- (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
 
-        MADocument *document = notification.object;
+        MADocument * __unsafe_unretained document = notification.object;
         switch (document.documentState) {
 
-            case UIDocumentStateClosed: {
-                if (self.reportState == MTReportStateClosed) {
-                    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                                    name: UIDocumentStateChangedNotification
-                                                                  object: document];
-                }
-                id o = [[NSInvocationOperation alloc] initWithTarget:self
-                                                            selector:@selector(reloadAfterClose)
-                                                              object:nil];
-                [[NSOperationQueue mainQueue] addOperation:o];
-                NSLog(@"\n\n\tDocument state closed.\n\n");
+            case UIDocumentStateClosed:
+                [self handleDocumentStateChangedNotificationClosed:notification];
                 break;
-            }
 
             case UIDocumentStateEditingDisabled:
                 NSLog(@"\n\n\tDocument state editing disabled.\n\n");
@@ -351,15 +341,7 @@ NSString * const MADUtiType                                     = @"com.everyday
                 break;
                 
             case UIDocumentStateNormal:
-                if (self.reportState !=  MTReportStateOpen) {
-                    SEL open = @selector(openViewerWithDocument:);
-                    id o = [[NSInvocationOperation alloc] initWithTarget: self
-                                                                selector: open
-                                                                  object: document];
-                    [[NSOperationQueue mainQueue] addOperation:o];
-                    self.reportState = MTReportStateOpen;
-                }
-                NSLog(@"\n\n\tDocument state normal.\n\n");
+                [self handleDocumentStateChangedNotificationNormal:notification];
                 break;
 
             case UIDocumentStateSavingError:
@@ -373,16 +355,40 @@ NSString * const MADUtiType                                     = @"com.everyday
     }
 }
 
+- (void)handleDocumentStateChangedNotificationClosed:(NSNotification *)notification {
+
+    MADocument * __unsafe_unretained document = notification.object;
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIDocumentStateChangedNotification
+                                                  object: document];
+    id o = [[NSInvocationOperation alloc] initWithTarget:self
+                                                selector:@selector(reloadAfterClose)
+                                                  object:nil];
+    [[NSOperationQueue mainQueue] addOperation:o];
+    NSLog(@"\n\n\tDocument state closed.\n\n");
+}
+
+- (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
+    MADocument * __unsafe_unretained document = notification.object;
+    SEL open = @selector(openViewerWithDocument:);
+    id o = [[NSInvocationOperation alloc] initWithTarget: self
+                                                selector: open
+                                                  object: document];
+    [[NSOperationQueue mainQueue] addOperation:o];
+}
+
 - (void)reloadAfterClose {
     UICollectionView *weakCollectionView __weak = self.collectionView;
-    [UIView performWithoutAnimation:^{
-        @autoreleasepool {
-            UICollectionView *collectionView = weakCollectionView;
-            NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-            [collectionView.backgroundView setNeedsDisplay];
-            [collectionView reloadItemsAtIndexPaths:paths];
-        }
+    /*[UIView performWithoutAnimation:^{
+
     }];
+    */
+    @autoreleasepool {
+        UICollectionView *collectionView = weakCollectionView;
+        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+        [collectionView.backgroundView setNeedsDisplay];
+        [collectionView reloadItemsAtIndexPaths:paths];
+    }
 }
 
 - (void)openViewerWithDocument:(MADocument *)document {
@@ -436,30 +442,19 @@ NSString * const MADUtiType                                     = @"com.everyday
         MADocument *document = [[MADocument alloc] initWithFileURL:url];
         document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
         document.documentDelegate = self;
-        
+        SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
         [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: @selector(documentStateChanged:)
+                                                 selector: documentStateChanged
                                                      name: UIDocumentStateChangedNotification
                                                    object: document];
         
-        self.reportState = MTReportStateClosed;
         self.fileManager.openDocument = document;
         
     }
 
-    
-    id __weak wself = self;
     MADocument *allocatedDocument = self.fileManager.openDocument;
-    [allocatedDocument openWithCompletionHandler:^(BOOL success) {
-        if (success) {
-            MADDesignerFileExplorerViewController *sself = wself;
-            @synchronized (sself) {
-                sself.reportState = MTReportStateOpen;
-            }
-        }
-    }];
+    [allocatedDocument openWithCompletionHandler:^(BOOL success) { }];
 
-    
 }
 
 - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType {
