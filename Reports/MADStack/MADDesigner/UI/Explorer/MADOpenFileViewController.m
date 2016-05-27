@@ -246,10 +246,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
     
-        self.filesCoordnator.delegate = self;
         self.shouldShowAddDocumentPopover = true;
 
         MADFileLocationManager *filesCoordnator = [[MADFileLocationManager alloc] init];
+        filesCoordnator.delegate = self;
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
 
@@ -274,6 +274,46 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }
     return self;
 }
+
+#pragma mark - 
+#pragma mark MADFileLocationManagerDelegate
+
+- (NSString *)groupIdentifier { return MADIdentifierGroup; }
+
+- (NSString *)ubiquityIdentifier { return MADUbiquityIdentifier; }
+
+- (NSString *)fileExtention { return MADFileExtentionMobleApplicationDocument; }
+
+- (void)didConfigureFilesController:(MADFilesController *)filesController {
+    filesController.delegate = self;
+}
+
+- (void)didDisconnectFromCloud:(id)sender {
+
+    typeof(self) __weak weakself = self;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        MADFileExplorerViewController *sself = weakself;
+        if (sself) {
+            id __weak weakself2 = sself;
+            UIAlertController *alert;
+            alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+                MADFileExplorerViewController *sself2 = weakself2;
+                [sself2 getUserCloudPrefs];
+            }];
+            
+            [sself presentViewController:alert animated:YES completion:nil];
+        }
+    }];
+}
+
+- (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
+    UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:handler];
+    return alert;
+}
+
+- (void)startLongRunningActivity { }
+
+- (void)completedLongRunningActivity { }
 
 #pragma mark -
 #pragma mark Static Functions
@@ -374,11 +414,17 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     NSString *hint;
     
+    UIBarButtonItem *barButtonItemDuplicate;
+    SEL handleDuplicate = @selector(actionDuplicate:);
+    barButtonItemDuplicate = [UIBarButtonItem newBarButtonItemDuplicate:self
+                                                                 action:handleDuplicate];
+    
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:_barButtonItemAction];
     [toolbarButtons removeObject:_barButtonItemCloudDown];
-    [toolbarButtons insertObject:_barButtonItemDuplicate atIndex:1];
-    
+    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
+    _barButtonItemDuplicate = barButtonItemDuplicate;
+    g
     [self setToolbarItems:toolbarButtons animated:NO];
     
     UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit:self
@@ -926,14 +972,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return _barButtonItemEditDone;
 }
 
-- (UIBarButtonItem *)barButtonItemDuplicate {
-    if (!_barButtonItemDuplicate) {
-        _barButtonItemDuplicate = [UIBarButtonItem newBarButtonItemDuplicate:self
-                                                                      action:@selector(actionDuplicate:)];
-    }
-    return _barButtonItemDuplicate;
-}
-
 #pragma mark -
 #pragma mark UIPopoverControllerDelegate
 
@@ -1105,44 +1143,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar { }
-
-#pragma mark - 
-#pragma mark MADFileLocationManagerDelegate
-
-- (NSString *)groupIdentifier { return MADIdentifierGroup; }
-
-- (NSString *)ubiquityIdentifier { return MADUbiquityIdentifier; }
-
-- (NSString *)fileExtention { return MADFileExtentionMobleApplicationDocument; }
-
-- (void)didConfigureFilesController:(MADFilesController *)filesController { filesController.delegate = self; }
-
-- (void)didDisconnectFromCloud:(id)sender {
-
-    typeof(self) __weak weakself = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        MADFileExplorerViewController *sself = weakself;
-        if (sself) {
-            id __weak weakself2 = sself;
-            UIAlertController *alert;
-            alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-                MADFileExplorerViewController *sself2 = weakself2;
-                [sself2 getUserCloudPrefs];
-            }];
-            
-            [sself presentViewController:alert animated:YES completion:nil];
-        }
-    }];
-}
-
-- (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
-    UIAlertController *alert = [UIAlertController newAlertControlerNotifyCloudSignOut:handler];
-    return alert;
-}
-
-- (void)startLongRunningActivity { }
-
-- (void)completedLongRunningActivity { }
 
 #pragma mark -
 #pragma mark UINibLoading

@@ -31,25 +31,29 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (instancetype)init {
 
     if (self = [super init]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
         NSNumber *yes = @YES;
         NSNumber *notSet = [[NSNumber alloc] initWithShort: MADAppStorageNotSet];
-        NSDictionary *defaultValues = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        yes, MADFirstLaunch,
+        NSDictionary *defaultValues;
+        defaultValues = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        yes,    MADFirstLaunch,
                                         notSet, MADAppConfigurationUserDefaultsStorageOption, nil];
-        [defaults registerDefaults:defaultValues];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
         self.getUserCloudPrefsFirstCall = true;
     }
     return self;
 }
 
-#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
+#pragma mark - Ubiquity Identity Token Handling (Account Change)
 
 - (BOOL)hasUbiquityIdentityChanged {
     BOOL hasChanged = NO;
     
-    id <NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
-    id <NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
+    id <NSObject, NSCopying, NSCoding> currentToken,
+                                       storedToken;
+    
+    currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+    storedToken = [self copyStoredUbiquityIdentityToken];
     
     bool currentTokenNilStoredNonNil = !currentToken && storedToken;
     bool storedTokenNilCurrentNonNil = !storedToken && currentToken;
@@ -63,13 +67,15 @@ static NSString * const MADFirstLaunch                                     = @"M
     return hasChanged;
 }
 
-- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
+- (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
 
     id<NSObject, NSCopying, NSCoding> storedToken = nil;
     
-    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
+    // Determine if the iCloud account associated with this device has changed since the last
+    //    time the user launched the app.
     NSData *ubiquityIdentityTokenArchive;
-    ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+    ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults]
+                                    objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
     
     if (ubiquityIdentityTokenArchive) {
         storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
@@ -80,13 +86,18 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (void)persistAccount {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    id<NSObject, NSCopying, NSCoding> token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+    
+    id<NSObject, NSCopying, NSCoding> token;
+    token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
     if (token) {
-        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
-        [[NSUserDefaults standardUserDefaults] setObject:ubiquityIdentityTokenArchive
-                                                  forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+        NSData *ubiquityIdentityTokenArchive;
+        ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
+        [[NSUserDefaults standardUserDefaults]
+                                        setObject: ubiquityIdentityTokenArchive
+                                           forKey: MADAppConfigurationUserDefaultsUbiquityToken];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+        [[NSUserDefaults standardUserDefaults]
+                                removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
     }
 }
 
@@ -94,24 +105,18 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (MADAppStorage)storageOption {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    return (MADAppStorage)[[NSUserDefaults standardUserDefaults] integerForKey:MADAppConfigurationUserDefaultsStorageOption];
+    return (MADAppStorage)[[NSUserDefaults standardUserDefaults]
+                                    integerForKey:MADAppConfigurationUserDefaultsStorageOption];
 }
 
 - (void)setStorageOption:(MADAppStorage)storageOption {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    [[NSUserDefaults standardUserDefaults] setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
+    [[NSUserDefaults standardUserDefaults] setInteger: storageOption
+                                               forKey: MADAppConfigurationUserDefaultsStorageOption];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Convenience
-
-- (MADStorageState *)newStorageState {
-    MADStorageState *storageState = [[MADStorageState alloc] init];
-    storageState.storageOption = self.storageOption;
-    storageState.accountDidChange = [self hasUbiquityIdentityChanged];
-    storageState.cloudAvailable = [MADFilesController isCloudAvailable];
-    return storageState;
-}
 
 - (bool)isFirstLaunch {
     bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
@@ -221,7 +226,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 
         self.getUserCloudPrefsFirstCall = false;
 
-        MADStorageState *storageState = [self newStorageState];
+        MADStorageState *storageState;
+        storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
+                                              hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
+                                                        isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
         if (storageState.cloudAvailable) {
             
             if (storageState.storageOption == MADAppStorageCloud) {
@@ -252,7 +260,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (void)getUserCloudPrefsSubsquient {
     
-    MADStorageState *storageState = [self newStorageState];
+    MADStorageState *storageState;
+    storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
+                                          hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
+                                                    isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
     if (storageState.accountDidChange) {
         
         switch (storageState.storageOption) {
@@ -296,7 +307,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)configureFilesController: (BOOL)accountChanged
-      storageOptionChangeHandler: (void (^)(void))storageOptionChangeHandler {
+      storageOptionChangeHandler: (void (^)(void))storageChangedHandler {
     
     if (self.filesController != nil && !accountChanged) return;
 
@@ -310,10 +321,11 @@ static NSString * const MADFirstLaunch                                     = @"M
         NSString *identifier = [self copyIdentifierForStorageOption];
         NSString *fileExtention = [delegate fileExtention].copy;
         MADAppStorage storageOption = self.storageOption;
-        id filesController = [MADFilesController newFilesControllerWithPathExtension:fileExtention
-                                                                       storageOption:storageOption
-                                                                          identifier:identifier
-                                                                   firstQueryHandler:storageOptionChangeHandler];
+        id filesController;
+        filesController = [MADFilesController newFilesControllerWithPathExtension: fileExtention
+                                                                    storageOption: storageOption
+                                                                       identifier: identifier
+                                                                firstQueryHandler: storageChangedHandler];
         self.filesController = filesController;
         [delegate didConfigureFilesController: self.filesController];
         [self.filesController startSearching];
@@ -325,7 +337,7 @@ static NSString * const MADFirstLaunch                                     = @"M
         id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: fileExtention
                                                           storageOption: storageOption
                                                              identifier: identifer
-                                                      firstQueryHandler: storageOptionChangeHandler];
+                                                      firstQueryHandler: storageChangedHandler];
         self.filesController.fileCoordinator = fc;
         [self.delegate didConfigureFilesController: self.filesController];
     }
@@ -334,9 +346,12 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (NSString *)copyIdentifierForStorageOption {
     UIViewController <MADFileLocationManagerDelegate> *delegate;
+    NSString *groupIdentifer;
+
     delegate = _delegate;
-    return self.storageOption != MADAppStorageCloud ? [delegate groupIdentifier].copy :
-                                                      [delegate ubiquityIdentifier].copy;
+    groupIdentifer = [self storageOption] != MADAppStorageCloud ? [delegate groupIdentifier] :
+                                                                  [delegate ubiquityIdentifier];
+    return groupIdentifer.copy;
 }
 
 @end

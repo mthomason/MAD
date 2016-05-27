@@ -55,22 +55,27 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 
 #pragma mark - Static helpers
 
+NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
+    ^NSComparisonResult(MADMetaData *lhs,MADMetaData *rhs){
+    return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+};
+
 + (instancetype)newFilesControllerWithPathExtension: (NSString *)pathExtension
                                       storageOption: (MADAppStorage)storageOption
                                          identifier: (NSString *)identifier
                                   firstQueryHandler: (void (^)(void))firstQueryHandler {
+    NSLog(@"Creating a File Controller with extension %@.", pathExtension);
 
-    id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: pathExtension
-                                                      storageOption: storageOption
-                                                         identifier: identifier
-                                                  firstQueryHandler: firstQueryHandler];
+    id coordinator, controller;
+    coordinator = [MADFileCoordinator newFileCoordinatorWithPathExtension: pathExtension
+                                                            storageOption: storageOption
+                                                               identifier: identifier
+                                                        firstQueryHandler: firstQueryHandler];
     
-    id filesController = [[MADFilesController alloc] initWithFileCoordinator: fc
-                                                               delegateQueue: [NSOperationQueue mainQueue]
-                                                              sortComparator: ^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-         return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-    }];
-    return filesController;
+    controller = [[MADFilesController alloc] initWithFileCoordinator: coordinator
+                                                       delegateQueue: [NSOperationQueue mainQueue]
+                                                      sortComparator: sortComparator];
+    return controller;
 }
 
 + (instancetype)newFilesControllerWithLastPathComponent: (NSString *)lastPathComponent
@@ -78,30 +83,39 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
                                              identifier: (NSString *)identifier
                                       firstQueryHandler: (void (^)(void))firstQueryHandler {
 
-    id coordinator = [MADFileCoordinator newFileCoordinatorWithLastPathComponent: lastPathComponent
-                                                                   storageOption: storageOption
-                                                                      identifier: identifier
-                                                               firstQueryHandler: firstQueryHandler];
+    NSLog(@"Creating a File Controller with last path component %@.", lastPathComponent);
 
-    id filesController = [[MADFilesController alloc] initWithFileCoordinator: coordinator
-                                                               delegateQueue: [NSOperationQueue mainQueue]
-                                                              sortComparator: ^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                  return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                              }];
-    return filesController;
+
+    id coordinator, controller;
+    coordinator = [MADFileCoordinator newFileCoordinatorWithLastPathComponent: lastPathComponent
+                                                                storageOption: storageOption
+                                                                   identifier: identifier
+                                                            firstQueryHandler: firstQueryHandler];
+
+
+    controller = [[MADFilesController alloc] initWithFileCoordinator: coordinator
+                                                       delegateQueue: [NSOperationQueue mainQueue]
+                                                      sortComparator: sortComparator];
+    return controller;
 }
 
-+ (bool)isCloudAvailable {
++ (BOOL)isCloudReadilyAvailable {
+    NSLog(@"Checking if cloud is readily available %@.",
+          [[NSFileManager defaultManager] ubiquityIdentityToken] != nil ? @"YES" : @"NO");
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                      groupIdentifier: (NSString *)groupIdentifier
                                                delay: (void (^)())handleLongRunningCall
-                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
+                                          completion: (MADBlockFileStorageLocation)handleCompletion {
 
-    if ([self isCloudAvailable]) {
-        
+    NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
+
+    if ([self isCloudReadilyAvailable]) {
+
+        NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
+
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         
         [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
@@ -110,14 +124,21 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
                               userInfo: longRunningCallBlock
                                repeats: NO];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        dispatch_queue_t global_queue;
+        global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(global_queue, ^(void) {
             
+            NSURL *ubiquityContainer;
+
             NSFileManager *fileManager = [[NSFileManager alloc] init];
             //This call may be SLOW, so only do on BACKGROUND thread.
             
-            NSURL *ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
+
+            NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
+
+            dispatch_queue_t main_queue = dispatch_get_main_queue();
+            dispatch_sync(main_queue, ^{
                 
                 NSURL *documentDirectory;
                 documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
@@ -126,6 +147,8 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
                 NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
                 [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
                 
+                NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
+                                                                            dataDirectory);
                 if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
                 
             });
@@ -142,6 +165,7 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 }
 
 + (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
+    NSLog(@"Detected a long running cloud lookup.");
     if(timer.userInfo) {
         void (^block)() = (void (^)())timer.userInfo;
         block();
@@ -155,6 +179,7 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
                          sortComparator: (NSComparisonResult (^)(MADMetaData *,
                                                                  MADMetaData *))sortComparator {
 
+    NSLog(@"Initalizing file coordinator.");
     if (self = [super init]) {
         
         _fileCoordinator = fileCoordinator;
@@ -175,20 +200,29 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 }
 
 - (void)startSearching {
+    NSLog(@"Starting search.");
     [self.fileCoordinator startQuery];
 }
 
 - (void)stopSearching {
+    NSLog(@"Stopping search.");
     [self.fileCoordinator stopQuery];
 }
 
 #pragma mark - Property Overrides
 
-- (NSUInteger)count { return self.fileMetaDatum.count; }
+- (NSUInteger)count {
+    NSLog(@"We got a grand total of %d items.", self.fileMetaDatum.count);
+    return self.fileMetaDatum.count;
+}
 
 - (void)setFileCoordinator:(id<MADFileCoordinator>)fileCoordinator {
-
+    
+    NSLog(@"Trying to set the file coordinator.");
+    
     if (![_fileCoordinator isEqual:fileCoordinator]) {
+
+        NSLog(@"Set the file coordinator.");
 
         id<MADFileCoordinator> oldFileCoordinator = _fileCoordinator;
         _fileCoordinator = fileCoordinator;
@@ -207,7 +241,11 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
         [self processContentChangesWithInsertedMetaDatum: inserted
                                         removedMetaDatum: removed
                                         updatedMetaDatum: updated
-                                              completion: ^(BOOL success, NSError *error) { }];
+                                              completion: ^(BOOL success, NSError *error) {
+                                              
+            NSLog(@"processContentChangesWithInsertedMetaDatum completed.");
+
+        }];
         
         _fileCoordinator.delegate = self;
         oldFileCoordinator.delegate = nil;
@@ -219,6 +257,8 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 #pragma mark - Subscripting
 
 - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
+
+    NSLog(@"Requesting object at index: %d.", index);
 
     __block MADMetaData *fileInfo = nil;
     __unsafe_unretained typeof(self) weakSelf = self;
@@ -233,35 +273,49 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 #pragma mark - Inserting / Removing / Managing / Updating MADMetaData Objects
 
 - (void)removeFileInfo:(MADMetaData *)fileInfo {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [self.fileCoordinator removeFileAtURL: fileInfo.URL];
 }
 
 - (void)duplicateFileInfo:(MADMetaData *)fileInfo {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [self.fileCoordinator duplicateFileAtURL: fileInfo.URL];
 }
 
 - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSURL *url = fileInfo.URL.copy;
     [self.fileCoordinator renameFileAtURL: url toName: name];
 }
 
 - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name
                     extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [self.fileCoordinator createURLForFile:list withName:name
                                  extention:extention fileGroup:fileGroup];
 }
 
 - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
                         fileGroup:(NSString *)fileGroup {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     return [self.fileCoordinator canCreateFileWithName:name extention:extention
                                              fileGroup:fileGroup];
 }
 
 - (NSURL *)documentDirectory {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     return [self.fileCoordinator documentsDirectory];
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo {
+
+    NSLog(@"%s : %@", __PRETTY_FUNCTION__, fileInfo);
 
     dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
 
@@ -272,6 +326,8 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
         weakSelf.fileMetaDatum[indexOfFileInfo] = fileInfo;
         
         [weakSelf.delegateQueue addOperationWithBlock:^{
+
+            NSLog(@"%s", __PRETTY_FUNCTION__);
 
             MADFilesController *sself = weakSelf;
             id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -299,10 +355,13 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(MADURLArray *)insertedURLs
                                              removedURLs:(MADURLArray *)removedURLs
                                              updatedURLs:(MADURLArray *)updatedURLs {
+    
+    NSLog(@"(NSURL) File Coordinator Did Update Contents With \n"
+          @"\t%@\n" @"\t%@\n" @"\t%@", insertedURLs, removedURLs, updatedURLs);
 
-    NSMutableArray *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count];
-    NSMutableArray *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count];
-    NSMutableArray *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
+    NSMutableArray *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count],
+                   *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count],
+                   *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
 
     NSURL *URL;
     MADMetaData *metadata;
@@ -336,7 +395,12 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
                                              removedMetaDatum:(NSArray *)removedMetaDatum
                                              updatedMetaDatum:(NSArray *)updatedMetaDatum
-                                                   completion:(void (^)(BOOL success, NSError *error))completion {
+                                                   completion:(void (^)(BOOL success,
+                                                                        NSError *error))completion {
+    
+    NSLog(@"(MetaDatam) File Coordinator Did Update Contents With \n"
+          @"\t%@\n" @"\t%@\n" @"\t%@", insertedMetaDatum, removedMetaDatum, updatedMetaDatum);
+
     NSArray *inserts = [NSArray arrayWithArray: insertedMetaDatum];
     NSArray *removes = [NSArray arrayWithArray: removedMetaDatum];
     NSArray *updates = [NSArray arrayWithArray: updatedMetaDatum];
@@ -349,21 +413,22 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 }
 
 - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    __unsafe_unretained typeof(self) weakSelf = self;
+    typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
         MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
         SEL didFailCreatingFile = @selector(filesController:didFailCreatingFileInfo:withError:);
         if ([delegate respondsToSelector:didFailCreatingFile]) {
-            [delegate filesController:weakSelf didFailCreatingFileInfo:fileInfo withError:error];
+            [delegate filesController:sself didFailCreatingFileInfo:fileInfo withError:error];
         }
         
     }];
 }
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    __unsafe_unretained typeof(self) weakSelf = self;
+    NSLog(@"File Coordinator did fail duplicating URL: %@", URL);
+    typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -376,7 +441,8 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 }
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    __unsafe_unretained typeof(self) weakSelf = self;
+    NSLog(@"File Coordinator did fail renaming URL: %@", URL);
+    typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -389,10 +455,13 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 }
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    typeof(self) __unsafe_unretained weakSelf = self;
+    NSLog(@"File Coordinator did fail removing URL: %@", URL);
+
+    typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
+        
         MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
         SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
         if ([delegate respondsToSelector:didFailRemovingFile]) {
@@ -416,13 +485,17 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
                                   removedMetaDatum:(NSArray *)removes
                                   updatedMetaDatum:(NSArray *)updates
                                         completion:(void (^)(BOOL success, NSError *error))completion {
-                                        
+
+    NSLog(@"%s\n\t%@\n\t%@\n\t%@", __PRETTY_FUNCTION__, inserts, removes, updates);
+    
     NSArray *insertedMetaDatum = inserts.copy;
     NSArray *removedMetaDatum = removes.copy;
     NSArray *updatedMetaDatum = updates.copy;
     
     MADFilesController * __weak weakSelf = self;
     [weakSelf.delegateQueue addOperationWithBlock:^{
+
+        NSLog(@"%s", __PRETTY_FUNCTION__);
 
         MADFilesController *sself = weakSelf;
         dispatch_queue_t fileMetaDataQueue = sself.fileMetaDataQueue;
@@ -434,6 +507,7 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 
         dispatch_sync(fileMetaDataQueue, ^{
             
+
             id contains = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
             trackedRemovedFileInfos = [removedMetaDatum filteredArrayUsingPredicate:contains];
 
@@ -459,8 +533,10 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
             MADFilesController * __weak wself = sself;
             dispatch_sync(fileMetaDataQueue, ^{
             
+
                 MADFilesController *sself2 = wself;
-                trackedRemovedFileInfoIndex = [sself2.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
+                trackedRemovedFileInfoIndex =
+                    [sself2.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
                 [sself2.fileMetaDatum removeObjectAtIndex: trackedRemovedFileInfoIndex];
                 
             });
@@ -492,7 +568,10 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
             
             MADFilesController *__weak wself = sself;
             dispatch_sync(fileMetaDataQueue, ^{
-                untrackedInsertedFileInfoIndex = [wself.fileMetaDatum indexOfObject:untrackedInsertedFileInfo];
+
+
+                untrackedInsertedFileInfoIndex =
+                    [wself.fileMetaDatum indexOfObject:untrackedInsertedFileInfo];
             });
             
             if ([delegate respondsToSelector:@selector(filesController:didInsertFileInfo:atIndex:)]) {

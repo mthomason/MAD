@@ -208,6 +208,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)duplicateFileAtURL:(NSURL *)URL {
+
     [MADFileUtilities duplicateFileAtURL:URL withCompletionHandler:^(NSURL *newURL, NSError *error) {
         if (error) {
             [self.delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
@@ -302,8 +303,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     }
     
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
-    
-    return ![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
+    NSString *path = documentURL.path;
+    return path ? ![[NSFileManager defaultManager] fileExistsAtPath:path] : NO;
 }
 
 - (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {

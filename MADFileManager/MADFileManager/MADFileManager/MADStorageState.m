@@ -10,4 +10,14 @@
 
 @implementation MADStorageState
 
++ (instancetype)newStorageStateWithStorageOption:(MADAppStorage)storageOption
+                           hasUbiquityIdentityChanged:(BOOL)hasUbiquityIdentityChanged
+                                     isCloudReadilyAvailable:(BOOL)isCloudReadilyAvailable {
+    MADStorageState *storageState = [[MADStorageState alloc] init];
+    storageState.storageOption = storageOption;
+    storageState.accountDidChange = hasUbiquityIdentityChanged;
+    storageState.cloudAvailable = isCloudReadilyAvailable;
+    return storageState;
+}
+
 @end

@@ -1,0 +1,8 @@
+Where to store documents?
+    Let user decide?
+    Once they choose, just use that location.
+
+application:didFinishWithLaunchingWithOptions
+    [[NSFileManager defaultManager] ubiquityIdentityToken]
+
+Register for NSUbiquityIdentifierDidChangeNotification

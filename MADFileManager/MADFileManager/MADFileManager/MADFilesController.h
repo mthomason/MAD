@@ -21,8 +21,7 @@
 @class MADMetaData;
 @class MADFile;
 
-typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble,
-                                                      NSURL *documents, NSURL *data);
+typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
 
 @interface MADFilesController : NSObject
 
@@ -58,12 +57,12 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble,
     - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name
                         extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo;
-    + (bool)isCloudAvailable;
 
+    + (BOOL)isCloudReadilyAvailable;
     + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                          groupIdentifier: (NSString *)groupIdentifier
                                                    delay: (void (^)())handleLongRunningCall
-                                              completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
+                                              completion: (MADBlockFileStorageLocation)handleCompletion;
 
     - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
                             fileGroup:(NSString *)fileGroup;
