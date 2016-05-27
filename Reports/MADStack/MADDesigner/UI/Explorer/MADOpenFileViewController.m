@@ -51,13 +51,9 @@
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADCredential.h>
 
-
-
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
-
-#import "MADStoryboard.h"
 
 #import "Constants.h"
 
@@ -89,15 +85,11 @@
 
 #import "MADTabBarController.h"
 
-static const CGFloat Float_0 = 0.000000000f;
-static const CGFloat Float_100 = 100.00000000f;
-
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
-
 
 static NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 
@@ -108,6 +100,9 @@ static NSString * const Downloading                             = @"Downloading"
 const char * MADQueueFileViewController = "com.everydayapps.mad.designer.file.view.controller";
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
+
+static const CGFloat Float_0 = 0.000000000f;
+static const CGFloat Float_100 = 100.00000000f;
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 //NSString * const MADUtiPublicData                               = @"public.data";
@@ -131,32 +126,32 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate>
 
-
     @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
-    @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
-    @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
+    @property (nonatomic, strong)   MADAppLaunchContext *pendingLaunchContext;
 
-    @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
-    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEdit;
-    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
-    @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
-    @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
+    @property (nonatomic, strong)   IBOutlet    UIBarButtonItem *barButtonItemAction;
+    @property (nonatomic, strong)               UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, strong)               UIBarButtonItem *barButtonItemEditDone;
+    @property (nonatomic, strong)               UIBarButtonItem *barButtonItemDuplicate;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemInformationDocument;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemTrash;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemInformation;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemAbout;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemAddNewDocument;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemCloudDown;
+    @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemLicensing;
 
-    @property (nonatomic, weak)   MADQueryBuilderSplitViewController *splitViewController;
-    @property (nonatomic, weak)   MADTabBarController *tabController;
+    @property (nonatomic, weak)     MADQueryBuilderSplitViewController *splitViewController;
+    @property (nonatomic, weak)     MADTabBarController *tabController;
 
-    @property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemLicensing;
 
     @property (nonatomic, strong)   UIPopoverController *openDocumentPopoverController;
     @property (nonatomic, strong)   UIPopoverController *licensingPopoverController;
+    @property (nonatomic, strong)   UIPopoverController *popoverControllerActivity;
+
 
     @property (nonatomic, weak)     UIPopoverPresentationController *infoPopoverPresentationController;
     @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
@@ -165,11 +160,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, assign)   bool shouldShowAddDocumentPopover;
     @property (nonatomic, assign)   bool aboutViewControllerOnScreen;
 
-
-    @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
-
     @property (nonatomic, strong)   MADSearchBar *searchBar;
-    @property (readonly)            UILabel *titleView;
 
     @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
@@ -178,9 +169,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, assign) BOOL cloudActivityRunning;
     @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
-    @property (nonatomic, strong) UIProgressView *progressViewFileManager;
+    @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
+    @property (nonatomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 
-    @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
+    @property (nonatomic, strong) UIProgressView *progressViewFileManager;
 
     @property (nonatomic, strong) NSMutableIndexSet *batchInserts;
     @property (nonatomic, strong) NSMutableIndexSet *batchRemoves;
@@ -196,6 +188,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark NSObject
 
 - (void)dealloc {
+    _barButtonItemAction = nil;
     [_batchInserts removeAllIndexes];
     [_batchUpdates removeAllIndexes];
     [_batchRemoves removeAllIndexes];
@@ -283,11 +276,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 #pragma mark -
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
-
-#pragma mark -
 #pragma mark Static Functions
 
 + (NSString *)keySubviews {
@@ -346,13 +334,19 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
-    layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
-    layoutGroupedDelegate.delegate = self;
-    
-    self.collectionViewDelegate = layoutGroupedDelegate;
+    // init
+    _aboutViewControllerOnScreen = false;
+    _updatingEnabled = YES;
+    _cloudActivityRunning = NO;
+    _cloudActivityRunningDisplay = NO;
+    _rightBarButtonItemActivityIndicatorVisible = NO;
 
     
+    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
+            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+
+    // setup ui - navigaion item
     MADNavigationBarTitleView *titleView;
     titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     
@@ -364,69 +358,109 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     
     self.navigationItem.titleView = titleView;
-    
     self.navigationItem.hidesBackButton = YES;
     
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    // setup ui - background
+    MADWatermarkView *watermarkView;
+    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
     
-    self.aboutViewControllerOnScreen = false;
-    
-    self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
-    self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
-    
-    self.collectionView.delegate = self.collectionViewDelegate;
-    self.collectionView.dataSource = self;
-    
-    [self addObservers];
-    
-    self.updatingEnabled = YES;
-    self.cloudActivityRunning = NO;
-    self.cloudActivityRunningDisplay = NO;
-    self.rightBarButtonItemActivityIndicatorVisible = NO;
-    
-    [self setNeedsStatusBarAppearanceUpdate];
-    
-    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
-    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
-            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-                   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
-    
-    [self setEditing:NO animated:NO];
-    
-    self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-    self.navigationController.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
-    
-    self.collectionView.backgroundColor = [UIColor lightGrayColor];
-        
-    UITapGestureRecognizer *tapGestureRecognizer;
-    tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                   action: @selector(handleDidTapCollectionView:)];
-    tapGestureRecognizer.delegate = self;
-    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
-    
+    // setup ui - search bar
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-    self.searchBar = searchBar;
-
+    _searchBar = searchBar;
+    
+    // setup ui - bar button items
+    
+    NSString *hint;
+    
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
-    [toolbarButtons removeObject:self.barButtonItemAction];
-    [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
+    [toolbarButtons removeObject:_barButtonItemAction];
+    [toolbarButtons removeObject:_barButtonItemCloudDown];
+    [toolbarButtons insertObject:_barButtonItemDuplicate atIndex:1];
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
     UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit:self
                                                                  action:@selector(edit:)];
-    self.barButtonItemEdit = editButton;
-    self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
-    self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
-    self.barButtonItemAction.accessibilityHint = NSLocalizedString(@"Preforms an action on the selected document.", @"Preforms an action on the selected document.");
-    self.barButtonItemDuplicate.accessibilityHint = NSLocalizedString(@"Duplicates the selected documents.", @"Duplicates the selected documents.");
-    self.barButtonItemInformationDocument.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
-    self.barButtonItemInformation.accessibilityHint = NSLocalizedString(@"Displays application information.", @"Displays application information.");
-    self.barButtonItemAbout.accessibilityHint = NSLocalizedString(@"Displays application about screen.", @"Displays application about screen.");
-    [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
+    _barButtonItemEdit = editButton;
+    
+    hint = NSLocalizedString(@"Enables document list edit mode.",
+                             @"Enables document list edit mode.");
+    _barButtonItemEdit.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
+    _barButtonItemAddNewDocument.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
+    _barButtonItemLicensing.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Deletes the selected documents.",
+                             @"Deletes the selected documents.");
+    _barButtonItemTrash.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Preforms an action on the selected document.",
+                             @"Preforms an action on the selected document.");
+    _barButtonItemAction.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Duplicates the selected documents.",
+                             @"Duplicates the selected documents.");
+    _barButtonItemDuplicate.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Displays selected document details.",
+                             @"Displays selected document details.");
+    _barButtonItemInformationDocument.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Displays application information.",
+                             @"Displays application information.");
+    _barButtonItemInformation.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(@"Displays application about screen.",
+                             @"Displays application about screen.");
+    _barButtonItemAbout.accessibilityHint = hint;
+    
+    [self.navigationItem setRightBarButtonItem:_barButtonItemEdit animated:NO];
+
+    self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+    self.navigationController.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
+    self.collectionView.backgroundColor = [UIColor lightGrayColor];
+    
+    // inital layout
+    
+    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
+    
+    // not editing
+    
+    [self setEditing: NO animated: NO];
+    
+    // add gestures
+    
+    UITapGestureRecognizer *tapGestureRecognizer;
+    SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
+    tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                   action: didTapCollectionView];
+    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
+    
+    // set delegates
+    tapGestureRecognizer.delegate = self;
+
+    self.collectionView.delegate = self.collectionViewDelegate;
+    self.collectionView.dataSource = self;
+    
+    MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
+    layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    layoutGroupedDelegate.delegate = self;
+    _collectionViewDelegate = layoutGroupedDelegate;
+    
+    // start observing
+    
+    [self addObservers];
+
+    // update statusbar?
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -452,14 +486,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         }];
     }];
 
-    
-    [self.collectionView.backgroundView setNeedsDisplay];
-    
-    //id indexPaths = self.collectionView.indexPathsForVisibleItems.copy;
-    //[self.collectionView reloadItemsAtIndexPaths: indexPaths];
-    
-    [self addActionItemToToolbar:animated];
-    
+    if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
+        NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
+        [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
+        [self setToolbarItems:toolbarButtons animated:animated];
+    }
+
+    //[self.collectionView.backgroundView setNeedsDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -532,13 +565,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 }
 
-- (void)displayActivityIndictor {
-    if (self.cloudActivityRunning) {
-        self.cloudActivityRunningDisplay = YES;
-        [self.headerCloud startAnimating];
-    }
-}
-
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.presentedViewController;
 }
@@ -547,7 +573,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return UIStatusBarStyleLightContent;
 }
 
-#pragma mark - UIGestureRecognizerDelegate
+#pragma mark -
+#pragma mark UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
        shouldReceiveTouch:(UITouch *)touch {
@@ -565,22 +592,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return YES;
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegate
+#pragma mark -
+#pragma mark UIDocumentInteractionControllerDelegate
 
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:
+                                            (UIDocumentInteractionController *) controller {
     id interactionController = self.navigationController;
     return interactionController;
 }
 
-#pragma mark - Custom Initalization
-
-- (void)addActionItemToToolbar:(BOOL)animated {
-    if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
-        NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
-        [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
-        [self setToolbarItems:toolbarButtons animated:animated];
-    }
-}
 
 #pragma mark - MFMailComposeViewController delegate protocol
 
@@ -592,7 +612,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }];
 }
 
-#pragma mark -  NSFileManager delegate protocol
+#pragma mark -
+#pragma mark NSFileManager delegate protocol
 
 - (BOOL)fileManager:(NSFileManager *)fileManager shouldMoveItemAtURL:(NSURL *)srcURL
               toURL:(NSURL *)dstURL {
@@ -606,7 +627,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
 }
 
-#pragma mark - UIMenuController required methods
+#pragma mark -
+#pragma mark UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
     return NO;
@@ -616,47 +638,18 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return NO;
 }
 
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [((UICollectionView *)scrollView).collectionViewLayout invalidateLayout];
 }
 
-#pragma mark - MADCollectionViewLayoutFilesDelegate
+#pragma mark -
+#pragma mark MADCollectionViewLayoutFilesDelegate
 
-- (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-    
-    if (self.isEditing) {
-        [self.collectionView selectItemAtIndexPath:indexPath animated:YES
-                                    scrollPosition:UICollectionViewScrollPositionCenteredVertically];
-        
-        if (metadata.isUbiquitous) {
-            if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
-                NSURL *url = metadata.URL.copy;
-                
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    NSError *error = nil;
-                    [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
-                                                                                  error:&error];
-                }];
-            }
-        }
-    } else {
-        [cell stopWobble];
-        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        [cell.activityIndicator startAnimating];
-        
-        id open = [[NSInvocationOperation alloc] initWithTarget:self
-                                                       selector:@selector(openDocumentAtURL:)
-                                                         object:metadata.URL.copy];
-        [[NSOperationQueue mainQueue] addOperation:open];
-        [cell normalizeTint];
-    }
-}
-
-#pragma mark - Touch Event Handlers
+#pragma mark -
+#pragma mark Touch Event Handlers
 
 - (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
     [self.searchBar resignFirstResponder];
@@ -665,78 +658,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-#pragma mark UI Helpers
+#pragma mark -
+#pragma mark UIDocumentPickerDelegate
 
-- (UILabel *)titleView {
-    return (UILabel *)self.navigationItem.titleView;
-}
-
-- (void)reenable {
-/*
-    self.collectionView.userInteractionEnabled = YES;
-    NSArray *visibleCells = self.collectionView.visibleCells;
-    UIActivityIndicatorView *activityIndicator;
-    for (MTCollectionViewCellDocument *cell in visibleCells) {
-        activityIndicator = cell.activityIndicator;
-        [activityIndicator stopAnimating];
-    }
-    */
-}
-/*
-- (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
-   NSURL *fileUrl = [self copyMetaDataUrlForIndexPath:indexPath];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            
-            MTCollectionViewCellDocument *visibleCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            NSURL *url = [UIDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-            NSString *path = [url path];
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-            if (image) {
-                visibleCell.imagePreview.image = image;
-            } else {
-                UIImage *defaultThumbnail = [MTCollectionViewCellDocument defaultThumbnail];
-                visibleCell.imagePreview.image = defaultThumbnail;
-            }
-            [visibleCell setNeedsLayout];
-            
-        });
-    });
-}
-*/
-- (void)selectionsUpdated {
-    
-    NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
-    switch (indexPaths.count) {
-
-        case 0:
-            self.barButtonItemInformationDocument.enabled = NO;
-            self.barButtonItemTrash.enabled = NO;
-            self.barButtonItemDuplicate.enabled = NO;
-            self.barButtonItemAction.enabled = NO;
-            break;
-
-        case 1:
-            self.barButtonItemInformationDocument.enabled = YES;
-            self.barButtonItemTrash.enabled = YES;
-            self.barButtonItemDuplicate.enabled = YES;
-            self.barButtonItemAction.enabled = YES;
-            break;
-
-        default:
-            self.barButtonItemInformationDocument.enabled = YES;
-            self.barButtonItemTrash.enabled = YES;
-            self.barButtonItemDuplicate.enabled = YES;
-            self.barButtonItemAction.enabled = NO;
-            break;
-
-    }
-
-}
-
-#pragma mark - UIDocumentPickerDelegate
-
-- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
+- (void)documentPicker:(UIDocumentPickerViewController *)controller
+  didPickDocumentAtURL:(NSURL *)url {
     [controller removeFromParentViewController];
 }
 
@@ -778,7 +704,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
 }
 
-#pragma mark - MADFilesControllerDelegate
+#pragma mark -
+#pragma mark MADFilesControllerDelegate
 
 - (void)filesControllerWillChangeContent:(MADFilesController *)filesController {
     [self.batchInserts removeAllIndexes];
@@ -870,7 +797,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)filesController:(MADFilesController *)filesController
                 didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
 
-#pragma mark - Notification Handlers
+#pragma mark -
+#pragma mark Notification Handlers
 
 - (void)handleCloudActivityStarted:(NSNotification *)notification {
     self.cloudActivityRunning = YES;
@@ -898,7 +826,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.headerCloud stopAnimating];
 }
 
-#pragma mark - Convenience
+#pragma mark -
+#pragma mark Convenience
 
 - (NSArray *)defaultPassthroughViews {
 
@@ -917,8 +846,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (NSURL *)copyMetaDataUrlForIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
-    return metadata.URL;
+    MADMetaData *metadata = [self.filesCoordnator.filesController
+                                objectAtIndexedSubscript:(NSUInteger)indexPath.item];
+    return metadata.URL.copy;
 }
 
 - (void)configureViewControllerWithLaunchContext:(MADAppLaunchContext *)launchContext {
@@ -966,6 +896,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                                                   object: nil];
 }
 
+#pragma mark -
 #pragma mark Add controls
 
 - (void)addProgressViewToView {
@@ -978,7 +909,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.progressViewFileManager removeFromSuperview];
 }
 
-#pragma mark - Lazy Load
+#pragma mark - 
+#pragma mark Property Overrides (Lazy loading)
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
+}
 
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
@@ -995,13 +934,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return _barButtonItemDuplicate;
 }
 
-#pragma mark - UIPopoverControllerDelegate
+#pragma mark -
+#pragma mark UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return [self.openDocumentPopoverController isEqual:popoverController] == NO;
 }
 
-#pragma mark - MADCollectionViewLayoutFilesDelegate
+#pragma mark - 
+#pragma mark MADCollectionViewLayoutFilesDelegate
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
@@ -1013,34 +954,60 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return [self copySubtitleForMetadata:metadata];
 }
 
-- (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata {
-    NSString *result;
-    NSString *downloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
-    if ([downloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
-    } else {
-        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(metadata.fileSystemFileSize)];
-        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
-        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
-    }
-    return result;
-}
-
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
     return [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
 }
 
-#pragma mark - UICollectionViewDataSource
+- (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)
+                                            [self.collectionView cellForItemAtIndexPath:indexPath];
+    [cell performSelectionAnimations];
+    
+    if (self.isEditing) {
+        [self.collectionView selectItemAtIndexPath:indexPath animated:YES
+                                    scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        
+        if (metadata.isUbiquitous) {
+            if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
+                NSURL *url = metadata.URL.copy;
+                
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    NSError *error = nil;
+                    [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
+                                                                                  error:&error];
+                }];
+            }
+        }
+    } else {
+        [cell stopWobble];
+        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        [cell.activityIndicator startAnimating];
+        
+        id open = [[NSInvocationOperation alloc] initWithTarget:self
+                                                       selector:@selector(openDocumentAtURL:)
+                                                         object:metadata.URL.copy];
+        [[NSOperationQueue mainQueue] addOperation:open];
+        [cell normalizeTint];
+    }
+}
+
+#pragma mark - 
+#pragma mark UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section {
+    return self.filesCoordnator.filesController ?
+                            (NSInteger)self.filesCoordnator.filesController.count : 0;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
     MTCollectionViewCellDocument *cell;
@@ -1073,19 +1040,11 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         cell.labelTitleSub.text = subtitle.copy;
     }
     
-    [self updateProgressViewUpload:cell.progressViewUpload uploading:uploading
-                   percentUploaded:metadata.ubiquitousItemPercentUploaded];
+    [self updateProgressView:cell.progressViewUpload active:uploading
+                     percent:metadata.ubiquitousItemPercentUploaded];
     
-    if (downloading) {
-        cell.progressViewDownload.hidden = NO;
-        if (cell.progressViewDownload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
-            [cell.progressViewDownload setProgress: (float) (metadata.ubiquitousItemPercentDownloaded / 100.0000f)
-                                          animated: YES];
-        }
-    } else {
-        cell.progressViewDownload.hidden = YES;
-        [cell.progressViewDownload setProgress:0.0 animated:YES];
-    }
+    [self updateProgressView:cell.progressViewDownload active:downloading
+                     percent:metadata.ubiquitousItemPercentDownloaded];
     
     UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
     if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
@@ -1120,57 +1079,26 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         END_ReadThumbnail:;
     }
     
-    [cell normalizeTint];
+    /*[cell normalizeTint];
     
     if ([self isFileViewEditing]) {
         [cell startWobble];
     } else {
         [cell stopWobble];
-    }
+    }*/
     
     return cell;
 }
 
-- (void)updateProgressViewDownload:(UIProgressView *)progressViewDownload
-                         downloading:(bool)downloading
-                   percentDownloaded:(double)percentDownloaded {
-    
-    if (!downloading) {
-        progressViewDownload.hidden = YES;
-        [progressViewDownload setProgress:Float_0 animated:YES];
-        return;
-    }
-    progressViewDownload.hidden = NO;
-    if (progressViewDownload.progress < percentDownloaded / Float_100) {
-        [progressViewDownload setProgress: (float) (percentDownloaded / Float_100)
-                                 animated: YES];
-    }
-}
-
-- (void)updateProgressViewUpload:(UIProgressView *)progressViewUpload
-                       uploading:(bool)uploading
-                 percentUploaded:(double)percentUploaded {
-
-    if (!uploading) {
-        progressViewUpload.hidden = YES;
-        [progressViewUpload setProgress:Float_0 animated:YES];
-    }
-
-    progressViewUpload.hidden = NO;
-    if (progressViewUpload.progress < percentUploaded / Float_100) {
-        [progressViewUpload setProgress: (float) (percentUploaded / Float_100)
-                                    animated: YES];
-        
-    }
-}
-
-#pragma mark - UISearchBarDelegate
+#pragma mark -
+#pragma mark UISearchBarDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField { }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
+- (void)searchBar:(UISearchBar *)searchBar
+    selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
 
@@ -1178,16 +1106,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar { }
 
-#pragma mark - Property Overrides
-
-- (NSNumberFormatter *)subtitleNumberFormatter {
-    if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
-    }
-    return _subtitleNumberFormatter;
-}
-
-#pragma mark - MADFileLocationManagerDelegate
+#pragma mark - 
+#pragma mark MADFileLocationManagerDelegate
 
 - (NSString *)groupIdentifier { return MADIdentifierGroup; }
 
@@ -1323,6 +1243,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
+
+#pragma mark -
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
+
 #pragma mark - UIPopoverControllerDelegate
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -1330,7 +1256,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
-#pragma mark - MTViewControllerProtocol
+#pragma mark - 
+#pragma mark MTViewControllerProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = true;
@@ -1361,7 +1288,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
-#pragma mark - MADOpenFileViewControllerDelegate
+#pragma mark -
+#pragma mark MADOpenFileViewControllerDelegate
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
@@ -1403,7 +1331,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                                                     name: UIDocumentStateChangedNotification
                                                   object: document];
     id o = [[NSInvocationOperation alloc] initWithTarget:self
-                                                selector:@selector(reloadAfterClose)
+                                                selector:@selector(handleReloadAfterClose)
                                                   object:nil];
     [[NSOperationQueue mainQueue] addOperation:o];
     NSLog(@"\n\n\tDocument state closed.\n\n");
@@ -1416,20 +1344,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                                                 selector: open
                                                   object: document];
     [[NSOperationQueue mainQueue] addOperation:o];
-}
-
-- (void)reloadAfterClose {
-    UICollectionView *weakCollectionView __weak = self.collectionView;
-    /*[UIView performWithoutAnimation:^{
-
-    }];
-    */
-    @autoreleasepool {
-        UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-        [collectionView.backgroundView setNeedsDisplay];
-        [collectionView reloadItemsAtIndexPaths:paths];
-    }
 }
 
 - (void)openViewerWithDocument:(MADocument *)document {
@@ -1512,6 +1426,23 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return UTIs;
 }
 
+#pragma mark -
+#pragma mark Private events handlers
+
+- (void)handleReloadAfterClose {
+    UICollectionView *weakCollectionView __weak = self.collectionView;
+    /*[UIView performWithoutAnimation:^{
+     
+     }];
+     */
+    @autoreleasepool {
+        UICollectionView *collectionView = weakCollectionView;
+        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
+        [collectionView.backgroundView setNeedsDisplay];
+        [collectionView reloadItemsAtIndexPaths:paths];
+    }
+}
+
 #pragma mark - MADDocumentDelegate
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -1533,7 +1464,27 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark MTDocumentCellProtocol
+
+- (void)editFile:(id)sender {
+    [self activateEditMode:sender];
+}
+
+- (void)emailFile:(id)sender {
+    [self email:sender];
+}
+
+- (void)renameFile:(id)sender {
+    [self rename:sender];
+}
+
+- (void)duplicateFile:(id)sender {
+    [self actionDuplicate:sender];
+}
+
+#pragma mark - 
+#pragma mark Actions
 
 - (IBAction)addDocument:(id)sender {
     UINavigationController *navControl = [UINavigationController NewDocument];
@@ -1613,26 +1564,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
-#pragma mark - MTDocumentCellProtocol
-
-- (void)editFile:(id)sender {
-    [self activateEditMode:sender];
-}
-
-- (void)emailFile:(id)sender {
-    [self email:sender];
-}
-
-- (void)renameFile:(id)sender {
-    [self rename:sender];
-}
-
-- (void)duplicateFile:(id)sender {
-    [self actionDuplicate:sender];
-}
-
-#pragma mark - Actions
-
 - (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.barButtonItemAddNewDocument setEnabled:YES];
@@ -1643,7 +1574,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.hidden = NO;
         self.searchBar.showsCancelButton = NO;
         self.searchBar.alpha = 0.0000f;
-        self.titleView.alpha = 1.0000f;
+        self.navigationItem.titleView.alpha = 1.0000f;
         self.navigationItem.leftBarButtonItem.enabled = NO;
         
         self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
@@ -1661,11 +1592,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.tintColor = [UIColor whiteColor];
         
         if (self.navigationItem.titleView != nil) {
-            [UIView transitionWithView:(UIView * _Nonnull)self.navigationItem.titleView
-                              duration:0.2000f
-                               options:UIViewAnimationOptionCurveEaseOut animations:^{
+        
+            UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
+            [UIView transitionWithView: titleView
+                              duration: 0.2000f
+                               options: UIViewAnimationOptionCurveEaseOut animations:^{
+                               
                                    self.searchBar.alpha = 1.0000f;
-                                   self.titleView.alpha = 0.0000f;
+                                   self.navigationItem.titleView.alpha = 0.0000f;
                                    self.navigationItem.titleView = searchViewHolder;
                                } completion:^(BOOL finished) {
                                    if (self.searchBar.isFirstResponder == NO) {
@@ -1680,14 +1614,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         }
         self.searchBar.hidden = YES;
         self.searchBar.alpha = 0.1000f;
-        self.titleView.alpha = 0.0000f;
+        self.navigationItem.titleView.alpha = 0.0000f;
         self.navigationItem.leftBarButtonItem.enabled = YES;
-        [UIView transitionWithView:self.navigationItem.titleView
-                          duration:0.2000f
-                           options:UIViewAnimationOptionCurveEaseOut animations:^{
+        UIView *titleView = self.navigationItem.titleView;
+        [UIView transitionWithView: titleView
+                          duration: 0.2000f
+                           options: UIViewAnimationOptionCurveEaseOut animations:^{
                                self.searchBar.alpha = 0.0000f;
-                               self.titleView.alpha = 1.0000f;
-                               self.navigationItem.titleView = self.titleView;
+                               self.navigationItem.titleView.alpha = 1.0000f;
+                               self.navigationItem.titleView = self.navigationItem.titleView;
                            } completion:nil];
         
     }
@@ -1716,7 +1651,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-- (void)done:(id)sender {
+- (IBAction)done:(id)sender {
     self.editing = NO;
     //self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -1750,15 +1685,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
-- (void)cut:(id)sender {
+- (IBAction)cut:(id)sender {
     [super cut:sender];
 }
 
-- (void)copy:(id)sender {
+- (IBAction)copy:(id)sender {
     [super copy:sender];
 }
 
-- (void)paste:(id)sender {
+- (IBAction)paste:(id)sender {
     NSURL *url = [[UIPasteboard generalPasteboard] URL];
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
@@ -1858,14 +1793,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self presentViewController:alertController animated:YES completion:NULL];
 }
 
-- (void)actionDuplicate:(id)sender {
+- (IBAction)actionDuplicate:(id)sender {
     for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
         MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)selectedItem.item];
         [self.filesCoordnator.filesController duplicateFileInfo:metaData];
     }
 }
 
-- (void)rename:(id)sender {
+- (IBAction)rename:(id)sender {
     
     MTCollectionViewCellDocument *cellDocument;
     if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
@@ -1927,7 +1862,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
-- (void)email:(MTCollectionViewCellDocument *)cell {
+- (IBAction)email:(MTCollectionViewCellDocument *)cell {
     
     NSIndexPath *indexPath;
     MADMetaData *metadata;
@@ -1981,7 +1916,25 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-#pragma mark - UIAdaptivePresentationControllerDelegate
+#pragma mark -
+#pragma mark Helpers
+
+- (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata {
+    NSString *result;
+    NSString *downloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+    if ([downloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
+    } else {
+        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(metadata.fileSystemFileSize)];
+        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
+        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
+    }
+    return result;
+}
+
+
+#pragma mark - 
+#pragma mark UIAdaptivePresentationControllerDelegate
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
@@ -1992,7 +1945,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return style;
 }
 
-#pragma mark - UIPopoverPresentationControllerDelegate
+#pragma mark - 
+#pragma mark UIPopoverPresentationControllerDelegate
 
 - (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController { }
 
@@ -2000,6 +1954,78 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
     self.aboutViewControllerOnScreen = false;
+}
+
+#pragma mark -
+#pragma mark Update UI
+
+- (void)updateProgressView:(UIProgressView *)progressView
+                    active:(bool)active
+                   percent:(double)percent {
+    
+    if (!active) {
+        progressView.hidden = YES;
+        [progressView setProgress:Float_0 animated:YES];
+        return;
+    }
+    
+    progressView.hidden = NO;
+    if (progressView.progress < percent / Float_100) {
+        [progressView setProgress: (float) (percent / Float_100)
+                         animated: YES];
+    }
+}
+
+- (void)reenable { }
+
+- (void)selectionsUpdated {
+    
+    NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
+    
+    switch (indexPaths.count) {
+            
+        case 0:
+            [self disableBarButtonItems];
+            break;
+            
+        case 1:
+            [self enableBarButtonItems];
+            break;
+            
+        default:
+            [self defaultBarButtonItemState];
+            break;
+            
+    }
+    
+}
+
+- (void)defaultBarButtonItemState {
+    _barButtonItemInformationDocument.enabled = YES;
+    _barButtonItemTrash.enabled = YES;
+    _barButtonItemDuplicate.enabled = YES;
+    _barButtonItemAction.enabled = NO;
+}
+
+- (void)enableBarButtonItems {
+    _barButtonItemInformationDocument.enabled = YES;
+    _barButtonItemTrash.enabled = YES;
+    _barButtonItemDuplicate.enabled = YES;
+    _barButtonItemAction.enabled = YES;
+}
+
+- (void)disableBarButtonItems {
+    _barButtonItemInformationDocument.enabled = NO;
+    _barButtonItemTrash.enabled = NO;
+    _barButtonItemDuplicate.enabled = NO;
+    _barButtonItemAction.enabled = NO;
+}
+
+- (void)displayActivityIndictor {
+    if (_cloudActivityRunning) {
+        _cloudActivityRunningDisplay = YES;
+        [_headerCloud startAnimating];
+    }
 }
 
 @end

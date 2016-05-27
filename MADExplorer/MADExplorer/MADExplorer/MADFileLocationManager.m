@@ -48,8 +48,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (BOOL)hasUbiquityIdentityChanged {
     BOOL hasChanged = NO;
     
-    id<NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
-    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
+    id <NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+    id <NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
     
     bool currentTokenNilStoredNonNil = !currentToken && storedToken;
     bool storedTokenNilCurrentNonNil = !storedToken && currentToken;
@@ -68,7 +68,8 @@ static NSString * const MADFirstLaunch                                     = @"M
     id<NSObject, NSCopying, NSCoding> storedToken = nil;
     
     // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
-    NSData *ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+    NSData *ubiquityIdentityTokenArchive;
+    ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
     
     if (ubiquityIdentityTokenArchive) {
         storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];

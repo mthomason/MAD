@@ -32,8 +32,6 @@
 
     @property (readonly) __kindof UIManagedDocument *openDocument;
 
-    - (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata;
-
     - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)visible
                                                  animated:(BOOL)animated;
 

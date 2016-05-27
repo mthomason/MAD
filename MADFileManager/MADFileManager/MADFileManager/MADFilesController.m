@@ -220,11 +220,10 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 
 - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
 
-    dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
     __block MADMetaData *fileInfo = nil;
     __unsafe_unretained typeof(self) weakSelf = self;
 
-    dispatch_sync(fileMetaDataQueue, ^{
+    dispatch_sync(_fileMetaDataQueue, ^{
         fileInfo = weakSelf.fileMetaDatum[index];
     });
     
