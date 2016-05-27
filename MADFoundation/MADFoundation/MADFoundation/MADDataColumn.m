@@ -159,14 +159,15 @@
         _fieldName = fieldName.copy;
 
         NSString *identifier = plist[[MADDataColumn keyIdentifier]];
-        _identifier = identifier;
+        _identifier = identifier.copy;
         
         NSArray *columnImmutable = plist[[MADDataColumn keyColumn]];
         NSMutableArray *column = [[NSMutableArray alloc] initWithArray: columnImmutable];
-        self.column = column;
+        _column = column;
         
-        id defaultValue = plist[[MADDataColumn keyDefaultValue]];
-        self.defaultValue = defaultValue;
+        NSObject <NSCopying> *defaultValue;
+        defaultValue = plist[[MADDataColumn keyDefaultValue]];
+        _defaultValue = defaultValue.copy;
 
         NSString *caption = plist[[MADDataColumn keyCaption]];
         _caption = caption.copy;
@@ -220,55 +221,63 @@
     }
 }
 
-- (NSDictionary *)plist {
-    
-    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity:8];
-    NSString *keyFieldName = [MADDataColumn keyFieldName];
-    plist[keyFieldName] = [self fieldName];
+- (NSDictionary *)copyPlist {
+    const NSUInteger plistCapacity = 12;
+    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity: plistCapacity];
 
-    NSString *keyIdentifier = [MADDataColumn keyIdentifier];
-    NSString *keyColumn = [MADDataColumn keyColumn];
-    NSString *keyDefaultValue = [MADDataColumn keyDefaultValue];
-    NSString *keyCaption = [MADDataColumn keyCaption];
-    NSString *keyColumnType = [MADDataColumn keyColumnType];
-    NSString *keyNativeColumnType = [MADDataColumn keyNativeColumnType];
-    NSString *keyDataLength = [MADDataColumn keyDataLength];
-    NSString *keyDataPercision = [MADDataColumn keyDataPercision];
-    NSString *keyIsPrimaryKey = [MADDataColumn keyIsPrimaryKey];
-    NSString *keyIsNotNull = [MADDataColumn keyIsNotNull];
-    NSString *keyIsAutoIncrement = [MADDataColumn keyIsAutoIncrement];
-    
-    NSNumber *primaryKey = [[NSNumber alloc] initWithBool:self.isPrimaryKey];
-    NSNumber *notNull = [[NSNumber alloc] initWithBool:self.isNotNull];
-    NSNumber *autoIncrement = [[NSNumber alloc] initWithBool:self.isAutoIncrement];
+    id key;
+    key = [MADDataColumn keyFieldName];
+    plist[key] = [self fieldName];
 
-    id defaultValue = self.defaultValue;
-    if ([defaultValue isEqual:[NSNull null]]) {
-        defaultValue = @"~MTNull~";
+    key= [MADDataColumn keyIdentifier];
+    id obj;
+    obj = _identifier.copy;
+    plist[key] = obj;
+
+    key = [MADDataColumn keyColumn];
+    obj = _column.copy;
+    plist[key] = obj;
+
+    key = [MADDataColumn keyDefaultValue];
+    obj = _defaultValue.copy;
+    if ([obj isEqual:[NSNull null]]) {
+        obj = @"~MTNull~";
     }
-    
-    plist[keyIdentifier] = self.identifier;
-    plist[keyColumn] = self.column;
-    plist[keyDefaultValue] = defaultValue;
-    plist[keyCaption] = self.caption;
-    
-    id type = [[NSNumber alloc] initWithShort:self.type];
-    plist[keyColumnType] = type;
-    
-    id nativeType = [[NSNumber alloc] initWithInteger:self.nativeType];
-    plist[keyNativeColumnType] = nativeType;
-    
-    id dataLength = [[NSNumber alloc] initWithInteger:self.dataLength];
-    plist[keyDataLength] = dataLength;
-    
-    id dataPercision = [[NSNumber alloc] initWithInteger:self.dataPercision];
-    plist[keyDataPercision] = dataPercision;
-    
-    
-    plist[keyIsPrimaryKey] = primaryKey;
-    plist[keyIsNotNull] = notNull;
-    plist[keyIsAutoIncrement] = autoIncrement;
+    plist[key] = obj;
 
+    key = [MADDataColumn keyCaption];
+    plist[key] = self.caption;
+    
+    key = [MADDataColumn keyColumnType];
+    obj = [[NSNumber alloc] initWithShort:_type];
+    plist[key] = obj;
+    
+    key = [MADDataColumn keyNativeColumnType];
+    obj = [[NSNumber alloc] initWithInteger:_nativeType];
+    plist[key] = obj;
+    
+    key = [MADDataColumn keyDataLength];
+    obj = [[NSNumber alloc] initWithInteger:_dataLength];
+    plist[key] = obj;
+    
+    obj = [[NSNumber alloc] initWithInteger:_dataPercision];
+    key = [MADDataColumn keyDataPercision];
+    plist[key] = obj;
+    
+    obj = [[NSNumber alloc] initWithBool:_primaryKey];
+    key = [MADDataColumn keyIsPrimaryKey];
+    plist[key] = obj;
+
+    obj = [[NSNumber alloc] initWithBool:_notNull];
+    key = [MADDataColumn keyIsNotNull];
+    plist[key] = obj;
+
+    obj = [[NSNumber alloc] initWithBool:_autoIncrement];
+    key = [MADDataColumn keyIsAutoIncrement];
+    plist[key] = obj;
+
+    NSAssert(plist.count == plistCapacity, @"Need to update dictionary size.");
+    
     return plist;
 }
 

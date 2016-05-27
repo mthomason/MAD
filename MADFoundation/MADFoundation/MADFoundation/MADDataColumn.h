@@ -15,8 +15,9 @@
 @interface MADDataColumn : NSObject
     <NSCoding>
 
-    @property (nonatomic, copy, readonly) NSString *identifier;
-    @property (nonatomic, strong) id defaultValue;
+    @property (nonatomic, readonly, copy) NSString *identifier;
+
+    @property (nonatomic, readwrite, strong) NSObject <NSCopying> *defaultValue;
 
     @property (nonatomic, assign)   MTDataType  type;
     @property (nonatomic, assign)   NSInteger   nativeType;
@@ -33,12 +34,12 @@
     - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
     - (instancetype)initWithPlist:(NSDictionary *)plist;
 
-    - (NSDictionary *)plist;
+    - (NSDictionary *)copyPlist;
     - (void)removeAllObjects;
 
-    - (void)addObject:(id)object;                           //Adds to end of column data
-    - (instancetype)objectAtIndex:(NSUInteger)index;        //Object at row number
-    - (void)addRows:(NSUInteger)count;                      //Adds specifc number of rows with default value.
+    - (void)addObject:(id)object;                       //Adds to end of column data
+    - (instancetype)objectAtIndex:(NSUInteger)index;    //Object at row number
+    - (void)addRows:(NSUInteger)count;                  //Adds specifc number of rows with default.
 
     + (MADDataColumn *)newDataColumnWithIdentifier:(NSString *)identifier;
 

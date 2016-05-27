@@ -22,12 +22,10 @@
 
 @protocol MADOpenFileViewControllerDelegate;
 
-@interface MADOpenFileViewController : UICollectionViewController
+@interface MADFileExplorerViewController : UICollectionViewController
     <MADFilesControllerDelegate,
         MADCollectionViewLayoutFilesDelegate,
         MADSaveFileProtocol>
-
-    @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 
     @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
     @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;

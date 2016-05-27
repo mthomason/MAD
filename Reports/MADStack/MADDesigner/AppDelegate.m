@@ -22,7 +22,7 @@
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import "MADOperationQueue.h"
-#import "MADDesignerFileExplorerViewController.h"
+#import "MADOpenFileViewController.h"
 
 #import "Constants.h"
 
@@ -42,6 +42,7 @@
 
 @class MADTransparentPresentationController;
 @class MFMailComposeViewController;
+@class MADFileExplorerViewController;
 
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
@@ -68,7 +69,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-    @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
+    @property (readonly) MADFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 
     @property (nonatomic, strong, readwrite) MADOperationQueue *operationQueueBackground;

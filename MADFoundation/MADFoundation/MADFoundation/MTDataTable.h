@@ -13,6 +13,7 @@
 #import <Foundation/NSEnumerator.h>
 #import <Foundation/NSDictionary.h>
 
+typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
 
 typedef NS_ENUM(short, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -37,7 +38,7 @@ typedef NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *>
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
 
-    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, copy, readwrite) NSString *name;
     @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
     @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
     @property (nonatomic, strong, readwrite) MADMutableDictionaryDataColumns *columns;

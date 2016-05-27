@@ -282,7 +282,6 @@
 		4C32A4BE1BB07D5A00DD59A3 /* MADBarcodes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */; };
 		4C32A4C01BB07D6300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A4BF1BB07D6300DD59A3 /* main.m */; };
 		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; };
-		4C32A4C51BB0816A00DD59A3 /* MADExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */; };
 		4C359E221B082E7D00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E241B082E7F00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -763,7 +762,6 @@
 		4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */; };
 		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; };
 		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; };
-		4C8DE28B1BAFB23400AD1111 /* MADExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */; };
 		4C8DE28F1BAFB26700AD1111 /* MADQueryVisualization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */; };
 		4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; };
@@ -1998,8 +1996,6 @@
 		4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADDesigner.storyboard; sourceTree = "<group>"; };
 		4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardNewDocument.storyboard; sourceTree = "<group>"; };
 		4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardObjectSelector.storyboard; sourceTree = "<group>"; };
-		4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADExplorer.storyboard; sourceTree = "<group>"; };
-		4C8DE28C1BAFB25300AD1111 /* MTStoryboardReportViewer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MTStoryboardReportViewer.storyboard; sourceTree = "<group>"; };
 		4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryVisualization.storyboard; sourceTree = "<group>"; };
 		4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MAD Designer.entitlements"; sourceTree = "<group>"; };
 		4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADBarcodeDesigner.storyboard; sourceTree = "<group>"; };
@@ -3802,7 +3798,6 @@
 		4C4020F81BAE98C300BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DE28C1BAFB25300AD1111 /* MTStoryboardReportViewer.storyboard */,
 				4C4020F91BAE98C300BAE5FC /* MADViewerController.h */,
 				4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */,
 				4C4020FD1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.h */,
@@ -4284,7 +4279,6 @@
 		4C8DE2891BAFB23400AD1111 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -5691,7 +5685,6 @@
 				4CC3D7DA1BCB6D9500BDA5D3 /* UIImagePatternPinkWithFlecks@2x.png in Resources */,
 				4CC3D7471BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy.png in Resources */,
 				4CC3D7511BCB6D9500BDA5D3 /* Icon-72-Designer-Modern.png in Resources */,
-				4C8DE28B1BAFB23400AD1111 /* MADExplorer.storyboard in Resources */,
 				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CC3D7D11BCB6D9500BDA5D3 /* UIImagePatternNotebook.png in Resources */,
 				4CC3D8071BCB6D9500BDA5D3 /* UIBarButtonItemMadDesigner@2x.png in Resources */,
@@ -6028,7 +6021,6 @@
 				4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */,
 				4C6700031BA133AB001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
 				4C6700341BA133AB001C9D5A /* fontawesome-webfont.ttf in Resources */,
-				4C32A4C51BB0816A00DD59A3 /* MADExplorer.storyboard in Resources */,
 				4C67006F1BA133AB001C9D5A /* mysql_version.h.in in Resources */,
 				4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
