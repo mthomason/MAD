@@ -358,9 +358,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     if ([keyPath isEqualToString:[MADFileExplorerViewController keySubviews]]) {
         if ([object isKindOfClass:[UITextField class]]) {
-            for (UIView *view in ((UITextField *)object).subviews) {
+            UIImage *image;
+            UIView *view;
+            NSArray<__kindof UIView *> *subviews = ((UITextField *)object).subviews;
+            for (view in subviews) {
                 if ([view isKindOfClass:[UIButton class]]) {
-                    UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    image = [((UIButton *)view).imageView.image
+                             imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     ((UIButton *)view).tintColor = [UIColor whiteColor];
                     [((UIButton *)view) setImage:image forState:UIControlStateNormal];
                 }
@@ -380,7 +384,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     _cloudActivityRunning = NO;
     _cloudActivityRunningDisplay = NO;
     _rightBarButtonItemActivityIndicatorVisible = NO;
-
     
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
@@ -423,9 +426,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [toolbarButtons removeObject:_barButtonItemAction];
     [toolbarButtons removeObject:_barButtonItemCloudDown];
     [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
-    _barButtonItemDuplicate = barButtonItemDuplicate;
-    g
     [self setToolbarItems:toolbarButtons animated:NO];
+    _barButtonItemDuplicate = barButtonItemDuplicate;
     
     UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit:self
                                                                  action:@selector(edit:)];
@@ -490,12 +492,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     // set delegates
     tapGestureRecognizer.delegate = self;
 
-    self.collectionView.delegate = self.collectionViewDelegate;
-    self.collectionView.dataSource = self;
-    
     MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
     layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
     layoutGroupedDelegate.delegate = self;
+
+    self.collectionView.delegate = layoutGroupedDelegate;
+    self.collectionView.dataSource = self;
+    
     _collectionViewDelegate = layoutGroupedDelegate;
     
     // start observing
