@@ -12,6 +12,11 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
+@class MADDataColumn;
+@class NSMutableDictionary;
+
+typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
+
 @interface MADDataColumn : NSObject
     <NSCoding>
 

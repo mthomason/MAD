@@ -23,10 +23,47 @@
 
 @implementation MTQueryCacheSelectLimitOffset
 
++ (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
+                                                 columnKeys:(NSArray *)columnKeys
+                                            sortDescriptors:(NSArray *)sortDescriptors {
+    id keyColumnKeys = @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys);
+    id keyTableNames = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
+    id keySortDesc   = @(MTQueryCacheSelectLimitOffsetParamatersSortDesc);
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             columnKeys, keyColumnKeys,
+                             tableName, keyTableNames,
+                             sortDescriptors, keySortDesc, nil];
+    
+    id query = [[self alloc] initWithObject: options];
+    return query;
+
+}
+
++ (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
+                                                 columnKeys:(NSArray *)columnKeys
+                                                    columns:(MADMutableMapDataColumns *)columns
+                                            sortDescriptors:(NSArray *)sortDescriptors {
+    id keyColumnKeys = @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys);
+    id keyTableNames = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
+    id keySortDesc   = @(MTQueryCacheSelectLimitOffsetParamatersSortDesc);
+    id keyColumns    = @(MTQueryCacheSelectLimitOffsetParamatersColumns);
+    
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             columns, keyColumns,
+                             columnKeys, keyColumnKeys,
+                             tableName, keyTableNames,
+                             sortDescriptors, keySortDesc, nil];
+    
+    
+    id query = [[self alloc] initWithObject: options];
+    return query;
+}
+
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
+                                                              NSStringFromClass([self class]));
 
         NSString *(^sqlSelect)(NSString *, NSArray *, bool);
         sqlSelect = ^(NSString *tableName, NSArray *columnKeys, bool includingRowID) {
@@ -88,8 +125,8 @@
                 for (NSDictionary *condition in whereClause) {
                     if (counter > 0) [sql appendString:@" AND "];
                     
-                    NSString * __weak columnHandle = condition[MTQueryKeyPredicateColumn];
-                    NSString * __weak columnValue = condition[MTQueryKeyPredicateValue];
+                    NSString *columnHandle = condition[MTQueryKeyPredicateColumn];
+                    NSString *columnValue = condition[MTQueryKeyPredicateValue];
                     [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
                     counter++;
                 }

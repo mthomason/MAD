@@ -21,6 +21,7 @@
 		4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAEC1C8C2D3B00420CFF /* MADDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */; };
+		4CE1CA481CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA471CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,6 +58,7 @@
 		4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "Categories/NSURL+Document.h"; sourceTree = "<group>"; };
 		4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataType.h; sourceTree = "<group>"; };
 		4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataType.m; sourceTree = "<group>"; };
+		4CE1CA471CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMutableMapDataColumns.h; sourceTree = "<group>"; };
 		4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplicationProtocol.h; sourceTree = "<group>"; };
 		4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
 		4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCacheProtocol.h; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				4C9372BA1BACFDB200D6BD62 /* MTDataTable.m */,
 				4C9372CD1BACFF0F00D6BD62 /* MADDataColumn.h */,
 				4C9372CE1BACFF0F00D6BD62 /* MADDataColumn.m */,
+				4CE1CA471CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h */,
 			);
 			name = DataTable;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */,
+				4CE1CA481CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h in Headers */,
 				4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */,
 				4C9372BB1BACFDB200D6BD62 /* MTDataTable.h in Headers */,
 				4CF09A491BB2791D007BCF7A /* UIApplication+MADAppDelegate.h in Headers */,

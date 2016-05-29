@@ -377,7 +377,11 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+
+        NSLog(@"%s", __PRETTY_FUNCTION__);
     
         UINavigationController *navController;
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;

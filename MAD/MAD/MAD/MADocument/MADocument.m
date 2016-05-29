@@ -774,7 +774,9 @@ READ_FAIL:;
                                   options: NSFileWrapperWritingAtomic
                       originalContentsURL: url
                                     error: error] ? true : false;
-        
+        if (!success) {
+            NSLog(@"Break");
+        }
         NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
     }
     
@@ -875,9 +877,10 @@ READ_END:;
 - (NSManagedObjectModel *)madManagedObjectModel {
     @synchronized (self) {
         if (!_madManagedObjectModel) {
-            NSURL *modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
-                                                      withExtension: MADManagedObjectModelExtention];
+            NSURL *modelURL;
             NSManagedObjectModel *managedObjectModel;
+            modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
+                                               withExtension: MADManagedObjectModelExtention];
             managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
             _madManagedObjectModel = managedObjectModel;
         }

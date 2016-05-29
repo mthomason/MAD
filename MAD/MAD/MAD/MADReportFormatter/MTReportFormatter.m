@@ -50,12 +50,6 @@
 
 NSString * const MTNullIdentifier = @"(null)";
 
-typedef NSMutableArray  <__kindof MADSectionPlist *>                    MADMutableSectionArray;
-typedef NSMutableArray  <__kindof NSNumber *>                           MADMutableIndexArray;
-
-typedef NSDictionary    <NSString *, NSNumber *>    MADStringNumberMap;
-typedef NSArray         <RptqQueryGroup *>          MADQueryGroupArray;
-
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
     return UIEdgeInsetsMake(fCGPointsForInches(1.0/4.0),
@@ -82,49 +76,44 @@ static inline CGFloat PrintableHeightForPage(MTReportFormatterPageDefinition *pa
     return page.layoutSize.height - page.margins.top - page.margins.bottom;
 }
 
-static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat nextItemHeight, CGFloat pageFooterHeight);
-static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat nextItemHeight, CGFloat pageFooterHeight) {
+static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage,
+                                         CGFloat nextItemHeight, CGFloat pageFooterHeight);
+static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
+                                         nextItemHeight, CGFloat pageFooterHeight) {
     return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;
 }
 
+typedef NSMutableArray  <__kindof MADSectionPlist *>    MADMutableSectionArray;
+typedef NSMutableArray  <__kindof NSNumber *>           MADMutableIndexArray;
+
+typedef NSDictionary    <NSManagedObjectID *, NSNumber *>        MADNumberMapByObjectID;
+
+typedef NSDictionary    <NSString *, NSNumber *>        MADStringNumberMap;
+typedef NSArray         <RptqQueryGroup *>              MADQueryGroupArray;
+
 @interface MTReportFormatter ()
 
-    @property (nonatomic, weak, readwrite)      MADocument *layout;
-    @property (nonatomic, assign)               MTReportFormatterOptions options;
+    @property (nonatomic, readwrite, weak)      MADocument *layout;
+    @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
 
-    @property (nonatomic, strong, readwrite)    MTReportFormatterPageDefinition *page;
+    @property (nonatomic, readwrite, strong)    MTReportFormatterPageDefinition *page;
 
-    @property (nonatomic, strong, readwrite)    MADCachingIndexes *reportIndexes;
-    @property (nonatomic, strong, readwrite)    MADCachingLayout *reportLayout;
+    @property (nonatomic, readwrite, strong)    MADCachingIndexes *reportIndexes;
+    @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
 
-    @property (nonatomic, strong)               MTReportFormatterState *machineState;
-    @property (nonatomic, strong)               MTReportFormatterCache *reportFormatterCache;
+    @property (nonatomic, readwrite, strong)    MTReportFormatterState *machineState;
+    @property (nonatomic, readwrite, strong)    MTReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, strong)               MADMutableSectionArray *pageLayoutTemporary;
-    @property (nonatomic, strong)               MADMutableIndexArray *pageIndexesTemporary;
+    @property (nonatomic, readwrite, strong)    MADMutableSectionArray *pageLayoutTemporary;
+    @property (nonatomic, readwrite, strong)    MADMutableIndexArray *pageIndexesTemporary;
 
-    @property (nonatomic, strong)               MADObjectArray      *lastComparsonValues;
-    @property (nonatomic, strong)               MADStringNumberMap  *layoutHeightsBySectionKey;
-    @property (nonatomic, strong, readwrite)    MADQueryGroupArray  *sortedQueryGroups;
+    @property (nonatomic, readwrite, strong)    MADObjectArray      *lastComparsonValues;
+    @property (nonatomic, readwrite, strong)    MADNumberMapByObjectID  *layoutHeightsBySectionKey;
+    @property (nonatomic, readwrite, strong)    MADQueryGroupArray  *sortedQueryGroups;
 
 @end
 
-
 @implementation MTReportFormatter
-
-- (void)initializeStateMachine {
-    NSArray *sd = [self.dataDelegate sortDescriptors];
-    NSArray *sortDescriptors = [NSArray arrayWithArray:sd];
-
-    self.machineState.rowCounter = 0;
-    self.machineState.groupCounter = 0;
-    self.machineState.pageCounter = 0;
-    self.machineState.detailRowId = @0;
-    self.machineState.detailRowIdLast = @0;
-    self.machineState.sortDescriptors = sortDescriptors;
-    self.machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
-    self.machineState.document = [self.layout activeDocumentModel];
-}
 
 - (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid {
     NSDictionary *row = [self.datasource copyDataForCacheId: rowid];
@@ -146,46 +135,45 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 + (instancetype)newReportFormatterWithDocument: (MADocument *)layout
                                        options: (MTReportFormatterOptions)options {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument: layout
+                                                                    options: options];
     return result;
 }
 
 + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
                                      options: (MTReportFormatterOptions)options {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument: layout
+                                                                    options: options];
     return result;
 }
 
 #pragma mark - Accessors
 
 - (MADSectionArray *)layoutForPage:(NSUInteger)page {
-    MADSectionArray *result = (page < (NSUInteger)[self.reportLayout count]) ?
-                                self.reportLayout[page] : nil;
+    MADSectionArray *result = page < _reportLayout.count ?
+                                        _reportLayout[page] : nil;
     return result;
 }
 
 - (NSUInteger)layoutIdentifier {
-    if (_overrideIdentifier == nil) {
-        NSManagedObjectID *objectID = _layout.documentObjectID;
-        NSURL *uri = objectID.URIRepresentation;
-        NSString *string = uri.absoluteString;
-        return string.hash;
-    } else {
-        return _overrideIdentifier.hash;
-    }
+    return _overrideIdentifier == nil ?
+                    _layout.documentObjectID.URIRepresentation.absoluteString.hash :
+                    _overrideIdentifier.hash;
 }
 
 - (NSString *)newStringNameCurrentReportIndexes:(CGSize)size andHash:(unsigned long)hash {
     NSString *sizeString = NSStringFromCGSize(_page.layoutSize);
-    NSString *name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
-                                                      "ih", sizeString];
+    NSString *name;
+    name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                                        "ih", sizeString];
     return name;
 }
 
 - (NSString *)newStringNameCurrentReportLayout:(CGSize)size andHash:(unsigned long)hash {
     NSString *sizeString = NSStringFromCGSize(_page.layoutSize);
-    NSString *name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
-                                                      "lh", sizeString];
+    NSString *name;
+    name = [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier],
+                                                        "lh", sizeString];
     return name;
 }
 
@@ -215,7 +203,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     if (layout) {
     
         [layout initializeSectionLayoutManagers: self.machineState.document];
-        NSDictionary *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
+        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
         
     } else {
@@ -225,24 +213,36 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     }
 }
 
+- (void)initializeStateMachine {
+    NSArray *sd = [self.dataDelegate sortDescriptors];
+    NSArray *sortDescriptors = [NSArray arrayWithArray:sd];
+    
+    _machineState.rowCounter = 0;
+    _machineState.groupCounter = 0;
+    _machineState.pageCounter = 0;
+    _machineState.detailRowId = @0;
+    _machineState.detailRowIdLast = @0;
+    _machineState.sortDescriptors = sortDescriptors;
+    _machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
+    _machineState.document = [self.layout activeDocumentModel];
+}
+
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
     self.page.margins = MADEdgeInsetsPrinting(printableRect, self.page.layoutSize);
 }
 
 #pragma mark - Reading cached data
 
-//  Data is cached by group, page, and report.
-
 - (bool)cachedIndexesExist {
-    return self.reportIndexes.count > 0 && self.reportLayout.count > 0;
+    return _reportIndexes.count > 0 && _reportLayout.count > 0;
 }
 
 - (BOOL)needsFormat {
-    id <MTReportFormatterDataSource> __unsafe_unretained datasource = self.datasource;
+    id <MTReportFormatterDataSource> datasource = self.datasource;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
-            ![self.datasource cacheExist] ? YES : NO;
+                ![datasource cacheExist] ? YES : NO;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
@@ -284,9 +284,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
-    NSDictionary *layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
-    self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
+    MADNumberMapByObjectID *layoutHeightsBySectionKeys;
+    layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
     
+    self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     [self cleanupTemporaryIndexes];
     
     [self beginBulkInserts];
@@ -339,16 +340,20 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
     id <MTCacheProtocol> cachedDelegate = self.cachedDelegate;
     
-    NSString *nixarray = [self newStringNameCurrentReportIndexes:_page.layoutSize
-                                                        andHash:(unsigned long)[self layoutIdentifier]];
+    NSString *nixarray;
+    nixarray = [self newStringNameCurrentReportIndexes: _page.layoutSize
+                                               andHash: (unsigned long)[self layoutIdentifier]];
 
-    MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: nixarray
-                                                            cachedDelegate: cachedDelegate];
+    MADArrayCaching *ixarray;
+    ixarray = [[MADArrayCaching alloc] initWithIdentifier: nixarray
+                                           cachedDelegate: cachedDelegate];
     [ixarray initializeDatabase];
+    
     self.reportIndexes = ixarray;
     
-    NSString *nlyarray = [self newStringNameCurrentReportLayout:_page.layoutSize
-                                                        andHash:(unsigned long)[self layoutIdentifier]];
+    NSString *nlyarray;
+    nlyarray = [self newStringNameCurrentReportLayout: _page.layoutSize
+                                              andHash: (unsigned long)[self layoutIdentifier]];
     
     MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: nlyarray
                                                             cachedDelegate: cachedDelegate];
@@ -365,8 +370,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (void)cleanupTemporaryIndexes {
-    [self.pageLayoutTemporary removeAllObjects];
-    [self.pageIndexesTemporary removeAllObjects];
+    [_pageLayoutTemporary removeAllObjects];
+    [_pageIndexesTemporary removeAllObjects];
 }
 
 - (NSUInteger)numberOfGroups {
@@ -422,13 +427,18 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     NSComparisonResult comparsonResult;
     
     if (value == [NSNull null]) {
+        
         if (value2 == [NSNull null]) {
             comparsonResult = NSOrderedSame;
+        
         } else {
             comparsonResult = NSOrderedAscending;
+        
         }
     } else if (value2 == [NSNull null]) {
+        
         comparsonResult = NSOrderedDescending;
+        
     } else {
         if (selector == @selector(localizedCaseInsensitiveCompare:)) {
             comparsonResult = [value localizedCaseInsensitiveCompare:value2];
@@ -468,7 +478,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
             if (documentSection.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
-                [self addHeightFromDocumentSectionToReportLayout:documentSection];
+                [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
+                                                producesFormFeed:documentSection.producesFormFeed];
                 break;
             }
         }
@@ -480,27 +491,31 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
             if (documentSection.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
-                [self addHeightFromDocumentSectionToReportLayout:documentSection];
+                [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
+                                                producesFormFeed:documentSection.producesFormFeed];
                 break;
             }
         }
     }
 }
 
-- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
-    id __unsafe_unretained key = documentSection.objectID;
-    NSNumber * __unsafe_unretained sectionHeight = self.layoutHeightsBySectionKey[key];
+//  ObjectID from RptqDocumentSection *
+- (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID {
+    NSNumber *sectionHeight = _layoutHeightsBySectionKey[objectID];
     return sectionHeight.floatValue;
 }
 
-- (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
-    CGFloat layoutHeight = [self heightForSection:documentSection];
-    if ([documentSection producesFormFeed]) {
-        [self forcePageBreakWithFooterHeight:[self heightForSection:self.machineState.document.hasPageFooterSection]];
+- (void)addHeightFromDocumentSectionToReportLayout:(NSManagedObjectID *)objectID
+                                  producesFormFeed:(BOOL)producesFormFeed {
+    CGFloat layoutHeight = [self heightForSectionWithObjectID:objectID];
+    if (producesFormFeed) {
+        [self forcePageBreakWithFooterHeight:
+         [self heightForSectionWithObjectID: _machineState.document.hasPageFooterSection.objectID]
+         ];
     } else {
         [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
     }
-    self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage + layoutHeight;
+    _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage + layoutHeight;
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSUInteger)level {
@@ -517,14 +532,14 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (void)addDetailToReportLayout {
     [self initReportLayoutContainers];
-    self.machineState.rowCounter = 0;
+    _machineState.rowCounter = 0;
     
     RptqDocumentSection *detailSection = self.machineState.document.hasDetailSection;
     
     bool firstRow = true;
         
-    NSArray *sqg = [self.layout.mainQuery.queryObject sortedQueryGroups];
-    [self setSortedQueryGroups:sqg];
+    NSArray *sortedQueryGroups = [self.layout.mainQuery.queryObject sortedQueryGroups];
+    self.sortedQueryGroups = sortedQueryGroups.copy;
     
     bool rowIdOnly = true;
     bool calculatedRowId = false;
@@ -532,6 +547,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     id lastResultRow = nil;
 
     NSEnumerator *enumeratorForReportData = [self.datasource enumeratorForReportData];
+    MADObjectArray *keyValuesForComparson;
+    
     for (id resultRow in enumeratorForReportData) {
 
         @autoreleasepool {
@@ -543,11 +560,13 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
                 }
                 calculatedRowId = true;
             }
+            
             self.machineState.detailRowIdLast = self.machineState.detailRowId;
+            
             self.machineState.detailRowId = rowIdOnly ? resultRow : resultRow[MADIdentifierROWID];
             
             //Get row key values
-            MADObjectArray *keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
+            keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
             
             //Display new footers if needed.
             if (firstRow) {
@@ -561,7 +580,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
             [self displayNewGroupHeadersIfNeeded: keyValuesForComparson
                                    andLastValues: self.lastComparsonValues];
             
-            [self addHeightFromDocumentSectionToReportLayout:detailSection];
+            [self addHeightFromDocumentSectionToReportLayout: detailSection.objectID
+                                            producesFormFeed: detailSection.producesFormFeed];
             
             [MTReportFormatter addDetailForRowID:self.machineState.detailRowId
                                       pageLayout:self.pageLayoutTemporary
@@ -575,18 +595,17 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
         lastResultRow = resultRow;
     }
     //Need to account for the last set of group footers.
-    if (lastResultRow) {
+    if (!lastResultRow) return;
         
-        MADObjectArray *keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:lastResultRow];
-        NSUInteger groupLevel = keyValuesForComparson.count;
-        while (groupLevel >= 1) {
-            @autoreleasepool {
-                RptqQueryGroup *group = [self sortedQueryGroups][groupLevel-1];
-                [self addHeightFromGroupFooterWithQueryGroup: group];
-                [self addGroupFooterAtLevel:groupLevel-1];
-            }
-            groupLevel--;
+    keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:lastResultRow];
+    NSUInteger groupLevel = keyValuesForComparson.count;
+    while (groupLevel >= 1) {
+        @autoreleasepool {
+            RptqQueryGroup *group = _sortedQueryGroups[groupLevel - 1];
+            [self addHeightFromGroupFooterWithQueryGroup: group];
+            [self addGroupFooterAtLevel:groupLevel-1];
         }
+        groupLevel--;
     }
 }
 
@@ -594,7 +613,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
-        NSMutableArray *keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
+        NSMutableArray *keyValues;
+        keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
 
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
             NSString * __unsafe_unretained key = sortDesc.key;
@@ -618,7 +638,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     
     bool newPageCreated = false;
     
-    CGFloat pageFooterSectionHeight = [self heightForSection:self.machineState.document.hasPageFooterSection];
+    CGFloat pageFooterSectionHeight = [self heightForSectionWithObjectID:self.machineState.document.hasPageFooterSection.objectID];
     
     if (HeightWithNextItem(self.machineState.counterHeightUsedCurrentPage, nextItemHeight, pageFooterSectionHeight) >
         PrintableHeightForPage(self.page)) {
@@ -632,8 +652,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (void)forcePageBreakWithFooterHeight:(CGFloat)footerHeight {
 
-    CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + footerHeight;
-    self.machineState.counterHeightUsedCurrentPage = newHeight;
+    _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage +
+                                                 footerHeight;
     [self addPageFooter];
     
     id pageInfo = self.pageLayoutTemporary != nil ?
@@ -647,7 +667,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     
     [self cleanupTemporaryIndexes];
     
-    self.machineState.pageCounter++;
+    _machineState.pageCounter++;
     
     [[MADNotificationDidFormatPage sharedObject] reportFormatter: self
                                                    formattedPage: self.machineState.pageCounter];
@@ -655,38 +675,41 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
     RptqDocumentSection *pageHeaderSection = [self.machineState.document hasPageHeaderSection];
     
     //Reset height of the page to zero plus the hight of the page header section
-    self.machineState.counterHeightUsedCurrentPage = [self heightForSection:pageHeaderSection];
+    _machineState.counterHeightUsedCurrentPage = [self heightForSectionWithObjectID:pageHeaderSection.objectID];
     
     [self addPageHeader];
 }
 
 - (void)addReportHeaderToReportLayout {
-    self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage +
-                                                        [self heightForSection:self.machineState.document.hasReportHeaderSection];
+    _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage +
+                                                        [self heightForSectionWithObjectID: _machineState.document.hasReportHeaderSection.objectID];
     [self addReportHeader];
 }
 
 - (void)addPageHeaderToReportLayout {
-    self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage +
-                                                        [self heightForSection:self.machineState.document.hasPageHeaderSection];
+    CGFloat heightForSection = [self heightForSectionWithObjectID: _machineState.document.hasPageHeaderSection.objectID];
+    _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage + heightForSection;
     [self addPageHeader];
 }
 
 - (void)addPageFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[self.machineState.document hasPageFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout: _machineState.document.hasPageFooterSection.objectID
+                                    producesFormFeed: _machineState.document.hasPageFooterSection.producesFormFeed];
     [self addPageFooter];
 }
 
 - (void)addReportFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[self.machineState.document hasReportFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout: _machineState.document.hasReportFooterSection.objectID
+                                    producesFormFeed: _machineState.document.hasReportFooterSection.producesFormFeed];
     [self addPageFooterToReportLayout];
     [self addReportFooter];
 }
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
-    MADSectionPlist *header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
-                                                                     groupLevel: groupLevel
-                                                                            row: self.machineState.detailRowId];
+    MADSectionPlist *header;
+    header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
+                                                    groupLevel: groupLevel
+                                                           row: _machineState.detailRowId];
     if (groupLevel == [self numberOfGroups] - 1) {
         self.machineState.groupCounter++;
     }
@@ -694,42 +717,48 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (void)addPageFooter {
-    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
-                                                                            row: self.machineState.detailRowId];
+    MADSectionPlist *footer;
+    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
+                                                           row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addReportFooter {
-    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
-                                                                            row: self.machineState.detailRowId];
+    MADSectionPlist *footer;
+    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
+                                                           row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
-    MADSectionPlist *footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
-                                                                     groupLevel: groupLevel
-                                                                            row: self.machineState.detailRowId];
+    MADSectionPlist *footer;
+    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
+                                                    groupLevel: groupLevel
+                                                           row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 + (void)addDetailForRowID:(NSNumber *)rowID
                pageLayout:(byref inout MADMutableSectionArray *)pageLayout
               pageIndexes:(byref inout MADMutableIndexArray *)pageIndexes {
-    MADSectionPlist *detail = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeBody
-                                                                            row: rowID];
+    MADSectionPlist *detail;
+    detail = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeBody
+                                                           row: rowID];
     [pageLayout     addObject: detail];
     [pageIndexes    addObject: rowID];
 }
 
 - (void)addReportHeader {
-    MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
-                                                                         row: self.machineState.detailRowId];
+    MADSectionPlist *obj;
+    obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
+                                                        row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: obj];
 }
 
 - (void)addPageHeader {
-    MADSectionPlist *obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
-                                                                         row: self.machineState.detailRowId];
+    MADSectionPlist *obj;
+    obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
+                                                        row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject:  obj];
 }
 

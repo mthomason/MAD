@@ -11,7 +11,6 @@
 #endif
 
 #import "MTDataTable.h"
-#import "MADDataColumn.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSData.h>
@@ -21,6 +20,7 @@
 #import <Foundation/NSPropertyList.h>
 #import <Foundation/NSStream.h>
 #import <Foundation/NSURL.h>
+#import "MADDataColumn.h"
 
 static NSString * const StringEmpty = @"";
 
@@ -42,7 +42,7 @@ static NSString * const StringEmpty = @"";
         NSMutableArray *columnKeys =    [decoder decodeObjectForKey: key];
         self.columnKeys = columnKeys;
         
-        NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
+        MADMutableMapDataColumns *columns;
         key = [MTDataTable keyColumns];
         columns =  [decoder decodeObjectForKey: key];
         self.columns = columns;
@@ -72,8 +72,8 @@ static NSString * const StringEmpty = @"";
         NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
         self.columnKeys = columnKeys;
         
-        NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
-        columns = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+        MADMutableMapDataColumns *columns;
+        columns = [[MADMutableMapDataColumns alloc] initWithCapacity:numberOfColumns];
         self.columns = columns;
         
         self.rowCounter = 0;

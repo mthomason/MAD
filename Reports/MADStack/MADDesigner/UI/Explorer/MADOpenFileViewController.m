@@ -347,6 +347,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark Public
 
 - (void)getUserCloudPrefs {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.filesCoordnator getUserCloudPrefs];
 }
 
@@ -524,7 +525,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
     typeof (self.collectionView) __weak wCollectionView = self.collectionView;
     [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
-                                     usingBlock: ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+                                     usingBlock: ^(NSIndexPath * _Nonnull indexPath,
+                                                   NSUInteger idx, BOOL * _Nonnull stop) {
     
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             UICollectionView *collectionView = wCollectionView;
@@ -598,6 +600,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     if (self.traitCollection.horizontalSizeClass != previousTraitCollection.horizontalSizeClass) {
         [self.collectionView.collectionViewLayout invalidateLayout];
     }
@@ -605,7 +609,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -757,6 +762,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark MADFilesControllerDelegate
 
 - (void)filesControllerWillChangeContent:(MADFilesController *)filesController {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [self.batchInserts removeAllIndexes];
     [self.batchRemoves removeAllIndexes];
     [self.batchUpdates removeAllIndexes];
@@ -765,6 +772,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)filesController:(MADFilesController *)filesController
       didInsertFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
 
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchInserts addIndex:index];
 
 }
@@ -772,6 +780,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)filesController:(MADFilesController *)filesController
       didRemoveFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
 
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchRemoves addIndex:index];
 
 }
@@ -779,12 +788,15 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)filesController:(MADFilesController *)filesController
       didUpdateFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
 
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchUpdates addIndex:index];
 
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController
                              completion:(void (^)(BOOL, NSError *))completion {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity: _batchInserts.count],
                    *removes = [[NSMutableArray alloc] initWithCapacity: _batchRemoves.count],
@@ -820,6 +832,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
     UICollectionView *__weak weakCollectionView = self.collectionView;
     [self.collectionView performBatchUpdates:^{
+    
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+
         UICollectionView *collectionView = weakCollectionView;
         if (inserts.count > 0) {
             [collectionView insertItemsAtIndexPaths: inserts];
@@ -838,13 +853,25 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController
-                didFailCreatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+                didFailCreatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+}
 
 - (void)filesController:(MADFilesController *)filesController
-                didFailRemovingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+                didFailRemovingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error {
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+}
 
 - (void)filesController:(MADFilesController *)filesController
-                didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error { }
+                didFailDuplicatingFileInfo:(MADFileInfo *)fileInfo withError:(NSError *)error {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+}
 
 #pragma mark -
 #pragma mark Notification Handlers

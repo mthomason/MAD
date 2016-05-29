@@ -31,6 +31,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (instancetype)init {
 
     if (self = [super init]) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
 
         NSNumber *yes = @YES;
         NSNumber *notSet = [[NSNumber alloc] initWithShort: MADAppStorageNotSet];
@@ -47,6 +48,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Ubiquity Identity Token Handling (Account Change)
 
 - (BOOL)hasUbiquityIdentityChanged {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     BOOL hasChanged = NO;
     
     id <NSObject, NSCopying, NSCoding> currentToken,
@@ -68,6 +71,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     id<NSObject, NSCopying, NSCoding> storedToken = nil;
     
@@ -119,6 +123,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Convenience
 
 - (bool)isFirstLaunch {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
                                                                                     true : false;
     if (isFirstLaunch) {
@@ -129,6 +135,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)setupFileStorageLocationsForCloud {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     UIViewController <MADFileLocationManagerDelegate> *safeDelegate = _delegate;
 
     NSString *ubiquityIdentifier = [safeDelegate ubiquityIdentifier].copy;
@@ -141,6 +149,8 @@ static NSString * const MADFirstLaunch                                     = @"M
                                                                delay: ^ {
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            NSLog(@"%s", __PRETTY_FUNCTION__);
+
             UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
             if (delegate) {
                 [delegate startLongRunningActivity];
@@ -164,6 +174,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)setupFileStorageLocationsForLocal {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     UIViewController <MADFileLocationManagerDelegate> *safedelegate;
     safedelegate = _delegate;
@@ -179,6 +190,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+
     
         UIViewController <MADFileLocationManagerDelegate> *delegate;
         delegate = wdelegate;
@@ -221,6 +234,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)getUserCloudPrefs {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == false) {
 
@@ -259,7 +273,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)getUserCloudPrefsSubsquient {
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     MADStorageState *storageState;
     storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
                                           hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
@@ -308,7 +323,9 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 - (void)configureFilesController: (BOOL)accountChanged
       storageOptionChangeHandler: (void (^)(void))storageChangedHandler {
-    
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     if (self.filesController != nil && !accountChanged) return;
 
     
@@ -345,6 +362,9 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (NSString *)copyIdentifierForStorageOption {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     UIViewController <MADFileLocationManagerDelegate> *delegate;
     NSString *groupIdentifer;
 

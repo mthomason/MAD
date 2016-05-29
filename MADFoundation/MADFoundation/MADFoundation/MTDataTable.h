@@ -11,9 +11,13 @@
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSEnumerator.h>
-#import <Foundation/NSDictionary.h>
+#import <MADFoundation/MADMutableMapDataColumns.h>
 
-typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
+@class MADDataColumn;
+@class NSMutableArray;
+@class NSDictionary;
+@class NSMutableDictionary;
+
 
 typedef NS_ENUM(short, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -26,24 +30,19 @@ typedef NS_ENUM(short, MTDataTableParameters) {
     MTDataTableNumberOfColumns,
 };
 
-@class MADDataColumn;
-@class NSMutableArray, NSMutableDictionary;
-
 typedef NSDictionary MADDataTablePlist;
-
-typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADDictionaryDataColumns;
-typedef NSMutableDictionary <__kindof NSString *, __kindof MADDataColumn *>
-                                                                MADMutableDictionaryDataColumns;
+typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
 
 @interface MTDataTable : NSObject
-    <NSCoding, NSFastEnumeration>
+  <NSCoding,
+    NSFastEnumeration>
 
-    @property (nonatomic, copy, readwrite) NSString *name;
-    @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
-    @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
-    @property (nonatomic, strong, readwrite) MADMutableDictionaryDataColumns *columns;
-    @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
-    @property (nonatomic, assign) NSUInteger tag;
+    @property (nonatomic, readwrite, copy)   NSString *name;
+    @property (nonatomic, readwrite, strong) NSMutableArray *columnKeys;
+    @property (nonatomic, readwrite, strong) NSMutableArray *sortDescriptors;
+    @property (nonatomic, readwrite, strong) MADMutableMapDataColumns *columns;
+    @property (nonatomic, readwrite, assign) NSUInteger rowCounter;
+    @property (nonatomic, readwrite, assign) NSUInteger tag;
 
     - (instancetype)initWithId:(NSUInteger)objectId;
     - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;

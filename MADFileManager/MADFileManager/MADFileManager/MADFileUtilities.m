@@ -407,6 +407,8 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentAppSupport
                               alternativeSelector: @selector(localApplicationSupportDirectory)];
 }
@@ -418,7 +420,8 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (NSURL *)localDirectoryForGroupIdentifier:(NSString *)groupIdentifier pathComponent:(NSString *)pathComponent
                         alternativeSelector:(SEL)alternativeSelector {
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSAssert(groupIdentifier != nil, @"Need a group identifier... %s", __PRETTY_FUNCTION__);
     NSError *error;
     NSURL *groupUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];

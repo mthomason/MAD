@@ -656,20 +656,20 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 
     MTReportFormatter * __unsafe_unretained reportFormatter = self.reportFormatter;
     CGFloat sizeHeight = documentSection.visibility.boolValue ?
-                [reportFormatter heightForSection:documentSection] : CGSizeZero.height;
+                [reportFormatter heightForSectionWithObjectID:documentSection.objectID] : CGSizeZero.height;
     
     switch (pageSection.sectionType) {
     
         case MNSDocumentSectionTypePageFooter:
             originY = pageIndex == numberOfPages - 1 ?  // last page?
                             pageRect.origin.y + pageRect.size.height - sizeHeight -
-                                [reportFormatter heightForSection:document.hasReportFooterSection] :
+                                [reportFormatter heightForSectionWithObjectID:document.hasReportFooterSection.objectID] :
                             pageRect.origin.y + pageRect.size.height - sizeHeight;
             break;
             
         case MNSDocumentSectionTypeReportFooter:
             originY = pageRect.origin.y + pageRect.size.height -
-                        [reportFormatter heightForSection:documentSection];
+                        [reportFormatter heightForSectionWithObjectID: documentSection.objectID];
             break;
             
         default:

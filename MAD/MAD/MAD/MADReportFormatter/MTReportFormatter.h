@@ -30,6 +30,7 @@ extern NSString * const MTNullIdentifier;
 @class RptqDocument;
 @class MADArrayCaching;
 @class MTReportFormatterPageDefinition;
+@class NSManagedObjectID;
 @class MADArrayCaching <ObjectType>;
 
 typedef NSArray         <__kindof id>                                   MADObjectArray;
@@ -80,7 +81,8 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     - (NSEnumerator <__kindof MADSectionPlist *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
     - (MADSectionArray *)layoutForPage:(NSUInteger)page;
 
-    - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
+    - (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID;
+    //- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
     - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
     - (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid;
 
