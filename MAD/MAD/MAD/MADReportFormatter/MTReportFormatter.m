@@ -378,7 +378,8 @@ typedef NSArray         <RptqQueryGroup *>              MADQueryGroupArray;
     return self.machineState.sortDescriptors.count;
 }
 
-- (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
+- (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues
+                         andLastValues:(NSArray *)lastValues {
     for (NSUInteger groupLevel = lastValues.count; groupLevel > 0; groupLevel--) {
         @autoreleasepool {
             NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel - 1];

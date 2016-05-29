@@ -243,7 +243,7 @@ static NSString * const MADFirstLaunch                                     = @"M
         MADStorageState *storageState;
         storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
                                               hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
-                                                        isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
+                                                 isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
         if (storageState.cloudAvailable) {
             
             if (storageState.storageOption == MADAppStorageCloud) {

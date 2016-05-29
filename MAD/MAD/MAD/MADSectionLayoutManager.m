@@ -421,4 +421,5 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     return allValidLocations;
 }
 
+
 @end

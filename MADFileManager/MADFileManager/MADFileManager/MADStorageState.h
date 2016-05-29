@@ -14,7 +14,9 @@
 typedef NS_ENUM(short, MADAppStorage) {
     MADAppStorageNotSet = 0,
     MADAppStorageCloud = 1,
-    MADAppStorageLocal = 2
+    MADAppStorageLocal = 2,
+    MADAppStorageCloudButSignedOut = 3,
+    MADAppStorageStateUnknown = 4
 };
 
 @interface MADStorageState : NSObject
@@ -25,7 +27,7 @@ typedef NS_ENUM(short, MADAppStorage) {
 
     + (instancetype)newStorageStateWithStorageOption:(MADAppStorage)storageOption
                           hasUbiquityIdentityChanged:(BOOL)hasUbiquityIdentityChanged
-                                    isCloudReadilyAvailable:(BOOL)isCloudReadilyAvailable;
+                             isCloudReadilyAvailable:(BOOL)isCloudReadilyAvailable;
 
 
 @end
