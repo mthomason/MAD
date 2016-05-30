@@ -66,10 +66,10 @@
         if (!installed) {
             NSURL *origin = [self resourceUrl];
             NSError *error;
-            destination = [destination URLByAppendingPathExtension:_fileExtension];
-            installed = [[NSFileManager defaultManager] copyItemAtURL:origin
-                                                                toURL:destination
-                                                                    error:&error];
+            destination = [destination URLByAppendingPathExtension: _fileExtension];
+            installed = [[NSFileManager defaultManager] copyItemAtURL: origin
+                                                                toURL: destination
+                                                                error: &error];
         }
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
         [standardUserDefaults setBool:installed forKey:_installFlag];

@@ -18,10 +18,9 @@
 #import <MAD/MADConstants.h>
 #import "NSUserDefaults+MADDesigner.h"
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+//#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
-#import "MADOperationQueue.h"
 #import "MADOpenFileViewController.h"
 
 #import "Constants.h"
@@ -30,12 +29,7 @@
 
 #import "MADUpgradeManager.h"
 
-#import "MTVerificationController.h"
-
 #import "MADQueryViewController.h"
-
-#import "MADInstallOperationSampleDatabase.h"
-#import "MADInstallOperationSampleDocument.h"
 
 #import <MAD/madlib.h>
 #import <MAD/madmath.h>
@@ -47,7 +41,6 @@
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
 static NSString * const MADIdentifierFileMusic                             = @"Music";
-static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
 static NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 static NSString * const MADIDUser                                          = @"MADIDUser";
 
@@ -71,8 +64,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
     @property (readonly) MADFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
-
-    @property (nonatomic, strong, readwrite) MADOperationQueue *operationQueueBackground;
 
 @end
 
@@ -219,88 +210,17 @@ static inline UIUserNotificationType MADUserNotificationType() {
     NSLog(@"%llu", UINT64_MAX);
 
 */
-    SEL resultHandler;
-    NSNotificationCenter *defaultNotifications;
-    defaultNotifications = [NSNotificationCenter defaultCenter];
-    resultHandler = @selector(handleNotificationKeyValueStoreDidChange:);
-    [defaultNotifications addObserver: self selector: resultHandler
-                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                               object: nil];
-    
-    resultHandler= @selector(handleNotificationUbiquityIdentityDidChange:);
-    [defaultNotifications addObserver: self selector: resultHandler
-                                 name: NSUbiquityIdentityDidChangeNotification
-                               object: nil];
-    
-    NSUserDefaults *defaults;
-    NSDictionary *defaultsToRegister;
-
-    defaults = [NSUserDefaults newUserDefaultsMADDesigner];
-    defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @NO, MADUpgradeInstalledChinook,
-                                    @NO, MADUpgradeInstalledSamples,
-                                    @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
-    
-    [defaults registerDefaults:defaultsToRegister];
-
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
                                                             categories: nil];
         [application registerUserNotificationSettings:notification];
     }
     
-    
-    /*
-    MADOperationQueue *operationQueueBackground;
-    operationQueueBackground = [[MADOperationQueue alloc] init];
-    NSOperation *getUserCloudPreferences;
-    MADInstallOperationSampleDatabase *sampleDatabase;
-    MADInstallOperationSampleDocument *sampleDocumentMusic;
-    MADInstallOperationSampleDocument *sampleDatabaseLondon;
-    NSOperation *resetReceipt;
-    
-    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
-                                                                   selector: @selector(getUserCloudPrefs)
-                                                                     object: NULL];
-    
-    sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
-    
-    sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
-                                                                        fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                      groupIdentifier: MADIdentifierGroup
-                                                                          installFlag: MADUpgradeInstalledSamplesLondon];
-    
-    sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
-                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                       groupIdentifier: MADIdentifierGroup
-                                                                           installFlag: MADUpgradeInstalledSamplesMusic];
-    
-    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
-                                                        selector: @selector(resetReceipt)
-                                                          object: NULL];
-    
-    [operationQueueBackground addOperation:getUserCloudPreferences];
-    [operationQueueBackground addOperation:sampleDatabase];
-    [operationQueueBackground addOperation:sampleDocumentMusic];
-    [operationQueueBackground addOperation:sampleDatabaseLondon];
-    [operationQueueBackground addOperation:resetReceipt];
-    
-    self.operationQueueBackground = operationQueueBackground;
-    */
+   
     return YES;
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    /*
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        @autoreleasepool {
-            [MTVerificationController sharedInstance];
-            [MADQueryViewController deleteCoreDataCache];
-        }
-    });
-    */
-}
+- (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
 
@@ -376,51 +296,12 @@ static inline UIUserNotificationType MADUserNotificationType() {
         [[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
 }
 
-- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
-    
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-        UINavigationController *navController;
-        navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
-        [navController popToRootViewControllerAnimated:YES];
-        
-        AppDelegate * __unsafe_unretained appDelegate = self;
-        UIAlertController *signedOutController;
-        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-            [appDelegate.openFileViewController getUserCloudPrefs];
-        }];
-
-        [self.openFileViewController presentViewController:signedOutController
-                                                  animated:YES completion:nil];
-    }];
-
-}
-
-- (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
-
-}
-
 #pragma mark - Convenience
 
 - (UIViewController *)openFileViewController {
     return ((UINavigationController *)
             [UIApplication sharedApplication].windows.firstObject.rootViewController).
                                                                     topViewController;
-}
-
-- (BOOL)isSampleInstalled {
-    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
-    BOOL result = [userDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
-    return result;
-}
-
-- (void)installedSample {
-    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
-    [userDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
 }
 
 - (NSString *)bundleDisplayName {

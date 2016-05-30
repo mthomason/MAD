@@ -90,6 +90,7 @@
 #import "MADInstallOperationSampleDatabase.h"
 #import "MADInstallOperationSampleDocument.h"
 #import "MTVerificationController.h"
+#import "NSUserDefaults+MADDesigner.h"
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic = 2;
@@ -109,9 +110,16 @@ static NSString * const NotDownloaded                           = @"Not Download
 static NSString * const Syncing                                 = @"Syncing";
 static NSString * const Downloading                             = @"Downloading";
 
+NSString * const MADUpgradeInstalledSamplesLondon   = @"MADUpgradeInstalledSamplesLondon";
+NSString * const MADUpgradeInstalledSamplesMusic    = @"MADUpgradeInstalledSamplesMusic";
+static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
+
 const char * MADQueueFileViewController = "com.everydayapps.mad.designer.file.view.controller";
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
+
+static NSString * const MADIDNotificationCloudActivityStarted = @"MADNotificationCloudActivityStarted";
+static NSString * const MADIDNotificationCloudActivityCompleted = @"MADNotificationCloudActivityCompleted";
 
 static const CGFloat Float_0 = 0.000000000f;
 static const CGFloat Float_100 = 100.00000000f;
@@ -258,9 +266,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [operationQueueBackground addOperation:operation];
     
     operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
-                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                       groupIdentifier: MADIdentifierGroup
-                                                                           installFlag: MADUpgradeInstalledSamplesMusic];
+                                                              fileExtension: MADFileExtentionMobleApplicationDocument
+                                                            groupIdentifier: MADIdentifierGroup
+                                                                installFlag: MADUpgradeInstalledSamplesMusic];
     operation.tag = MADIDInstallOperationSampleDocumentMusic;
     [operation addObserver:self];
     [operationQueueBackground addOperation:operation];
@@ -288,6 +296,17 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [super initialize];
     if (self == [MADFileExplorerViewController self]) {
     
+        NSUserDefaults *defaults;
+        NSDictionary *defaultsToRegister;
+        
+        defaults = [NSUserDefaults newUserDefaultsMADDesigner];
+        defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              @NO, MADUpgradeInstalledChinook,
+                              @NO, MADUpgradeInstalledSamples,
+                              @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+        
+        [defaults registerDefaults:defaultsToRegister];
+
         
         UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
         
@@ -469,6 +488,20 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // set delegates
+    MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
+    layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    layoutGroupedDelegate.delegate = self;
+    
+    self.collectionView.delegate = layoutGroupedDelegate;
+    self.collectionView.dataSource = self;
+    
+    _collectionViewDelegate = layoutGroupedDelegate;
+    
+    // start observing
+    
+    [self addObservers];
+
     [self initalInstallOperations];
     
     // init
@@ -580,24 +613,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
     tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                    action: didTapCollectionView];
+    tapGestureRecognizer.delegate = self;
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
-    // set delegates
-    tapGestureRecognizer.delegate = self;
-
-    MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
-    layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
-    layoutGroupedDelegate.delegate = self;
-
-    self.collectionView.delegate = layoutGroupedDelegate;
-    self.collectionView.dataSource = self;
-    
-    _collectionViewDelegate = layoutGroupedDelegate;
-    
-    // start observing
-    
-    [self addObservers];
-
     // update statusbar?
     
     [self setNeedsStatusBarAppearanceUpdate];
@@ -1032,36 +1050,75 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)addObservers {
+    SEL resultHandler;
     
+    resultHandler = @selector(handleNotificationUbiquityIdentityDidChange:);
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                             selector: resultHandler
+                                                 name: NSUbiquityIdentityDidChangeNotification
+                                               object: nil];
+    
+    resultHandler = @selector(handleContentSizeCategoryDidChangeNotification:);
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: resultHandler
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
     
-    
+    resultHandler = @selector(handleCloudActivityStarted:);
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityStarted:)
-                                                 name: @"MADNotificationCloudActivityStarted"
+                                             selector: resultHandler
+                                                 name: MADIDNotificationCloudActivityStarted
                                                object: nil];
     
+    resultHandler = @selector(handleCloudActivityCompleted:);
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityCompleted:)
+                                             selector: resultHandler
                                                  name: @"MADNotificationCloudActivityCompleted"
                                                object: nil];
 }
 
 - (void)removeObservers {
     [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquityIdentityDidChangeNotification
+                                                  object: nil];
+
+    [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIContentSizeCategoryDidChangeNotification
                                                   object: nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: @"MADNotificationCloudActivityStarted"
+                                                    name: MADIDNotificationCloudActivityStarted
                                                   object: nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: @"MADNotificationCloudActivityCompleted"
+                                                    name: MADIDNotificationCloudActivityCompleted
                                                   object: nil];
+}
+
+- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
+    NSLog(@"Ubiquity did indeed change..... %@", notification.userInfo);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+        
+        UINavigationController *navController;
+        navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+        [navController popToRootViewControllerAnimated:YES];
+        
+        typeof(self) __weak weakself = self;
+        UIAlertController *signedOutController;
+        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+            MADFileExplorerViewController *strongself = weakself;
+            if (strongself) {
+                [strongself getUserCloudPrefs];
+            }
+        }];
+        
+        [self presentViewController:signedOutController animated:YES completion:nil];
+    }];
+    
 }
 
 #pragma mark -

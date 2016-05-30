@@ -15,8 +15,6 @@
 #import <Foundation/NSUserDefaults.h>
 
 NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
-NSString * const MADUpgradeInstalledSamplesLondon   = @"MADUpgradeInstalledSamplesLondon";
-NSString * const MADUpgradeInstalledSamplesMusic    = @"MADUpgradeInstalledSamplesMusic";
 NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
 
 NSString * const MTSampleDatabaseChinook            = @"chinook";

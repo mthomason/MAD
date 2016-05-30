@@ -13,8 +13,6 @@
 
 extern NSString * const MADUpgradeInstalledSamples;
 extern NSString * const MADUpgradeInstalledChinook;
-extern NSString * const MADUpgradeInstalledSamplesLondon;
-extern NSString * const MADUpgradeInstalledSamplesMusic;
 
 @interface MADInstallOperationSampleDatabase : MADOperation
 
