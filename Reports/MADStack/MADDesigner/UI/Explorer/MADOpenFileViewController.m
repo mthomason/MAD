@@ -85,10 +85,22 @@
 
 #import "MADTabBarController.h"
 
+#import "MADOperation.h"
+#import "MADOperationQueue.h"
+#import "MADInstallOperationSampleDatabase.h"
+#import "MADInstallOperationSampleDocument.h"
+#import "MTVerificationController.h"
+
+const NSUInteger MADIDInstallOperationSampleDatabaseChinook = 1;
+const NSUInteger MADIDInstallOperationSampleDocumentMusic = 2;
+const NSUInteger MADIDInstallOperationSampleDocumentLondon = 3;
+
+static NSString * const MADIdentifierFileLondon                 = @"London";
+static NSString * const MADIdentifierFileMusic                  = @"Music";
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
-
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 
 static NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
@@ -124,9 +136,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         UIPopoverPresentationControllerDelegate,
         MADocumentDelegate,
         MTViewControllerProtocol,
-        MADFileLocationManagerDelegate>
+        MADFileLocationManagerDelegate,
+        MADOperationObserver>
 
     @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+
+    @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
+    @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
+
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 
@@ -169,7 +186,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, assign) BOOL cloudActivityRunning;
     @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
-    @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
+    @property (nonatomic, assign, getter=isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
     @property (nonatomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 
     @property (nonatomic, strong) UIProgressView *progressViewFileManager;
@@ -185,6 +202,77 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 @implementation MADFileExplorerViewController
 
 #pragma mark -
+#pragma mark MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation {
+    
+}
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation {
+    
+}
+
+- (void)operationDidFinish:(MADOperation *)operation
+                    errors:(NSArray *)errors {
+
+    switch (operation.tag) {
+
+        case MADIDInstallOperationSampleDocumentMusic:
+        case MADIDInstallOperationSampleDocumentLondon: {
+            typeof(self) __weak weakself = self;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [weakself.collectionView reloadData];
+            }];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (void)initalInstallOperations {
+    MADOperationQueue *operationQueueBackground;
+    operationQueueBackground = [[MADOperationQueue alloc] init];
+    operationQueueBackground.maxConcurrentOperationCount = 1;
+    
+    NSOperation *getUserCloudPreferences;
+    MADOperation *operation;
+    NSOperation *resetReceipt;
+    
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                   selector: @selector(getUserCloudPrefs)
+                                                                     object: NULL];
+    [operationQueueBackground addOperation:getUserCloudPreferences];
+
+    
+    operation = [[MADInstallOperationSampleDatabase alloc] init];
+    [operationQueueBackground addOperation:operation];
+    
+    operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+                                                                        fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                      groupIdentifier: MADIdentifierGroup
+                                                                          installFlag: MADUpgradeInstalledSamplesLondon];
+    operation.tag = MADIDInstallOperationSampleDocumentLondon;
+    [operation addObserver:self];
+    [operationQueueBackground addOperation:operation];
+    
+    operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                       groupIdentifier: MADIdentifierGroup
+                                                                           installFlag: MADUpgradeInstalledSamplesMusic];
+    operation.tag = MADIDInstallOperationSampleDocumentMusic;
+    [operation addObserver:self];
+    [operationQueueBackground addOperation:operation];
+
+    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
+                                                        selector: @selector(resetReceipt)
+                                                          object: NULL];
+    
+    [operationQueueBackground addOperation:resetReceipt];
+}
+
+#pragma mark -
 #pragma mark NSObject
 
 - (void)dealloc {
@@ -197,7 +285,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 + (void)initialize {
+    [super initialize];
     if (self == [MADFileExplorerViewController self]) {
+    
         
         UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
         
@@ -378,6 +468,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self initalInstallOperations];
     
     // init
     _aboutViewControllerOnScreen = false;

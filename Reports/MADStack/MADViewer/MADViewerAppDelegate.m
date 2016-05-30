@@ -266,11 +266,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (void)displayActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
+    //[self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
 }
 
 - (void)hideActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
+    //[self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {

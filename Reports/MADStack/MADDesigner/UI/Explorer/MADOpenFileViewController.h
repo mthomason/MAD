@@ -27,20 +27,7 @@
         MADCollectionViewLayoutFilesDelegate,
         MADSaveFileProtocol>
 
-    @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
-    @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
-
-    @property (readonly) __kindof UIManagedDocument *openDocument;
-
-    - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)visible
-                                                 animated:(BOOL)animated;
-
-
-    - (IBAction)done:(id)sender;
-    - (IBAction)edit:(id)sender;
-
     - (void)getUserCloudPrefs;
-    - (void)reenable;
 
 @end
 

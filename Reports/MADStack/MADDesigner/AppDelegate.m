@@ -249,9 +249,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
         [application registerUserNotificationSettings:notification];
     }
     
+    
+    /*
     MADOperationQueue *operationQueueBackground;
     operationQueueBackground = [[MADOperationQueue alloc] init];
-    
     NSOperation *getUserCloudPreferences;
     MADInstallOperationSampleDatabase *sampleDatabase;
     MADInstallOperationSampleDocument *sampleDocumentMusic;
@@ -285,7 +286,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
     [operationQueueBackground addOperation:resetReceipt];
     
     self.operationQueueBackground = operationQueueBackground;
-    
+    */
     return YES;
 }
 
