@@ -7,12 +7,13 @@
 //
 
 #import "MADPreference.h"
+#import <Foundation/NSString.h>
 
 @interface MADPreference ()
 
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, assign) BOOL allowCloud;
-@property (nonatomic, assign) BOOL encrypt;
+    @property (nonatomic, strong) NSString *key;
+    @property (nonatomic, assign) BOOL allowCloud;
+    @property (nonatomic, assign) BOOL encrypt;
 
 @end
 
@@ -26,11 +27,9 @@
 - (instancetype)initWithKey:(NSString *)key allowCloud:(BOOL)allowCloud encrypt:(BOOL)encrypt {
     if (self = [super init]) {
         
-        NSString *k = [NSString stringWithString:key];
-        self.key = k;
-        
-        self.allowCloud = allowCloud;
-        self.encrypt = encrypt;
+        _key = key.copy;
+        _allowCloud = allowCloud;
+        _encrypt = encrypt;
         
     }
     return self;

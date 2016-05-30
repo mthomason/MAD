@@ -1053,6 +1053,7 @@
 		4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DB91CE6B76600B56B90 /* rwpng.c */; };
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
+		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
@@ -6355,6 +6356,7 @@
 				4C26BAA51BAF9E8000456DC8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C401FC21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */,
+				4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */,
 				4C26BA801BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */,
 				4C401F7A1BAE7EB500BAE5FC /* MADWatermarkView.m in Sources */,

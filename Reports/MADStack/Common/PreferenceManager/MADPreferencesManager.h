@@ -19,4 +19,10 @@
 
 @end
 
+@interface MADPreferencesManager (Storage)
+
+- (MADPreference *)storageOption;
+
+@end
+
 #endif

@@ -10,17 +10,19 @@
 #define MAD_MADCloudManager_h
 
 #import <Foundation/NSObject.h>
+#import "MADAppStorageOption.h"
 
-typedef NS_ENUM(short, MADCloudPreference) {
-    MADCloudPreferenceCloud,
-    MADCloudPreferenceLocal,
-    MADCloudPreferenceCloudSignedOut,
-    MADCloudPreferenceUnknown,
-};
+@protocol MADCloudManagerDelegate <NSObject>
+
+    - (void)promptUserForCloudPreference:(void (^)(MADAppStorage preference))result;
+
+@end
 
 @interface MADCloudManager : NSObject
 
-    @property (nonatomic, readonly) MADCloudPreference userPreference;
+    @property (nonatomic, weak) id <MADCloudManagerDelegate> delegate;
+    @property (nonatomic, readonly) MADAppStorage userPreference;
+    @property (nonatomic, readonly) NSURL *ubiquityContainer;
 
 @end
 

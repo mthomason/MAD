@@ -14,15 +14,39 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSTimer.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSUserDefaults.h>
+#import <Foundation/NSThread.h>
+
+// FIXME: Don't import NSException.h on release builds.
+#import <Foundation/NSException.h>
 
 #import "MADFileUtilities.h"
+
+// UserDefaults/Preferences Used by this Singleton
+
+//bool value
+static NSString * const MADAppConfigurationUserDefaultsStorageOptionSet
+                            = @"MADAppConfigurationUserDefaultsStorageOptionSet";
+
+//short MADCloudPreference value
+static NSString * const MADAppConfigurationUserDefaultsStorageOption
+                            = @"MADAppConfigurationUserDefaultsStorageOption";
+
+static const char * MADQueueCloudSerial
+                            = "com.everydayapps.mad.cloud.serial";
 
 @interface MADCloudManager() {
     BOOL _completedStepOne;
 
     BOOL _cloudReadilyAvailable;
-    MADCloudPreference _userPreference;
+    MADAppStorage _userPreference;
+    
 }
+
+    @property (nonatomic, copy) NSString *ubiquityIdentifier;
+    @property (nonatomic, copy) NSString *groupIdentifier;
+    
+    @property (nonatomic, strong) dispatch_queue_t queue_background_serial;
 
 @end
 
@@ -58,7 +82,10 @@
 - (instancetype)initPrivate {
     if (self = [super init]) {
         
-        _userPreference = MADCloudPreferenceUnknown;
+        _ubiquityIdentifier = nil;
+        _groupIdentifier =  nil;
+        
+        _userPreference = MADAppStorageStateUnknown;
         _completedStepOne = NO;
         
         @autoreleasepool {
@@ -69,9 +96,26 @@
     return self;
 }
 
+- (dispatch_queue_t)queue_background_serial {
+    return _queue_background_serial == nil ?
+        (_queue_background_serial =
+            dispatch_queue_create(MADQueueCloudSerial, DISPATCH_QUEUE_SERIAL)) :
+        _queue_background_serial;
+}
+
+- (void)initalizeWithGroupIdentifier:(NSString *)groupIdentifier
+                  ubiquityIdentifier:(NSString *)ubiquityIdentifier {
+    _groupIdentifier = groupIdentifier.copy;
+    _ubiquityIdentifier = ubiquityIdentifier.copy;
+}
+
 - (void)startCloud {
+    NSAssert(_ubiquityIdentifier != nil && _groupIdentifier != nil, @"Call initalize function.");
+
      if ([self stepOneCheckUbiquityIdentifierAndRegisterForNotifcations]) {
-         [self stepTwoGetStorageInformationCloudAvailable];
+         [self stepTwoGetStorageInformationCloudAvailable:^(BOOL success) {
+             
+         }];
      } else {
          
      }
@@ -98,57 +142,122 @@
     
     _cloudReadilyAvailable = [MADCloudManager isCloudReadilyAvailable];     // Check if signed in
     [self addNotifications];                                                // Add notifications
+    _completedStepOne = YES;
     return _cloudReadilyAvailable;                                          //  for change in
 }                                                                           //  status.
 
-- (void)stepTwoGetStorageInformationCloudAvailable {
+- (void)stepTwoGetStorageInformationCloudAvailable:(void(^)(BOOL success))completion {
     
-    
+    [self stepTwoPartTwoGetUrlForUbiquityIdentifier: _ubiquityIdentifier
+                                    groupIdentifier: _groupIdentifier
+                                         completion: ^(BOOL success) {
+                                            completion(success);
+                                         }];
+    [self stepTwoPartOneGetUserCloudPreferences:[MADCloudManager getSavedUserStorageOption]
+                                     completion:^(BOOL success) {
+        
+    }];
 }
 
-+ (void)stepThreePartOneGetUserICloudPreferences {
 
+- (void)stepTwoPartOneGetUserCloudPreferences:(MADAppStorage)storageOption
+                                   completion:(void(^)(BOOL success))completion {
+    switch (storageOption) {
+            
+        case MADAppStorageCloud:
+            _userPreference = MADAppStorageCloud;
+            completion(YES);
+            break;
+
+        case MADAppStorageLocal:
+            _userPreference = MADAppStorageLocal;
+            completion(YES);
+            break;
+
+        case MADAppStorageCloudButSignedOut:
+            _userPreference = MADAppStorageCloudButSignedOut;
+            completion(YES);
+            break;
+
+        case MADAppStorageNotSet:
+        case MADAppStorageStateUnknown:
+        default: {
+            MADCloudManager *__unsafe_unretained scaryself = self;
+            [self.delegate promptUserForCloudPreference:^(MADAppStorage preference) {
+                scaryself->_userPreference = preference;
+                if (completion) completion(YES);
+            }];
+            break;
+        }
+    }
 }
 
-+ (void)stepThreePartTwoGetUrlForUbiquityIdentifier: (NSString *)ubiquityIdentifier
-                                       groupIdentifier: (NSString *)groupIdentifier {
-    //void (^longRunningCallBlock)() = [handleLongRunningCall copy];
-    
+- (void)stepTwoPartTwoGetUrlForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                  groupIdentifier: (NSString *)groupIdentifier
+                                  completion:(void(^)(BOOL success))completion {
+ 
     [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
                             target: self
                           selector: @selector(handleLongRunningCloudUrlLookup:)
                           userInfo: nil
                            repeats: NO];
     
-    dispatch_queue_t global_queue;
-    global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(global_queue, ^(void) {
-        
+    
+    MADCloudManager * __unsafe_unretained scarySelf = self;
+    
+    
+    dispatch_async(_queue_background_serial, ^{
         NSURL *ubiquityContainer;
-        
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        //This call may be SLOW, so only do on BACKGROUND thread.
-        
-        ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
-        
-        NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
-        
-        dispatch_queue_t main_queue = dispatch_get_main_queue();
-        dispatch_sync(main_queue, ^{
-            
-            [self createDirectory: @"Documents"
-                        atLoction: ubiquityContainer];
-            [self createDirectory: @"Data"
-                        atLoction: ubiquityContainer];
-            
-            
-        });
+        ubiquityContainer = [MADCloudManager copyURLToCloudUbiquityContainerForUbiquityID:ubiquityIdentifier];
+        scarySelf->_ubiquityContainer = ubiquityContainer.copy;
+        if (completion) completion(scarySelf->_ubiquityContainer != nil);
     });
+    
+    dispatch_async(_queue_background_serial, ^{
+        
+        [MADCloudManager createDirectory: @"Documents"
+                               atLoction: scarySelf->_ubiquityContainer];
+        [MADCloudManager createDirectory: @"Data"
+                               atLoction: scarySelf->_ubiquityContainer];
+        
+        
+    });
+    
+
+}
+
++ (NSURL *)copyURLToCloudUbiquityContainerForUbiquityID:(NSString *)ubiquityID {
+    NSURL *cloudDirectoryURL;
+    NSAssert(![NSThread isMainThread], @"Get off my thread!");
+    cloudDirectoryURL = [[NSFileManager defaultManager]
+                                                URLForUbiquityContainerIdentifier:ubiquityID].copy;
+    return cloudDirectoryURL;
+}
+
+- (void)promptUserForStorageChoice {
+    [self.delegate promptUserForCloudPreference:^(MADAppStorage preference) {
+        switch (preference) {
+            case MADAppStorageCloud:
+                break;
+            case MADAppStorageLocal:
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
 + (void)createDirectory:(NSString *)directoryName atLoction:(NSURL *)location {
     id documentDirectory = [location URLByAppendingPathComponent:directoryName];
     [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
+}
+
++ (MADAppStorage)getSavedUserStorageOption {
+    return [[NSUserDefaults standardUserDefaults]
+                boolForKey:MADAppConfigurationUserDefaultsStorageOptionSet] ?
+                    (MADAppStorage)[[NSUserDefaults standardUserDefaults]
+                        integerForKey:MADAppConfigurationUserDefaultsStorageOption] :
+                    MADAppStorageStateUnknown;
 }
 
 + (void)handleLongRunningCloudUrlLookup:(id)sender {
@@ -248,7 +357,25 @@
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     // Identity changed, so assume all keys changed.    
+    /*
+     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+
+        NSLog(@"%s", __PRETTY_FUNCTION__);
     
+        UINavigationController *navController;
+        navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+        [navController popToRootViewControllerAnimated:YES];
+        
+        AppDelegate * __unsafe_unretained appDelegate = self;
+        UIAlertController *signedOutController;
+        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
+            [appDelegate.openFileViewController getUserCloudPrefs];
+        }];
+
+        [self.openFileViewController presentViewController:signedOutController
+                                                  animated:YES completion:nil];
+    }];
+    */
 }
 
 - (id)debugQuickLookObject {

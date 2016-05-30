@@ -13,7 +13,7 @@
 
 @interface NSUserDefaults (MADDesigner)
 
-+ (NSUserDefaults *)newUserDefaultsMADDesigner;
++ (instancetype)newUserDefaultsMADDesigner;
 
 @end
 

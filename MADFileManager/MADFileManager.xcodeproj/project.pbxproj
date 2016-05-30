@@ -39,6 +39,7 @@
 		4CE1CA461CF87323001BD2D5 /* File in Resources */ = {isa = PBXBuildFile; fileRef = 4CE1CA451CF87323001BD2D5 /* File */; };
 		4CE1CA4B1CFAF74A001BD2D5 /* MADCloudManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */; };
 		4CE1CA4C1CFAF74A001BD2D5 /* MADCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */; };
+		4CE1CA4E1CFB70BA001BD2D5 /* MADAppStorageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		4CE1CA451CF87323001BD2D5 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 		4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudManager.h; path = MADFileManager/MADCloudManager.h; sourceTree = "<group>"; };
 		4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCloudManager.m; path = MADFileManager/MADCloudManager.m; sourceTree = "<group>"; };
+		4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAppStorageOption.h; path = MADFileManager/MADAppStorageOption.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +213,7 @@
 				4C4754541CF4178E00BC9E02 /* MADFilesControllerDelegate.h */,
 				4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */,
 				4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */,
+				4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */,
 			);
 			name = MADFileManager;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				4C41DA8A1BA22C5700FF63EC /* MADFileCoordinator.h in Headers */,
 				4C41DA7A1BA22C5700FF63EC /* MADAppLaunchContext.h in Headers */,
 				4C41DA821BA22C5700FF63EC /* MADFileInfo.h in Headers */,
+				4CE1CA4E1CFB70BA001BD2D5 /* MADAppStorageOption.h in Headers */,
 				4C6701131BA20683001C9D5A /* MADFileManager.h in Headers */,
 				4C41DA881BA22C5700FF63EC /* MADDirectoryMonitor.h in Headers */,
 				4C41DA7C1BA22C5700FF63EC /* MADFile.h in Headers */,

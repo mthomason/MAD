@@ -236,18 +236,27 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 + (instancetype)newAlertControllerPromptStorageOptionLocal:(void (^)())handlerLocal
                                                      cloud:(void (^)())handlerCloud {
 
-    NSString *title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions);
-    NSString *message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions);
-    NSString *localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly);
-    NSString *cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
+    NSString *title, *message, *localOnlyActionTitle, *cloudActionTitle;
+    UIAlertController *storageController;
+    UIAlertAction *option;
+    title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions),
+    message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions),
+    localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly),
+    cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
     
-    UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    storageController = [UIAlertController alertControllerWithTitle: title
+                                                            message: message
+                                                     preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle style:UIAlertActionStyleDefault handler:handlerLocal];
-    [storageController addAction:localOption];
+    option = [UIAlertAction actionWithTitle: localOnlyActionTitle
+                                      style: UIAlertActionStyleDefault
+                                    handler: handlerLocal];
+    [storageController addAction:option];
     
-    UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle style:UIAlertActionStyleDefault handler:handlerCloud];
-    [storageController addAction:cloudOption];
+    option = [UIAlertAction actionWithTitle: cloudActionTitle
+                                      style: UIAlertActionStyleDefault
+                                    handler: handlerCloud];
+    [storageController addAction:option];
 
     return storageController;
 }

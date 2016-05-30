@@ -10,14 +10,7 @@
 #define MADFileManager_MADStorageState_h
 
 #import <Foundation/NSObject.h>
-
-typedef NS_ENUM(short, MADAppStorage) {
-    MADAppStorageNotSet = 0,
-    MADAppStorageCloud = 1,
-    MADAppStorageLocal = 2,
-    MADAppStorageCloudButSignedOut = 3,
-    MADAppStorageStateUnknown = 4
-};
+#import <MADFileManager/MADAppStorageOption.h>
 
 @interface MADStorageState : NSObject
 

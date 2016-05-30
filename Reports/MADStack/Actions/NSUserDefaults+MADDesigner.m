@@ -13,7 +13,7 @@ static NSString * const MADAppConfigurationApplicationGroupsPrimary
 
 @implementation NSUserDefaults (MADDesigner)
 
-+ (NSUserDefaults *)newUserDefaultsMADDesigner {
++ (instancetype)newUserDefaultsMADDesigner {
     NSUserDefaults *prefs;
     prefs = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     return prefs;

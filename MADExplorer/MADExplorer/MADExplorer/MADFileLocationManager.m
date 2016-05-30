@@ -14,6 +14,8 @@
 #import <MADFileManager/MADFileCoordinator.h>
 #import <UIKit/UIViewController.h>
 
+#import <MADFileManager/MADAppStorageOption.h>
+
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                     = @"MADFirstLaunch";

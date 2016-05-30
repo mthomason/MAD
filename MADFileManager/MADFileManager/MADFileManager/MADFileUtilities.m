@@ -49,7 +49,8 @@ static NSString * const MADPathComponentData       = @"Data";
     }
 }
 
-+ (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID extension:(NSString *)extension {
++ (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID
+                extension:(NSString *)extension {
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     
     dispatch_async(defaultQueue, ^{
@@ -72,7 +73,8 @@ static NSString * const MADPathComponentData       = @"Data";
     });
 }
 
-+ (void)makeItemUbiquitousAtURL:(NSURL *)sourceURL documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
++ (void)makeItemUbiquitousAtURL:(NSURL *)sourceURL
+          documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
     NSString *destinationFileName = sourceURL.lastPathComponent;
     
     NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -91,14 +93,17 @@ static NSString * const MADPathComponentData       = @"Data";
     });
 }
 
-+ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler {
++ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list,
+                                                                   NSError *error))completionHandler {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
     
     NSFileAccessIntent *readingIntent = [NSFileAccessIntent readingIntentWithURL:url options:NSFileCoordinatorReadingWithoutChanges];
-    [fileCoordinator coordinateAccessWithIntents:@[readingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+    [fileCoordinator coordinateAccessWithIntents: @[readingIntent]
+                                           queue: [self queue]
+                                      byAccessor: ^(NSError *accessError) {
         if (accessError) {
             if (successfulSecurityScopedResourceAccess) {
                 [url stopAccessingSecurityScopedResource];

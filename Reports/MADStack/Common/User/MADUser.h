@@ -11,7 +11,15 @@
 
 #import <Foundation/NSObject.h>
 
+@protocol MADUserDelegate <NSObject>
+
+
+
+@end
+
 @interface MADUser : NSObject
+
+//- (CFUUID *)uuid;
 
 @end
 
