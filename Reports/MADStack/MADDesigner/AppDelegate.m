@@ -18,10 +18,7 @@
 #import <MAD/MADConstants.h>
 #import "NSUserDefaults+MADDesigner.h"
 
-//#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
-#import "MADOpenFileViewController.h"
 
 #import "Constants.h"
 
@@ -55,14 +52,13 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 static inline UIUserNotificationType MADUserNotificationType();
 static inline UIUserNotificationType MADUserNotificationType() {
     return (UIUserNotificationType)(UIUserNotificationTypeAlert |
-                                    UIUserNotificationTypeBadge |
-                                    UIUserNotificationTypeSound);
+                                        UIUserNotificationTypeBadge |
+                                        UIUserNotificationTypeSound);
 }
 
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-    @property (readonly) MADFileExplorerViewController *openFileViewController;
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 
 @end
@@ -231,38 +227,13 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Fix me... close open applications by calling delegate method from openFileViewController.
+// FIXME: ... close open applications by calling delegate method from openFileViewController.
     //[self.appConfiguration cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-/*
-    NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
-    NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
-    NSError *error = nil;
-    
-    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url
-                                                           toURL:destination error:&error];
-    
-    if (success) {
-        
-        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] :
-                                             [UIAlertController newAlertControllerError:error];
-        [self.openFileViewController presentViewController:alert animated:YES completion:^{
-            [self.openFileViewController.collectionView reloadData];
-        }];
-        
-    } else {
-        
-        UIAlertController *alert = [UIAlertController newAlertControllerError:error];
-        [self.openFileViewController presentViewController:alert animated:YES completion:^{
-            [self.openFileViewController.collectionView reloadData];
-        }];
-        
-    }
-    return success;*/
-    // FIXME: Open a fucking file, YO!!!
+// FIXME: Open a fucking file, YO!!!
     return NO;
 }
 
@@ -297,12 +268,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 #pragma mark - Convenience
-
-- (UIViewController *)openFileViewController {
-    return ((UINavigationController *)
-            [UIApplication sharedApplication].windows.firstObject.rootViewController).
-                                                                    topViewController;
-}
 
 - (NSString *)bundleDisplayName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];
