@@ -38,6 +38,8 @@
 		4CB2D3D11BA407FB00AA473B /* MADStorageState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */; };
 		4CC1C6F51CFDB62A006F1546 /* NSURL+CommonURLs.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC1C6F31CFDB62A006F1546 /* NSURL+CommonURLs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC1C6F61CFDB62A006F1546 /* NSURL+CommonURLs.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC1C6F41CFDB62A006F1546 /* NSURL+CommonURLs.m */; };
+		4CC1C6F91CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC1C6F71CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h */; };
+		4CC1C6FA1CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC1C6F81CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m */; };
 		4CE1CA461CF87323001BD2D5 /* File in Resources */ = {isa = PBXBuildFile; fileRef = 4CE1CA451CF87323001BD2D5 /* File */; };
 		4CE1CA4B1CFAF74A001BD2D5 /* MADCloudManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */; };
 		4CE1CA4C1CFAF74A001BD2D5 /* MADCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */; };
@@ -89,6 +91,8 @@
 		4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADStorageState.m; path = MADFileManager/MADStorageState.m; sourceTree = "<group>"; };
 		4CC1C6F31CFDB62A006F1546 /* NSURL+CommonURLs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+CommonURLs.h"; path = "MADFileManager/Categories/NSURL+CommonURLs.h"; sourceTree = "<group>"; };
 		4CC1C6F41CFDB62A006F1546 /* NSURL+CommonURLs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+CommonURLs.m"; path = "MADFileManager/Categories/NSURL+CommonURLs.m"; sourceTree = "<group>"; };
+		4CC1C6F71CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ConvenienceConstructors.h"; path = "MADFileManager/Categories/NSURL+ConvenienceConstructors.h"; sourceTree = "<group>"; };
+		4CC1C6F81CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ConvenienceConstructors.m"; path = "MADFileManager/Categories/NSURL+ConvenienceConstructors.m"; sourceTree = "<group>"; };
 		4CE1CA451CF87323001BD2D5 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 		4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudManager.h; path = MADFileManager/MADCloudManager.h; sourceTree = "<group>"; };
 		4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCloudManager.m; path = MADFileManager/MADCloudManager.m; sourceTree = "<group>"; };
@@ -220,6 +224,8 @@
 				4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */,
 				4CC1C6F31CFDB62A006F1546 /* NSURL+CommonURLs.h */,
 				4CC1C6F41CFDB62A006F1546 /* NSURL+CommonURLs.m */,
+				4CC1C6F71CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h */,
+				4CC1C6F81CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m */,
 			);
 			name = MADFileManager;
 			sourceTree = "<group>";
@@ -243,6 +249,7 @@
 				4CE1CA4B1CFAF74A001BD2D5 /* MADCloudManager.h in Headers */,
 				4C41DA8A1BA22C5700FF63EC /* MADFileCoordinator.h in Headers */,
 				4C41DA7A1BA22C5700FF63EC /* MADAppLaunchContext.h in Headers */,
+				4CC1C6F91CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h in Headers */,
 				4C41DA821BA22C5700FF63EC /* MADFileInfo.h in Headers */,
 				4CE1CA4E1CFB70BA001BD2D5 /* MADAppStorageOption.h in Headers */,
 				4C6701131BA20683001C9D5A /* MADFileManager.h in Headers */,
@@ -358,6 +365,7 @@
 				4C41DA801BA22C5700FF63EC /* MADMetaData.m in Sources */,
 				4C41DA8E1BA22C5700FF63EC /* MADCloudFileCoordinator.m in Sources */,
 				4C41DA871BA22C5700FF63EC /* MADFileUtilities.m in Sources */,
+				4CC1C6FA1CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m in Sources */,
 				4CE1CA4C1CFAF74A001BD2D5 /* MADCloudManager.m in Sources */,
 				4C4144181CCDF68A0050BAF6 /* MADFileCoordinator.m in Sources */,
 				4C41DA891BA22C5700FF63EC /* MADDirectoryMonitor.m in Sources */,

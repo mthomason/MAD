@@ -60,7 +60,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (instancetype)newURLForLocalCacheDirectoryNamed:(NSString *)handle {
-    NSURL *url = [NSURL newUrlForLocalCacheDirectory];
+    NSURL *url = [NSURL newURLForLocalCacheDirectory];
     NSURL *cachedArrayDirectories = [url URLByAppendingPathComponent: handle isDirectory: YES];
     BOOL exist, isDirectory;
     NSString *path = cachedArrayDirectories.path;
@@ -89,9 +89,9 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     return url;
 }
 
-+ (instancetype)newUrlForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-                              pathComponent:(NSString *)pathComponent
-                        alternativeSelector:(SEL)alternativeSelector {
++ (instancetype)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+                                            pathComponent:(NSString *)pathComponent
+                                      alternativeSelector:(SEL)alternativeSelector {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
     NSAssert(groupIdentifier != nil, @"Need a group identifier... %s", __PRETTY_FUNCTION__);
@@ -116,10 +116,10 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
                                                                 attributes: nil error: &error];
     }
     
-    return isDirectory ? cacheURL : [self newUrlForURLSelector:alternativeSelector];
+    return isDirectory ? cacheURL : [self newURLForURLSelector:alternativeSelector];
 }
 
-+ (instancetype)newUrlForURLSelector:(SEL)selector {
++ (instancetype)newURLForURLSelector:(SEL)selector {
     IMP imp = [self methodForSelector:selector];
     NSURL *(*func)(id, SEL) = (void *)imp;
     return func(self, selector);
@@ -153,7 +153,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     return cacheURL;
 }
 
-+ (instancetype)newUrlForLocalDocumentsDirectory {
++ (instancetype)newURLForLocalDocumentsDirectory {
     NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                         NSUserDomainMask, YES);
     NSString *firstObject = documentsDirectories.firstObject;
@@ -165,20 +165,20 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
-+ (instancetype)newUrlForLocalCacheDirectory {
++ (instancetype)newURLForLocalCacheDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *firstObject = paths.firstObject;
     id url = [[NSURL alloc] initFileURLWithPath:firstObject isDirectory:YES];
     return url;
 }
 
-+ (instancetype)newUrlForLocalDataDirectory {
++ (instancetype)newURLForLocalDataDirectory {
     NSString *homeDirectory = NSHomeDirectory();
     NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
     return  [fileUrlWithPath URLByAppendingPathComponent:MADPathComponentData isDirectory:YES];
 }
 
-+ (instancetype)newUrlForLocalApplicationSupportDirectory {
++ (instancetype)newURLForLocalApplicationSupportDirectory {
     NSArray <NSURL *> *possibleUrls;
     possibleUrls = [[NSFileManager defaultManager] URLsForDirectory: NSApplicationSupportDirectory
                                                           inDomains: NSUserDomainMask];
@@ -216,41 +216,50 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (instancetype)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID {
-    NSURL *cloudDirectoryURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:ubiquityID];
-    NSURL *documentsDirectoryURL = [cloudDirectoryURL URLByAppendingPathComponent:MADPathComponentDocuments];
-    return documentsDirectoryURL;
+    NSURL *cloudDirectory, *documentsDirectory;
+    cloudDirectory = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:ubiquityID];
+    documentsDirectory = [cloudDirectory URLByAppendingPathComponent:MADPathComponentDocuments];
+    return documentsDirectory;
 }
 
 + (instancetype)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self newUrlForLocalDirectoryForGroupIdentifier: groupIdentifier
-                                             pathComponent: MADPathComponentDocuments
-                                       alternativeSelector: @selector(newUrlForLocalDocumentsDirectory)];
+    SEL altSelector = @selector(newURLForLocalDocumentsDirectory);
+    NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
+                                                   pathComponent: MADPathComponentDocuments
+                                             alternativeSelector: altSelector];
+    return url;
 }
 
 + (instancetype)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self newUrlForLocalDirectoryForGroupIdentifier: groupIdentifier
-                                             pathComponent: MADPathComponentData
-                                       alternativeSelector: @selector(newUrlForLocalDataDirectory)];
+    SEL altSelector = @selector(newURLForLocalDataDirectory);
+    NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
+                                                   pathComponent: MADPathComponentData
+                                             alternativeSelector: altSelector];
+    return url;
 }
 
 + (instancetype)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self newUrlForLocalDirectoryForGroupIdentifier: groupIdentifier
-                                             pathComponent: MADPathComponentCache
-                                       alternativeSelector: @selector(newUrlForLocalCacheDirectory)];
+    SEL altSelector = @selector(newURLForLocalCacheDirectory);
+    NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
+                                                   pathComponent: MADPathComponentCache
+                                             alternativeSelector: altSelector];
+    return url;
 }
 
-+ (instancetype)newUrlForLocalApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-    return [self newUrlForLocalDirectoryForGroupIdentifier: groupIdentifier
-                                             pathComponent: MADPathComponentAppSupport
-                                       alternativeSelector: @selector(newUrlForLocalApplicationSupportDirectory)];
++ (instancetype)newURLLocalApplicationSupportDirectoryForGroupID:(NSString *)groupIdentifier {
+    SEL altSelector = @selector(newURLForLocalApplicationSupportDirectory);
+    NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
+                                                   pathComponent: MADPathComponentAppSupport
+                                             alternativeSelector: altSelector];
+    return url;
 }
 
 + (instancetype)newUrlForLocalTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self newUrlForLocalDirectoryForGroupIdentifier: groupIdentifier
-                                             pathComponent: MADPathComponentTemporary
-                                       alternativeSelector: @selector(newURLLocalTemporaryDirectory)];
+    SEL altSelector = @selector(newURLLocalTemporaryDirectory);
+    NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
+                                                   pathComponent: MADPathComponentTemporary
+                                             alternativeSelector: altSelector];
+    return url;
 }
 
 @end

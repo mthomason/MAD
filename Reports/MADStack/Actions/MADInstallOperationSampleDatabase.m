@@ -73,7 +73,7 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
     NSURL *appSupportDirectory =
-        [NSURL newUrlForLocalApplicationSupportDirectoryForGroupIdentifier: MADIdentifierGroup];
+        [NSURL newURLLocalApplicationSupportDirectoryForGroupID: MADIdentifierGroup];
     NSString *filename = [[NSString alloc] initWithFormat: @"%@.%@",
                                                 MTSampleDatabaseChinook,
                                                 MTDocumentExtentionSqlite3];

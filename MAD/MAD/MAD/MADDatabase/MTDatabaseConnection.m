@@ -151,7 +151,7 @@ NSString * const MADStringEmpty = @"";
         //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
         
         NSURL *appSupportDirectory;
-        appSupportDirectory = [NSURL newUrlForLocalApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+        appSupportDirectory = [NSURL newURLLocalApplicationSupportDirectoryForGroupID:MADIdentifierGroup];
         NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
                                                             isDirectory: NO];
         NSString *path = dbUrl.path;

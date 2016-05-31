@@ -16,6 +16,7 @@
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
 #import "NSURL+CommonURLs.h"
+#import "NSURL+ConvenienceConstructors.h"
 #import <dispatch/queue.h>
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
@@ -26,10 +27,10 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
             <MADDirectoryMonitorDelegate>
 
     @property (nonatomic, copy)     NSArray *currentLocalContents;
-    @property (nonatomic, strong)   NSPredicate *predicate;
+    @property (nonatomic, copy)   NSPredicate *predicate;
     @property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
     @property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
-    @property (nonatomic, strong)   NSString *fileGroup;
+    @property (nonatomic, copy)   NSString *fileGroup;
 
 @end
 
@@ -44,8 +45,10 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
           firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
     if (self = [super init]) {
-        self.fileGroup = fileGroup;
-        self.predicate = predicate;
+
+        _fileGroup = fileGroup.copy;
+        _predicate = predicate.copy;
+        
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
         NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
@@ -54,7 +57,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         self.directoryMonitor = directoryMonitor;
         self.directoryMonitor.delegate = self;
         
-        NSArray *currentLocalContents = [NSArray array];
+        NSArray *currentLocalContents = [[NSArray alloc] init];
         self.currentLocalContents = currentLocalContents;
 
     }
@@ -65,7 +68,9 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 - (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
               firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension, pathExtension];
+    NSPredicate *predicate;
+    predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension,
+                                                 pathExtension];
     
     if (self = [self initWithPredicate:predicate identifier:fileGroup
                firstQueryUpdateHandler:firstQueryUpdateHandler]) {
@@ -79,7 +84,9 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
                                identifier:(NSString *)fileGroup
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent, lastPathComponent];
+    NSPredicate *predicate;
+    predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent,
+                                                 lastPathComponent];
     
     if (self = [self initWithPredicate:predicate identifier:fileGroup
                firstQueryUpdateHandler:firstQueryUpdateHandler]) {
@@ -102,62 +109,97 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (void)removeFileAtURL:(NSURL *)URL {
+
+    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
     [MADFileUtilities removeFileAtURL:URL withCompletionHandler:^(NSError *error) {
         if (error) {
-            [self.delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
-        }
-        else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[]
-                                                                removedURLs:@[URL]
-                                                                updatedURLs:@[]];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            [delegate fileCoordinatorDidFailRemovingFileAtURL: URL
+                                                    withError: error];
+        } else {
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            NSArray *inserts = [[NSArray alloc] init],
+                    *removes = [[NSArray alloc] initWithObjects:URL, nil],
+                    *updates = [[NSArray alloc] init];
+            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
+                                                           removedURLs: updates
+                                                           updatedURLs: removes];
         }
     }];
 }
 
 - (void)duplicateFileAtURL:(NSURL *)URL {
+
+    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
     [MADFileUtilities duplicateFileAtURL:URL withCompletionHandler:^(NSURL *newURL, NSError *error) {
         if (error) {
-            [self.delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
         } else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[newURL]
-                                                                removedURLs:@[]
-                                                                updatedURLs:@[]];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
+                    *removes = [[NSArray alloc] init],
+                    *updates = [[NSArray alloc] init];
+            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
+                                                           removedURLs: removes
+                                                           updatedURLs: updates];
         }
     }];
 }
 
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
-    [MADFileUtilities renameFileAtURL:URL toName:name withCompletionHandler:^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
+
+    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
+    [MADFileUtilities renameFileAtURL:URL toName:name withCompletionHandler:^(NSURL *sourceURL,
+                                                                              NSURL *newURL,
+                                                                              NSError *error) {
         if (error) {
-            [self.delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            [delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
         } else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[newURL]
-                                                                removedURLs:@[sourceURL]
-                                                                updatedURLs:@[]];
+            NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
+                    *removes = [[NSArray alloc] initWithObjects:sourceURL, nil],
+                    *updates = [[NSArray alloc] init];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+           [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:inserts
+                                                          removedURLs:removes
+                                                          updatedURLs:updates];
         }
     }];
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention
+               fileGroup:(NSString *)fileGroup {
+
+    NSURL *documentURL = [NSURL newURLLocalDocumentWithName:name extention:extention
+                                                  fileGroup:fileGroup];
     
+    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
     [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
+
         if (error) {
-            [self.delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            [delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
         }
         else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: @[documentURL]
-                                                                removedURLs: @[]
-                                                                updatedURLs: @[]];
+            NSArray *inserts = [[NSArray alloc] initWithObjects:documentURL, nil],
+                    *removes = [[NSArray alloc] init],
+                    *updates = [[NSArray alloc] init];
+            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
+            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
+                                                                removedURLs: removes
+                                                                updatedURLs: updates];
         }
     }];
 }
 
-- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                    fileGroup:(NSString *)fileGroup {
     if (name.length <= 0) {
         return NO;
     }
-    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
+    NSURL *documentURL = [NSURL newURLLocalDocumentWithName:name extention:extention
+                                                  fileGroup:fileGroup];
     NSString *path = documentURL.path;
     if (path == nil) return NO;
     return ![[NSFileManager defaultManager] fileExistsAtPath:path];
@@ -191,25 +233,30 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         
         NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
         
-        NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
-                                                                   includingPropertiesForKeys: nil
-                                                                                      options: NSDirectoryEnumerationSkipsPackageDescendants
-                                                                                        error: nil];
+        NSArray *URLs;
+        URLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
+                                             includingPropertiesForKeys: nil
+                                                                options: NSDirectoryEnumerationSkipsPackageDescendants
+                                                                  error: nil];
         
-        NSArray *localListURLs = [localDocumentURLs filteredArrayUsingPredicate:predicate];
+        NSArray *localListURLs = [URLs filteredArrayUsingPredicate:predicate];
         
         if (localListURLs.count > 0) {
-            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, self.currentLocalContents];
-            NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
+            NSPredicate *containPredicate, *doesntContainPredicate;
+            NSArray *insertedURLs, *removedURLs, *emptyArray;
+
+            containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject,
+                                                                sself.currentLocalContents];
+            doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
-            NSArray *insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
+            insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
             
             containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
             doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
-            NSArray *removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
+            removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
             
-            NSArray *emptyArray = [[NSArray alloc] init];
+            emptyArray = [[NSArray alloc] init];
             [sself.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
                                                                  removedURLs: removedURLs
                                                                  updatedURLs: emptyArray];
@@ -222,12 +269,6 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
             sself.firstQueryUpdateHandler = nil;
         }
     });
-}
-
-- (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
-    NSURL *documentURLWithoutExtension = [url URLByAppendingPathComponent:name];
-    return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }
 
 @end

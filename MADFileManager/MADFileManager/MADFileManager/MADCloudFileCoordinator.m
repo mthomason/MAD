@@ -56,17 +56,16 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope, NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
                                        NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope, NSMetadataQueryUbiquitousDocumentsScope];
         metadataQuery.notificationBatchingInterval = 0.5000;
-        metadataQuery.predicate = predicate;
+        metadataQuery.predicate = predicate.copy;
 
         [self addObserversToQuery:metadataQuery];
         self.metadataQuery = metadataQuery;
         
-        __block NSURL *cloudContainerURL;
+        MADCloudFileCoordinator __unsafe_unretained * wself = self;
         dispatch_barrier_async(self.documentsDirectoryQueue, ^{
-            cloudContainerURL = [NSURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
+            wself->_documentsDirectory =
+                [NSURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
         });
-        _documentsDirectory = cloudContainerURL.copy;
-        
     }
     
     return self;
@@ -107,11 +106,15 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)ubiquityIdentifier
               firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.pathExtension = %@)", NSMetadataItemURLKey, pathExtension];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.pathExtension = %@)",
+                              NSMetadataItemURLKey, pathExtension];
     
-    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier
+           firstQueryUpdateHandler:firstQueryUpdateHandler];
     
     if (self) { }
+
+    predicate = nil;
     
     return self;
 }
@@ -119,11 +122,15 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)ubiquityIdentifier
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.lastPathComponent = %@)", NSMetadataItemURLKey, lastPathComponent];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.lastPathComponent = %@)",
+                              NSMetadataItemURLKey, lastPathComponent];
     
-    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier
+           firstQueryUpdateHandler:firstQueryUpdateHandler];
     
     if (self) { }
+    
+    predicate = nil;
     
     return self;
 }
@@ -139,9 +146,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (NSURL *)documentsDirectory {
     __block NSURL *documentsDirectory;
     
-    MADCloudFileCoordinator * __weak weakself = self;
+    MADCloudFileCoordinator __unsafe_unretained * wself = self;
     dispatch_sync(self.documentsDirectoryQueue, ^{
-        documentsDirectory = weakself.documentsDirectory;
+        documentsDirectory = wself->_documentsDirectory;
     });
     
     return documentsDirectory;
@@ -298,7 +305,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - Convenience
 
-- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                    fileGroup:(NSString *)fileGroup {
     if (name.length <= 0) {
         return NO;
     }

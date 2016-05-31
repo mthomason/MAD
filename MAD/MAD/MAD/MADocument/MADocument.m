@@ -25,8 +25,8 @@
 #import <setjmp.h>
 #import <copyfile.h>
 
-#import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFileManager/MADFileUtilities.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADFilename.h>
