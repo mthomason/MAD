@@ -7,6 +7,8 @@
 //
 
 #import "UIApplication+MADAppDelegate.h"
+#import <UIKit/UIApplication.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 NSString * const MADApplicationIdMadDesigner                         = @"666001433";
 NSString * const MADApplicationIdMadViewer                           = @"666003759";
@@ -14,7 +16,7 @@ NSString * const MADApplicationIdMadViewer                           = @"6660037
 @implementation MADApplication
 
 + (MADAppDelegate)AppDelegate {
-    MADAppDelegate __autoreleasing appDelegate = (MADAppDelegate)[UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     return appDelegate;
 }
 

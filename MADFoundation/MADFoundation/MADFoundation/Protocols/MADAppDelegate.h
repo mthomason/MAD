@@ -9,8 +9,9 @@
 #ifndef MAD_MADFoundation_MADAppDelegate_h
 #define MAD_MADFoundation_MADAppDelegate_h
 
-#import <UIKit/UIApplication.h>
-#import "MADApplicationProtocol.h"
+@class UIApplication;
+@protocol UIApplicationDelegate;
+@protocol MADApplicationProtocol;
 
 typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;
 

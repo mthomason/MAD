@@ -15,6 +15,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MTVerificationController() <SKRequestDelegate>

@@ -21,5 +21,4 @@ FOUNDATION_EXPORT const unsigned char MADFileManagerVersionString[];
 #import <MADFileManager/MADLocalFileCoordinator.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADAppLaunchContext.h>
 #import <MADFileManager/MADFileInfo.h>

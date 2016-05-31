@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSURL.h>
 
 @interface NSURL (ConvenienceConstructors)
 

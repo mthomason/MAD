@@ -18,12 +18,13 @@
 #import "UIColor+PaperPatterns.h"
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MADReceiptViewController ()
 
-@property (nonatomic, strong) MADFeatures *features;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+    @property (nonatomic, strong) MADFeatures *features;
+    @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -51,38 +52,47 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    int extraRows = [MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0;
-    return [MTVerificationController sharedInstance].receipt == nil ? 0 : [MTVerificationController sharedInstance].receipt.inAppPurchases.count + extraRows;
+    NSUInteger extraRows;
+    extraRows = ([MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0);
+    return (NSInteger)([MTVerificationController sharedInstance].receipt == nil ? 0 :
+                       [MTVerificationController sharedInstance].receipt.inAppPurchases.count +
+                      ([MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0));
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
     BOOL inAppPurchase = NO;
-    NSInteger inAppPurchaseIndex = 0;
+    NSUInteger inAppPurchaseIndex = 0;
     if ([MTVerificationController sharedInstance].receipt.charterMembership) {
         
         if (indexPath.item == 0) {
             static NSString *reuseID = @"MADIdentifierReceiptApplicationDetails";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
-            ((MADTableViewCellReceiptApplication *)cell).product.text = [[MADApplication AppDelegate] name];
-            ((MADTableViewCellReceiptApplication *)cell).version.text = [MTVerificationController sharedInstance].receipt.version;
+            NSString *name    = [[MADApplication AppDelegate] name],
+                     *version = [MTVerificationController sharedInstance].receipt.version;
+            ((MADTableViewCellReceiptApplication *)cell).product.text = name.copy;
+            ((MADTableViewCellReceiptApplication *)cell).version.text = version.copy;
         } else if (indexPath.item == 1) {
             
             static NSString *reuseID = @"MADIdentifierReceiptCharterMember";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
             NSString *formatString = NSLocalizedString(@"Charter Member (since version %@)", @"Charter Member (since version %@)");
-            NSString *formattted = [NSString stringWithFormat:formatString, [MTVerificationController sharedInstance].receipt.originalVersion];
-            NSMutableAttributedString *at = ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText.mutableCopy;
-            [at replaceCharactersInRange:NSMakeRange(0, at.length) withString:formattted];
-            ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText = at;
+            NSString *formattted;
+            formattted = [[NSString alloc] initWithFormat:formatString,
+                                [MTVerificationController sharedInstance].receipt.originalVersion];
+            NSMutableAttributedString *cellText;
+            cellText = ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText.mutableCopy;
+            [cellText replaceCharactersInRange:NSMakeRange(0, cellText.length) withString:formattted];
+            ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText = cellText;
             
         } else {
             inAppPurchase = YES;
-            inAppPurchaseIndex = indexPath.item - 1;
+            inAppPurchaseIndex = (NSUInteger)indexPath.item - 1;
         }
     } else {
         inAppPurchase = YES;
-        inAppPurchaseIndex = indexPath.item;
+        inAppPurchaseIndex = (NSUInteger)indexPath.item;
     }
     if (inAppPurchase) {
         static NSString *reuseID = @"MADIdentifierReceipt";
@@ -123,25 +133,32 @@
 }
 
 - (IBAction)actionRefresh:(id)sender {
+    MADReceiptViewController __weak *weakself = self;
     [[MTVerificationController sharedInstance] refreshReceipt:^(BOOL success, NSError *error) {
+        MADReceiptViewController *strongself = weakself;
         if (error != nil) {
             UIAlertController *alert = [UIAlertController newAlertControllerError:error];
-            [self presentViewController:alert animated:YES completion:^{
+            [strongself presentViewController:alert animated:YES completion:^{
                 
             }];
         } else {
             NSString *title = NSLocalizedString(@"Purchases Restored", @"Purchases Restored");
-            NSString *messages = NSLocalizedString(@"Restored purchases for your account.", @"Restored purchases for your account.");
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                           message: messages
-                                                                    preferredStyle: UIAlertControllerStyleAlert];
+            NSString *messages = NSLocalizedString(@"Restored purchases for your account.",
+                                                   @"Restored purchases for your account.");
+            UIAlertController *alert;
+            alert = [UIAlertController alertControllerWithTitle: title
+                                                        message: messages
+                                                 preferredStyle: UIAlertControllerStyleAlert];
             NSString *dismiss = NSLocalizedString(@"Dismiss", @"Dismiss");
-            UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:dismiss style:UIAlertActionStyleDefault handler:NULL];;;
+            UIAlertAction *dismissAction;
+            dismissAction = [UIAlertAction actionWithTitle: dismiss
+                                                     style: UIAlertActionStyleDefault
+                                                   handler: NULL];
             
             [alert addAction:dismissAction];
-            [self presentViewController:alert animated:YES completion:NULL];
+            [strongself presentViewController:alert animated:YES completion:NULL];
         }
-        [self.tableView reloadData];
+        [strongself.tableView reloadData];
     }];
 }
 
@@ -153,8 +170,9 @@
 //    return charterMember ? (i) : i;
 //}
 
-- (CGFloat)inAppPurchaseCellHeight:(NSInteger)index {
-    NSDictionary *purchase = [MTVerificationController sharedInstance].receipt.inAppPurchases[index];
+- (CGFloat)inAppPurchaseCellHeight:(NSUInteger)index {
+    NSDictionary *purchase;
+    purchase = [MTVerificationController sharedInstance].receipt.inAppPurchases[index];
     NSString *cancelDate = purchase[@"cancellation-date"];
     return cancelDate.length > 0 ? 126.0000f : 100.0000f;
 }
@@ -166,13 +184,13 @@
         } else if (indexPath.item == 1) {
             return 34.0000f;
         } else {
-            return [self inAppPurchaseCellHeight:indexPath.item-2];
+            return [self inAppPurchaseCellHeight:(NSUInteger)indexPath.item-2];
         }
     } else {
         if (indexPath.item == 0) {
             return 74.0000f;
         } else {
-            return [self inAppPurchaseCellHeight:indexPath.item-1];
+            return [self inAppPurchaseCellHeight:(NSUInteger)indexPath.item-1];
         }
     }
 }

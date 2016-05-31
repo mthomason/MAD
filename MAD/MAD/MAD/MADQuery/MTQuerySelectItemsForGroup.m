@@ -29,7 +29,8 @@
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
+                 NSStringFromClass([self class]));
         
         NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[keyTableName];

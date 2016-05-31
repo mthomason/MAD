@@ -7,7 +7,6 @@
 //
 
 #import <MADFoundation/MADDataType.h>
-#import <Foundation/NSData.h>
 #import <Foundation/NSString.h>
 #import "NSData+Comparson.h"
 

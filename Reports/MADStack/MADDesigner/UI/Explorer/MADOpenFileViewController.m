@@ -26,7 +26,6 @@
 
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
@@ -39,14 +38,11 @@
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADAppLaunchContext.h>
 #import <MADFileManager/MADFilesController.h>
 
-#import <MADCocoaExtensions/UIView+Animations.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
 
 #import <MAD/MADConstants.h>
+#import <MAD/MADAppLaunchContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADCredential.h>
@@ -56,9 +52,6 @@
 #import "MADProgressView.h"
 
 #import "Constants.h"
-
-#import "MTStoreKitController+Features.h"
-#import "MADDocumentInformationTableViewController+Designer.h"
 
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"
@@ -73,13 +66,6 @@
 
 #import "MADNavigationController.h"
 
-#import "UIStoryboard+Query.h"
-#import "UINavigationController+MADQuery.h"
-#import "UINavigationController+Designer.h"
-
-#import "UITabBarController+Shared.h"
-#import "UITableViewController+Designer.h"
-
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
 
@@ -92,7 +78,20 @@
 #import "MADInstallOperationSampleDatabase.h"
 #import "MADInstallOperationSampleDocument.h"
 #import "MTVerificationController.h"
+
+#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADFoundation/NSURL+Document.h>
+#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+
 #import "NSUserDefaults+MADDesigner.h"
+#import "UIStoryboard+Query.h"
+#import "UINavigationController+MADQuery.h"
+#import "UINavigationController+Designer.h"
+
+#import "UITabBarController+Shared.h"
+#import "UITableViewController+Designer.h"
+#import "MTStoreKitController+Features.h"
+#import "MADDocumentInformationTableViewController+Designer.h"
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic = 2;
@@ -214,13 +213,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark -
 #pragma mark MADOperationObserver
 
-- (void)operationDidStart:(MADOperation *)operation {
-    
-}
+- (void)operationDidStart:(MADOperation *)operation { }
 
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation {
-    
-}
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation
                     errors:(NSArray *)errors {
@@ -342,13 +337,17 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         UIColor *redColor = [MADColorEverydayApps newColorRed];
         navigationBarQLPreviewAppearance.tintColor = redColor;
                 UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-        UILabel *labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
+
+        UILabel *labelInTableCell;
+        labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
         labelInTableCell.highlightedTextColor       = orangeColor;
         
-        UILabel *labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+        UILabel *labelInCollectionCell;
+        labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
         labelInCollectionCell.highlightedTextColor  = orangeColor;
         
-        UIImageView *imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
+        UIImageView *imageInCollectionViewCell;
+        imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
         imageInCollectionViewCell.tintColor         = orangeColor;
         
     }
@@ -1164,12 +1163,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark MADCollectionViewLayoutFilesDelegate
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
+    MADMetaData *metadata;
+    metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
     return metadata.URL.lastPathComponent.stringByDeletingPathExtension;
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
+    MADMetaData *metadata;
+    metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
     return [self copySubtitleForMetadata:metadata];
 }
 
@@ -1181,7 +1182,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
+    MADMetaData *metadata;
+    metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)
                                             [self.collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
@@ -1377,7 +1379,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
+    MADViewerController *viewControllerReportViewer;
+    viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
 }
 

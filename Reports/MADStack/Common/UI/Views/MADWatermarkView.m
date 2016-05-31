@@ -14,6 +14,7 @@
 #import <UIKit/NSStringDrawing.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView * const __strong *);
 

@@ -7,7 +7,6 @@
 //
 
 #import "MADFileUtilities.h"
-#import <UIKit/UIKit.h>
 #import "NSURL+CommonURLs.h"
 
 static NSString * const MADPathComponentDocuments  = @"Documents";

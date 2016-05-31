@@ -12,6 +12,13 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <CoreData/NSManagedObjectID.h>
 
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSValue.h>
+#import <Foundation/NSURL.h>
+#import <UIKit/UIGeometry.h>
+
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";
 static NSString * const keyTables                   = @"3";

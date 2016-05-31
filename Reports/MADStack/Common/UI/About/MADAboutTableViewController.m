@@ -35,6 +35,8 @@
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
 
+#import <MADFoundation/MADApplicationProtocol.h>
+
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
         UITableViewDelegate,

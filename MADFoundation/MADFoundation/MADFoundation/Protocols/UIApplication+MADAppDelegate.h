@@ -9,13 +9,14 @@
 #ifndef MAD_MADFoundation_UIApplication__MADAppDelegate__h
 #define MAD_MADFoundation_UIApplication__MADAppDelegate__h
 
+#import <Foundation/NSObject.h>
 #import "MADAppDelegate.h"
 
 @interface MADApplication : NSObject
 
-+ (MADAppDelegate)AppDelegate;
-+ (BOOL)isMADDesigner;
-+ (BOOL)isMADViewer;
+    + (MADAppDelegate)AppDelegate;
+    + (BOOL)isMADDesigner;
+    + (BOOL)isMADViewer;
 
 @end
 

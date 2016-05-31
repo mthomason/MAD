@@ -881,8 +881,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     
-    NSNumber *keyTableNames = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersTableNames];
-    NSNumber *keySortDesc = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersSortDesc];
+    NSNumber *keyTableNames, *keySortDesc;
+    keyTableNames = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersTableNames];
+    keySortDesc = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersSortDesc];
     id tableName = [self tableName];
     id sortDescriptors = self.sortDescriptors;
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:

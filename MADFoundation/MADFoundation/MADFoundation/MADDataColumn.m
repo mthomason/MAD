@@ -53,9 +53,9 @@
     self.dataPercision = dataPercision.integerValue;
     
     
-    [encoder encodeBool: self.isPrimaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
-    [encoder encodeBool: self.isNotNull ? YES : NO          forKey: [MADDataColumn keyIsNotNull]];
-    [encoder encodeBool: self.isAutoIncrement ? YES : NO    forKey: [MADDataColumn keyIsAutoIncrement]];
+    [encoder encodeBool: _primaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
+    [encoder encodeBool: _notNull ? YES : NO          forKey: [MADDataColumn keyIsNotNull]];
+    [encoder encodeBool: _autoIncrement ? YES : NO    forKey: [MADDataColumn keyIsAutoIncrement]];
 
 }
 
