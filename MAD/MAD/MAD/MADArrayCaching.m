@@ -22,13 +22,8 @@
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADFileManager/MADFileUtilities.h>
-
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
-#import "MADConstants.h"
-
-#import "MTQuery.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTQueryCacheAddColumn.h"
@@ -43,6 +38,13 @@ static NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ 
 static NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0;";
 static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
+#ifdef MAD_MTArrayCached_DEBUG
+void sqliteCallbackFunc(void *foo, const char* statement);
+void sqliteCallbackFunc(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
+}
+#endif
+
 @interface MADArrayCaching ()
 
     @property (nonatomic, strong, readwrite) NSString *identifier;
@@ -54,7 +56,6 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     @property (nonatomic, assign) sqlite3_stmt *statementCount;
     @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
-    @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
     @property (nonatomic, strong) MADIndex *lastObjectSelected;
 
 @end
@@ -62,6 +63,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 @implementation MADArrayCaching
 
 - (void)dealloc {
+    _lastObjectSelected = nil;
     if (_statementInsert != NULL) {
         sqlite3_finalize(_statementInsert);
         sqlite3_finalize(_statementSelect);
@@ -87,29 +89,12 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     //sqlite3_close_v2(_database.databaseHandle);
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier {
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                    cachedDelegate:(id <MTCacheProtocol>)cachedDelegate {
     if (self = [super init]) {
         
-        _statementCount = NULL;
-        _statementEnumer = NULL;
-        _statementInsert = NULL;
-        _statementSelect = NULL;
-
-        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
-        self.fastEnumerationObjects = fastEnumerationObjects;
-
-        NSString *i = [NSString stringWithString:identifier];
-        self.identifier = i;
-        
-    }
-    return self;
-}
-
-- (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
-    if (self = [super init]) {
-        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
-        [self setFastEnumerationObjects:fastEnumerationObjects];
-        
+        NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");
+                
         _statementCount = NULL;
         _statementEnumer = NULL;
         _statementInsert = NULL;
@@ -123,8 +108,11 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
-    MTDatabaseCache *database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
+    MTDatabaseConnection *databaseConnection;
+    MTDatabaseCache *database;
+    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
+    database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
+    
 #ifdef MAD_MTArrayCached_DEBUG
     sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
 #endif
@@ -142,21 +130,25 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     }
     if (![self.database tableExist:MTArrayCachedTableName]) {
 
-        MADDataColumn *columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
+        MADDataColumn *columnKey;
+        columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
         columnKey.type = MTDataTypeInteger;
         columnKey.primaryKey = true;
         columnKey.notNull = true;
         columnKey.autoIncrement = false;
         
-        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier createTable:YES unique:NO];
+        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier
+            createTable:YES unique:NO];
 
-        MADDataColumn *columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
+        MADDataColumn *columnValue;
+        columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
         columnValue.type = MTDataTypeBlob;
         columnValue.primaryKey = false;
         columnValue.notNull = true;
         columnValue.autoIncrement = false;
 
-        [self addColumn:columnValue toTable:MTArrayCachedTableName columnName:columnValue.identifier createTable:NO unique:NO];
+        [self addColumn:columnValue toTable:MTArrayCachedTableName
+             columnName:columnValue.identifier createTable:NO unique:NO];
 
         self.numberOrRows = 0;
     }
@@ -253,25 +245,9 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     return success;
 }
 
-#ifdef MAD_MTArrayCached_DEBUG
-void sqliteCallbackFunc(void *foo, const char* statement);
-void sqliteCallbackFunc(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
-}
-#endif
-
-+ (NSURL *)urlForIdentifier:(NSString *)identifer {
-    NSURL *cachedArrayDirectories;
-    cachedArrayDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:identifer];
-    NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
-    return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
-}
-
 - (NSURL *)url {
     NSURL *result = nil;
-    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-        [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
-        [self.cachedDelegate cachedFilesDirectory];
+    NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory].copy;
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     return result;
@@ -301,13 +277,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return data;
 }
 
-- (id)objectForData:(NSData *)data {
++ (id)newObjectForData:(NSData __unsafe_unretained *)data {
     NSError * __autoreleasing * error = NULL;
-    static const NSPropertyListReadOptions options = NSPropertyListImmutable;
-    id propertyList = [NSPropertyListSerialization propertyListWithData: data options: options
-                                                                 format: nil error: error];
+    id plist;
+    plist = [NSPropertyListSerialization propertyListWithData: data
+                                                      options: NSPropertyListImmutable
+                                                       format: nil error: error];
     NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
-    return propertyList;
+    return plist;
 }
 
 - (void)addObject:(id _Nonnull)object {
@@ -374,9 +351,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
         const void *sqlite3ColumnBlob = sqlite3_column_blob(_statementSelect, 0);
         int bytes = sqlite3_column_bytes(_statementSelect, 0);
-        NSData *queryResult = [NSData dataWithBytes: sqlite3ColumnBlob
-                                             length: (NSUInteger)bytes];
-        result = [self objectForData:queryResult];
+        NSData *queryResult = [[NSData alloc] initWithBytes: sqlite3ColumnBlob
+                                                     length: (NSUInteger)bytes];
+        result = [MADArrayCaching newObjectForData:queryResult];
         
         MADIndex *idx = [[MADIndex alloc] initWithIndex:index andObject:result];
         self.lastObjectSelected = idx;
@@ -387,10 +364,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)removeAllObjects {
-    [self setLastObjectSelected:nil];
-    self.numberOrRows = 0;
-    NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
-    MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheDeleteAllFromTable
+    _lastObjectSelected = nil;
+    _numberOrRows = 0;
+    NSDictionary *queryDefination;
+    MTQuery *queryDeleteAllFromTable;
+    queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
+    queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
     NSError * __autoreleasing error = NULL;
@@ -447,10 +426,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     if (![self isEmpty]) {  //wat??
+        NSData *queryResult;
         while (sqlite3_step(_statementEnumer) == SQLITE_ROW) {
-            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+            queryResult = [[NSData alloc] initWithBytes: sqlite3_column_blob(_statementEnumer, 0)
                                                  length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
-            id result = [self objectForData:queryResult];
+            id result = [MADArrayCaching newObjectForData:queryResult];
             [results addObject:result];
         }
     }
@@ -464,9 +444,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     if ([self isEmpty]) {
         stepResult = sqlite3_step(_statementEnumer);
         if (stepResult == SQLITE_ROW) {
-            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                 length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
-            result = [self objectForData:queryResult];
+            NSData *queryResult;
+            queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                         length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
+            result = [MADArrayCaching newObjectForData:queryResult];
         } else if (stepResult == SQLITE_DONE) {
             sqlite3_reset(_statementEnumer);
             result = nil;
@@ -494,28 +475,30 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     
     if (state->state != 2) {
         state->itemsPtr = stackbuf;
-        [self.fastEnumerationObjects removeAllObjects];
+        
+        NSData *queryResult;
         
         for (i = 0; i<len; i++) {
-            @autoreleasepool {
-                stepResult = sqlite3_step(_statementEnumer);
-                if (stepResult == SQLITE_ROW) {
-                    NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                         length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
-                    id obj = [self objectForData:queryResult];
-                    [self.fastEnumerationObjects addObject:obj];
-                    stackbuf[i] = obj;
-                } else if (stepResult == SQLITE_DONE) {
-                    sqlite3_reset(_statementEnumer);
-                    stackbuf[i] = nil;
-                    state->state = 2;
-                    break;
-                } else {
-                    sqlite3_reset(_statementEnumer);
-                    stackbuf[i] = nil;
-                    state->state = 2;
-                    break;
-                }
+
+            stepResult = sqlite3_step(_statementEnumer);
+            if (stepResult == SQLITE_ROW) {
+                queryResult = [[NSData alloc] initWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                     length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
+                id obj = [MADArrayCaching newObjectForData:queryResult];
+                stackbuf[i] = obj;
+                
+            } else if (stepResult == SQLITE_DONE) {
+                sqlite3_reset(_statementEnumer);
+                stackbuf[i] = nil;
+                state->state = 2;
+                break;
+                
+            } else {
+                sqlite3_reset(_statementEnumer);
+                stackbuf[i] = nil;
+                state->state = 2;
+                break;
+                
             }
         }
     }

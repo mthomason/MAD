@@ -28,9 +28,6 @@
 
 #import "MADQueryViewController.h"
 
-#import <MAD/madlib.h>
-#import <MAD/madmath.h>
-
 @class MADTransparentPresentationController;
 @class MFMailComposeViewController;
 @class MADFileExplorerViewController;

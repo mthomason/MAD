@@ -10,9 +10,9 @@
 #define MAD_MTCacheProtocol_h
 
 @protocol MTCacheProtocol <NSObject>
-@required
+  @required
     - (NSURL *)cachedFilesDirectory;
-@optional
+  @optional
 @end
 
 #endif

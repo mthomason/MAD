@@ -19,21 +19,18 @@
     @property (nonatomic, readonly, strong, nonnull) NSString * identifier;
     @property (readonly) long long int count;
 
-    - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier;
-    - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier cachedDelegate:(id <MTCacheProtocol> _Nullable)cachedDelegate;
+    - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
+                                 cachedDelegate:(id <MTCacheProtocol> _Nullable)cachedDelegate;
 
     - (void)initializeDatabase;
     - (void)finalizeDatabase;
 
-    - (nullable NSURL *)url;
     - (nullable ObjectType)objectAtIndex:(NSUInteger)index;
     - (void)addObject:(id _Nonnull)object;
     - (void)removeAllObjects;
 
     - (void)beginBulkInserts;
     - (void)endBulkInserts;
-
-    + (nullable NSURL *)urlForIdentifier:(nonnull NSString *)identifer;
 
     - (void)resetEnumerator;
     - (id _Nullable)objectAtIndexedSubscript:(NSUInteger)idx;

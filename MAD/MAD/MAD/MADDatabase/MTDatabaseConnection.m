@@ -118,7 +118,8 @@ NSString * const MADStringEmpty = @"";
 
 // Currently only returns SQLite3 type.
 + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
-    id resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    NSURL *sqlite_url = url.copy;
+    id resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:sqlite_url];
     return resultCredentals;
 }
 
