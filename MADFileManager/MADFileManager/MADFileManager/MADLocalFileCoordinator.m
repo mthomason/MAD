@@ -15,6 +15,7 @@
 #import <Foundation/NSFileManager.h>
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
+#import "NSURL+CommonURLs.h"
 #import <dispatch/queue.h>
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
@@ -47,7 +48,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         self.predicate = predicate;
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:fileGroup];
+        NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
         
         MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
         self.directoryMonitor = directoryMonitor;
@@ -170,7 +171,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (NSURL *)documentsDirectory {
-    NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+    NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
     return url;
 }
 
@@ -188,7 +189,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
         MADLocalFileCoordinator *sself = wself;
         if (sself == nil) return;
         
-        NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier: fileGroup];
+        NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
         
         NSArray *localDocumentURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
                                                                    includingPropertiesForKeys: nil
@@ -224,7 +225,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    NSURL *url = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:fileGroup];
+    NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
     NSURL *documentURLWithoutExtension = [url URLByAppendingPathComponent:name];
     return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }

@@ -17,17 +17,6 @@
 
     + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
-    + (NSURL *)localTemporaryDirectory;
-    + (NSURL *)newUrlForLocalCacheDirectoryNamed:(NSString *)handle;
-    + (NSURL *)sharedApplicationGroupContainer:(NSString *)groupIdentifier;
-    + (NSURL *)uniqueURLForURL:(NSURL *)url;
-    + (NSURL *)uniqueUrlInDirectory: (NSURL *)directory withDesiredHandle: (NSString *)desiredFileHandle andExtension: (NSString *)extension;
-    + (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-    + (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-    + (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
-    + (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-    + (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-    
     + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
     + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID extension:(NSString *)extension;
     + (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler;

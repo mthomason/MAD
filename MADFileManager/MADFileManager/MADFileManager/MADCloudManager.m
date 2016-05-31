@@ -312,7 +312,7 @@ static const char * MADQueueCloudSerial
         
     } else {
         
-        NSURL *documents = [MADFileUtilities localDataDirectoryForGroupIdentifier:groupIdentifier];
+        NSURL *documents = [NSURL newURLForLocalDataDirectoryForGroupIdentifier:groupIdentifier];
         NSURL *data = [MADFileUtilities localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
         if (handleCompletion) handleCompletion(NO, documents, data);
         

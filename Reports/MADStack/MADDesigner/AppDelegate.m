@@ -16,17 +16,8 @@
 #import <Foundation/NSString.h>
 
 #import <MAD/MADConstants.h>
-#import "NSUserDefaults+MADDesigner.h"
-
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
 #import "Constants.h"
 
-#import "MADNavigationController.h"
-
-#import "MADUpgradeManager.h"
-
-#import "MADQueryViewController.h"
 
 @class MADTransparentPresentationController;
 @class MFMailComposeViewController;
@@ -268,35 +259,6 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (NSString *)bundleDisplayName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];
-}
-
-
-- (BOOL)isFirstLaunch {
-    NSUserDefaults *userDefaults = [NSUserDefaults newUserDefaultsMADDesigner];
-    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
-    if (firstLaunch) {
-        dispatch_async(self.appDelegateQueueSerial, ^{
-            @autoreleasepool {
-                NSUserDefaults *userDefaultsBackground;
-                NSUUID *uuid = [NSUUID UUID];
-                userDefaultsBackground = [NSUserDefaults newUserDefaultsMADDesigner];
-                [userDefaultsBackground setObject:uuid.UUIDString forKey:MADIDUser];
-                [userDefaultsBackground synchronize];
-            }
-        });
-    }
-    return firstLaunch;
-}
-
-- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
-             subsquientLaunches:(void (^)(void))subsequentLaunch
-                    everyLaunch:(void (^)(void))everyLaunch {
-    if (self.isFirstLaunch) {
-        firstLaunchHandler();
-    } else {
-        subsequentLaunch();
-    }
-    everyLaunch();
 }
 
 @end

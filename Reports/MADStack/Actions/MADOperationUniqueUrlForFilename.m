@@ -11,7 +11,7 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSPathUtilities.h>
-#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/NSURL+CommonURLs.h>
 
 @interface MADOperationUniqueUrlForFilename ()
 
@@ -45,9 +45,9 @@
 - (void)execute {
 
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory: self.documentsDirectory
-                                            withDesiredHandle: self.desiredFilename
-                                                 andExtension: self.pathExtension];
+    NSURL *uniqueUrl = [NSURL newURLUniqueUrlInDirectory: self.documentsDirectory
+                                       withDesiredHandle: self.desiredFilename
+                                            andExtension: self.pathExtension];
 
 
     if (uniqueUrl != nil) {

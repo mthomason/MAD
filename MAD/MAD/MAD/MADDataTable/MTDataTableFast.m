@@ -56,6 +56,7 @@
 #import "MADQueryCacheIndexCreateParameters.h"
 
 #import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/NSURL+CommonURLs.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <stdio.h>
@@ -279,7 +280,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (NSURL *)urlFastCache {
     NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                                [MADFileUtilities localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+                                [NSURL newURLForLocalCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
                                 [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }

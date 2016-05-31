@@ -45,18 +45,17 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 #endif
 
-@interface MADArrayCaching ()
+@interface MADArrayCaching () {
 
+    int _numberOfRows;
+    sqlite3_stmt *_statementInsert;
+    sqlite3_stmt *_statementSelect;
+    sqlite3_stmt *_statementCount;
+    sqlite3_stmt *_statementEnumer;
+}
     @property (nonatomic, strong, readwrite) NSString *identifier;
-    @property (nonatomic, strong) MTDatabaseCache *database;
-
-    @property (nonatomic, assign) int numberOrRows;
-    @property (nonatomic, assign) sqlite3_stmt *statementInsert;
-    @property (nonatomic, assign) sqlite3_stmt *statementSelect;
-    @property (nonatomic, assign) sqlite3_stmt *statementCount;
-    @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
-
-    @property (nonatomic, strong) MADIndex *lastObjectSelected;
+    @property (nonatomic, strong, readwrite) MTDatabaseCache *database;
+    @property (nonatomic, strong, readwrite) MADIndex *lastObjectSelected;
 
 @end
 
@@ -94,7 +93,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     if (self = [super init]) {
         
         NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");
-                
+        
         _statementCount = NULL;
         _statementEnumer = NULL;
         _statementInsert = NULL;
@@ -150,10 +149,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         [self addColumn:columnValue toTable:MTArrayCachedTableName
              columnName:columnValue.identifier createTable:NO unique:NO];
 
-        self.numberOrRows = 0;
+        _numberOfRows = 0;
     }
     [self prepareStatements];
-    self.numberOrRows = (int)[self count];
+    _numberOfRows = (int)[self count];
 }
 
 - (void)beginBulkInserts {
@@ -202,7 +201,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     BOOL success = YES;
     if (_statementInsert == NULL) {
         MTDatabaseCache * __unsafe_unretained database = self.database;
-        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String], -1,
+        success = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1,
                                      &_statementInsert, NULL) == SQLITE_OK;
     }
     return success;
@@ -220,7 +219,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     BOOL success = YES;
     if (_statementSelect == NULL) {
         MTDatabaseCache * __unsafe_unretained database = self.database;
-        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String], -1,
+        success = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1,
                                      &_statementSelect, NULL) == SQLITE_OK;
     }
     return success;
@@ -239,7 +238,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     BOOL success = YES;
     if (_statementCount == NULL) {
         MTDatabaseCache * __unsafe_unretained database = self.database;
-        success = sqlite3_prepare_v2(database->_database, [queryString UTF8String],
+        success = sqlite3_prepare_v2(database->_database, queryString.UTF8String,
                                      -1, &_statementCount, NULL) == SQLITE_OK;
     }
     return success;
@@ -254,25 +253,29 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
-                                       columnName:(NSString *)columnName
-      createTable:(BOOL)create unique:(BOOL)unique {
+       columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
     NSString *columnAffinity = [self.database newNativeTypeForDataType:column.type];
-    MTQueryCacheAddColumn *queryCacheAddColumn =
-        [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
-                                             createTable:create ? true : false
-                                        uniqueColumnHack:unique ? true : false
-                                        columnAffinity:columnAffinity];
+    MTQueryCacheAddColumn *queryCacheAddColumn;
+    queryCacheAddColumn =
+        [[MTQueryCacheAddColumn alloc] initWithTableName: table
+                                              columnName: columnName
+                                                  column: column
+                                             createTable: create ? true : false
+                                        uniqueColumnHack: unique ? true : false
+                                          columnAffinity: columnAffinity];
     bool success = false;
-    NSError * __autoreleasing error = NULL;
-    success = [self.database executeQuery:queryCacheAddColumn withError:&error];
+    NSError * __autoreleasing * error = NULL;
+    success = [self.database executeQuery:queryCacheAddColumn withError:error];
 }
 
-- (NSData *)dataForObject:(id _Nonnull)object {
++ (NSData *)dataForObject:(id _Nonnull)object {
     NSError * __autoreleasing * error = NULL;
-    static const NSPropertyListFormat format = NSPropertyListBinaryFormat_v1_0;
-    NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
-                                                             options: 0 error: error];
+    NSData *data;
+    data = [NSPropertyListSerialization dataWithPropertyList: object
+                                                      format: NSPropertyListBinaryFormat_v1_0
+                                                     options: 0
+                                                       error: error];
     NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
     return data;
 }
@@ -290,27 +293,29 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)addObject:(id _Nonnull)object {
     @autoreleasepool {
 
-        self.lastObjectSelected = nil;
+        _lastObjectSelected = nil;
         NSError * __autoreleasing * error = NULL;
-        static const NSPropertyListFormat format = NSPropertyListBinaryFormat_v1_0;
-        NSData *data = [NSPropertyListSerialization dataWithPropertyList: object format: format
-                                                                 options: 0 error: error];
+        NSData *data;
+        data = [NSPropertyListSerialization dataWithPropertyList: object
+                                                          format: NSPropertyListBinaryFormat_v1_0
+                                                         options: 0
+                                                           error: error];
         
-        sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
+        sqlite3_bind_int(_statementInsert, 1, _numberOfRows);
         sqlite3_bind_blob(_statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
         if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
             sqlite3_reset(_statementInsert);
-            _numberOrRows++;
+            ++_numberOfRows;
         }
     }
 }
 
 - (void)writeData:(NSData *)data {
-    sqlite3_bind_int(_statementInsert, 1, _numberOrRows);
+    sqlite3_bind_int(_statementInsert, 1, _numberOfRows);
     sqlite3_bind_blob(_statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
     if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
         sqlite3_reset(_statementInsert);
-        _numberOrRows++;
+        ++_numberOfRows;
     }
 }
 
@@ -327,8 +332,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     sqlite3_bind_int(_statementSelect, 1, (int)index);
     
     if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
-        result = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
-                                length: (NSUInteger)sqlite3_column_bytes(_statementSelect, 0)];
+        result = [[NSData alloc] initWithBytes: sqlite3_column_blob(_statementSelect, 0)
+                                        length: (NSUInteger)sqlite3_column_bytes(_statementSelect, 0)];
         sqlite3_reset(_statementSelect);
     }
     return result;
@@ -365,7 +370,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (void)removeAllObjects {
     _lastObjectSelected = nil;
-    _numberOrRows = 0;
+    _numberOfRows = 0;
     NSDictionary *queryDefination;
     MTQuery *queryDeleteAllFromTable;
     queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
@@ -384,10 +389,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                             ascending: NO
                                                              selector: @selector(compare:)];
     NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
-    MADQueryDefinition *queryDefinitionSelect = [MTQuery newQueryDefinitionSelect: columnNameIndex
-                                                                        tableName: MTArrayCachedTableName
-                                                                  sortDescriptors: sortdesc];
-    return queryDefinitionSelect;
+    MADQueryDefinition *definition = [MTQuery newQueryDefinitionSelect: columnNameIndex
+                                                             tableName: MTArrayCachedTableName
+                                                       sortDescriptors: sortdesc];
+    return definition;
 }
 
 - (MADQueryDefinition *)queryDefinationLastObject {
@@ -400,8 +405,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                                   tableName: MTArrayCachedTableName
                                                             sortDescriptors: sortdesc];
     NSMutableDictionary *queryDefinationSelect = queryDefinition.mutableCopy;
-    NSNumber *yes = @YES;
-    NSNumber *key = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
+    NSNumber *yes = @YES, *key;
+    key = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
 
     [queryDefinationSelect setObject:yes forKey:key];
     
@@ -421,7 +426,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return lastRowid;
 }
 
-- (BOOL)isEmpty { return self.numberOrRows > 0; }
+- (BOOL)isEmpty { return _numberOfRows > 0; }
 
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
@@ -445,8 +450,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         stepResult = sqlite3_step(_statementEnumer);
         if (stepResult == SQLITE_ROW) {
             NSData *queryResult;
-            queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                         length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
+            queryResult = [[NSData alloc] initWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                 length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
             result = [MADArrayCaching newObjectForData:queryResult];
         } else if (stepResult == SQLITE_DONE) {
             sqlite3_reset(_statementEnumer);

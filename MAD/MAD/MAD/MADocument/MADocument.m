@@ -26,6 +26,7 @@
 #import <copyfile.h>
 
 #import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/NSURL+CommonURLs.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADFilename.h>
@@ -423,7 +424,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
     NSString *destinationName;
     destinationName = [name stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [MADFileUtilities localTemporaryDirectory];
+    NSURL *destinationDirectoryUrl = [NSURL newURLLocalTemporaryDirectory];
     id url = [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
                                                       isDirectory: YES];
     return url;
@@ -431,7 +432,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
     NSString *filenameId = [MADFilename newFilenameId:filename.hash];
-    return [MADFileUtilities newUrlForLocalCacheDirectoryNamed:filenameId];
+    return [NSURL newURLForLocalCacheDirectoryNamed:filenameId];
 }
 
 + (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl {
@@ -444,7 +445,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
     NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
-    NSURL *cacheDirectory = [MADFileUtilities newUrlForLocalCacheDirectoryNamed:fileNameId];
+    NSURL *cacheDirectory = [NSURL newURLForLocalCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

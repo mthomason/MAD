@@ -8,7 +8,7 @@
 
 #import "MADInstallOperationSampleDatabase.h"
 #import <MAD/MADConstants.h>
-#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/NSURL+CommonURLs.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
@@ -73,7 +73,7 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
     NSURL *appSupportDirectory =
-        [MADFileUtilities localApplicationSupportDirectoryForGroupIdentifier: MADIdentifierGroup];
+        [NSURL newUrlForLocalApplicationSupportDirectoryForGroupIdentifier: MADIdentifierGroup];
     NSString *filename = [[NSString alloc] initWithFormat: @"%@.%@",
                                                 MTSampleDatabaseChinook,
                                                 MTDocumentExtentionSqlite3];

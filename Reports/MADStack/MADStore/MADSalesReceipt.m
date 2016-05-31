@@ -359,7 +359,7 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
                                 }
                             }
                             
-                            NSNumber *num = @(quantity);
+                            NSNumber *num = [[NSNumber alloc] initWithUnsignedInteger: quantity];
                             if (attr_type == INAPP_QUANTITY) {
                                 item[MTStoreKitIdentifierReceiptQuantity] = num;
                             } else if (attr_type == INAPP_WEBORDER) {
@@ -561,7 +561,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
             
             ASN1_get_object(&p, &length, &type, &xclass, seq_end - p);
             if (type == V_ASN1_OCTET_STRING) {
-                NSData *data = [NSData dataWithBytes:p length:(NSUInteger)length];
+                NSData *data = [[NSData alloc] initWithBytes:p length:(NSUInteger)length];
                 
                 // Bytes
                 if (attr_type == BUNDLE_ID || attr_type == OPAQUE_VALUE || attr_type == HASH) {
@@ -602,9 +602,9 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
                         }
                         
                         if (key) {
-                            NSString *string = [[NSString alloc] initWithBytes:str_p
-                                                                        length:(NSUInteger)str_length
-                                                                      encoding:NSUTF8StringEncoding];
+                            NSString *string = [[NSString alloc] initWithBytes: str_p
+                                                                        length: (NSUInteger)str_length
+                                                                      encoding: NSUTF8StringEncoding];
                             info[key] = string;
                         }
                     }

@@ -8,6 +8,7 @@
 
 #import "MADFileUtilities.h"
 #import <UIKit/UIKit.h>
+#import "NSURL+CommonURLs.h"
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";
@@ -19,14 +20,21 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO) {
+    NSString *path = url.path;
+    if ([[NSFileManager defaultManager] fileExistsAtPath: path] == NO) {
         
         NSError *error = nil;
         NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-        [coordinator coordinateWritingItemAtURL: url options: 0 error: &error byAccessor: ^(NSURL *newURL) {
+        [coordinator coordinateWritingItemAtURL: url
+                                        options: (NSFileCoordinatorWritingOptions)0 error: &error
+                                     byAccessor: ^(NSURL *newURL) {
             
             NSError *errorCreateNew = nil;
-            [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path withIntermediateDirectories: YES attributes: nil error: &errorCreateNew];
+            NSString *path = newURL.path;
+
+            [[NSFileManager defaultManager] createDirectoryAtPath: path
+                                      withIntermediateDirectories: YES attributes: nil
+                                                            error: &errorCreateNew];
             
             NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
         }];
@@ -35,14 +43,9 @@ static NSString * const MADPathComponentData       = @"Data";
     }
 }
 
-+ (NSURL *)sharedApplicationGroupContainer:(NSString *)groupIdentifier {
-    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
-    NSAssert(containerURL != nil, @"The shared application group container is unavailable. Check your entitlements and provisioning profiles for this target. Details on proper setup can be found in the PDFs referenced from the README.");
-    return containerURL;
-}
-
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId {
-    NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension subdirectory: @""];
+    NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension
+                                                                       subdirectory: @""];
     
     for (NSURL *url in defaultListURLs) {
         [self copyURLToDocumentsDirectory:url groupId:groupId];
@@ -57,12 +60,15 @@ static NSString * const MADPathComponentData       = @"Data";
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
         // Note the call to -URLForUbiquityContainerIdentifier: should be on a background queue.
-        NSURL *documentsDirectoryURL = [self cloudDocumentsDirectoryForUbiquityID:ubiquityID];
-        NSURL *documentsDirectoryLocal = [self localDocumentsDirectoryForGroupIdentifier:groupID];
-        NSArray *localDocumentURLs = [fileManager contentsOfDirectoryAtURL: documentsDirectoryLocal
-                                                includingPropertiesForKeys: nil
-                                                                   options: 0
-                                                                     error: nil];
+        NSURL *documentsDirectoryURL, *documentsDirectoryLocal;
+        NSArray <NSURL *> *localDocumentURLs;
+        documentsDirectoryURL = [NSURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID],
+        documentsDirectoryLocal = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
+        
+        localDocumentURLs = [fileManager contentsOfDirectoryAtURL: documentsDirectoryLocal
+                                       includingPropertiesForKeys: nil
+                                                          options: (NSDirectoryEnumerationOptions)0
+                                                            error: nil];
         
         for (NSURL *URL in localDocumentURLs) {
             if ([URL.pathExtension isEqualToString:extension]) {
@@ -74,16 +80,18 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)makeItemUbiquitousAtURL:(NSURL *)sourceURL
-          documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
+            documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
+    
     NSString *destinationFileName = sourceURL.lastPathComponent;
     
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSURL *destinationURL = [documentsDirectoryURL URLByAppendingPathComponent:destinationFileName];
     
+    NSString *path = destinationURL.path;
     if ([fileManager isUbiquitousItemAtURL:destinationURL] ||
-        [fileManager fileExistsAtPath:destinationURL.path]) {
+        (path != nil && [fileManager fileExistsAtPath:path])) {
 
-        destinationURL = [MADFileUtilities uniqueURLForURL:destinationURL];
+        destinationURL = [NSURL newURLUniqueURLForURL:destinationURL];
         
     }
     
@@ -93,15 +101,19 @@ static NSString * const MADPathComponentData       = @"Data";
     });
 }
 
-+ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list,
-                                                                   NSError *error))completionHandler {
++ (void)readFileAtURL:(NSURL *)url
+            withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler {
+    
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
     
-    NSFileAccessIntent *readingIntent = [NSFileAccessIntent readingIntentWithURL:url options:NSFileCoordinatorReadingWithoutChanges];
-    [fileCoordinator coordinateAccessWithIntents: @[readingIntent]
+    NSFileAccessIntent *readingIntent;
+    readingIntent = [NSFileAccessIntent readingIntentWithURL:url
+                                                     options:NSFileCoordinatorReadingWithoutChanges];
+    NSArray *intents = [[NSArray alloc] initWithObjects: readingIntent, nil];
+    [fileCoordinator coordinateAccessWithIntents: intents
                                            queue: [self queue]
                                       byAccessor: ^(NSError *accessError) {
         if (accessError) {
@@ -120,7 +132,9 @@ static NSString * const MADPathComponentData       = @"Data";
         NSError *readError;
         MADFile *deserializedList;
         
-        NSData *contents = [NSData dataWithContentsOfURL:readingIntent.URL options:NSDataReadingUncached error:&readError];
+        NSData *contents = [[NSData alloc] initWithContentsOfURL:readingIntent.URL
+                                                         options:NSDataReadingUncached
+                                                           error:&readError];
         
         if (contents) {
             deserializedList = [NSKeyedUnarchiver unarchiveObjectWithData:contents];
@@ -138,11 +152,16 @@ static NSString * const MADPathComponentData       = @"Data";
     }];
 }
 
-+ (void)createFile:(MADFile *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *))completionHandler {
++ (void)createFile:(MADFile *)list atURL:(NSURL *)url
+                   withCompletionHandler:(void (^)(NSError *))completionHandler {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
-    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL:url options:NSFileCoordinatorWritingForReplacing];
-    [fileCoordinator coordinateAccessWithIntents:@[writingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+    NSFileAccessIntent *writing;
+    writing = [NSFileAccessIntent writingIntentWithURL:url
+                                               options:NSFileCoordinatorWritingForReplacing];
+    NSArray <NSFileAccessIntent *> *intents = [[NSArray alloc] initWithObjects:writing, nil];
+    [fileCoordinator coordinateAccessWithIntents: intents
+                                           queue: [self queue] byAccessor:^(NSError *accessError) {
         if (accessError) {
             if (completionHandler) {
                 completionHandler(accessError);
@@ -155,12 +174,14 @@ static NSString * const MADPathComponentData       = @"Data";
         
         NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:list];
         
-        BOOL success = [serializedListData writeToURL:writingIntent.URL options:NSDataWritingAtomic error:&error];
+        BOOL success = [serializedListData writeToURL:writing.URL
+                                              options:NSDataWritingAtomic error:&error];
         
         if (success) {
             NSDictionary *fileAttributes = @{ NSFileExtensionHidden: @YES };
-            
-            [[NSFileManager defaultManager] setAttributes:fileAttributes ofItemAtPath:writingIntent.URL.path error:nil];
+            NSString *path = writing.URL.path;
+            [[NSFileManager defaultManager] setAttributes: fileAttributes
+                                             ofItemAtPath: path error: nil];
         }
         
         if (completionHandler) {
@@ -169,35 +190,47 @@ static NSString * const MADPathComponentData       = @"Data";
     }];
 }
 
-+ (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler {
-    NSString *filename = [name stringByAppendingPathExtension:source.lastPathComponent.pathExtension];
-    NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent:filename isDirectory:NO];
-    NSURL *destination = [MADFileUtilities uniqueURLForURL:desired];
++ (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name
+  withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL,
+                                  NSError *error))completionHandler {
+    
+    NSString *pathExtension = source.lastPathComponent.pathExtension;
+    NSString *filename = [name stringByAppendingPathExtension: pathExtension];
+    NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent: filename
+                                                                            isDirectory: NO];
+    NSURL *destination = [NSURL newURLUniqueURLForURL:desired];
 
     NSString *status;
     NSError *errorGettingAttributes = nil;
-    if ([source getResourceValue:&status forKey:NSURLUbiquitousItemDownloadingStatusKey error:&errorGettingAttributes] &&
+    if ([source getResourceValue:&status forKey:NSURLUbiquitousItemDownloadingStatusKey
+                           error:&errorGettingAttributes] &&
         [status isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
-        [self moveFileAtURL:source toUrl:destination withCompletionHandler:^(NSURL *result, NSError *error) {
+        [self moveFileAtURL:source toUrl:destination
+                   withCompletionHandler:^(NSURL *result, NSError *error) {
             completionHandler(source, result, error);
         }];
     } else {
-        [self moveRemoveFileAtURL:source toUrl:destination withCompletionHandler:^(NSURL *result, NSError *error) {
+        [self moveRemoveFileAtURL:source toUrl:destination
+            withCompletionHandler:^(NSURL *result, NSError *error) {
             completionHandler(source, result, error);
         }];
     }
 }
 
-+ (void)moveRemoveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *, NSError *))completionHandler {
++ (void)moveRemoveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination
+      withCompletionHandler:(void (^)(NSURL *, NSError *))completionHandler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        [self moveFileAtURL:source toUrl:destination withCompletionHandler:^(NSURL *result, NSError *error) {
+        [self moveFileAtURL:source toUrl:destination
+                   withCompletionHandler:^(NSURL *result, NSError *error) {
             completionHandler(destination, error);
         }];
         
     });
 }
 
-+ (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {
++ (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination
+                      withCompletionHandler:(void (^)(NSURL *result,
+                                                      NSError *error))completionHandler {
     NSError *coordinatorError = nil;
     
     BOOL successfulSecurityScopedResourceAccess = [source startAccessingSecurityScopedResource];
@@ -209,54 +242,30 @@ static NSString * const MADPathComponentData       = @"Data";
                                       error: &coordinatorError
                                  byAccessor: ^(NSURL *accessorSource, NSURL *accessorDestination) {
                                      
-                                     __block NSError *moveError = nil;
-                                     BOOL success = [[NSFileManager defaultManager] moveItemAtURL: accessorSource
-                                                                                       toURL: accessorDestination
-                                                                                       error: &moveError];
-                                     if (success) {
-                                         [coordinator itemAtURL:accessorSource didMoveToURL:accessorDestination];
-                                     }
-                                     if (successfulSecurityScopedResourceAccess) {
-                                         [source stopAccessingSecurityScopedResource];
-                                     }
+        __block NSError *moveError = nil;
+        BOOL success = [[NSFileManager defaultManager] moveItemAtURL: accessorSource
+                                                               toURL: accessorDestination
+                                                               error: &moveError];
+        if (success) {
+            [coordinator itemAtURL:accessorSource didMoveToURL:accessorDestination];
+        }
+        if (successfulSecurityScopedResourceAccess) {
+            [source stopAccessingSecurityScopedResource];
+        }
                                      
-                                     completionHandler(accessorDestination, moveError);
+        completionHandler(accessorDestination, moveError);
 
-                                 }];
+    }];
 
 }
 
-+ (NSURL *)uniqueURLForURL:(NSURL *)url {
-    return [self uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
-                    withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
-                         andExtension: url.lastPathComponent.pathExtension];
-}
-
-+ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
++ (void)duplicateFileAtURL:(NSURL *)url
+     withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {
     
-    NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
-    NSURL *fileUrl = extension.length > 0 ?
-    [baseUrl URLByAppendingPathExtension: extension] :
-    baseUrl;
-    NSInteger ctr = 0;
-    BOOL isDir1;
-    while ([[NSFileManager defaultManager] fileExistsAtPath:fileUrl.path isDirectory:&isDir1] ||
-           [[NSFileManager defaultManager] isUbiquitousItemAtURL:fileUrl]) {
-        
-        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
-        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
-        fileUrl = [baseUrlFormatted URLByAppendingPathExtension: extension];
-        ctr++;
-    }
-    return fileUrl;
-    
-}
-
-+ (void)duplicateFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {
-    
-    NSURL *uniqueUrl = [self uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
-                                          withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
-                                               andExtension: url.lastPathComponent.pathExtension];
+    NSURL *uniqueUrl;
+    uniqueUrl = [NSURL newURLUniqueUrlInDirectory: url.URLByDeletingLastPathComponent
+                                withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
+                                     andExtension: url.lastPathComponent.pathExtension];
 
     // `url` may be a security scoped resource.
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
@@ -303,8 +312,13 @@ static NSString * const MADPathComponentData       = @"Data";
     // `url` may be a security scoped resource.
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
     
-    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL:url options:NSFileCoordinatorWritingForDeleting];
-    [fileCoordinator coordinateAccessWithIntents:@[writingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+    NSFileAccessIntent *writing;
+    writing = [NSFileAccessIntent writingIntentWithURL: url
+                                               options: NSFileCoordinatorWritingForDeleting];
+    NSArray *intents = [[NSArray alloc] initWithObjects:writing, nil];
+    [fileCoordinator coordinateAccessWithIntents:intents
+                                           queue:[self queue]
+                                      byAccessor:^(NSError *accessError) {
         if (accessError) {
             if (completionHandler) {
                 completionHandler(accessError);
@@ -317,7 +331,7 @@ static NSString * const MADPathComponentData       = @"Data";
         
         NSError *error;
         
-        [fileManager removeItemAtURL:writingIntent.URL error:&error];
+        [fileManager removeItemAtURL:writing.URL error:&error];
         
         if (successfulSecurityScopedResourceAccess) {
             [url stopAccessingSecurityScopedResource];
@@ -332,11 +346,13 @@ static NSString * const MADPathComponentData       = @"Data";
 #pragma mark - Convenience
 
 + (void)copyURLToDocumentsDirectory:(NSURL *)url groupId:(NSString *)groupId {
-    NSURL *localDocumentsDirectory = [self localDocumentsDirectoryForGroupIdentifier:groupId];
-    NSURL *toURL = [localDocumentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
+    NSURL *localDocumentsDirectory = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupId];
+    NSString *lastPathComponent = url.lastPathComponent;
+    NSURL *toURL = [localDocumentsDirectory URLByAppendingPathComponent:lastPathComponent];
     
     // If the file already exists, don't attempt to copy the version from the bundle.
-    if ([[NSFileManager defaultManager] fileExistsAtPath:toURL.path]) {
+    NSString *path = toURL.path;
+    if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
         return;
     }
     
@@ -345,12 +361,19 @@ static NSString * const MADPathComponentData       = @"Data";
     
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
     
-    NSFileAccessIntent *movingIntent = [NSFileAccessIntent writingIntentWithURL:url options:NSFileCoordinatorWritingForMoving];
-    NSFileAccessIntent *replacingIntent = [NSFileAccessIntent writingIntentWithURL:toURL options:NSFileCoordinatorWritingForReplacing];
-    [fileCoordinator coordinateAccessWithIntents:@[movingIntent, replacingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+    NSFileAccessIntent *moving, *replacing;
+    moving    = [NSFileAccessIntent writingIntentWithURL: url
+                                                 options: NSFileCoordinatorWritingForMoving];
+    replacing = [NSFileAccessIntent writingIntentWithURL: toURL
+                                                 options: NSFileCoordinatorWritingForReplacing];
+    NSArray *intents = [[NSArray alloc] initWithObjects:moving, replacing, nil];
+    [fileCoordinator coordinateAccessWithIntents: intents
+                                           queue: [self queue] byAccessor:^(NSError *accessError) {
         if (accessError) {
-            // An error occured when trying to coordinate moving URL to toURL. In your app, handle this gracefully.
-            NSLog(@"Couldn't move file: %@ to: %@ error: %@.", url.absoluteString, toURL.absoluteString, accessError.localizedDescription);
+            // An error occured when trying to coordinate moving URL to toURL.
+            //  In your app, handle this gracefully.
+            NSLog(@"Couldn't move file: %@ to: %@ error: %@.", url.absoluteString,
+                    toURL.absoluteString, accessError.localizedDescription);
             
             return;
         }
@@ -359,12 +382,14 @@ static NSString * const MADPathComponentData       = @"Data";
         
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         
-        success = [fileManager copyItemAtURL:movingIntent.URL toURL:replacingIntent.URL error:&error];
+        success = [fileManager copyItemAtURL:moving.URL toURL:replacing.URL error:&error];
         
         if (success) {
             NSDictionary *fileAttributes = @{ NSFileExtensionHidden: @YES };
-            
-            [fileManager setAttributes:fileAttributes ofItemAtPath:replacingIntent.URL.path error:nil];
+            NSString *path = replacing.URL.path;
+            if (path) {
+                [fileManager setAttributes:fileAttributes ofItemAtPath:path error:nil];
+            }
         }
         
         if (successfulSecurityScopedResourceAccess) {
@@ -390,101 +415,25 @@ static NSString * const MADPathComponentData       = @"Data";
     return queue;
 }
 
-+ (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID {
-    NSURL *cloudDirectoryURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:ubiquityID];
-    NSURL *documentsDirectoryURL = [cloudDirectoryURL URLByAppendingPathComponent:MADPathComponentDocuments];
-    return documentsDirectoryURL;
-}
-
-+ (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentDocuments
-                              alternativeSelector: @selector(localDocumentsDirectory)];
-}
-
-+ (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentData
-                              alternativeSelector: @selector(localDataDirectory)];
-}
-
-+ (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentCache
-                              alternativeSelector: @selector(localCacheDirectory)];
-}
-
-+ (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentAppSupport
-                              alternativeSelector: @selector(localApplicationSupportDirectory)];
-}
-
-+ (NSURL *)localTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
-    return [self localDirectoryForGroupIdentifier: groupIdentifier pathComponent: MADPathComponentTemporary
-                              alternativeSelector: @selector(localTemporaryDirectory)];
-}
-
-+ (NSURL *)localDirectoryForGroupIdentifier:(NSString *)groupIdentifier pathComponent:(NSString *)pathComponent
-                        alternativeSelector:(SEL)alternativeSelector {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    NSAssert(groupIdentifier != nil, @"Need a group identifier... %s", __PRETTY_FUNCTION__);
-    NSError *error;
-    NSURL *groupUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
-    
-    NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil for %@.  Maybe the fucking entitlment file is missing?!?!", groupIdentifier);
-    NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent isDirectory: YES];
-    BOOL isDirectory;
-    BOOL success = [[NSFileManager defaultManager] fileExistsAtPath: cacheURL.path isDirectory: &isDirectory];
-    
-    if (!success) {
-        isDirectory = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL withIntermediateDirectories: YES attributes: nil error: &error];
-    }
-    
-    return isDirectory ? cacheURL : [self urlForURLSelector:alternativeSelector];
-}
-
-+ (NSURL *)urlForURLSelector:(SEL)selector {
-    IMP imp = [self methodForSelector:selector];
-    NSURL *(*func)(id, SEL) = (void *)imp;
-    return func(self, selector);
-}
-
-+ (NSArray <__kindof NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier andExtention: (NSString *)extenstion {
-    NSURL *direcotry = [self localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
++ (NSArray <__kindof NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
+                                                                   andExtention: (NSString *)extenstion {
+    NSURL *direcotry = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
     return [self contentsOfDirectory:direcotry withPathExtension:extenstion];
-}
-
-+ (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier fileURL:(NSURL *)fileURL {
-    NSString *fileNameId = [NSString stringWithFormat:@"%lu", (unsigned long)fileURL.lastPathComponent.stringByDeletingPathExtension.hash];
-    return [MADFileUtilities localCacheDirectoryForGroupIdentifier:groupIdentifier handle:fileNameId];
-}
-
-+ (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier handle:(NSString *)handle {
-    
-    NSURL *cacheDirectory = [MADFileUtilities localCacheDirectoryForGroupIdentifier:groupIdentifier];
-    
-    NSURL *cacheURL = [cacheDirectory URLByAppendingPathComponent:handle isDirectory:YES];
-    
-    BOOL isDirectory;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:cacheURL.path isDirectory:&isDirectory]) {
-        
-        NSError * __autoreleasing *error = NULL;
-        isDirectory = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL withIntermediateDirectories: YES attributes: nil error: error];
-        
-    }
-    return cacheURL;
 }
 
 - (NSArray <__kindof NSURL *> *)contentOfDirectory:(NSURL *)directory withExtention:(NSString *)extenstion {
     
     NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory.path error:&error];
+    NSString *path = directory.path;
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: path
+                                                                                     error: &error];
     for (NSString *filename in directoryContents) {
         NSString *fullPath = [directory.path stringByAppendingPathComponent:filename];
         NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
         BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath: fileURL.path isDirectory: &isDirectory]) {
+        path = fileURL.path;
+        if ([[NSFileManager defaultManager] fileExistsAtPath: path isDirectory: &isDirectory]) {
             if ([fileURL.pathExtension isEqualToString:extenstion]) {
                 [result addObject:fileURL];
             }
@@ -498,13 +447,17 @@ static NSString * const MADPathComponentData       = @"Data";
     
     NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
-    NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docPaths.firstObject error:&error];
+    NSArray *docPaths;
+    docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = docPaths.firstObject;
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
+                                                                                     error:&error];
     for (NSString *filename in directoryContents) {
         NSString *fullPath = [docPaths.firstObject stringByAppendingPathComponent:filename];
         NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
         BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path isDirectory:&isDirectory]) {
+        path = fileURL.path;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
             if ([fileURL.pathExtension isEqualToString:extenstion]) {
                 [result addObject:fileURL];
             }
@@ -513,32 +466,19 @@ static NSString * const MADPathComponentData       = @"Data";
     return result;
 }
 
-+ (NSURL *)newUrlForLocalCacheDirectoryNamed:(NSString *)handle {
-    NSURL *url = [MADFileUtilities newUrlForLocalCacheDirectory];
-    NSURL *cachedArrayDirectories = [url URLByAppendingPathComponent: handle isDirectory: YES];
-    BOOL exist, isDirectory;
-    exist = [[NSFileManager defaultManager] fileExistsAtPath: cachedArrayDirectories.path isDirectory: &isDirectory];
-    if (exist == NO || isDirectory == NO) {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] createDirectoryAtURL: cachedArrayDirectories withIntermediateDirectories: YES attributes: nil error: &error];
-        if (error) {
-            error = nil;
-            [[NSFileManager defaultManager] createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:nil error:&error];
-        }
-        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
-    }
-    return cachedArrayDirectories;
-}
-
-+ (NSArray <__kindof NSURL *> *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension {
++ (NSArray <__kindof NSURL *> *)contentsOfDirectory:(NSURL *)directory
+                                  withPathExtension:(NSString *)extension {
     NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory.path error:&error];
+    NSString *path = directory.path;
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
+                                                                                     error:&error];
     for (NSString *filename in directoryContents) {
         NSString *fullPath = [directory.path stringByAppendingPathComponent:filename];
         NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
         BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path isDirectory:&isDirectory]) {
+        path = fileURL.path;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
             if ([fileURL.pathExtension isEqualToString:extension]) {
                 [result addObject:fileURL];
             }
@@ -547,15 +487,14 @@ static NSString * const MADPathComponentData       = @"Data";
     return result;
 }
 
-+ (NSURL *)newUrlForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl {
-    NSString *fileNameId = [NSString stringWithFormat:@"%lu", (unsigned long)fileUrl.lastPathComponent.stringByDeletingPathExtension.hash];
-    NSURL *url = [self newUrlForLocalCacheDirectoryNamed:fileNameId];
-    return url;
-}
-
 + (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {
     NSError *error = nil;
-    BOOL directoryGood = [[NSFileManager defaultManager] createDirectoryAtPath:[url path] withIntermediateDirectories:YES attributes:nil error:&error];
+    NSString *path;
+    if ((path = url.path) == nil) return NO;
+    BOOL directoryGood = [[NSFileManager defaultManager] createDirectoryAtPath: path
+                                                   withIntermediateDirectories: YES
+                                                                    attributes: nil
+                                                                         error: &error];
     if (error != nil) {
         directoryGood = NO;
         NSAssert(error, @"Error creating directory!  %@", error);
@@ -563,84 +502,40 @@ static NSString * const MADPathComponentData       = @"Data";
     return directoryGood;
 }
 
-+ (NSURL *)localDocumentsDirectory {
-    NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    return [NSURL URLWithString:documentsDirectories.firstObject];
-}
-
-+ (NSURL *)localTemporaryDirectory {
-    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
-    return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
-}
-
-+ (NSURL *)newUrlForLocalCacheDirectory {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    id url = [[NSURL alloc] initFileURLWithPath:paths.firstObject isDirectory:YES];
-    return url;
-}
-
-+ (NSURL *)localDataDirectory {
-    NSString *homeDirectory = NSHomeDirectory();
-    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
-    return  [fileUrlWithPath URLByAppendingPathComponent:MADPathComponentData isDirectory:YES];
-}
-
-- (NSURL *)localApplicationSupportDirectory {
-    NSBundle *mainBundle = [NSBundle mainBundle];
-    NSArray *possibleUrls = [[NSFileManager defaultManager] URLsForDirectory: NSApplicationSupportDirectory inDomains: NSUserDomainMask];
-    NSURL *appSupportDirectory = nil;
-    NSURL *appSupportDirectoryForApp = nil;
-    
-    if (possibleUrls.count >= 1) {
-        appSupportDirectory = possibleUrls[0];
-        
-        BOOL isDirectory;
-        BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath: appSupportDirectory.path isDirectory: &isDirectory];
-        if (fileExist == NO) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] createDirectoryAtURL: appSupportDirectory withIntermediateDirectories: YES attributes: nil error: &error];
-        }
-        
-        appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:mainBundle.bundleIdentifier];
-        fileExist = [[NSFileManager defaultManager] fileExistsAtPath: appSupportDirectoryForApp.path isDirectory: &isDirectory];
-        
-        if (fileExist == NO) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] createDirectoryAtURL: appSupportDirectoryForApp withIntermediateDirectories: YES attributes: nil error: &error];
-        }
-        
-    }
-    return appSupportDirectoryForApp;
-}
-
-
 + (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
     NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
 
    NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [MADFileUtilities newUrlForLocalCachedDirectoryForFileUrl: documentUrl];
-    NSArray *cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
-                                                         includingPropertiesForKeys: nil
-                                                                            options: 0
-                                                                            error: &error];
-    for (NSURL *cachedFile in cachedFiles) {
+    NSURL *cachedDirectory = [NSURL newURLForLocalCachedDirectoryForFileUrl: documentUrl];
+    NSArray <NSURL *> *cachedFiles;
+    cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
+                                                includingPropertiesForKeys: nil
+                                                                   options: (NSDirectoryEnumerationOptions)0
+                                                                     error: &error];
+    NSURL *cachedFile;
+    for (cachedFile in cachedFiles) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
     [defaultManager removeItemAtURL:cachedDirectory error:&error];
 }
 
-+ (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl groupIdentifier:(NSString *)groupIdentifier {
++ (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
+                       groupIdentifier:(NSString *)groupIdentifier {
     NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
 
-    NSURL *cachedDirectory = [MADFileUtilities localCacheDirectoryForGroupIdentifier: groupIdentifier fileURL: documentUrl];
+    NSURL *cachedDirectory = [NSURL newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier
+                                                                           fileURL: documentUrl];
     return [MADFileUtilities removeContentsOfDirectory:cachedDirectory];
 }
 
 + (BOOL)removeContentsOfDirectory:(NSURL *)directory {
     NSError *error = nil;
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: directory includingPropertiesForKeys: nil
-                                            options: 0 error: &error];
+    NSArray <NSURL *> *files;
+    files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: directory
+                                          includingPropertiesForKeys: nil
+                                                             options: (NSDirectoryEnumerationOptions)0
+                                                               error: &error];
     for (NSURL *file in files) {
         [[NSFileManager defaultManager] removeItemAtURL: file error: &error];
     }

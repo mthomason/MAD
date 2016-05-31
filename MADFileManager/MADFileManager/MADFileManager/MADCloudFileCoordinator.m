@@ -23,6 +23,7 @@
 #import "MADMetaData.h"
 
 #import "MADFileCoordinatorProtocol.h"
+#import "NSURL+CommonURLs.h"
 
 NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
 NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
@@ -62,7 +63,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         
         __block NSURL *cloudContainerURL;
         dispatch_barrier_async(self.documentsDirectoryQueue, ^{
-            cloudContainerURL = [MADFileUtilities cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
+            cloudContainerURL = [NSURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
         });
         _documentsDirectory = cloudContainerURL.copy;
         

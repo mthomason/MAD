@@ -17,6 +17,7 @@
 
 #import <MADCocoaExtensions/BDHost.h>
 
+#import <MADFileManager/NSURL+CommonURLs.h>
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MADConstants.h"
@@ -149,9 +150,12 @@ NSString * const MADStringEmpty = @"";
         //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
         //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
         
-        NSURL *appSupportDirectory = [MADFileUtilities localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
-        NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
-        NSURL *databaseUrl = [NSURL fileURLWithPath:dbUrl.path];
+        NSURL *appSupportDirectory;
+        appSupportDirectory = [NSURL newUrlForLocalApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+        NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
+                                                            isDirectory: NO];
+        NSString *path = dbUrl.path;
+        NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
         resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:databaseUrl];
         
     }

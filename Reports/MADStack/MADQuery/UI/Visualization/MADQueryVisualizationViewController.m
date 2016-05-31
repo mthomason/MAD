@@ -32,7 +32,7 @@
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/NSURL+CommonURLs.h>
 
 #import <MAD/MADConstants.h>
 
@@ -538,7 +538,8 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (NSURL *)localCacheFileUrl {
     NSString *groupIdentifier = MADIdentifierGroup;
     
-    NSURL *cachedFilesDirectories = [MADFileUtilities localCacheDirectoryForGroupIdentifier:groupIdentifier];
+    NSURL *cachedFilesDirectories;
+    cachedFilesDirectories = [NSURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
     NSString *cacheFileName = [self cacheFileName];
     return [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
 }
