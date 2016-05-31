@@ -83,13 +83,13 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;
 }
 
-typedef NSMutableArray  <__kindof MADSectionPlist *>    MADMutableSectionArray;
-typedef NSMutableArray  <__kindof NSNumber *>           MADMutableIndexArray;
+typedef NSMutableArray  <__kindof MADSectionPlist *>        MADMutableSectionArray;
+typedef NSMutableArray  <__kindof NSNumber *>               MADMutableIndexArray;
 
-typedef NSDictionary    <NSManagedObjectID *, NSNumber *>        MADNumberMapByObjectID;
+typedef NSDictionary    <NSManagedObjectID *, NSNumber *>   MADNumberMapByObjectID;
 
-typedef NSDictionary    <NSString *, NSNumber *>        MADStringNumberMap;
-typedef NSArray         <RptqQueryGroup *>              MADQueryGroupArray;
+typedef NSDictionary    <NSString *, NSNumber *>            MADStringNumberMap;
+typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 @interface MTReportFormatter ()
 
@@ -478,7 +478,7 @@ typedef NSArray         <RptqQueryGroup *>              MADQueryGroupArray;
 - (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
+            if (documentSection.type.shortValue == MNSDocumentSectionTypeGroupHeader) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;
@@ -491,7 +491,7 @@ typedef NSArray         <RptqQueryGroup *>              MADQueryGroupArray;
 - (void)addHeightFromGroupFooterWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
+            if (documentSection.type.shortValue == MNSDocumentSectionTypeGroupFooter) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;

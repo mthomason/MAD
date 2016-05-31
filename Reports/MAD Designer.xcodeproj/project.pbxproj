@@ -1054,7 +1054,8 @@
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
-		4CE1CA551CFC5115001BD2D5 /* madmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* madmap.cpp */; };
+		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
+		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
@@ -2432,8 +2433,10 @@
 		4CD90DB91CE6B76600B56B90 /* rwpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rwpng.c; sourceTree = "<group>"; };
 		4CD90DBA1CE6B76600B56B90 /* rwpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwpng.h; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		4CE1CA531CFC5115001BD2D5 /* madmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = madmap.cpp; path = MADStack/cpp/madmap.cpp; sourceTree = "<group>"; };
-		4CE1CA541CFC5115001BD2D5 /* madmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = madmap.hpp; path = MADStack/cpp/madmap.hpp; sourceTree = "<group>"; };
+		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
+		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
+		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
+		4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVector.mm; path = MADStack/cpp/MADVector.mm; sourceTree = "<group>"; };
 		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignVerticalCenter20.png; path = Reports/UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
 		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignVerticalCenter20@2x.png"; path = "Reports/UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
 		4CE314131694BCEC00114431 /* UIImageAlignTop20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignTop20.png; path = Reports/UIImageAlignTop20.png; sourceTree = "<group>"; };
@@ -4934,8 +4937,10 @@
 		4CE1CA521CFC50E0001BD2D5 /* cpp */ = {
 			isa = PBXGroup;
 			children = (
-				4CE1CA541CFC5115001BD2D5 /* madmap.hpp */,
-				4CE1CA531CFC5115001BD2D5 /* madmap.cpp */,
+				4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */,
+				4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */,
+				4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */,
+				4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */,
 			);
 			name = cpp;
 			sourceTree = "<group>";
@@ -6235,7 +6240,7 @@
 				4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */,
 				4CC886031C7AA861003E18D2 /* UIStoryboard+About.m in Sources */,
 				4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */,
-				4CE1CA551CFC5115001BD2D5 /* madmap.cpp in Sources */,
+				4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */,
 				4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */,
 				4C5B56041C98F838005C19D9 /* MADTextField.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
@@ -6423,6 +6428,7 @@
 				4C26B9C21BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m in Sources */,
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
 				4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */,
+				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4C401F271BAE703200BAE5FC /* MADTableViewCellQueryOverride.m in Sources */,
 				4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */,

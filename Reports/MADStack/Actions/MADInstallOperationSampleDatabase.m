@@ -35,13 +35,13 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     if (self.cancelled) goto FINISH;
 
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
-    if (!installed) goto FINISH;
+    if (installed) goto FINISH;
 
     
     fileURL = [MADInstallOperationSampleDatabase newApplicationBundleSampleDatabaseChinook];
     databaseURL = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
     
-    if (databaseURL != nil) goto FINISH;
+    if (databaseURL == nil) goto FINISH;
     
     [MADInstallOperationSampleDatabase copyItemAtURL:fileURL toURL:databaseURL];
 

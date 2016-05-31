@@ -6,4 +6,5 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#include "madmap.hpp"
+#include "MADVector.hpp"
+

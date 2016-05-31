@@ -87,6 +87,8 @@
 
 #import "MADOperation.h"
 #import "MADOperationQueue.h"
+#import "MADOperationObserver.h"
+
 #import "MADInstallOperationSampleDatabase.h"
 #import "MADInstallOperationSampleDocument.h"
 #import "MTVerificationController.h"

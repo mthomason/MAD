@@ -8,13 +8,17 @@
 
 #ifndef madmap_hpp
 #define madmap_hpp
-
+/*
 #include <stdio.h>
 
-class MadMap {
-    public:
-        unsigned int count();
-        void * objectForKey();
-};
+namespace MAD {
 
+    template <class T>
+    class Vector {
+    public:
+        Vector(unsigned int);
+    };
+    
+}
+*/
 #endif /* madmap_hpp */
