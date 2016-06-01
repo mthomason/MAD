@@ -14,7 +14,7 @@
 
 @protocol MADFilesControllerDelegate <NSObject>
 
-@optional
+  @optional
 
     - (void)filesControllerWillChangeContent:(MADFilesController *)filesController;
 

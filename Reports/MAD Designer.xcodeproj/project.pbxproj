@@ -1095,7 +1095,7 @@
 		4CFEE7FB1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FA1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m */; };
 		4CFEE7FD1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FC1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard */; };
 		4CFEE8021BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FF1BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard */; };
-		4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */; };
+		4CFEE8031BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8011BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m */; };
 		4CFEE80A1BB7993300AFAA0A /* MADPredicateBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */; };
 		4CFEE80B1BB7993300AFAA0A /* MADAddTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */; };
 		4CFEE80C1BB7993300AFAA0A /* MADLinkBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */; };
@@ -2166,6 +2166,11 @@
 		4CBBA94C1CFE9AE80033F63B /* MADAlertControllerAlertRemovedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlertControllerAlertRemovedProtocol.h; sourceTree = "<group>"; };
 		4CBBA94D1CFE9F800033F63B /* MADAggregateFunctionsViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAggregateFunctionsViewControllerDelegate.h; sourceTree = "<group>"; };
 		4CBBA94E1CFEA4640033F63B /* MADGroupByViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGroupByViewControllerDelegate.h; sourceTree = "<group>"; };
+		4CBBA94F1CFEB7F40033F63B /* MADTableViewControllerOpperatorsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewControllerOpperatorsDelegate.h; sourceTree = "<group>"; };
+		4CBBA9531CFECB520033F63B /* MADQueryBuilderAddLinkJoinTypeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderAddLinkJoinTypeDelegate.h; sourceTree = "<group>"; };
+		4CBBA9541CFECCFE0033F63B /* MADLinkPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLinkPart.h; sourceTree = "<group>"; };
+		4CBBA9551CFED5780033F63B /* MADQueryBuilderSortTypeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderSortTypeDelegate.h; sourceTree = "<group>"; };
+		4CBBA9561CFED6870033F63B /* MADQueryBuilderAddGroupDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderAddGroupDelegate.h; sourceTree = "<group>"; };
 		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
 		4CC3D6331BCB62BC00BDA5D3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CC3D6391BCB6D9400BDA5D3 /* MADIcon22x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADIcon22x29.png; sourceTree = "<group>"; };
@@ -2485,8 +2490,8 @@
 		4CFEE7FA1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderChooseFieldViewController.m; sourceTree = "<group>"; };
 		4CFEE7FC1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderSelectField.storyboard; sourceTree = "<group>"; };
 		4CFEE7FF1BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderSelectOperator.storyboard; sourceTree = "<group>"; };
-		4CFEE8001BB78CAB00AFAA0A /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
-		4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerOpperators.m; sourceTree = "<group>"; };
+		4CFEE8001BB78CAB00AFAA0A /* MADTableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewControllerOpperators.h; sourceTree = "<group>"; };
+		4CFEE8011BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewControllerOpperators.m; sourceTree = "<group>"; };
 		4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADPredicateBuilder.storyboard; sourceTree = "<group>"; };
 		4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADAddTable.storyboard; sourceTree = "<group>"; };
 		4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADLinkBuilder.storyboard; sourceTree = "<group>"; };
@@ -4997,6 +5002,8 @@
 			isa = PBXGroup;
 			children = (
 				4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */,
+				4CBBA9551CFED5780033F63B /* MADQueryBuilderSortTypeDelegate.h */,
+				4CBBA9561CFED6870033F63B /* MADQueryBuilderAddGroupDelegate.h */,
 				4C4020CF1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.h */,
 				4C4020D01BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m */,
 				4C4020E61BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.h */,
@@ -5020,8 +5027,9 @@
 			isa = PBXGroup;
 			children = (
 				4CFEE7FF1BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard */,
-				4CFEE8001BB78CAB00AFAA0A /* UITableViewControllerOpperators.h */,
-				4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */,
+				4CBBA94F1CFEB7F40033F63B /* MADTableViewControllerOpperatorsDelegate.h */,
+				4CFEE8001BB78CAB00AFAA0A /* MADTableViewControllerOpperators.h */,
+				4CFEE8011BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m */,
 			);
 			path = SelectOperator;
 			sourceTree = "<group>";
@@ -5058,6 +5066,8 @@
 			isa = PBXGroup;
 			children = (
 				4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */,
+				4CBBA9541CFECCFE0033F63B /* MADLinkPart.h */,
+				4CBBA9531CFECB520033F63B /* MADQueryBuilderAddLinkJoinTypeDelegate.h */,
 				4CFEE8111BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.h */,
 				4CFEE8101BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m */,
 				4CFEE80E1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.h */,
@@ -6233,7 +6243,7 @@
 				4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */,
 				4CA0C6D01CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
-				4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */,
+				4CFEE8031BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m in Sources */,
 				4CA0C6B71CA5401000222B8D /* MADCreateDocumentOperation.m in Sources */,
 				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */,

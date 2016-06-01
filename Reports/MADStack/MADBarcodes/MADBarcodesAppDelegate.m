@@ -12,20 +12,19 @@
 
 
 #import "MADBarcodesAppDelegate.h"
-
-@interface MADBarcodesAppDelegate()
-
-@end
+#import <UIKit/UIWindow.h>
 
 @implementation MADBarcodesAppDelegate
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+                didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 
@@ -44,10 +43,13 @@
     return NO;
 }
 
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+- (UIInterfaceOrientationMask)application:(UIApplication *)application
+  supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+  
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-                                                            UIInterfaceOrientationMaskAllButUpsideDown :
-                                                                UIInterfaceOrientationMaskAll;
+                                                        UIInterfaceOrientationMaskAllButUpsideDown :
+                                                        UIInterfaceOrientationMaskAll;
+
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {

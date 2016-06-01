@@ -10,15 +10,14 @@
 #define Reports_UITableViewControllerOpperators_h
 
 #import <UIKit/UITableViewController.h>
-#import <UIKit/UITableView.h>
-#import <MAD/RptqQueryPredicate+Extras.h>
 
 @protocol MADTableViewControllerOpperatorsDelegate;
 
 @class MADTableViewControllerOpperators;
 
 @interface MADTableViewControllerOpperators : UITableViewController
-    <UITableViewDataSource, UITableViewDelegate>
+    <UITableViewDataSource,
+        UITableViewDelegate>
 
     @property (nonatomic, weak) IBOutlet id <MADTableViewControllerOpperatorsDelegate> delegate;
 

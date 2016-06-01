@@ -10,22 +10,8 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UICollectionViewController.h>
-#import <MADFileManager/MADFilesControllerDelegate.h>
-#import <MADExplorer/MADSaveFileProtocol.h>
-#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
-#import <MADExplorer/MADDocumentState.h>
-
-@class UIManagedDocument;
-@class MADMetaData;
-@class MADFileLocationManager;
-@class MADOpenDocumentManager;
-
-@protocol MADOpenFileViewControllerDelegate;
 
 @interface MADFileExplorerViewController : UICollectionViewController
-    <MADFilesControllerDelegate,
-        MADCollectionViewLayoutFilesDelegate,
-        MADSaveFileProtocol>
 
     - (void)getUserCloudPrefs;
 

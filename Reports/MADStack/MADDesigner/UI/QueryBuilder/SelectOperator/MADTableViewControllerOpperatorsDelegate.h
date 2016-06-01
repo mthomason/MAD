@@ -9,5 +9,15 @@
 #ifndef MADTableViewControllerOpperatorsDelegate_h
 #define MADTableViewControllerOpperatorsDelegate_h
 
+#import <MAD/MADPredicateOperator.h>
+
+@class MADTableViewControllerOpperators;
+
+@protocol MADTableViewControllerOpperatorsDelegate
+  @required
+    - (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType;
+  @optional
+    - (void)uITableViewControllerOpperatorsDidFinish:(MADTableViewControllerOpperators *)controller;
+@end
 
 #endif /* MADTableViewControllerOpperatorsDelegate_h */

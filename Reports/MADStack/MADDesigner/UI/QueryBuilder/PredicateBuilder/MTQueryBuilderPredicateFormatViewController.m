@@ -18,26 +18,28 @@
 #pragma mark - View lifecycle
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    MADocument __unsafe_unretained * document = _document;
     if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
+        
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
             MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
-            tvcSC.document = self.document;
-            tvcSC.delegate = self;
+            tvcSC.document = document;
+            tvcSC.queryPredicateDelegate = self;
         }
+        
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
+    
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
             MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
-            tvcSC.document = self.document;
-            tvcSC.delegate = self;
+            tvcSC.document = document;
+            tvcSC.queryPredicateDelegate = self;
         }
+        
     }
 }
 

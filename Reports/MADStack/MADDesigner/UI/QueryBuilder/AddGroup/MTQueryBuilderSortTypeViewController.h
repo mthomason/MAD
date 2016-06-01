@@ -12,17 +12,14 @@
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADSortOrder.h>
 
-@class MTQueryBuilderSortTypeViewController;
+@protocol MADQueryBuilderSortTypeDelegate;
 
-@protocol MTQueryBuilderSortTypeDelegate
-    - (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller;
-    - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType;
-@end
+@class MTQueryBuilderSortTypeViewController;
 
 @interface MTQueryBuilderSortTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADQueryBuilderSortTypeDelegate> delegate;
     @property (nonatomic, assign) MNSSortOrder initalSortOrder;
 
 @end

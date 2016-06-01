@@ -20,17 +20,16 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTKeyChain.h>
 
-#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/MADocument.h>
-
 #import <MAD/MTDatabase.h>
-
 #import <MAD/MTDatabaseConnection.h>
+#import <MADFoundation/MTDataTable.h>
 
 #import "MTCellEnterText.h"
 
@@ -40,6 +39,7 @@
     @property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
     @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
     @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+
     @property (nonatomic, strong) UITextField *textField;
     @property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
     @property (nonatomic, strong) NSArray *pickerData;
@@ -53,8 +53,7 @@
 @implementation MTViewControllerValueBasedOnField
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         
         NSDateFormatter *longStyleDateFormatter = [[NSDateFormatter alloc] init];
         [longStyleDateFormatter setDateStyle:NSDateFormatterFullStyle];
@@ -95,7 +94,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self enterStringDelegate] enterStringDidFinishWithString:[[self textField] text]];
+    [self.enterStringDelegate enterStringDidFinishWithString: self.textField.text];
 }
 
 - (void)keyboardDidHide:(id)sender {

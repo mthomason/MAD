@@ -84,7 +84,7 @@
 }
 
 - (NSString *)display {
-    return [[self toStringHumanReadable] lowercaseString];
+    return self.toStringHumanReadable.lowercaseString;
 }
 
 + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectId managedObjectContext:(NSManagedObjectContext *)managedObjectContext {

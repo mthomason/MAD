@@ -9,25 +9,22 @@
 #ifndef Reports_MTQueryBuilderAddGroupViewController_h
 #define Reports_MTQueryBuilderAddGroupViewController_h
 
-#import "MTQueryBuilderSortTypeViewController.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import <UIKit/UITableViewController.h>
+#import "MADQueryBuilderSortTypeDelegate.h"
 #import "MTQueryBuilderChooseFieldDelegate.h"
+
+@protocol MADQueryBuilderAddGroupDelegate;
 
 @class MTQueryBuilderAddGroupViewController;
 @class NSManagedObjectID;
 @class MADocument;
 
-@protocol MTQueryBuilderAddGroupDelegate
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField andSortOrder:(MNSSortOrder)sortOrder;
-- (void)viewControllerDidCancel:(id)sender;
-@end
-
 @interface MTQueryBuilderAddGroupViewController : UITableViewController
     <UITableViewDelegate,
-        MTQueryBuilderSortTypeDelegate,
+        MADQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-    @property (nonatomic, weak) id <MTQueryBuilderAddGroupDelegate> delegate;
+    @property (nonatomic, weak) id <MADQueryBuilderAddGroupDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;

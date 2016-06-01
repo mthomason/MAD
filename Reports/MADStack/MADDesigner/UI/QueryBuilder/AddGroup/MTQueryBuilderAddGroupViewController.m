@@ -24,6 +24,8 @@
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
+#import "MADQueryBuilderAddGroupDelegate.h"
+
 static NSString * const TextAccending = @"Accending";
 static NSString * const TextDecending = @"Decending";
 static NSString * const TextDefault = @"Default";

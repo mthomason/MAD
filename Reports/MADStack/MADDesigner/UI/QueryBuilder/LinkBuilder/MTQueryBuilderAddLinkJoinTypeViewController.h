@@ -12,20 +12,15 @@
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADQueryLinkType.h>
 
-@class MTQueryBuilderAddLinkJoinTypeViewController, MADocument;
+@protocol MADQueryBuilderAddLinkJoinTypeDelegate;
 
-@protocol MTQueryBuilderAddLinkJoinTypeDelegate
-
-    - (MNSLinkType)initalLinktype;
-    - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith: (MNSLinkType)result
-                                                        from: (MADocument *)document;
-
-@end
+@class MTQueryBuilderAddLinkJoinTypeViewController;
+@class MADocument;
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
+    @property (nonatomic, weak) id <MADQueryBuilderAddLinkJoinTypeDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 
 @end

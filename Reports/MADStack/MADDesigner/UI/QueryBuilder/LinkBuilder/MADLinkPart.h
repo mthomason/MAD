@@ -9,5 +9,11 @@
 #ifndef MADLinkPart_h
 #define MADLinkPart_h
 
+typedef NS_ENUM(short, MADLinkPart) {
+    MADLinkLeft = 0,
+    MADLinkCenter,
+    MADLinkRight,
+    MADLinkNone
+};
 
 #endif /* MADLinkPart_h */

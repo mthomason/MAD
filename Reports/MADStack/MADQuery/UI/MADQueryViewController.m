@@ -36,6 +36,7 @@
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQuery+Extras.h>
 
+#import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqQueryField+Extras.h>
 
 #import <MAD/RptqQueryLinks+Extras.h>
@@ -82,6 +83,8 @@
 
 #import "MADViewTableHeader+QueryViewSectionTypes.h"
 
+#import "MADQueryBuilderAddGroupDelegate.h"
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -96,11 +99,11 @@ NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddG
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 
-static NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
-static NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
-static NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
-static NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
-static NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
+static NSString * const NSFetchedResultsCacheName                   = @"NSFetchedResultsCacheName";
+static NSString * const NSFetchedResultsCacheTables                 = @"NSFetchedResultsCacheTables";
+static NSString * const NSFetchedResultsCacheLinks                  = @"NSFetchedResultsCacheLinks";
+static NSString * const NSFetchedResultsCacheGroups                 = @"NSFetchedResultsCacheGroups";
+static NSString * const NSFetchedResultsCachePredicates             = @"NSFetchedResultsCachePredicates";
 
 static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
 
@@ -113,7 +116,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
         MTQueryBuilderAddTableDelegate,
-        MTQueryBuilderAddGroupDelegate,
+        MADQueryBuilderAddGroupDelegate,
         MTViewControllerProtocol,
         MTQueryBuilderLinkBuilderDelegate,
         MTViewControllerProtocol,
@@ -477,10 +480,11 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
 
                     MADocument *document = self.document;
-                    MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)navControl.topViewController;
-                    tvc.document = document;
+                    MTQueryBuilderLinkBuilderViewController *tvc;
+                    tvc = (MTQueryBuilderLinkBuilderViewController *)navControl.topViewController;
                     if (tvc) {
-                        tvc.delegate = self;
+                        tvc.document = document;
+                        tvc.queryLinkDelegate = self;
                     }
                 }
             }
@@ -491,7 +495,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
-                    MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
+                    MTQueryBuilderPredicateFormatViewController *tvc;
+                    tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
                     if (tvc) {
                         MADocument *document = self.document;
                         tvc.document = document;
@@ -505,7 +510,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
-                    MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
+                    MTQueryBuilderAddGroupViewController *tvc;
+                    tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
                     if (tvc) {
                         MADocument *document = self.document;
                         tvc.document = document;
@@ -516,7 +522,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         }
     } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
                 if ([segue.destinationViewController isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
-                    MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
+                    MTReportDesignerSectionLayoutSettingsViewController *tvc;
+                    tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
                         MADocument *document = self.document;

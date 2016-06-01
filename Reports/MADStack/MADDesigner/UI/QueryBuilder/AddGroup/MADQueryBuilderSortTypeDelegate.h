@@ -9,5 +9,13 @@
 #ifndef MADQueryBuilderSortTypeDelegate_h
 #define MADQueryBuilderSortTypeDelegate_h
 
+#import <MAD/MADSortOrder.h>
+
+@class MTQueryBuilderSortTypeViewController;
+
+@protocol MADQueryBuilderSortTypeDelegate
+    - (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller;
+    - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType;
+@end
 
 #endif /* MADQueryBuilderSortTypeDelegate_h */

@@ -11,12 +11,10 @@
 #endif
 
 #import "MTQueryBuilderSortTypeViewController.h"
+#import "MADQueryBuilderSortTypeDelegate.h"
+
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
-
-#define MNSSortTypeReuseIds [NSArray arrayWithObjects: @"MTTableViewCellSortOrderAccending", @"MTTableViewCellSortOrderDecending", nil]
-
-#define MNSSortTypeNames [NSArray arrayWithObjects: NSLocalizedString(@"Accending", @"Accending"), NSLocalizedString(@"Decending", @"Decending"), nil]
 
 @interface MTQueryBuilderSortTypeViewController ()
 
@@ -35,10 +33,10 @@
     [super viewDidLoad];
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
-    if ([self initalSortOrder] == MNSSortOrderAccending) {
-        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    if (_initalSortOrder == MNSSortOrderAccending) {
+        _tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
-        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        _tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
     }
 }
 
@@ -50,15 +48,17 @@
     UITableViewCell *cellAccending = self.tableViewCellAccending;
     UITableViewCell *cellDecending = self.tableViewCellDecending;
     
-    if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderAccending]]) {
+    UITableViewCell *cellActive = [tableView cellForRowAtIndexPath:indexPath];
+    NSString *reuseID = cellActive.reuseIdentifier;
+    if ([reuseID isEqualToString: @"MTTableViewCellSortOrderAccending"]) {
         [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderAccending];
-        [cellAccending setAccessoryType: UITableViewCellAccessoryCheckmark];
-        [cellDecending setAccessoryType: UITableViewCellAccessoryNone];
+        cellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
+        cellDecending.accessoryType = UITableViewCellAccessoryNone;
         
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderDecending]]) {
+    } else if ([reuseID isEqualToString: @"MTTableViewCellSortOrderDecending"]) {
         [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderDecending];
-        [cellAccending setAccessoryType: UITableViewCellAccessoryNone];
-        [cellDecending setAccessoryType: UITableViewCellAccessoryCheckmark];
+        cellAccending.accessoryType = UITableViewCellAccessoryNone;
+        cellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
 
     }
 }

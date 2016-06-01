@@ -9,13 +9,13 @@
 #ifndef MADPredicateOperator_h
 #define MADPredicateOperator_h
 
-typedef NS_ENUM(short, MNSPredicateOperator) {
-	MNSPredicateOperatorEqual = 0,
-	MNSPredicateOperatorNotEqual,
-	MNSPredicateOperatorGreaterThan,
-	MNSPredicateOperatorGreaterThanOrEqualTo,
-	MNSPredicateOperatorLessThan,
-	MNSPredicateOperatorLessThanOrEqualTo
+typedef NS_ENUM(short, MADPredicateOperator) {
+	MADPredicateOperatorEqual = 0,
+	MADPredicateOperatorNotEqual,
+	MADPredicateOperatorGreaterThan,
+	MADPredicateOperatorGreaterThanOrEqualTo,
+	MADPredicateOperatorLessThan,
+	MADPredicateOperatorLessThanOrEqualTo
 };
 
 #endif /* MADPredicateOperator_h */

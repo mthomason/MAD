@@ -12,6 +12,7 @@
 
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "MADQueryBuilderAddPredicateDelegate.h"
+#import "MADTableViewControllerOpperatorsDelegate.h"
 
 #import <CoreData/NSManagedObjectID.h>
 
@@ -21,29 +22,35 @@
 #import <UIKit/UIStoryboardSegue.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import "MTViewControllerValueBasedOnField.h"
 
 #import <MAD/MADocument.h>
+
+#import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+
+#import "MADTableViewControllerOpperators.h"
+
+static NSString * const MADIDPredicateOperatorEqual = @"Equal",
+                * const MADIDPredicateOperatorNotEqual = @"Not Equal",
+                * const MADIDPredicateOperatorGreaterThan = @"Greater Than",
+                * const MADIDPredicateOperatorGreaterTahnOrEqualTo = @"Greater Than or Equal To",
+                * const MADIDPredicateOperatorLessThan = @"Less Than",
+                * const MADIDPredicateOperatorLessThanOrEqualTo = @"Less Than or Equal To";
 
 @implementation MTQueryBuilderAddPredicateViewController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self setCurrentlyEditingPart: MNSPredicateNone];
+    if (self = [super initWithCoder:aDecoder]) {
+        _currentlyEditingPart = MNSPredicateNone;
     }
     return self;
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        [self setCurrentlyEditingPart: MNSPredicateNone];
+    if (self = [super initWithStyle:style]) {
+        _currentlyEditingPart = MNSPredicateNone;
     }
     return self;
 }
@@ -56,22 +63,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableViewCellRightSide setUserInteractionEnabled: (self.fieldLeft == nil) == NO];
+    [_tableViewCellRightSide setUserInteractionEnabled: (_fieldLeft == nil) == NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.tableViewCellRightSide setUserInteractionEnabled: (self.fieldLeft == nil) == NO];
+    [_tableViewCellRightSide setUserInteractionEnabled: (_fieldLeft == nil) == NO];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    MADocument __unsafe_unretained *document = _document;
+
     if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
         [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
         
         [self setCurrentlyEditingPart: MNSPredicateCenter];
         
-        if ([segue.destinationViewController isKindOfClass: [UITableViewControllerOpperators class]]) {
-            ((UITableViewControllerOpperators *)segue.destinationViewController).delegate = self;
+        Class tableType = [MADTableViewControllerOpperators class];
+        if ([segue.destinationViewController isKindOfClass: tableType]) {
+            MADTableViewControllerOpperators *destinationViewController;
+            destinationViewController = segue.destinationViewController;
+            destinationViewController.delegate = self;
         }
         
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovLeftSide"] ||
@@ -79,11 +92,16 @@
         
         [self setCurrentlyEditingPart: MNSPredicateLeft];
   
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        Class tableType = [MTQueryBuilderChooseFieldViewController class];
+        if ([segue.destinationViewController isKindOfClass: tableType]) {
 
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).excludeTables = @[];
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = self.document;
+            MTQueryBuilderChooseFieldViewController __unsafe_unretained *destinationViewController;
+            NSArray *excludedTables = [[NSArray alloc] init];
+            destinationViewController = segue.destinationViewController;
+            destinationViewController.excludeTables = excludedTables;
+            destinationViewController.delegate = self;
+            destinationViewController.document = document;
+            
         }
         
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovRightSide"] ||
@@ -91,17 +109,24 @@
         
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        Class tableTypeChooes = [MTQueryBuilderChooseFieldViewController class];
+        Class tableTypeField = [MTViewControllerValueBasedOnField class];
+        if ([segue.destinationViewController isKindOfClass: tableTypeChooes]) {
             
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).excludeTables = @[];
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
-            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = self.document;
+            NSArray *excludedTables = [[NSArray alloc] init];
+            MTQueryBuilderChooseFieldViewController __unsafe_unretained *destinationViewController;
+            destinationViewController = segue.destinationViewController;
+            destinationViewController.excludeTables = excludedTables;
+            destinationViewController.delegate = self;
+            destinationViewController.document = document;
         
-        } else if ([segue.destinationViewController isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
+        } else if ([segue.destinationViewController isKindOfClass: tableTypeField]) {
 
-            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).enterStringDelegate = self;
-            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).document = self.document;
-            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID.copy;
+            MTViewControllerValueBasedOnField __unsafe_unretained *destinationViewController;
+            destinationViewController = segue.destinationViewController;
+            destinationViewController.enterStringDelegate = self;
+            destinationViewController.document = document;
+            destinationViewController.schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID.copy;
         }
     }
 }
@@ -111,97 +136,105 @@
 - (IBAction)save:(id)sender {
     
     RptqQueryPredicate *queryPredicate = nil;
+    NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
     if (self.leftValue == nil) {
         if (self.rightValue == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftField: self.fieldLeft
                                                              comparsonOperator: self.predicateOperator
                                                                  andRightField: self.fieldRight
-                                                       forManagedObjectContext: self.document.managedObjectContext];
+                                                       forManagedObjectContext: managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftField: self.fieldLeft
                                                              comparsonOperator: self.predicateOperator
                                                                  andRightValue: self.rightValue
-                                                       forManagedObjectContext: self.document.managedObjectContext];
+                                                       forManagedObjectContext: managedObjectContext];
         }
     } else {
         if (self.rightValue == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
                                                              comparsonOperator: self.predicateOperator
                                                                  andRightField: self.fieldRight
-                                                       forManagedObjectContext: self.document.managedObjectContext];
+                                                       forManagedObjectContext: managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
                                                              comparsonOperator: self.predicateOperator
                                                                  andRightValue: self.rightValue
-                                                       forManagedObjectContext: self.document.managedObjectContext];
+                                                       forManagedObjectContext: managedObjectContext];
         }
     }
     
-    [self.delegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+    [self.queryPredicateDelegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }
 
 - (IBAction)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel: self];
+    [self.queryPredicateDelegate viewControllerDidCancel: self];
 }
 
 #pragma mark - Delegates
 
-- (void)enterStringDidFinishWithString:(NSString *)userInput {
-    if ([self currentlyEditingPart] == MNSPredicateLeft) {
-        [self setLeftValue: userInput];
-        [self setFieldLeft: nil];
-        [[[self tableViewCellLeftSide] detailTextLabel] setText:[userInput lowercaseString]];
-    } else if ([self currentlyEditingPart] == MNSPredicateRight) {
+- (void)enterStringDidFinishWithString:(NSString *)userString {
+
+    NSString *userInput = userString.copy;
+    if (_currentlyEditingPart == MNSPredicateLeft) {
+        self.leftValue = userInput;
+        self.fieldLeft = nil;
+        _tableViewCellLeftSide.detailTextLabel.text = userInput.lowercaseString;
+        
+    } else if (_currentlyEditingPart == MNSPredicateRight) {
         [self setRightValue: userInput];
         [self setFieldRight: nil];
-        [[[self tableViewCellRightSide] detailTextLabel] setText:[userInput lowercaseString]];
+        _tableViewCellRightSide.detailTextLabel.text = userInput.lowercaseString;
+        
     }
     [self.navigationController popToViewController:self animated:YES];
 }
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+                                      withField:(RptqQueryField *)queryField {
+    UITableViewCell *tableViewCellRightSide = _tableViewCellRightSide;
     [self.navigationController popToViewController:self animated:YES];
-    if ([self currentlyEditingPart] == MNSPredicateLeft) {
-        [self setLeftValue: nil];
-        [self setFieldLeft: queryField];
-        [[[self tableViewCellLeftSide] detailTextLabel] setText: [queryField display]];
-    } else if ([self currentlyEditingPart] == MNSPredicateRight) {
-        [self setRightValue: nil];
-        [self setFieldRight: queryField];
-        [[[self tableViewCellRightSide] detailTextLabel] setText: [queryField display]];
+    if (_currentlyEditingPart == MNSPredicateLeft) {
+        self.leftValue = nil;
+        self.fieldLeft = queryField;
+        _tableViewCellLeftSide.detailTextLabel.text = queryField.display;
+        
+    } else if (_currentlyEditingPart == MNSPredicateRight) {
+        self.rightValue = nil;
+        self.fieldRight = queryField;
+        tableViewCellRightSide.detailTextLabel.text = queryField.display;
     }
-    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil)];
+    tableViewCellRightSide.userInteractionEnabled = (self.fieldLeft == nil);
 }
 
-- (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType {
+- (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType {
     [self.navigationController popToViewController:self animated:YES];
     NSString *label = nil;
-    [self setPredicateOperator: operatorType];
-    switch (operatorType) {
-        case MNSPredicateOperatorEqual:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorEqual];
+
+    switch ((_predicateOperator = operatorType)) {
+        case MADPredicateOperatorEqual:
+            label = NSLocalizedString(MADIDPredicateOperatorEqual, MADIDPredicateOperatorEqual);
             break;
-        case MNSPredicateOperatorNotEqual:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorNotEqual];
+        case MADPredicateOperatorNotEqual:
+            label = NSLocalizedString(MADIDPredicateOperatorNotEqual, MADIDPredicateOperatorNotEqual);
             break;
-        case MNSPredicateOperatorGreaterThan:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorGreaterThan];
+        case MADPredicateOperatorGreaterThan:
+            label = NSLocalizedString(MADIDPredicateOperatorGreaterThan, MADIDPredicateOperatorGreaterThan);
             break;
-        case MNSPredicateOperatorGreaterThanOrEqualTo:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorGreaterThanOrEqualTo];
+        case MADPredicateOperatorGreaterThanOrEqualTo:
+            label = NSLocalizedString(MADIDPredicateOperatorGreaterTahnOrEqualTo, MADIDPredicateOperatorGreaterTahnOrEqualTo);
             break;
-        case MNSPredicateOperatorLessThanOrEqualTo:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorLessThanOrEqualTo];
+        case MADPredicateOperatorLessThanOrEqualTo:
+            label = NSLocalizedString(MADIDPredicateOperatorLessThanOrEqualTo, MADIDPredicateOperatorLessThanOrEqualTo);
             break;
-        case MNSPredicateOperatorLessThan:
-            label = MNSPredicateOperatorNames[MNSPredicateOperatorLessThan];
+        case MADPredicateOperatorLessThan:
+            label = NSLocalizedString(MADIDPredicateOperatorLessThan, MADIDPredicateOperatorLessThan);
             break;
         default:
             label = NSLocalizedString(@"Default", @"Default");
             break;
     }
-    [[[self tableViewCellOperator] detailTextLabel] setText: [label lowercaseString]];
+    _tableViewCellOperator.detailTextLabel.text = label.lowercaseString;
 }
 
 #pragma mark - Table View Delegate

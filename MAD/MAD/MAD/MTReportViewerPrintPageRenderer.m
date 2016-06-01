@@ -20,20 +20,15 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseField.h"
 
-#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-
-#import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
 #import "RptqDatabase.h"
-#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "RptqQueryField.h"
 #import "RptqUserCredentals.h"
 
-#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
 #import "RptqDocumentSectionRows.h"
@@ -47,7 +42,6 @@
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "RptqDocumentObjectImage.h"
 

@@ -12,6 +12,11 @@
 
 #import "MADOpenFileViewController.h"
 #import "MADOpenFileViewControllerProtocol.h"
+
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
+#import <MADFileManager/MADFilesControllerDelegate.h>
+
+#import <MADExplorer/MADSaveFileProtocol.h>
 #import <MADExplorer/MTDocumentCellProtocol.h>
 
 #import <QuickLook/QLPreviewController.h>
@@ -94,26 +99,26 @@
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
 
+#import <MADExplorer/MADDocumentState.h>
+
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic = 2;
 const NSUInteger MADIDInstallOperationSampleDocumentLondon = 3;
 
 static NSString * const MADIdentifierFileLondon                 = @"London";
 static NSString * const MADIdentifierFileMusic                  = @"Music";
+static NSString * const MADImageToolbarCloudDownload            = @"MADImageToolbarCloudDownload";
+static NSString * const NotDownloaded                           = @"Not Downloaded";
+static NSString * const Syncing                                 = @"Syncing";
+static NSString * const Downloading                             = @"Downloading";
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
+NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
+NSString * const MADUpgradeInstalledSamplesMusic                = @"MADUpgradeInstalledSamplesMusic";
 
-static NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
-
-static NSString * const NotDownloaded                           = @"Not Downloaded";
-static NSString * const Syncing                                 = @"Syncing";
-static NSString * const Downloading                             = @"Downloading";
-
-NSString * const MADUpgradeInstalledSamplesLondon   = @"MADUpgradeInstalledSamplesLondon";
-NSString * const MADUpgradeInstalledSamplesMusic    = @"MADUpgradeInstalledSamplesMusic";
 static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
 
 const char * MADQueueFileViewController = "com.everydayapps.mad.designer.file.view.controller";
@@ -144,10 +149,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         MTDocumentCellProtocol,
         UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
+        MADFilesControllerDelegate,
         MADocumentDelegate,
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate,
-        MADOperationObserver>
+        MADOperationObserver,
+        MADSaveFileProtocol,
+        MADCollectionViewLayoutFilesDelegate>
 
     @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
 

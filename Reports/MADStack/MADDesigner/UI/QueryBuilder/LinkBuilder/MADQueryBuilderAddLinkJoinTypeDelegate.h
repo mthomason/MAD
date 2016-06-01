@@ -9,5 +9,13 @@
 #ifndef MADQueryBuilderAddLinkJoinTypeDelegate_h
 #define MADQueryBuilderAddLinkJoinTypeDelegate_h
 
+@protocol MADQueryBuilderAddLinkJoinTypeDelegate
+
+    - (MNSLinkType)initalLinktype;
+    - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith: (MNSLinkType)result
+                                                        from: (MADocument *)document;
+
+@end
+
 
 #endif /* MADQueryBuilderAddLinkJoinTypeDelegate_h */

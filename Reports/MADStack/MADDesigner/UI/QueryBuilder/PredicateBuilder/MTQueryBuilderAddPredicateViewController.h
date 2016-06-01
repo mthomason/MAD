@@ -9,12 +9,15 @@
 #ifndef Reports_MTQueryBuilderAddPredicateViewController_h
 #define Reports_MTQueryBuilderAddPredicateViewController_h
 
+#import <UIKit/UITableViewController.h>
+
 #import "MUIViewControllerDelegate.h"
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
-#import "MTViewControllerValueBasedOnField.h"
-#import "UITableViewControllerOpperators.h"
+
+#import "MADTableViewControllerOpperatorsDelegate.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"
+#import <MAD/MADPredicateOperator.h>
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -29,27 +32,30 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @class RptqQueryPredicate;
 @class MADocument;
 
+typedef id <MTQueryBuilderAddPredicateDelegate,
+                MTViewControllerProtocol> MADQueryBuilderPredicateDelegate;
+
 @interface MTQueryBuilderAddPredicateViewController : UITableViewController
     <UITableViewDelegate,
-        UITableViewControllerOpperatorsDelegate,
+        MADTableViewControllerOpperatorsDelegate,
         MTQueryBuilderChooseFieldDelegate,
         MTViewControllerValueBasedOnFieldDelegate>
 
 
-    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) IBOutlet MADQueryBuilderPredicateDelegate queryPredicateDelegate;
     @property (nonatomic, weak) MADocument *document;
 
-    @property (assign) MNSPredicatePart currentlyEditingPart;
+    @property (nonatomic, assign) MNSPredicatePart currentlyEditingPart;
+    @property (nonatomic, assign) MADPredicateOperator predicateOperator;
 
-    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellLeftSide;
-    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellRightSide;
-    @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellOperator;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellLeftSide;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellRightSide;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellOperator;
 
-    @property (assign) MNSPredicateOperator predicateOperator;
-    @property (copy) NSString *leftValue;
-    @property (copy) NSString *rightValue;
-    @property (nonatomic, strong) RptqQueryField *fieldLeft;
-    @property (nonatomic, strong) RptqQueryField *fieldRight;
+    @property (nonatomic, copy)     NSString *leftValue;
+    @property (nonatomic, copy)     NSString *rightValue;
+    @property (nonatomic, strong)   RptqQueryField *fieldLeft;
+    @property (nonatomic, strong)   RptqQueryField *fieldRight;
 
     - (IBAction)save:(id)sender;
     - (IBAction)cancel:(id)sender;

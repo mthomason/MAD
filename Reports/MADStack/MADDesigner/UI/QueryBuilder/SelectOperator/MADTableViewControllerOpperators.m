@@ -13,24 +13,46 @@
 #import "MADTableViewControllerOpperators.h"
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
+#import <MAD/RptqQueryPredicate+Extras.h>
+
+static NSString * const MADIDOperatorEqual                   = @"UITableViewCellPredicateOperatorEqual";
+static NSString * const MADIDOperatorNotEqual                = @"UITableViewCellPredicateOperatorNotEqual";
+static NSString * const MADIDOperatorGreaterThan             = @"UITableViewCellPredicateOperatorGreaterThan";
+static NSString * const MADIDOperatorGreaterThanOrEqualTo    = @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo";
+static NSString * const MADIDOperatorLessThanOrEqualTo       = @"UITableViewCellPredicateOperatorLessThanOrEqualTo";
+static NSString * const MADIDOperatorLessThan                = @"UITableViewCellPredicateOperatorLessThan";
+
+#define MADPredicateOperatorReuseIds [NSArray arrayWithObjects: @"UITableViewCellPredicateOperatorEqual", @"UITableViewCellPredicateOperatorNotEqual", @"UITableViewCellPredicateOperatorGreaterThan", @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo", @"UITableViewCellPredicateOperatorLessThan", @"UITableViewCellPredicateOperatorLessThanOrEqualTo", nil]
+
 @implementation MADTableViewControllerOpperators
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorEqual]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorEqual];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorNotEqual]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorNotEqual];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorGreaterThan]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThan];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorGreaterThanOrEqualTo]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThanOrEqualTo];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorLessThan]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThan];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorLessThanOrEqualTo]]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThanOrEqualTo];
+    UITableViewCell __weak *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    NSString *reuseIdentifier = cell.reuseIdentifier.copy;
+    
+    if ([reuseIdentifier isEqualToString: MADIDOperatorEqual]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorEqual];
+        
+    } else if ([reuseIdentifier isEqualToString:MADIDOperatorNotEqual]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorNotEqual];
+        
+    } else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThan]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThan];
+        
+    } else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThanOrEqualTo]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThanOrEqualTo];
+        
+    } else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThan]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThan];
+        
+    } else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThanOrEqualTo]) {
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThanOrEqualTo];
+        
     }
 }
 

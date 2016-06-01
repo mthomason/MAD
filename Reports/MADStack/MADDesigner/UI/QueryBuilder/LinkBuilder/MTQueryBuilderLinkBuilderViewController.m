@@ -52,7 +52,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setJoinType:MNSLinkTypeLeftOuterJoin];
-    [self setCurrentlyEditingPart: MNSLinkNone];
+    [self setCurrentlyEditingPart: MADLinkNone];
     [self updateRightLabelState];
     [self updateSaveButtonState];
 }
@@ -70,12 +70,12 @@
         
         if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldOne"]) {
             
-            self.currentlyEditingPart = MNSLinkLeft;
+            self.currentlyEditingPart = MADLinkLeft;
             [self setupFieldController2:segue.destinationViewController];
 
         } else if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldTwo"]) {
             
-            [self setCurrentlyEditingPart: MNSLinkRight];
+            [self setCurrentlyEditingPart: MADLinkRight];
             [self setupFieldController1:segue.destinationViewController];
             
         }
@@ -116,14 +116,14 @@
                                                 rightField: self.secondField
                                                   joinType: self.linkType
                                       managedObjectContext: self.document.managedObjectContext];
-        [self.delegate viewControllerSchemaAddLinkDidAdd: links];
+        [self.queryLinkDelegate viewControllerSchemaAddLinkDidAdd: links];
     } else {
         [self cancel:sender];
     }
 }
 
 - (IBAction)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel:self];
+    [self.queryLinkDelegate viewControllerDidCancel:self];
 }
 
 #pragma mark - Delegate callbacks
@@ -139,7 +139,7 @@
     RptqQueryTable *queryTable = [queryField inQueryTable];
     NSString *tableFieldName = [queryField toString];
     switch ([self currentlyEditingPart]) {
-        case MNSLinkLeft: {
+        case MADLinkLeft: {
 
             self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.lowercaseString;
             self.firstTable = queryTable;
@@ -155,7 +155,7 @@
                                                     UITableViewCellAccessoryDisclosureIndicator;
             break;
         }
-        case MNSLinkRight: {
+        case MADLinkRight: {
             self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.lowercaseString;
             self.secondTable = queryTable;
             self.secondField = queryField;
