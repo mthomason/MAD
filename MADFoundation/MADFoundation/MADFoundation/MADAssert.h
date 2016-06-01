@@ -9,5 +9,11 @@
 #ifndef MADAssert_h
 #define MADAssert_h
 
+    #ifndef DEBUG
+        #import <Foundation/NSException.h>
+        #define MADAssert NSAssert(condition, desc, ...)
+    #else
+        #define MADAssert
+    #endif
 
 #endif /* MADAssert_h */

@@ -9,5 +9,10 @@
 #ifndef MADAlertControllerAlertRemovedProtocol_h
 #define MADAlertControllerAlertRemovedProtocol_h
 
+@protocol MADAlertControllerAlertRemovedProtocol <NSObject>
+
+    - (void)alertControllerDidDisappear:(MADAlertController *)alertController;
+
+@end
 
 #endif /* MADAlertControllerAlertRemovedProtocol_h */

@@ -8,9 +8,6 @@
 
 #import "UIView+Extras.h"
 
-#import <UIKit/UIApplication.h>
-#import <UIKit/UIGestureRecognizer.h>
-
 @implementation UIView (Extras)
 
 - (CGRect)popoverRectForSelectedViews:(NSSet *)views {

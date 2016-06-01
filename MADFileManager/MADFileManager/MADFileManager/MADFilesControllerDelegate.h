@@ -9,8 +9,6 @@
 #ifndef MADFilesControllerDelegate_h
 #define MADFilesControllerDelegate_h
 
-@protocol MADFileCoordinator;
-
 @class MADFilesController;
 @class MADMetaData;
 

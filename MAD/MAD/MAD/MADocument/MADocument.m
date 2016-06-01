@@ -723,11 +723,11 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     
     success = [pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
     if (!success) goto READ_END;
+ 
+    [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
 
     success = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
                                                    isDirectory: &isDirectory];
-
-    if (success) [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
 
     if (!success || !isDirectory) {
         success = [[NSFileManager defaultManager] createDirectoryAtPath:urlGutsPath
@@ -774,7 +774,7 @@ READ_FAIL:;
         success = [fileWrapper writeToURL: urlGuts
                                   options: NSFileWrapperWritingAtomic
                       originalContentsURL: url
-                                    error: error] ? true : false;
+                                    error: error];
         if (!success) {
             NSLog(@"Break");
         }

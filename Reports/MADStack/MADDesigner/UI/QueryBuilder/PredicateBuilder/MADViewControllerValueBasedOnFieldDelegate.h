@@ -9,5 +9,10 @@
 #ifndef MADViewControllerValueBasedOnFieldDelegate_h
 #define MADViewControllerValueBasedOnFieldDelegate_h
 
+@class NSString;
+
+@protocol MTViewControllerValueBasedOnFieldDelegate
+    - (void)enterStringDidFinishWithString:(NSString *)userInput;
+@end
 
 #endif /* MADViewControllerValueBasedOnFieldDelegate_h */

@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MADDesigner_NSURL_CommonURLs_h
+#define MADDesigner_NSURL_CommonURLs_h
+
+#import <Foundation/NSURL.h>
 
 @interface NSURL (CommonURLs)
 
@@ -40,3 +43,5 @@
 + (instancetype)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl;
 
 @end
+
+#endif

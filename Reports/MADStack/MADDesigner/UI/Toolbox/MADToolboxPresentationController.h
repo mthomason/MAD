@@ -10,7 +10,8 @@
 #define Reports_MADToolboxPresentationController_h
 
 #import <UIKit/UIPresentationController.h>
-#import <UIKit/UIPopoverPresentationController.h>
+
+@protocol UIPopoverPresentationControllerDelegate;
 
 @class MADDimmingView;
 

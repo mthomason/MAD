@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryBuilderAddPredicateViewController.h"
+#import "MADQueryBuilderAddPredicateDelegate.h"
 
 #import <CoreData/NSManagedObjectID.h>
 

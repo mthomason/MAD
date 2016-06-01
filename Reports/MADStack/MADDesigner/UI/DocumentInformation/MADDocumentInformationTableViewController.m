@@ -13,6 +13,9 @@
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
 
+#import <UIKit/UILabel.h>
+#import <UIKit/UIVisualEffectView.h>
+
 @interface MADDocumentInformationTableViewController ()
     <MADVibrantTableViewCellDelegate>
 

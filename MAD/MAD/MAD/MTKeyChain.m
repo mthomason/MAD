@@ -12,16 +12,14 @@
 
 #import "MTKeyChain.h"
 #import "MADErrorUserInfo.h"
+#import <CoreFoundation/CFData.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSBundle.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
-#import <MADCocoaExtensions/UIApplication+Helpers.h>
-
-#import <UIKit/UILabel.h>
-
-typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
-typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
+#import <dispatch/dispatch.h>
+#import <Security/SecItem.h>
 
 NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
@@ -29,17 +27,10 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 const NSInteger MTKeyErrorUserCanceled = 393920;
 
 @interface MTKeyChain()
-    <UITextFieldDelegate>
 
-    @property (atomic, copy) MTKeyChainCredentialsCompletion credentialsCompletion;
     @property (nonatomic, strong) NSString *credentialsUsername;
-
-    @property (atomic, copy) MTKeyChainSaveCompletion saveCompletion;
     @property (nonatomic, strong) NSString *saveUsername;
     @property (nonatomic, strong) NSString *savePassword;
-
-    @property (nonatomic, strong) UITextField *textFieldOne;
-    @property (nonatomic, strong) UITextField *textFieldTwo;
 
 @end
 
@@ -70,30 +61,48 @@ static MTKeyChain *sharedSingleton = nil;
 }
 
 + (NSString *)keyForUsernameWithMainKey:(NSString *)key {
-    return [NSString stringWithFormat:@"u:%@", key];
+    id result = [[NSString alloc] initWithFormat:@"u:%@", key];
+    return result;
 }
 
 + (NSString *)keyForPasswordWithMainKey:(NSString *)key {
     return [NSString stringWithFormat:@"p:%@", key];
 }
 
++ (NSDictionary *)newDictionaryQueryGeneric:(NSString *)key {
+    const NSNumber *yes = @YES;
+    NSString *keyCopy = key.copy;
+    NSDictionary *query = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            (__bridge id)kSecClassGenericPassword,  (__bridge id)(kSecClass),
+                            keyCopy,                                (__bridge id)(kSecAttrService),
+                            @"Generic",                             (__bridge id)(kSecAttrAccount),
+                            yes,                                    (__bridge id)(kSecReturnData),
+                            nil];
+    return query;
+}
+
 + (NSDictionary *)queryUsernameDefination:(NSString *)key {
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
     const NSNumber *yes = @YES;
-    NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)kSecClassGenericPassword,
-                            (__bridge id)(kSecAttrService) : keyUsername,
-                            (__bridge id)(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
-                            (__bridge id)(kSecReturnData) : yes};
+    NSDictionary *query = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            (__bridge id)kSecClassGenericPassword,  (__bridge id)(kSecClass),
+                            keyUsername,                            (__bridge id)(kSecAttrService),
+                            MTKeyChainUsernameAccountDesc,          (__bridge id)(kSecAttrAccount),
+                            yes,                                    (__bridge id)(kSecReturnData),
+                            nil];
+
     return query;
 }
 
 + (NSDictionary *)queryPasswordDefination:(NSString *)key {
     NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
     const NSNumber *yes = @YES;
-    NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
-                            (__bridge id)(kSecAttrService) : keyPassword,
-                            (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
-                            (__bridge id)(kSecReturnData) : yes};
+    NSDictionary *query = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            (__bridge id)kSecClassGenericPassword,  (__bridge id)(kSecClass),
+                            keyPassword,                            (__bridge id)(kSecAttrService),
+                            MTKeyChainPasswordAccountDesc,          (__bridge id)(kSecAttrAccount),
+                            yes,                                    (__bridge id)(kSecReturnData),
+                            nil];
     return query;
 }
 
@@ -236,69 +245,15 @@ static MTKeyChain *sharedSingleton = nil;
     return status;
 }
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password
-              forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit
-          completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
++ (void)deleteKey:(NSString *)key {
+    NSDictionary *query = [MTKeyChain newDictionaryQueryGeneric:key];
     
-    if (shortCircuit == NO) {
-        
-        self.saveUsername = username;
-        self.savePassword = password;
-        
-        NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-        NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-        if (keyUsername == nil || keyPassword == nil ||
-            ![username isEqualToString:keyUsername] ||
-            ![password isEqualToString:keyPassword]) {
-            
-            UIAlertController *alertController;
-            alertController = [UIAlertController newAlertControllerSaveCredentials:^(UIAlertAction *action) {
-                
-                [MTKeyChain saveUsername: self.saveUsername
-                             andPassword: self.savePassword
-                                  forKey: key];
-                
-                completion(YES, nil, self.saveUsername, self.savePassword);
-                
-            } cancel:^(UIAlertAction *action) {
-                completion(NO, nil, nil, nil);
-            }];
-
-          [MADThread safeSwitchToMainThread:^{
-                UIViewController *topViewController = [MADStackViewController topViewController];
-                topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-                [topViewController  presentViewController: alertController animated: YES completion: nil];
-            }];
-            
-        }
-        
-    } else {
-        completion(YES, nil, username, password);
-    }
+    CFDataRef queryData = NULL;
     
-}
-
-- (void)deleteKey:(NSString *)key usingViewController:(UIViewController *)viewController {
-    if ([MTKeyChain credentialsExist:key]) {
-        
-        UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
-            [MTKeyChain deleteSavedPasswordForKey:key];
-        } cancel:nil];
-        
-        [MADThread safeSwitchToMainThread:^{
-            UIViewController *topViewController = viewController == nil ? [MADStackViewController topViewController] : viewController;
-            topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-            [topViewController  presentViewController: alertController
-                                             animated: YES
-                                           completion: nil];
-        }];
-    } else {
-        [MTKeyChain deleteSavedPasswordForKey:key];
+    OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) query, (CFTypeRef *)&queryData);
+    if (deleteStatus == errSecSuccess) {
+        deleteStatus = SecItemDelete((__bridge CFDictionaryRef)query);
     }
-}
-
-- (void)deleteKey:(NSString *)key {
-    [self deleteKey:key usingViewController:nil];
 }
 
 + (void)deleteSavedPasswordForKey:(NSString *)key {
@@ -318,153 +273,6 @@ static MTKeyChain *sharedSingleton = nil;
         deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
     }
 
-}
-
-- (void)getUsernameAndPasswordForKey:(NSString *)key
-                          completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion {
-    
-    [self setCredentialsCompletion:completion];
-    
-    const NSInteger stateGetPassword = 1;
-    const NSInteger stateGetUsernameAndPassword = 2;
-    const NSInteger stateGetNothing = 3;
-    
-    NSInteger status;
-    CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
-    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
-    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
-    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
-    
-    //Check items doesn't exist
-    if (queryUsernameStatus == errSecItemNotFound) {
-        status = stateGetUsernameAndPassword;
-    } else {
-        if (queryPasswordStatus == errSecItemNotFound) {
-            status = stateGetPassword;
-        } else {
-            status = stateGetNothing;
-        }
-    }
-    
-    //Check errors
-    if (status == stateGetNothing) {
-        if (queryUsernameStatus == errSecSuccess && queryUsernameData != NULL) {
-            if ((queryPasswordStatus == errSecSuccess && queryPasswordData != NULL) == NO){
-                status = stateGetPassword;
-            }
-        } else {
-            status = stateGetUsernameAndPassword;
-        }
-    }
-    
-    
-    switch (status) {
-        case stateGetNothing: {
-            //Items found.  Check for errors, then return.
-            NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData encoding: NSUTF8StringEncoding];;
-            NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData encoding: NSUTF8StringEncoding];
-            completion(YES, nil, username, password, YES);
-            break;
-        }
-        case stateGetPassword: {
-            //Username found.  What about password?
-            NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
-                                                       encoding:NSUTF8StringEncoding];
-            SEL promptForPasswordGivenUsername = @selector(promptForPasswordGivenUsername:);
-            [self performSelectorOnMainThread: promptForPasswordGivenUsername withObject: username waitUntilDone: NO];
-            break;
-        }
-        case stateGetUsernameAndPassword: {
-            SEL promptForUsernameAndPassword = @selector(promptForUsernameAndPassword);
-            [self performSelectorOnMainThread: promptForUsernameAndPassword withObject: nil waitUntilDone: NO];
-            break;
-        }
-        default:
-            completion(NO, nil, nil, nil, NO);
-            break;
-    }
-}
-
-- (void)promptForPasswordGivenUsername:(NSString *)username {
-    
-    self.credentialsUsername = username;
-    
-    
-    UIAlertController *prompt = [UIAlertController newAlertControllerPromptForPasswordGivenUsername:username
-                                                                                           password:^(UITextField *textField) {
-        textField.delegate = self;
-    } submit:^(NSString *password) {
-        self.credentialsCompletion(YES, nil, username, password, NO);
-    } cancel:^() {
-        self.credentialsCompletion(NO, nil, nil, nil, NO);
-    }];
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [MADStackViewController topViewController];
-        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: prompt animated: YES completion: nil];
-    }];
-    
-}
-
-- (void)promptForUsernameAndPassword {
-    
-    UIAlertController *prompt = [UIAlertController newAlertControllerPromptForUsername:^(UITextField *textField) {
-        textField.delegate = self;
-    } password:^(UITextField *textField) {
-        textField.delegate = self;
-    } submit:^(NSString *username, NSString *password) {
-        self.credentialsCompletion(YES, nil, username, password, NO);
-    } cancel:^() {
-        NSError *error = [MTKeyChain errorUserCanceled];
-        self.credentialsCompletion(NO, error, nil, nil, NO);
-    }];
-
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [MADStackViewController topViewController];
-        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: prompt animated: YES completion: nil];
-    }];
-    
-}
-
-- (void)configureTextFieldForPassword:(UITextField **)textField {
-    (*textField).delegate = self;
-    UILabel *password = [[UILabel alloc] init];
-    password.textColor = [UIColor lightGrayColor];
-    password.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    password.text = NSLocalizedString(@"Password: ", @"Password: ");
-    [password sizeToFit];
-    (*textField).leftView = password;
-    (*textField).secureTextEntry = YES;
-    (*textField).leftViewMode = UITextFieldViewModeAlways;
-    (*textField).text = @"";
-    (*textField).autocapitalizationType = UITextAutocapitalizationTypeNone;
-    (*textField).clearButtonMode = UITextFieldViewModeAlways;
-}
-
-- (void)configureTextFieldForUsername:(UITextField **)textField {
-    (*textField).delegate = self;
-    UILabel *username = [[UILabel alloc] init];
-    username.textColor = [UIColor lightGrayColor];
-    username.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    username.text = NSLocalizedString(@"Username: ", @"Username: ");
-    [username sizeToFit];
-    (*textField).leftView = username;
-    (*textField).secureTextEntry = NO;
-    (*textField).leftViewMode = UITextFieldViewModeAlways;
-    (*textField).text = @"";
-    (*textField).autocapitalizationType = UITextAutocapitalizationTypeNone;
-    (*textField).clearButtonMode = UITextFieldViewModeAlways;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    ((UILabel *)textField.leftView).textColor = [UIColor darkGrayColor];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
 }
 
 @end

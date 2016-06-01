@@ -67,7 +67,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 #pragma mark - Members
 
 // MARK: Add new vertex to adjacency list.
-- (MTVertex *)addVertexWithObject:(id <NSCopying>)object {
+- (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object {
     //id obj = [object copyWithZone:NULL];
     MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject:object];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
@@ -198,13 +198,14 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     do {
         MTVertex *u = [greyVertices dequeue];
         NSArray *incidentEdges = [u incidentEdges];
+        NSNumber *distance;
         for (MTEdge *edge in incidentEdges) {
             MTVertex *vertex = [edge destination];
             do {
                 if (vertex.properties.vertexColor == MTColorWhite) {
                     vertex.properties.vertexColor = MTColorGray;
                     vertex.bfsProperties.bfsPredecessor = u;
-                    NSNumber *distance = [[NSNumber alloc] initWithInteger:u.bfsProperties.bfsDistance.integerValue + 1];
+                    distance = [[NSNumber alloc] initWithInteger:u.bfsProperties.bfsDistance.integerValue + 1];
                     vertex.bfsProperties.bfsDistance = distance;
                     [greyVertices enqueue: vertex];
                 }
@@ -230,16 +231,20 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
     MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
-    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter
+                                     listOfEdges:&resultEdges listOfVertices:&resultVertices];
     for (MTVertex *vertex in self.vertices) {
         if (vertex.properties.vertexColor == MTColorWhite) {
-            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
+                                             listOfEdges:&resultEdges
+                                          listOfVertices:&resultVertices];
         }
     }
     return resultEdges;
 }
 
-- (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
+- (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
+                    isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
     NSNumber *counter = @0;
     

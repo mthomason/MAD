@@ -11,6 +11,7 @@
 #endif
 
 #import "MTGroupByViewController.h"
+#import "MADGroupByViewControllerDelegate.h"
 
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -137,7 +138,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     
-    id <MTGroupByViewControllerDelegate> delegate = _delegate;
+    id <MADGroupByViewControllerDelegate> delegate = _delegate;
     if (delegate == nil) goto SkipDisplay;
     switch (indexPath.row) {
         

@@ -199,9 +199,12 @@
 - (id)objectAtIndex:(NSUInteger)index {
     NSUInteger sortedIndex = [self sortedIndexForIndex:index];
     
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[self.columnKeys count]];
+    NSMutableDictionary *data;
+    data = [[NSMutableDictionary alloc] initWithCapacity:[self.columnKeys count]];
     for (NSString *fieldKey in self.columnKeys) {
         NSArray *dataInColumn = self.columns[fieldKey];
+// FIXME: what is this?
+        NSAssert(false, @"Remove after testing this warning.");
         id objectForField = dataInColumn[sortedIndex];
         data[fieldKey] = objectForField;
     }

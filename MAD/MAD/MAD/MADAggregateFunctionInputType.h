@@ -9,7 +9,7 @@
 #ifndef MADAggregateFunctionInputType_h
 #define MADAggregateFunctionInputType_h
 
-typedef CF_ENUM(NSUInteger, MTAggregateFunctionInputType) {
+typedef CF_ENUM(short, MTAggregateFunctionInputType) {
     MTAggregateFunctionInputTypeField = 0,
     MTAggregateFunctionInputTypeFormula
 };

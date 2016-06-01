@@ -11,12 +11,14 @@
 #endif
 
 #import "MTViewControllerValueBasedOnField.h"
+#import "MADViewControllerValueBasedOnFieldDelegate.h"
 
 #import <UIKit/UIWindow.h>
 
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -183,13 +185,19 @@
         } else {
             
             NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-            
+            // FIXME: Comeon with the fucking blocks.
+        
             if ([NSThread isMainThread]) {
                 UIViewController * __weak weak1 = strongself2;
                 
                 [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
+                       UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                   [MTKeyChain deleteKey:key];
+                       } cancel:nil];
+                       [weak1 presentViewController:alertController animated:YES
+                                         completion:nil];
+                       
                 
-                    [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
                     
                 }];
                 
@@ -202,10 +210,12 @@
                          onViewController: weak1
                                completion:^(BOOL presentErrorSuccess) {
                                
-                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
-                                   
+                                   UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                       [MTKeyChain deleteKey:key];
+                                   } cancel:nil];
+                                   [weak1 presentViewController:alertController animated:YES
+                                                     completion:nil];
                                }];
-                    
                 });
             }
         }
@@ -231,16 +241,17 @@
 
 #pragma mark - Picker View Delegate
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component {
     NSString *result = nil;
-    if (row < [[self pickerData] count]) {
-        NSDictionary *pickerData = [self pickerData][row];
+    if ((NSUInteger)row < _pickerData.count) {
+        NSDictionary *pickerData = _pickerData[(NSUInteger)row];
         id resultObject = [[pickerData allValues] lastObject];
         if ([resultObject isKindOfClass:[NSDateComponents class]]) {
             NSDateComponents *resultDate = resultObject;
             NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
             NSDate *newDate = [localCalendar dateFromComponents:resultDate];
-            result = [[self longStyleDateFormatter] stringFromDate:newDate];
+            result = [_longStyleDateFormatter stringFromDate:newDate];
         } else if ([resultObject isKindOfClass:[NSString class]]) {
             result = [NSString stringWithString: resultObject];
         } else if ([resultObject isKindOfClass:[NSNumber class]]) {

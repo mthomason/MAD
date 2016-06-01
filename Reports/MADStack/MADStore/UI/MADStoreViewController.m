@@ -108,12 +108,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [MTStoreKitController sharedObject].products.count;
+    return (NSInteger)[MTStoreKitController sharedObject].products.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADCollectionViewCellProductFeature *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    SKProduct *product =[MTStoreKitController sharedObject].products[indexPath.item];
+    SKProduct *product =[MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
     cell.labelTitle.text = product.localizedTitle;
     cell.labelDescription.text = product.localizedDescription;
     self.priceFormatter.locale = product.priceLocale;

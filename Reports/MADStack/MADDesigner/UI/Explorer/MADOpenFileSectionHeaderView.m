@@ -18,22 +18,40 @@
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";
 
+static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView);
+static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
+    return CGRectMake(view.width - activityView.width - 10.0000f,
+                      ((view.height - activityView.height) / 2.0000f),
+                      activityView.width,
+                      activityView.height);;
+}
+
+
 @interface MADOpenFileSectionHeaderView ()
 
-@property (nonatomic, strong) UILabel *label;
+    @property (nonatomic, strong) UILabel *label;
 
-@property (nonatomic, strong) NSString *localizedTextCloud;
-@property (nonatomic, strong) NSString *localizedTextLocal;
-@property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextCloud;
-@property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextLocal;
+    @property (nonatomic, strong) NSString *localizedTextCloud;
+    @property (nonatomic, strong) NSString *localizedTextLocal;
+    @property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextCloud;
+    @property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextLocal;
 
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+    @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 
-@property (nonatomic, strong) NSString *fontType;
+    @property (nonatomic, strong) NSString *fontType;
 
 @end
 
 @implementation MADOpenFileSectionHeaderView
+
++ (void)initialize {
+    if (self == [MADOpenFileSectionHeaderView self]) {
+        UIActivityIndicatorView *appearance;
+        appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[self class], nil];
+        appearance.tintColor = [UIColor whiteColor];
+        appearance.color     = [UIColor whiteColor];
+    }
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -45,9 +63,6 @@ NSString * const MADTextLocal = @"Local";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-
-        [[UIActivityIndicatorView appearanceWhenContainedIn:[MADOpenFileSectionHeaderView class], nil] setTintColor:[UIColor whiteColor]];
-        [[UIActivityIndicatorView appearanceWhenContainedIn:[MADOpenFileSectionHeaderView class], nil] setColor:[UIColor whiteColor]];
         
         NSString *localizedTextCloud = NSLocalizedString(MADTextCloud, MADTextCloud);
         self.localizedTextCloud = localizedTextCloud;
@@ -56,7 +71,8 @@ NSString * const MADTextLocal = @"Local";
         self.localizedTextLocal = localizedTextLocal;
         
         // Initalize the section type
-        CGRect labelRect = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y, frame.size.width - 10.0000f, frame.size.height);
+        CGRect labelRect = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y,
+                                      frame.size.width - 10.0000f, frame.size.height);
         
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
         label.textAlignment = NSTextAlignmentLeft;
@@ -69,12 +85,11 @@ NSString * const MADTextLocal = @"Local";
 
         [self addSubview: label];
 
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        UIActivityIndicatorView *activityView;
+        activityView = [[UIActivityIndicatorView alloc]
+                        initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         activityView.hidesWhenStopped = YES;
-        activityView.frame = CGRectMake(self.frame.size.width - activityView.frame.size.width - 10.0000f,
-                                        ((self.frame.size.height - activityView.frame.size.height) / 2.0000f),
-                                        activityView.frame.size.width,
-                                        activityView.frame.size.height);
+        activityView.frame = MADFrameActivityView(self.frame.size, activityView.frame.size);
         [activityView stopAnimating];
         activityView.tintColor = [UIColor whiteColor];
         activityView.color = [UIColor whiteColor];
@@ -83,20 +98,23 @@ NSString * const MADTextLocal = @"Local";
         self.activityIndicatorView = activityView;
         
         UIColor *foregroundColor = [MADColorEverydayApps newColorRed];
-        NSDictionary *attributesLocal = @{NSForegroundColorAttributeName : foregroundColor};
+        NSDictionary *attributes;
+        attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                      foregroundColor, NSForegroundColorAttributeName, nil ];
         
-        NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
-                                                                                    attributes: attributesLocal];
+        NSAttributedString *attributedStringLocal;
+        attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
+                                                                attributes: attributes];
         self.localizedAttrbiutedTextLocal = attributedStringLocal;
         
-        NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
-                                                                                    attributes: attributesLocal];
+        NSAttributedString *attributedStringCloud;
+        attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
+                                                                attributes: attributes];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
-        UIColor *blueColor = [MADColorEverydayApps newColorHeaderColor];
-        self.backgroundColor = blueColor;
+        self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
         label.backgroundColor = [UIColor clearColor];
-        label.textColor = foregroundColor;
+        label.textColor = [MADColorEverydayApps newColorRed];
         
         self.label = label;
         
@@ -121,30 +139,31 @@ NSString * const MADTextLocal = @"Local";
 
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
-    if (self.label != nil) {
-        self.label.font = [UIFont preferredFontForTextStyle:self.fontType];
+    if (_label != nil) {
+        _label.font = [UIFont preferredFontForTextStyle:self.fontType];
         switch (self.sectionType) {
                 
             case MACloudManagerSectionCloud:
-                self.label.attributedText = self.localizedAttrbiutedTextCloud;
+                _label.attributedText = _localizedAttrbiutedTextCloud.copy;
                 break;
                 
             case MACloudManagerSectionLocal:
-                self.label.attributedText = self.localizedAttrbiutedTextLocal;
+                _label.attributedText = _localizedAttrbiutedTextLocal.copy;
                 break;
                                 
             default:
-                self.label.attributedText = nil;
-                self.label.text = @"";
+                _label.attributedText = nil;
+                _label.text = @"";
                 break;
         }
     }
-    [self.label sizeToFit];
-    self.label.frame = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y, self.label.frame.size.width + 5.0000f, self.frame.size.height);
-    self.activityIndicatorView.frame = CGRectMake(self.label.frame.origin.x + self.label.frame.size.width + 5.0000f,
-                                                  self.activityIndicatorView.frame.origin.y,
-                                                  self.activityIndicatorView.frame.size.width,
-                                                  self.activityIndicatorView.frame.size.height);
+    [_label sizeToFit];
+    _label.frame = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y,
+                              _label.frame.size.width + 5.0000f, self.frame.size.height);
+    _activityIndicatorView.frame = CGRectMake(_label.frame.origin.x + _label.frame.size.width + 5.0000f,
+                                              _activityIndicatorView.frame.origin.y,
+                                              _activityIndicatorView.frame.size.width,
+                                              _activityIndicatorView.frame.size.height);
 }
 
 @end

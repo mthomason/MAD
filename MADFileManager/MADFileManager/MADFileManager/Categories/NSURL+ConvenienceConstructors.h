@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_NSURL_ConvenienceConstructors_h
+#define MADDesigner_NSURL_ConvenienceConstructors_h
+
 #import <Foundation/NSURL.h>
 
 @interface NSURL (ConvenienceConstructors)
@@ -15,3 +18,5 @@
                              fileGroup:(NSString *)fileGroup;
 
 @end
+
+#endif

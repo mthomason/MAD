@@ -8,6 +8,7 @@
 
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
+#import <UIKit/UIVisualEffectView.h>
 
 @implementation MADVibrantTableView
 

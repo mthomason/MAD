@@ -7,6 +7,7 @@
 //
 
 #import "MTDatabaseMySql.h"
+#import "MADDatabaseProtocol.h"
 
 #import "MADErrorUserInfo.h"
 #import <MADFoundation/MTDataTable.h>

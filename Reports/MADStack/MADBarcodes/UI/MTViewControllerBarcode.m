@@ -19,6 +19,7 @@
 
 #import "MADNavigationBarTitleView.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MAD/MTDataTable+Factory.h>
 
@@ -179,7 +180,13 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                      onViewController: weakself2
                            completion:^(BOOL presentErrorSuccess) {
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                               [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself2];
+                               
+                               UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                   [MTKeyChain deleteKey:key];
+                               } cancel:nil];
+                               [weakself2 presentViewController:alertController animated:YES
+                                                     completion:nil];
+                               
                            }];
                 
             }
@@ -204,10 +211,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                 [NSError presentError: error
                      onViewController: weakself
                            completion:^(BOOL presentErrorSuccess) {
-                               MTViewControllerBarcode * __strong strongself2 = weakself;
-                               MTViewControllerBarcode * __weak weak = strongself2;
+                               MTViewControllerBarcode *strongself2 = weakself;
+
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                               [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak];
+                               UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                   [MTKeyChain deleteKey:key];
+                               } cancel:nil];
+                               [strongself2 presentViewController:alertController animated:YES
+                                                       completion:nil];
                            }];
                 
             }

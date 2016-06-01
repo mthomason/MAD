@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C93729D1BACFC9200D6BD62 /* MADFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372A51BACFC9200D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */; };
 		4C9372AA1BACFC9200D6BD62 /* MADFoundationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372A91BACFC9200D6BD62 /* MADFoundationTests.m */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAssert.h; sourceTree = "<group>"; };
 		4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C93729D1BACFC9200D6BD62 /* MADFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFoundation.h; sourceTree = "<group>"; };
 		4C93729F1BACFC9200D6BD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */,
 				4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */,
+				4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */,
 				4CF09A3C1BB23FA8007BCF7A /* Protocols */,
 				4C9372E21BAD0E5C00D6BD62 /* Categories */,
 				4C9372E11BAD0E4C00D6BD62 /* DataTable */,
@@ -208,6 +211,7 @@
 				4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */,
 				4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */,
 				4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */,
+				4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */,
 				4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MADDataColumn.h in Headers */,
 			);

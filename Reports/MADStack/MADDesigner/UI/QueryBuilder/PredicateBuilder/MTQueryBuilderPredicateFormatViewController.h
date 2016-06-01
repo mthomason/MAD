@@ -11,6 +11,7 @@
 
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "MUIViewControllerDelegate.h"
+#import "MADQueryBuilderAddPredicateDelegate.h"
 
 @class MTQueryBuilderPredicateFormatViewController;
 

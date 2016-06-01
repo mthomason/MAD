@@ -11,7 +11,7 @@
 
 @interface MADFonts ()
 
-@property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
+    @property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
 
 @end
 
@@ -20,9 +20,10 @@
 - (instancetype)init {
     if (self = [super init]) {
         
-        NSArray *unsortedNames = [UIFont familyNames];
-        NSArray *sortedNames = [unsortedNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        NSArray <NSString *> *familyNames = [NSArray arrayWithArray:sortedNames];
+        NSArray *unsortedNames = [UIFont familyNames], *sortedNames, *familyNames;
+        sortedNames = [unsortedNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        
+        familyNames = [[NSArray alloc] initWithArray:sortedNames];
         self.familyNames = familyNames;
 
     }

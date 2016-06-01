@@ -9,22 +9,24 @@
 #ifndef MADFileCoordinatorProtocol_h
 #define MADFileCoordinatorProtocol_h
 
-@protocol MADFileCoordinatorDelegate <NSObject>
+@protocol MADFileCoordinatorDelegate;
 
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (NSArray *)insertedURLs
-                                                 removedURLs: (NSArray *)removedURLs
-                                                 updatedURLs: (NSArray *)updatedURLs;
+@class MADFile;
 
-    - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (NSArray *)insertedMetaDatum
-                                                 removedMetaDatum: (NSArray *)removedMetaDatum
-                                                 updatedMetaDatum: (NSArray *)updatedMetaDatum
-                                                       completion: (void (^)(BOOL success,
-                                                                             NSError *error))completion;
+@protocol MADFileCoordinatorProtocol <NSObject>
 
-    - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-    - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+    @property (nonatomic, weak) id <MADFileCoordinatorDelegate> delegate;
+    @property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
+
+    - (void)startQuery;
+    - (void)stopQuery;
+    - (void)removeFileAtURL:(NSURL *)URL;
+    - (void)duplicateFileAtURL:(NSURL *)URL;
+    - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
+    - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
+                   extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
+    - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                        fileGroup:(NSString *)fileGroup;
 
 @end
 

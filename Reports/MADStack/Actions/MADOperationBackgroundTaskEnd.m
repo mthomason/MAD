@@ -8,7 +8,6 @@
 
 #import "MADOperationBackgroundTaskEnd.h"
 #import "MADOperationBackgroundTaskBegin.h"
-#import <UIKit/UIApplication.h>
 
 @interface MADOperationBackgroundTaskEnd ()
 

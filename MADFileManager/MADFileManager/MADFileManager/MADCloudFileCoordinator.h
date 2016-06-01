@@ -17,7 +17,7 @@ extern NSString * const MADNotificationCloudActivityCompleted;
 
 @class NSPredicate;
 
-@interface MADCloudFileCoordinator : NSObject <MADFileCoordinator>
+@interface MADCloudFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 
     - (instancetype)initWithPredicate:(NSPredicate *)predicate
                            identifier:(NSString *)identifier

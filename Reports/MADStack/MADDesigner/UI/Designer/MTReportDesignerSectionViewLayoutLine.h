@@ -22,7 +22,7 @@
 
 @interface MTReportDesignerSectionViewLayoutLine : UICollectionViewLayout
 
-    @property (weak, nonatomic) id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
+    @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
 
     - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter;
 

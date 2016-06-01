@@ -9,9 +9,13 @@
 #ifndef MAD_Designer_MADVibrantTableViewCellBase_h
 #define MAD_Designer_MADVibrantTableViewCellBase_h
 
-#import "MADTableViewCellMargin.h"
 #import <UIKit/UITableViewCell.h>
-#import <UIKit/UIVisualEffectView.h>
+
+#import "MADTableViewCellMargin.h"
+//#import <UIKit/UIVisualEffectView.h>
+
+@class UIBlurEffect;
+@class UIVisualEffectView;
 
 @protocol MADVibrantTableViewCellDelegate <NSObject>
     - (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell;
@@ -21,14 +25,14 @@
 
     @property (nonatomic, weak) id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
 
-    @property (nonatomic, strong) UILabel *label;
+    @property (nonatomic, weak) UILabel *label;
     @property (nonatomic, weak) UIVisualEffectView *effectView;
     @property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
 
     @property (nonatomic, strong) NSArray *layoutConstraints;
     @property (atomic, assign) BOOL updatingConstraints;
 
-    + (UIBlurEffectStyle)blurEffectStyle;
+    + (NSInteger)blurEffectStyle;
 
     - (void)updateConstraints;
     - (void)initialize;

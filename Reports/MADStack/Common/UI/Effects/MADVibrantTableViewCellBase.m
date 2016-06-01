@@ -8,6 +8,7 @@
 
 #import "MADVibrantTableViewCellBase.h"
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <UIKit/UIVisualEffectView.h>
 
 @interface MADVibrantTableViewCellBase ()
 
@@ -48,60 +49,67 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    if (self.initalSetupComplete == NO && self.vibrantTableViewCellDelegate != nil) {
-        self.initalSetupComplete = YES;
-        CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 320.0000f);
-        
-        UIBlurEffect *effect = [self.vibrantTableViewCellDelegate blurEffectForCell:self];
-        UIVibrancyEffect *veffect = [UIVibrancyEffect effectForBlurEffect:effect];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:veffect];
-        UILabel *label = [[UILabel alloc] initWithFrame:rect];
-        
-        label.textColor = [UIColor greenColor];
-        label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-        [visualEffectsView.contentView addSubview:label];
-        self.accessoryView.tintColor = [UIColor blackColor];
-        
-        [visualEffectsView setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                             forAxis: UILayoutConstraintAxisHorizontal];
-        [visualEffectsView setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                             forAxis: UILayoutConstraintAxisVertical];
-        
-        [label setContentCompressionResistancePriority: 500
-                                               forAxis: UILayoutConstraintAxisHorizontal];
-        
-        [label setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                 forAxis: UILayoutConstraintAxisHorizontal];
-        
-        label.numberOfLines = 0;
-        label.lineBreakMode = NSLineBreakByWordWrapping;
-        label.userInteractionEnabled = NO;
-        visualEffectsView.userInteractionEnabled = NO;
-        visualEffectsView.contentView.userInteractionEnabled = NO;
-
-        [self.contentView addSubview:visualEffectsView];
-        self.selectionStyle = UITableViewCellSelectionStyleGray;
-        self.userInteractionEnabled = YES;
-        self.effectView = visualEffectsView;
-        self.label = label;
-        self.label.translatesAutoresizingMaskIntoConstraints = NO;
-        self.effectView.translatesAutoresizingMaskIntoConstraints = NO;
-        self.effectView.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        self.selectionStyle = UITableViewCellSelectionStyleGray;
-        self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
-        self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
-        
-        self.backgroundColor = [UIColor clearColor];
-        
-        _marginStyle = MADTableViewCellMarginStyleMiddle;
-
-    }
+    id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
+    vibrantTableViewCellDelegate = _vibrantTableViewCellDelegate;
     
+    if (vibrantTableViewCellDelegate == nil) return;
+    if (_initalSetupComplete) return;
+    
+    _initalSetupComplete = YES;
+    CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 320.0000f);
+    
+    UIBlurEffect *effect = [vibrantTableViewCellDelegate blurEffectForCell:self];
+    UIVibrancyEffect *veffect = [UIVibrancyEffect effectForBlurEffect:effect];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:veffect];
+    UILabel *label = [[UILabel alloc] initWithFrame:rect];
+    
+    label.textColor = [UIColor greenColor];
+    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    [effectView.contentView addSubview:label];
+    self.accessoryView.tintColor = [UIColor blackColor];
+    
+    [effectView setContentHuggingPriority: UILayoutPriorityDefaultLow
+                                  forAxis: UILayoutConstraintAxisHorizontal];
+    [effectView setContentHuggingPriority: UILayoutPriorityDefaultLow
+                                  forAxis: UILayoutConstraintAxisVertical];
+    
+    [label setContentCompressionResistancePriority: 500
+                                           forAxis: UILayoutConstraintAxisHorizontal];
+    
+    [label setContentHuggingPriority: UILayoutPriorityDefaultLow
+                             forAxis: UILayoutConstraintAxisHorizontal];
+    
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.userInteractionEnabled = NO;
+    effectView.userInteractionEnabled = NO;
+    effectView.contentView.userInteractionEnabled = NO;
+    
+    [self.contentView addSubview:effectView];
+    self.selectionStyle = UITableViewCellSelectionStyleGray;
+    self.userInteractionEnabled = YES;
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    effectView.translatesAutoresizingMaskIntoConstraints = NO;
+    effectView.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.effectView = effectView;
+    self.label = label;
+    
+    
+    self.selectionStyle = UITableViewCellSelectionStyleGray;
+    self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
+    self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
+    
+    self.backgroundColor = [UIColor clearColor];
+    
+    _marginStyle = MADTableViewCellMarginStyleMiddle;
+    
+
     if (self.accessoryView != nil) {
         self.accessoryView.tintColor = [UIColor blackColor];
-//        [self.effectView.contentView addSubview: self.accessoryView];
+        // [self.effectView.contentView addSubview: self.accessoryView];
     }
-//    [self.contentView addSubview:visualEffectsView];
+    // [self.contentView addSubview:visualEffectsView];
 
 }
 

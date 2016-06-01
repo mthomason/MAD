@@ -11,6 +11,8 @@
 #endif
 
 #import "MADDesignerElementPickerViewController.h"
+#import "MADAggregateFunctionsViewControllerDelegate.h"
+#import "MADGroupByViewControllerDelegate.h"
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIStoryboardSegue.h>
@@ -23,8 +25,6 @@
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 #import "MADNavigationBarTitleView.h"
-
-#import "MTAggregateFunctionsViewController.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -51,8 +51,8 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 @interface MADDesignerElementPickerViewController ()
     <MTQueryBuilderChooseFieldDelegate,
-        MTAggregateFunctionsViewControllerDelegate,
-        MTGroupByViewControllerDelegate,
+        MADAggregateFunctionsViewControllerDelegate,
+        MADGroupByViewControllerDelegate,
         UINavigationControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegateFlowLayout>

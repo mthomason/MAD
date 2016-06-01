@@ -11,6 +11,7 @@
 #endif
 
 #import "MADViewerController.h"
+#import <MAD/MADActivityItemProviderPdfDelegate.h>
 
 #import <CoreData/CoreData.h>
 
@@ -83,7 +84,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
         MTTabBarImageProtocol,
-        MTActivityItemProviderDelegate>
+        MADActivityItemProviderDelegate>
 
     @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 

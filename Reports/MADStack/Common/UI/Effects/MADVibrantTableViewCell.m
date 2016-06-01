@@ -7,6 +7,7 @@
 //
 
 #import "MADVibrantTableViewCell.h"
+#import <UIKit/UIVisualEffectView.h>
 
 @interface MADVibrantTableViewCell ()
 

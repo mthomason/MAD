@@ -313,7 +313,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)displayErrors:(NSArray *)errors forConnectionString:(NSString *)connectionString {
     [MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
-        [[MTKeyChain sharedObject] deleteKey:connectionString];
+        [MTKeyChain deleteKey:connectionString];
     }];
 }
 

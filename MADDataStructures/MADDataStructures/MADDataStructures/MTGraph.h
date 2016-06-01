@@ -18,7 +18,7 @@
     - (instancetype)init;
     - (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
 
-    - (MTVertex *)addVertexWithObject:(id <NSCopying>)object;
+    - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object;
     - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id <NSCopying>)object andWeight:(NSNumber *)weight;
 
     - (void)removeVertex:(MTVertex *)vertex;

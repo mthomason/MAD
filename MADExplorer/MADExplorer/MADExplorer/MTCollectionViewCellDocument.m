@@ -11,6 +11,9 @@
 #endif
 
 #import "MTCollectionViewCellDocument.h"
+#import "MTDocumentCellProtocol.h"
+
+#import <QuartzCore/CALayer.h>
 
 #import <UIKit/UINibLoading.h>
 #import <UIKit/NSAttributedString.h>
@@ -22,7 +25,6 @@
 #import <UIKit/UIImageView.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
-#import <QuartzCore/CALayer.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
@@ -38,16 +40,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @interface MTCollectionViewCellDocument ()
 
-    @property (nonatomic, weak, readwrite) UIActivityIndicatorView *activityIndicator;
+    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
 
-    @property (nonatomic, copy) UIColor *colorTextNormal;
-    @property (nonatomic, copy) UIColor *colorTextSelected;
+    @property (nonatomic, readwrite, copy) UIColor *colorTextNormal;
+    @property (nonatomic, readwrite, copy) UIColor *colorTextSelected;
 
-    @property (nonatomic, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
-    @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRecognizer;
+    @property (nonatomic, readwrite, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
+    @property (nonatomic, readwrite, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
-    @property (nonatomic, assign) BOOL wobbling;
-    @property (nonatomic, assign) bool addedGestures;
+    @property (nonatomic, readwrite, assign) BOOL wobbling;
+    @property (nonatomic, readwrite, assign) bool addedGestures;
 
 @end
 
@@ -234,8 +236,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 - (void)setNeedsLayout {
     [super setNeedsLayout];
-    [self.labelTitle setNeedsLayout];
-    [self.labelTitleSub setNeedsLayout];
+    [_labelTitle setNeedsLayout];
+    [_labelTitleSub setNeedsLayout];
 }
 
 
@@ -247,10 +249,12 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (void)setText:(NSString *)text {
 
     NSDictionary *attributes = [MTCollectionViewCellDocument newAttributesCaption];
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
-                                                                                         attributes: attributes];
-    self.labelTitle.attributedText = attributedString;
-    self.labelTitle.text = text;
+    NSMutableAttributedString *attributedString;
+    attributedString = [[NSMutableAttributedString alloc] initWithString: text
+                                                              attributes: attributes];
+    UILabel *labelTitle = _labelTitle;
+    labelTitle.attributedText = attributedString;
+    labelTitle.text = text.copy;
 }
 
 + (NSDictionary *)newAttributesCaption {
@@ -303,31 +307,33 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)email:(id)sender {
-    [self.delegate email:self];
+    [_delegate email:self];
 }
 
 - (void)activateEditMode:(id)sender {
-    [self.delegate activateEditMode:sender];
+    [_delegate activateEditMode:sender];
 }
 
 - (void)rename:(id)sender {
-    [self.delegate rename:self];
+    [_delegate rename:self];
 }
 
 - (void)duplicate:(id)sender {
-    [self.delegate actionDuplicate:self];
+    [_delegate actionDuplicate:self];
 }
 
 - (void)normalizeTint {
+    UITapGestureRecognizer __unsafe_unretained * tapGestureRecognizer = _tapGestureRecognizer;
+    UILabel                __unsafe_unretained * labelTitle           = _labelTitle;
     if (self.highlighted) {
         id colorTextSelectedHighlighted = [UIColor whiteColor];
-        self.labelTitle.textColor = colorTextSelectedHighlighted;
+        labelTitle.textColor = colorTextSelectedHighlighted;
     } else if (self.selected) {
-        self.labelTitle.textColor = self.colorTextSelected.copy;
-        self.tapGestureRecognizer.enabled = NO;
+        labelTitle.textColor = _colorTextSelected.copy;
+        tapGestureRecognizer.enabled = NO;
     } else {
-        self.labelTitle.textColor = self.colorTextNormal.copy;
-        self.tapGestureRecognizer.enabled = YES;
+        labelTitle.textColor = _colorTextNormal.copy;
+        tapGestureRecognizer.enabled = YES;
     }
 }
 
@@ -336,21 +342,36 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         self.wobbling = YES;
         u_int32_t randomInt = arc4random_uniform(500);
         float r = (randomInt / 500.0000f) + 0.5000f;
-        CGAffineTransform leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-        CGAffineTransform rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
+        CGAffineTransform leftWobble, rightWobble;
+        leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+        rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
         
         self.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        MTCollectionViewCellDocument __weak *weakself = self;
         [UIView animateWithDuration:0.2 animations:^{
-            self.transform = leftWobble;
+            MTCollectionViewCellDocument *strongself = weakself;
+            if (strongself) {
+                strongself.transform = leftWobble;
+            }
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.2
-                                  delay:0
-                                options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionBeginFromCurrentState
-                             animations:^{
-                                 [UIView setAnimationRepeatCount: MAXFLOAT];
-                                 self.transform = rightWobble;
-                             }
-                             completion:nil];
+            MTCollectionViewCellDocument *strongself = weakself;
+            if (strongself) {
+                MTCollectionViewCellDocument __weak *weakself2 = strongself;
+                [UIView animateWithDuration:0.2
+                                      delay:0
+                                    options:UIViewAnimationOptionAllowUserInteraction |
+                                            UIViewAnimationOptionRepeat |
+                                            UIViewAnimationOptionAutoreverse |
+                                            UIViewAnimationOptionBeginFromCurrentState
+                                 animations:^{
+                                     [UIView setAnimationRepeatCount: MAXFLOAT];
+                                     MTCollectionViewCellDocument *strongself2 = weakself2;
+                                     if (strongself2) {
+                                         strongself2.transform = rightWobble;
+                                     }
+                                 }
+                                 completion:nil];
+            }
         }];
     }
     
@@ -371,13 +392,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (NSString *)accessibilityHint {
-    NSString *documentHint = self.wobbling ? NSLocalizedString(@"Selects document named %@.", @"Selects document named %@.") : NSLocalizedString(@"Opens document named %@.", @"Opens document named %@.");
-    return [NSString stringWithFormat: documentHint, self.labelTitle.text];
+    NSString *documentHint = _wobbling ? NSLocalizedString(@"Selects document named %@.",
+                                                           @"Selects document named %@.") :
+                                         NSLocalizedString(@"Opens document named %@.",
+                                                           @"Opens document named %@.");
+    return [NSString stringWithFormat: documentHint, _labelTitle.text];
 }
 
 - (NSString *)accessibilityLabel {
     NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
-    return [NSString stringWithFormat: documentName, self.labelTitle.text];
+    return [NSString stringWithFormat: documentName, _labelTitle.text];
 }
 
 - (NSInteger)accessibilityElementCount {
@@ -395,21 +419,36 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (id)accessibilityElementAtIndex:(NSInteger)index {
     switch (index) {
         case 0: {
-            NSString *documentHint = self.wobbling ? NSLocalizedString(@"Selects document named %@.", @"Selects document named %@.") : NSLocalizedString(@"Opens document named %@.", @"Opens document named %@.");
+            NSString *documentHint = _wobbling ? NSLocalizedString(@"Selects document named %@.",
+                                                                   @"Selects document named %@.") :
+                                                 NSLocalizedString(@"Opens document named %@.",
+                                                                   @"Opens document named %@.");
+            UIImageView *imagePreview = _imagePreview;
+            UILabel *labelTitle = _labelTitle;
             NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
-            self.imagePreview.isAccessibilityElement = YES;
-            self.imagePreview.accessibilityHint = [NSString stringWithFormat: documentHint, self.labelTitle.text];
-            self.imagePreview.accessibilityLabel = [NSString stringWithFormat: documentName, self.labelTitle.text];
-            self.imagePreview.accessibilityTraits = UIAccessibilityTraitButton;
-            return self.imagePreview;
+            imagePreview.isAccessibilityElement = YES;
+            NSString *text;
+            
+            text = [[NSString alloc] initWithFormat: documentHint, labelTitle.text];
+            imagePreview.accessibilityHint = text;
+            
+            text = [[NSString alloc] initWithFormat: documentName, labelTitle.text];
+            imagePreview.accessibilityLabel = text;
+            
+            imagePreview.accessibilityTraits = UIAccessibilityTraitButton;
+            return imagePreview;
             break;
         }
         case 1: {
             NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
-            self.labelTitle.isAccessibilityElement = YES;
-            self.labelTitle.accessibilityLabel = [NSString stringWithFormat: documentName, self.labelTitle.text];
-            self.labelTitle.accessibilityHint = NSLocalizedString(@"Renames document.", @"Renames document.");;
-            self.labelTitle.accessibilityTraits = UIAccessibilityTraitButton;
+            UILabel *labelTitle = _labelTitle;
+            NSString *text;
+            labelTitle.isAccessibilityElement = YES;
+            text = [[NSString alloc] initWithFormat: documentName, labelTitle.text];
+            labelTitle.accessibilityLabel = text;
+            labelTitle.accessibilityHint = NSLocalizedString(@"Renames document.",
+                                                             @"Renames document.");;
+            labelTitle.accessibilityTraits = UIAccessibilityTraitButton;
             return self.labelTitle;
             break;
         }

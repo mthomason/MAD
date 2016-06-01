@@ -11,6 +11,7 @@
 #endif
 
 #import "MTActivityItemProviderPdf.h"
+#import "MADActivityItemProviderPdfDelegate.h"
 #import "MADocument.h"
 #import "MTReportFormatter.h"
 #import "MTReportViewerPrintPageRenderer.h"

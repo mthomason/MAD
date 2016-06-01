@@ -11,10 +11,13 @@
 
 #import <UIKit/UICollectionViewCell.h>
 #import <UIKit/UIGestureRecognizer.h>
-#import "MTDocumentCellProtocol.h"
+
+@protocol MTDocumentCellProtocol;
 
 @class MTCollectionViewCellDocument;
-@class UILabel, UIActivityIndicatorView, UIProgressView;
+@class UILabel;
+@class UIActivityIndicatorView;
+@class UIProgressView;
 
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 

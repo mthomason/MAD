@@ -40,32 +40,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:self.document.managedObjectContext];
+    NSArray <RptqUserCredentals *> *connections;
+    connections = [RptqUserCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
     RptqUserCredentals *userCredentals = connections[0];
     NSString *databaseDriverType = [userCredentals database_driver_type];
 
     if ([databaseDriverType isEqualToString:MADIdentifierDatabaseMySQL]) {
 
-        [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
-        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
-        [[[self tableViewCellEquiJoin] textLabel] setEnabled:YES];
-        [[self tableViewCellNaturalJoin] setUserInteractionEnabled:YES];
-        [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
-        [[[self tableViewCellNaturalJoin] textLabel] setEnabled:YES];
-        [[self tableViewCellFullOuterJoin] setUserInteractionEnabled:NO];
-        [[self tableViewCellFullOuterJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[[self tableViewCellFullOuterJoin] textLabel] setEnabled:NO];
+        [_tableViewCellEquiJoin setUserInteractionEnabled:YES];
+        [_tableViewCellEquiJoin setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[_tableViewCellEquiJoin textLabel] setEnabled:YES];
+        [_tableViewCellNaturalJoin setUserInteractionEnabled:YES];
+        [_tableViewCellNaturalJoin setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[_tableViewCellNaturalJoin textLabel] setEnabled:YES];
+        [_tableViewCellFullOuterJoin setUserInteractionEnabled:NO];
+        [_tableViewCellFullOuterJoin setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[_tableViewCellFullOuterJoin textLabel] setEnabled:NO];
 
 
         
     } else if ([databaseDriverType isEqualToString:MADIdentifierDatabaseTDS]) {
         
-        [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
-        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
-        [[[self tableViewCellEquiJoin] textLabel] setEnabled:YES];
-        [[self tableViewCellNaturalJoin] setUserInteractionEnabled:NO];
-        [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[[self tableViewCellNaturalJoin] textLabel] setEnabled:NO];
+        [_tableViewCellEquiJoin setUserInteractionEnabled:YES];
+        [_tableViewCellEquiJoin setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[_tableViewCellEquiJoin textLabel] setEnabled:YES];
+        [_tableViewCellNaturalJoin setUserInteractionEnabled:NO];
+        [_tableViewCellNaturalJoin setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[_tableViewCellNaturalJoin textLabel] setEnabled:NO];
 
     }
 
@@ -80,90 +81,90 @@
     switch (type) {
         case MNSLinkTypeCrossJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
         case MNSLinkTypeEquiJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryCheckmark;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
         case MNSLinkTypeFullOuterJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeInnerJoin:
 
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeLeftOuterJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeNaturalJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryCheckmark];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryCheckmark;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeRightOuterJoin:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryCheckmark];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryCheckmark;
 
             break;
         default:
             
-            [[self tableViewCellCrossJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellEquiJoin] setAccessoryType:         UITableViewCellAccessoryNone];
-            [[self tableViewCellFullOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellInnerJoin] setAccessoryType:        UITableViewCellAccessoryNone];
-            [[self tableViewCellLeftOuterJoin] setAccessoryType:    UITableViewCellAccessoryNone];
-            [[self tableViewCellNaturalJoin] setAccessoryType:      UITableViewCellAccessoryNone];
-            [[self tableViewCellRightOuterJoin] setAccessoryType:   UITableViewCellAccessoryNone];
+            _tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            _tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            _tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            _tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            _tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
     }

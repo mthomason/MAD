@@ -11,24 +11,24 @@
 
 #import "RptqDatabase.h"
 
-typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
-	MNSDatabaseTypeUnknown              = 0,
-	MNSDatabaseTypeDatabaseCom          = 1,
-	MNSDatabaseTypeMySQL                = 2,
-    MNSDatabaseTypeMicrosoftSqlAzure    = 3,
-    MNSDatabaseTypeAmazonSimpleDb       = 4,
-    MNSDatabaseTypeMicrosoftSqlServer   = 5,
-    MNSDatabaseTypeOracle               = 6,
-    MNSDatabaseTypeODBC                 = 7,
-    MNSDatabaseTypeGooleAppEngine       = 8,
-    MNSDatabaseTypeNone                 = 9,
-    MNSDatabaseTypeSqlite3              = 10,
-    MNSDatabaseTypeSample1              = 11,
+typedef NS_ENUM(short, MADDatabaseType) {
+	MADDatabaseTypeUnknown              = 0,
+	MADDatabaseTypeDatabaseCom          = 1,
+	MADDatabaseTypeMySQL                = 2,
+    MADDatabaseTypeMicrosoftSqlAzure    = 3,
+    MADDatabaseTypeAmazonSimpleDb       = 4,
+    MADDatabaseTypeMicrosoftSqlServer   = 5,
+    MADDatabaseTypeOracle               = 6,
+    MADDatabaseTypeODBC                 = 7,
+    MADDatabaseTypeGooleAppEngine       = 8,
+    MADDatabaseTypeNone                 = 9,
+    MADDatabaseTypeSqlite3              = 10,
+    MADDatabaseTypeSample1              = 11,
 };
 
-#define MNSDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MNSDatabaseTypeSalesforceCom", @"MNSDatabaseTypeDatabaseCom", @"MNSDatabaseTypeMySQL", @"MNSDatabaseTypeMicrosoftSqlAzure", @"MNSDatabaseTypeAmazonSimpleDb", @"MNSDatabaseTypeMicrosoftSqlServer", @"MNSDatabaseTypeOracle", @"MNSDatabaseTypeODBC", @"MNSDatabaseTypeGooleAppEngine", @"MNSDatabaseTypeNone", nil]
+#define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 
-#define MNSDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
+#define MADDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
 
 @interface RptqDatabase (Extras)
 
@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
     @property (readonly) RptqQuery *defaultQuery;
 
     - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
-    - (MNSDatabaseType)databaseType;
+    - (MADDatabaseType)databaseType;
 
 @end
 

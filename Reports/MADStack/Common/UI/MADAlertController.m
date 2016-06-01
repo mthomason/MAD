@@ -7,6 +7,7 @@
 //
 
 #import "MADAlertController.h"
+#import "MADAlertControllerAlertRemovedProtocol.h"
 
 @interface MADAlertController ()
 

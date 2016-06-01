@@ -38,7 +38,7 @@
 }
 
 - (void)addRow:(MADReportSectionRowsRepresentation *)row {
-    [self.rows addObject:row];
+    [_rows addObject:row];
 }
 
 - (NSUInteger)numberOfRows { return self.rows.count; }
@@ -47,7 +47,8 @@
 
 - (NSUInteger)characterCount {
     NSUInteger characterCount = 0;
-    for (MADReportSectionRowsRepresentation *row in self.rows) {
+    MADReportSectionRowsRepresentation *row;
+    for (row in _rows) {
         characterCount += [row characterCount];
     }
     return characterCount;
@@ -55,7 +56,8 @@
 
 - (NSUInteger)elementCount {
     NSUInteger elementCount = 0;
-    for (MADReportSectionRowsRepresentation *row in self.rows) {
+    MADReportSectionRowsRepresentation *row;
+    for (row in _rows) {
         elementCount += [row elementCount];
     }
     return elementCount;

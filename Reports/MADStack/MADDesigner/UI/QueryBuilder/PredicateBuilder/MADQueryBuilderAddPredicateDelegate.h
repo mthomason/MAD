@@ -9,5 +9,8 @@
 #ifndef MADQueryBuilderAddPredicateDelegate_h
 #define MADQueryBuilderAddPredicateDelegate_h
 
+@protocol MTQueryBuilderAddPredicateDelegate
+    - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
+@end
 
 #endif /* MADQueryBuilderAddPredicateDelegate_h */

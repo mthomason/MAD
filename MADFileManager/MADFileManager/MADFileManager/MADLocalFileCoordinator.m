@@ -8,16 +8,19 @@
 
 #import "MADLocalFileCoordinator.h"
 #import "MADFileCoordinatorProtocol.h"
+#import "MADFileCoordinatorDelegate.h"
 
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
+
+#import <dispatch/queue.h>
+
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
 #import "NSURL+CommonURLs.h"
 #import "NSURL+ConvenienceConstructors.h"
-#import <dispatch/queue.h>
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
 NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";

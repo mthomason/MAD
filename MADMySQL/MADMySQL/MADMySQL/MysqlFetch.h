@@ -27,8 +27,11 @@
     @property(strong, readwrite) NSArray *fieldNames;
     @property(strong, readwrite) NSArray *fields;
 
-    - (MTDataTable *)fetchWithCommand: (NSString *)s dataTable:(MTDataTable **)dataTable
-                         onConnection: (MysqlConnection *)connection error:(NSError * __autoreleasing *)error;
+    - (MTDataTable *)fetchWithCommand: (NSString *)s
+                            dataTable: (MTDataTable * __autoreleasing *)dataTable
+                         onConnection: (MysqlConnection *)connection
+                                error: (NSError * __autoreleasing *)error;
+
     + (MYSQL_BIND)bindDataForStatement: (MYSQL_STMT *)myStatement andField:(NSUInteger)x;
     - (MTDataTable *)fetchWithCommand: (NSString *)command
                             dataTable: (MTDataTable **)dataTable

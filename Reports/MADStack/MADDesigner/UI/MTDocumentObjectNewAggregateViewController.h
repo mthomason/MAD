@@ -38,7 +38,7 @@
 @interface MTDocumentObjectNewAggregateViewController : MADTableViewController
     <MTUnwindProtocol, UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;
+    @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
@@ -48,7 +48,7 @@
     @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
     @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
     @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
-    @property (nonatomic, strong) NSManagedObjectID *fieldObjectId;
+    @property (nonatomic, copy) NSManagedObjectID *fieldObjectId;
     @property (nonatomic, strong) RptqQueryField *fieldObject;
 
     @property (nonatomic, assign) BOOL editmode;

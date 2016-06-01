@@ -9,5 +9,8 @@
 #ifndef MADActivityItemProviderPdfDelegate_h
 #define MADActivityItemProviderPdfDelegate_h
 
+@protocol MADActivityItemProviderDelegate <NSObject>
+    - (void)showPrintDialog;
+@end
 
 #endif /* MADActivityItemProviderPdfDelegate_h */

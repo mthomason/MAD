@@ -9,6 +9,8 @@
 #import "MADVibrantCollectionView.h"
 #import "MADVibrantTableViewCell.h"
 
+#import <UIKit/UIVisualEffectView.h>
+
 @implementation MADVibrantCollectionView
 
 - (void)awakeFromNib {

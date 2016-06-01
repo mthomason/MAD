@@ -138,7 +138,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
     
-    [self.tableView setSectionHeaderHeight: MADHeaderHeight];
+    self.tableView.sectionHeaderHeight = MADFloatHeaderHeight;
 
     self.openSectionIndex = NSNotFound;
     RptqDocument *document = [self.document activeDocumentModel];
@@ -234,7 +234,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)section];
     if (!sectionInfo.headerView) {
         CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y,
-                                 self.tableView.bounds.size.width, MADHeaderHeight);
+                                 self.tableView.bounds.size.width, MADFloatHeaderHeight);
         id vsht = [[MADDatabaseTableSectionHeaderView alloc] initWithFrame: rect
                                                                      title: sectionInfo.table.alias
                                                                    section: section

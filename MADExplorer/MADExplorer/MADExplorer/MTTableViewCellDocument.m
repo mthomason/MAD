@@ -7,6 +7,7 @@
 //
 
 #import "MTTableViewCellDocument.h"
+#import "MTDocumentCellProtocol.h"
 
 #import <UIKit/UIImageView.h>
 #import <UIKit/UINibLoading.h>

@@ -10,6 +10,8 @@
 #import "MADCloudFileCoordinator.h"
 #import "MADStorageState.h"
 
+#import <MADFoundation/MADAssert.h>
+
 @implementation MADFileCoordinator
 
 + (instancetype)newFileCoordinatorWithPathExtension: (NSString *)pathExtension
@@ -33,15 +35,40 @@
                                           storageOption: (MADAppStorage)storageOption
                                              identifier: (NSString *)identifier
                                       firstQueryHandler: (void (^)(void))firstQueryHandler {
-    if (storageOption != MADAppStorageCloud) {
-        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
-                                                               identifier: identifier
-                                                  firstQueryUpdateHandler: firstQueryHandler];
-    } else {
-        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
-                                                               identifier: identifier
-                                                  firstQueryUpdateHandler: firstQueryHandler];
-    }
+    id fileCoordinator;
+    fileCoordinator = storageOption != MADAppStorageCloud ?
+                [[MADLocalFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
+                                                                identifier: identifier
+                                                   firstQueryUpdateHandler: firstQueryHandler] :
+                [[MADCloudFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
+                                                                identifier: identifier
+                                                   firstQueryUpdateHandler: firstQueryHandler];
+    return fileCoordinator;
+}
+
+- (void)startQuery {
+    MADAssert(false, @"Must subclass.");
+}
+- (void)stopQuery {
+    MADAssert(false, @"Must subclass.");
+}
+- (void)removeFileAtURL:(NSURL *)URL {
+    MADAssert(false, @"Must subclass.");
+}
+- (void)duplicateFileAtURL:(NSURL *)URL {
+    MADAssert(false, @"Must subclass.");
+}
+- (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
+    MADAssert(false, @"Must subclass.");
+}
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name
+               extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    MADAssert(false, @"Must subclass.");
+}
+- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+                    fileGroup:(NSString *)fileGroup {
+    MADAssert(false, @"Must subclass.");
+    return NO;
 }
 
 @end

@@ -23,6 +23,7 @@
 #import "MADNotificationDidReadRows.h"
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
+#import "MADDatabaseProtocol.h"
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
@@ -76,10 +77,11 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
-    bool responds = [self.delegate respondsToSelector:@selector(getCredentialsForKey:)];
+    id <MTDatabaseProtocol> delegate = _delegate;
+    bool responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
     MADCredential *results = nil;
     if (responds) {
-        MADCredential *c = [self.delegate getCredentialsForKey:key];
+        MADCredential *c = [delegate getCredentialsForKey:key];
         if (c) {
             results = c.copy;
         }

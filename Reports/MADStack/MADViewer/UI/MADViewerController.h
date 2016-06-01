@@ -11,15 +11,16 @@
 
 #import "MADPageViewController.h"
 #import <UIKit/UIDocumentInteractionController.h>
-
 #import <MAD/MADActivityProtocol.h>
 #import "MADocumentProtocol.h"
 
 @protocol MTViewControllerProtocol;
 
 @interface MADViewerController : MADPageViewController
-    <MADViewControllerDocumentProtocol, MADActivityProtocol,
-        UIPageViewControllerDelegate, UIPageViewControllerDataSource,
+    <MADViewControllerDocumentProtocol,
+        MADActivityProtocol,
+        UIPageViewControllerDelegate,
+        UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;

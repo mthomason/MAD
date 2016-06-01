@@ -12,8 +12,8 @@
 
 @interface MADToolboxTransitioningDelegate ()
 
-@property (nonatomic, strong, readwrite) UIPresentationController *presentationController;
-@property (nonatomic, assign, readwrite) BOOL popoverStyle;
+    @property (nonatomic, strong, readwrite) UIPresentationController *presentationController;
+    @property (nonatomic, assign, readwrite) BOOL popoverStyle;
 
 @end
 
@@ -23,14 +23,15 @@
 
     if (CGRectEqualToRect(sourceRect, self.sourceRect) == NO) {
         
-        if (self.presentationController && [self.presentationController isKindOfClass:[UIPopoverPresentationController class]]) {
-            ((UIPopoverPresentationController *)self.presentationController).sourceRect = sourceRect;
+        if (_presentationController &&
+            [_presentationController isKindOfClass:[UIPopoverPresentationController class]]) {
+            ((UIPopoverPresentationController *)_presentationController).sourceRect = sourceRect;
         }
         _sourceRect = sourceRect;
         
     }
     
-    [((UIPopoverPresentationController *)self.presentationController).containerView setNeedsLayout];
+    [((UIPopoverPresentationController *)_presentationController).containerView setNeedsLayout];
     
 }
 
@@ -62,21 +63,25 @@
 }
 
 - (void)updatePassthroughViews {
+
+    UIView *passthroughContainer = _passthroughContainer;
+
     if (self.popoverStyle) {
         
-        NSArray *allElementViews =  self.passthroughViews.allObjects;
-        NSArray *allContainerObjects = self.passthroughContainers.allObjects;
+        NSArray *allElementViews =  _passthroughViews.allObjects;
+        NSArray *allContainerObjects = _passthroughContainers.allObjects;
+        
         NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:self.passthroughContainer];
+        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:passthroughContainer];
         NSArray *passthroughViewsAll = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
-        ((UIPopoverPresentationController *)self.presentationController).passthroughViews = passthroughViewsAll;
+        ((UIPopoverPresentationController *)_presentationController).passthroughViews = passthroughViewsAll;
         
         
     } else {
         
-        ((MADToolboxPresentationController *)self.presentationController).passthroughContainers = self.passthroughContainers;
-        ((MADToolboxPresentationController *)self.presentationController).passthroughViews = self.passthroughViews;
-        ((MADToolboxPresentationController *)self.presentationController).passthroughContainer = self.passthroughContainer;
+        ((MADToolboxPresentationController *)_presentationController).passthroughContainers = _passthroughContainers;
+        ((MADToolboxPresentationController *)_presentationController).passthroughViews = _passthroughViews;
+        ((MADToolboxPresentationController *)_presentationController).passthroughContainer = passthroughContainer;
         
     }
 }
@@ -86,9 +91,13 @@
                                                           sourceViewController: (UIViewController *)source {
     
     UIPresentationController *presentationController;
+    UIView *passthroughContainer = _passthroughContainer;
+    id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+    popoverPresentationControllerDelegate = _popoverPresentationControllerDelegate;
+    
     if ((UIUserInterfaceSizeClassRegular == source.traitCollection.horizontalSizeClass &&
         UIUserInterfaceSizeClassRegular == source.traitCollection.verticalSizeClass) != NO) {
-        self.popoverStyle = YES;
+        _popoverStyle = YES;
         
         presentationController = [[UIPopoverPresentationController alloc] initWithPresentedViewController: presented
                                                                                  presentingViewController: presenting];
@@ -99,24 +108,24 @@
         NSArray *allElementViews =  self.passthroughViews.allObjects;
         NSArray *allContainerObjects = self.passthroughContainers.allObjects;
         NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:self.passthroughContainer];
+        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:passthroughContainer];
         ((UIPopoverPresentationController *)presentationController).passthroughViews = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
         ((UIPopoverPresentationController *)presentationController).permittedArrowDirections = self.permittedArrowDirections;
-        ((UIPopoverPresentationController *)presentationController).delegate = self.popoverPresentationControllerDelegate;
+        ((UIPopoverPresentationController *)presentationController).delegate = popoverPresentationControllerDelegate;
 
     } else {
-        self.popoverStyle = NO;
+        _popoverStyle = NO;
         presentationController = [[MADToolboxPresentationController alloc] initWithPresentedViewController: presented
                                                                                   presentingViewController: presenting];
         
         ((MADToolboxPresentationController *)presentationController).container = self.container;
         ((MADToolboxPresentationController *)presentationController).passthroughContainers = self.passthroughContainers;
         ((MADToolboxPresentationController *)presentationController).passthroughViews = self.passthroughViews;
-        ((MADToolboxPresentationController *)presentationController).passthroughContainer = self.passthroughContainer;
-        ((MADToolboxPresentationController *)presentationController).popoverPresentationControllerDelegate = self.popoverPresentationControllerDelegate;
+        ((MADToolboxPresentationController *)presentationController).passthroughContainer = passthroughContainer;
+        ((MADToolboxPresentationController *)presentationController).popoverPresentationControllerDelegate = popoverPresentationControllerDelegate;
     }
-    self.presentationController = presentationController;
-    return self.presentationController;
+    _presentationController = presentationController;
+    return _presentationController;
 }
 
 - (MADToolboxAnimatedTransitioning *)animationController {
@@ -154,22 +163,23 @@
     return YES;
 }
 
-- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
+- (void)animateTransition:(id <UIViewControllerContextTransitioning>)context {
     
     UITabBarController *tabBarController;
-    UINavigationController *toolboxNavigationController;
-    BOOL isToolboxVisible = self.isToolboxVisible;
+    UINavigationController *toolboxNavigationController, *navController;
+    
+    BOOL isToolboxVisible = _toolboxVisible;
     if (isToolboxVisible == NO) {
-        UINavigationController *navController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        navController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
         tabBarController = navController.viewControllers.firstObject;
-        toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        toolboxNavigationController = (UINavigationController *)[context viewControllerForKey:UITransitionContextFromViewControllerKey];
     } else {
-        UINavigationController *navController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        navController = [context viewControllerForKey:UITransitionContextFromViewControllerKey];
         tabBarController = navController.viewControllers.firstObject;
-        toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        toolboxNavigationController = (UINavigationController *)[context viewControllerForKey:UITransitionContextToViewControllerKey];
     }
     
-    UIView *containerView = transitionContext.containerView;
+    UIView *containerView = context.containerView;
     
     BOOL showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
 
@@ -177,7 +187,7 @@
         [containerView addSubview:toolboxNavigationController.view];
     }
     
-    CGRect appearedFrame = [transitionContext finalFrameForViewController:toolboxNavigationController];
+    CGRect appearedFrame = [context finalFrameForViewController:toolboxNavigationController];
     CGRect dismissedFrame = appearedFrame;
     
     if (showOnSide) {
@@ -191,32 +201,32 @@
 
     toolboxNavigationController.view.frame = initialFrame;
 
-    //UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
-    UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
+    UIViewController <MADViewControllerProtocol> *designer;
+    designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     
     typeof(toolboxNavigationController) __weak weakNavController = toolboxNavigationController;
-    [UIView animateWithDuration: [self transitionDuration:transitionContext]
+    [UIView animateWithDuration: [self transitionDuration:context]
                           delay: 0.0000f
          usingSpringWithDamping: 300.0000f
           initialSpringVelocity: 5.0000f
-                        options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                        options: UIViewAnimationOptionAllowUserInteraction |
+                                    UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
 
-                         [tabBarController setNeedsStatusBarAppearanceUpdate];
-                         weakNavController.view.frame = finalFrame;
+        [tabBarController setNeedsStatusBarAppearanceUpdate];
+        weakNavController.view.frame = finalFrame;
 
-                     } completion: ^(BOOL finished) {
+    } completion: ^(BOOL finished) {
+        
+        [designer.view setNeedsLayout];    // Give designer scroll view a chance to update insets
                          
-                         [designer.view setNeedsLayout];    // Give designer scroll view a chance to update insets
-                         
-                         if (isToolboxVisible == NO) {
-                             [weakNavController.view removeFromSuperview];
-                         }
+        if (isToolboxVisible == NO) {
+            [weakNavController.view removeFromSuperview];
+        }
 
-                         [transitionContext completeTransition:YES];
-                         
-                    }];
+        [context completeTransition:YES];
+    }];
 }
 
 @end

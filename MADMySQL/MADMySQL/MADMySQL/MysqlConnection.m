@@ -103,10 +103,12 @@
     const char *schema =    server.schema.UTF8String;
     unsigned int port =     server.port;
     
-    mysql_real_connect(connectionHandle, host, user, password, schema, port, NULL,  /* default socket */ server.flags);
+    mysql_real_connect(connectionHandle, host, user, password, schema, port,
+                       NULL,  /* default socket */ server.flags);
 
     if (!connectionHandle) {
-        NSString *errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_error(connectionHandle)];
+        NSString *errorDescription;
+        errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_error(connectionHandle)];
         unsigned int errorCode = mysql_errno(connectionHandle);
         if ([errorDescription length] <= 0) {
             errorDescription = NSLocalizedString(@"Failed to connect", @"Failed to connect");
@@ -115,9 +117,11 @@
             errorCode = 101;
         }
         if (error != NULL) {
-            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorDescription};
+            NSDictionary *userInfo;
+            userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            errorDescription, NSLocalizedDescriptionKey, nil];
             *error = [NSError errorWithDomain: @"MTDatabaseMySql"
-                                         code: errorCode
+                                         code: (NSInteger)errorCode
                                      userInfo: userInfo];
         }
         return nil;

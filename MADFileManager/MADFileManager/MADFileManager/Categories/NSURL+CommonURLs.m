@@ -7,6 +7,9 @@
 //
 
 #import "NSURL+CommonURLs.h"
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSException.h>
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";

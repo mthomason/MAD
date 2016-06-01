@@ -8,6 +8,7 @@
 
 #import "MADFilesController.h"
 #import "MADFileCoordinatorProtocol.h"
+#import "MADFileCoordinatorDelegate.h"
 #import "MADFilesControllerDelegate.h"
 
 #import "MADFileCoordinator.h"
@@ -175,7 +176,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 #pragma mark - Initialization
 
-- (instancetype)initWithFileCoordinator: (id <MADFileCoordinator>)fileCoordinator
+- (instancetype)initWithFileCoordinator: (id <MADFileCoordinatorProtocol>)fileCoordinator
                           delegateQueue: (NSOperationQueue *)delegateQueue
                          sortComparator: (NSComparisonResult (^)(MADMetaData *,
                                                                  MADMetaData *))sortComparator {
@@ -217,7 +218,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     return self.fileMetaDatum.count;
 }
 
-- (void)setFileCoordinator:(id<MADFileCoordinator>)fileCoordinator {
+- (void)setFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator {
     
     NSLog(@"Trying to set the file coordinator.");
     
@@ -225,7 +226,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
         NSLog(@"Set the file coordinator.");
 
-        id<MADFileCoordinator> oldFileCoordinator = _fileCoordinator;
+        id <MADFileCoordinatorProtocol> oldFileCoordinator = _fileCoordinator;
         _fileCoordinator = fileCoordinator;
         
         [oldFileCoordinator stopQuery];

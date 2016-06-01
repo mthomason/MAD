@@ -76,31 +76,34 @@
 
 - (NSString *)copyDatabaseSchemaName {
     NSString *result = @"";
-    MNSDatabaseType databaseType = [self.inDatabase databaseType];
+    MADDatabaseType databaseType = [self.inDatabase databaseType];
     switch (databaseType) {
         
-        case MNSDatabaseTypeMySQL:
-        case MNSDatabaseTypeSqlite3:
+        case MADDatabaseTypeMySQL:
+        case MADDatabaseTypeSqlite3:
             result = [self mysql_database];
             break;
         
-        case MNSDatabaseTypeMicrosoftSqlServer:
+        case MADDatabaseTypeMicrosoftSqlServer:
             result = [self tds_database];
             break;
 
-        case MNSDatabaseTypeUnknown: {
+        case MADDatabaseTypeUnknown: {
             
             if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseMySQL]) {
                 result = self.mysql_database;
-                self.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMySQL);
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
+                self.inDatabase.databaseDriverTypeEnum = type;
                 
             } else if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseTDS]) {
                 result = self.tds_database;
-                [self.inDatabase setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMicrosoftSqlServer];
+                self.inDatabase.databaseDriverTypeEnum = type;
                 
             } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseSqlite3]) {
                 result = [self mysql_database];
-                [self.inDatabase setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
+                self.inDatabase.databaseDriverTypeEnum = type;
             }
             
             break;
@@ -116,21 +119,22 @@
 
 #pragma mark - Static
 
-+ (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
++ (instancetype)newUserCredentalForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSString *entityName = NSStringFromClass([self class]);
     NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext: objectContext];
     id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;
 }
 
-+ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
++ (NSArray <RptqUserCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
-    NSArray *results = [[NSArray alloc] initWithArray:fetchResults];
+    NSArray <RptqUserCredentals *> *results;
+    results = [[NSArray <RptqUserCredentals *> alloc] initWithArray:fetchResults];
     return results;
 }
 

@@ -13,7 +13,6 @@
 #import "MTViewControllerBarcodeOptions.h"
 
 #import <UIKit/UINavigationController.h>
-//#import <UIKit/UINavigationBar.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIStepper.h>
@@ -36,6 +35,7 @@
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MAD/MADDatabaseProtocol.h>
 
@@ -852,13 +852,22 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
         [self.tableView reloadData];
         
     } else {
-        MTViewControllerBarcodeOptions * __strong strongself = self;
+        MTViewControllerBarcodeOptions * __weak weakself = self;
         [NSError presentError: error
              onViewController: self
                    completion:^(BOOL presentErrorSuccess) {
-                       MTViewControllerBarcodeOptions * __weak weakself = strongself;
+                   
+                   
+                       MTViewControllerBarcodeOptions *strongself = weakself;
                        NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                       [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself];
+                   
+                       UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                   [MTKeyChain deleteKey:key];
+                       } cancel:nil];
+                       [strongself presentViewController:alertController animated:YES
+                                              completion:nil];
+                       
+                       
                    }];
         
     }

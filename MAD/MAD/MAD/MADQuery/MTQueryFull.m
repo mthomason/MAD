@@ -463,7 +463,8 @@
     return result;
 }
 
-- (NSString *)sqlTableReferenceWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth
+- (NSString *)sqlTableReferenceWithTables:(NSArray *)tables
+                                linkDepth:(NSNumber * __autoreleasing *)linkDepth
                   forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];

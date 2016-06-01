@@ -12,6 +12,7 @@
 
 #import "MADOpenFileViewController.h"
 #import "MADOpenFileViewControllerProtocol.h"
+#import <MADExplorer/MTDocumentCellProtocol.h>
 
 #import <QuickLook/QLPreviewController.h>
 #import <StoreKit/SKPaymentQueue.h>
@@ -210,6 +211,105 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 @implementation MADFileExplorerViewController
 
++ (void)initialize {
+    [super initialize];
+    if (self == [MADFileExplorerViewController self]) {
+    
+        NSUserDefaults *defaults;
+        NSDictionary *defaultsToRegister;
+        
+        defaults = [NSUserDefaults newUserDefaultsMADDesigner];
+        defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              @NO, MADUpgradeInstalledChinook,
+                              @NO, MADUpgradeInstalledSamples,
+                              @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+        
+        [defaults registerDefaults:defaultsToRegister];
+
+        
+        UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
+        UIColor *redColor = [MADColorEverydayApps newColorRed];
+        UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
+        
+        UITabBarItem *tabBarItemAppearance;
+        tabBarItemAppearance = [UITabBarItem appearance];
+        
+        UIBarButtonItem *barButtonItem;
+        barButtonItem = [UIBarButtonItem appearance];
+        barButtonItem.tintColor = whiteColor.copy;
+        
+        UINavigationBar *navigationBar;
+        Class controlClass;
+        controlClass = [QLPreviewController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.barTintColor  = madColor4.copy;
+        navigationBar.tintColor     = redColor.copy;
+
+        controlClass = [UIViewController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.tintColor     = whiteColor.copy;
+
+        controlClass = [UINavigationController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.tintColor     = whiteColor.copy;
+
+        controlClass = [UIToolbar class];
+        barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
+        barButtonItem.tintColor = whiteColor.copy;
+
+        UISegmentedControl *segmentedControl;
+        controlClass = [UINavigationBar class];
+        segmentedControl = [UISegmentedControl appearanceWhenContainedIn:controlClass, nil];
+        segmentedControl.tintColor = whiteColor.copy;
+        
+        id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                  whiteColor, NSForegroundColorAttributeName, nil];
+        [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
+                                            forState: UIControlStateNormal];
+
+        UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
+        navigationBarAppearance.titleTextAttributes = titleTextAttributes;
+        
+        UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
+
+        UILabel *labelInTableCell;
+        controlClass = [UITableViewCell class];
+        labelInTableCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+        labelInTableCell.highlightedTextColor = orangeColor.copy;
+        
+        UILabel *labelInCollectionCell;
+        labelInCollectionCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+        labelInCollectionCell.highlightedTextColor = orangeColor.copy;
+        
+        UIImageView *imageInCollectionViewCell;
+        imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:controlClass, nil];
+        imageInCollectionViewCell.tintColor = orangeColor.copy;
+        
+    }
+}
+
+#pragma mark -
+#pragma mark Static Functions
+
++ (NSString *)keySubviews {
+    return NSStringFromSelector(@selector(subviews));
+}
++ (NSString *)keyLeftView {
+    return NSStringFromSelector(@selector(leftView));
+}
+
++ (NSOperationQueue *)queue {
+// ???: Does this run?
+    static NSOperationQueue *queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = [[NSOperationQueue alloc] init];
+    });
+    
+    return queue;
+}
+
+
 #pragma mark -
 #pragma mark MADOperationObserver
 
@@ -224,10 +324,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
         case MADIDInstallOperationSampleDocumentMusic:
         case MADIDInstallOperationSampleDocumentLondon: {
-            typeof(self) __weak weakself = self;
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [weakself.collectionView reloadData];
-            }];
+// FIXME: Trigger reload after install... without crashing.
             break;
         }
             
@@ -253,10 +350,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     operation = [[MADInstallOperationSampleDatabase alloc] init];
     [operationQueueBackground addOperation:operation];
-    
+    NSString *groupID = [self groupIdentifier];
     operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
                                                                         fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                      groupIdentifier: MADIdentifierGroup
+                                                                      groupIdentifier: groupID
                                                                           installFlag: MADUpgradeInstalledSamplesLondon];
     operation.tag = MADIDInstallOperationSampleDocumentLondon;
     [operation addObserver:self];
@@ -264,7 +361,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
                                                               fileExtension: MADFileExtentionMobleApplicationDocument
-                                                            groupIdentifier: MADIdentifierGroup
+                                                            groupIdentifier: groupID
                                                                 installFlag: MADUpgradeInstalledSamplesMusic];
     operation.tag = MADIDInstallOperationSampleDocumentMusic;
     [operation addObserver:self];
@@ -289,86 +386,25 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self removeObservers];
 }
 
-+ (void)initialize {
-    [super initialize];
-    if (self == [MADFileExplorerViewController self]) {
-    
-        NSUserDefaults *defaults;
-        NSDictionary *defaultsToRegister;
-        
-        defaults = [NSUserDefaults newUserDefaultsMADDesigner];
-        defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @NO, MADUpgradeInstalledChinook,
-                              @NO, MADUpgradeInstalledSamples,
-                              @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
-        
-        [defaults registerDefaults:defaultsToRegister];
-
-        
-        UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
-        
-        
-        UITabBarItem *tabBarItemAppearance =                [UITabBarItem appearance];
-        UIBarButtonItem *barButtonItem =                    [UIBarButtonItem appearance];
-        UINavigationBar *navigationBarAppearance =          [UINavigationBar appearance];
-        
-        UINavigationBar *navigationBarQLPreviewAppearance = [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil];
-        UINavigationBar *navigationBarViewController =      [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil];
-        UINavigationBar *navigationBarNavigationBar =       [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
-        UIBarButtonItem *barButtonItemToolbar =             [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil];
-        UISegmentedControl *segmentedControl =              [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil];
-        
-        
-        navigationBarQLPreviewAppearance.barTintColor   = madColor4;
-        
-        UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-        navigationBarViewController.tintColor           = whiteColor;
-        navigationBarNavigationBar.tintColor            = whiteColor;
-        barButtonItemToolbar.tintColor                  = whiteColor;
-        barButtonItem.tintColor                         = whiteColor;
-        segmentedControl.tintColor                      = whiteColor;
-        
-        id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                  whiteColor, NSForegroundColorAttributeName, nil];
-        [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
-                                            forState: UIControlStateNormal];
-        navigationBarAppearance.titleTextAttributes = titleTextAttributes;
-        
-        UIColor *redColor = [MADColorEverydayApps newColorRed];
-        navigationBarQLPreviewAppearance.tintColor = redColor;
-                UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-
-        UILabel *labelInTableCell;
-        labelInTableCell = [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil];
-        labelInTableCell.highlightedTextColor       = orangeColor;
-        
-        UILabel *labelInCollectionCell;
-        labelInCollectionCell = [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil];
-        labelInCollectionCell.highlightedTextColor  = orangeColor;
-        
-        UIImageView *imageInCollectionViewCell;
-        imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil];
-        imageInCollectionViewCell.tintColor         = orangeColor;
-        
-    }
-}
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
     
         self.shouldShowAddDocumentPopover = true;
 
-        MADFileLocationManager *filesCoordnator = [[MADFileLocationManager alloc] init];
+        MADFileLocationManager *filesCoordnator;
+        filesCoordnator = [[MADFileLocationManager alloc] init];
         filesCoordnator.delegate = self;
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
 
         self.getUserCloudPrefsFirstCall = YES;
         
-        MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
+        MADOpenDocumentManager *openFiles;
+        openFiles = [[MADOpenDocumentManager alloc] init];
         self.fileManager = openFiles;
 
-        MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
+        MADProgressView *progressView;
+        progressView= [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
         self.progressViewFileManager = progressView;
         
         NSMutableIndexSet *indexSet;
@@ -424,27 +460,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)startLongRunningActivity { }
 
 - (void)completedLongRunningActivity { }
-
-#pragma mark -
-#pragma mark Static Functions
-
-+ (NSString *)keySubviews {
-    return NSStringFromSelector(@selector(subviews));
-}
-+ (NSString *)keyLeftView {
-    return NSStringFromSelector(@selector(leftView));
-}
-
-+ (NSOperationQueue *)queue {
-// ???: Does this run?
-    static NSOperationQueue *queue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        queue = [[NSOperationQueue alloc] init];
-    });
-    
-    return queue;
-}
 
 #pragma mark -
 #pragma mark MADSaveFileProtocol

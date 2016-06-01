@@ -349,7 +349,7 @@
                                                                               driverType: database.identifier
                                                                             connectionId: connectionId];
     
-    RptqUserCredentals *userCredentals = [RptqUserCredentals newUserCredentalsForManagedObjectContext: managedObjectContext];
+    RptqUserCredentals *userCredentals = [RptqUserCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
     userCredentals.database_driver_type = databaseIdentifier;
@@ -361,7 +361,7 @@
             NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
             userCredentals.mysql_port = port;
 
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger:MNSDatabaseTypeMySQL];
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
             userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
 
             NSString *server = [[NSString alloc] initWithString:database.databaseConnection.server];
@@ -378,7 +378,7 @@
             NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
             userCredentals.tds_port = port;
 
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger: MNSDatabaseTypeMicrosoftSqlServer];
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeMicrosoftSqlServer];
             userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
  
             NSString *server = [[NSString alloc] initWithString: database.databaseConnection.server];
@@ -396,11 +396,10 @@
         
         if (database.databaseConnection != nil) {
 
-// FIXME: Storing Sqlite3 database url in mysql holder.
-            NSString *db = [[NSString alloc] initWithString:database.databaseConnection.databaseUrl.path.lastPathComponent];
-            userCredentals.mysql_database = db;
+            userCredentals.mysql_database = database.databaseConnection.
+                                                     databaseUrl.path.lastPathComponent.copy;
 
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger: MNSDatabaseTypeSqlite3];
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeSqlite3];
             userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
         }
         

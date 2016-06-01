@@ -146,7 +146,7 @@
                      onViewController: strongself2
                            completion:^(BOOL displayErrorSuccess) {
                                NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                               [[MTKeyChain sharedObject] deleteKey:key];
+                               [MTKeyChain deleteKey:key];
                            }];
                 
             } else {
@@ -162,7 +162,7 @@
                          onViewController: strongself3
                                completion:^(BOOL displayErrorSuccess) {
                                    NSString *key = [[NSString alloc] initWithString:weakself5.query.database.databaseConnection.connectionString];
-                                   [[MTKeyChain sharedObject] deleteKey:key];
+                                   [MTKeyChain deleteKey:key];
                                }];
                     
                 });

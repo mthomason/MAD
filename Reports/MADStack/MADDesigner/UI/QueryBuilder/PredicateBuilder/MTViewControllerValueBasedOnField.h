@@ -17,14 +17,10 @@
 #import <MAD/MTKeyChain.h>
 #import <MADFoundation/MTDataTable.h>
 
+@protocol MTViewControllerValueBasedOnFieldDelegate;
 
 @class NSManagedObjectID;
-
 @class MADocument;
-
-@protocol MTViewControllerValueBasedOnFieldDelegate
-    - (void)enterStringDidFinishWithString:(NSString *)userInput;
-@end
 
 @interface MTViewControllerValueBasedOnField : UIViewController
     <UITableViewDataSource,

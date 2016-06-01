@@ -10,8 +10,6 @@
 #define Reports_MTShowSqlViewController_h
 
 #import <UIKit/UIViewController.h>
-//#import "MUIViewControllerDelegate.h"
-//#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @protocol MTViewControllerProtocol;
 

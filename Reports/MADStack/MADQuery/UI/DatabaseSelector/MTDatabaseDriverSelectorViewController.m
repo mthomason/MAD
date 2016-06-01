@@ -17,11 +17,13 @@
 
 #import "MUIViewControllerDelegate.h"
 
-#import "MADVibrantTableViewCellImage.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTConnectionViewController.h"
+
+#import <UIKit/UIImage.h>
+#import <UIKit/UIVisualEffectView.h>
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
@@ -33,7 +35,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 @interface MTDatabaseDriverSelectorViewController ()
     <MTViewControllerProtocol,
-        MADVibrantTableViewCellDelegate,
         UITableViewDelegate>
 
     @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;

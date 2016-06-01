@@ -14,15 +14,13 @@
 @interface MADToolboxPresentationController ()
     <UIGestureRecognizerDelegate>
 
-    @property (nonatomic, strong) UIGestureRecognizer *dismissGestureReconizer;
-    @property (nonatomic, weak) UIViewController <MADViewControllerProtocol> *designerViewController;
-    @property (nonatomic, strong) MADDimmingView *dimmingView;
+    @property (nonatomic, readwrite, strong) UIGestureRecognizer *dismissGestureReconizer;
+    @property (nonatomic, readwrite, weak)   UIViewController <MADViewControllerProtocol> *designerViewController;
+    @property (nonatomic, readwrite, strong) MADDimmingView *dimmingView;
 
 @end
 
 @implementation MADToolboxPresentationController
-
-
 
 + (NSString *)keyPathPassthroughContainer {
     NSString *passthroughContainer = NSStringFromSelector(@selector(passthroughContainer));

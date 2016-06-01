@@ -22,9 +22,9 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 @interface MADFileLocationManager ()
 
-    @property (nonatomic, strong, readwrite) MADFilesController *filesController;
-    @property (nonatomic, assign) bool getUserCloudPrefsFirstCall;
-    @property (readonly) bool isFirstLaunch;
+    @property (nonatomic, readwrite, strong) MADFilesController *filesController;
+    @property (nonatomic, readwrite, assign) bool getUserCloudPrefsFirstCall;
+    @property (nonatomic, readonly) bool isFirstLaunch;
 
 @end
 
@@ -60,12 +60,12 @@ static NSString * const MADFirstLaunch                                     = @"M
     currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
     storedToken = [self copyStoredUbiquityIdentityToken];
     
-    bool currentTokenNilStoredNonNil = !currentToken && storedToken;
-    bool storedTokenNilCurrentNonNil = !storedToken && currentToken;
-    bool currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
-    
-    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
+    if ((!currentToken && storedToken) ||
+        (!storedToken && currentToken) ||
+        (currentToken && storedToken && ![currentToken isEqual:storedToken])) {
+        
         [self persistAccount];
+        
         hasChanged = YES;
     }
     
@@ -280,7 +280,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     MADStorageState *storageState;
     storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
                                           hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
-                                                    isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
+                                             isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
     if (storageState.accountDidChange) {
         
         switch (storageState.storageOption) {
@@ -335,30 +335,31 @@ static NSString * const MADFirstLaunch                                     = @"M
     delegate = _delegate;
     
     
-    if (!self.filesController) {
+    if (!_filesController) {
         
         NSString *identifier = [self copyIdentifierForStorageOption];
         NSString *fileExtention = [delegate fileExtention].copy;
-        MADAppStorage storageOption = self.storageOption;
+        MADAppStorage storageOption = [self storageOption];
+
         id filesController;
         filesController = [MADFilesController newFilesControllerWithPathExtension: fileExtention
                                                                     storageOption: storageOption
                                                                        identifier: identifier
                                                                 firstQueryHandler: storageChangedHandler];
-        self.filesController = filesController;
-        [delegate didConfigureFilesController: self.filesController];
-        [self.filesController startSearching];
+        [delegate didConfigureFilesController: filesController];
+        [filesController startSearching];
+        _filesController = filesController;
         
     } else if (accountChanged) {
         NSString *identifer = [self copyIdentifierForStorageOption];
         NSString *fileExtention = [delegate fileExtention].copy;
-        MADAppStorage storageOption = self.storageOption;
+        MADAppStorage storageOption = [self storageOption];
         id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: fileExtention
                                                           storageOption: storageOption
                                                              identifier: identifer
                                                       firstQueryHandler: storageChangedHandler];
-        self.filesController.fileCoordinator = fc;
-        [self.delegate didConfigureFilesController: self.filesController];
+        _filesController.fileCoordinator = fc;
+        [delegate didConfigureFilesController: _filesController];
     }
 
 }

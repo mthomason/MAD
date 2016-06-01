@@ -9,6 +9,15 @@
 #import "MADFileUtilities.h"
 #import "NSURL+CommonURLs.h"
 
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSFileCoordinator.h>
+#import <Foundation/NSKeyedArchiver.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSOperation.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSBundle.h>
+
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";
 static NSString * const MADPathComponentAppSupport = @"Application Support";

@@ -13,7 +13,7 @@
 #import <Foundation/NSObject.h>
 
 
-@protocol MADFileCoordinator;;
+@protocol MADFileCoordinatorProtocol;
 @protocol MADFilesControllerDelegate;
 
 @class NSOperationQueue;
@@ -29,9 +29,9 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
     @property (readonly) NSURL *documentDirectory;
 
     @property (nonatomic, readonly) NSUInteger count;
-    @property (nonatomic, strong) id <MADFileCoordinator> fileCoordinator;
+    @property (nonatomic, strong) id <MADFileCoordinatorProtocol> fileCoordinator;
 
-    - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
+    - (instancetype)initWithFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator
                               delegateQueue:(NSOperationQueue *)delegateQueue
                              sortComparator:(NSComparisonResult (^)(MADMetaData *lhs,
                                                                     MADMetaData *rhs))sortComparator;

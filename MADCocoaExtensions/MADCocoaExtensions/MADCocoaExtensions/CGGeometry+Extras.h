@@ -31,6 +31,7 @@ extern const double MAD_360;
 extern const double MADDefaultHeight;
 extern const double MADHeaderHeight;
 
+extern const CGFloat MADFloatHeaderHeight;
 extern const CGFloat MADFloatZero;
 extern const CGFloat MADFloat_64;
 extern const CGFloat MADFloat_320;

@@ -11,9 +11,9 @@
 #endif
 
 #import "MTAggregateFunctionsViewController.h"
+#import "MADAggregateFunctionsViewControllerDelegate.h"
 
 #import <UIKit/UIStoryboardSegue.h>
-
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
@@ -23,8 +23,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @interface MTAggregateFunctionsViewController ()
 
-@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
-
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
 @end
 
@@ -36,7 +35,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     if ([segue.identifier isEqualToString:@"MTSegueSelectAggregateFunction"]) {
         UITableViewCell *tableViewCell = (UITableViewCell *)sender;
         [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-        [self setSelectedFunctionType: [tableViewCell tag]];
+        [self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
     }
 }
 
@@ -46,10 +45,13 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 }
 
 - (void)updateSelectedFunctionType {
+
     NSInteger numberOfSections = [self.tableView numberOfSections];
     for (NSInteger sectionCtr = 0; sectionCtr < numberOfSections; sectionCtr++) {
+
         NSInteger numberOfRows = [self.tableView numberOfRowsInSection:sectionCtr];
         for (NSInteger rowCtr = 0; rowCtr < numberOfRows; rowCtr++) {
+
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
             UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (tableViewCell.tag == [self selectedFunctionType]) {
@@ -68,8 +70,12 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
 
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Aggregate Functions", @"Title of form that allows you to choose a type of aggregate function (count, first, last, max, min, avg, sum).");
+    MADNavigationBarTitleView *titleView;
+    titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Aggregate Functions",
+                                       @"Title of form that allows you to choose a type of "
+                                       @"aggregate function (count, first, last, max, min, "
+                                       @"avg, sum).");
     self.navigationItem.titleView = titleView;
 
 }
@@ -116,11 +122,9 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     
     UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-    [self setSelectedFunctionType: [tableViewCell tag]];
+    [self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
     
-    if (self.delegate != nil) {
-        [self.delegate didSelectFunction: [self selectedFunctionType]];
-    }
+    [self.functionDelegate didSelectFunction: [self selectedFunctionType]];
 
 }
 

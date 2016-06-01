@@ -18,20 +18,14 @@
 
 extern NSString * const MTGroupByViewControllerIdentifier;
 
+@protocol MADGroupByViewControllerDelegate;
+
 @class MADocument;
-
-@protocol MTGroupByViewControllerDelegate
-
-    - (void)didSelectGroupByPage;
-    - (void)didSelectGroupByReport;
-    - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
-
-@end
 
 @interface MTGroupByViewController : MADTableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-    @property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;
+    @property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;

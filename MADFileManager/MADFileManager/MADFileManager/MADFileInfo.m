@@ -59,7 +59,9 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 #pragma mark - Property Overrides
 
 - (NSString *)name {
-    NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
+    NSString *path = self.URL.path;
+    if (!path) return @"";
+    NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath: path];
     return displayName.stringByDeletingPathExtension;
 }
 

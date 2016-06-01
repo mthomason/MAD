@@ -84,9 +84,9 @@
     return result;
 }
 
-- (MNSDatabaseType)databaseType {
-    NSNumber *type = self.databaseDriverTypeEnum;
-    return type.unsignedIntegerValue;
+- (MADDatabaseType)databaseType {
+    NSNumber __unsafe_unretained *type = self.databaseDriverTypeEnum;
+    return type.shortValue;
 }
 
 #pragma mark - Static

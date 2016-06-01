@@ -13,9 +13,9 @@
 
 @interface RptqUserCredentals (Extras)
 
-    + (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
+    + (instancetype)newUserCredentalForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-    + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
+    + (NSArray <RptqUserCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
     - (NSString *)copyDatabaseSchemaName;
 
 @end

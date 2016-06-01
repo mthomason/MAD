@@ -56,7 +56,10 @@
  numberOfColumnsKey : numberOfColumns}];
  */
 
-- (MTDataTable *)fetchWithCommand:(NSString *)command dataTable:(MTDataTable **)dataTable onConnection:(MysqlConnection *)connection error:(NSError * __autoreleasing *)error {
+- (MTDataTable *)fetchWithCommand: (NSString *)command
+                        dataTable: (MTDataTable * __autoreleasing *)dataTable
+                     onConnection: (MysqlConnection *)connection
+                            error: (NSError * __autoreleasing *)error {
     return [self fetchWithCommand:command dataTable:dataTable onConnection:connection extendedNames:YES error:error];
 }
 
@@ -92,8 +95,8 @@
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     dataColumn.fieldName = fieldName;
     dataColumn.nativeType = myField.type;
-    dataColumn.dataLength = myField.length;
-    dataColumn.dataPercision = myField.decimals;
+    dataColumn.dataLength = (NSInteger)myField.length;
+    dataColumn.dataPercision = (NSInteger)myField.decimals;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? true : false;
     dataColumn.type = [MTDataTypeMySQL dataTypeForNativeType:myField.type];
 
@@ -101,7 +104,7 @@
 }
 
 - (MTDataTable *)fetchWithCommand: (NSString *)command
-                        dataTable: (MTDataTable **)dataTable
+                        dataTable: (MTDataTable * __autoreleasing *)dataTable
                      onConnection: (MysqlConnection *)connection
                     extendedNames: (BOOL)useExtendedNames
                             error: (NSError * __autoreleasing *)error {

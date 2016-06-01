@@ -122,8 +122,10 @@
         
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 
+        MADocument *document = _document;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        
+            RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
             
             if (documentObject.formatNumericCurrency.boolValue) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
@@ -135,7 +137,7 @@
         if ([self.userSelectedObjectIds count] == 1) {
 
             NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
-            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
             NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
             [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
             [self.stepperNumberOfDecimals setValue:numberOfDec];
@@ -146,7 +148,7 @@
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
             for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-                RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+                RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
                 NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
                 if (counter > 0) {
                     if (lastInteger == currentInteger && allTheSame) {

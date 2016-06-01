@@ -12,7 +12,6 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/MADDatabaseProtocol.h>
 
 typedef NSString MADSafeQueryField;
 
@@ -25,6 +24,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeGetResults,
 	MTDatabaseQueryTypeVerify
 };
+
+@protocol MTDatabaseProtocol;
 
 @class NSMutableArray;
 @class MADCredential;

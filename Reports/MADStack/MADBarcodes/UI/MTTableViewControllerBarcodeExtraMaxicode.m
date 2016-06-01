@@ -11,6 +11,7 @@
 #endif
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
+#import <MAD/MADDatabaseProtocol.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 
@@ -81,7 +82,7 @@
              onViewController: wself
                    completion:^(BOOL presentErrorSuccess) {
                        NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                       [[MTKeyChain sharedObject] deleteKey:key];
+                       [MTKeyChain deleteKey:key];
                    }];
         
     }

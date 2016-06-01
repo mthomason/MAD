@@ -11,7 +11,7 @@
 
 #import "MADFileCoordinator.h"
 
-@interface MADLocalFileCoordinator : NSObject <MADFileCoordinator>
+@interface MADLocalFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 
     - (instancetype)initWithPathExtension: (NSString *)pathExtension
                                identifier: (NSString *)fileGroup

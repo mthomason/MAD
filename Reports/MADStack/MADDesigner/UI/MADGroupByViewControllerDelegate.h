@@ -9,5 +9,12 @@
 #ifndef MADGroupByViewControllerDelegate_h
 #define MADGroupByViewControllerDelegate_h
 
+@protocol MADGroupByViewControllerDelegate
+
+    - (void)didSelectGroupByPage;
+    - (void)didSelectGroupByReport;
+    - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
+
+@end
 
 #endif /* MADGroupByViewControllerDelegate_h */

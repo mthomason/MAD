@@ -40,6 +40,8 @@
 
 #import <MADSqlite3/sqlite3.h>
 
+#import "MADDatabaseProtocol.h"
+
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
 NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";

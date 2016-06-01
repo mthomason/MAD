@@ -49,7 +49,8 @@
 + (void)initialize {
     if (self == [MADAboutTableViewController self]) {
     
-        UINavigationBar *navigationBarMailAppearance =      [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
+        UINavigationBar *navigationBarMailAppearance;
+        navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
         
         UIColor *color = [MADColorEverydayApps newColorAnalogous4];
         navigationBarMailAppearance.barTintColor = color;
