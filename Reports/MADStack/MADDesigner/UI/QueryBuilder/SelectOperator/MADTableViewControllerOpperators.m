@@ -10,9 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "UITableViewControllerOpperators.h"
+#import "MADTableViewControllerOpperators.h"
+#import "MADTableViewControllerOpperatorsDelegate.h"
 
-@implementation UITableViewControllerOpperators
+@implementation MADTableViewControllerOpperators
 
 #pragma mark - Table view delegate
 
