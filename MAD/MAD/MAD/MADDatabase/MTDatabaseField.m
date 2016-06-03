@@ -75,9 +75,9 @@ static inline bool isDataTypeNumeric(MADDataType type) {
     return copy;
 }
 
-- (BOOL)isNumeric { return isDataTypeNumeric(_fieldType) ? YES : NO; }
+- (BOOL)isNumeric { return isDataTypeNumeric(_fieldType); }
 
-+ (BOOL)isNumeric:(MADDataType)dataType { return isDataTypeNumeric(dataType) ? YES : NO; }
++ (BOOL)isNumeric:(MADDataType)dataType { return isDataTypeNumeric(dataType); }
 
 - (SEL)selectorForSorting {
     return MADDataTypeSelectorForSorting(self.fieldType);

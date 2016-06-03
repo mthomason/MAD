@@ -1147,12 +1147,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         case UIAccessibilityScrollDirectionNext:
         case UIAccessibilityScrollDirectionRight:
-            return [self moveToPageAtIndex: self.currentPageIndex + 1 ] ? YES : NO;
+            return [self moveToPageAtIndex: self.currentPageIndex + 1 ];
             break;
             
         case UIAccessibilityScrollDirectionPrevious:
         case UIAccessibilityScrollDirectionLeft:
-            return [self moveToPageAtIndex: self.currentPageIndex - 1 ] ? YES : NO;
+            return [self moveToPageAtIndex: self.currentPageIndex - 1 ];
             break;
             
         default:

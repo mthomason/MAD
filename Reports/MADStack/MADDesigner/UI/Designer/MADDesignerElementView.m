@@ -265,7 +265,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)setWobbleRunning:(BOOL)running {
-    self.displayWobbling = running ? true : false;
+    self.displayWobbling = running;
     if (running) {
         NSInteger randomInt = arc4random() % 500;
         float r = (randomInt / 500.0000f) + 0.5000f;

@@ -276,7 +276,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     if (dbconn) {
         success = [self runQuery:query onProcess:dbconn withError: NULL];
     }
-    return success ? YES : NO;
+    return success;
 }
 
 - (bool)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process withError:(NSError * __autoreleasing *)error {
@@ -297,7 +297,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
-    return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn] ? YES : NO;
+    return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
 }
 
 - (bool)runSQL:(NSString *)sql onDataTable:(MTDataTable *)datatable fieldKeys:(NSArray *)fieldKeys process:(MTDatabaseProcessSqlServer *)process {

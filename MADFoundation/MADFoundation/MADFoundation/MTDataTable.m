@@ -231,7 +231,7 @@ static NSString * const StringEmpty = @"";
         success = [cache writeToURL: url
                             options: NSDataWritingAtomic |
                                      NSDataWritingFileProtectionCompleteUnlessOpen
-                              error: errorWriting] ? true : false;
+                              error: errorWriting];
 
         NSAssert(errorWriting == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
 

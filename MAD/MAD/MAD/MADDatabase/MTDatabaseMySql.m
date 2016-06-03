@@ -131,7 +131,7 @@
             result = true;
         }
     }
-    return result ? YES : NO;
+    return result;
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
@@ -357,7 +357,7 @@
                 databaseField.fieldType = fieldType;
                 databaseField.width = dataColumn.dataLength;
                 databaseField.decimals = dataColumn.dataPercision;
-                databaseField.primaryKey = dataColumn.isPrimaryKey ? YES : NO;
+                databaseField.primaryKey = dataColumn.isPrimaryKey;
             }
         }
     }

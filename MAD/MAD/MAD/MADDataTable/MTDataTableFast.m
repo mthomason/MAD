@@ -120,8 +120,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSNumber *tag = [decoder decodeObjectForKey: [MTDataTableFast keyTag]];
         self.tag = tag.unsignedIntegerValue;
         
-        _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]] ? true : false;
-        _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]] ? true : false;
+        _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];
+        _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];
         
         NSArray *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
         NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
@@ -149,7 +149,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSString *keyTag = [MTDataTableFast keyTag];
     plist[keyTag] = tag;
     
-    NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:self.bulkInsertLoop ? YES : NO];
+    NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:self.bulkInsertLoop];
     NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
     plist[keyBulkInsertLoop] = bulkInsert;
     
@@ -163,7 +163,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         plist[keyGroupKeys] = self.groupKeys;
     }
     
-    NSNumber *sortSet = [[NSNumber alloc] initWithBool:self.sortDescriptorsSet ? YES : NO];
+    NSNumber *sortSet = [[NSNumber alloc] initWithBool:self.sortDescriptorsSet];
     NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
     plist[keySortDescriptorsSet] = sortSet;
     
@@ -187,7 +187,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     id keyBuildInsertLoop = [MTDataTableFast keyBulkInsertLoop];
     NSNumber * __weak bulkInsertLoopWrapper = plist[keyBuildInsertLoop];
-    self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue ? true : false;
+    self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
     
     id keyGroupKeys = [MTDataTableFast keyGroupKeys];
     NSArray *groupKeysArray = plist[keyGroupKeys];
@@ -242,8 +242,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     [encoder encodeObject:  absStr                              forKey: [MTDataTableFast keyUrlFastCache]];
     NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
     [encoder encodeObject: objid                                forKey: [MTDataTableFast keyTag]];
-    [encoder encodeBool: _bulkInsertLoop ? YES : NO             forKey: [MTDataTableFast keyBulkInsertLoop]];
-    [encoder encodeBool: _sortDescriptorsSet ? YES : NO         forKey: [MTDataTableFast keySortDescriptorsSet]];
+    [encoder encodeBool: _bulkInsertLoop             forKey: [MTDataTableFast keyBulkInsertLoop]];
+    [encoder encodeBool: _sortDescriptorsSet         forKey: [MTDataTableFast keySortDescriptorsSet]];
 
 }
 
@@ -369,8 +369,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTQueryCache *query = [[MTQueryCacheAddColumn alloc] initWithTableName: table
                                                                 columnName: columnName
                                                                     column: column
-                                                               createTable: create ? true : false
-                                                          uniqueColumnHack: unique ? true : false
+                                                               createTable: create
+                                                          uniqueColumnHack: unique
                                                             columnAffinity: columnAffinity];
     query.database = _databaseForInserts;
     success = [_databaseForInserts executeQuery:query withError:&errorQuery];

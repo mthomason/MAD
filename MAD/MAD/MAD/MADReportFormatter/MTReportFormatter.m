@@ -242,7 +242,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
-                ![datasource cacheExist] ? YES : NO;
+                ![datasource cacheExist];
 }
 
 - (void)formatForSize:(CGSize)printableSize {

@@ -717,7 +717,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
+    return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsGroups);
 }
 
 - (void)tableView:(UITableView *)tableView

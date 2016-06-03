@@ -97,7 +97,7 @@
     dataColumn.nativeType = myField.type;
     dataColumn.dataLength = (NSInteger)myField.length;
     dataColumn.dataPercision = (NSInteger)myField.decimals;
-    dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? true : false;
+    dataColumn.primaryKey = IS_PRI_KEY(myField.flags);
     dataColumn.type = [MADDataTypeMySQL dataTypeForNativeType:myField.type];
 
     return dataColumn;

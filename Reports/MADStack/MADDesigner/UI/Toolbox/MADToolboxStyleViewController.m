@@ -46,7 +46,7 @@ static NSString * const DialogSpace = @"--";
 
 static inline BOOL ControlStateIsOn(MTControlState controlState);
 static inline BOOL ControlStateIsOn(MTControlState controlState) {
-    return controlState == MTControlStateOn ? YES : NO;
+    return controlState == MTControlStateOn;
 }
 
 @interface MADToolboxStrings : NSAttributedString

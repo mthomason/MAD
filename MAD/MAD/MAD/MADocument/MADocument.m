@@ -406,11 +406,11 @@ ARCHIVE_FILE_AT_URL_SHORT:;
             NSError *errorWriting = nil;
             success = [data writeToURL: archiveURL
                                options: NSDataWritingAtomic
-                                 error: &errorWriting] ? true : false;
+                                 error: &errorWriting];
         } else {
             resultUrl = [archiveURL uniqueUrl];
             NSData *data = fileWrapper.serializedRepresentation;
-            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
+            success = [data writeToURL:resultUrl atomically:YES];
         }
     }
     return success;
@@ -806,7 +806,7 @@ READ_END:;
 
     return [MADocument ArchiveFilesAtURL: self.urlGuts
                                    toURL: self.fileURL
-                               overwrite: YES] ? YES : NO;
+                               overwrite: YES];
     
 }
 

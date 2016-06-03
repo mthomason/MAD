@@ -53,9 +53,9 @@
     self.dataPercision = dataPercision.integerValue;
     
     
-    [encoder encodeBool: _primaryKey ? YES : NO       forKey: [MADDataColumn keyIsPrimaryKey]];
-    [encoder encodeBool: _notNull ? YES : NO          forKey: [MADDataColumn keyIsNotNull]];
-    [encoder encodeBool: _autoIncrement ? YES : NO    forKey: [MADDataColumn keyIsAutoIncrement]];
+    [encoder encodeBool: _primaryKey       forKey: [MADDataColumn keyIsPrimaryKey]];
+    [encoder encodeBool: _notNull          forKey: [MADDataColumn keyIsNotNull]];
+    [encoder encodeBool: _autoIncrement    forKey: [MADDataColumn keyIsAutoIncrement]];
 
 }
 
@@ -81,7 +81,7 @@
         NSNumber *dataPercision =   [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
         self.dataPercision =        dataPercision.integerValue;
         
-        self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]] ? true : false;
+        self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]];
 
     }
     return self;
@@ -185,13 +185,13 @@
         _dataPercision = dataPercision.integerValue;
         
         NSNumber *isPrimaryKey = plist[[MADDataColumn keyIsPrimaryKey]];
-        _primaryKey = isPrimaryKey.boolValue ? true : false;
+        _primaryKey = isPrimaryKey.boolValue;
 
         NSNumber *isNotNull = plist[[MADDataColumn keyIsNotNull]];
-        _notNull = isNotNull.boolValue ? true : false;
+        _notNull = isNotNull.boolValue;
 
         NSNumber *isAutoIncrement = plist[[MADDataColumn keyIsAutoIncrement]];
-        _autoIncrement = isAutoIncrement.boolValue ? true : false;
+        _autoIncrement = isAutoIncrement.boolValue;
         
     }
     return self;

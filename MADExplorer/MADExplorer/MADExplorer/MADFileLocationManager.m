@@ -128,7 +128,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
     bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
-                                                                                    true : false;
+                                                                                    YES : NO;
     if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
         [[NSUserDefaults standardUserDefaults] synchronize];

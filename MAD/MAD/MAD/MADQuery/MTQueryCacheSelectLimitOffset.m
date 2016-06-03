@@ -168,7 +168,7 @@
         dispatch_group_enter(group);
         __block NSString *sqlSelectText;
         dispatch_group_async(group, queueHigh, ^{
-            sqlSelectText = sqlSelect(tableName, columnKeys, dropRowid.boolValue ? true : false);
+            sqlSelectText = sqlSelect(tableName, columnKeys, dropRowid.boolValue);
         });
 
         __block NSString *sqlOrderByText;

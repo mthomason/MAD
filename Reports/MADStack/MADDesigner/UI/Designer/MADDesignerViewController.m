@@ -1109,7 +1109,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqQuery *query =  database.hasQueries.anyObject;
         
         RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
-        [section setProducesFormFeed: newPageAfter ? YES : NO];
+        [section setProducesFormFeed: newPageAfter];
         
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -1131,7 +1131,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqQuery *query =  database.hasQueries.anyObject;
         
         RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
-        NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible ? YES : NO];
+        NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible];
         section.visibility = visibility;
         
         id key = [section copySectionKey];

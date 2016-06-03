@@ -50,7 +50,7 @@
         NSNumber *uniqueObj = object[keyColumnUnique];
         bool uniqueValue = false;
         if (uniqueObj != nil) {
-            uniqueValue = uniqueObj.boolValue ? true : false;
+            uniqueValue = uniqueObj.boolValue;
         }
         
         NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
@@ -58,7 +58,7 @@
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
                                                        createTable:createTable.boolValue ?
-                                                                                true : false
+                                                                                YES : NO
                                                   uniqueColumnHack:uniqueValue
                                                     columnAffinity:columnAffinity];
         self.sql = sql;

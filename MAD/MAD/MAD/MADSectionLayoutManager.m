@@ -177,7 +177,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         NSMutableDictionary *items = [[NSMutableDictionary alloc] init];
         self.items = items;
         
-        self.visibility = section.visibility.boolValue ? true : false;
+        self.visibility = section.visibility.boolValue;
         
         RptqDocumentSectionRows *rows = section.hasRows.firstObject;
 

@@ -261,8 +261,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         [[MTQueryCacheAddColumn alloc] initWithTableName: table
                                               columnName: columnName
                                                   column: column
-                                             createTable: create ? true : false
-                                        uniqueColumnHack: unique ? true : false
+                                             createTable: create
+                                        uniqueColumnHack: unique
                                           columnAffinity: columnAffinity];
     bool success = false;
     NSError * __autoreleasing * error = NULL;

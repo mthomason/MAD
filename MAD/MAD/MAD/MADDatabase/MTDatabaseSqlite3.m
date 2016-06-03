@@ -68,7 +68,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
 /*static inline bool Sqlite3ResultOK(int result);
 static inline bool Sqlite3ResultOK(int result) {
-    return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE ? true : false;
+    return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
 }*/
 
 #ifdef MAD_MTDatabaseSqlite3_DEBUG

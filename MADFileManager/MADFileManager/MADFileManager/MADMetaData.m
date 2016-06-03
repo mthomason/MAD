@@ -80,7 +80,7 @@
     if (_metadataItem) {
         NSNumber *isUbiquitous;
         isUbiquitous = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
-        return isUbiquitous.boolValue ? true : false;
+        return isUbiquitous.boolValue;
     } else {
         return false;
     }
@@ -171,7 +171,7 @@
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
-        return result.boolValue ? true : false;
+        return result.boolValue;
     } else {
         return false;
     }
@@ -181,7 +181,7 @@
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
-        return result.boolValue ? true : false;
+        return result.boolValue;
     } else {
         return false;
     }
@@ -191,7 +191,7 @@
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey];
-        return result.boolValue ? true : false;
+        return result.boolValue;
     } else {
         return false;
     }
@@ -201,7 +201,7 @@
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey];
-        return result.boolValue ? true : false;
+        return result.boolValue;
     } else {
         return false;
     }
@@ -231,7 +231,7 @@
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
-        return result.boolValue ? true : false;
+        return result.boolValue;
     } else {
         return false;
     }
@@ -241,7 +241,7 @@
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
-                true : false;
+                YES : NO;
     } else {
         return false;
     }
@@ -251,7 +251,7 @@
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
-                true : false;
+                YES : NO;
     } else {
         return false;
     }
@@ -261,7 +261,7 @@
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
-                true : false;
+                YES : NO;
     } else {
         return false;
     }
