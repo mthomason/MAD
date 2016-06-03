@@ -33,7 +33,7 @@
 
 - (void)setText:(NSString *)text {
     MADLogoString *attributedText = [NSAttributedString newLogoStringForTitle:text];
-    [super setText: text];
+    super.text = text;
     self.attributedText = attributedText;
     [self sizeToFit];
 }

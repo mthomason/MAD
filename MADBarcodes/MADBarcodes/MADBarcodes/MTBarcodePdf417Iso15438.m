@@ -64,24 +64,24 @@ NSString * const MADStringDisplayPdfHibc    = @"HIBC PDF";
 }
 
 - (NSInteger)numberOfColumns {
-    return [self option2];
+    return self.option2;
 }
 
 - (void)setNumberOfColumns:(NSInteger)numberOfColumns {
-    [self setOption2:numberOfColumns];
+    self.option2 = numberOfColumns;
 }
 
 - (NSInteger)errorCorrectionCapacity {
-    return [self option1];
+    return self.option1;
 }
 
 - (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity {
-    [self setOption1:errorCorrectionCapacity];
+    self.option1 = errorCorrectionCapacity;
 }
 
 - (void)initSampleData {
-    [self setInput:              self.name];
-    [self setPrimaryData:        @""];
+    self.input = self.name;
+    self.primaryData = @"";
 }
 
 @end

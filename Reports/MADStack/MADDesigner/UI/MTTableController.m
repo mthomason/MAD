@@ -54,11 +54,11 @@
 @implementation MADTableController
 
 - (void)dealloc {
-    [_query database].delegate = nil;
+    _query.database.delegate = nil;
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self datatable];
+    return self.datatable;
 }
 
 - (instancetype)initWithQuery:(MTQuery *)query {
@@ -70,7 +70,7 @@
     
     if (self = [super initWithCollectionViewLayout:tableLayout]) {
         _firstTimeViewDidAppear = true;
-        [query database].delegate = self;
+        query.database.delegate = self;
         MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         tableLayout.delegate = self;
@@ -283,11 +283,11 @@
 }
 
 - (NSUInteger)rowCount {
-    return [[self datatable] numberOfRows];
+    return [self.datatable numberOfRows];
 }
 
 - (NSUInteger)columnCount {
-    return [[self datatable] numberOfColumns];
+    return [self.datatable numberOfColumns];
 
 }
 #pragma mark - Delegates
@@ -342,7 +342,7 @@
     NSUInteger column = (NSUInteger)section;
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
     MTDatabaseField *field = self.query.fields[fieldKey];
-    NSUInteger maxNumberOfCharacters = [field calculatedWidth];
+    NSUInteger maxNumberOfCharacters = field.calculatedWidth;
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;
     }

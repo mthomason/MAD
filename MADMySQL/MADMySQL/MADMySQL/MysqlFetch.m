@@ -184,8 +184,8 @@
             }
             
             
-            [mf setFieldNames:fieldNameCollector];
-            [mf setFields:fieldCollector];
+            mf.fieldNames = fieldNameCollector;
+            mf.fields = fieldCollector;
             
             if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
                 errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
@@ -379,7 +379,7 @@ char *mySQLTypeForType(int type) {
             for (unsigned int x=0; x < statement->field_count;x++) {
                 
                 MYSQL_FIELD stmtFieldName = statement->fields[x];
-                NSString *key = [mf fieldNames][x];
+                NSString *key = mf.fieldNames[x];
                 if (*bindings[x].is_null==1) {
                     dict[key] = [NSNull null];
                 } else {
@@ -503,7 +503,7 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_TIMESTAMP: {
                             NSString *f=[[NSString alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length) encoding:NSUTF8StringEncoding];
                             NSDateFormatter * __autoreleasing sqlFmt = [[NSDateFormatter alloc] init];
-                            [sqlFmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                            sqlFmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
                             NSDate *date = [sqlFmt dateFromString:f];
                             dict[key] = date;
                         } break;
@@ -539,12 +539,12 @@ char *mySQLTypeForType(int type) {
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
                             NSDateComponents * __autoreleasing comps = [[NSDateComponents alloc] init];
-                            [comps setYear:aValue->year];
-                            [comps setMonth:aValue->month];
-                            [comps setDay:aValue->day];
-                            [comps setHour:aValue->hour];
-                            [comps setMinute:aValue->minute];
-                            [comps setSecond:aValue->second];
+                            comps.year = aValue->year;
+                            comps.month = aValue->month;
+                            comps.day = aValue->day;
+                            comps.hour = aValue->hour;
+                            comps.minute = aValue->minute;
+                            comps.second = aValue->second;
                             NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:comps];
                             if (date) {
                                 dict[key] = date;
@@ -556,9 +556,9 @@ char *mySQLTypeForType(int type) {
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
                             NSDateComponents *comps=[[NSDateComponents alloc] init];
-                            [comps setHour:aValue->hour];
-                            [comps setMinute:aValue->minute];
-                            [comps setSecond:aValue->second];
+                            comps.hour = aValue->hour;
+                            comps.minute = aValue->minute;
+                            comps.second = aValue->second;
                             NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:comps];
                             if (date) {
                                 dict[key] = date;
@@ -569,9 +569,9 @@ char *mySQLTypeForType(int type) {
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
                             NSDateComponents *comps=[[NSDateComponents alloc] init];
-                            [comps setYear:aValue->year];
-                            [comps setMonth:aValue->month];
-                            [comps setDay:aValue->day];
+                            comps.year = aValue->year;
+                            comps.month = aValue->month;
+                            comps.day = aValue->day;
                             dict[key] = comps;
                         } break;
                             

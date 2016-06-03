@@ -65,14 +65,14 @@
 
 - (NSData *)fileSystemFileCreationDate {
     id date = _metadataItem ? [_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] :
-                              [_attributes objectForKey:NSFileCreationDate];
+                              _attributes[NSFileCreationDate];
     return date;
 }
 
 - (NSData *)fileSystemContentChangeDate {
     id date = _metadataItem ?
                 [_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] :
-                [_attributes objectForKey:NSFileModificationDate];
+                _attributes[NSFileModificationDate];
     return date;
 }
 
@@ -116,7 +116,7 @@
             displayName = @"";
         }
     }
-    return [displayName stringByDeletingPathExtension];
+    return displayName.stringByDeletingPathExtension;
 }
 
 - (NSString *)fileSystemName {
@@ -128,7 +128,7 @@
 - (unsigned long long)fileSystemFileSize {
     NSNumber *fileSize;
     fileSize = _metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey] :
-                               [self.attributes objectForKey:NSFileSize];
+                               (self.attributes)[NSFileSize];
     return fileSize.unsignedLongLongValue;
 }
 
@@ -238,8 +238,8 @@
 }
 
 - (bool)isUbiquitousItemDownloadingStatusNotDownloaded {
-    if ([self isUbiquitous]) {
-        NSString *status = [self ubiquitousItemDownloadingStatus];
+    if (self.ubiquitous) {
+        NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
                 true : false;
     } else {
@@ -248,8 +248,8 @@
 }
 
 - (bool)isUbiquitousItemDownloadingStatusDownloaded {
-    if ([self isUbiquitous]) {
-        NSString *status = [self ubiquitousItemDownloadingStatus];
+    if (self.ubiquitous) {
+        NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
                 true : false;
     } else {
@@ -258,8 +258,8 @@
 }
 
 - (bool)isUbiquitousItemDownloadingStatusCurrent {
-    if ([self isUbiquitous]) {
-        NSString *status = [self ubiquitousItemDownloadingStatus];
+    if (self.ubiquitous) {
+        NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
                 true : false;
     } else {
@@ -268,8 +268,8 @@
 }
 
 - (bool)isSyncing {
-    return [self isUbiquitous] &&
-            ([self ubiquitousItemIsDownloading] || [self ubiquitousItemIsUploading]);
+    return self.ubiquitous &&
+            (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }
 
 + (MADMetaDataArray *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
@@ -287,7 +287,7 @@
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
                                                                                     error: &error];
-        NSNumber *fsfn = [attributes objectForKey:NSFileSystemFileNumber];
+        NSNumber *fsfn = attributes[NSFileSystemFileNumber];
         return fsfn.unsignedLongLongValue;
     } else {
         return 0;
@@ -300,7 +300,7 @@
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
                                                                                     error: &error];
-        NSNumber * __weak fsf = [attributes objectForKey:NSFileSystemNumber];
+        NSNumber * __weak fsf = attributes[NSFileSystemNumber];
         return fsf.unsignedLongLongValue;
     } else {
         return 0;
@@ -325,8 +325,8 @@
 
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[MADMetaData class]]) {
-        NSString *fileSystemNameUnknown = [((MADMetaData *)object) fileSystemName];
-        NSString *fileSystemName = [self fileSystemName];
+        NSString *fileSystemNameUnknown = ((MADMetaData *)object).fileSystemName;
+        NSString *fileSystemName = self.fileSystemName;
         return [fileSystemName compare:fileSystemNameUnknown] == NSOrderedSame;
     }
     return  NO;

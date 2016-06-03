@@ -136,7 +136,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     }
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
     
     id <MADGroupByViewControllerDelegate> delegate = _delegate;
     if (delegate == nil) goto SkipDisplay;
@@ -217,30 +217,30 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     switch (indexPath.row) {
 
         case 0:
-            [cell.textLabel setText:[RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage]];
-            if ([self aggregateGroupType] == MTAggregateGroupByTypePage) {
-                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            (cell.textLabel).text = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+            if (self.aggregateGroupType == MTAggregateGroupByTypePage) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             break;
         
         case 1:
-            [cell.textLabel setText:[RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport]];
-            if ([self aggregateGroupType] == MTAggregateGroupByTypeReport) {
-                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            (cell.textLabel).text = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+            if (self.aggregateGroupType == MTAggregateGroupByTypeReport) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             break;
         
         default: {
-            RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:[self updatedIndexPath:indexPath]];
+            RptqQueryGroup *queryGroup = [self.fetchedResultsControllerGroups objectAtIndexPath:[self updatedIndexPath:indexPath]];
             NSString *fieldNameNice = [queryGroup fieldNameNice];
             NSInteger groupLevel = [queryGroup location];
             NSString *textLabel = fieldNameNice == nil ?
                     [NSString stringWithFormat:@"Group %ld", (long)groupLevel] :
                     [NSString stringWithFormat:@"Group %ld (%@)", (long)groupLevel, fieldNameNice];
-            [cell.textLabel setText:textLabel];
+            (cell.textLabel).text = textLabel;
             if (_aggregateGroupType == MTAggregateGroupByTypeSection &&
                                         indexPath.row - 2 == (NSInteger)_aggregateGroupNumber) {
-                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             break;
         }
@@ -253,11 +253,11 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> __unsafe_unretained sectionInfo =
                                 _fetchedResultsControllerGroups.sections[(NSUInteger)section];
-    return [sectionInfo name];
+    return sectionInfo.name;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [_fetchedResultsControllerGroups sectionIndexTitles];
+    return _fetchedResultsControllerGroups.sectionIndexTitles;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title

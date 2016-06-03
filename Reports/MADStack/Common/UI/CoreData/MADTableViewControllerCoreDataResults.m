@@ -55,11 +55,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)[self.fetchedResultsController.sections[(NSUInteger)section] numberOfObjects];
+    return (NSInteger)(self.fetchedResultsController.sections[(NSUInteger)section]).numberOfObjects;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return [self.fetchedResultsController.sections[(NSUInteger)section] name];
+	return (self.fetchedResultsController.sections[(NSUInteger)section]).name;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
@@ -68,7 +68,7 @@
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [self.fetchedResultsController sectionIndexTitles];
+    return (self.fetchedResultsController).sectionIndexTitles;
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate
@@ -153,7 +153,7 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if ([self beganUpdates])
+    if (self.beganUpdates)
         [self.tableView endUpdates];
 }
 

@@ -103,8 +103,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 + (BOOL)isCloudReadilyAvailable {
     NSLog(@"Checking if cloud is readily available %@.",
-          [[NSFileManager defaultManager] ubiquityIdentityToken] != nil ? @"YES" : @"NO");
-    return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
+          [NSFileManager defaultManager].ubiquityIdentityToken != nil ? @"YES" : @"NO");
+    return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
 }
 
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
@@ -312,7 +312,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 - (NSURL *)documentDirectory {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    return [self.fileCoordinator documentsDirectory];
+    return (self.fileCoordinator).documentsDirectory;
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo {

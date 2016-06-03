@@ -81,16 +81,16 @@
         
         case MADDatabaseTypeMySQL:
         case MADDatabaseTypeSqlite3:
-            result = [self mysql_database];
+            result = self.mysql_database;
             break;
         
         case MADDatabaseTypeMicrosoftSqlServer:
-            result = [self tds_database];
+            result = self.tds_database;
             break;
 
         case MADDatabaseTypeUnknown: {
             
-            if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseMySQL]) {
+            if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseMySQL]) {
                 result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
                 self.inDatabase.databaseDriverTypeEnum = type;
@@ -100,8 +100,8 @@
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMicrosoftSqlServer];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
-            } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseSqlite3]) {
-                result = [self mysql_database];
+            } else if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseSqlite3]) {
+                result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
                 self.inDatabase.databaseDriverTypeEnum = type;
             }
@@ -112,7 +112,7 @@
             result = @"unknown";
             break;
     }
-    NSString *resultNoPathExtension = [result stringByDeletingPathExtension];
+    NSString *resultNoPathExtension = result.stringByDeletingPathExtension;
     NSString *capitalized = resultNoPathExtension.capitalizedString;
     return capitalized;
 }

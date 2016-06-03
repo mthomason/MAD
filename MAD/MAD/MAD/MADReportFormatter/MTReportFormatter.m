@@ -204,7 +204,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     
         [layout initializeSectionLayoutManagers: self.machineState.document];
         MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
-        [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
+        self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
         
     } else {
         
@@ -224,7 +224,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     _machineState.detailRowIdLast = @0;
     _machineState.sortDescriptors = sortDescriptors;
     _machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
-    _machineState.document = [self.layout activeDocumentModel];
+    _machineState.document = (self.layout).activeDocumentModel;
 }
 
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
@@ -673,7 +673,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     [[MADNotificationDidFormatPage sharedObject] reportFormatter: self
                                                    formattedPage: self.machineState.pageCounter];
     
-    RptqDocumentSection *pageHeaderSection = [self.machineState.document hasPageHeaderSection];
+    RptqDocumentSection *pageHeaderSection = (self.machineState.document).hasPageHeaderSection;
     
     //Reset height of the page to zero plus the hight of the page header section
     _machineState.counterHeightUsedCurrentPage = [self heightForSectionWithObjectID:pageHeaderSection.objectID];
@@ -711,7 +711,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
                                                     groupLevel: groupLevel
                                                            row: _machineState.detailRowId];
-    if (groupLevel == [self numberOfGroups] - 1) {
+    if (groupLevel == self.numberOfGroups - 1) {
         self.machineState.groupCounter++;
     }
     [self.pageLayoutTemporary addObject: header];
@@ -806,7 +806,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 #ifdef MADWATCHKIT
     return NO;
 #else
-    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 #endif
 }

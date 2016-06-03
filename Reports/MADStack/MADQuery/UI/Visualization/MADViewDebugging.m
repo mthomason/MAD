@@ -11,7 +11,7 @@
 @implementation MADViewDebugging
 
 - (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+    super.frame = frame;
 }
 
 @end

@@ -32,14 +32,14 @@
 
 - (void)drawRect:(CGRect)rect {
 
-    if ([self numberOfRowsInBackground] >= 2) {
+    if (self.numberOfRowsInBackground >= 2) {
         [[UIColor groupTableViewBackgroundColor] setStroke];
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         
-        CGFloat sectionHeight = rect.size.height / [self numberOfRowsInBackground];
+        CGFloat sectionHeight = rect.size.height / self.numberOfRowsInBackground;
         CGFloat lineOriginY = CGPointZero.y;
-        for (NSUInteger row = 0; row < [self numberOfRowsInBackground]; row++) {
+        for (NSUInteger row = 0; row < self.numberOfRowsInBackground; row++) {
             
             
             

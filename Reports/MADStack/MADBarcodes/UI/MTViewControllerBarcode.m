@@ -139,8 +139,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
     [self.barButtonItemSave setEnabled:NO];
     
-    UIView *topView = [self topView];
-    UIView *bottomView = [self bottomView];
+    UIView *topView = self.topView;
+    UIView *bottomView = self.bottomView;
     
     NSString *barcodeViewerHeight = @"200.0000";
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -166,13 +166,13 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                         object: self.queryField1.databaseSchemaField];
-            [querySampleDataField database].delegate = self;
+            querySampleDataField.database.delegate = self;
             self.query = querySampleDataField;
             NSError * __autoreleasing error = NULL;
             bool success = [self.query performQueryWithError:&error];
             if (success) {
                 NSArray *allObjects = [self.dataTableSampleData allObjects];
-                [self.optionsViewController setSampleBarcodeData:allObjects];
+                (self.optionsViewController).sampleBarcodeData = allObjects;
                 [self.optionsViewController.tableView reloadData];
             } else {
                 MTViewControllerBarcode * __weak weakself2 = self;
@@ -196,14 +196,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                         object: self.queryField2.databaseSchemaField];
-            [querySampleDataField database].delegate = self;
+            querySampleDataField.database.delegate = self;
             self.query2 = querySampleDataField;
             NSError * __autoreleasing error = NULL;
             bool success = [self.query2 performQueryWithError:&error];
 
             if (success) {
                 NSArray *allObjects = [self.dataTableSampleData2 allObjects];
-                [self.optionsViewController setSampleBarcodeData2dComponent:allObjects];
+                (self.optionsViewController).sampleBarcodeData2dComponent = allObjects;
                 [self.optionsViewController.tableView reloadData];
             } else {
                 MTViewControllerBarcode * __weak weakself = self;
@@ -245,12 +245,12 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 + (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    return [MTDataTable newDataTableForIdentifier:[[objectID URIRepresentation] absoluteString]];
+    return [MTDataTable newDataTableForIdentifier:[objectID URIRepresentation].absoluteString];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if ([self editmode]) {
+    if (self.editmode) {
         [self setEditmode:NO];
         [self updateBarcode];
     }
@@ -277,11 +277,11 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     if (field != nil) {
         [self.barButtonItemSave setEnabled:YES];
     }
-    [self setQueryField1:field];
+    self.queryField1 = field;
 }
 
 - (void)didSetField2:(RptqQueryField *)field {
-    [self setQueryField2:field];
+    self.queryField2 = field;
 }
 
 - (RptqQueryField *)barcodeQueryField1 {
@@ -311,20 +311,20 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
 
 - (void)barcode2dComponentSetEnabled:(BOOL)enabled {
-    [self.barcode setHas2dComponentEnabled:enabled];
+    (self.barcode).has2dComponentEnabled = enabled;
     [self updateBarcode];
 }
 
 - (void)barcode2dComponentSetType:(NSInteger)type {
-    [self.barcode setHas2dComponentType:type];
+    (self.barcode).has2dComponentType = type;
     [self updateBarcode];
 }
 
 - (void)barcode2dComponentsetSampleData:(NSArray *)sampleData {
  
-    [self setCachedData2dComponent:sampleData];
-    if ([sampleData count] > 0) {
-        [self.barcode setPrimaryData: sampleData[0]];
+    self.cachedData2dComponent = sampleData;
+    if (sampleData.count > 0) {
+        (self.barcode).primaryData = sampleData[0];
     }
     [self updateBarcode];
 
@@ -335,8 +335,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 - (void)setSampleData:(NSArray *)sampleData {
-    [self setCachedData:sampleData];
-    if ([sampleData count] > 0) {
+    self.cachedData = sampleData;
+    if (sampleData.count > 0) {
         self.barcodeInput = sampleData[0];
     }
     [self updateBarcode];
@@ -350,8 +350,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 - (BOOL)didToggleShowErrorMessages {
-    BOOL showErrorMessages = ![self.barcode showErrorMessages];
-    [self.barcode setShowErrorMessages:showErrorMessages];
+    BOOL showErrorMessages = !(self.barcode).showErrorMessages;
+    (self.barcode).showErrorMessages = showErrorMessages;
     [self updateBarcode];
     return showErrorMessages;
 }
@@ -367,7 +367,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle {
-    [self.barcode setBorderStyle:borderStyle];
+    (self.barcode).borderStyle = borderStyle;
     [self updateBarcode];
 }
 
@@ -499,7 +499,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     [self.optionsViewController addObserver:barcode forKeyPath:barcodeTypeString options:NSKeyValueObservingOptionNew context:NULL];
     [self.optionsViewController addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
     [self.optionsViewController addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
-    [[self previewViewController] setBarcodeToPreview:barcode];
+    [self.previewViewController setBarcodeToPreview:barcode];
     self.barcode = barcode;
     
     [self updateBarcode];
@@ -513,13 +513,13 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         MTViewControllerBarcodePreview *pvc = segue.destinationViewController;
         pvc.delegate = self;
         [pvc setBarcodeToPreview:self.barcode];
-        [[pvc view] layoutIfNeeded];
-        [self setPreviewViewController:pvc];
+        [pvc.view layoutIfNeeded];
+        self.previewViewController = pvc;
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
-        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[segue.destinationViewController topViewController];
+        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[(segue.destinationViewController) topViewController];
         ovc.delegate = self;
         ovc.document = self.document;
-        [self setOptionsViewController:ovc];
+        self.optionsViewController = ovc;
     }
 }
 

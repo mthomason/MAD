@@ -137,7 +137,7 @@
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
     if (predicate) {
-        NSManagedObjectContext *objectContext = [predicate managedObjectContext];
+        NSManagedObjectContext *objectContext = predicate.managedObjectContext;
         if (objectContext) {
             [objectContext deleteObject:predicate];
         }

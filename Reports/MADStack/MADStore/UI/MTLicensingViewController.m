@@ -58,57 +58,57 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self setPreferredContentSize:CGSizeMake(380.0000f, 480.0000f)];
+        self.preferredContentSize = CGSizeMake(380.0000f, 480.0000f);
     }
 }
 
 - (void)initalizationComplete:(BOOL)success error:(NSError *)error {
-    [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
-    [[self activityIndicator2] stopAnimating];
+    [self.activityIndicatorDesignerLicenseOneYear stopAnimating];
+    [self.activityIndicator2 stopAnimating];
     
     [self enableUserInterface];
     if ([MADApplication isMADDesigner]) {
-        [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
-        [self.buttonBuyNowDesignerOneYear setEnabled:success];
+        self.viewBuyButtonsBackground.backgroundColor = [MADColorEverydayApps newColorBlue];
+        (self.buttonBuyNowDesignerOneYear).enabled = success;
         [self.buttonBuyNowDesignerOneYear setHidden:NO];
-        [self.buttonBuyNowDesignerOneMonth setEnabled:success];
+        (self.buttonBuyNowDesignerOneMonth).enabled = success;
         [self.buttonBuyNowDesignerOneMonth setHidden:NO];
     } else if ([MADApplication isMADViewer]) {
-        [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
-        [self.buttonBuyNowViewerOneYear setEnabled:success];
+        self.viewBuyButtonsBackground.backgroundColor = [MADColorEverydayApps newColorBlue];
+        (self.buttonBuyNowViewerOneYear).enabled = success;
         [self.buttonBuyNowViewerOneYear setHidden:NO];
-        [self.buttonBuyNowViewerOneMonth setEnabled:success];
+        (self.buttonBuyNowViewerOneMonth).enabled = success;
         [self.buttonBuyNowViewerOneMonth setHidden:NO];
     }
     
-    NSArray *products = [[MTStoreKitController sharedObject] products];
+    NSArray *products = [MTStoreKitController sharedObject].products;
     
     NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
-    [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
     
     for (SKProduct *product in products) {
         
         if ([product.productIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
             
-            [priceFormatter setLocale:[product priceLocale]];
+            priceFormatter.locale = product.priceLocale;
             NSString *priceString = [priceFormatter stringFromNumber:product.price];
             [self.buttonBuyNowDesignerOneYear setTitle:priceString forState:UIControlStateNormal];
             
         } else if ([product.productIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionMonth1]) {
             
-            [priceFormatter setLocale:[product priceLocale]];
+            priceFormatter.locale = product.priceLocale;
             NSString *priceString = [priceFormatter stringFromNumber:product.price];
             [self.buttonBuyNowDesignerOneMonth setTitle:priceString forState:UIControlStateNormal];
             
         } else if ([product.productIdentifier isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
             
-            [priceFormatter setLocale:[product priceLocale]];
+            priceFormatter.locale = product.priceLocale;
             NSString *priceString = [priceFormatter stringFromNumber:product.price];
             [self.buttonBuyNowViewerOneMonth setTitle:priceString forState:UIControlStateNormal];
             
         } else if ([product.productIdentifier isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
             
-            [priceFormatter setLocale:[product priceLocale]];
+            priceFormatter.locale = product.priceLocale;
             NSString *priceString = [priceFormatter stringFromNumber:product.price];
             [self.buttonBuyNowViewerOneYear setTitle:priceString forState:UIControlStateNormal];
             
@@ -120,22 +120,22 @@
     if (isLicensedUser) {
         
         [self showLicensingDetailsWithExperationDate:experationDate];
-        [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
-        [[self activityIndicator2] stopAnimating];
+        [self.activityIndicatorDesignerLicenseOneYear stopAnimating];
+        [self.activityIndicator2 stopAnimating];
         
-        BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
+        BOOL allowPurchase = experationDate.timeIntervalSinceNow < MTTimeIntervalDay * 15;
         if ([MADApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
-            [self.buttonBuyNowDesignerOneYear setEnabled:allowPurchase];
-            [self.buttonBuyNowDesignerOneYear setHidden:!allowPurchase];
-            [self.buttonBuyNowDesignerOneMonth setEnabled:allowPurchase];
-            [self.buttonBuyNowDesignerOneMonth setHidden:!allowPurchase];
+            self.viewBuyButtonsBackground.backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
+            (self.buttonBuyNowDesignerOneYear).enabled = allowPurchase;
+            (self.buttonBuyNowDesignerOneYear).hidden = !allowPurchase;
+            (self.buttonBuyNowDesignerOneMonth).enabled = allowPurchase;
+            (self.buttonBuyNowDesignerOneMonth).hidden = !allowPurchase;
         } else if ([MADApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
-            [self.buttonBuyNowViewerOneMonth setEnabled:allowPurchase];
-            [self.buttonBuyNowViewerOneMonth setHidden:!allowPurchase];
-            [self.buttonBuyNowViewerOneYear setEnabled:allowPurchase];
-            [self.buttonBuyNowViewerOneYear setHidden:!allowPurchase];
+            self.viewBuyButtonsBackground.backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
+            (self.buttonBuyNowViewerOneMonth).enabled = allowPurchase;
+            (self.buttonBuyNowViewerOneMonth).hidden = !allowPurchase;
+            (self.buttonBuyNowViewerOneYear).enabled = allowPurchase;
+            (self.buttonBuyNowViewerOneYear).hidden = !allowPurchase;
         }
         
     } else {
@@ -148,17 +148,17 @@
         }];
         
         if ([MADApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
+            self.viewBuyButtonsBackground.backgroundColor = [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:NO];
             [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
         } else if ([MADApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
+            self.viewBuyButtonsBackground.backgroundColor = [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowViewerOneYear setEnabled:NO];
             [self.buttonBuyNowViewerOneMonth setEnabled:NO];
         }
         
-        [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
-        [[self activityIndicator2] startAnimating];
+        [self.activityIndicatorDesignerLicenseOneYear startAnimating];
+        [self.activityIndicator2 startAnimating];
         
         NSArray *productIds;
         if ([MADApplication isMADDesigner]) {
@@ -192,16 +192,16 @@
         [weakViewController licenseUserCompletion:isLicensedUser andExperationDate:experationDate];
     };
     
-    [self setLicenseUserCompletion:licenseUserCompletion];
+    self.licenseUserCompletion = licenseUserCompletion;
     
     MTBlockCompletion completion = ^(BOOL success, NSError *error){
         [self enableUserInterface];
-        [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
+        [[MTStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
         if (success == NO) {
             [NSError presentError: error onViewController: self completion: NULL];
         }
     };
-    [self setStandardCompletion:completion];
+    self.standardCompletion = completion;
 
     if ([MADApplication isMADDesigner]) {
         self.buttonBuyNowDesignerOneYear.layer.cornerRadius = 6.6666f;
@@ -225,7 +225,7 @@
         self.buttonBuyNowViewerOneMonth.enabled = NO;
     }
 
-    [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
+    [[MTStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
     
 }
 
@@ -233,7 +233,7 @@
     NSString *dateString = [NSDateFormatter localizedStringFromDate:experationDate
                                                           dateStyle:NSDateFormatterLongStyle
                                                           timeStyle:NSDateFormatterNoStyle];
-    [[self labelDesignerValueExpires] setText:dateString];
+    self.labelDesignerValueExpires.text = dateString;
     [self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setHidden: NO];
     }];
@@ -263,9 +263,9 @@
         [self.buttonBuyNowViewerOneYear setHidden:YES];
         [self.buttonBuyNowViewerOneMonth setHidden:YES];
     }
-    [[self buttonDone] setEnabled:NO];
-    [[self swipeDone] setEnabled:NO];
-    [[self buttonRestore] setEnabled:NO];
+    [self.buttonDone setEnabled:NO];
+    [self.swipeDone setEnabled:NO];
+    [self.buttonRestore setEnabled:NO];
 }
 
 - (void)enableUserInterface {
@@ -280,9 +280,9 @@
         [self.buttonBuyNowViewerOneYear setHidden:NO];
         [self.buttonBuyNowViewerOneMonth setHidden:NO];
     }
-    [[self buttonDone] setEnabled:YES];
-    [[self swipeDone] setEnabled:YES];
-    [[self buttonRestore] setEnabled:YES];
+    [self.buttonDone setEnabled:YES];
+    [self.swipeDone setEnabled:YES];
+    [self.buttonRestore setEnabled:YES];
 }
 
 - (IBAction)done:(id)sender {
@@ -306,10 +306,10 @@
 }
 
 - (void)indicateStartUpdating {
-    [self viewBuyButtonsBackground].backgroundColor = [UIColor lightGrayColor];
+    self.viewBuyButtonsBackground.backgroundColor = [UIColor lightGrayColor];
     [self disableUserInterface];
-    [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
-    [[self activityIndicator2] startAnimating];
+    [self.activityIndicatorDesignerLicenseOneYear startAnimating];
+    [self.activityIndicator2 startAnimating];
 }
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
@@ -322,7 +322,7 @@
     NSArray *productArray = [products filteredArrayUsingPredicate:predicate];
     if (productArray.count > 0) {
         [[MTStoreKitController sharedObject] purchaseProduct: productArray[0]
-                                                  completion: [self standardCompletion]];
+                                                  completion: self.standardCompletion];
     } else {
         [self enableUserInterface];
     }

@@ -51,8 +51,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderChooseFieldViewController class]]) {
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
-        [segue.destinationViewController setDocument:self.document];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+        [(segue.destinationViewController) setDocument: self.document];
     }
 }
 
@@ -63,16 +63,16 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     
-    RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
+    RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
     MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
-    [self setDataTableSampleData:dataTable];
+    self.dataTableSampleData = dataTable;
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: schemaField];
     NSError * __autoreleasing error = NULL;
     bool success = [querySampleDataField performQueryWithError:&error];
     if (success) {
         MTDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
-        [self setDataTableSampleData:dt];
+        self.dataTableSampleData = dt;
         NSArray *allObjects = [self.dataTableSampleData allObjects];
         [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
         [self.tableView reloadData];
@@ -110,10 +110,10 @@
         NSInteger numberOfRows = [tableView numberOfRowsInSection:1];
         for (NSInteger i = 0; i < numberOfRows; i++) {
             UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
-            [c setAccessoryType:UITableViewCellAccessoryNone];
+            c.accessoryType = UITableViewCellAccessoryNone;
         }
-        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [self.delegate barcodeMaxicodeDidSetEncodingMode:[cell tag]];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [self.delegate barcodeMaxicodeDidSetEncodingMode:cell.tag];
     }
 }
 

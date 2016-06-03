@@ -79,7 +79,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
 }
 
 - (void)doubleTapZoom:(UITapGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateEnded) {
+    if (sender.state == UIGestureRecognizerStateEnded) {
         CGFloat initalZoomScale = self.zoomScale;
         CGFloat zoomScale = MADBackgroundScrollViewZoomScales[0];
         for (int i=0; i<5; i++) {

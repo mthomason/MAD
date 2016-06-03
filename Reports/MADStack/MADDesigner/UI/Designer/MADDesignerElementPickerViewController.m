@@ -77,7 +77,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [segue.destinationViewController setDocument:self.document];
+        [(segue.destinationViewController) setDocument: self.document];
     }
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, segue.destinationViewController.accessibilityElements.firstObject);
 }
@@ -122,7 +122,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
                                                           image, whitespace, nil];
     [dataSource addObjectsFromArray:defaults];
     
-    if ([[MTStoreKitController sharedObject] isBarcodeDesignerEnabled]) {
+    if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
         NSNumber *barcode = [NSNumber numberWithShort: MTDocumentObjectTypeBarcode];
         [dataSource addObject:barcode];
     }
@@ -242,7 +242,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     if (self.aggregateViewController) {
         NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:functionType];
         NSString *detailText = [[NSString alloc] initWithFormat:@"%@(x)", functionName];
-        [self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel setText:detailText];
+        (self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel).text = detailText;
     }
 }
 
@@ -258,7 +258,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
                                       withField:(RptqQueryField *)field {
     
-    switch ([[controller view] tag]) {
+    switch (controller.view.tag) {
             
         case MTDocumentObjectTypeLabelDynamic:
             
@@ -272,7 +272,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             id display = [field display];
             id detailtext = [[NSString alloc] initWithFormat:formatString, display];
-            [self.aggregateViewController.tableViewCellAggregateInput.detailTextLabel setText:detailtext];
+            (self.aggregateViewController.tableViewCellAggregateInput.detailTextLabel).text = detailtext;
             [self.navigationBar popNavigationItemAnimated:YES];
             
             break;
@@ -289,14 +289,14 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark - Group By Functions View Controller Delegate Protocol
 
 - (void)didSelectGroupByPage {
-    [self setAggregateGroupByType: MTAggregateGroupByTypePage];
+    self.aggregateGroupByType = MTAggregateGroupByTypePage;
     self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
     [self.navigationBar popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupByReport {
-    [self setAggregateGroupByType: MTAggregateGroupByTypeReport];
+    self.aggregateGroupByType = MTAggregateGroupByTypeReport;
     self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
     [self.navigationBar popNavigationItemAnimated:YES];
@@ -326,7 +326,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
                 NSUInteger group = self.aggregateGroupBySectionNumber;
                 NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [[NSString alloc] initWithFormat:format, group];
-                [detailTextLabel setText:detail];
+                detailTextLabel.text = detail;
                 break;
                 
             }
@@ -334,19 +334,19 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             case MTAggregateGroupByTypeReport: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-                [detailTextLabel setText:detailText];
+                detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-                [detailTextLabel setText:detailText];
+                detailTextLabel.text = detailText;
                 break;
                 
             }
             default:
-                [detailTextLabel setText:@""];
+                detailTextLabel.text = @"";
                 break;
         }
     }
@@ -370,7 +370,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    switch ([tableView tag]) {
+    switch (tableView.tag) {
         case MTViewTagFieldOrFormulaSelector:
 
             switch (indexPath.row) {

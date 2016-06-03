@@ -35,8 +35,8 @@
 + (MTBarcodeType)type { return MTBarcodeTypePlanet; }
 
 - (void)initSampleData {
-    [self setInput:              @"1231231231231"];
-    [self setPrimaryData:        @""];
+    self.input = @"1231231231231";
+    self.primaryData = @"";
 }
 
 @end

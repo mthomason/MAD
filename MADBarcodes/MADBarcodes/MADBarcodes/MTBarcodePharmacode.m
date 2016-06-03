@@ -37,8 +37,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"131070"];
-    [self setPrimaryData:        @""];
+    self.input = @"131070";
+    self.primaryData = @"";
 }
 
 @end

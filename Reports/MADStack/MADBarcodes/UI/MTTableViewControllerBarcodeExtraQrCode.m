@@ -64,20 +64,20 @@
     UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     NSString *automatic = NSLocalizedString(@"Automatic", @"Automatic");
     if (autoresize) {
-        [cellAuto setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [[cellSize detailTextLabel] setText:automatic];
-        [[cellError detailTextLabel] setText:automatic];
+        cellAuto.accessoryType = UITableViewCellAccessoryCheckmark;
+        cellSize.detailTextLabel.text = automatic;
+        cellError.detailTextLabel.text = automatic;
     } else {
-        [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
+        cellAuto.accessoryType = UITableViewCellAccessoryNone;
         NSInteger initalErrorCorrecion = [self.delegate barcodeQrCodeInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
-            [[cellError detailTextLabel] setText:automatic];
-            [[cellSize detailTextLabel] setText:@"Custom"];
+            cellError.detailTextLabel.text = automatic;
+            cellSize.detailTextLabel.text = @"Custom";
         }
         NSInteger initalSize = [self.delegate barcodeQrCodeInitalSize];
         if (initalSize == 0) {
-            [[cellSize detailTextLabel] setText:automatic];
-            [[cellError detailTextLabel] setText:@"Custom"];
+            cellSize.detailTextLabel.text = automatic;
+            cellError.detailTextLabel.text = @"Custom";
         }
     }
     [cellSize setNeedsLayout];
@@ -129,11 +129,11 @@
 }
 
 - (NSInteger)initalRow {
-    return [self displayingSize] ? [self.delegate barcodeQrCodeInitalSize] : [self.delegate barcodeQrCodeInitalErrorCorrection];
+    return self.displayingSize ? [self.delegate barcodeQrCodeInitalSize] : [self.delegate barcodeQrCodeInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
-    if ([self displayingSize]) {
+    if (self.displayingSize) {
         [self.delegate barcodeQrCodeDidSetSize:tag];
     } else {
         [self.delegate barcodeQrCodeDidSetErrorCorrection:tag];

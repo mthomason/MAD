@@ -165,7 +165,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
     
-    NSURL *urlFastCache = [self urlFastCache];
+    NSURL *urlFastCache = self.urlFastCache;
     NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: urlFastCache.absoluteString];
     NSString *keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
     plist[keyUrlFastCache] = urlFastCacheAbsolute;
@@ -178,9 +178,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
     plist[keyBulkInsertLoop] = bulkInsert;
     
-    if ([self groupTableNames] != nil) {
+    if (self.groupTableNames != nil) {
         NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
-        plist[keyGroupTableNames] = [self groupTableNames];
+        plist[keyGroupTableNames] = self.groupTableNames;
     }
     
     if (self.groupKeys != nil) {
@@ -297,7 +297,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (void)reopenDbConnection {
 
-    NSURL *urlFastCache = [self urlFastCache];
+    NSURL *urlFastCache = self.urlFastCache;
 
     MTDatabaseCache *database; MTDatabaseConnection *connection;
     
@@ -520,7 +520,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         }
     } else {
         NSMutableArray *sd = [[NSMutableArray alloc] initWithArray:sortDescriptors];
-        [self setSortDescriptors:sd];
+        self.sortDescriptors = sd;
     }
     
     // FIXME: reset cache after setting the sort descriptors    
@@ -578,7 +578,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (void)createIndex {
     
-    NSArray *sortDescriptors = [[self dataDelegate] sortDescriptors];
+    NSArray *sortDescriptors = [self.dataDelegate sortDescriptors];
     [self.sortDescriptors setArray:sortDescriptors];
     [self sortUsingDescriptors:self.sortDescriptors];
     
@@ -653,7 +653,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSDictionary *objForRow = [self objectAtRow:row];
     NSString *key = self.columnKeys[0];
     MADDataColumn *columnMetaData = self.columns[key];
-    NSString *fieldName = [columnMetaData fieldName];
+    NSString *fieldName = columnMetaData.fieldName;
     return objForRow[fieldName];
 }
 
@@ -815,7 +815,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
         
-        const char *sqlc = [sql UTF8String];
+        const char *sqlc = sql.UTF8String;
         char *queryString = sqlite3_mprintf((char *) sqlc);
         
         MTDatabaseCache *databaseForSelects = self.databaseForSelects;
@@ -852,7 +852,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSEnumerator *objectEnumerator = nil;
     NSDictionary *queryDefination = [self queryDefinationSelect];
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject: queryDefination];
-    NSURL *urlFastCache = [self urlFastCache];
+    NSURL *urlFastCache = self.urlFastCache;
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
     objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                    columns: self.columns
@@ -891,7 +891,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                             sortDescriptors, keySortDesc, nil];
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:options];
 
-    NSURL *url = [self urlFastCache];
+    NSURL *url = self.urlFastCache;
     MTDatabaseConnection *connection = [MTDatabaseConnection newDatabaseConnectionForUrl: url];
 
     MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
@@ -1107,7 +1107,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
     
     NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
-    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
+    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:keys.count];
     
     NSUInteger sortLevel;
     for (NSString *key in keys) {
@@ -1130,7 +1130,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTDataTableFastObjectEnumerator *enumerator;
     
     query = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheSelectGroupKeys object: querySelect];
-    urlFastCache = [self urlFastCache];
+    urlFastCache = self.urlFastCache;
     databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
     enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                              columns: self.columns
@@ -1162,7 +1162,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                  object: options];
     
     NSArray *columnKeys = self.columnKeys;
-    NSURL *urlFastCache = [self urlFastCache];
+    NSURL *urlFastCache = self.urlFastCache;
     MTDatabaseConnection *databaseConnection;
     NSEnumerator *data;
     databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];

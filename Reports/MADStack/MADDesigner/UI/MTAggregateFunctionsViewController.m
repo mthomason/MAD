@@ -34,7 +34,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     
     if ([segue.identifier isEqualToString:@"MTSegueSelectAggregateFunction"]) {
         UITableViewCell *tableViewCell = (UITableViewCell *)sender;
-        [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+        tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
     }
 }
@@ -46,7 +46,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 - (void)updateSelectedFunctionType {
 
-    NSInteger numberOfSections = [self.tableView numberOfSections];
+    NSInteger numberOfSections = (self.tableView).numberOfSections;
     for (NSInteger sectionCtr = 0; sectionCtr < numberOfSections; sectionCtr++) {
 
         NSInteger numberOfRows = [self.tableView numberOfRowsInSection:sectionCtr];
@@ -54,8 +54,8 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
             UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:indexPath];
-            if (tableViewCell.tag == [self selectedFunctionType]) {
-                [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+            if (tableViewCell.tag == self.selectedFunctionType) {
+                tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
             } else {
                 tableViewCell.accessoryType = UITableViewCellAccessoryNone;
             }
@@ -116,15 +116,15 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    for (UITableViewCell *tableViewCell in [self tableViewCells]) {
-        [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
+    for (UITableViewCell *tableViewCell in self.tableViewCells) {
+        tableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
-    [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+    tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
     [self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
     
-    [self.functionDelegate didSelectFunction: [self selectedFunctionType]];
+    [self.functionDelegate didSelectFunction: self.selectedFunctionType];
 
 }
 

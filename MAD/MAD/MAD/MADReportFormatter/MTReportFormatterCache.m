@@ -28,10 +28,10 @@
     if (self = [super init]) {
         
         NSMutableDictionary *layout = [[NSMutableDictionary alloc] initWithCapacity:2];
-        [self setLayout:layout];
+        self.layout = layout;
         
         NSMutableDictionary *indexes = [[NSMutableDictionary alloc] initWithCapacity:2];
-        [self setIndexes:indexes];
+        self.indexes = indexes;
     }
     return self;
 }

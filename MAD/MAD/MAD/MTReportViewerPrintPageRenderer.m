@@ -374,7 +374,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     RptqDatabase *databaseSchemas;
     MTDatabaseConnection *databaseConnection;
     
-    document = [reportFormatter.layout activeDocumentModel];
+    document = (reportFormatter.layout).activeDocumentModel;
     databaseSchemas = document.hasDatabaseSchemas.anyObject;
     
     RptqUserCredentals *credentals = databaseSchemas.ownedByUser;
@@ -1091,9 +1091,9 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
 
     UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     
     UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f
                                            green:170.0000f/256.0000f
@@ -1144,7 +1144,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
 #pragma mark - UIPrintPageRender
 
 - (NSInteger)numberOfPages {
-    return (NSInteger)[self.reportFormatter numberOfPages];
+    return (NSInteger)(self.reportFormatter).numberOfPages;
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
@@ -1170,7 +1170,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
 #pragma mark
 
 - (id)debugQuickLookObject {
-    return [self textRepresentation];
+    return self.textRepresentation;
 }
 
 @end

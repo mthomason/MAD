@@ -29,7 +29,7 @@
     if (self) {
         
         NSMutableArray *rectArray = [[NSMutableArray alloc] init];
-        [self setItemAttributesBySection:rectArray];
+        self.itemAttributesBySection = rectArray;
 
         [self registerClass: [MTReportDesignerSectionDecorationView class]
     forDecorationViewOfKind: NSStringFromClass([MTReportDesignerSectionDecorationView class])];
@@ -119,7 +119,7 @@
 
 - (CGSize)collectionViewContentSize {
     //NSLog(@"collectionViewContentSize");
-    return [self contentSize];
+    return self.contentSize;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -199,7 +199,7 @@
     NSUInteger sectionCounter = 0, itemCounter = 0;
     CGFloat sectionHeight = [self sectionHeight];
 
-    for (NSArray *sectionAttributes in [self invalidatedLayoutArray]) {
+    for (NSArray *sectionAttributes in self.invalidatedLayoutArray) {
 
         CGFloat maxWidthForSection = 0.0000f, maxHeightForSection = 0.0000f;
 
@@ -243,7 +243,7 @@
 
 - (void)invalidateLayout {
     NSMutableArray *invalidatedLayoutArray = [_itemAttributesBySection copy];
-    [self setInvalidatedLayoutArray:invalidatedLayoutArray];
+    self.invalidatedLayoutArray = invalidatedLayoutArray;
 
     [super invalidateLayout];
 
@@ -254,7 +254,7 @@
     NSInteger counter = 0;
     BOOL valueSet = NO;
     NSArray *indexPathsForItems = [self.collectionView indexPathsForVisibleItems];
-    CGFloat sectionHeight = ([self.collectionView frame].size.height / [self.collectionView numberOfSections]);
+    CGFloat sectionHeight = ((self.collectionView).frame.size.height / [self.collectionView numberOfSections]);
     NSUInteger section = alienCenter.y / sectionHeight;
     NSUInteger numberOfItemsInSameSection = 0;
     
@@ -264,8 +264,8 @@
         
         if (indexPath.section == section) {
             
-            if (alienCenter.x < [layoutAttributes center].x && valueSet == NO) {
-                item = [indexPath item];
+            if (alienCenter.x < layoutAttributes.center.x && valueSet == NO) {
+                item = indexPath.item;
                 //section = indexPath.section;
                 valueSet = YES;
                 //break;

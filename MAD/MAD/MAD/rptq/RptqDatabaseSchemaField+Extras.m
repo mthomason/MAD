@@ -31,7 +31,7 @@
     request.resultType = NSCountResultType;
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = [[fetchResults firstObject] unsignedIntegerValue] + 1;
+    NSUInteger identifier = [fetchResults.firstObject unsignedIntegerValue] + 1;
 
     id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;
@@ -122,7 +122,7 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], self.name];
+    return [NSString stringWithFormat:@"%@.%@", self.inTable.name, self.name];
 }
 
 - (NSString *)toString {
@@ -136,7 +136,7 @@
 - (NSString *)fieldTypeDisplay {
 
     NSString *result = nil;
-    switch ([[self dataType] integerValue]) {
+    switch (self.dataType.integerValue) {
         case MADDataTypeBit:
             result = NSLocalizedString(@"Bit", @"Bit data type.");
             break;

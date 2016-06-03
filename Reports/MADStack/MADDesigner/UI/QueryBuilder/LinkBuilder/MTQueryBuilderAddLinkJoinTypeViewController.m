@@ -44,7 +44,7 @@
     NSArray <RptqUserCredentals *> *connections;
     connections = [RptqUserCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
     RptqUserCredentals *userCredentals = connections[0];
-    NSString *databaseDriverType = [userCredentals database_driver_type];
+    NSString *databaseDriverType = userCredentals.database_driver_type;
 
     UITableViewCell *tableViewCell;
     if ([databaseDriverType isEqualToString:MADIdentifierDatabaseMySQL]) {
@@ -56,12 +56,12 @@
         
         tableViewCell = _tableViewCellNaturalJoin;
         tableViewCell.userInteractionEnabled = YES;
-        [tableViewCell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
         tableViewCell.textLabel.enabled = YES;
 
         tableViewCell = _tableViewCellFullOuterJoin;
         tableViewCell.userInteractionEnabled = NO;
-        [tableViewCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
         tableViewCell.textLabel.enabled = NO;
 
 
@@ -70,12 +70,12 @@
 
         tableViewCell = _tableViewCellEquiJoin;
         [tableViewCell setUserInteractionEnabled:YES];
-        [tableViewCell setSelectionStyle:UITableViewCellSelectionStyleGray];
-        [[tableViewCell textLabel] setEnabled:YES];
+        tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
+        [tableViewCell.textLabel setEnabled:YES];
 
         tableViewCell = _tableViewCellNaturalJoin;
         tableViewCell.userInteractionEnabled = NO;
-        [tableViewCell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
         tableViewCell.textLabel.enabled = NO;
         
     }

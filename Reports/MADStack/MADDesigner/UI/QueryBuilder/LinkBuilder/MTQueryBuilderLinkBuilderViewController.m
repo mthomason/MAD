@@ -52,7 +52,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setJoinType:MNSLinkTypeLeftOuterJoin];
-    [self setCurrentlyEditingPart: MADLinkNone];
+    self.currentlyEditingPart = MADLinkNone;
     [self updateRightLabelState];
     [self updateSaveButtonState];
 }
@@ -75,7 +75,7 @@
 
         } else if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldTwo"]) {
             
-            [self setCurrentlyEditingPart: MADLinkRight];
+            self.currentlyEditingPart = MADLinkRight;
             [self setupFieldController1:segue.destinationViewController];
             
         }
@@ -129,16 +129,16 @@
 #pragma mark - Delegate callbacks
 
 - (MNSLinkType)initalLinktype {
-    return [self linkType];
+    return self.linkType;
 }
 
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)queryField {
     [self.navigationController popToViewController: self animated: YES];
     
-    RptqQueryTable *queryTable = [queryField inQueryTable];
+    RptqQueryTable *queryTable = queryField.inQueryTable;
     NSString *tableFieldName = [queryField toString];
-    switch ([self currentlyEditingPart]) {
+    switch (self.currentlyEditingPart) {
         case MADLinkLeft: {
 
             self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.lowercaseString;
@@ -149,7 +149,7 @@
 
             NSString *required = NSLocalizedString(@"Required",
                                                    @"Shows that this field is required.");
-            required = [required lowercaseString];
+            required = required.lowercaseString;
             self.tableViewCellTableFieldTwo.detailTextLabel.text = required;
             self.tableViewCellTableFieldTwo.accessoryType =
                                                     UITableViewCellAccessoryDisclosureIndicator;
@@ -176,9 +176,9 @@
 
 - (void)setJoinType:(MNSLinkType)type {
     NSString *linkName = [RptqQueryLinks newLocalizedNameForLinkType:type];
-    NSString *text = [linkName lowercaseString];
-    [[[self tableViewCellJoinType] detailTextLabel] setText:text];
-    [self setLinkType: type];
+    NSString *text = linkName.lowercaseString;
+    self.tableViewCellJoinType.detailTextLabel.text = text;
+    self.linkType = type;
 }
 
 - (BOOL)firstFieldSet {

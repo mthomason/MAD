@@ -131,7 +131,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     NSArray *allVertices = [self allVertices];
     for (MTVertex *vertex in allVertices) {
         @autoreleasepool {
-            NSArray *ie = [vertex incidentEdges];
+            NSArray *ie = vertex.incidentEdges;
             NSArray *incidentEdges = [NSArray arrayWithArray:ie];
             [allEdges addObjectsFromArray:incidentEdges];
         }
@@ -152,7 +152,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     NSArray *allVertices = [self allVertices];
     for (MTVertex *vertex in allVertices) {
         @autoreleasepool {
-            NSArray *ie = [vertex incidentEdges];
+            NSArray *ie = vertex.incidentEdges;
             NSArray *incidentEdges = [NSArray arrayWithArray:ie];
             [allEdges addObjectsFromArray:incidentEdges];
         }
@@ -197,10 +197,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     do {
         MTVertex *u = [greyVertices dequeue];
-        NSArray *incidentEdges = [u incidentEdges];
+        NSArray *incidentEdges = u.incidentEdges;
         NSNumber *distance;
         for (MTEdge *edge in incidentEdges) {
-            MTVertex *vertex = [edge destination];
+            MTVertex *vertex = edge.destination;
             do {
                 if (vertex.properties.vertexColor == MTColorWhite) {
                     vertex.properties.vertexColor = MTColorGray;
@@ -307,7 +307,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     vertex.dfsProperties.dfsDistance = *counter;
     vertex.dfsProperties.dfsTimestampDiscovered = *counter;
     
-    NSArray *incidentEdges = [vertex incidentEdges];
+    NSArray *incidentEdges = vertex.incidentEdges;
     for (MTEdge *incidentEdge in incidentEdges) {
         
         MTVertex *neighborVertex = incidentEdge.destination;

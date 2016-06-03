@@ -34,12 +34,12 @@
         UIApplication * __weak weakself = self;
         if (weakself.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [weakself setNetworkActivityIndicatorVisible:networkActivityIndicatorVisible];
+                weakself.networkActivityIndicatorVisible = networkActivityIndicatorVisible;
             });
         }
     } else {
         if (self.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
-            [self setNetworkActivityIndicatorVisible:networkActivityIndicatorVisible];
+            self.networkActivityIndicatorVisible = networkActivityIndicatorVisible;
         }
     }
 }

@@ -306,7 +306,7 @@ static NSString * const StringEmpty = @"";
     
     MADMutableMapPlist *columnsPlist;
     columnsPlist = [[MADMutableMapPlist alloc] initWithCapacity:[self numberOfColumns]];
-    for (NSString *key in [self columnKeys]) {
+    for (NSString *key in self.columnKeys) {
         MADDataColumn *dataColumn = self.columns[key];
         columnsPlist[key] = [dataColumn copyPlist];
     }

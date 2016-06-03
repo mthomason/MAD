@@ -25,7 +25,7 @@
 @implementation RptqDocumentObjectFormula (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [[self parentObjectFormula] formattedString:dataType forValue:value];
+    return [self.parentObjectFormula formattedString:dataType forValue:value];
 }
 
 - (void)awakeFromInsert {
@@ -38,7 +38,7 @@
                                                                    ascending: NO];
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
-    [request setFetchLimit:1];
+    request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
@@ -79,25 +79,25 @@
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: [document managedObjectContext]];
+                                                                       inManagedObjectContext: document.managedObjectContext];
     
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
-                                                                              inManagedObjectContext: [document managedObjectContext]];
+                                                                              inManagedObjectContext: document.managedObjectContext];
     
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
+                                                 insertIntoManagedObjectContext: document.managedObjectContext];
 
     NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
     RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                               insertIntoManagedObjectContext: [document managedObjectContext]];
+                                                                               insertIntoManagedObjectContext: document.managedObjectContext];
     
     dataObject.isFormula = reportObject;
     dataObject.isFormula.source = formulaText;
     NSNumber *typeFormula = @(MTDocumentObjectTypeFormula);
     dataObject.type = typeFormula;
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[document hasDetailSection] hasRows][0] hasObjects]];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[document.hasDetailSection.hasRows[0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     

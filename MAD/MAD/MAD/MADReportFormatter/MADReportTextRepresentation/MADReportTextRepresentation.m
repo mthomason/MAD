@@ -49,7 +49,7 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 
 - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex {
     id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
-    [self.pages setObject:page forKey:p];
+    (self.pages)[p] = page;
 }
 
 - (void)removeAllPages {

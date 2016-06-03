@@ -55,7 +55,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
 }
 
 - (void)initializeRowInterval {
-    [self setPageInterval:PageIntervalInital];
+    self.pageInterval = PageIntervalInital;
 }
 
 - (NSDictionary *)parametersWithNumberOfPages:(NSUInteger)pages {
@@ -74,7 +74,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
         notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
                                                      object:reportFormatter userInfo:parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-        if ([self pageInterval] < PageIntervalInitalMax) {
+        if (self.pageInterval < PageIntervalInitalMax) {
             if (page > self.pageInterval) {
                 self.pageInterval = (unsigned long)ceil(self.pageInterval * 1.1);
             }

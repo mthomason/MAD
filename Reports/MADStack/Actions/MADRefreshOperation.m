@@ -67,7 +67,7 @@ static const short errCache = 2;
     }
     
     NSError * __autoreleasing eerror = NULL;
-    MTDatabaseConnection *connectionSettings = [document.database databaseConnection];
+    MTDatabaseConnection *connectionSettings = (document.database).databaseConnection;
     id dbconn = [document.database connectWithConnection:connectionSettings credentals:credientals];
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];

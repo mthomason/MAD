@@ -80,8 +80,8 @@
                         forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
 
-    RptqQuery *query = [database defaultQuery];
-    NSSet *queryTables = [query hasQueryTables];
+    RptqQuery *query = database.defaultQuery;
+    NSSet *queryTables = query.hasQueryTables;
     NSInteger dupeCtr = 0;
     for (RptqQueryTable *queryTable in queryTables) {
         if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {

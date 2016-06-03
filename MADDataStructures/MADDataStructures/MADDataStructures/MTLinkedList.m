@@ -46,14 +46,14 @@
 - (void)add:(id)object {
     if (object != nil) {
         [self.list addObject:object];
-        [self setLocation: self.count - 1];
+        self.location = self.count - 1;
     }
 }
 
 - (id)head {
     id result;
     @synchronized(self) {
-        result = [self.list objectAtIndex:0];
+        result = (self.list)[0];
     }
     return result;
 }
@@ -63,7 +63,7 @@
     @synchronized(self) {
         if ([self isNext]) {
             self.location++;
-            result = [self.list objectAtIndex:self.location];
+            result = (self.list)[self.location];
         } else {
             result = nil;
         }
@@ -76,7 +76,7 @@
     @synchronized(self) {
         if ([self isPrevious]) {
             self.location--;
-            result = [self.list objectAtIndex:self.location];
+            result = (self.list)[self.location];
         } else {
             result = nil;
         }
@@ -85,15 +85,15 @@
 }
 
 - (id)getTop {
-    return (self.count > 0) ? [self.list lastObject] : nil;
+    return (self.count > 0) ? (self.list).lastObject : nil;
 }
 
 - (id)getBottom {
-    return (self.count > 0) ? [self.list objectAtIndex:0] : nil;
+    return (self.count > 0) ? (self.list)[0] : nil;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    return [self.list objectAtIndex:index];
+    return (self.list)[index];
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {

@@ -56,10 +56,10 @@
     if (self = [super initWithCoder:aDecoder]) {
         
         NSDateFormatter *longStyleDateFormatter = [[NSDateFormatter alloc] init];
-        [longStyleDateFormatter setDateStyle:NSDateFormatterFullStyle];
-        [longStyleDateFormatter setTimeStyle:NSDateFormatterLongStyle];
-        [longStyleDateFormatter setLocale:[NSLocale currentLocale]];
-        [self setLongStyleDateFormatter:longStyleDateFormatter];
+        longStyleDateFormatter.dateStyle = NSDateFormatterFullStyle;
+        longStyleDateFormatter.timeStyle = NSDateFormatterLongStyle;
+        longStyleDateFormatter.locale = [NSLocale currentLocale];
+        self.longStyleDateFormatter = longStyleDateFormatter;
         
     }
     return self;
@@ -106,11 +106,11 @@
 - (void)keyboardDidShow:(NSNotification *)sender {
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
 
-        NSDictionary *userInfo = [sender userInfo];
+        NSDictionary *userInfo = sender.userInfo;
         //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
         NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
         NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
-        NSTimeInterval duration = [keyboardAnimationDurationUserInfoKey longLongValue];
+        NSTimeInterval duration = keyboardAnimationDurationUserInfoKey.longLongValue;
         NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
         //CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
         CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
@@ -118,7 +118,7 @@
         CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
         MTViewControllerValueBasedOnField * __weak weakself = self;
         UIViewAnimationOptions options;
-        switch ([keyboardAnimationCurveUserInfoKey integerValue]) {
+        switch (keyboardAnimationCurveUserInfoKey.integerValue) {
             case UIViewAnimationCurveEaseInOut:
                 options = UIViewAnimationOptionCurveEaseInOut;
                 break;
@@ -136,7 +136,7 @@
                 break;
         }
         [UIView animateWithDuration:duration delay:0.0 options:options animations:^{
-            [[weakself pickerView] setFrame:pickerViewFrameEnd];
+            weakself.pickerView.frame = pickerViewFrameEnd;
         } completion:^(BOOL finished) {
             
         }];
@@ -154,7 +154,7 @@
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: field];
 
-    [self setQuerySampleDataField:querySampleDataField];
+    self.querySampleDataField = querySampleDataField;
     
     MTViewControllerValueBasedOnField * __weak weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -167,11 +167,11 @@
             MTViewControllerValueBasedOnField * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 MTViewControllerValueBasedOnField *strongself5 = weakself3;
-                MTDataTable * __autoreleasing dt = [[querySampleDataField.database delegate] dataTableForQuery:querySampleDataField];
-                [strongself5 setDataTable: dt];
+                MTDataTable * __autoreleasing dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
+                strongself5.dataTable = dt;
                 
-                NSArray *allObjects = [[strongself5 dataTable] allObjects];
-                [strongself5 setPickerData:allObjects];
+                NSArray *allObjects = [strongself5.dataTable allObjects];
+                strongself5.pickerData = allObjects;
                 [strongself5.pickerView reloadAllComponents];
                 
                 [strongself5.pickerView setNeedsDisplay];
@@ -245,7 +245,7 @@
     NSString *result = nil;
     if ((NSUInteger)row < _pickerData.count) {
         NSDictionary *pickerData = _pickerData[(NSUInteger)row];
-        id resultObject = [[pickerData allValues] lastObject];
+        id resultObject = pickerData.allValues.lastObject;
         if ([resultObject isKindOfClass:[NSDateComponents class]]) {
             NSDateComponents *resultDate = resultObject;
             NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
@@ -254,7 +254,7 @@
         } else if ([resultObject isKindOfClass:[NSString class]]) {
             result = [NSString stringWithString: resultObject];
         } else if ([resultObject isKindOfClass:[NSNumber class]]) {
-            result = [(NSNumber *)resultObject stringValue];
+            result = ((NSNumber *)resultObject).stringValue;
         } else if (resultObject == nil) {
             result = @"NULL";
         } else {
@@ -268,7 +268,7 @@
 
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    [[self textField] setText:[self pickerView:pickerView titleForRow:row forComponent:component]];
+    self.textField.text = [self pickerView:pickerView titleForRow:row forComponent:component];
 }
 
 #pragma mark - Table View Data Source
@@ -286,7 +286,7 @@
     
     MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
-    [result.textField setReturnKeyType:UIReturnKeyDone];
+    (result.textField).returnKeyType = UIReturnKeyDone;
     result.textField.delegate = self;
     
     self.textField = result.textField;

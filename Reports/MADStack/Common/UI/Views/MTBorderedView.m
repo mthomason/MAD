@@ -39,7 +39,7 @@
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, path);
     [[UIColor clearColor] setFill];
-    [[self borderColor] setStroke];
+    [self.borderColor setStroke];
     CGFloat dashPhase = 0.0;
     CGFloat dashLengths[] = { 7, 3, 7, 3, 7, 3 };
     CGContextSetLineDash(currentContext,

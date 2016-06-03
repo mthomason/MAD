@@ -38,7 +38,7 @@
         RptqDocumentObjectBarcode *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
+    self.identifier = @(identifier);
     
 }
 
@@ -68,20 +68,20 @@
 
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
-    [self setAdd2dComponent:    @([barcode has2dComponent])];
-    self.borderStyle =       @([barcode borderStyle]);
-    self.borderWidth =        @([barcode borderWidth]);
-    [self setType:              @([barcode barcodeType])];
-    [self setHeight:            @([barcode height])];
-    [self setHumanReadable:     @([barcode humanReadable])];
-    [self setOption1:           @([barcode option1])];
-    [self setOption2:           @([barcode option2])];
-    [self setOption3:           @([barcode option3])];
-    [self setShowErrorMessage:  @([barcode showErrorMessages])];
-    [self setWhitespaceWidth:   @([barcode whitespaceWidth])];
-    [self setScale:             @([barcode scale])];
-    [self setReferencesField1:  fieldOne];
-    [self setReferencesField2:  fieldTwo];
+    self.add2dComponent = @(barcode.has2dComponent);
+    self.borderStyle =       @(barcode.borderStyle);
+    self.borderWidth =        @(barcode.borderWidth);
+    self.type = @(barcode.barcodeType);
+    self.height = @(barcode.height);
+    self.humanReadable = @(barcode.humanReadable);
+    self.option1 = @(barcode.option1);
+    self.option2 = @(barcode.option2);
+    self.option3 = @(barcode.option3);
+    self.showErrorMessage = @(barcode.showErrorMessages);
+    self.whitespaceWidth = @(barcode.whitespaceWidth);
+    self.scale = @(barcode.scale);
+    self.referencesField1 = fieldOne;
+    self.referencesField2 = fieldTwo;
     [self.managedObjectContext save:nil];
 }
 
@@ -114,48 +114,48 @@
 
         NSString *className = NSStringFromClass([RptqDocumentObjectBarcode class]);
         NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: className
-                                                                                  inManagedObjectContext: [queryFieldOne managedObjectContext]];
+                                                                                  inManagedObjectContext: queryFieldOne.managedObjectContext];
         
         reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                          insertIntoManagedObjectContext: [queryFieldOne managedObjectContext]];
+                                          insertIntoManagedObjectContext: queryFieldOne.managedObjectContext];
         
         
-        NSNumber *componentEnabled = @([barcode has2dComponentEnabled]);
-        NSNumber *borderStyle = @([barcode borderStyle]);
-        NSNumber *borderWidth = @([barcode borderWidth]);
+        NSNumber *componentEnabled = @(barcode.has2dComponentEnabled);
+        NSNumber *borderStyle = @(barcode.borderStyle);
+        NSNumber *borderWidth = @(barcode.borderWidth);
         NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
         NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
         
-        NSNumber *height = @([barcode height]);
-        NSNumber *humanReadable = @([barcode humanReadable]);
-        NSNumber *option1 = @([barcode option1]);
-        NSNumber *option2 = @([barcode option2]);
-        NSNumber *option3 = @([barcode option3]);
-        NSNumber *showErrorMessage = @([barcode showErrorMessages]);
-        NSNumber *barcodeType = @([barcode barcodeType]);
-        NSNumber *whitespaceWidth = @([barcode whitespaceWidth]);
+        NSNumber *height = @(barcode.height);
+        NSNumber *humanReadable = @(barcode.humanReadable);
+        NSNumber *option1 = @(barcode.option1);
+        NSNumber *option2 = @(barcode.option2);
+        NSNumber *option3 = @(barcode.option3);
+        NSNumber *showErrorMessage = @(barcode.showErrorMessages);
+        NSNumber *barcodeType = @(barcode.barcodeType);
+        NSNumber *whitespaceWidth = @(barcode.whitespaceWidth);
         NSNumber *useStaticInput1 = @(NO);
         NSNumber *useStaticInput2 = @(NO);
-        NSNumber *scale = @([barcode scale]);
+        NSNumber *scale = @(barcode.scale);
         
-        [reportObject setAdd2dComponent:componentEnabled];
-        [reportObject setBorderStyle:borderStyle];
+        reportObject.add2dComponent = componentEnabled;
+        reportObject.borderStyle = borderStyle;
         reportObject.borderWidth = borderWidth;
-        [reportObject setColorBackground:colorBackground];
-        [reportObject setColorForeground:colorForeground];
-        [reportObject setHeight:height];
-        [reportObject setHumanReadable:humanReadable];
-        [reportObject setReferencesField1: queryFieldOne];
-        [reportObject setReferencesField2: queryFieldTwo];
-        [reportObject setOption1: option1];
-        [reportObject setOption2: option2];
-        [reportObject setOption3: option3];
-        [reportObject setShowErrorMessage: showErrorMessage];
-        [reportObject setType:barcodeType];
-        [reportObject setWhitespaceWidth:whitespaceWidth];
-        [reportObject setUseStaticInput1:useStaticInput1];
-        [reportObject setUseStaticInput2:useStaticInput2];
-        [reportObject setScale:scale];
+        reportObject.colorBackground = colorBackground;
+        reportObject.colorForeground = colorForeground;
+        reportObject.height = height;
+        reportObject.humanReadable = humanReadable;
+        reportObject.referencesField1 = queryFieldOne;
+        reportObject.referencesField2 = queryFieldTwo;
+        reportObject.option1 = option1;
+        reportObject.option2 = option2;
+        reportObject.option3 = option3;
+        reportObject.showErrorMessage = showErrorMessage;
+        reportObject.type = barcodeType;
+        reportObject.whitespaceWidth = whitespaceWidth;
+        reportObject.useStaticInput1 = useStaticInput1;
+        reportObject.useStaticInput2 = useStaticInput2;
+        reportObject.scale = scale;
 
     }
     

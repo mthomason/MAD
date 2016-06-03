@@ -37,8 +37,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"Code 128"];
-    [self setPrimaryData:        @""];
+    self.input = @"Code 128";
+    self.primaryData = @"";
 }
 
 @end
@@ -63,8 +63,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"Code 128b"];
-    [self setPrimaryData:        @""];
+    self.input = @"Code 128b";
+    self.primaryData = @"";
 }
 
 @end
@@ -89,8 +89,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"9889876543210"];
-    [self setPrimaryData:        @""];
+    self.input = @"9889876543210";
+    self.primaryData = @"";
 }
 
 @end
@@ -115,8 +115,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"13666666666666613"];
-    [self setPrimaryData:        @""];
+    self.input = @"13666666666666613";
+    self.primaryData = @"";
 }
 
 @end
@@ -141,8 +141,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"27182818"];
-    [self setPrimaryData:        @""];
+    self.input = @"27182818";
+    self.primaryData = @"";
 }
 
 @end
@@ -167,8 +167,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"27182818"];
-    [self setPrimaryData:        @""];
+    self.input = @"27182818";
+    self.primaryData = @"";
 }
 
 @end

@@ -17,7 +17,7 @@
 @synthesize labelH1, imageThumbnail;
 
 - (void)awakeFromNib {
-    [self imageThumbnail].contentMode = UIViewContentModeScaleAspectFit;
+    self.imageThumbnail.contentMode = UIViewContentModeScaleAspectFit;
     [super awakeFromNib];
 }
 

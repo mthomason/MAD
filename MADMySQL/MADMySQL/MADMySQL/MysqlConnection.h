@@ -19,9 +19,9 @@
 }
 
     - (unsigned int)errorNumber;
-    - (const char *)errorText;
+    - (const char *)errorText NS_RETURNS_INNER_POINTER;
 
-    - (void *)connection;
+    - (void *)connection NS_RETURNS_INNER_POINTER;
 
     @property(readonly) BOOL transactionsEnabled;
     @property(readonly) MysqlServer *server;

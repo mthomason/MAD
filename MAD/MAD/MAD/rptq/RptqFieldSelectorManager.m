@@ -52,7 +52,7 @@
 
 
 - (NSUInteger)countOfRowHeights {
-	return [self.rowHeights count];
+	return (self.rowHeights).count;
 }
 
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx {

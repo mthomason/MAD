@@ -156,7 +156,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {
-        [(MADConnectionViewController *)segue.destinationViewController setDatabaseType:dbId];
+        ((MADConnectionViewController *)segue.destinationViewController).databaseType = dbId;
     }
 }
 

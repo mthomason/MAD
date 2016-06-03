@@ -119,7 +119,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     [super viewWillAppear:animated];
     [self.styleNavigationController popToRootViewControllerAnimated:animated];
 
-    [self setClearsBackground: self.clearsBackground];
+    self.clearsBackground = self.clearsBackground;
     UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];

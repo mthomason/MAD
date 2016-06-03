@@ -54,7 +54,7 @@
     id result;
     @synchronized(self) {
         self.counter = self.counter - 1;
-        result = [self.queue objectAtIndex:self.counter];
+        result = (self.queue)[self.counter];
         [self.queue removeObjectAtIndex:self.counter];
     }
     return result;

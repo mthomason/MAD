@@ -86,16 +86,16 @@ static NSNumberFormatter *currencyNumberFormatter;
         result = (RptqDocumentObject *)managedObject;
         
     } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
-        result = [(RptqDocumentObjectGroupKey *)managedObject parentObject];
+        result = ((RptqDocumentObjectGroupKey *)managedObject).parentObject;
         
     } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
-        result = [(RptqDocumentObjectLabel *)managedObject parentObjectLabel];
+        result = ((RptqDocumentObjectLabel *)managedObject).parentObjectLabel;
         
     } else if ([managedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
-        result = [(RptqDocumentObjectBarcode *)managedObject parentObjectBarcode];
+        result = ((RptqDocumentObjectBarcode *)managedObject).parentObjectBarcode;
         
     } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
-        result = [(RptqDocumentObjectLabelDataField *)managedObject parentObjectLabelDataField];
+        result = ((RptqDocumentObjectLabelDataField *)managedObject).parentObjectLabelDataField;
         
     }
     return result;
@@ -156,8 +156,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     NSUInteger lastDropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = fetchResults.lastObject;
-        idNumber = [[lastObject identifier] unsignedIntegerValue] + 1;
-        lastDropIndex = [[lastObject dropIndex] unsignedIntegerValue] + 1;
+        idNumber = lastObject.identifier.unsignedIntegerValue + 1;
+        lastDropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
     }
     
     NSString *fontname = [[NSString alloc] initWithString:[MADFont defaultFamily]];
@@ -382,7 +382,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: self.isGroupKey.groupNumber
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
-            result = [NSString stringWithFormat:gorupFormatString, [groupNumberText uppercaseString]];
+            result = [NSString stringWithFormat:gorupFormatString, groupNumberText.uppercaseString];
             break;
         }
         
@@ -429,7 +429,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             if ([value isKindOfClass:[NSString class]]) {
                 result = value;
             } else if ([value isKindOfClass:[NSNumber class]]) {
-                result = [NSString stringWithFormat:@"%ld", (long)[(NSNumber *)value integerValue]];
+                result = [NSString stringWithFormat:@"%ld", (long)((NSNumber *)value).integerValue];
             } else {
                 result = [NSString stringWithFormat:@"%@", value];
             }
@@ -455,18 +455,18 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             static NSDateFormatter *dateTimeformatter;
             if (dateformatter == nil) {
                 dateformatter = [[NSDateFormatter alloc] init];
-                [dateformatter setDateStyle:NSDateFormatterShortStyle];
-                [dateformatter setTimeStyle:NSDateFormatterNoStyle];
+                dateformatter.dateStyle = NSDateFormatterShortStyle;
+                dateformatter.timeStyle = NSDateFormatterNoStyle;
             }
             if (timeformatter == nil) {
                 timeformatter = [[NSDateFormatter alloc] init];
-                [timeformatter setDateStyle:NSDateFormatterNoStyle];
-                [timeformatter setTimeStyle:NSDateFormatterShortStyle];
+                timeformatter.dateStyle = NSDateFormatterNoStyle;
+                timeformatter.timeStyle = NSDateFormatterShortStyle;
             }
             if (dateTimeformatter == nil) {
                 dateTimeformatter = [[NSDateFormatter alloc] init];
-                [dateTimeformatter setDateStyle:NSDateFormatterShortStyle];
-                [dateTimeformatter setTimeStyle:NSDateFormatterShortStyle];
+                dateTimeformatter.dateStyle = NSDateFormatterShortStyle;
+                dateTimeformatter.timeStyle = NSDateFormatterShortStyle;
             }
             NSDate *d = nil;
             if ([value isKindOfClass:[NSData class]]) {
@@ -474,7 +474,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             } else {
                 NSTimeInterval t = 0;
                 if ([value isKindOfClass:[NSString class]]) {
-                    t = [(NSString *)value longLongValue];
+                    t = ((NSString *)value).longLongValue;
                 } else if ([value isKindOfClass:[NSNumber class]]) {
                     t = [value longLongValue];
                 }
@@ -517,16 +517,16 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
         case MADDataTypeNumber:
         {
             if ([value isKindOfClass:[NSNumber class]]) {
-                if ([[self formatNumericCurrency] boolValue]) {
+                if (self.formatNumericCurrency.boolValue) {
                     if (!currencyNumberFormatter) {
                         currencyNumberFormatter = [[NSNumberFormatter alloc] init];
-                        [currencyNumberFormatter setLocale:[NSLocale currentLocale]];
-                        [currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                        currencyNumberFormatter.locale = [NSLocale currentLocale];
+                        currencyNumberFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
                     }
                     result = [currencyNumberFormatter stringFromNumber:value];
                 } else {
                     NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
-                    [formatString appendFormat:@"%ld", (long)[[self formatNumericDecimals] integerValue]];
+                    [formatString appendFormat:@"%ld", (long)self.formatNumericDecimals.integerValue];
                     [formatString appendString:@"f"];
                     result = [NSString stringWithFormat:formatString, [value floatValue]];
                 }

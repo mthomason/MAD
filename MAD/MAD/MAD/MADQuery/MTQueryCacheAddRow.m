@@ -45,7 +45,7 @@ static NSString * const SqlDelimitorObject = @", %@";
 @dynamic columns;
 
 - (void)setDatabase:(MTDatabase *)database {
-    [super setDatabase:database];
+    super.database = database;
     NSString *c = [self columnNames];
     NSString *sqlColumnNames = [NSString stringWithString:c];
     self.sqlPreProcessColumnNames = sqlColumnNames;

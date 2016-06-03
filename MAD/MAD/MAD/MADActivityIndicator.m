@@ -55,7 +55,7 @@
                                        frame.size.width,
                                        44.0000f);
         UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
-        [status setTextColor:[UIColor lightTextColor]];
+        status.textColor = [UIColor lightTextColor];
         UIFont *font = [UIFont fontWithName: @"Helvetica-Light"
                                        size: 11.0000f];
         

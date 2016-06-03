@@ -205,7 +205,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 #pragma mark - Methods
 
 - (void)addItem:(MADSectionLayoutAttributes *)item {
-    [self.items setObject:item forKey:item.objectID];
+    (self.items)[item.objectID] = item;
     self.lastItem = item;
     self.lastOpperationWasAdditon = true;
 }
@@ -247,12 +247,12 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 // FIXME: Unused function causes retain cycle.
     layout.objectID = objectID;
     layout.frame = frame;
-    [self.items setObject: layout forKey: objectID];
+    (self.items)[objectID] = layout;
 }
 
 - (void)removeItemWithID:(NSManagedObjectID *)objectID {
     
-    MADSectionLayoutAttributes *item = [self.items objectForKey:objectID];
+    MADSectionLayoutAttributes *item = (self.items)[objectID];
     NSIndexPath *pathToRemvoe = item.indexPath;
     
     [self.items enumerateKeysAndObjectsUsingBlock:

@@ -394,7 +394,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                     
                     strongControl2.tintColor = titleColor;
                     
-                    [[(UIButton *)strongControl2 titleLabel] setTextColor:titleColor];
+                    ((UIButton *)strongControl2).titleLabel.textColor = titleColor;
                 }
             }
             
@@ -406,7 +406,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
-    [self setUserSelectedObjectIds:objectIds];
+    self.userSelectedObjectIds = objectIds;
     [self updateDisplay];
 
 }
@@ -721,16 +721,16 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                 NSAttributedString *displayNameBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
                 NSAttributedString *displaySizeBold = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: fontSizeHolder
                                                                                                             withFontSize: _labelFontSize.font.pointSize];
-                [_labelFontName setAttributedText: displayNameBold];
-                [_labelFontSize setAttributedText: displaySizeBold];
+                _labelFontName.attributedText = displayNameBold;
+                _labelFontSize.attributedText = displaySizeBold;
                 break;
             }
             default: {
                 fontDisplayName = NSLocalizedString(@"Ambiguous", @"Ambiguous");
                 NSAttributedString *displayNameBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
                 NSAttributedString *displaySizeBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                [_labelFontName setAttributedText: displayNameBold];
-                [_labelFontSize setAttributedText:displaySizeBold];
+                _labelFontName.attributedText = displayNameBold;
+                _labelFontSize.attributedText = displaySizeBold;
                 break;
             }
         }

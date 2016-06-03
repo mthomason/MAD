@@ -53,12 +53,12 @@
 
 - (void)setBarcodeToPreview:(MTBarcode *)barcode {
     self.barcode = barcode;
-    [self.barcodeView setBarcode:barcode];
+    (self.barcodeView).barcode = barcode;
 }
 
 - (void)update {
-    if ([self.barcodeView barcode] == nil) {
-        [self.barcodeView setBarcode:[self barcode]];
+    if ((self.barcodeView).barcode == nil) {
+        (self.barcodeView).barcode = self.barcode;
     }
     [self.barcodeView setNeedsDisplay];
 }

@@ -402,14 +402,14 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     
     if (fileWrapperError == nil) {
         if (overwrite) {
-            NSData *data = [fileWrapper serializedRepresentation];
+            NSData *data = fileWrapper.serializedRepresentation;
             NSError *errorWriting = nil;
             success = [data writeToURL: archiveURL
                                options: NSDataWritingAtomic
                                  error: &errorWriting] ? true : false;
         } else {
             resultUrl = [archiveURL uniqueUrl];
-            NSData *data = [fileWrapper serializedRepresentation];
+            NSData *data = fileWrapper.serializedRepresentation;
             success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
     }
@@ -417,7 +417,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 }
 
 + (BOOL)isRetnaDisplay {
-    return [[UIScreen mainScreen] scale] > 1.5;
+    return [UIScreen mainScreen].scale > 1.5;
 }
 
 + (NSURL *)newArchiveUrlForMadUrl:(NSURL *)madUrl {
@@ -607,7 +607,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     [document removeObservers];
     NSURL *gutsUrl = document.urlGuts.copy;
 
-    NSURL *fileURL = [document fileURL];
+    NSURL *fileURL = document.fileURL;
     [document saveToURL: fileURL
        forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: ^(BOOL success) {
@@ -646,7 +646,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 }
 
 - (NSURL *)cachedFilesDirectory {
-    NSString *filename = [self filename];
+    NSString *filename = self.filename;
     return [MADocument cacheFilesDirectoryForFilename:filename];
 }
 
@@ -815,13 +815,13 @@ READ_END:;
     //if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            NSLog(@"Error saving context1: %@\n%@", [err localizedDescription], [err userInfo]);
+            NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
             //[NSError presentError: err
-            NSLog(@"Error saving context2: %@\n%@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
             //     onViewController: nil
             //           completion: NULL];
         } else {
-            NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
             //[NSError presentError: error
             //     onViewController: nil
             //           completion: NULL];
@@ -952,7 +952,7 @@ READ_END:;
 
     if (self.extraInformation == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
-        [self setExtraInformation:extraInfo];
+        self.extraInformation = extraInfo;
     }
     NSNumber *dataVersion = [[NSNumber alloc] initWithDouble:1.0];
     self.extraInformation[MADDocumentInfoKeyVersion] = dataVersion;
@@ -977,7 +977,7 @@ READ_END:;
         
         writeAdditionalContent  = YES;
         
-        NSURL *metaUrl = [self urlMetaPlaylist];
+        NSURL *metaUrl = self.urlMetaPlaylist;
         id version = content[MADDocumentInfoKeyVersion];
         id generator = content[MADDocumentInfoKeyGenerator];
         
@@ -1119,10 +1119,10 @@ READ_END:;
         
         
         MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
-        [self.sectionLayoutManagers setObject: layoutManagerHeader forKey: headerSection.objectID];
+        (self.sectionLayoutManagers)[headerSection.objectID] = layoutManagerHeader;
         
         MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
-        [self.sectionLayoutManagers setObject: layoutManagerFooter forKey: footerSection.objectID];
+        (self.sectionLayoutManagers)[footerSection.objectID] = layoutManagerFooter;
 
 
         RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
@@ -1202,7 +1202,7 @@ READ_END:;
 #pragma mark - Report Notifications
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
-    NSDictionary *parameters = [sender userInfo];
+    NSDictionary *parameters = sender.userInfo;
     NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
     
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
@@ -1255,7 +1255,7 @@ READ_END:;
 - (void)saveContext {
     NSError *error;
     if (self.managedObjectContext != nil) {
-        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
+        if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
             [self.managedObjectContext save:nil];
         }
     }
@@ -1300,7 +1300,7 @@ READ_END:;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-        [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
+        sectionLayoutManagers[reportSection.objectID] = layoutManager;
     }
     
     self.sectionLayoutManagers = sectionLayoutManagers;
@@ -1330,7 +1330,7 @@ READ_END:;
     NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
-    [fetchReqest setPredicate:documentObjectsPredicate];
+    fetchReqest.predicate = documentObjectsPredicate;
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
@@ -1423,10 +1423,10 @@ READ_END:;
 }
 
 - (void)initializeMainQuery:(RptqDocument *)document {
-    RptqDatabase *database = [document defaultDatabase];
+    RptqDatabase *database = document.defaultDatabase;
     if (database) {
     
-        RptqQuery *rquery = [database defaultQuery];
+        RptqQuery *rquery = database.defaultQuery;
         MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
         NSMutableDictionary *extraParameters = parameters.mutableCopy;
 
@@ -1438,7 +1438,7 @@ READ_END:;
         
         NSArray *sortDescriptors = [self readCurrentSortDescriptors];
         [self.mainDataTable sortUsingDescriptors:sortDescriptors];
-        [self setMainQuery:defaultQuery];
+        self.mainQuery = defaultQuery;
     }
 }
 
@@ -1467,8 +1467,8 @@ READ_END:;
 }
 
 - (void)initializeMainDatabase:(RptqDocument *)document {
-    RptqDatabase *database = [document defaultDatabase];
-    RptqQuery *query = [database defaultQuery];
+    RptqDatabase *database = document.defaultDatabase;
+    RptqQuery *query = database.defaultQuery;
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
     db.delegate = self;
@@ -1501,9 +1501,9 @@ READ_END:;
     BOOL contentChanged = NO;
     if (!path) contentChanged = YES;
     if (!contentChanged) {
-        contentChanged = [self activeDocumentModel] != nil &&
+        contentChanged = self.activeDocumentModel != nil &&
                          (self.documentStatus.contextChagned) &&
-                         [self.reportFormatter numberOfPages] > 0;
+                         (self.reportFormatter).numberOfPages > 0;
     }
     contentChanged = YES;
     if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {

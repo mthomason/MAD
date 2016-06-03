@@ -242,7 +242,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 
 - (void)setBounds:(CGRect)bounds {
-    [super setBounds:bounds];
+    super.bounds = bounds;
     self.contentView.frame = bounds;
 }
 

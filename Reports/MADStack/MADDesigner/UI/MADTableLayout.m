@@ -90,11 +90,11 @@ typedef struct _ColumnWidth {
         [columnWidths addObject:columnWidthEncoding];
     }
 
-    [self setColumnWidth:columnWidths];
+    self.columnWidth = columnWidths;
 
-    if ([self.columnWidth count] > 0) {
+    if ((self.columnWidth).count > 0) {
         ColumnWidth lastWidth;
-        [[self.columnWidth lastObject] getValue:&lastWidth];
+        [(self.columnWidth).lastObject getValue:&lastWidth];
         CGFloat tableWidth = lastWidth.originX + lastWidth.width;
         if (tableWidth < self.collectionView.frame.size.width) {
             lastWidth.width = self.collectionView.frame.size.width - lastWidth.originX;

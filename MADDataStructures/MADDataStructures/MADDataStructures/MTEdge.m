@@ -74,15 +74,15 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat:@"->%@", [[self destination] toStringHumanReadable]];
+    return [NSString stringWithFormat:@"->%@", [self.destination toStringHumanReadable]];
 }
 
 - (NSString *)toString {
-    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [[self origin] toStringHumanReadable], [[self destination] toStringHumanReadable]];
+    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [self.origin toStringHumanReadable], [self.destination toStringHumanReadable]];
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [self origin], [self destination]];
+    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, self.origin, self.destination];
 }
 
 @end

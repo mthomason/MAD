@@ -27,7 +27,7 @@
     if (self = [super init]) {
         
         NSString *tableName = [[NSString alloc] initWithString: object];
-        [self setTableName:tableName];
+        self.tableName = tableName;
         
     }
     return self;

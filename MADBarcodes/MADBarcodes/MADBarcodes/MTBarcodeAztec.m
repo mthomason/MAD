@@ -40,11 +40,11 @@
 
 - (MTBarcodeAztecSizingMode)sizingMode {
     MTBarcodeAztecSizingMode result = MTBarcodeAztecSizingModeAutomaticResizing;
-    if ([self option1] == NO && [self option2] == NO && [self option3] == NO) {
+    if (self.option1 == NO && self.option2 == NO && self.option3 == NO) {
         result = MTBarcodeAztecSizingModeAutomaticResizing;
-    } else if ([self option1] != NO) {
+    } else if (self.option1 != NO) {
         result = MTBarcodeAztecSizingModeSpecificErrorLevel;
-    } else if ([self option2] != NO) {
+    } else if (self.option2 != NO) {
         result = MTBarcodeAztecSizingModeSpecificSize;
     }
     
@@ -58,24 +58,24 @@
 }
 - (void)setSize:(MTBarcodeAztecSpecificSize)size {
     [self setOption1:NO];
-    [self setOption2:size];
+    self.option2 = size;
     [self setOption3:NO];
 }
 - (void)setMinmumErrorCorrection:(MTBarcodeAztecErrorCorrection)minmumErrorCorrection {
-    [self setOption1:minmumErrorCorrection];
+    self.option1 = minmumErrorCorrection;
     [self setOption2:NO];
     [self setOption3:NO];
 }
 - (NSInteger)size {
-    return [self option2];
+    return self.option2;
 }
 - (NSInteger)errorCorrection {
-    return [self option1];
+    return self.option1;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"Sample Data"];
-    [self setPrimaryData:        @""];
+    self.input = @"Sample Data";
+    self.primaryData = @"";
 }
 
 @end

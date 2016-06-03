@@ -227,7 +227,7 @@
 
     id key;
     key = [MADDataColumn keyFieldName];
-    plist[key] = [self fieldName];
+    plist[key] = self.fieldName;
 
     key= [MADDataColumn keyIdentifier];
     id obj;

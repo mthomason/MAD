@@ -34,7 +34,7 @@
     
     if (dataTableObjectId != nil) {
         objectIdSet = true;
-        objectId = [dataTableObjectId unsignedIntegerValue];
+        objectId = dataTableObjectId.unsignedIntegerValue;
     }
     if (objectIdSet) {
         return [MTDataTable newDataTableOfType:type withObjectID:objectId];
@@ -65,7 +65,7 @@
 }
 
 + (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
-    NSUInteger hash = [identifier hash];
+    NSUInteger hash = identifier.hash;
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);

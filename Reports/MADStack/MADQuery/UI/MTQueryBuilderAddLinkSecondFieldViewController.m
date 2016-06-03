@@ -37,9 +37,9 @@
         cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: CellIdentifier];
     }
     
-    RptqDatabaseSchemaField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
-    [[cell textLabel] setText: [field name]];
-    [[cell detailTextLabel] setText: [field fieldTypeDisplay]];
+    RptqDatabaseSchemaField *field = [self.fetchedResultsController objectAtIndexPath: indexPath];
+    cell.textLabel.text = field.name;
+    cell.detailTextLabel.text = [field fieldTypeDisplay];
     
     return cell;
 }
@@ -50,7 +50,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    RptqQueryField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    RptqQueryField *field = [self.fetchedResultsController objectAtIndexPath: indexPath];
     [self.delegate viewControllerSchemaAddLinkDidSecondFieldFinishWith: field];
 }
 

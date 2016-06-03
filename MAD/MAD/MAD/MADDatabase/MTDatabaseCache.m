@@ -15,7 +15,7 @@
 
 + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection {
     
-    NSString *identifier = [connection databaseTypeIdentifier];
+    NSString *identifier = connection.databaseTypeIdentifier;
     
     id result = nil;
     if ([MADIdentifierDatabaseSqlite3 isEqualToString:identifier]) {

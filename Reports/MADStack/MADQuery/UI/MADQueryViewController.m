@@ -221,7 +221,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-    NSLog(@"Updated objects: %@", [updatedObjects debugDescription]);
+    NSLog(@"Updated objects: %@", updatedObjects.debugDescription);
 
     for (id updatedObject in updatedObjects) {
         
@@ -231,12 +231,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
             
             NSDictionary <NSString *, id> *changes = [query changedValues];
-            NSLog(@"Changed values: %@", [changes debugDescription]);
+            NSLog(@"Changed values: %@", changes.debugDescription);
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
                     MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables
-                                                                                                          reportingEnabled:[[MTStoreKitController sharedObject] isReportingEnabled]];
+                                                                                                          reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
                     self.datamodel = datamodel;
                 }
             }
@@ -437,7 +437,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     if ([segue.identifier isEqualToString: MADSegueShowSql]) {
         MADViewControllerSQL *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MADViewControllerSQL *)[segue.destinationViewController topViewController];
+            viewController = (MADViewControllerSQL *)[(segue.destinationViewController) topViewController];
         } else {
             viewController = segue.destinationViewController;
         }
@@ -452,7 +452,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             if (navControl.topViewController) {
                 if ([navControl.topViewController isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
                     
-                    MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)[navControl topViewController];
+                    MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)navControl.topViewController;
                     if (tvc) {
                         tvc.delegate = self;
                     }
@@ -468,7 +468,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                                           managedObjectContext: document.managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
-                    [tvc setFetchedResultsController: frc];
+                    tvc.fetchedResultsController = frc;
                 }
             }
         }
@@ -476,8 +476,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
+            if (navControl.topViewController) {
+                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
 
                     MADocument *document = self.document;
                     MTQueryBuilderLinkBuilderViewController *tvc;
@@ -493,8 +493,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
+            if (navControl.topViewController) {
+                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
                     MTQueryBuilderPredicateFormatViewController *tvc;
                     tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
                     if (tvc) {
@@ -508,8 +508,8 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
+            if (navControl.topViewController) {
+                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
                     MTQueryBuilderAddGroupViewController *tvc;
                     tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
                     if (tvc) {
@@ -754,12 +754,12 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
             RptqQueryGroup *fromGroup = [self.queryGroupsController objectAtIndexPath: fromIndex];
             RptqQueryGroup *toGroup = [self.queryGroupsController objectAtIndexPath: toIndex];
-            NSInteger fromWeight = [[toGroup weight] integerValue];
-            NSInteger toWeight = [[fromGroup weight] integerValue];
-            [toGroup setWeight:@(toWeight)];
-            [fromGroup setWeight:@(fromWeight)];
+            NSInteger fromWeight = toGroup.weight.integerValue;
+            NSInteger toWeight = fromGroup.weight.integerValue;
+            toGroup.weight = @(toWeight);
+            fromGroup.weight = @(fromWeight);
             NSError *error = nil;
-            [[self.queryGroupsController managedObjectContext] save:&error];
+            [(self.queryGroupsController).managedObjectContext save:&error];
             [self performFetchGroups];
             break;
         }
@@ -884,7 +884,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [self.queryGroupsController objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
-            [result backgroundView].backgroundColor = [UIColor whiteColor];
+            result.backgroundView.backgroundColor = [UIColor whiteColor];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             
@@ -922,16 +922,16 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
             RptqQueryPredicate *predicate = [self.queryPredicatesController objectAtIndexPath: indexPathPredicates];
             
             NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
-            if ([predicate fieldleftpred] != nil) {
+            if (predicate.fieldleftpred != nil) {
                 leftFieldDisplay = predicate.fieldleftpred;
             } else {
                 leftFieldDisplay = [predicate.hasLeftField toString];
             }
             
-            if ([predicate fieldrightpred] != nil) {
-                rightFieldDisplay = [predicate fieldrightpred];
+            if (predicate.fieldrightpred != nil) {
+                rightFieldDisplay = predicate.fieldrightpred;
             } else {
-                rightFieldDisplay = [[predicate hasRightField] toString];
+                rightFieldDisplay = [predicate.hasRightField toString];
             }
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             
@@ -990,7 +990,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     
     if (!result) {
         result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DefaultCellShouldNotGetHere"];
-        [result.textLabel setText: @"Err"];
+        (result.textLabel).text = @"Err";
     }
 
     return result;
@@ -1071,7 +1071,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
         [result addObject: sectionNumber];
 
-    } else if ([controller isEqual:[self queryLinksController]]) {
+    } else if ([controller isEqual:self.queryLinksController]) {
 
         sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
         [result addObject: sectionNumber];
@@ -1172,7 +1172,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if ([self beganUpdates]) {
+    if (self.beganUpdates) {
         [self.tableView endUpdates];
     }
     [self setBeganUpdates:NO];
@@ -1192,7 +1192,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (void)performFetchLinks {
-    [self performFetchWithController:[self queryLinksController]];
+    [self performFetchWithController:self.queryLinksController];
 }
 
 - (void)performFetchGroups {
@@ -1325,7 +1325,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setQueryTablesController: frc];
+            self.queryTablesController = frc;
             [self performFetchTables];
             frc = nil;
         }
@@ -1344,7 +1344,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setQueryLinksController: frc];
+            self.queryLinksController = frc;
             [self performFetchLinks];
             frc = nil;
         }
@@ -1363,7 +1363,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setQueryGroupsController: frc];
+            self.queryGroupsController = frc;
             [self performFetchGroups];
             frc = nil;
             
@@ -1383,7 +1383,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setQueryPredicatesController: frc];
+            self.queryPredicatesController = frc;
             [self performFetchPredicate];
             frc = nil;
         }
@@ -1399,7 +1399,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
         MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables: rptqQuery.numberOfTables
-                                                                                              reportingEnabled: [[MTStoreKitController sharedObject] isReportingEnabled]];
+                                                                                              reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled];
         _datamodel = datamodel;
     }
     return _datamodel;
@@ -1422,7 +1422,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     NSNumber *tables = [[NSNumber alloc] initWithShort: MTQuerySectionsTables];
     NSNumber *resultCount = [[NSNumber alloc] initWithShort: MTQuerySectionsNumberOfQueryResults];
 
-    bool reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
+    bool reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
     switch (numberOfTables) {
         case 0: { //There are three configurations for the table.  These configurations depend
                     //on the number of schemas in the query: zero, one, or more than one.
@@ -1538,7 +1538,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
-    RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
+    RptqDatabaseSchemaTable *schemaTable = table.databaseSchemaTable;
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
     MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
     
@@ -1606,10 +1606,10 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         NSManagedObject *object = nil;
         MADTableViewCellQueryLink *tableViewCellLink = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
         if (tableViewCellLink) {
-            object = [context existingObjectWithID:[tableViewCellLink tableID] error:&error];
+            object = [context existingObjectWithID:tableViewCellLink.tableID error:&error];
         } else {
             
-            id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedLinkes sections] objectAtIndex:0];
+            id <NSFetchedResultsSectionInfo> sectionInfo = fetchedLinkes.sections[0];
             if (row < (NSInteger)sectionInfo.numberOfObjects) {
                 NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
                 object = [fetchedLinkes objectAtIndexPath:testLinkIndexPath];
@@ -1641,7 +1641,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         NSIndexPath *groupIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
 
-        id <NSFetchedResultsSectionInfo> sectionInfo = [self.queryGroupsController.sections objectAtIndex:0];
+        id <NSFetchedResultsSectionInfo> sectionInfo = (self.queryGroupsController.sections)[0];
         if (row < (NSInteger)sectionInfo.numberOfObjects) {
             NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
             NSManagedObject *object = [self.queryGroupsController objectAtIndexPath:testGroupIndexPath];
@@ -1677,7 +1677,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         NSManagedObject *object = nil;
         
         if (tableViewCellPredicate) {
-            object = [context existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
+            object = [context existingObjectWithID:tableViewCellPredicate.tableID error:&error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
             object = [self.queryPredicatesController objectAtIndexPath: testPredicateIndexPath];
@@ -1761,7 +1761,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         
         NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
         
-        bool reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
+        bool reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
         MADQueryViewControllerLayout *oldQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables      reportingEnabled:reportingEnabled];
         MADQueryViewControllerLayout *newQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables - 1  reportingEnabled:reportingEnabled];
 

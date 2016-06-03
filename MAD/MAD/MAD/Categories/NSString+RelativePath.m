@@ -20,8 +20,8 @@
     NSString *pathComponent, *anchorComponent;
     
     for (NSUInteger i = 0, n = componentsInCommon; i < n; i++) {
-        pathComponent = [pathComponents objectAtIndex:i];
-        anchorComponent = [anchorComponents objectAtIndex:i];
+        pathComponent = pathComponents[i];
+        anchorComponent = anchorComponents[i];
         if (![pathComponent isEqualToString:anchorComponent]) {
             componentsInCommon = i;
             break;

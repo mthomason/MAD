@@ -95,7 +95,7 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 #pragma mark Text Field Delegate Protocol
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([[textField text] length] > 0) {
+    if (textField.text.length > 0) {
         [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelSaveIdentifer" sender:self];
     } else {
         [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelCancelIdentifer" sender:self];

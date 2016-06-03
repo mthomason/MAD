@@ -120,7 +120,7 @@
     NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];
     NSString *fieldAlias;
     RptqDatabaseSchemaField *field;
-    for (field in [schemaTable hasFields]) {
+    for (field in schemaTable.hasFields) {
         
         fieldAlias = [database fieldAliasForField:field.name
                                 withSafeTableName:safeTableName];
@@ -134,7 +134,7 @@
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self dataTableMaxFieldLength];
+    return self.dataTableMaxFieldLength;
 }
 
 @end

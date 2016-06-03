@@ -93,7 +93,7 @@ static NSString * const TextDefault = @"Default";
             
             MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
-                [dvc setExcludeTables:@[]];
+                dvc.excludeTables = @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }

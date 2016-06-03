@@ -102,7 +102,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 }
 
 - (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
-    if ([self initializeProductsCompletion] == nil && self.products.count == 0) {
+    if (self.initializeProductsCompletion == nil && self.products.count == 0) {
         
         self.initializeProductsCompletion = [completion copy];
         self.productIdentifiers = productIdentifiers;
@@ -112,7 +112,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
         request.delegate = self;
         [request start];
         
-    } else if ([[self products] count] == 0) {
+    } else if (self.products.count == 0) {
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey :         @"Product Load Failed",
                                     NSLocalizedFailureReasonErrorKey :  @"Try again later."};
         completion(NO, [NSError errorWithDomain:@"MTStoreKitController" code:5 userInfo:errorInfo]);
@@ -169,14 +169,14 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 #pragma mark - SKRequestDelegate Protocol
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    if ([self initializeProductsCompletion]) {
-        [self initializeProductsCompletion](NO, error);
+    if (self.initializeProductsCompletion) {
+        self.initializeProductsCompletion(NO, error);
     }
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
-    if ([self initializeProductsCompletion]) {
-        [self initializeProductsCompletion](YES, nil);
+    if (self.initializeProductsCompletion) {
+        self.initializeProductsCompletion(YES, nil);
     }
 }
 
@@ -192,7 +192,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
 
     for (SKPaymentTransaction *transaction in transactions) {
-		switch ([transaction transactionState]) {
+		switch (transaction.transactionState) {
                 
 			case SKPaymentTransactionStatePurchasing:
 				break;
@@ -204,7 +204,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
                 
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 
-                [self purchaseProductWithIdentifierCompletion](YES, nil);
+                self.purchaseProductWithIdentifierCompletion(YES, nil);
                 
 				break;
             }
@@ -219,8 +219,8 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 			case SKPaymentTransactionStateFailed: {
                 
-                if ([self purchaseProductWithIdentifierCompletion] != nil) {
-                    [self purchaseProductWithIdentifierCompletion](NO, [transaction error]);
+                if (self.purchaseProductWithIdentifierCompletion != nil) {
+                    self.purchaseProductWithIdentifierCompletion(NO, transaction.error);
                 }
                 [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 				break;

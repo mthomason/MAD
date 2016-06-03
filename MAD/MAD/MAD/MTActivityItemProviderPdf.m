@@ -208,7 +208,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 }
 
 - (void)disableUserInteraction:(UIView *)view {
-    for (UIView *subview in [view subviews]) {
+    for (UIView *subview in view.subviews) {
         if ([subview isKindOfClass:[UILabel class]]) {
             [(UILabel *)subview performSelectorOnMainThread:@selector(setTextColor:) withObject:[UIColor lightGrayColor] waitUntilDone:NO];
         } else if ([subview isKindOfClass:[UIImageView class]]) {

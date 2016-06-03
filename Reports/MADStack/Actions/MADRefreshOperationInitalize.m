@@ -126,8 +126,7 @@
         sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
         for (reportSection in sectionEnumerator) {
             layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-            [sectionLayoutManagers setObject: layoutManager
-                                      forKey: reportSection.objectID];
+            sectionLayoutManagers[reportSection.objectID] = layoutManager;
         }
         
         document.sectionLayoutManagers = sectionLayoutManagers;

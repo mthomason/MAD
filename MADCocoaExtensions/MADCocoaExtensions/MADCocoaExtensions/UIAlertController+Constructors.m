@@ -144,7 +144,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                             style: UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction *action) {
         NSString *t1 = ((UITextField *)alertController.textFields.firstObject).text.copy,
-                 *t2 = ((UITextField *)[alertController.textFields objectAtIndex:1]).text.copy;
+                 *t2 = ((UITextField *)(alertController.textFields)[1]).text.copy;
         handlerContinue(t1, t2);
     }];
     

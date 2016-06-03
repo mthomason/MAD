@@ -40,16 +40,16 @@
 }
 
 - (NSInteger)numberOfDataColumns {
-    return [self option2];
+    return self.option2;
 }
 
 - (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns {
-    [self setOption2:numberOfDataColumns];
+    self.option2 = numberOfDataColumns;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"1666666666661"];
-    [self setPrimaryData:        @""];
+    self.input = @"1666666666661";
+    self.primaryData = @"";
 }
 
 @end

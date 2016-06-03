@@ -39,16 +39,16 @@
 }
 
 - (void)setSize:(NSInteger)size {
-    [self setOption2:size];
+    self.option2 = size;
 }
 
 - (NSInteger)size {
-    return [self option2];
+    return self.option2;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"http://www.everydayapps.com/"];
-    [self setPrimaryData:        @""];
+    self.input = @"http://www.everydayapps.com/";
+    self.primaryData = @"";
 }
 
 @end

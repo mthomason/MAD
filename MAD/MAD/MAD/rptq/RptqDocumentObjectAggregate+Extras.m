@@ -29,7 +29,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 @implementation RptqDocumentObjectAggregate (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [[self parentObject] formattedString:dataType forValue:value];
+    return [self.parentObject formattedString:dataType forValue:value];
 }
 
 #pragma mark - Overrides

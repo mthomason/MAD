@@ -127,7 +127,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
         UITableViewCell *cell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];
         RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
-        [self setQueryField:queryField];
+        self.queryField = queryField;
     
     }
 }
@@ -141,7 +141,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
     self.tableView.sectionHeaderHeight = MADFloatHeaderHeight;
 
     self.openSectionIndex = NSNotFound;
-    RptqDocument *document = [self.document activeDocumentModel];
+    RptqDocument *document = (self.document).activeDocumentModel;
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
 
@@ -183,7 +183,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 			[infoArray addObject:sectionInfo];
 		}
 		
-		[self setSectionInfoArray: infoArray];
+		self.sectionInfoArray = infoArray;
 	}
     
    
@@ -241,7 +241,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
                                                                   delegate: self];
         sectionInfo.headerView = vsht;
     }
-    return [sectionInfo headerView];
+    return sectionInfo.headerView;
 }
 
 
@@ -271,7 +271,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
         id sortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
         NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
         queryField = fieldsArray[(NSUInteger)indexPath.row];
-        [self setQueryField:queryField];
+        self.queryField = queryField;
     }
     return queryField;
 }

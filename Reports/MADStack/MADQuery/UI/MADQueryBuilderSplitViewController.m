@@ -158,10 +158,10 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
     MADQueryBuilderSplitViewController * __unsafe_unretained weakself = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
-            NSArray *items = [weakself toolbarItems];
+            NSArray *items = weakself.toolbarItems;
             NSMutableArray *mutableItems = [items mutableCopy];
             [mutableItems removeObject:weakself.barButtonItemRevealQuery];
-            [weakself setToolbarItems:mutableItems];
+            weakself.toolbarItems = mutableItems;
         }
     }];
 }
@@ -190,18 +190,18 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
         
     } else if (sender == self) {
         MADocument *document = self.document;
-        [segue.destinationViewController setDocument:document];
+        [(segue.destinationViewController) setDocument: document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
     } else {
         if (self.popover != nil) {
-            if ([self.popover isPopoverVisible]) {
+            if ((self.popover).popoverVisible) {
                 [self.popover dismissPopoverAnimated:YES];
             }
         }
         Class popoverSegueClass = [UIStoryboardPopoverSegue class];
         if ([segue isKindOfClass:popoverSegueClass]) {
-            [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
-            [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
+            ((UIStoryboardPopoverSegue *)segue).popoverController.delegate = self;
+            self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
             [self.tabBarController disableTabBarItems];
         }
     }

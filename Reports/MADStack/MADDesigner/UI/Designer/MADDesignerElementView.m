@@ -110,8 +110,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    [_canvasView setContentScaleFactor:contentScaleFactor];
-    [super setContentScaleFactor:contentScaleFactor];
+    _canvasView.contentScaleFactor = contentScaleFactor;
+    super.contentScaleFactor = contentScaleFactor;
 }
 
 - (void)setNeedsDisplay {
@@ -121,11 +121,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (void)setTransform:(CGAffineTransform)transform {
     _canvasView.transform = transform;
-    [super setTransform:transform];
+    super.transform = transform;
 }
 
 - (void)setAlpha:(CGFloat)alpha {
-    [super setAlpha:alpha];
+    super.alpha = alpha;
     
     UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f
                                                      blue:1.0000f alpha:alpha];
@@ -212,7 +212,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     UIView *piece = nil;
     if ([piece isKindOfClass:[MTResizeHandleView class]]) {
         [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-        if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
             CGPoint translation = [gestureRecognizer translationInView:piece.superview];
             switch (((MTResizeHandleView *)piece).type) {
                 case north:
@@ -265,7 +265,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)setWobbleRunning:(BOOL)running {
-    [self setDisplayWobbling:running ? true : false];
+    self.displayWobbling = running ? true : false;
     if (running) {
         NSInteger randomInt = arc4random() % 500;
         float r = (randomInt / 500.0000f) + 0.5000f;
@@ -305,7 +305,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         
         NSString *string = [documentObject copyDesignerRepresentationText];
         
-        switch ([documentObject getType]) {
+        switch (documentObject.getType) {
                 
             case MTDocumentObjectTypeImage:
                 self.displayImage = documentObject.isImage.image;

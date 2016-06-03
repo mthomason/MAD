@@ -309,7 +309,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 
 - (void)setEnabled:(BOOL)enabled {
-    [self.pageSlider setEnabled:enabled];
+    (self.pageSlider).enabled = enabled;
     
     UIColor *tintColor = nil;
     UIImage *thumbImage = nil;

@@ -119,7 +119,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            MTDatabaseConnection *databaseConnection = [blockSelf databaseConnection];
+            MTDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
             DBPROCESS *dbconn = (__bridge DBPROCESS *)([blockSelf connectWithConnection:databaseConnection credentals:nil]);
 
             if (dbconn) {
@@ -781,8 +781,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     }
                     
                     /* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
-                    NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:[colmunHolder count]];
-                    for (NSInteger i = 0; i<[colmunHolder count]; i++) {
+                    NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:colmunHolder.count];
+                    for (NSInteger i = 0; i<colmunHolder.count; i++) {
                         NSNumber *negOne = @-1;
                         [columnPercision addObject: negOne];
                     }
@@ -820,7 +820,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                             
                                             NSCharacterSet *characterSet = [NSCharacterSet decimalDigitCharacterSet];
                                             NSString *seperator = [objectStr stringByTrimmingCharactersInSet:characterSet];
-                                            switch ([seperator length]) {
+                                            switch (seperator.length) {
                                                 case 0: {
                                                     NSNumber *zero = @0;
                                                     [columnPercision setObject:zero atIndexedSubscript:columnCounter];
@@ -995,7 +995,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                         DBDATETIME4 smallDate = *sybDateTime4Bind[indexOfType];
                                         
                                         NSDateComponents *offsetCompsDays = [[NSDateComponents alloc] init];
-                                        [offsetCompsDays setDay: smallDate.days];
+                                        offsetCompsDays.day = smallDate.days;
                                         
                                         NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1990 options:0];
                                         
@@ -1027,13 +1027,13 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                         dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
                                         
                                         NSDateComponents *comps = [[NSDateComponents alloc] init];
-                                        [comps setYear:     dateinfo.dateyear];
-                                        [comps setMonth:    dateinfo.datemonth + 1];
-                                        [comps setDay:      dateinfo.datedmonth];
-                                        [comps setHour:     dateinfo.datehour];
-                                        [comps setMinute:     dateinfo.dateminute];
-                                        [comps setSecond:     dateinfo.datesecond];
-                                        [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
+                                        comps.year = dateinfo.dateyear;
+                                        comps.month = dateinfo.datemonth + 1;
+                                        comps.day = dateinfo.datedmonth;
+                                        comps.hour = dateinfo.datehour;
+                                        comps.minute = dateinfo.dateminute;
+                                        comps.second = dateinfo.datesecond;
+                                        comps.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)];
                                         NSDate *date = [gregorian dateFromComponents:comps];
                                         resultsForRow[fieldName] = date;
                                     } else {
@@ -1049,13 +1049,13 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                         dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
                                         
                                         NSDateComponents *comps = [[NSDateComponents alloc] init];
-                                        [comps setYear:     dateinfo.dateyear];
-                                        [comps setMonth:    dateinfo.datemonth + 1];
-                                        [comps setDay:      dateinfo.datedmonth];
-                                        [comps setHour:     dateinfo.datehour];
-                                        [comps setMinute:     dateinfo.dateminute];
-                                        [comps setSecond:     dateinfo.datesecond];
-                                        [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
+                                        comps.year = dateinfo.dateyear;
+                                        comps.month = dateinfo.datemonth + 1;
+                                        comps.day = dateinfo.datedmonth;
+                                        comps.hour = dateinfo.datehour;
+                                        comps.minute = dateinfo.dateminute;
+                                        comps.second = dateinfo.datesecond;
+                                        comps.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)];
                                         NSCalendar *gregorian = [[NSCalendar alloc]
                                                                  initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
                                         NSDate *date = [gregorian dateFromComponents:comps];
@@ -1279,7 +1279,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
             NSString *appName = [self.databaseConnection appname];
             const char *a = [appName cStringUsingEncoding:NSUTF8StringEncoding];
-            NSString *connection = [self.databaseConnection database];
+            NSString *connection = (self.databaseConnection).database;
             const char *n = [connection cStringUsingEncoding:NSUTF8StringEncoding];
             DBSETLUSER(login, u);
             DBSETLPWD(login, p);
@@ -1345,7 +1345,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (id)connectionSettings {
-    return [self databaseConnection];
+    return self.databaseConnection;
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {

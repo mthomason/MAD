@@ -61,7 +61,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 }
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    [super setContentScaleFactor:contentScaleFactor];
+    super.contentScaleFactor = contentScaleFactor;
 }
 
 - (void)setNeedsDisplay {

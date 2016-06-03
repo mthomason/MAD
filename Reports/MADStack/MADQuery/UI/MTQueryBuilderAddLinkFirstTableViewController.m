@@ -38,9 +38,9 @@
         cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
     }
     
-    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
-    [[cell textLabel] setText: [tablea alias]];
-    [[cell detailTextLabel] setText: @""];
+    RptqQueryTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
+    cell.textLabel.text = tablea.alias;
+    cell.detailTextLabel.text = @"";
 
     return cell;
 }
@@ -50,7 +50,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    RptqQueryTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
     [self.delegate viewControllerDidFinishWithTable:tablea];
 }
 

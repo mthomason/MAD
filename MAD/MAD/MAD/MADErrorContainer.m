@@ -74,7 +74,7 @@ static NSString * const MADErrorContainerDate   = @"d";
 - (void)presentAllErrorsWithCompletion:(void (^)(BOOL success))completion {
     if (self.errors.count > 0) {
         NSDictionary *errorHolder = self.errors.lastObject;
-        NSError *errorToShow = [errorHolder objectForKey:MADErrorContainerError];
+        NSError *errorToShow = errorHolder[MADErrorContainerError];
         [self.errors removeLastObject];
         [NSError presentError: errorToShow
              onViewController: nil
@@ -93,7 +93,7 @@ static NSString * const MADErrorContainerDate   = @"d";
 - (NSArray <__kindof NSError *> *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:self.errors.count];
     for (NSDictionary *containers in self.errors) {
-        NSError *error = ((NSError *)[containers objectForKey:@"e"]).copy;
+        NSError *error = ((NSError *)containers[@"e"]).copy;
         [results addObject:error];
     }
     return results;

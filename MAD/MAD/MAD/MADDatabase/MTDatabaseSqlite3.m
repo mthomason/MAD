@@ -202,7 +202,7 @@ void sqliteLog(void *foo, const char* statement) {
                     [lowerCaseString rangeOfString:@"clob"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"text"].location != NSNotFound;
         if (!isText) {
-            isNone = [lowerCaseString length] == 0 ||
+            isNone = lowerCaseString.length == 0 ||
                         [lowerCaseString rangeOfString:@"blob"].location != NSNotFound;
             
             if (!isNone) {
@@ -381,7 +381,7 @@ void sqliteLog(void *foo, const char* statement) {
             }
                 
             case MADDataTypeInteger: {
-                success = sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)[databinding value]).longLongValue);
+                success = sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue);
                 break;
             }
                 
@@ -391,10 +391,10 @@ void sqliteLog(void *foo, const char* statement) {
 
                     success = sqlite3_bind_text(*statement, databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
                     
-                } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
+                } else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
                     
-                    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:[databinding value]];
-                    success = sqlite3_bind_double(*statement, databinding.columnNumber, [date timeIntervalSince1970]);
+                    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
+                    success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
                     
                 } else {
                     NSAssert(false, @"What else is there? %s", __PRETTY_FUNCTION__);
@@ -548,7 +548,7 @@ void sqliteLog(void *foo, const char* statement) {
                                                               pNotNull, pPrimaryKey, pAutoinc);
                             }
                             
-                            [dataColumn setFieldName: fieldName];
+                            dataColumn.fieldName = fieldName;
                             dataColumn.nativeType = affentyType;
                             MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                             dataColumn.type = columnType;
@@ -638,7 +638,7 @@ void sqliteLog(void *foo, const char* statement) {
     }
 
     return [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
-            intoResultTable: dataTable partOfTransactionSet: [query partOfTransactionSet]
+            intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
             returnsResults: query.returnsResults binaryBindings: query.binaryBindings withError: resultError];
 }
 
@@ -863,7 +863,7 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-    const char *queryStartChar = [queryStart UTF8String];
+    const char *queryStartChar = queryStart.UTF8String;
     char *sql = sqlite3_mprintf((char *) queryStartChar);
     //NSLog(@"SQL3: %s", sql);
 

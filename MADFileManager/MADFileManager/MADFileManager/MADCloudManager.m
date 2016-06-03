@@ -320,7 +320,7 @@ static const char * MADQueueCloudSerial
     
 
 + (BOOL)isCloudReadilyAvailable {
-    return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
+    return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
 }
 
 - (void)addNotifications {

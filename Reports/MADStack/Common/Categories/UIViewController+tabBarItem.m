@@ -29,7 +29,7 @@
 
 - (UITabBarItem *)mad_tabBarItem {
     UITabBarItem *tabBarItem = [self mad_tabBarItem];
-    if (tabBarItem && [tabBarItem image] == nil) {
+    if (tabBarItem && tabBarItem.image == nil) {
         UIImage *tabBarImage = [self.class newTabBarImage];
         if (tabBarImage) {
             UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

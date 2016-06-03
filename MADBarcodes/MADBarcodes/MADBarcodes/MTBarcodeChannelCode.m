@@ -40,17 +40,17 @@
 }
 
 - (void)setNumberOfChannels:(NSInteger)numberOfChannels {
-    [self setOption2:numberOfChannels];
+    self.option2 = numberOfChannels;
 }
 
 - (NSInteger)numberOfChannels {
-    return [self option2];
+    return self.option2;
 }
 
 - (void)initSampleData {
     [self setNumberOfChannels:   4];
-    [self setInput:              @"257"];
-    [self setPrimaryData:        @""];
+    self.input = @"257";
+    self.primaryData = @"";
 }
 
 @end

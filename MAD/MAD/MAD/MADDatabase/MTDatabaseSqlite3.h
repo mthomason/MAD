@@ -19,7 +19,7 @@ typedef NSString MADSqlite3SortDescription;
 
     //@property (nonatomic, readwrite, assign) sqlite3 *database;
 
-    - (void *)databaseHandle;
+    - (void *)databaseHandle NS_RETURNS_INNER_POINTER;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
     - (NSString *)identifier;

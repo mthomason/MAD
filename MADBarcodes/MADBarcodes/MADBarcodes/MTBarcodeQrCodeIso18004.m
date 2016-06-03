@@ -40,11 +40,11 @@
 
 - (MTBarcodeSizingMode)sizingMode {
     MTBarcodeSizingMode result = MTBarcodeSizingModeAutomaticResizing;
-    if ([self option1] == NO && [self option2] == NO && [self option3] == NO) {
+    if (self.option1 == NO && self.option2 == NO && self.option3 == NO) {
         result = MTBarcodeSizingModeAutomaticResizing;
-    } else if ([self option1] != NO) {
+    } else if (self.option1 != NO) {
         result = MTBarcodeSizingModeSpecificErrorLevel;
-    } else if ([self option2] != NO) {
+    } else if (self.option2 != NO) {
         result = MTBarcodeSizingModeSpecificSize;
     }
     return result;
@@ -57,24 +57,24 @@
 }
 - (void)setSize:(NSInteger)size {
     [self setOption1:NO];
-    [self setOption2:size];
+    self.option2 = size;
     [self setOption3:NO];
 }
 - (void)setErrorCorrection:(NSInteger)errorCorrection {
-    [self setOption1:errorCorrection];
+    self.option1 = errorCorrection;
     [self setOption2:NO];
     [self setOption3:NO];
 }
 - (NSInteger)size {
-    return [self option2];
+    return self.option2;
 }
 - (NSInteger)errorCorrection {
-    return [self option1];
+    return self.option1;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"1Ei3RbGUevDJBVoM93g5ffrSE5snfFvfFS"];
-    [self setPrimaryData:        @""];
+    self.input = @"1Ei3RbGUevDJBVoM93g5ffrSE5snfFvfFS";
+    self.primaryData = @"";
 }
 
 @end

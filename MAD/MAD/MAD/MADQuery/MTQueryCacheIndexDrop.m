@@ -34,16 +34,16 @@
         NSNumber *keyIndexName = @(MTQueryCacheIndexDropIndexName);
         
         NSString *indexName = object[keyIndexName];
-        [self setIndexName:indexName];
+        self.indexName = indexName;
         
-        [self setQueryObject:object];
+        self.queryObject = object;
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    return [NSString stringWithFormat:@"DROP INDEX IF EXISTS main.%@", [self indexName]];
+    return [NSString stringWithFormat:@"DROP INDEX IF EXISTS main.%@", self.indexName];
 }
 
 - (BOOL)returnsResults {

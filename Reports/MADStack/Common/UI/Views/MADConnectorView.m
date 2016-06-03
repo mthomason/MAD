@@ -36,10 +36,10 @@
         self.backgroundColor = [UIColor clearColor];
 
         CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);
-        [self setShadowSize:shadowSize];
+        self.shadowSize = shadowSize;
 
         CGSize smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
-        [self setSmallCircleSize:smallCircleSize];
+        self.smallCircleSize = smallCircleSize;
         
         UIView *anchorLeft = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 1.0000f, 1.0000f)];
         UIView *anchorRight = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height, 1.0000f, 1.0000f)];
@@ -77,7 +77,7 @@
 
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
     CGRect frame = [self rectForOriginPoint:originPoint andDestinationPoint:destinationPoint];
-    [self setFrame:frame];
+    self.frame = frame;
 }
 
 - (CGRect)rectForOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
@@ -120,7 +120,7 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+    super.frame = frame;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -164,7 +164,7 @@
             origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
             destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
             
-            if ([self leftViewIsInital]) {   //Origin is the front part of the arrow
+            if (self.leftViewIsInital) {   //Origin is the front part of the arrow
                 connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, smallCircleSize.width, smallCircleSize.height);
                 connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
             } else {

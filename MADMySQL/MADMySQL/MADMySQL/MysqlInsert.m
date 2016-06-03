@@ -80,19 +80,19 @@
         [cmd appendFormat:@" ) "];
         
         MYSQL_STMT *myStatement = mysql_stmt_init(connection.connection);
-        const char *utf8EncodedString = [cmd UTF8String];
+        const char *utf8EncodedString = cmd.UTF8String;
         if (mysql_stmt_prepare(myStatement, utf8EncodedString,strlen(utf8EncodedString))) {
             [MysqlException raiseConnection:connection withFormat: @"mysql_stmt_prepare failed %@ %s",cmd, mysql_stmt_error(myStatement)];
         }
         
-        MYSQL_BIND *binding=calloc(sizeof(MYSQL_BIND),[keys count]?[keys count]:1);
+        MYSQL_BIND *binding=calloc(sizeof(MYSQL_BIND),keys.count?keys.count:1);
         
-        for (NSUInteger x=0; x < [keys count];x++) {
+        for (NSUInteger x=0; x < keys.count;x++) {
             NSString *key= keys[x];
             NSObject *object = rowData[key];
             if ([object isKindOfClass:[NSString class]]) {
                 NSString *s = (NSString *)object;
-                const char *ch = [s UTF8String];
+                const char *ch = s.UTF8String;
                 binding[x].is_null= 0;
                 binding[x].buffer_type = MYSQL_TYPE_STRING;
                 binding[x].buffer = (void *)ch;
@@ -101,11 +101,11 @@
                 NSData *data = (NSData *)object;
                 binding[x].is_null= 0;
                 binding[x].buffer_type = MYSQL_TYPE_BLOB;
-                binding[x].buffer = (void *)[data bytes];
-                binding[x].buffer_length= [data length];
+                binding[x].buffer = (void *)data.bytes;
+                binding[x].buffer_length= data.length;
             } else if ([object isKindOfClass:[NSNumber class]]) {
-                NSString *s = (NSString *)[object description];
-                const char *ch = [s UTF8String];
+                NSString *s = (NSString *)object.description;
+                const char *ch = s.UTF8String;
                 binding[x].is_null= 0;
                 binding[x].buffer_type = MYSQL_TYPE_STRING;
                 binding[x].buffer = (void *)ch;
@@ -115,8 +115,8 @@
                 *aBool=1;
                 binding[x].is_null= aBool;
             } else {
-                NSString *s = (NSString *)[object description];
-                const char *ch = [s UTF8String];
+                NSString *s = (NSString *)object.description;
+                const char *ch = s.UTF8String;
                 binding[x].is_null= 0;
                 binding[x].buffer = (void *)ch;
                 binding[x].buffer_type = MYSQL_TYPE_STRING;
@@ -143,7 +143,7 @@
             [MysqlException raiseConnection:connection withFormat:@" mysql_stmt_close failed %s", mysql_stmt_error(myStatement)];
         }
         
-        for (NSUInteger x=0; x < [keys count];x++) {
+        for (NSUInteger x=0; x < keys.count;x++) {
             NSString *key= keys[x];
             NSObject *object = rowData[key];
             if ([object isKindOfClass:[NSNull class]]) {

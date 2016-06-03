@@ -72,7 +72,7 @@
         [self.edges addObject:edge];
     } else {
         NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithObjects:edge, nil];
-        [self setEdges:arrayEmpty];
+        self.edges = arrayEmpty;
     }
 }
 
@@ -80,7 +80,7 @@
     bool result = false;
     NSArray *edges = self.edges;
     for (MTEdge *edge in edges) {
-        if ([[edge destination] isEqual:vertex]) {
+        if ([edge.destination isEqual:vertex]) {
             result = true;
         }
     }
@@ -114,8 +114,8 @@
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", humanReadableVector];
     for (MTEdge *edge in self.edges) {
         [result appendString:@"->"];
-        MTVertex *destination = [edge destination];
-        id destinationObject = [destination object];
+        MTVertex *destination = edge.destination;
+        id destinationObject = destination.object;
         NSString *desc = [destinationObject respondsToSelector:@selector(toStringHumanReadable)] ?
                             [destinationObject toStringHumanReadable] :
                             [NSString stringWithFormat:@"%@", destinationObject];

@@ -34,8 +34,8 @@
 + (MTBarcodeType)type { return MTBarcodeTypeAusroute; }
 
 - (void)initSampleData {
-    [self setInput:              @"39549554"];
-    [self setPrimaryData:        @""];
+    self.input = @"39549554";
+    self.primaryData = @"";
 }
 
 @end

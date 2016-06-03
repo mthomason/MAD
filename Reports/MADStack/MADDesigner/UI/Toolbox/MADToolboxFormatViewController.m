@@ -95,12 +95,12 @@
         }
     }
     
-    [self setUserSelectedObjectIds:keepers];
+    self.userSelectedObjectIds = keepers;
     
-    for (UIView *view in [self viewsToDisableNumeric]) {
-        [view setUserInteractionEnabled:numericTypeInSet];
+    for (UIView *view in self.viewsToDisableNumeric) {
+        view.userInteractionEnabled = numericTypeInSet;
         if ([view isKindOfClass:[UIControl class]]) {
-            [(UIControl *)view setEnabled:numericTypeInSet];
+            ((UIControl *)view).enabled = numericTypeInSet;
         }
     }
     
@@ -118,7 +118,7 @@
 
     } else {
     
-        [self.tableViewCellCurrency setSelectionStyle:UITableViewCellSelectionStyleBlue];
+        (self.tableViewCellCurrency).selectionStyle = UITableViewCellSelectionStyleBlue;
         
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 
@@ -132,15 +132,15 @@
             }
         }
 
-        [self.tableViewCellCurrency setAccessoryType:accessoryType];
+        (self.tableViewCellCurrency).accessoryType = accessoryType;
         
-        if ([self.userSelectedObjectIds count] == 1) {
+        if ((self.userSelectedObjectIds).count == 1) {
 
             NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
             RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
-            NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
-            [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
-            [self.stepperNumberOfDecimals setValue:numberOfDec];
+            NSInteger numberOfDec = documentObject.formatNumericDecimals.integerValue;
+            (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:numberOfDec];
+            (self.stepperNumberOfDecimals).value = numberOfDec;
 
         } else {
             
@@ -149,7 +149,7 @@
             NSUInteger counter = 0;
             for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
                 RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
-                NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
+                NSInteger currentInteger = documentObject.formatNumericDecimals.integerValue;
                 if (counter > 0) {
                     if (lastInteger == currentInteger && allTheSame) {
                         allTheSame = YES;
@@ -184,12 +184,12 @@
     
     if ([sender isEqual:self.stepperNumberOfDecimals]) {
         valueChangedAction = @selector(setFormatNumericDecimals:);
-        valueThatChanged = @([self.stepperNumberOfDecimals value]);
-        [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]]];
+        valueThatChanged = @((self.stepperNumberOfDecimals).value);
+        (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            [documentObject setFormatNumericDecimals:valueThatChanged];
+            documentObject.formatNumericDecimals = valueThatChanged;
             [documentObject.managedObjectContext save:nil];
         }
     }
@@ -213,7 +213,7 @@
     }
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
-    [self.labelNumberOfDecimals setAttributedText:localizedAttributedMessage];
+    (self.labelNumberOfDecimals).attributedText = localizedAttributedMessage;
     return localizedAttributedMessage;
 }
 
@@ -234,11 +234,11 @@
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            BOOL isCurrency = [documentObject.formatNumericCurrency boolValue];
+            BOOL isCurrency = (documentObject.formatNumericCurrency).boolValue;
             BOOL isCurrencyNow = !isCurrency;
-            [documentObject setFormatNumericCurrency:@(isCurrencyNow)];
+            documentObject.formatNumericCurrency = @(isCurrencyNow);
             UITableViewCellAccessoryType newAccessory = isCurrencyNow ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            [self.tableViewCellCurrency setAccessoryType:newAccessory];
+            (self.tableViewCellCurrency).accessoryType = newAccessory;
             [documentObject.managedObjectContext save:nil];
         }
     }

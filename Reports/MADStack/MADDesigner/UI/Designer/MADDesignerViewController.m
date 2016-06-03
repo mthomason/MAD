@@ -681,11 +681,10 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
             [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
 
-            [layoutConstraintsReportSectionHeight setObject: layoutConstraintView
-                                                     forKey: sectionView.objectIdTag];
+            layoutConstraintsReportSectionHeight[sectionView.objectIdTag] = layoutConstraintView;
             
-            [sectionViewsDictionary setObject:sectionView forKey:reportSectionKey];
-            [sectionControlViewsDictionary setObject:sectionViewLabel forKey:reportSectionKey];
+            sectionViewsDictionary[reportSectionKey] = sectionView;
+            sectionControlViewsDictionary[reportSectionKey] = sectionViewLabel;
             
             [reportSectionKeyTracker addObject:reportSectionKey];
             [sectionViewsArray addObject:sectionView];
@@ -899,7 +898,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [super prepareForSegue:segue sender:sender];
     
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [segue.destinationViewController setDocument:self.document];
+        [(segue.destinationViewController) setDocument: self.document];
     }
     
 }
@@ -1203,9 +1202,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         //Remove row
         RptqDocumentSectionRows *rowToDelete = documentSection.hasRows.lastObject;
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
-        [[hasRows lastObject] setInSection:nil];
+        [hasRows.lastObject setInSection:nil];
         [hasRows removeObjectAtIndex:hasRows.count - 1];
-        [documentSection setHasRows:hasRows];
+        documentSection.hasRows = hasRows;
         [rowToDelete setInSection:nil];
         
     }
@@ -1314,7 +1313,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
             [self.selectedObjectIds removeObject: lastElementViewToShowMenu.objectIdTag];
-            [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
+            (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
         }
         self.lastElementViewToShowMenu = nil;
     }
@@ -1806,7 +1805,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                   documentObjectSize.width, documentObjectSize.height);
     
-    switch ([documentObject getType]) {
+    switch (documentObject.getType) {
         case MTDocumentObjectTypeFormula:
         case MTDocumentObjectTypeLabelStatic:
         case MTDocumentObjectTypeLabelDynamic:
@@ -1872,11 +1871,11 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                     
                         MTCollectionViewCellElement *strongcell1 = weakcell1;
                         if (strongcell1) {
-                            [strongcell1 setContentScaleFactor:contextScale];
-                            [strongcell1.contentView setContentScaleFactor:contextScale];
+                            strongcell1.contentScaleFactor = contextScale;
+                            (strongcell1.contentView).contentScaleFactor = contextScale;
                         }
                         
-                        [weakElementView1 setContentScaleFactor:contextScale];
+                        weakElementView1.contentScaleFactor = contextScale;
                         
                     });
 
@@ -2006,7 +2005,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [self applyBorderToView:elementView];
-    [self setLastElementViewToShowMenu:elementView];
+    self.lastElementViewToShowMenu = elementView;
     return YES;
 }
 
@@ -2196,7 +2195,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (CGSize)collectionView: (MADDesignerSectionView *)collectionView sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
-    return [layoutManager size];
+    return layoutManager.size;
 }
 
 #pragma mark - Gesture Recognizers
@@ -2278,7 +2277,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)handleStrayTouch:(UITapGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateEnded) {
+    if (sender.state == UIGestureRecognizerStateEnded) {
         [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
         if (self.presentedViewController != nil) {
             [self hideToolbox];
@@ -2374,7 +2373,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             
             [self deselectElementView: elementView animated: YES];
             [self.selectedObjectIds removeObject: elementView.objectIdTag];
-            [self.viewControllerToolbox setSelectedObjectIds: self.selectedObjectIds];
+            (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
             
             [self.promptManager removeString: elementView.displayStringAttributed.string];
             [self displayPrompt];
@@ -2416,7 +2415,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     MTQueryBuilderChooseFieldViewController *dynamicFieldController;
     dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
  
-    RptqQueryField *queryField = [dynamicFieldController queryField];
+    RptqQueryField *queryField = dynamicFieldController.queryField;
 
     NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
     NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -2432,7 +2431,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     if (_aggregateToEdit && _editAggregate) {
         
-        if ([viewController fieldObject] != nil) {
+        if (viewController.fieldObject != nil) {
             [self.aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
                                                                 inputType: MTAggregateFunctionInputTypeField
                                                                 groupType: viewController.aggregateGroupByType
@@ -2441,10 +2440,10 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         }
         
     } else {
-        if ([viewController fieldObjectId] != nil) {
+        if (viewController.fieldObjectId != nil) {
         
             NSNumber *groupNumber;
-            groupNumber = [[NSNumber alloc] initWithInteger:[viewController groupTypeSectionNumber]];
+            groupNumber = [[NSNumber alloc] initWithInteger:viewController.groupTypeSectionNumber];
             
             [self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType
                                                          inputType: MTAggregateFunctionInputTypeField
@@ -2461,12 +2460,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     if (_objectIdEditBarcode  != nil) {
         
-        MTBarcode *barcode = [viewController barcode];
+        MTBarcode *barcode = viewController.barcode;
         
         NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
         RptqDocumentObject *object;
         object = (RptqDocumentObject *)[managedObjectContext objectWithID:_objectIdEditBarcode];
-        RptqDocumentObjectBarcode *barcodeObject = [object isBarcode];
+        RptqDocumentObjectBarcode *barcodeObject = object.isBarcode;
         [barcodeObject updateWithBarcode: barcode
                                 fieldOne: viewController.queryField1
                                 fieldTwo: viewController.queryField2];
@@ -2477,7 +2476,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
         NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeBarcode];
         defination[MTDocumentObjectDefinationType] = type;
-        defination[MTDocumentObjectDefinationObject] = [viewController barcode];
+        defination[MTDocumentObjectDefinationObject] = viewController.barcode;
         
         RptqQueryField *queryField1 = viewController.queryField1;
         if (queryField1 != nil) {
@@ -2706,7 +2705,7 @@ END_deselectElementView:;
     documentObject  = [document.managedObjectContext objectWithID:objectId];
     sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
     layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
-    itemToRemove = [layoutManager.items objectForKey:objectId];
+    itemToRemove = (layoutManager.items)[objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
@@ -2855,7 +2854,7 @@ END_deselectElementView:;
             
             MADocument *document = strongself1.document;
             MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
-            MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: pieceObjectIDTag];
+            MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[pieceObjectIDTag];
             
             MADocument * __unsafe_unretained wdocument = document;
             MADDesignerViewController __weak *weakself2 = strongself1;
@@ -3028,7 +3027,7 @@ END_deselectElementView:;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
-    NSManagedObjectID *objectId = [documentSectionView objectIdTag];
+    NSManagedObjectID *objectId = documentSectionView.objectIdTag;
     __block NSManagedObjectID *key = nil;
     __block CGFloat height;
 
@@ -3070,7 +3069,7 @@ END_deselectElementView:;
             scroller.scrollEnabled = enabled;
             [scroller flashScrollIndicators];
             
-            for (UICollectionView *collectionView in [scroller.container subviews]) {
+            for (UICollectionView *collectionView in (scroller.container).subviews) {
                 if ([collectionView isKindOfClass: [UICollectionView class]]) {
                     collectionView.scrollEnabled = enabled;
                     [collectionView flashScrollIndicators];
@@ -3089,11 +3088,11 @@ END_deselectElementView:;
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         
-        if ([self popoverControllerObjectSelector] != nil)
-            [allpopovers addObject:[self popoverControllerObjectSelector]];
+        if (self.popoverControllerObjectSelector != nil)
+            [allpopovers addObject:self.popoverControllerObjectSelector];
         
         for (UIPopoverController *popoverController in allpopovers) {
-            if ([popoverController isPopoverVisible]) {
+            if (popoverController.popoverVisible) {
                 [popoverController dismissPopoverAnimated:YES];
                 result = YES;
             }
@@ -3193,7 +3192,7 @@ END_deselectElementView:;
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView;
-                documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
+                documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
                 
                 for (NSInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
                 
@@ -3201,7 +3200,7 @@ END_deselectElementView:;
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
                                                                           inCollectionView:documentSectionView];
-                        if ([self.selectedObjectIds containsObject: [elementView objectIdTag]]) {
+                        if ([self.selectedObjectIds containsObject: elementView.objectIdTag]) {
                             [results addObject:elementView];
                         }
                     }
@@ -3230,7 +3229,7 @@ END_deselectElementView:;
     }
     
     [self.selectedObjectIds removeAllObjects];
-    [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
+    (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
     
     [self displaySectionViewsRemoveBorder];
     
@@ -3370,7 +3369,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     for (UIView *subview in self.sectionViewsArray) {
         height += subview.frame.size.height <= CGSizeZero.height ?
         ceil(subview.intrinsicContentSize.height) :
-        [subview frame].size.height;
+        subview.frame.size.height;
     }
     
     return CGSizeMake(self.view.bounds.size.width, height);
@@ -3479,7 +3478,7 @@ static const inline CGSize sizePopoverFonts() {
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
     MADDesignerSectionView *collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
     ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
-    [collectionView setObjectIdTag: section.objectID];
+    collectionView.objectIdTag = section.objectID;
     collectionView.tag = section.identifier.integerValue;
     collectionView.visible = section.visibility.boolValue;
     collectionView.selected = NO;

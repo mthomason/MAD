@@ -38,19 +38,19 @@
 
 - (void)setMod43CheckDigitEnabled:(BOOL)enabled {
     if (enabled) {
-        [self setOption2:1];
+        self.option2 = 1;
     } else {
-        [self setOption2:0];
+        self.option2 = 0;
     }
 }
 
 - (BOOL)mod43CheckDigitEnabled {
-    return [self option2] == 1;
+    return self.option2 == 1;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"*CODE39*"];
-    [self setPrimaryData:        @""];
+    self.input = @"*CODE39*";
+    self.primaryData = @"";
 }
 
 @end

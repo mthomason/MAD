@@ -63,12 +63,12 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [_tableViewCellRightSide setUserInteractionEnabled: (_fieldLeft == nil) == NO];
+    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeft == nil) == NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [_tableViewCellRightSide setUserInteractionEnabled: (_fieldLeft == nil) == NO];
+    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeft == nil) == NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -78,7 +78,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
     if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
         [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
         
-        [self setCurrentlyEditingPart: MNSPredicateCenter];
+        self.currentlyEditingPart = MNSPredicateCenter;
         
         Class tableType = [MADTableViewControllerOpperators class];
         if ([segue.destinationViewController isKindOfClass: tableType]) {
@@ -90,7 +90,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovLeftSide"] ||
                [segue.identifier isEqualToString:@"showAddPredicateFofLeftSide"]) {
         
-        [self setCurrentlyEditingPart: MNSPredicateLeft];
+        self.currentlyEditingPart = MNSPredicateLeft;
   
         Class tableType = [MTQueryBuilderChooseFieldViewController class];
         if ([segue.destinationViewController isKindOfClass: tableType]) {
@@ -107,7 +107,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovRightSide"] ||
                [segue.identifier isEqualToString:@"showAddPredicateFofRightSide"]) {
         
-        [self setCurrentlyEditingPart: MNSPredicateRight];
+        self.currentlyEditingPart = MNSPredicateRight;
         
         Class tableTypeChooes = [MTQueryBuilderChooseFieldViewController class];
         Class tableTypeField = [MTViewControllerValueBasedOnField class];
@@ -182,7 +182,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         _tableViewCellLeftSide.detailTextLabel.text = userInput.lowercaseString;
         
     } else if (_currentlyEditingPart == MNSPredicateRight) {
-        [self setRightValue: userInput];
+        self.rightValue = userInput;
         [self setFieldRight: nil];
         _tableViewCellRightSide.detailTextLabel.text = userInput.lowercaseString;
         

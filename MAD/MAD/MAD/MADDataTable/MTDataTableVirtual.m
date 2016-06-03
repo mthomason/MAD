@@ -77,7 +77,7 @@
     if(self) {
         NSString *key = [MTDataTableVirtual keySortIndex];
         NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
-        [self setSortIndex:sortIndex];
+        self.sortIndex = sortIndex;
     }
     return self;
 }
@@ -87,7 +87,7 @@
     if (self) {
         
         NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-        [self setSortIndex:sortIndex];
+        self.sortIndex = sortIndex;
         
     }
     return self;
@@ -105,7 +105,7 @@
 
 - (void)initialize {
     NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
-    [self setSortIndex:sortIndex];
+    self.sortIndex = sortIndex;
 }
 
 - (void)loadWithPlist:(MADDataTablePlist *)plist {
@@ -115,7 +115,7 @@
     NSArray *sortIndexArray = plist[keySortIndex];
     
     NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
-    [self setSortIndex:sortIndex];
+    self.sortIndex = sortIndex;
 }
 
 - (MADDataTablePlist *)copyPlist {
@@ -127,7 +127,7 @@
 }
 
 - (void)addColumn:(MADDataColumn *)column {
-    NSString *identifier = [[NSString alloc] initWithString:[column identifier]];
+    NSString *identifier = [[NSString alloc] initWithString:column.identifier];
     [self.columnKeys addObject:identifier];
     self.columns[identifier] = column;
 }
@@ -149,12 +149,12 @@
 }
 
 - (NSUInteger)numberOfRows {
-    return [self rowCounter];
+    return self.rowCounter;
 }
 
 - (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
     NSUInteger sortedIndex;
-    if ([self.sortDescriptors count] > 0) {
+    if ((self.sortDescriptors).count > 0) {
         sortedIndex = [self.sortIndex indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj[@"~rowid~"] unsignedIntegerValue] == index) {
                 *stop = YES;
@@ -200,7 +200,7 @@
     NSUInteger sortedIndex = [self sortedIndexForIndex:index];
     
     NSMutableDictionary *data;
-    data = [[NSMutableDictionary alloc] initWithCapacity:[self.columnKeys count]];
+    data = [[NSMutableDictionary alloc] initWithCapacity:(self.columnKeys).count];
     for (NSString *fieldKey in self.columnKeys) {
         NSArray *dataInColumn = self.columns[fieldKey];
 // FIXME: what is this?
@@ -215,7 +215,7 @@
     NSUInteger index = 0;
     NSUInteger numberOfColumns = [self numberOfColumns];
     NSMutableDictionary *indexedRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
-    NSUInteger numberOfRows = [self rowCounter];
+    NSUInteger numberOfRows = self.rowCounter;
     NSNumber *ogRowIndex = @(numberOfRows);
     for (id object in row) {
         NSString *key = self.columnKeys[index];
@@ -227,7 +227,7 @@
     }
     [self.sortIndex addObject:indexedRow];
     numberOfRows++;
-    [self setRowCounter:numberOfRows];
+    self.rowCounter = numberOfRows;
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
@@ -238,8 +238,8 @@
         [column addObject:obj];
     }
     [self.sortIndex addObject:row];
-    NSUInteger numberOfRows = [self rowCounter] + 1;
-    [self setRowCounter:numberOfRows];
+    NSUInteger numberOfRows = self.rowCounter + 1;
+    self.rowCounter = numberOfRows;
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
@@ -253,7 +253,7 @@
 }
 
 - (NSUInteger)numberOfColumns {
-    return [self.columnKeys count];
+    return (self.columnKeys).count;
 }
 
 + (NSString *)keySortIndex {

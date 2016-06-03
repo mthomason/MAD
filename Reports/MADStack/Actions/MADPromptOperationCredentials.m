@@ -113,7 +113,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
         MADPromptOperationCredentials *strongself = weakself;
         username = ((UITextField *)alertController.textFields.firstObject).text;
-        password = ((UITextField *)[alertController.textFields objectAtIndex:1]).text;
+        password = ((UITextField *)(alertController.textFields)[1]).text;
 
         MADCredential *credentials = nil;
         if (username != nil && password != nil) {

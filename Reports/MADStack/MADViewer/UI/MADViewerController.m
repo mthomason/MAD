@@ -188,7 +188,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)dealloc {
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if ([_timerLabelTimeSinceRefreh isValid]) {
+            if (_timerLabelTimeSinceRefreh.valid) {
                 [_timerLabelTimeSinceRefreh invalidate];
             }
         }
@@ -200,7 +200,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSTimer *timer = self.timerLabelTimeSinceRefreh;
     if (timer != nil) {
         if ([timer respondsToSelector:@selector(isValid)]) {
-            if ([timer isValid]) {
+            if (timer.valid) {
                 [timer invalidate];
             }
         }
@@ -345,10 +345,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
 
-    RptqDocument *activeDocumentModel = [document activeDocumentModel];
+    RptqDocument *activeDocumentModel = document.activeDocumentModel;
 
     [document initializeMainQuery:activeDocumentModel];
-    [document activeDocumentModel];
+    document.activeDocumentModel;
     [document prepareForQuery];
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
@@ -386,7 +386,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = false;
     
     if (self.printPageRendererReport == nil) {
-        [document activeDocumentModel];
+        document.activeDocumentModel;
         
         MTReportViewerPrintPageRenderer *prtingPageRendererReport =
             [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
@@ -619,10 +619,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.activityExporting = true;
     self.toolbarSlider.enabled = NO;
     
-    MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
+    MTActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
     activityItemProviderPdf.delegate = self;
     NSArray *activityItems = [[NSArray alloc] initWithObjects: activityItemProviderPdf, nil];
-    [self setActivityItemProviderPdf:activityItemProviderPdf];
+    self.activityItemProviderPdf = activityItemProviderPdf;
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     printPreview.delegate = self;
@@ -992,7 +992,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         if (pageViewController.viewControllers.count > 0) {
             MADReportPageViewController *viewController = pageViewController.viewControllers[0];
-            [pageViewController setCurrentPageIndex: viewController.pageViewAttributes.pageNumber - 1];
+            pageViewController.currentPageIndex = viewController.pageViewAttributes.pageNumber - 1;
             [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
             [pageViewController.toolbarSlider.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
         }
@@ -1042,7 +1042,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     if (self.timerLabelTimeSinceRefreh != nil) {
         if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if ([self.timerLabelTimeSinceRefreh isValid]) {
+            if ((self.timerLabelTimeSinceRefreh).valid) {
                 [self.timerLabelTimeSinceRefreh invalidate];
             }
         }

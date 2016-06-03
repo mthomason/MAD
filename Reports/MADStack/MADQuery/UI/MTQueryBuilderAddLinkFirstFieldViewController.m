@@ -36,7 +36,7 @@
                                       reuseIdentifier: CellIdentifier];
     }
     
-    RptqDatabaseSchemaField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    RptqDatabaseSchemaField *field = [self.fetchedResultsController objectAtIndexPath: indexPath];
     cell.textLabel.text = field.name.copy;
     cell.detailTextLabel.text = field.fieldTypeDisplay.copy;
     
@@ -49,7 +49,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    RptqQueryField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    RptqQueryField *field = [self.fetchedResultsController objectAtIndexPath: indexPath];
     [self.delegate viewControllerSchemaAddLinkFirstFieldDidFinishWith:field];
 }
 

@@ -415,56 +415,56 @@
                     break;
             }
         }
-        NSString *forgroundColor = [self.forgroundColor hexStringValue];
-        NSString *backgroundColor = [self.backgroundColor hexStringValue];
+        NSString *forgroundColor = (self.forgroundColor).hexStringValue;
+        NSString *backgroundColor = (self.backgroundColor).hexStringValue;
         const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
         const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
         strcpy(barcode->fgcolour, fgcolor);
         strcpy(barcode->bgcolour, bgcolor);
         
-        barcode->height = (int)[self height];
-        barcode->border_width = (int)[self borderWidth];
-        barcode->whitespace_width = (int)[self whitespaceWidth];
-        barcode->show_hrt = [self humanReadable];
+        barcode->height = (int)self.height;
+        barcode->border_width = (int)self.borderWidth;
+        barcode->whitespace_width = (int)self.whitespaceWidth;
+        barcode->show_hrt = self.humanReadable;
         barcode->output_options = self.borderStyle;
         barcode->scale = 1.0000f;
         barcode->input_mode = MTBarcodeDataTypeUnicode;
         
         if (barcode->symbology != MTBarcodeTypeMaxicode) {
-            barcode->option_1 = (int)[self option1];
-            barcode->option_2 = (int)[self option2];
-            barcode->option_3 = (int)[self option3];
+            barcode->option_1 = (int)self.option1;
+            barcode->option_2 = (int)self.option2;
+            barcode->option_3 = (int)self.option3;
         } else {
         }
         
         NSString *primaryInput = nil;
         if (self.has2dComponentEnabled) {
             
-            primaryInput = [self primaryData];
-            barcode->option_1 = (int)[self has2dComponentType];
+            primaryInput = self.primaryData;
+            barcode->option_1 = (int)self.has2dComponentType;
             
-            if ([[self input] length] > 0) {
-                const char *primaryData = [[self input] UTF8String];
+            if (self.input.length > 0) {
+                const char *primaryData = self.input.UTF8String;
                 strcpy(barcode->primary, primaryData);
             } else {
                 strcpy(barcode->primary, "");
             }
 
         } else {
-            primaryInput = [self input];
+            primaryInput = self.input;
         }
         
         
-        NSInteger inputLength = [primaryInput length];
+        NSInteger inputLength = primaryInput.length;
         NSString *inputString = inputLength > 0 ? primaryInput : @"";
         
         if (barcode->symbology == MTBarcodeTypeTelepenNum) {
-            NSCharacterSet *numeric = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
             inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
         }
 
         
-        const char *input = [inputString UTF8String];
+        const char *input = inputString.UTF8String;
         int inputLen = (int)strlen(input);
         int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
         NSString *errorMessage = nil;
@@ -495,7 +495,7 @@
         }
         
         if (errorMessage) {
-            if ([self showErrorMessages]) {
+            if (self.showErrorMessages) {
                 [errorMessage drawInRect:rect withAttributes:nil];
             }
         }
@@ -540,7 +540,7 @@
         } else if (makeSmaller2) {
             skewValue = skewValue2;
         } else {
-            skewValue = [self scale];
+            skewValue = self.scale;
         }
         
         CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
@@ -553,7 +553,7 @@
         CGContextSaveGState(context);
         //CGContextClipToRect(context, originalRect);
         
-        if ([self center]) {
+        if (self.center) {
             CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
             CGFloat mx = CGRectGetMidX(bitmapRect);
             CGFloat my = CGRectGetMidY(bitmapRect);
@@ -711,7 +711,7 @@
 + (NSString *)newBarcodeNameForType:(MTBarcodeType)type {
     id t = [[NSNumber alloc] initWithUnsignedInteger: type];
     NSDictionary *names = [MTBarcode newDictionaryNames];
-    NSString *name = [names objectForKey: t];
+    NSString *name = names[t];
     return name.copy;
 }
 

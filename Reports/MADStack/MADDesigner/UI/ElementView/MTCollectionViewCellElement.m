@@ -46,7 +46,7 @@
         UIMenuItem *menuItemFormat = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Format", @"Format") action: @selector(format:)];
         [menuItems addObject:menuItemEdit];
         [menuItems addObject:menuItemFormat];
-        [menu setMenuItems:menuItems];
+        menu.menuItems = menuItems;
     });
     
 

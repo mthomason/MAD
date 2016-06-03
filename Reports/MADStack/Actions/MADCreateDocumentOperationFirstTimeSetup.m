@@ -71,7 +71,7 @@
         doc.documentObjectID = rptqDocument.objectID;
 
         NSError *error = nil;
-        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
     }];
 
     [self finish];

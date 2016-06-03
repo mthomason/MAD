@@ -152,7 +152,7 @@
     CGContextAddPath(currentContext, path);
     
     // Set the blue color as the stroke color
-    if (![self highlight]) {
+    if (!self.highlight) {
         [[MADColorEverydayApps newColorYellow] setStroke];
     } else {
         [[MADColorEverydayApps newColorOrange] setStroke];

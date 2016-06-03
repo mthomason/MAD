@@ -57,16 +57,16 @@
 }
 
 - (NSInteger)encodingMode {
-    return [self option1];
+    return self.option1;
 }
 
 - (NSString *)primaryDataString {
-    return [self primaryData];
+    return self.primaryData;
 }
 
 - (void)initSampleData {
-    [self setInput:              @"666001433"];
-    [self setPrimaryData:        @"MAD Designer"];
+    self.input = @"666001433";
+    self.primaryData = @"MAD Designer";
 }
 
 @end

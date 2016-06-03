@@ -25,7 +25,7 @@
         
         NSAssert([object isKindOfClass:[NSString class]], @"MTQueryCustomSql expects NSString.");
         NSString *queryString = [[NSString alloc] initWithString:object];
-        [self setQueryObject:queryString];
+        self.queryObject = queryString;
         
     }
     return self;

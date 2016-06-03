@@ -161,7 +161,7 @@
             NSString *sqlSelect = [self sqlSelectExpressionWithTables: sort
                                                 usingOnlyActiveFields: onlyActiveFields
                                               forManagedObjectContext: managedObjectContext];
-            if ([sqlSelect length] > 0) {
+            if (sqlSelect.length > 0) {
                 [result appendString:sqlSelect];
                 [result appendString:MADSqlTextFromPart];
                 
@@ -169,7 +169,7 @@
                 NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity: topologicalSortArray.count];
                 
                 for (MTPair *pair in topologicalSortArray) {
-                    MTVertex *vertexTable = [pair former];
+                    MTVertex *vertexTable = pair.former;
                     if (vertexTable) {
                         vertexTable.properties.vertexColor = MTColorWhite;
                         [vertexArray addObject:vertexTable];
@@ -202,7 +202,7 @@
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     NSUInteger loopCounter = 0;
     
-    for (RptqQueryPredicate *queryPredicate in [query hasQueryPredicate]) {
+    for (RptqQueryPredicate *queryPredicate in query.hasQueryPredicate) {
         
         if (loopCounter == 0) {
             [result appendString:@"\nWHERE\n"];
@@ -278,7 +278,7 @@
     NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
     NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
     NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
-    [fetchRequestDataField setPredicate:predicateDataField];
+    fetchRequestDataField.predicate = predicateDataField;
     NSError *fetchFieldsError = nil;
     NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
     if (fetchFieldsError != nil) {
@@ -293,7 +293,7 @@
     NSString *entityObjectAggregate = NSStringFromClass([RptqDocumentObjectAggregate class]);
     NSFetchRequest *fetchRequestAggregate = [[NSFetchRequest alloc] initWithEntityName:entityObjectAggregate];
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-    [fetchRequestAggregate setPredicate:predicate];
+    fetchRequestAggregate.predicate = predicate;
     NSError *fetchAggregateError = nil;
     id aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate
                                                                    error:&fetchAggregateError];
@@ -310,7 +310,7 @@
     NSString *entityObjectQueryGroup = NSStringFromClass([RptqQueryGroup class]);
     NSFetchRequest *fetchRequestQueryGroup = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryGroup];
     NSPredicate *predicateQueryGroups = [NSPredicate predicateWithValue:YES];
-    [fetchRequestQueryGroup setPredicate:predicateQueryGroups];
+    fetchRequestQueryGroup.predicate = predicateQueryGroups;
     NSError *fetchQueryGroupError = nil;
     id queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup
                                                          error:&fetchQueryGroupError];
@@ -327,7 +327,7 @@
     NSString *entityObjectQueryLinks = NSStringFromClass([RptqQueryLinks class]);
     NSFetchRequest *fetchRequestQueryLinks = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryLinks];
     NSPredicate *predicateQueryLinks = [NSPredicate predicateWithValue:YES];
-    [fetchRequestQueryLinks setPredicate:predicateQueryLinks];
+    fetchRequestQueryLinks.predicate = predicateQueryLinks;
     NSError *fetchQueryLinksError = nil;
     id queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks
                                                         error:&fetchQueryLinksError];
@@ -345,36 +345,36 @@
     NSArray *queryGroups = [NSArray arrayWithArray:[self activeGroupedObjectsForManagedObjectContext:managedObjectContext]];
     NSArray *queryLinks = [NSArray arrayWithArray:[self activeQueryLinkObjectsForManagedObjectContext:managedObjectContext]];
     
-    NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count] + [queryGroups count];
+    NSUInteger estimatedSetSize = dataObjectFields.count + aggregateObjectFields.count + queryGroups.count;
     NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
     
     for (RptqDocumentObjectBarcode *dataField in barcodes) {
-        RptqQueryField *queryField = [dataField referencesField1];
+        RptqQueryField *queryField = dataField.referencesField1;
         if (queryField != nil) {
             [queryFields addObject:queryField];
         }
-        RptqQueryField *queryField2 = [dataField referencesField2];
+        RptqQueryField *queryField2 = dataField.referencesField2;
         if (queryField2 != nil) {
             [queryFields addObject:queryField2];
         }
     }
     
     for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
-        RptqQueryField *queryField = [dataField referencesQueryField];
+        RptqQueryField *queryField = dataField.referencesQueryField;
         if (queryField != nil) {
             [queryFields addObject:queryField];
         }
     }
     
     for (RptqDocumentObjectAggregate *dataField in aggregateObjectFields) {
-        RptqQueryField *queryField = [dataField aggregateField];
+        RptqQueryField *queryField = dataField.aggregateField;
         if (queryField != nil) {
             [queryFields addObject:queryField];
         }
     }
     
     for (RptqQueryGroup *queryGroup in queryGroups) {
-        RptqQueryField *queryField = [queryGroup hasField];
+        RptqQueryField *queryField = queryGroup.hasField;
         if (queryField != nil) {
             [queryFields addObject:queryField];
         }
@@ -410,7 +410,7 @@
         for (RptqQueryField *queryField in queryFields) {
             
             
-            RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
+            RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
             if (fieldCounter != 0)  [result appendString:@",\n"];
             
             NSString *tableName = [queryField.inQueryTable copyQueryAlias];
@@ -475,7 +475,7 @@
     for (MTVertex *vertexTable in tables) {
         if (vertexTable) {
             
-            NSManagedObjectID *objectID = [vertexTable object];
+            NSManagedObjectID *objectID = vertexTable.object;
             RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID
                                                       managedObjectContext:managedObjectContext];
             

@@ -115,7 +115,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 #ifdef MAD_MTArrayCached_DEBUG
     sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
 #endif
-    [self setDatabase:database];
+    self.database = database;
 }
 
 - (void)initializeDatabase {
@@ -152,7 +152,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         _numberOfRows = 0;
     }
     [self prepareStatements];
-    _numberOfRows = (int)[self count];
+    _numberOfRows = (int)self.count;
 }
 
 - (void)beginBulkInserts {
@@ -339,7 +339,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
-- (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtIndex:index]; }
+- (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtIndex: index]; }
 
 - (id)objectAtIndex:(NSUInteger)index {
     id result = nil;
@@ -408,7 +408,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     NSNumber *yes = @YES, *key;
     key = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
 
-    [queryDefinationSelect setObject:yes forKey:key];
+    queryDefinationSelect[key] = yes;
     
     MADQueryDefinition *result = [MTQuery newQueryDefinitionSelect:queryDefinationSelect
                                                          withLimit:1

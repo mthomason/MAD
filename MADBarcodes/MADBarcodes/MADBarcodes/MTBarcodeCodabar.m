@@ -37,8 +37,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"9-$:/.+D"];
-    [self setPrimaryData:        @""];
+    self.input = @"9-$:/.+D";
+    self.primaryData = @"";
 }
 
 @end

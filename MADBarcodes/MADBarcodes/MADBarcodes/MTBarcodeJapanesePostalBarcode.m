@@ -35,8 +35,8 @@
 + (MTBarcodeType)type { return MTBarcodeTypeJapanPost; }
 
 - (void)initSampleData {
-    [self setInput:              @"Japanese-Postal-Barcode"];
-    [self setPrimaryData:        @""];
+    self.input = @"Japanese-Postal-Barcode";
+    self.primaryData = @"";
 }
 
 @end

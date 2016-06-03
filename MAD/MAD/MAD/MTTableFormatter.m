@@ -29,6 +29,6 @@
 
 #pragma mark - Reading cached data
 
-- (BOOL)needsFormat { return [super needsFormat]; }
+- (BOOL)needsFormat { return super.needsFormat; }
 
 @end

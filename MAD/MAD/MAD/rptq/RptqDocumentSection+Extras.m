@@ -74,10 +74,10 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentSection *lastObject = fetchResults.lastObject;
-        identifier = [[lastObject identifier] unsignedIntegerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identiferNumber = @(identifier);
-    [self setIdentifier:identiferNumber];
+    self.identifier = identiferNumber;
     
     NSNumber *height = [RptqDocumentSection defaultHeight];
     NSNumber *layoutHeight = @(0.0000f);
@@ -115,7 +115,7 @@
 }
 
 - (BOOL)producesFormFeed {
-    return [self.wrappingStyle integerValue] == RptqDocumentSectionWrappingStyleNewPageAfter;
+    return (self.wrappingStyle).integerValue == RptqDocumentSectionWrappingStyleNewPageAfter;
 }
 
 - (void)setProducesFormFeed:(BOOL)producesFormFeed {
@@ -139,7 +139,7 @@
     } else {
         NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet addObject:value];
-        [self setHasRows: tempSet];
+        self.hasRows = tempSet;
     }
 }
 
@@ -149,7 +149,7 @@
     } else {
         NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet removeObject:value];
-        [self setHasRows: tempSet];
+        self.hasRows = tempSet;
     }
 }
 
@@ -243,18 +243,18 @@
 
 + (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group = [query queryGroupForIndex:groupLevel];
-    return [RptqDocumentSection headerSectionInSections:[group hasSection]];
+    return [RptqDocumentSection headerSectionInSections:group.hasSection];
 }
 
 + (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group =  [query queryGroupForIndex:groupLevel];
-    return [RptqDocumentSection footerSectionInSections:[group hasSection]];
+    return [RptqDocumentSection footerSectionInSections:group.hasSection];
 }
 
 + (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+        if (section.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
             resultSection = section;
             break;
         }
@@ -265,7 +265,7 @@
 + (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+        if (section.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
             resultSection = section;
             break;
         }
@@ -276,12 +276,12 @@
 // This is the layout height for page rendering... the designer section height is stored in the db
 - (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
-    if ([[self visibility] boolValue]) {
+    if (self.visibility.boolValue) {
         for (RptqDocumentSectionRows *row in self.hasRows) {
-            for (RptqDocumentObject *element in [row hasObjects]) {
+            for (RptqDocumentObject *element in row.hasObjects) {
                 
-                CGFloat originPointX        = [element.dropPointX floatValue];
-                CGFloat originPointY        = [element.dropPointY floatValue];
+                CGFloat originPointX        = (element.dropPointX).floatValue;
+                CGFloat originPointY        = (element.dropPointY).floatValue;
                 
                 CGSize marginSize           = [element size];
                 CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY,
@@ -303,7 +303,7 @@
 
 + (RptqDocument *)rptqDocumentForSection:(RptqDocumentSection *)section {
     RptqDocument *result = nil;
-    if ([section inGroup]) {
+    if (section.inGroup) {
         result = section.inGroup.inQuery.inDatabase.ownedByQueryAsStaticResource;
     } else if (section.inReport) {
         result = section.inReport;
@@ -348,11 +348,11 @@
             break;
 
         case MNSDocumentSectionTypeGroupHeader:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [self.inGroup fieldNameQuery]];
             break;
 
         case MNSDocumentSectionTypeGroupFooter:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [self.inGroup fieldNameQuery]];
             break;
 
         default:
@@ -439,10 +439,10 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
     RptqDocumentSectionEnumerator *enumerator;
     enumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
 
-    NSURL *urlNeedle = [[section objectID] URIRepresentation];
+    NSURL *urlNeedle = [section.objectID URIRepresentation];
     for (RptqDocumentSection *sec in enumerator) {
         @autoreleasepool {
-            NSURL *urlInHaystack = [[sec objectID] URIRepresentation];
+            NSURL *urlInHaystack = [sec.objectID URIRepresentation];
             breakNow = [urlNeedle isEqual:urlInHaystack];
             if (breakNow) break;
             result++;

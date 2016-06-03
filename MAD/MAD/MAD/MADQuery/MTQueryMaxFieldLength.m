@@ -33,10 +33,10 @@
         
         NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]], @"Need RptqDatabaseSchemaField's!");
 
-        [self setQueryObject: array];
-        RptqDatabaseSchemaField *field = [array firstObject];
+        self.queryObject = array;
+        RptqDatabaseSchemaField *field = array.firstObject;
 
-        RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
+        RptqUserCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:userCredentals];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
@@ -51,7 +51,7 @@
     *error = sqlError;
     
     NSString *sql = nil;
-    NSArray *fields = [[NSArray alloc] initWithArray:[self queryObject]];
+    NSArray *fields = [[NSArray alloc] initWithArray:self.queryObject];
     
     if (fields.count > 0) {
 
@@ -61,7 +61,7 @@
         for (RptqDatabaseSchemaField *field in fields) {
             
             MTDatabaseField *dbField = [field databaseFieldWrapper];
-            RptqDatabaseSchemaTable *table = [field inTable];
+            RptqDatabaseSchemaTable *table = field.inTable;
             
             [tables addObject:table];
 
@@ -69,8 +69,8 @@
                                                               andTableName:field.inTable.name];
             MADSafeQueryField *safeFieldName = [self.database newSafeQueryField:field.name
                                                              andTable:field.inTable.name];
-            [self fields][fieldAliasSafe] = dbField;
-            [[self fieldKeys] addObject:fieldAliasSafe];
+            self.fields[fieldAliasSafe] = dbField;
+            [self.fieldKeys addObject:fieldAliasSafe];
             
             [selectFields appendFormat: @" %@( %@(%@) ) %@ %@,",
                     [self.database sqlAggregateFunctionMax],
@@ -80,8 +80,8 @@
         }
         
         NSString *fieldsPart;
-        if ([selectFields length] > 0) {
-            fieldsPart = [selectFields substringToIndex:[selectFields length] - 1];
+        if (selectFields.length > 0) {
+            fieldsPart = [selectFields substringToIndex:selectFields.length - 1];
         } else {
             fieldsPart = @"";
         }

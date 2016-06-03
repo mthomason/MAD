@@ -57,12 +57,12 @@
         
     }
 
-    [document activeDocumentModel];
+    document.activeDocumentModel;
     MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
 
     if (database) {
     
-        [document setDatabase:database];
+        document.database = database;
         self.success = true;
         [self finish];
 

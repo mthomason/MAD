@@ -35,7 +35,7 @@
     
     UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
     NSArray *motionEffects = @[xAxis, yAxis, shadowOffsetHeight, shadowOffsetWidth];
-    [motionGroup setMotionEffects:motionEffects];
+    motionGroup.motionEffects = motionEffects;
     return motionGroup;
 }
 

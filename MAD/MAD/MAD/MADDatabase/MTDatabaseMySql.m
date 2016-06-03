@@ -86,7 +86,7 @@
         NSString *server = [connection server];
         serv.host = server.copy;
         
-        NSString *database = [connection database];
+        NSString *database = connection.database;
         serv.schema = database.copy;
         
         serv.port = (unsigned int)connection.port;
@@ -102,7 +102,7 @@
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
     bool result = false;
-    MTDatabaseConnection *connectionSettings = [self databaseConnection];
+    MTDatabaseConnection *connectionSettings = self.databaseConnection;
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
     if (dbconn) {
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
@@ -156,7 +156,7 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    MTDatabaseConnection *connectionSettings = [self databaseConnection];
+    MTDatabaseConnection *connectionSettings = self.databaseConnection;
     MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil];
     if (conn) {
         
@@ -349,7 +349,7 @@
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
             for (MADDataColumn *dataColumn in columnsEnumerator) {
-                MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
+                MTDatabaseField *databaseField = resultsDictionary[dataColumn.fieldName];
                 
                 databaseField.fieldTypeNative = dataColumn.nativeType;
                 

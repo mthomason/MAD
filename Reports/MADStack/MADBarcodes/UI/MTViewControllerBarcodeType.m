@@ -45,7 +45,7 @@
     NSDictionary *namesByType = [MTBarcode newDictionaryNames];
     self.barcodeNamesByType = namesByType;
     
-    NSArray *allNames = [self.barcodeNamesByType allValues];
+    NSArray *allNames = (self.barcodeNamesByType).allValues;
     NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     self.barcodeNamesOrdered = allNamesSorted;
     
@@ -53,7 +53,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSNumber *initalKey = @([self initalKey]);
+    NSNumber *initalKey = @(self.initalKey);
     NSString *barcodeName = self.barcodeNamesByType[initalKey];
     NSUInteger index = [self.barcodeNamesOrdered indexOfObject:barcodeName];
     [self.pickerView selectRow:(NSInteger)index
@@ -97,7 +97,7 @@
     NSArray *keys = [self.barcodeNamesByType allKeysForObject:barcodeName];
     if (keys.count > 0) {
         NSNumber *key = keys[0];
-        MTBarcodeType resultType = [key unsignedIntegerValue];
+        MTBarcodeType resultType = key.unsignedIntegerValue;
         [self.delegate didChangeBarcodeType:resultType];
     }
 }

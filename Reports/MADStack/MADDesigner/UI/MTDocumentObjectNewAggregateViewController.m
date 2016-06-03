@@ -63,8 +63,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)field {
-    [self setFieldObject:field];
-    [self setFieldObjectId: [field objectID]];
+    self.fieldObject = field;
+    self.fieldObjectId = field.objectID;
     
     NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
     NSString *detail = [NSString stringWithFormat:formatString, [field display]];
@@ -128,75 +128,75 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     
     MTAggregateFunctionType aggregateFunctionType = MTAggregateFunctionTypeNotSet;
     
-    if ([[action identifier] isEqualToString:MTSegueAggregateFunctionCount]) {
+    if ([action.identifier isEqualToString:MTSegueAggregateFunctionCount]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeCount;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionFirst]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionFirst]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeFirst;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionLast]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionLast]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeLast;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionMaximum]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMaximum]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeMax;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionMean]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMean]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeMean;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionMinimum]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMinimum]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeMin;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFunctionSum]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFunctionSum]) {
         
         aggregateFunctionType = MTAggregateFunctionTypeSum;
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateGroupTypeSave]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateGroupTypeSave]) {
         
-        MTGroupByViewController *groupByViewController = [action sourceViewController];
+        MTGroupByViewController *groupByViewController = action.sourceViewController;
         self.aggregateGroupByType = groupByViewController.aggregateGroupType;
         self.groupTypeSectionNumber = groupByViewController.aggregateGroupNumber;
         
-        switch ([self aggregateGroupByType]) {
+        switch (self.aggregateGroupByType) {
             case MTAggregateGroupByTypeSection: {
                 
-                NSUInteger group = [self groupTypeSectionNumber];
+                NSUInteger group = self.groupTypeSectionNumber;
                 NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
                 break;
                 
             }
             case MTAggregateGroupByTypeReport: {
                 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
                 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
             }
             default:
-                [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+                self.tableViewCellAggregateGroupBy.detailTextLabel.text = @"";
                 break;
         }
         
         
-    } else if ([[action identifier] isEqualToString:MTSegueAggregateFieldSave]) {
+    } else if ([action.identifier isEqualToString:MTSegueAggregateFieldSave]) {
         
-        MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
-        RptqQueryField *queryField = [dynamicFieldController queryField];
-        [self setFieldObject:queryField];
+        MTQueryBuilderChooseFieldViewController *dynamicFieldController = action.sourceViewController;
+        RptqQueryField *queryField = dynamicFieldController.queryField;
+        self.fieldObject = queryField;
         self.fieldObjectId = queryField.objectID.copy;
         
         NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
@@ -207,10 +207,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     }
     
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
-        [self setAggregateFunctionType:aggregateFunctionType];
+        self.aggregateFunctionType = aggregateFunctionType;
         NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:aggregateFunctionType];
         NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
-        [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+        self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
     }
     
     [self updateDisplay];
@@ -246,11 +246,11 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         NSNumber *groupNumber = [[NSNumber alloc] initWithInteger: self.groupTypeSectionNumber];
         [aggregateDelegate didUpdateggregateFunctionWithType: self.aggregateFunctionType
                                                    inputType: MTAggregateFunctionInputTypeField
-                                                 inputObject: [self fieldObject]
-                                                   groupType: [self aggregateGroupByType]
+                                                 inputObject: self.fieldObject
+                                                   groupType: self.aggregateGroupByType
                                                  groupNumber: groupNumber];
     }
-    self.navigationItem.rightBarButtonItem.enabled = [self fieldObject] != nil;
+    self.navigationItem.rightBarButtonItem.enabled = self.fieldObject != nil;
 }
 
 - (void)updateField {
@@ -267,10 +267,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)updateGroupType {
-    switch ([self aggregateGroupByType]) {
+    switch (self.aggregateGroupByType) {
         case MTAggregateGroupByTypeSection: {
             
-            NSInteger group = [self groupTypeSectionNumber];
+            NSInteger group = self.groupTypeSectionNumber;
             NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
             NSString *detail = [[NSString alloc] initWithFormat:format, group];
             self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
@@ -348,7 +348,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     self.fieldObject = aggregateDocumentObject.aggregateField;
     self.editmode = YES;
 
-    [self setAggregateDocumentObject:aggregateDocumentObject];
+    self.aggregateDocumentObject = aggregateDocumentObject;
 
 }
 - (IBAction)save:(id)sender {
@@ -370,7 +370,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self editmode]) {
+    if (self.editmode) {
         [self setEditmode:NO];
     }
     [self updateDisplay];

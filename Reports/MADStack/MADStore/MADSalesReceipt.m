@@ -251,7 +251,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
     
     hashData = [NSMutableData dataWithLength:SHA_DIGEST_LENGTH];
     
-    SHA1([input bytes], [input length], [hashData mutableBytes]);
+    SHA1(input.bytes, input.length, hashData.mutableBytes);
     
     bid = receipt[MTStoreKitIdentifierReceiptBid],
     version = receipt[MTStoreKitIdentifierReceiptVersion],
@@ -279,8 +279,8 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
     int xclass = 0;
     long length = 0;
     
-    NSUInteger dataLenght = [inappData length];
-    const uint8_t *p = [inappData bytes];
+    NSUInteger dataLenght = inappData.length;
+    const uint8_t *p = inappData.bytes;
     
     const uint8_t *end = p + dataLenght;
     

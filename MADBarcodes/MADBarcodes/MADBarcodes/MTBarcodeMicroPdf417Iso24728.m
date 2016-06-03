@@ -25,7 +25,7 @@
     if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeMicroPdf417Iso24728 type];
-        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"];
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMicroPdf417";
         self.name = @"MicroPDF417 (ISO 24728)";
         self.has2dComponent = NO;
         self.hasOptionalInput = YES;
@@ -51,8 +51,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              self.name];
-    [self setPrimaryData:        @""];
+    self.input = self.name;
+    self.primaryData = @"";
 }
 
 @end

@@ -32,10 +32,10 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 //    if (YES) {    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
 
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
-        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
-                            [verificationController modernReceiptIsValid] &&
-                            [verificationController modernReceiptProcessLicensed] &&
+                            verificationController.modernReceiptIsValid &&
+                            verificationController.modernReceiptProcessLicensed &&
                             [experationDate compare:[NSDate date]] == NSOrderedDescending;
         completion(licensedUser, experationDate);
 
@@ -57,10 +57,10 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 //    if (YES) {
         
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
-        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
-            [verificationController modernReceiptIsValid] &&
-            [verificationController modernReceiptProcessLicensed] &&
+            verificationController.modernReceiptIsValid &&
+            verificationController.modernReceiptProcessLicensed &&
             [experationDate compare:[NSDate date]] == NSOrderedDescending;
         result = licensedUser;
         
@@ -78,10 +78,10 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 //    if (YES) {  //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
         
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
-        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
-                            [verificationController modernReceiptIsValid] &&
-                            [verificationController modernReceiptProcessLicensed] &&
+                            verificationController.modernReceiptIsValid &&
+                            verificationController.modernReceiptProcessLicensed &&
                             [experationDate compare:[NSDate date]] == NSOrderedDescending;
         completion(licensedUser, experationDate);
         
@@ -102,14 +102,14 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
     
 //#if SUBSCRIPTION == TRUE
     
-    if ([[MTVerificationController sharedInstance] modernReceiptIsValid]) {
+    if ([MTVerificationController sharedInstance].modernReceiptIsValid) {
 
         NSArray *inAppPurchasesReadOnly = [MTVerificationController sharedInstance].receipt.inAppPurchases;
         NSMutableArray *inAppPurchases = [NSMutableArray arrayWithArray: inAppPurchasesReadOnly];
         
         NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             NSDictionary *transactionData = evaluatedObject;
-            return ([[transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] length] > 0);
+            return ([transactionData[MTStoreKitIdentifierReceiptCancellationDate] length] > 0);
         }];
         NSArray *refundedPurchases = [inAppPurchases filteredArrayUsingPredicate:canceledReceipts];
         
@@ -119,19 +119,19 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
             NSDictionary *transactionData = evaluatedObject;
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+            dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
 
             //Only goes though this if a refunded transaction exist.
             for (NSDictionary *refundTransaction in refundedPurchases) {
                 
                 // FIXME: Verify the below loop... haven't tested since iOS7 update
-                NSString *refundTransactionOrigionalTransactionId = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptOriginalTransactionId];
+                NSString *refundTransactionOrigionalTransactionId = refundTransaction[MTStoreKitIdentifierReceiptOriginalTransactionId];
                 if (refundTransactionOrigionalTransactionId) {
-                    NSString *origionalTransactionId = [transactionData objectForKey:MTStoreKitIdentifierReceiptTransactionId];
+                    NSString *origionalTransactionId = transactionData[MTStoreKitIdentifierReceiptTransactionId];
                     if ([origionalTransactionId isEqualToString:refundTransactionOrigionalTransactionId]) {
-                        NSString *refundTransactionCancelDate = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptCancellationDate];
+                        NSString *refundTransactionCancelDate = refundTransaction[MTStoreKitIdentifierReceiptCancellationDate];
                         NSDate *refundDate = nil;
-                        if ([refundTransactionCancelDate length] > 0) {
+                        if (refundTransactionCancelDate.length > 0) {
                             refundDate = [dateFormat dateFromString: refundTransactionCancelDate];
                             if ([refundDate compare:[NSDate date]] == NSOrderedAscending) {
                                 refunded = YES;
@@ -141,7 +141,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
                 }
             }
             
-            if ([[transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] length] > 0) {
+            if ([transactionData[MTStoreKitIdentifierReceiptCancellationDate] length] > 0) {
                 refunded = YES;
             }
             
@@ -151,14 +151,14 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
         }];
         [inAppPurchases filterUsingPredicate:nonRefundedReceipts];
 
-        if ([inAppPurchases count] > 0) {
+        if (inAppPurchases.count > 0) {
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+            dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
             
             [inAppPurchases sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *transactionA, NSDictionary *transactionB) {
-                NSString *purchaseDateStringA = [transactionA objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
-                NSString *purchaseDateStringB = [transactionB objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSString *purchaseDateStringA = transactionA[MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSString *purchaseDateStringB = transactionB[MTStoreKitIdentifierReceiptOriginalPurchaseDate];
                 NSDate *purchaseDateA = [dateFormat dateFromString:purchaseDateStringA];
                 NSDate *purchaseDateB = [dateFormat dateFromString:purchaseDateStringB];
                 return [purchaseDateA compare:purchaseDateB];
@@ -168,8 +168,8 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
             
             for (NSDictionary *transactionData in inAppPurchases) {
                 //NSString *receiptBundleIdentifier = [transactionData objectForKey:MTStoreKitIdentifierReceiptBid];
-                NSString *receiptBundlePurchaseDate = [transactionData objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
-                NSString *receiptBundleProductIdentifier = [transactionData objectForKey:MTStoreKitIdentifierReceiptProductId];
+                NSString *receiptBundlePurchaseDate = transactionData[MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSString *receiptBundleProductIdentifier = transactionData[MTStoreKitIdentifierReceiptProductId];
                 
                 NSDate *purchaseDate = [dateFormat dateFromString:receiptBundlePurchaseDate];
                 

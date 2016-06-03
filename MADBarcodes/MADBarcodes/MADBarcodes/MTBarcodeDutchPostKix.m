@@ -37,8 +37,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"DUTCHPOSTKX"];
-    [self setPrimaryData:        @""];
+    self.input = @"DUTCHPOSTKX";
+    self.primaryData = @"";
 }
 
 @end

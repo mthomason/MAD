@@ -16,7 +16,7 @@
 @interface MTDatabaseProcessSqlServer : NSObject
 
     - (instancetype)initWithProcess:(void /* DBPROCESS */ *)process;
-    - (void /* DBPROCESS */ *)process;
+    - (void /* DBPROCESS */ *)process NS_RETURNS_INNER_POINTER;
 
 @end
 

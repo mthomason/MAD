@@ -277,14 +277,14 @@
 }
 
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
     section.layoutHeight = layoutHeight;
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     
     if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
@@ -298,9 +298,9 @@
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
-        [newRowToAppend setInSection:section];
+        newRowToAppend.inSection = section;
         [hasRows addObject:newRowToAppend];
-        [section setHasRows:hasRows];
+        section.hasRows = hasRows;
         
     } else if (numberOfRows < section.numberOfRows.unsignedIntegerValue) {
         
@@ -309,36 +309,36 @@
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
         [hasRows.lastObject setInSection:nil];
         [hasRows removeObjectAtIndex: hasRows.count - 1];
-        [section setHasRows:hasRows];
+        section.hasRows = hasRows;
         [rowToDelete setInSection:nil];
         
     }
     NSNumber *numberOfRowsObj = [NSNumber numberWithUnsignedInteger:numberOfRows];
-    [section setNumberOfRows: numberOfRowsObj];
+    section.numberOfRows = numberOfRowsObj;
 }
 
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
     section.layoutHeight = layoutHeight;
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     NSNumber *visibility = [[NSNumber alloc] initWithBool:isVisible];
     section.visibility = visibility;
 }
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     [section setProducesFormFeed:newPageAfter];
 }
 
 - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow {
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     return [section producesFormFeed];
 }
@@ -405,7 +405,7 @@
         
     }
     
-    [rptqDatabase setOwnedByUser: userCredentals];
+    rptqDatabase.ownedByUser = userCredentals;
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
     RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId
                                                         inManagedObjectContext: managedObjectContext];
@@ -658,22 +658,22 @@
                 case MTAggregateFunctionInputTypeField: {
                     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: objectId
                                                              managedObjectContext: mangedObjectContext];
-                    [reportObject setAggregateField:field];
+                    reportObject.aggregateField = field;
                     [reportObject setAggregateFunction:nil];
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
                     RptqDocumentObjectFormula *formula =  [mangedObjectContext objectWithID: objectId];
                     [reportObject setAggregateField:nil];
-                    [reportObject setAggregateFunction:formula];
+                    reportObject.aggregateFunction = formula;
                     break;
                 }
                 default:
                     break;
             }
             
-            [documentObject setIsAggregate: reportObject];
-            [documentObject setType: @(MTDocumentObjectTypeAggregate)];
+            documentObject.isAggregate = reportObject;
+            documentObject.type = @(MTDocumentObjectTypeAggregate);
             
             break;
         }
@@ -696,7 +696,7 @@
         }
         case MTDocumentObjectTypeWhtiespace: {
             
-            [documentObject setType: @(MTDocumentObjectTypeWhtiespace)];
+            documentObject.type = @(MTDocumentObjectTypeWhtiespace);
             
             break;
         }
@@ -721,9 +721,9 @@
             break;
     }
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[self hasDetailSection] hasRows][0] hasObjects]];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[self.hasDetailSection.hasRows[0] hasObjects]];
     [hasObjects insertObject:documentObject atIndex:0];
-    [[[self hasDetailSection] hasRows][0] setHasObjects:hasObjects];
+    [self.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     return documentObject;
 }
 

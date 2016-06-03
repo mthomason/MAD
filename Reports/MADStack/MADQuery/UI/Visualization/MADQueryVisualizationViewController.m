@@ -553,7 +553,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
-    UIWindow *window = [[UIApplication sharedApplication] windows][0];
+    UIWindow *window = [UIApplication sharedApplication].windows[0];
     gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
                                                   toView: self.scrollView.contentView];
     [self didMoveFieldRect:self.controllersByObjectID[((MADManagedObjectView *)gestureRecognizer.view).objectIdTag]

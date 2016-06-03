@@ -653,7 +653,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @autoreleasepool {
         BOOL canMakePayments;
         canMakePayments = [SKPaymentQueue canMakePayments];
-        [_barButtonItemLicensing setEnabled:canMakePayments];
+        _barButtonItemLicensing.enabled = canMakePayments;
     }
 
     NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
@@ -939,21 +939,21 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     NSIndexPath *path;
     NSUInteger i;
 
-    i = [_batchInserts firstIndex];
+    i = _batchInserts.firstIndex;
     while (i != NSNotFound) {
         path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [inserts addObject:path];
         i = [_batchInserts indexGreaterThanIndex: i];
     }
     
-    i = [_batchRemoves firstIndex];
+    i = _batchRemoves.firstIndex;
     while (i != NSNotFound) {
         path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [removes addObject:path];
         i = [_batchRemoves indexGreaterThanIndex: i];
     }
 
-    i = [_batchUpdates firstIndex];
+    i = _batchUpdates.firstIndex;
     while (i != NSNotFound) {
         path = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
         [updates addObject:path];
@@ -1363,7 +1363,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
+            shouldPerformSegueWithIdentifier = self.shouldShowAddDocumentPopover;
             self.shouldShowAddDocumentPopover = false;
             self.barButtonItemAddNewDocument.enabled = NO;
         }
@@ -1389,7 +1389,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         id tvc = navControl.topViewController;
         [tvc setDelegate: self];
     }
-    [segue.destinationViewController setDelegate: self];
+    [(segue.destinationViewController) setDelegate: self];
     
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
@@ -1403,7 +1403,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
     MADViewerController *viewControllerReportViewer;
-    viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
+    viewControllerReportViewer = (MADViewerController *)((UINavigationController *)segue.destinationViewController).topViewController;
     viewControllerReportViewer.viewControllerDelegate = self;
 }
 
@@ -1422,7 +1422,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
-        MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
+        MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[(segue.destinationViewController) topViewController];
         [queryBuilderViewController reloadMainDocumentAnimated:YES];
     }
 }
@@ -1439,7 +1439,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [allpopovers addObject:self.licensingPopoverController];
         
         for (UIPopoverController *popoverController in allpopovers) {
-            if ([popoverController isPopoverVisible]) {
+            if (popoverController.popoverVisible) {
                 [popoverController dismissPopoverAnimated:YES];
                 result = YES;
             }
@@ -1901,7 +1901,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (IBAction)paste:(id)sender {
-    NSURL *url = [[UIPasteboard generalPasteboard] URL];
+    NSURL *url = [UIPasteboard generalPasteboard].URL;
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     NSURL *destinationUrl = [url uniqueUrl];
@@ -1973,7 +1973,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [popoverController presentPopoverFromBarButtonItem: self.barButtonItemAction
                                       permittedArrowDirections: UIPopoverArrowDirectionAny
                                                       animated: YES];
-            [self setPopoverControllerActivity:popoverController];
+            self.popoverControllerActivity = popoverController;
         }
     } else {
         [self presentViewController:activityViewController animated:YES completion:^{ }];

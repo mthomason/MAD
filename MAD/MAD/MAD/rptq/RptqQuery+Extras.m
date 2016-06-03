@@ -221,8 +221,8 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
         @autoreleasepool {
-            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-            RptqQueryField *groupField = [queryGroup hasField];
+            BOOL sortAscending = (queryGroup.sort.integerValue == MNSSortOrderAccending);
+            RptqQueryField *groupField = queryGroup.hasField;
             
             NSString *queryTable = [groupField.inQueryTable copyQueryAlias];
 

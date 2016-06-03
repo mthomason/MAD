@@ -21,7 +21,7 @@
 	// fetch key data
 	[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
 	
-	NSUInteger dataLength = [self length];
+	NSUInteger dataLength = self.length;
 	
 	//See the doc: For block ciphers, the output size will always be less than or
 	//equal to the input size plus the size of one block.
@@ -33,7 +33,7 @@
 	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
                                           keyPtr, kCCKeySizeAES256,
                                           NULL /* initialization vector (optional) */,
-                                          [self bytes], dataLength, /* input */
+                                          self.bytes, dataLength, /* input */
                                           buffer, bufferSize, /* output */
                                           &numBytesEncrypted);
 	if (cryptStatus == kCCSuccess) {
@@ -53,7 +53,7 @@
 	// fetch key data
 	[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
 	
-	NSUInteger dataLength = [self length];
+	NSUInteger dataLength = self.length;
 	
 	//See the doc: For block ciphers, the output size will always be less than or
 	//equal to the input size plus the size of one block.
@@ -65,7 +65,7 @@
 	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
                                           keyPtr, kCCKeySizeAES256,
                                           NULL /* initialization vector (optional) */,
-                                          [self bytes], dataLength, /* input */
+                                          self.bytes, dataLength, /* input */
                                           buffer, bufferSize, /* output */
                                           &numBytesDecrypted);
 	

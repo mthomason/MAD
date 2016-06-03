@@ -47,7 +47,7 @@
         }
         
         NSString *cmd = [self command];
-        if (mysql_query(connection.connection, [cmd UTF8String])) {
+        if (mysql_query(connection.connection, cmd.UTF8String)) {
             [MysqlException raiseConnection: connection
                                  withFormat: @"Could not perform mysql update %@ #%d:%s", cmd, mysql_errno(connection.connection), mysql_error(connection.connection)];
         } else {

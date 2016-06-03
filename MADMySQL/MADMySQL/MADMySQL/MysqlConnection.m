@@ -60,10 +60,10 @@
     #endif
     
     if (!mysql_real_connect(newObject->_connection,
-                            [server.host UTF8String],
-                            [server.user UTF8String],
-                            [server.password UTF8String],
-                            [server.schema UTF8String],
+                            (server.host).UTF8String,
+                            (server.user).UTF8String,
+                            (server.password).UTF8String,
+                            (server.schema).UTF8String,
                             server.port,  // default port
                             NULL,  // default socket
                             server.flags)) {
@@ -110,7 +110,7 @@
         NSString *errorDescription;
         errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_error(connectionHandle)];
         unsigned int errorCode = mysql_errno(connectionHandle);
-        if ([errorDescription length] <= 0) {
+        if (errorDescription.length <= 0) {
             errorDescription = NSLocalizedString(@"Failed to connect", @"Failed to connect");
         }
         if (errorCode == 0) {
@@ -208,7 +208,7 @@
 - (void)sendIdle  __attribute__ ((noreturn))
 {
     @autoreleasepool {
-        [[NSThread currentThread] setName:@"Mysql Idle Thread"];
+        [NSThread currentThread].name = @"Mysql Idle Thread";
         while (true) {
             [NSThread sleepForTimeInterval:20.0];
             @synchronized (self) {
@@ -235,7 +235,7 @@
 
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %@/%@/%@/%@",[super description],server.host,server.schema,server.user,server.password];
+    return [NSString stringWithFormat:@"%@ %@/%@/%@/%@",super.description,server.host,server.schema,server.user,server.password];
 }
 
 @end

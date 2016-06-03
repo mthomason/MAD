@@ -47,7 +47,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 - (void)dealloc {
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if ([_timerLabelTimeSinceRefreh isValid]) {
+            if (_timerLabelTimeSinceRefreh.valid) {
                 [_timerLabelTimeSinceRefreh invalidate];
             }
         }
@@ -215,7 +215,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         
         if (self.timerLabelTimeSinceRefreh != nil) {
             if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-                if ([self.timerLabelTimeSinceRefreh isValid]) {
+                if ((self.timerLabelTimeSinceRefreh).valid) {
                     [self.timerLabelTimeSinceRefreh invalidate];
                 }
             }

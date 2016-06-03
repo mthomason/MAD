@@ -34,16 +34,16 @@
         
         key = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[key];
-        [self setTableName:tableName];
+        self.tableName = tableName;
         
         key = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
         NSArray *array = object[key];
         NSArray *sortDescriptors = [NSArray arrayWithArray:array];
-        [self setSortDescriptors:sortDescriptors];
+        self.sortDescriptors = sortDescriptors;
         
         key = [[NSNumber alloc] initWithShort: MADQuerySelectColumns];
         NSDictionary *columns = object[key];
-        [self setColumns:columns];
+        self.columns = columns;
     }
     return self;
 }
@@ -51,8 +51,8 @@
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT *, ROWID FROM %@ ", self.tableName];
 
-    [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
-    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
+    [sql appendString:[self whereClauseWithRowIds:self.rowids]];
+    [sql appendString:[self orderByClauseWithSortDescriptors:self.sortDescriptors]];
     
     return sql;
 }

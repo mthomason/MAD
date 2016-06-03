@@ -33,8 +33,8 @@
 + (NSAttributedString *)FollowUsOnTwitter {
     
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [style setAlignment:NSTextAlignmentCenter];
-    [style setLineBreakMode:NSLineBreakByWordWrapping];
+    style.alignment = NSTextAlignmentCenter;
+    style.lineBreakMode = NSLineBreakByWordWrapping;
     
     UIColor *black = [UIColor blackColor];
     NSMutableAttributedString *twitter = [NSAttributedString Twitter].mutableCopy;

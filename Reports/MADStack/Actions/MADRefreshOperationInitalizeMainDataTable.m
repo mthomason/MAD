@@ -38,7 +38,7 @@
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     MADocument *document = self.document;
-    NSString *filename = [document filename];
+    NSString *filename = document.filename;
     NSLog(@"Filename:   %@ (%s)", filename, __func__);
 
     //MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];

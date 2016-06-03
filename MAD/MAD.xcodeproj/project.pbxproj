@@ -282,7 +282,7 @@
 		4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F11BADE80500775B72 /* MADArrayCaching.m */; };
 		4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F21BADE80500775B72 /* MADConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F31BADE80500775B72 /* MADConstants.m */; };
-		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282401BADE81A00775B72 /* MADSectionLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282411BADE81A00775B72 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */; };
 		4CC282421BADE81A00775B72 /* MADSectionLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -307,7 +307,7 @@
 		4CC2827A1BADE82200775B72 /* MADNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823D1BADE81A00775B72 /* MADNotificationDidReadRows.m */; };
 		4CC283B71BADE8C400775B72 /* MTReportViewerPrintPageRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283121BADE85000775B72 /* MTReportViewerPrintPageRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283B81BADE8C500775B72 /* MTReportViewerPrintPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283131BADE85000775B72 /* MTReportViewerPrintPageRenderer.m */; };
-		4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283141BADE85000775B72 /* MTTableFormatter.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283141BADE85000775B72 /* MTTableFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283BA1BADE8C700775B72 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283151BADE85000775B72 /* MTTableFormatter.m */; };
 		4CC283C71BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283C51BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283C81BADE8EC00775B72 /* RptqDocumentSectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283C61BADE8EA00775B72 /* RptqDocumentSectionEnumerator.m */; };

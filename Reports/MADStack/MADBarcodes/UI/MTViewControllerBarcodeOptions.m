@@ -138,7 +138,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 
 - (void)customInit {
     self.borderWidth = 5;
-    [self setSampleBarcodeIndex: 0];
+    self.sampleBarcodeIndex = 0;
     
     NSDictionary *d = @{SetDatasource : SetDatasource};
     NSArray *sampleBarcodeData = @[d];
@@ -188,28 +188,28 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 
         MADocument *document = self.document;
         [self setSelectingField1:YES];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:document];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = document;
 
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
         MADocument *document = self.document;
         [self setSelectingField2:YES];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:document];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = document;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
         // FIXME: Set inital component
         [self setSelecting2dComponentType:YES];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
 
         MTViewControllerBarcodeType *barcodeTypeViewController = segue.destinationViewController;
         MTBarcode *barcode = [self.delegate barcodeToDisplay];
-        [barcodeTypeViewController setInitalKey: barcode.barcodeType];
-        [barcodeTypeViewController setDelegate:self];
+        barcodeTypeViewController.initalKey = barcode.barcodeType;
+        barcodeTypeViewController.delegate = self;
 
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
 
@@ -272,7 +272,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
 
     //There's an optional section section for 2d component.
-    if ([barcode has2dComponent]) {
+    if (barcode.has2dComponent) {
         numberOfSections++;
     }
     return numberOfSections;
@@ -338,23 +338,23 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                 
                 NSAssert(sampleBarcodeDataCount >= 1, @"Sample data is missing");
                 
-                if ([self sampleBarcodeIndex] >= sampleBarcodeDataCount) {
-                    [self setSampleBarcodeIndex:0];
+                if (self.sampleBarcodeIndex >= sampleBarcodeDataCount) {
+                    self.sampleBarcodeIndex = 0;
                 }
                 
-                NSDictionary *sampleItem = [self sampleBarcodeData][[self sampleBarcodeIndex]];
-                NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
+                NSDictionary *sampleItem = self.sampleBarcodeData[self.sampleBarcodeIndex];
+                NSString *sampleText = [NSString stringWithFormat:@"%@", sampleItem.allValues.lastObject];
                 [self.delegate setInput:sampleText];
                 
                 NSString *fieldOneName = [[self.delegate barcodeQueryField1] toStringHumanReadable];
-                [[cell detailTextLabel] setText:fieldOneName];
+                cell.detailTextLabel.text = fieldOneName;
                 
                 break;
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeType forIndexPath:indexPath];
-                NSString *barcodeName = [MTBarcode newBarcodeNameForType:[barcode barcodeType]];
-                [[cell detailTextLabel] setText:barcodeName];
+                NSString *barcodeName = [MTBarcode newBarcodeNameForType:barcode.barcodeType];
+                cell.detailTextLabel.text = barcodeName;
                 break;
             }
             case 2: {
@@ -362,17 +362,17 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                 if ([barcode isKindOfClass:[MTBarcodeCode39Iso16388 class]] ||
                     [barcode isKindOfClass:[MTBarcodeCode39Extended class]]) {
                     NSString *mod43CheckDigit = @"Mod-43 Check Digit";
-                    [[cell textLabel] setText:mod43CheckDigit];
+                    cell.textLabel.text = mod43CheckDigit;
                     BOOL enabled = [(MTBarcodeCode39Iso16388 *)barcode mod43CheckDigitEnabled];
                     UITableViewCellAccessoryType accessory = enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                    [cell setAccessoryType:accessory];
+                    cell.accessoryType = accessory;
                 } else {
                     if (barcode.hasOptionalInput) {
-                        NSString *barcodeName = [MTBarcode newBarcodeNameForType:[barcode barcodeType]];
+                        NSString *barcodeName = [MTBarcode newBarcodeNameForType:barcode.barcodeType];
                         NSString *textLabel = [NSString stringWithFormat:@"%@ detail", barcodeName];
-                        [[cell textLabel] setText:textLabel];
+                        cell.textLabel.text = textLabel;
                         UITableViewCellAccessoryType accessory = UITableViewCellAccessoryDisclosureIndicator;
-                        [cell setAccessoryType:accessory];
+                        cell.accessoryType = accessory;
                     }
                 }
                 break;
@@ -383,78 +383,78 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     } else if (section == tvsRendering(barcode.has2dComponent)) {
         switch (indexPath.row) {
             case 0: {
-                BOOL humanReadable = [barcode humanReadable];
+                BOOL humanReadable = barcode.humanReadable;
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowHumanReadableText forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = humanReadable ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                [cell setAccessoryType:accessory];
+                cell.accessoryType = accessory;
                 break;
             }
             case 1: {
-                BOOL showErrorMessages = [barcode showErrorMessages];
+                BOOL showErrorMessages = barcode.showErrorMessages;
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowErrorMessages forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                [cell setAccessoryType:accessory];
+                cell.accessoryType = accessory;
                 break;
             }
             case 2: {
                 
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceSymbolHeight forIndexPath:indexPath];
-                NSInteger symbolHeight = [barcode height];
+                NSInteger symbolHeight = barcode.height;
                 
                 static NSInteger tagWithStepper = 48584;
-                if ([cell tag] != tagWithStepper) {
+                if (cell.tag != tagWithStepper) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     [stepper setWraps:NO];
-                    [stepper setValue:symbolHeight];
-                    CGFloat centerY = CGRectGetMidY([[cell contentView] bounds]);
-                    CGFloat correctX = CGPointZero.x + [[cell contentView] bounds].size.width - ([stepper bounds].size.width / 2.0000f) - 20.0000f;
+                    stepper.value = symbolHeight;
+                    CGFloat centerY = CGRectGetMidY(cell.contentView.bounds);
+                    CGFloat correctX = CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f;
                     [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
-                    [[cell contentView] addSubview:stepper];
+                    [cell.contentView addSubview:stepper];
                     CGPoint newCenter = CGPointMake(correctX, centerY);
-                    [stepper setCenter:newCenter];
-                    [cell setTag: tagWithStepper];
+                    stepper.center = newCenter;
+                    cell.tag = tagWithStepper;
                 }
                 NSString *detail = [NSString stringWithFormat:@"%ld", (long)symbolHeight];
                 NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
-                [[cell textLabel] setAttributedText:attributedString];
+                cell.textLabel.attributedText = attributedString;
             }
             default:
                 break;
         }
 
     } else if (section == tvsBorder(barcode.has2dComponent)) {
-        MTBarcodeBorderStyle borderStyle = [barcode borderStyle];
+        MTBarcodeBorderStyle borderStyle = barcode.borderStyle;
         
         switch (indexPath.row) {
             case 0: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                [cell setAccessoryType:accessory];
+                cell.accessoryType = accessory;
                 if (accessory == UITableViewCellAccessoryCheckmark) {
                     NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
                     NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
-                    [[tableView cellForRowAtIndexPath:row1] setAccessoryType:UITableViewCellAccessoryNone];
-                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                    [tableView cellForRowAtIndexPath:row1].accessoryType = UITableViewCellAccessoryNone;
+                    [tableView cellForRowAtIndexPath:row2].accessoryType = UITableViewCellAccessoryNone;
                 }
                 break;
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorder forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBox ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                [cell setAccessoryType:accessory];
+                cell.accessoryType = accessory;
                 if (accessory == UITableViewCellAccessoryCheckmark) {
                     NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
                     NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
-                    [[tableView cellForRowAtIndexPath:row0] setAccessoryType:UITableViewCellAccessoryNone];
-                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                    [tableView cellForRowAtIndexPath:row0].accessoryType = UITableViewCellAccessoryNone;
+                    [tableView cellForRowAtIndexPath:row2].accessoryType = UITableViewCellAccessoryNone;
                 }
                 break;
             }
             case 2: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderOption2 forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBind ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                [cell setAccessoryType:accessory];
+                cell.accessoryType = accessory;
                 if (accessory == UITableViewCellAccessoryCheckmark) {
                     NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
                     NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
@@ -469,11 +469,11 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderWidth forIndexPath:indexPath];
                 
                 static NSInteger tagWithStepper = 34314;
-                if ([cell tag] != tagWithStepper) {
+                if (cell.tag != tagWithStepper) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     stepper.wraps = NO;
-                    stepper.value = [self borderWidth];
+                    stepper.value = self.borderWidth;
                     CGFloat centerY = CGRectGetMidY(cell.contentView.bounds);
                     CGFloat correctX = CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f;
                     [stepper addTarget:self action:@selector(didChangeBorderWidth:) forControlEvents:UIControlEventValueChanged];
@@ -482,7 +482,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                     stepper.center = newCenter;
                     cell.tag = tagWithStepper;
                 }
-                NSString *detail = [NSString stringWithFormat:@"%ld", (long)[self borderWidth]];
+                NSString *detail = [NSString stringWithFormat:@"%ld", (long)self.borderWidth];
                 NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
                 cell.textLabel.attributedText = attributedString;
                 
@@ -500,7 +500,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentType forIndexPath:indexPath];
-                NSInteger type = [barcode has2dComponentType];
+                NSInteger type = barcode.has2dComponentType;
                 NSString *detailText = [NSString stringWithFormat:@"%ld", (long)type];
                 cell.detailTextLabel.text = detailText;
                 
@@ -589,7 +589,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 
                 } else {
                     if (barcode.hasOptionalInput) {
-                        [self performSegueWithIdentifier:[barcode detailsSegueIdentifer] sender:self];
+                        [self performSegueWithIdentifier:barcode.detailsSegueIdentifer sender:self];
                     }
                 }
                 
@@ -606,14 +606,14 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
                 case 0: {
                     BOOL humanReadable = [self.delegate didToggleHumanReadable];
                     UITableViewCellAccessoryType accessory = humanReadable ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                    [cell setAccessoryType:accessory];
+                    cell.accessoryType = accessory;
                     break;
                 }
                     
                 case 1: {
                     BOOL showErrorMessages = [self.delegate didToggleShowErrorMessages];
                     UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                    [cell setAccessoryType:accessory];
+                    cell.accessoryType = accessory;
                     break;
                 }
                     
@@ -681,9 +681,9 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
             
             switch (row) {
                 case 0: {
-                    BOOL wasEnabled = [[self.delegate barcodeToDisplay] has2dComponentEnabled];
+                    BOOL wasEnabled = [self.delegate barcodeToDisplay].has2dComponentEnabled;
                     UITableViewCellAccessoryType accessory = wasEnabled ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
-                    [cell setAccessoryType: accessory];
+                    cell.accessoryType = accessory;
                     [self.delegate barcode2dComponentSetEnabled: !wasEnabled ];
                     break;
                 }
@@ -724,10 +724,10 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 - (NSInteger)initalRow {
     NSInteger result;
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
-    if ([self selecting2dComponentType]) {
-        result = [barcode option1];
+    if (self.selecting2dComponentType) {
+        result = barcode.option1;
     } else {
-        switch ([barcode barcodeType]) {
+        switch (barcode.barcodeType) {
                 
             case MTBarcodeTypeCodeOne:
                 result = [(MTBarcodeCodeOne *)barcode size];
@@ -758,11 +758,11 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 
 - (void)didSelectTag:(NSInteger)tag {
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
-    if ([self selecting2dComponentType]) {
-        [barcode setHas2dComponentType:tag];
+    if (self.selecting2dComponentType) {
+        barcode.has2dComponentType = tag;
         [self.delegate updateBarcode];
     } else {
-        switch ([barcode barcodeType]) {
+        switch (barcode.barcodeType) {
                 
             case MTBarcodeTypeCodeOne:
                 [(MTBarcodeCodeOne *)barcode setSize:tag];
@@ -824,9 +824,9 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     [self.navigationController popViewControllerAnimated:YES];
     
     id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
-    if  ([self selectingField1]) {
+    if  (self.selectingField1) {
         [delegate didSetField1:field];
-    } else if ([self selectingField2]) {
+    } else if (self.selectingField2) {
         [delegate didSetField2:field];
     }
     
@@ -839,15 +839,15 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     
     if (success) {
         MTDataTable * __weak dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
-        [self setSampleDataTable:dt];
+        self.sampleDataTable = dt;
         NSAssert((self.selectingField1 == NO && self.selectingField2 == NO) == NO, @"Must be setting one or the other.");
         NSAssert((self.selectingField1 && self.selectingField2) == NO, @"Can't be setting both at the same time, now can we?");
         if (self.selectingField1) {
             NSArray *allObjects = [self.sampleDataTable allObjects];
-            [self setSampleBarcodeData:allObjects];
+            self.sampleBarcodeData = allObjects;
         } else if (self.selectingField2) {
             NSArray *allObjects = [self.sampleDataTable allObjects];
-            [self setSampleBarcodeData2dComponent:allObjects];
+            self.sampleBarcodeData2dComponent = allObjects;
         }
         [self.tableView reloadData];
         
@@ -876,7 +876,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 #pragma mark - MTDatabaseProtocol
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self sampleDataTable];
+    return self.sampleDataTable;
 }
 
 #pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate
@@ -928,13 +928,13 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 }
 - (NSString *)initalPrimaryData {
     MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[self.delegate barcodeToDisplay];
-    return [barcode primaryData];
+    return barcode.primaryData;
 }
 
 - (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData {
-    [self setSampleBarcodeDataMaxicode:sampleData];
-    if ([sampleData count] > 0) {
-        id result = [[sampleData[0] allObjects] lastObject];
+    self.sampleBarcodeDataMaxicode = sampleData;
+    if (sampleData.count > 0) {
+        id result = [sampleData[0] allObjects].lastObject;
         [self.delegate barcodeMaxicodeDidSetPrimaryData:result];
     } else {
         [self.delegate barcodeMaxicodeDidSetPrimaryData:nil];

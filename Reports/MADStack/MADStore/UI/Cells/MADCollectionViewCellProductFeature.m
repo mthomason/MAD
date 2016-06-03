@@ -53,14 +53,14 @@ static inline CGRect ImageSize(CGSize size) {
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
-    [super setHighlighted:highlighted];
+    super.highlighted = highlighted;
     self.labelDescription.textColor = highlighted || self.selected ?
                                 self.labelTitle.highlightedTextColor.copy :
                                 self.textColorFromNib.copy;
 }
 
 - (void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
+    super.selected = selected;
     self.labelDescription.textColor = selected || self.highlighted ?
                                     self.labelTitle.highlightedTextColor.copy :
                                     self.textColorFromNib.copy;

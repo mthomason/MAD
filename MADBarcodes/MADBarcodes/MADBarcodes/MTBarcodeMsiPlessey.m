@@ -40,18 +40,18 @@
 }
 
 - (NSInteger)checkpointDigit {
-    return [self option2];
+    return self.option2;
 }
 
 - (void)setCheckDigit:(NSInteger)checkDigit {
     NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
-    [self setOption2: checkDigit];
+    self.option2 = checkDigit;
 }
 
 - (void)initSampleData {
-    [self setOption2:            0];
-    [self setInput:              @"87654321"];
-    [self setPrimaryData:        @""];
+    self.option2 = 0;
+    self.input = @"87654321";
+    self.primaryData = @"";
 }
 
 @end

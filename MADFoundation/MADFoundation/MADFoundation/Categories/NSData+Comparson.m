@@ -15,7 +15,7 @@
     if ([self isEqualToData:data]) {
         result = NSOrderedSame;
     } else {
-        result = [self length] > [data length] ? NSOrderedAscending : NSOrderedDescending;
+        result = self.length > data.length ? NSOrderedAscending : NSOrderedDescending;
     }
     return result;
 }

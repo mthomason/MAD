@@ -50,19 +50,19 @@
     [self setClipsToBounds:YES];
     
     if (!self.toolbar) {
-        UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[self bounds]];
-        [[self layer] insertSublayer:[toolbar layer] atIndex:0];
-        [self setToolbar:toolbar];
+        UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
+        [self.layer insertSublayer:toolbar.layer atIndex:0];
+        self.toolbar = toolbar;
     }
 }
 
 - (void) setBlurTintColor:(UIColor *)blurTintColor {
-    [self.toolbar setBarTintColor:blurTintColor];
+    (self.toolbar).barTintColor = blurTintColor;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.toolbar setFrame:[self bounds]];
+    (self.toolbar).frame = self.bounds;
 }
 
 @end

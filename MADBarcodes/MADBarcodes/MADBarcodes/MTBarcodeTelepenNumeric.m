@@ -37,8 +37,8 @@
 }
 
 - (void)initSampleData {
-    [self setInput:              @"466X33"];
-    [self setPrimaryData:        @""];
+    self.input = @"466X33";
+    self.primaryData = @"";
 }
 
 @end

@@ -75,11 +75,11 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (void)reloadReceipt {
-    MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
+    MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[NSBundle mainBundle].appStoreReceiptURL.path];
     
     NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
     NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
-    NSUUID *identifierForVendor = [[UIDevice currentDevice] identifierForVendor].copy;
+    NSUUID *identifierForVendor = [UIDevice currentDevice].identifierForVendor.copy;
     
     self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: bundleID
                                                      bundleVersion: globalBundleVersion
@@ -91,7 +91,7 @@ static MTVerificationController *sharedSingleton;
 
 - (void)resetReceipt {
 
-    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    NSURL *receiptUrl = [NSBundle mainBundle].appStoreReceiptURL;
     NSString *receiptPath = receiptUrl.path;
     
     
@@ -103,7 +103,7 @@ static MTVerificationController *sharedSingleton;
         NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
         
         NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
-        NSUUID *identifierForVendor = [[UIDevice currentDevice] identifierForVendor].copy;
+        NSUUID *identifierForVendor = [UIDevice currentDevice].identifierForVendor.copy;
         
         BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: bundleID
                                                    bundleVersion: globalBundleVersion
@@ -213,28 +213,28 @@ static MTVerificationController *sharedSingleton;
 
 // NOTE: These are needed for 4.x (as willSendRequestForAuthenticationChallenge: is not supported)
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return [[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust];
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
     {
-        SecTrustRef trust = [[challenge protectionSpace] serverTrust];
+        SecTrustRef trust = challenge.protectionSpace.serverTrust;
         NSError *error = nil;
         BOOL didUseCredential = NO;
         BOOL isTrusted = [self validateTrust:trust error:&error];
         if (isTrusted) {
             NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
             if (credential) {
-                [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+                [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
                 didUseCredential = YES;
             }
 		}
         if (! didUseCredential) {
-            [[challenge sender] cancelAuthenticationChallenge:challenge];
+            [challenge.sender cancelAuthenticationChallenge:challenge];
         }
     } else {
-        [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
+        [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
     }
 }
 
@@ -258,7 +258,7 @@ static MTVerificationController *sharedSingleton;
     if (trust) {
         if (!trusted && error) {
             *error = [NSError errorWithDomain:@"kSecTrustError" code:(NSInteger)trust_result userInfo:nil];
-            [self setFailureReason:*error];
+            self.failureReason = *error;
         }
         return trusted;
     }
@@ -384,13 +384,13 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
             [signature_string canBeConvertedToEncoding:NSASCIIStringEncoding], outLabel);
     
     CC_LONG purchase_info_length;
-    purchase_info_length = (unsigned int)[purchaseInfoData length];
-    const uint8_t *purchase_info_bytes = [purchaseInfoData bytes];
+    purchase_info_length = (unsigned int)purchaseInfoData.length;
+    const uint8_t *purchase_info_bytes = purchaseInfoData.bytes;
     
     
     size_t signature_length;
-    signature_length = [signatureData length];
-    const uint8_t *signature_bytes = [signatureData bytes];
+    signature_length = signatureData.length;
+    const uint8_t *signature_bytes = signatureData.bytes;
     
     require(purchase_info_bytes && signature_bytes, outLabel);
     

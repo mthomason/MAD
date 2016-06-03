@@ -116,9 +116,9 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    if ([self barcode]) {
-        [[self barcode] setCenter: YES];
-        [[self barcode] drawInRect:rect];
+    if (self.barcode) {
+        [self.barcode setCenter: YES];
+        [self.barcode drawInRect:rect];
     }
 }
 
