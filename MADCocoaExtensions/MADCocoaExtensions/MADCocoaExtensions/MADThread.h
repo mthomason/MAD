@@ -13,7 +13,8 @@
 
 @interface MADThread : NSObject
 
-    + (void)completeOnMainThread:(void(^)(BOOL success, id obj))completion withObject:(id)obj andSuccess:(BOOL)success;
+    + (void)completeOnMainThread:(void(^)(BOOL success, id obj))completion
+                      withObject:(id)obj andSuccess:(BOOL)success;
     + (void)safeSwitchToMainThread:(void(^)())completion;
 
 @end

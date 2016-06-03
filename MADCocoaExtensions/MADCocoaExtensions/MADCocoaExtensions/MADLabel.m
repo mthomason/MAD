@@ -10,7 +10,7 @@
 
 @implementation MADLabel
 
-+ (instancetype)newDocumentCaption:(CGRect)frame width:(CGFloat)width NS_RETURNS_RETAINED {
++ (instancetype)newLabelDocumentCaption:(CGRect)frame width:(CGFloat)width {
     MADLabel *label = [[self alloc] initWithFrame:frame];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;

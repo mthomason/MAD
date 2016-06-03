@@ -31,14 +31,14 @@
     return barButtonItemDuplicate;
 }
 
-+ (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action {
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                                            target: target
                                                                                            action: action];
     return barButtonItemEditDone;
 }
 
-+ (instancetype)ActivityIndicator NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemActivityIndicator {
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;

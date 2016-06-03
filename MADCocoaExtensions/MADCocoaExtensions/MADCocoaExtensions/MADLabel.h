@@ -13,7 +13,7 @@
 
 @interface MADLabel : UILabel
 
-+ (instancetype)newDocumentCaption:(CGRect)frame width:(CGFloat)width NS_RETURNS_RETAINED;
++ (instancetype)newLabelDocumentCaption:(CGRect)frame width:(CGFloat)width;
 
 @end
 

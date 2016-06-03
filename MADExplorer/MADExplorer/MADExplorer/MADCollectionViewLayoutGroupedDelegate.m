@@ -32,8 +32,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (UILabel *)testLabel {
     if (!_testLabel) {
-        UILabel *label = [MADLabel newDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
-                                                width: fLabelWidth];
+        UILabel *label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
+                                                     width: fLabelWidth];
         _testLabel = label;
     }
     return _testLabel;

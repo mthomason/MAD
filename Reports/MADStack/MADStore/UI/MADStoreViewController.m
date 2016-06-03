@@ -81,7 +81,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         MADFeatures *features = [[MADFeatures alloc] init];
         NSArray *products = [features availableFeaturesProductIDs];
         
-        UIBarButtonItem *barButtonItem = [UIBarButtonItem ActivityIndicator];
+        UIBarButtonItem *barButtonItem = [UIBarButtonItem newBarButtonItemActivityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 
         [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {

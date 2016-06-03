@@ -1170,7 +1170,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
-        _barButtonItemEditDone = [UIBarButtonItem buttonEditDone:self action:@selector(edit:)];
+        _barButtonItemEditDone = [UIBarButtonItem newBarButtonItemEditDone: self
+                                                                    action: @selector(edit:)];
     }
     return _barButtonItemEditDone;
 }

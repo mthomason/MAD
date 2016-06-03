@@ -15,8 +15,8 @@
 
     + (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action;
     + (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action;
-    + (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED;
-    + (instancetype)ActivityIndicator NS_RETURNS_RETAINED;
+    + (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action;
+    + (instancetype)newBarButtonItemActivityIndicator;
 
 @end
 
