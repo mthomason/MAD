@@ -98,7 +98,7 @@
 - (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
     result.name = self.name;
-    result.fieldType = (MTDataType)self.dataType.integerValue;
+    result.fieldType = (MADDataType)self.dataType.integerValue;
     result.fieldTypeNative = self.dataTypeNative.integerValue;
     result.decimals = self.decimals.unsignedIntegerValue;
     result.primaryKey = self.primaryKey.boolValue;
@@ -116,7 +116,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MADDataType selectorForSorting:self.dataType.shortValue];
+    return MADDataTypeSelectorForSorting(self.dataType.shortValue);
 }
 
 #pragma mark - MTProtocolLog
@@ -137,73 +137,73 @@
 
     NSString *result = nil;
     switch ([[self dataType] integerValue]) {
-        case MTDataTypeBit:
+        case MADDataTypeBit:
             result = NSLocalizedString(@"Bit", @"Bit data type.");
             break;
-        case MTDataTypeBlob:
+        case MADDataTypeBlob:
             result = NSLocalizedString(@"Blob", @"Blob data type.");
             break;
-        case MTDataTypeDate:
+        case MADDataTypeDate:
             result = NSLocalizedString(@"Date", @"Date data type.");
             break;
-        case MTDataTypeDateTime:
+        case MADDataTypeDateTime:
             result = NSLocalizedString(@"Date Time", @"Date data type.");
             break;
-        case MTDataTypeDecimal:
+        case MADDataTypeDecimal:
             result = NSLocalizedString(@"Decimal", @"Date data type.");
             break;
-        case MTDataTypeDouble:
+        case MADDataTypeDouble:
             result = NSLocalizedString(@"Double", @"Date data type.");
             break;
-        case MTDataTypeEnum:
+        case MADDataTypeEnum:
             result = NSLocalizedString(@"Enum", @"Date data type.");
             break;
-        case MTDataTypeFloat:
+        case MADDataTypeFloat:
             result = NSLocalizedString(@"Float", @"Date data type.");
             break;
-        case MTDataTypeGeometry:
+        case MADDataTypeGeometry:
             result = NSLocalizedString(@"Geometry", @"Date data type.");
             break;
-        case MTDataTypeImage:
+        case MADDataTypeImage:
             result = NSLocalizedString(@"Image", @"Image data type.");
             break;
-        case MTDataTypeInt24:
+        case MADDataTypeInt24:
             result = NSLocalizedString(@"Int24", @"Image data type.");
             break;
-        case MTDataTypeInteger:
+        case MADDataTypeInteger:
             result = NSLocalizedString(@"Integer", @"Image data type.");
             break;
-        case MTDataTypeLong:
+        case MADDataTypeLong:
             result = NSLocalizedString(@"Long", @"Image data type.");
             break;
-        case MTDataTypeLongLong:
+        case MADDataTypeLongLong:
             result = NSLocalizedString(@"Long Long", @"Image data type.");
             break;
-        case MTDataTypeNumber:
+        case MADDataTypeNumber:
             result = NSLocalizedString(@"Number", @"Number data type.");
             break;
-        case MTDataTypeSet:
+        case MADDataTypeSet:
             result = NSLocalizedString(@"Set", @"Number data type.");
             break;
-        case MTDataTypeShort:
+        case MADDataTypeShort:
             result = NSLocalizedString(@"Short", @"Number data type.");
             break;
-        case MTDataTypeString:
+        case MADDataTypeString:
             result = NSLocalizedString(@"String", @"String data type.");
             break;
-        case MTDataTypeTime:
+        case MADDataTypeTime:
             result = NSLocalizedString(@"Time", @"Number data type.");
             break;
-        case MTDataTypeTimeStamp:
+        case MADDataTypeTimeStamp:
             result = NSLocalizedString(@"Time Stamp", @"Number data type.");
             break;
-        case MTDataTypeUnknown:
+        case MADDataTypeUnknown:
             result = NSLocalizedString(@"Unknown", @"Number data type.");
             break;
-        case MTDataTypeVarChar:
+        case MADDataTypeVarChar:
             result = NSLocalizedString(@"Var Char", @"Number data type.");
             break;
-        case MTDataTypeYear:
+        case MADDataTypeYear:
             result = NSLocalizedString(@"Year", @"Number data type.");
             break;
         default:

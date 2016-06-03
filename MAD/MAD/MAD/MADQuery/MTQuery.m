@@ -70,7 +70,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @implementation MTQuery
 
-- (id)initWithQueryType:(MADQueryType)type object:(id)object {
+- (instancetype)initWithQueryType:(MADQueryType)type object:(id)object {
 
     switch (type) {
             
@@ -175,11 +175,11 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             break;
             
         default:
-            NSAssert(false, @"Did you forget a constructor?");
+            NSAssert(NO, @"Did you forget a constructor?");
             break;
     }
     if (self) {
-        [self setType:type];
+        self.type = type;
     }
     return self;
 }
@@ -190,7 +190,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (BOOL)partOfTransactionSet { return NO; }
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     
     if (self = [super init]) {
         
@@ -206,11 +206,11 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return self;
 }
 
-- (bool)performQueryWithError:(NSError * __autoreleasing *)error {
-    NSError * __autoreleasing qerror = NULL;
-    bool success = [self.database executeQuery:self withError:&qerror];
+- (BOOL)performQueryWithError:(NSError * __autoreleasing *)error {
+    NSError * __autoreleasing * qerror = NULL;
+    BOOL success = [self.database executeQuery:self withError:qerror];
     if (!success && error == NULL) {
-        *error = qerror;
+        error = qerror;
     }
     return success;
 }
@@ -228,7 +228,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {
-    NSString *tableName = [table toString];
+    NSString *tableName = table.toString;
     return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
 }
 
@@ -253,7 +253,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if ([whereClause count] > 0) {
+    if (whereClause.count > 0) {
         NSUInteger counter = 0, counterBinings = 0;
         for (NSDictionary *condition in whereClause) {
             [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
@@ -263,7 +263,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             
             MTDatabaseDataBinding *databinding;
             if ([[NSNull null] isEqual: columnValue]) {
-                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: MTDataTypeNull
+                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
                                                                    fieldIndex: counterBinings
                                                                         value: columnValue];
             } else {
@@ -282,7 +282,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if ([sortDescriptors count] > 0) {
+    if (sortDescriptors.count > 0) {
         NSUInteger sortCounter = 0;
         [sql appendString:@" ORDER BY "];
         
@@ -309,7 +309,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 - (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     BOOL firstTime = YES;
-    if ([rowids count] > 0) {
+    if (rowids.count > 0) {
         for (NSNumber *rowido in rowids) {
             [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
             [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
@@ -321,7 +321,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
+- (MADDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
     MADDataColumn * __weak column = self.columns[columnHandle];
     return column.type;
 }

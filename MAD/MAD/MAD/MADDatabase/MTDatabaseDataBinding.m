@@ -15,48 +15,48 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSString.h>
 
-static inline MTDataType DataTypeLimited(MTDataType expandedDataType) {
+static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
     switch (expandedDataType) {
-        case MTDataTypeBit:
-        case MTDataTypeInteger:
-        case MTDataTypeShort:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeInt24:
-        case MTDataTypeEnum: {
-            return MTDataTypeInteger;
+        case MADDataTypeBit:
+        case MADDataTypeInteger:
+        case MADDataTypeShort:
+        case MADDataTypeLong:
+        case MADDataTypeLongLong:
+        case MADDataTypeInt24:
+        case MADDataTypeEnum: {
+            return MADDataTypeInteger;
             break;
         }
-        case MTDataTypeSet:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeString:
-        case MTDataTypeVarChar:
-        case MTDataTypeGeometry: {
-            return MTDataTypeString;
+        case MADDataTypeSet:
+        case MADDataTypeTime:
+        case MADDataTypeTimeStamp:
+        case MADDataTypeYear:
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeString:
+        case MADDataTypeVarChar:
+        case MADDataTypeGeometry: {
+            return MADDataTypeString;
             break;
         }
-        case MTDataTypeImage:
-        case MTDataTypeBlob: {
-            return MTDataTypeBlob;
+        case MADDataTypeImage:
+        case MADDataTypeBlob: {
+            return MADDataTypeBlob;
             break;
         }
-        case MTDataTypeFloat: {
-            return MTDataTypeFloat;
+        case MADDataTypeFloat: {
+            return MADDataTypeFloat;
             break;
         }
-        case MTDataTypeDouble:
-        case MTDataTypeDecimal:
-        case MTDataTypeNumber: {
-            return MTDataTypeDouble;
+        case MADDataTypeDouble:
+        case MADDataTypeDecimal:
+        case MADDataTypeNumber: {
+            return MADDataTypeDouble;
             break;
         }
-        case MTDataTypeUnknown:
+        case MADDataTypeUnknown:
         default: {
-            return MTDataTypeUnknown;
+            return MADDataTypeUnknown;
             break;
         }
     }
@@ -67,7 +67,7 @@ static inline MTDataType DataTypeLimited(MTDataType expandedDataType) {
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, strong, readwrite) id value;
-    @property (nonatomic, assign, readwrite) MTDataType datatype;
+    @property (nonatomic, assign, readwrite) MADDataType datatype;
     @property (nonatomic, assign, readwrite) int fieldIndex;
 
 @end
@@ -81,25 +81,25 @@ static inline MTDataType DataTypeLimited(MTDataType expandedDataType) {
 - (instancetype)init {
     if (self = [super init]) {
         self.value = nil;
-        self.datatype = MTDataTypeNull;
+        self.datatype = MADDataTypeNull;
         self.fieldIndex = 0;
     }
     return self;
 }
 
-- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSUInteger)fieldIndex
+- (instancetype)initWithDataType:(MADDataType)datatype fieldIndex:(NSUInteger)fieldIndex
                            value:(id)value {
 
     if (self = [super init]) {
         
         if (value == nil || value == [NSNull null]) {
-            datatype = MTDataTypeNull;
+            datatype = MADDataTypeNull;
             value = [NSNull null];
         } else {
             datatype = DataTypeLimited(datatype);
-            if (datatype == MTDataTypeUnknown) {
+            if (datatype == MADDataTypeUnknown) {
                 value = [NSString stringWithFormat:@"%@", value];
-                datatype = MTDataTypeString;
+                datatype = MADDataTypeString;
             }
         }
         self.datatype = datatype;

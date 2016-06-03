@@ -20,14 +20,14 @@
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) NSUInteger calculatedWidth;
 
-    @property (nonatomic, assign) MTDataType fieldType;
+    @property (nonatomic, assign) MADDataType fieldType;
     @property (nonatomic, assign) NSInteger fieldTypeNative;
     @property (nonatomic, assign) NSUInteger width;
     @property (nonatomic, assign) NSUInteger decimals;
     @property (nonatomic, assign) BOOL primaryKey;
 
     - (BOOL)isNumeric;
-    + (BOOL)isNumeric:(MTDataType)dataType;
+    + (BOOL)isNumeric:(MADDataType)dataType;
 
     - (SEL)selectorForSorting;
 

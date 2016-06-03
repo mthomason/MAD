@@ -24,7 +24,7 @@ typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataC
 
     @property (nonatomic, readwrite, strong) NSObject <NSCopying> *defaultValue;
 
-    @property (nonatomic, assign)   MTDataType  type;
+    @property (nonatomic, assign)   MADDataType  type;
     @property (nonatomic, assign)   NSInteger   nativeType;
     @property (nonatomic, assign)   NSInteger   dataLength;
     @property (nonatomic, assign)   NSInteger   dataPercision;

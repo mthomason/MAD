@@ -49,7 +49,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;
     - (CGRect)elementViewFrameDesigner;
-    - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
     - (CGSize)sizeContentView;
     - (void)setOrigin:(CGPoint)origin;
     - (void)dropAtRect:(CGRect)rect;

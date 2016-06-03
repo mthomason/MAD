@@ -98,7 +98,7 @@
     dataColumn.dataLength = (NSInteger)myField.length;
     dataColumn.dataPercision = (NSInteger)myField.decimals;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? true : false;
-    dataColumn.type = [MTDataTypeMySQL dataTypeForNativeType:myField.type];
+    dataColumn.type = [MADDataTypeMySQL dataTypeForNativeType:myField.type];
 
     return dataColumn;
 }
@@ -422,7 +422,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                                 
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                column.type = MTDataTypeString;
+                                                column.type = MADDataTypeString;
                                             
                                             }
                                             
@@ -441,7 +441,7 @@ char *mySQLTypeForType(int type) {
                                             if (rowCounter == 0) {
                                             
                                                 MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                column.type = MTDataTypeInteger;
+                                                column.type = MADDataTypeInteger;
                                                 
                                             }
                                             

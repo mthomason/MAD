@@ -353,7 +353,7 @@
                 
                 databaseField.fieldTypeNative = dataColumn.nativeType;
                 
-                MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
+                MADDataType fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
                 databaseField.fieldType = fieldType;
                 databaseField.width = dataColumn.dataLength;
                 databaseField.decimals = dataColumn.dataPercision;

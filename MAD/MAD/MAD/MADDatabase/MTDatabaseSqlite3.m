@@ -189,7 +189,7 @@ void sqliteLog(void *foo, const char* statement) {
 //Converting native type to affinity type
 // using http://www.sqlite.org/datatype3.html
 
-+ (MTDataType)dataTypeForNativeType:(NSString *)nativeType {
++ (MADDataType)dataTypeForNativeType:(NSString *)nativeType {
     
     NSString *lowerCaseString = nativeType.lowercaseString;
     
@@ -214,43 +214,43 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     
-    MTDataType result;
+    MADDataType result;
     if (isInteger) {
-        result = MTDataTypeInteger;
+        result = MADDataTypeInteger;
     } else if (isText) {
-        result = MTDataTypeString;
+        result = MADDataTypeString;
     } else if (isNone) {
-        result = MTDataTypeBlob;
+        result = MADDataTypeBlob;
     } else if (isReal) {
-        result = MTDataTypeDouble;
+        result = MADDataTypeDouble;
     } else {
-        result = MTDataTypeNumber;
+        result = MADDataTypeNumber;
     }
     return result;
 }
 
-+ (MTDataType)dataTypeForAffentyType:(int)affentyType {
-    MTDataType result;
++ (MADDataType)dataTypeForAffentyType:(int)affentyType {
+    MADDataType result;
     switch (affentyType) {
         case SQLITE_INTEGER:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SQLITE_FLOAT:
-            result = MTDataTypeDouble;
+            result = MADDataTypeDouble;
             break;
         case SQLITE_BLOB:
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         case SQLITE_NULL:
         case SQLITE3_TEXT:
         default:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
     }
     return result;
 }
 
-+ (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MTDataType)columnType
++ (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
                                                             ascending:(BOOL)ascending {
     NSString *sortDescription = nil;
     NSString *nativeTypeDescription = [MTDatabaseSqlite3 newNativeTypeForDataType:columnType];
@@ -262,89 +262,89 @@ void sqliteLog(void *foo, const char* statement) {
     return sortDescription;
 }
 
-+ (MTDataType)dataTypeForNativeTypeNumeric:(MTDataType)dataType {
-    MTDataType result;
++ (MADDataType)dataTypeForNativeTypeNumeric:(MADDataType)dataType {
+    MADDataType result;
     switch (dataType) {
-        case MTDataTypeBit:
-        case MTDataTypeInteger:
-        case MTDataTypeShort:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeInt24:
-        case MTDataTypeEnum:
-            result = MTDataTypeInteger;
+        case MADDataTypeBit:
+        case MADDataTypeInteger:
+        case MADDataTypeShort:
+        case MADDataTypeLong:
+        case MADDataTypeLongLong:
+        case MADDataTypeInt24:
+        case MADDataTypeEnum:
+            result = MADDataTypeInteger;
             break;
-        case MTDataTypeSet:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeString:
-        case MTDataTypeVarChar:
-        case MTDataTypeGeometry:
-            result = MTDataTypeString;
+        case MADDataTypeSet:
+        case MADDataTypeTime:
+        case MADDataTypeTimeStamp:
+        case MADDataTypeYear:
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeString:
+        case MADDataTypeVarChar:
+        case MADDataTypeGeometry:
+            result = MADDataTypeString;
             break;
-        case MTDataTypeImage:
-        case MTDataTypeBlob: {
+        case MADDataTypeImage:
+        case MADDataTypeBlob: {
             
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         }
-        case MTDataTypeFloat:
-            result = MTDataTypeFloat;
+        case MADDataTypeFloat:
+            result = MADDataTypeFloat;
             break;
-        case MTDataTypeDouble:
-            result = MTDataTypeDouble;
+        case MADDataTypeDouble:
+            result = MADDataTypeDouble;
             break;
-        case MTDataTypeDecimal:
-        case MTDataTypeNumber:
-            result = MTDataTypeDecimal;
+        case MADDataTypeDecimal:
+        case MADDataTypeNumber:
+            result = MADDataTypeDecimal;
             break;
-        case MTDataTypeUnknown:
+        case MADDataTypeUnknown:
         default:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
     }
     return result;
 }
 
-+ (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
++ (NSString *)newNativeTypeForDataType:(MADDataType)dataType {
     NSString *columnAffinity;
     switch (dataType) {
-        case MTDataTypeBit:
-        case MTDataTypeInteger:
-        case MTDataTypeShort:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeInt24:
-        case MTDataTypeEnum:
+        case MADDataTypeBit:
+        case MADDataTypeInteger:
+        case MADDataTypeShort:
+        case MADDataTypeLong:
+        case MADDataTypeLongLong:
+        case MADDataTypeInt24:
+        case MADDataTypeEnum:
             columnAffinity = @"INTEGER";
             break;
-        case MTDataTypeSet:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeString:
-        case MTDataTypeVarChar:
-        case MTDataTypeGeometry:
+        case MADDataTypeSet:
+        case MADDataTypeTime:
+        case MADDataTypeTimeStamp:
+        case MADDataTypeYear:
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeString:
+        case MADDataTypeVarChar:
+        case MADDataTypeGeometry:
             columnAffinity = @"TEXT";
             break;
-        case MTDataTypeImage:
-        case MTDataTypeBlob:
+        case MADDataTypeImage:
+        case MADDataTypeBlob:
             columnAffinity = @"NONE";
             break;
-        case MTDataTypeFloat:
-        case MTDataTypeDouble:
+        case MADDataTypeFloat:
+        case MADDataTypeDouble:
             columnAffinity = @"REAL";
             break;
-        case MTDataTypeDecimal:
-        case MTDataTypeNumber:
+        case MADDataTypeDecimal:
+        case MADDataTypeNumber:
             columnAffinity = @"NUMERIC";
             break;
-        case MTDataTypeUnknown:
+        case MADDataTypeUnknown:
         default:
             columnAffinity = @"TEXT";
             break;
@@ -353,7 +353,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 
-- (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
+- (NSString *)newNativeTypeForDataType:(MADDataType)dataType {
     return [MTDatabaseSqlite3 newNativeTypeForDataType:dataType];
 }
 
@@ -369,7 +369,7 @@ void sqliteLog(void *foo, const char* statement) {
     } else {
         switch (databinding.datatype) {
                 
-            case MTDataTypeBlob: {
+            case MADDataTypeBlob: {
 
                 if ([databinding.value isKindOfClass:[NSString class]]) {
                     success = sqlite3_bind_text(*statement, databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
@@ -380,12 +380,12 @@ void sqliteLog(void *foo, const char* statement) {
                 break;
             }
                 
-            case MTDataTypeInteger: {
+            case MADDataTypeInteger: {
                 success = sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)[databinding value]).longLongValue);
                 break;
             }
                 
-            case MTDataTypeString: {
+            case MADDataTypeString: {
                 
                 if ([databinding.value isKindOfClass:[NSString class]]) {
 
@@ -402,14 +402,14 @@ void sqliteLog(void *foo, const char* statement) {
                 break;
                 
             }
-            case MTDataTypeFloat:
-            case MTDataTypeDouble: {
+            case MADDataTypeFloat:
+            case MADDataTypeDouble: {
                 NSNumber * __weak n = (NSNumber *)databinding.value;
                 success = sqlite3_bind_double(*statement, databinding.columnNumber, n.doubleValue);
                 break;
             }
                 
-            case MTDataTypeNull:
+            case MADDataTypeNull:
                 success = sqlite3_bind_null(*statement, databinding.columnNumber);
                 break;
                 
@@ -550,7 +550,7 @@ void sqliteLog(void *foo, const char* statement) {
                             
                             [dataColumn setFieldName: fieldName];
                             dataColumn.nativeType = affentyType;
-                            MTDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
+                            MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                             dataColumn.type = columnType;
                             
                             dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
@@ -682,52 +682,52 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (id)newObject: (void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
-       withType: (MTDataType)type {
+       withType: (MADDataType)type {
 
     id columnValue;
     switch (type) {
 
-        case MTDataTypeLong:
+        case MADDataTypeLong:
             columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
 
-        case MTDataTypeLongLong:
+        case MADDataTypeLongLong:
             columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
 
-        case MTDataTypeInt24:
-        case MTDataTypeInteger:
+        case MADDataTypeInt24:
+        case MADDataTypeInteger:
             columnValue = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnCounter)];
             break;
 
-        case MTDataTypeShort:
+        case MADDataTypeShort:
             columnValue = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, columnCounter)];
             break;
 
-        case MTDataTypeImage:
-        case MTDataTypeBlob: {
+        case MADDataTypeImage:
+        case MADDataTypeBlob: {
             const void *blob = sqlite3_column_blob(statement, columnCounter);
             columnValue = [[NSData alloc] initWithBytes: blob
                                                  length: (NSUInteger)sqlite3_column_bytes(statement, columnCounter)];
             break;
         }
 
-        case MTDataTypeFloat:
+        case MADDataTypeFloat:
             columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
 
-        case MTDataTypeNumber:
-        case MTDataTypeDouble:
-        case MTDataTypeDecimal:
+        case MADDataTypeNumber:
+        case MADDataTypeDouble:
+        case MADDataTypeDecimal:
             columnValue = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnCounter)];
             break;
 
-        case MTDataTypeBit:
-        case MTDataTypeVarChar:
-        case MTDataTypeString:
-        case MTDataTypeEnum:
-        case MTDataTypeYear:
-        case MTDataTypeSet: {
+        case MADDataTypeBit:
+        case MADDataTypeVarChar:
+        case MADDataTypeString:
+        case MADDataTypeEnum:
+        case MADDataTypeYear:
+        case MADDataTypeSet: {
             const unsigned char *text = sqlite3_column_text(statement, columnCounter);
             if (text == NULL) {
                 columnValue = [NSNull null];
@@ -738,17 +738,17 @@ void sqliteLog(void *foo, const char* statement) {
             break;
         }
 
-        case MTDataTypeUnknown:
-        case MTDataTypeNull: {
+        case MADDataTypeUnknown:
+        case MADDataTypeNull: {
             columnValue = [NSNull null];
             break;
         }
 
-        case MTDataTypeTimeStamp:
-        case MTDataTypeTime:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
+        case MADDataTypeTimeStamp:
+        case MADDataTypeTime:
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeGeometry:
         default: {
             //NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {

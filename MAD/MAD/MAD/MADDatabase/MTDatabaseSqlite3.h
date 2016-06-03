@@ -38,14 +38,14 @@ typedef NSString MADSqlite3SortDescription;
     int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
     int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
-    + (NSString *)newNativeTypeForDataType:(MTDataType)dataType;
-    + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MTDataType)columnType
+    + (NSString *)newNativeTypeForDataType:(MADDataType)dataType;
+    + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
                                                                 ascending:(BOOL)ascending;
 
     + (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement
                   columnNumber:(int)columnNumber;
     + (id)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
-           withType:(MTDataType)type;
+           withType:(MADDataType)type;
 
     + (void)executeQueryWithSql:(NSString *)queryString
                        database:(void * /* sqlite3 * */)database

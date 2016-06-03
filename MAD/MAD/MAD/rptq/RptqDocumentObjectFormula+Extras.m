@@ -24,7 +24,7 @@
 
 @implementation RptqDocumentObjectFormula (Extras)
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [[self parentObjectFormula] formattedString:dataType forValue:value];
 }
 

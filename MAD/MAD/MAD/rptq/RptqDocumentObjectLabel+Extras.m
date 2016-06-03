@@ -19,7 +19,7 @@
 
 @implementation RptqDocumentObjectLabel (Extras)
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [[self parentObjectLabel] formattedString:dataType forValue:value];
 }
 

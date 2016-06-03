@@ -421,11 +421,11 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     self.sizeheight = sizeHeight;
 }
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     
     NSString *result;
     switch (dataType) {
-        case MTDataTypeYear:
+        case MADDataTypeYear:
             if ([value isKindOfClass:[NSString class]]) {
                 result = value;
             } else if ([value isKindOfClass:[NSNumber class]]) {
@@ -434,22 +434,22 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                 result = [NSString stringWithFormat:@"%@", value];
             }
             break;
-        case MTDataTypeGeometry:
+        case MADDataTypeGeometry:
             result = [NSString stringWithFormat:@"%@", value];
             break;
-        case MTDataTypeImage:
+        case MADDataTypeImage:
             result = [NSString stringWithFormat:@"%@", value];
             break;
-        case MTDataTypeSet:
+        case MADDataTypeSet:
             result = [NSString stringWithFormat:@"%@", value];
             break;
-        case MTDataTypeUnknown:
+        case MADDataTypeUnknown:
             result = [NSString stringWithFormat:@"%@", value];
             break;
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp: {
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeTime:
+        case MADDataTypeTimeStamp: {
             static NSDateFormatter *dateformatter;
             static NSDateFormatter *timeformatter;
             static NSDateFormatter *dateTimeformatter;
@@ -481,17 +481,17 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                 d = [NSDate dateWithTimeIntervalSince1970:t];
             }
             switch (dataType) {
-                case MTDataTypeDate:
+                case MADDataTypeDate:
                     result = [dateformatter stringFromDate:d];
                     break;
-                case MTDataTypeDateTime:
+                case MADDataTypeDateTime:
                     result = [dateTimeformatter stringFromDate:d];
                     break;
-                case MTDataTypeTime:
+                case MADDataTypeTime:
                     result = [timeformatter stringFromDate:d];
                     break;
                     
-                case MTDataTypeTimeStamp:
+                case MADDataTypeTimeStamp:
                     result = [dateformatter stringFromDate:d];
                     break;
 
@@ -502,19 +502,19 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
   
             break;
         }
-        case MTDataTypeBlob:
+        case MADDataTypeBlob:
             result = [NSString stringWithFormat:@"%@", value];
             break;
-        case MTDataTypeBit:
-        case MTDataTypeFloat:
-        case MTDataTypeInteger:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeInt24:
-        case MTDataTypeEnum:
-        case MTDataTypeDouble:
-        case MTDataTypeDecimal:
-        case MTDataTypeNumber:
+        case MADDataTypeBit:
+        case MADDataTypeFloat:
+        case MADDataTypeInteger:
+        case MADDataTypeLong:
+        case MADDataTypeLongLong:
+        case MADDataTypeInt24:
+        case MADDataTypeEnum:
+        case MADDataTypeDouble:
+        case MADDataTypeDecimal:
+        case MADDataTypeNumber:
         {
             if ([value isKindOfClass:[NSNumber class]]) {
                 if ([[self formatNumericCurrency] boolValue]) {
@@ -535,7 +535,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             }
             break;
         }
-        case MTDataTypeString:
+        case MADDataTypeString:
             result = [NSString stringWithFormat:@"%@", value];
             break;
         default:

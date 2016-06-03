@@ -56,7 +56,7 @@
         NSMutableDictionary *mutableColumns = [NSMutableDictionary dictionaryWithDictionary:columns];
         
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-        rowid.type = MTDataTypeInteger;
+        rowid.type = MADDataTypeInteger;
         mutableColumns[MADIdentifierROWID] = rowid;
         self.columns = mutableColumns;
   

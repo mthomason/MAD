@@ -1,5 +1,5 @@
 //
-//  MTDataTypeMySQL.m
+//  MADDataTypeMySQL.m
 //  MAD
 //
 //  Created by Michael Thomason on 9/19/15.
@@ -9,93 +9,93 @@
 #import "MTDataTypeMySQL.h"
 #import "mysql.h"
 
-@implementation MTDataTypeMySQL
+@implementation MADDataTypeMySQL
 
-+ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
++ (MADDataType)dataTypeForNativeType:(NSInteger)nativeType {
     switch (nativeType) {
         case MYSQL_TYPE_BIT:
-            return MTDataTypeBit;
+            return MADDataTypeBit;
             break;
         case MYSQL_TYPE_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case MYSQL_TYPE_DATE:
-            return MTDataTypeDate;
+            return MADDataTypeDate;
             break;
         case MYSQL_TYPE_DATETIME:
-            return MTDataTypeDateTime;
+            return MADDataTypeDateTime;
             break;
         case MYSQL_TYPE_DECIMAL:
-            return MTDataTypeDecimal;
+            return MADDataTypeDecimal;
             break;
         case MYSQL_TYPE_DOUBLE:
-            return MTDataTypeDouble;
+            return MADDataTypeDouble;
             break;
         case MYSQL_TYPE_ENUM:
-            return MTDataTypeEnum;
+            return MADDataTypeEnum;
             break;
         case MYSQL_TYPE_FLOAT:
-            return MTDataTypeFloat;
+            return MADDataTypeFloat;
             break;
         case MYSQL_TYPE_GEOMETRY:
-            return MTDataTypeGeometry;
+            return MADDataTypeGeometry;
             break;
         case MYSQL_TYPE_INT24:
-            return MTDataTypeInteger;
+            return MADDataTypeInteger;
             break;
         case MYSQL_TYPE_LONG:
-            return MTDataTypeLong;
+            return MADDataTypeLong;
             break;
         case MYSQL_TYPE_LONG_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case MYSQL_TYPE_LONGLONG:
-            return MTDataTypeLongLong;
+            return MADDataTypeLongLong;
             break;
         case MYSQL_TYPE_MEDIUM_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case MYSQL_TYPE_NEWDATE:
-            return MTDataTypeDate;
+            return MADDataTypeDate;
             break;
         case MYSQL_TYPE_NEWDECIMAL:
-            return MTDataTypeDecimal;
+            return MADDataTypeDecimal;
             break;
         case MYSQL_TYPE_NULL:
-            return MTDataTypeNumber;
+            return MADDataTypeNumber;
             break;
         case MYSQL_TYPE_SET:
-            return MTDataTypeSet;
+            return MADDataTypeSet;
             break;
         case MYSQL_TYPE_SHORT:
-            return MTDataTypeShort;
+            return MADDataTypeShort;
             break;
         case MYSQL_TYPE_STRING:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
         case MYSQL_TYPE_TIME:
-            return MTDataTypeDateTime;
+            return MADDataTypeDateTime;
             break;
         case MYSQL_TYPE_TIMESTAMP:
-            return MTDataTypeTimeStamp;
+            return MADDataTypeTimeStamp;
             break;
         case MYSQL_TYPE_TINY:
-            return MTDataTypeShort;
+            return MADDataTypeShort;
             break;
         case MYSQL_TYPE_TINY_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case MYSQL_TYPE_VAR_STRING:
-            return MTDataTypeVarChar;
+            return MADDataTypeVarChar;
             break;
         case MYSQL_TYPE_VARCHAR:
-            return MTDataTypeVarChar;
+            return MADDataTypeVarChar;
             break;
         case MYSQL_TYPE_YEAR:
-            return MTDataTypeYear;
+            return MADDataTypeYear;
             break;
         default:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
     }
 }

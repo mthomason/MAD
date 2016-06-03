@@ -24,7 +24,7 @@
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [[self parentObjectLinkLabel] formattedString:dataType forValue:value];
 }
 

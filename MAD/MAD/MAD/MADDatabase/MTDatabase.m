@@ -203,7 +203,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                     safeFieldAlias, MADSqlTextFromPart, safeTable];
 }
 
-- (NSString *)newNativeTypeForDataType:(MTDataType)dataType {
+- (NSString *)newNativeTypeForDataType:(MADDataType)dataType {
     return @"";
 }
 

@@ -74,7 +74,7 @@
     }
 }
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [[self parentObjectLabelDataField] formattedString:dataType forValue:value];
 }
 

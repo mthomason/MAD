@@ -9,25 +9,25 @@
 #include "madsqlite3.h"
 /*#include <MADSqlite3/sqlite3.h>
 
-static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
+static inline MADDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     switch (sqlite3type) {
         case SQLITE_INTEGER:
-            return MTDataTypeInteger;
+            return MADDataTypeInteger;
             break;
         case SQLITE_TEXT:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
         case SQLITE_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case SQLITE_NULL:
-            return MTDataTypeNull;
+            return MADDataTypeNull;
             break;
         case SQLITE_FLOAT:
-            return MTDataTypeFloat;
+            return MADDataTypeFloat;
             break;
         default:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
     }
 }

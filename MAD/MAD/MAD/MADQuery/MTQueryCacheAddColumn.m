@@ -88,7 +88,7 @@
 }
 
 + (NSString *)newSqlWithTableName:(NSString *)tableName columnName:(NSString *)columnName
-                         database:(MTDatabaseCache *)database datatype:(MTDataType)datatype
+                         database:(MTDatabaseCache *)database datatype:(MADDataType)datatype
                      isPrimaryKey:(bool)isPrimaryKey createTable:(bool)createTable
                  uniqueColumnHack:(bool)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
     

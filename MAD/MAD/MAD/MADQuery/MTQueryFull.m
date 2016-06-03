@@ -239,7 +239,7 @@
         } else if (queryPredicate.fieldrightpred != nil) {
             
             RptqQueryField *leftField = queryPredicate.hasLeftField;
-            MTDataType dataType = leftField.databaseSchemaField.dataType.shortValue;
+            MADDataType dataType = leftField.databaseSchemaField.dataType.shortValue;
             
             NSString * __weak fieldrightpred = queryPredicate.fieldrightpred;
             rightValue = [MTDatabaseField isNumeric:dataType] ? fieldrightpred :

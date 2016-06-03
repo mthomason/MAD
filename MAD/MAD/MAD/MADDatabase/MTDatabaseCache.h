@@ -18,7 +18,7 @@
 }
 
     - (BOOL)tableExist:(NSString *)tablename;
-    - (NSString *)newNativeTypeForDataType:(MTDataType)dataType;
+    - (NSString *)newNativeTypeForDataType:(MADDataType)dataType;
     - (void)beginBulkInsert;
     - (void)endBulkInsert;
 

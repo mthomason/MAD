@@ -1,5 +1,5 @@
 //
-//  MTDataTypeMySQL.h
+//  MADDataTypeMySQL.h
 //  MAD
 //
 //  Created by Michael Thomason on 9/19/15.
@@ -12,9 +12,9 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
-@interface MTDataTypeMySQL : NSObject
+@interface MADDataTypeMySQL : NSObject
 
-    + (MTDataType)dataTypeForNativeType:(NSInteger)nativeType;
+    + (MADDataType)dataTypeForNativeType:(NSInteger)nativeType;
 
 @end
 

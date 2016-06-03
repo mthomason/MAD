@@ -20,7 +20,7 @@
 
 @implementation RptqDocumentObjectImage (Extras)
 
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [[self parentObject] formattedString:dataType forValue:value];
 }
 

@@ -86,7 +86,7 @@
     for (NSManagedObjectID *objectId in objectIds) {
 
         RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-        MTDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
+        MADDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;

@@ -13,35 +13,36 @@
 #import "MTDatabaseField.h"
 #import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
+#import <MADFoundation/MADDataType.h>
 
-static inline bool isDataTypeNumeric(MTDataType type);
-static inline bool isDataTypeNumeric(MTDataType type) {
+static inline bool isDataTypeNumeric(MADDataType type);
+static inline bool isDataTypeNumeric(MADDataType type) {
     switch (type) {
-        case MTDataTypeBit:
-        case MTDataTypeFloat:
-        case MTDataTypeInteger:
-        case MTDataTypeNumber:
-        case MTDataTypeDecimal:
-        case MTDataTypeDouble:
-        case MTDataTypeEnum:
-        case MTDataTypeInt24:
-        case MTDataTypeLong:
-        case MTDataTypeLongLong:
-        case MTDataTypeShort:
+        case MADDataTypeBit:
+        case MADDataTypeFloat:
+        case MADDataTypeInteger:
+        case MADDataTypeNumber:
+        case MADDataTypeDecimal:
+        case MADDataTypeDouble:
+        case MADDataTypeEnum:
+        case MADDataTypeInt24:
+        case MADDataTypeLong:
+        case MADDataTypeLongLong:
+        case MADDataTypeShort:
             return true;
             break;
-        case MTDataTypeBlob:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
-        case MTDataTypeString:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-        case MTDataTypeVarChar:
+        case MADDataTypeBlob:
+        case MADDataTypeDate:
+        case MADDataTypeDateTime:
+        case MADDataTypeGeometry:
+        case MADDataTypeImage:
+        case MADDataTypeSet:
+        case MADDataTypeString:
+        case MADDataTypeTime:
+        case MADDataTypeTimeStamp:
+        case MADDataTypeYear:
+        case MADDataTypeUnknown:
+        case MADDataTypeVarChar:
         default:
             return false;
             break;
@@ -76,10 +77,10 @@ static inline bool isDataTypeNumeric(MTDataType type) {
 
 - (BOOL)isNumeric { return isDataTypeNumeric(_fieldType) ? YES : NO; }
 
-+ (BOOL)isNumeric:(MTDataType)dataType { return isDataTypeNumeric(dataType) ? YES : NO; }
++ (BOOL)isNumeric:(MADDataType)dataType { return isDataTypeNumeric(dataType) ? YES : NO; }
 
 - (SEL)selectorForSorting {
-    return [MADDataType selectorForSorting:self.fieldType];
+    return MADDataTypeSelectorForSorting(self.fieldType);
 }
 
 @end

@@ -11,6 +11,6 @@
 
 //#include <stdio.h>
 
-//static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
+//static inline MADDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
 
 #endif /* madsqlite3_h */

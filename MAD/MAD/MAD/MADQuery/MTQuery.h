@@ -10,8 +10,8 @@
 #define Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/MADDataType.h>
 #import "MADQueryType.h"
+#import <MADFoundation/MADDataType.h>
 
 #pragma mark Types of specific paramamters accepted for each query
 
@@ -51,14 +51,14 @@ extern NSString * const MADIdentifierROWID;
 
     @property (nonatomic, assign, readonly) MADQueryType type;
 
-    - (id)initWithQueryType:(MADQueryType)type object:(id)object;
+    - (instancetype)initWithQueryType:(MADQueryType)type object:(id)object;
 
     - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
     - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
                     managedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                    error:(NSError **)error;    //Only on MTQueryFull
 
-    - (bool)performQueryWithError:(NSError * __autoreleasing *)error;
+    - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error;
 
 @end
 
@@ -69,12 +69,12 @@ extern NSString * const MADIdentifierROWID;
     - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
     - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
     - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-    - (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
+    - (MADDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
-    - (BOOL)returnsResults;
-    - (BOOL)partOfTransactionSet;
+    @property (nonatomic, readonly) BOOL returnsResults;
+    @property (nonatomic, readonly) BOOL partOfTransactionSet;
 
     + (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query;
     + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect

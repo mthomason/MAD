@@ -185,86 +185,86 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     });
 }
 
-+ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
-    MTDataType result;
++ (MADDataType)dataTypeForNativeType:(NSInteger)nativeType {
+    MADDataType result;
     switch (nativeType) {
         case SYBDATETIMN:
-            result = MTDataTypeDateTime;
+            result = MADDataTypeDateTime;
             break;
         case SYBDATETIME:
-            result = MTDataTypeDateTime;
+            result = MADDataTypeDateTime;
             break;
         case SYBDATETIME4:
-            result = MTDataTypeDateTime;
+            result = MADDataTypeDateTime;
             break;
         case SYBCHAR:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
         case SYBVARCHAR:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
         case SYBTEXT:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
         case SYBNTEXT:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
         case SYBNVARCHAR:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
         case SYBBIT:
-            result = MTDataTypeBit;
+            result = MADDataTypeBit;
             break;
         case SYBBITN:
-            result = MTDataTypeBit;
+            result = MADDataTypeBit;
             break;
         case SYBINT1:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SYBINT2:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SYBINT4:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SYBINT8:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SYBINTN:
-            result = MTDataTypeInteger;
+            result = MADDataTypeInteger;
             break;
         case SYBMONEY:
-            result = MTDataTypeFloat;
+            result = MADDataTypeFloat;
             break;
         case SYBMONEYN:
-            result = MTDataTypeFloat;
+            result = MADDataTypeFloat;
             break;
         case SYBREAL:
-            result = MTDataTypeFloat;
+            result = MADDataTypeFloat;
             break;
         case SYBFLT8:
-            result = MTDataTypeFloat;
+            result = MADDataTypeFloat;
             break;
         case SYBFLTN:
-            result = MTDataTypeFloat;
+            result = MADDataTypeFloat;
             break;
         case SYBNUMERIC:
-            result = MTDataTypeDecimal;
+            result = MADDataTypeDecimal;
             break;
         case SYBIMAGE:
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         case SYBBINARY:
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         case SYBVOID:
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         case SYBVARBINARY:
-            result = MTDataTypeBlob;
+            result = MADDataTypeBlob;
             break;
         default:
-            result = MTDataTypeString;
+            result = MADDataTypeString;
             break;
     }
     return result;

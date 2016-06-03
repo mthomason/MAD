@@ -15,11 +15,11 @@
 @interface MTDatabaseDataBinding : NSObject
 
     @property (nonatomic, strong, readonly) id value;
-    @property (nonatomic, assign, readonly) MTDataType datatype;
+    @property (nonatomic, assign, readonly) MADDataType datatype;
     @property (nonatomic, assign, readonly) int fieldIndex;
     @property (readonly) int columnNumber;
 
-    - (instancetype)initWithDataType: (MTDataType)datatype
+    - (instancetype)initWithDataType: (MADDataType)datatype
                           fieldIndex: (NSUInteger)fieldIndex
                                value: (id)value NS_DESIGNATED_INITIALIZER;
 

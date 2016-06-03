@@ -817,7 +817,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             }
             
             RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
-            MTDataType aggregateType = databaseSchemaField.dataType.shortValue;
+            MADDataType aggregateType = databaseSchemaField.dataType.shortValue;
             
             NSNumber * __unsafe_unretained function = isAggregate.function;
             BOOL calculateInMemory = function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||

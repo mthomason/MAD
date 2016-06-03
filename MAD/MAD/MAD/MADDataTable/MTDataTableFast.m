@@ -64,26 +64,26 @@
 #import "madlib.h"
 
 /*
-static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
-static inline MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
+static inline MADDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
+static inline MADDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     switch (sqlite3type) {
         case SQLITE_INTEGER:
-            return MTDataTypeInteger;
+            return MADDataTypeInteger;
             break;
         case SQLITE_TEXT:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
         case SQLITE_BLOB:
-            return MTDataTypeBlob;
+            return MADDataTypeBlob;
             break;
         case SQLITE_NULL:
-            return MTDataTypeNull;
+            return MADDataTypeNull;
             break;
         case SQLITE_FLOAT:
-            return MTDataTypeFloat;
+            return MADDataTypeFloat;
             break;
         default:
-            return MTDataTypeString;
+            return MADDataTypeString;
             break;
     }
 }*/
@@ -498,7 +498,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                         MADDataColumn * __weak column = self.columns[columnKey];
                         if ([column.fieldName isEqualToString:sortDescriptor.key]) {
                         
-                            SEL sortAlgo = [MADDataType selectorForSorting:column.type];
+                            SEL sortAlgo = MADDataTypeSelectorForSorting(column.type);
                             NSSortDescriptor *newSortDescriptor = [[NSSortDescriptor alloc] initWithKey: columnKey
                                                                                               ascending: sortDescriptor.ascending
                                                                                                selector: sortAlgo];
@@ -895,7 +895,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTDatabaseConnection *connection = [MTDatabaseConnection newDatabaseConnectionForUrl: url];
 
     MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
-    rowid.type = MTDataTypeInteger;
+    rowid.type = MADDataTypeInteger;
     
     NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
     columns = [[NSDictionary alloc] initWithObjectsAndKeys: rowid, MADIdentifierROWID, nil];
