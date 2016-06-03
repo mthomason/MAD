@@ -168,6 +168,7 @@ xcuserdata
 .DS_Store
 
 StaticLibraries/.DS_Store
+Compressor/source
 
 *.tar.gz
 *.tgz
