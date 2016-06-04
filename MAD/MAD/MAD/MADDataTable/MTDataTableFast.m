@@ -69,15 +69,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MTDataTableFast ()
 
+    @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
+    @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
+
     @property (nonatomic, readwrite, strong) MTDatabaseCache *databaseForInserts;
     @property (nonatomic, readwrite, strong) MTDatabaseCache *databaseForSelects;
 
     @property (nonatomic, readwrite, strong) NSURL *urlFastCache;
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
-    @property (nonatomic, readwrite, strong) NSArray *groupTableNames;
-
-    @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
-    @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
 
     @property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
 
@@ -130,12 +129,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
         NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
         self.groupKeyIndexes = groupKeys;
-
-        //NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
-        //self.groupKeyIndexes = groupKeyIndexes;
-        
-        NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
-        self.groupTableNames = groupTableNames;
         
         [self reopenDbConnection];
     }
@@ -159,11 +152,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:self.bulkInsertLoop];
     NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
     plist[keyBulkInsertLoop] = bulkInsert;
-    
-    if (self.groupTableNames != nil) {
-        NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
-        plist[keyGroupTableNames] = self.groupTableNames;
-    }
     
     if (self.groupKeyIndexes != nil) {
         NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
@@ -206,11 +194,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     }
     self.groupKeyIndexes = groupKeys;
     
-    id keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
-    NSArray *groupTableNames = plist[keyGroupTableNames];
-    NSArray *tableNames = [[NSArray alloc] initWithArray:groupTableNames];
-    self.groupTableNames = tableNames;
-    
     [self reopenDbConnection];
     
 }
@@ -236,10 +219,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 + (NSString *)keyGroupKeys {
     return NSStringFromSelector(@selector(groupKeyIndexes));
-}
-
-+ (NSString *)keyGroupTableNames {
-    return NSStringFromSelector(@selector(groupTableNames));
 }
 
 + (NSString *)keyColumns {
