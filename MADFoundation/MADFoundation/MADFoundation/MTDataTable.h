@@ -79,7 +79,6 @@ typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
     - (NSUInteger)numberOfColumns;
     - (NSUInteger)numberOfRows;
 
-    - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending;
     - (NSEnumerator *)enumeratorForAllObjectsSorted;
     - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
     - (NSEnumerator *)enumeratorForKeyObjectsSorted;

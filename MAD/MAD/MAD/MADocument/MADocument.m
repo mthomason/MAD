@@ -720,6 +720,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     int r;
     NSURL *urlGuts = _urlGuts.copy, *urlArchive;
     NSString *urlGutsPath = urlGuts.path, *pathExtension = url.pathExtension;
+    NSError * __autoreleasing *errorCreate = nil;
     
     success = [pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
     if (!success) goto READ_END;
@@ -730,15 +731,18 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                                                    isDirectory: &isDirectory];
 
     if (!success || !isDirectory) {
-        success = [[NSFileManager defaultManager] createDirectoryAtPath:urlGutsPath
-                                            withIntermediateDirectories:YES attributes:nil
-                                                                  error:NULL];
-        if (!success) goto READ_FAIL;
+        BOOL successCreate;
+        successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: urlGutsPath
+                                                  withIntermediateDirectories: YES
+                                                                   attributes: nil
+                                                                        error: errorCreate];
+        if (!successCreate) goto READ_FAIL;
         
-        success = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
-                                                       isDirectory: &isDirectory];
+        BOOL sucessExist;
+        sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
+                                                           isDirectory: &isDirectory];
         
-        if (!success || !isDirectory) goto READ_FAIL;
+        if (!sucessExist || !isDirectory) goto READ_FAIL;
     }
     
     urlArchive = url;// [url URLByAppendingPathExtension:@"tar.gz"];
@@ -757,7 +761,6 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     
 READ_FAIL:;
     
-    //Try lagecy read
     {
         NSLog(@"%s", strerror(errno));
         

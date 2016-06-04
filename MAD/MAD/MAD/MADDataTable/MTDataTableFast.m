@@ -22,6 +22,8 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSIndexSet.h>
+
 #import <dispatch/dispatch.h>
 
 #import <MADFoundation/MTCacheProtocol.h>
@@ -67,22 +69,21 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MTDataTableFast ()
 
-    @property (nonatomic, strong) MTDatabaseCache *databaseForInserts;
-    @property (nonatomic, strong, readwrite) MTDatabaseCache *databaseForSelects;
+    @property (nonatomic, readwrite, strong) MTDatabaseCache *databaseForInserts;
+    @property (nonatomic, readwrite, strong) MTDatabaseCache *databaseForSelects;
 
-    @property (nonatomic, strong) NSURL *urlFastCache;
+    @property (nonatomic, readwrite, strong) NSURL *urlFastCache;
+    @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
+    @property (nonatomic, readwrite, strong) NSArray *groupTableNames;
 
-    @property (nonatomic, strong) NSMutableArray *groupKeys;    //Could used NSIndexSet
-    @property (nonatomic, strong) NSArray *groupTableNames;
+    @property (nonatomic, readwrite, assign) bool bulkInsertLoop;
+    @property (nonatomic, readwrite, assign) bool sortDescriptorsSet;
 
-    @property (nonatomic, assign) bool bulkInsertLoop;
-    @property (nonatomic, assign) bool sortDescriptorsSet;
+    @property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
 
-    @property (nonatomic, strong) MADIndex *lastDataForCacheId;
+    @property (nonatomic, readwrite, strong) MTQueryCacheAddRow *bulkInsertQuery;
 
-    @property (nonatomic, strong) MTQueryCacheAddRow *bulkInsertQuery;
-
-    @property (nonatomic, strong) dispatch_queue_t queueBulkAdd;
+    @property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;
 
 @end
 
@@ -103,6 +104,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         self.bulkInsertLoop = false;
         self.tag = objectId;
         self.sortDescriptorsSet = false;
+        
+        NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
+        self.groupKeyIndexes = groupKeyIndexes;
     }
     return self;
 }
@@ -123,9 +127,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];
         _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];
         
-        NSArray *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
-        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
-        self.groupKeys = groupKeys;
+        NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
+        NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
+        self.groupKeyIndexes = groupKeys;
+
+        //NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
+        //self.groupKeyIndexes = groupKeyIndexes;
         
         NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
         self.groupTableNames = groupTableNames;
@@ -158,9 +165,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         plist[keyGroupTableNames] = self.groupTableNames;
     }
     
-    if (self.groupKeys != nil) {
+    if (self.groupKeyIndexes != nil) {
         NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
-        plist[keyGroupKeys] = self.groupKeys;
+        plist[keyGroupKeys] = self.groupKeyIndexes;
     }
     
     NSNumber *sortSet = [[NSNumber alloc] initWithBool:self.sortDescriptorsSet];
@@ -190,9 +197,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
     
     id keyGroupKeys = [MTDataTableFast keyGroupKeys];
-    NSArray *groupKeysArray = plist[keyGroupKeys];
-    NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
-    self.groupKeys = groupKeys;
+    NSIndexSet *groupKeysArray = plist[keyGroupKeys];
+    NSMutableIndexSet *groupKeys;
+    if (groupKeysArray) {
+        groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
+    } else {
+        groupKeys = [[NSMutableIndexSet alloc] init];
+    }
+    self.groupKeyIndexes = groupKeys;
     
     id keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
     NSArray *groupTableNames = plist[keyGroupTableNames];
@@ -223,7 +235,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 + (NSString *)keyGroupKeys {
-    return NSStringFromSelector(@selector(groupKeys));
+    return NSStringFromSelector(@selector(groupKeyIndexes));
 }
 
 + (NSString *)keyGroupTableNames {
@@ -239,11 +251,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     [super encodeWithCoder:encoder];
 
     NSString *absStr = _urlFastCache.absoluteString;
-    [encoder encodeObject:  absStr                              forKey: [MTDataTableFast keyUrlFastCache]];
+    [encoder encodeObject: absStr forKey: [MTDataTableFast keyUrlFastCache]];
+    
     NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
-    [encoder encodeObject: objid                                forKey: [MTDataTableFast keyTag]];
-    [encoder encodeBool: _bulkInsertLoop             forKey: [MTDataTableFast keyBulkInsertLoop]];
-    [encoder encodeBool: _sortDescriptorsSet         forKey: [MTDataTableFast keySortDescriptorsSet]];
+    [encoder encodeObject: objid forKey: [MTDataTableFast keyTag]];
+    [encoder encodeBool: _bulkInsertLoop forKey: [MTDataTableFast keyBulkInsertLoop]];
+    [encoder encodeBool: _sortDescriptorsSet forKey: [MTDataTableFast keySortDescriptorsSet]];
 
 }
 
@@ -317,45 +330,29 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
              unique:NO];
 }
 
-- (void)initializeGroupKeys {
+- (void)setupGroupKeyIndexes {
     NSArray * __unsafe_unretained sortDescriptors = self.sortDescriptors;
     NSArray * __weak columnKeys = self.columnKeys;
-
-    NSUInteger index = NSNotFound;
+    
+    [_groupKeyIndexes removeAllIndexes];
+    
     NSMutableArray *groupKeys;
     groupKeys = [[NSMutableArray alloc] initWithCapacity: sortDescriptors.count];
     NSSortDescriptor *sortDescriptor;
     NSNumber *columnIndex;
     NSString *key;
+    NSUInteger index = NSNotFound;
     for (sortDescriptor in sortDescriptors) {
         @autoreleasepool {
             key = sortDescriptor.key;
             if ((index = [columnKeys indexOfObject: key]) != NSNotFound) {
                 columnIndex = [[NSNumber alloc] initWithUnsignedInteger: index];
+
+                [_groupKeyIndexes addIndex:index];
                 [groupKeys addObject:columnIndex];
             }
         }
     }
-
-    self.groupKeys = groupKeys;
-    groupKeys = nil;
-}
-
-- (NSString *)idColumnKeyForGroupLocation:(NSUInteger)groupLevel {
-    NSString *result = nil;
-    if (self.groupKeys.count > groupLevel) {
-        NSNumber *level = self.groupKeys[groupLevel];
-        result = self.columnKeys[level.unsignedIntegerValue];
-        NSString *rval = [NSString stringWithString:result];
-        return rval;
-    } else {
-        return nil;
-    }
-}
-
-- (MADDataColumn *)idDataColumnForGroupLevel:(NSUInteger)groupLevel {
-    NSString *key = [self idColumnKeyForGroupLocation:groupLevel];
-    return self.columns[key];
 }
 
 - (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
@@ -380,12 +377,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (void)addRow:(NSArray *)row {
+
     self.rowCounter++;
-    if (self.groupKeys == nil) {
-        [self.groupKeys removeAllObjects];
-        [self initializeGroupKeys];
+
+    if (self.groupKeyIndexes == nil) {
+        [self setupGroupKeyIndexes];
     }
-    
     
     if (self.bulkInsertLoop) {
         
@@ -455,7 +452,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
 
-    [self.groupKeys removeAllObjects];
+    [_groupKeyIndexes removeAllIndexes];
     if (self.columnKeys.count > 0 && self.columns.count > 0) {
         
         if (sortDescriptors.count > 0 /*&& self.sortDescriptorsSet == NO*/) {
@@ -479,8 +476,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                                                selector: sortAlgo];
                             [newSortDescriptors addObject:newSortDescriptor];
                             
-                            NSNumber *groupKey = [[NSNumber alloc] initWithUnsignedInteger: groupKeyCounter];
-                            [self.groupKeys addObject:groupKey];
+                            [_groupKeyIndexes addIndex:groupKeyCounter];
                             
                             break;
                         }
@@ -703,26 +699,29 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
-    [self initializeGroupKeys];
+    [self setupGroupKeyIndexes];
     NSMutableArray * whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
-    NSUInteger groupLevel = 0;
-    for (NSString *key in groupKeys) {
+    NSUInteger groupLevel = 0,
+               groupIndex = [_groupKeyIndexes firstIndex];
+    NSDictionary *whereStatement;
+    NSString *columnLevel, *gk;
+    while(groupIndex != NSNotFound && groupLevel < groupKeys.count) {
         @autoreleasepool {
-            NSString *columnLevel = [self idColumnKeyForGroupLocation:groupLevel].copy;
-            NSString *gk = key.copy;
-            NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : columnLevel,
-                                             MTQueryKeyPredicateValue : gk};
+            columnLevel = ((NSString *)self.columnKeys[groupIndex]).copy;
+            gk = ((NSString *)groupKeys[groupLevel]).copy;
+            whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              columnLevel, MTQueryKeyPredicateColumn,
+                              gk, MTQueryKeyPredicateValue, nil];
             [whereClause addObject:whereStatement];
             groupLevel++;
         }
+        groupIndex = [_groupKeyIndexes indexGreaterThanIndex: groupIndex];
     }
     return whereClause;
 }
 
 // FIXME: Return error handler... remove credentals
 - (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
-    
-    [self initializeGroupKeys];
 
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName].copy;
@@ -904,8 +903,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
-    [self.groupKeys removeAllObjects];
-    [self initializeGroupKeys];
+    [self setupGroupKeyIndexes];
     
     NSEnumerator *enumerator;
     NSArray *columnKeys = [self columnKeysForSortDescriptors];
@@ -1075,58 +1073,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         myself.bulkInsertLoop = false;
         [(MTDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
     });
-}
-
-#pragma mark - Unused
-
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys
-                                accending:(BOOL)accending {
-    NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
-    
-    NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
-    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:keys.count];
-    
-    NSUInteger sortLevel;
-    for (NSString *key in keys) {
-        sortLevel = groupLevel >= 1 ? groupLevel - 1 : 0;
-        NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:sortLevel],
-                                         @"v" : key};
-        [whereClause addObject:whereStatement];
-    }
-    
-
-    NSNumber *order = [[NSNumber alloc] initWithBool: accending];
-    NSString *table = [self tableName].copy;
-    id columns = self.columns;
-    
-    NSNumber *keyFK = [[NSNumber alloc] initWithShort:MADQuerySelectFieldKeys];
-    NSNumber *keyTN = [[NSNumber alloc] initWithShort:MADQuerySelectTableName];
-    NSNumber *keySA = [[NSNumber alloc] initWithShort:MADQuerySelectSortAccending];
-    NSNumber *keySP = [[NSNumber alloc] initWithShort:MADQuerySelectPredicates];
-    NSNumber *keySC = [[NSNumber alloc] initWithShort:MADQuerySelectColumns];
-    
-    NSDictionary *querySelect = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        columnKeys,           keyFK,
-                                        table,                keyTN,
-                                        order,                keySA,
-                                        whereClause,          keySP,
-                                        columns,              keySC, nil];
-    MTQuery *query;
-    NSURL *urlFastCache;
-    MTDatabaseConnection *databaseConnection;
-    MTDataTableFastObjectEnumerator *enumerator;
-    
-    query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectGroupKeys
-                                        object: querySelect];
-    urlFastCache = self.urlFastCache;
-    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
-    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                             columns: self.columns
-                                                                          columnKeys: columnKeys
-                                                                               query: query];
-    [enumerator setAddRowId:NO];
-    [enumerator setSingleColumnNoWrapper:YES];
-    return enumerator;
 }
 
 - (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds { //Note, software currently usues

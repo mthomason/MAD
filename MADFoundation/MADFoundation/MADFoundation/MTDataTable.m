@@ -167,12 +167,6 @@ static NSString * const StringEmpty = @"";
     return nil;
 }
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel
-                                 withKeys:(NSArray *)keys accending:(BOOL)accending {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
-    return nil;
-}
-
 - (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
