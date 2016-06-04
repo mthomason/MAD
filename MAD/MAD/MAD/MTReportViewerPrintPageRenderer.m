@@ -534,12 +534,10 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                 
             }
             
-            line = nil;
             [sectionRepresentation addRow:rowRepresentation];
             [fontDescriptors removeAllObjects];
         }
     }
-    rowRepresentation = nil;
 
 END_DrawSection:;
 

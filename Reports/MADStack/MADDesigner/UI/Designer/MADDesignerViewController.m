@@ -1495,7 +1495,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         documentObject = [private objectWithID:elementViewId];
         documentObjectInSection = documentObject.inSectionRow.inSection;
         designerSectionView = [self getSectionViewForDocumentSection:documentObjectInSection];
-        designerSectionView = designerSectionView.objectIdTag.copy;
+        designerSectionViewTag = designerSectionView.objectIdTag.copy;
         documentObjectInSection = [RptqDocumentSection documentSectionForObjectID: designerSectionViewTag
                                                            inManagedObjectContext: private];
         BOOL found = NO;
@@ -3200,7 +3200,7 @@ END_deselectElementView:;
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
                                                                           inCollectionView:documentSectionView];
-                        if ([self.selectedObjectIds containsObject: elementView.objectIdTag]) {
+                        if (elementView != nil && [self.selectedObjectIds containsObject: elementView.objectIdTag]) {
                             [results addObject:elementView];
                         }
                     }

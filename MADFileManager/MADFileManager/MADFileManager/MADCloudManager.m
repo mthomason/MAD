@@ -326,7 +326,7 @@ static const char * MADQueueCloudSerial
 - (void)addNotifications {
     SEL handler;
     handler = @selector(handleNotificationKeyValueStoreDidChange:);
-    NSString *name;
+    NSString * __unsafe_unretained name;
     name = NSUbiquitousKeyValueStoreDidChangeExternallyNotification;
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: handler
@@ -337,7 +337,7 @@ static const char * MADQueueCloudSerial
     name = NSUbiquityIdentityDidChangeNotification;
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: handler
-                                                 name: NSUbiquityIdentityDidChangeNotification
+                                                 name: name
                                                object: nil];
     
     dispatch_queue_t queue = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);
