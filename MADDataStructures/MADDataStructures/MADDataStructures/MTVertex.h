@@ -36,7 +36,7 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
     - (void)addEdge:(MTEdge *)edge;
 
     - (void)removeEdge:(MTEdge *)edge;
-    - (bool)isAdjacentToVertex:(MTVertex *)vertex;
+    - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
     @property (readonly) MADBfsProperties *bfsProperties;
     @property (readonly) MADDfsProperties *dfsProperties;

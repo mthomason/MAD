@@ -25,17 +25,17 @@
                                                           andViewController:(UIViewController *)viewController;
     - (NSString *)valueForKey:(NSString *)key;
 
-    @property (nonatomic, readonly, assign) bool alertDisplayed;
+    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
 
     @property (nonatomic, readonly, copy) MADCredential *credentials;
-    @property (nonatomic, readonly, assign) bool gotCredentials;
+    @property (nonatomic, readonly, assign) BOOL gotCredentials;
 
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
-    @property (nonatomic, readonly, assign) bool bypass;
-    @property (nonatomic, readonly, assign) bool userContinue;
-    @property (nonatomic, readonly, assign) bool displayingPrompt;
-    @property (nonatomic, readonly, assign) bool result;
+    @property (nonatomic, readonly, assign) BOOL bypass;
+    @property (nonatomic, readonly, assign) BOOL userContinue;
+    @property (nonatomic, readonly, assign) BOOL displayingPrompt;
+    @property (nonatomic, readonly, assign) BOOL result;
 
 @end
 

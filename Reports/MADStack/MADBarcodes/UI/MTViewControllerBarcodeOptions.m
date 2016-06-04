@@ -58,16 +58,16 @@ static NSString * const StringEmpty = @"";
 static inline NSInteger tvsDefination();
 static inline NSInteger tvsDefination() { return 0; }
 
-static inline NSInteger tvsRendering(bool has2dComponent);
-static inline NSInteger tvsRendering(bool has2dComponent) {
+static inline NSInteger tvsRendering(BOOL has2dComponent);
+static inline NSInteger tvsRendering(BOOL has2dComponent) {
     return has2dComponent ? 2 : 1;
 }
-static inline NSInteger tvsBorder(bool has2dComponent);
-static inline NSInteger tvsBorder(bool has2dComponent) {
+static inline NSInteger tvsBorder(BOOL has2dComponent);
+static inline NSInteger tvsBorder(BOOL has2dComponent) {
     return has2dComponent ? 3 : 2;
 }
-static inline NSInteger tvs2dComponent(bool has2dComponent);
-static inline NSInteger tvs2dComponent(bool has2dComponent) {
+static inline NSInteger tvs2dComponent(BOOL has2dComponent);
+static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     return has2dComponent ? 1 : -1;
 }
 
@@ -833,7 +833,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: field.databaseSchemaField];
     NSError * __autoreleasing error = NULL;
-    bool success = [querySampleDataField performQueryWithError:&error];
+    BOOL success = [querySampleDataField performQueryWithError:&error];
 
     
     

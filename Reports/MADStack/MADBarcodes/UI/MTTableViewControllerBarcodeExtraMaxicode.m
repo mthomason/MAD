@@ -69,7 +69,7 @@
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: schemaField];
     NSError * __autoreleasing error = NULL;
-    bool success = [querySampleDataField performQueryWithError:&error];
+    BOOL success = [querySampleDataField performQueryWithError:&error];
     if (success) {
         MTDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         self.dataTableSampleData = dt;

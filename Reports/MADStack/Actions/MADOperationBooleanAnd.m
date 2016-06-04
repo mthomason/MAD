@@ -42,11 +42,11 @@
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
 
-    bool succes = true;
+    BOOL succes = YES;
     for (NSObject <MADOperationCondition> *condition in self.conditions) {
         MADOperationConditionResult *result = [condition evaluateForOperation:operation];
         if (!result.isSucceed) {
-            succes = false;
+            succes = NO;
             break;
         }
     }

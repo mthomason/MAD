@@ -28,17 +28,17 @@
     - (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController;
     - (NSString *)valueForKey:(NSString *)key;
 
-    @property (nonatomic, readonly, assign) bool alertDisplayed;
+    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
 
     @property (nonatomic, readonly, copy) NSString *password;
-    @property (nonatomic, readonly, assign) bool gotPassword;
+    @property (nonatomic, readonly, assign) BOOL gotPassword;
 
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
-    @property (nonatomic, readonly, assign) bool bypass;
-    @property (nonatomic, readonly, assign) bool userContinue;
+    @property (nonatomic, readonly, assign) BOOL bypass;
+    @property (nonatomic, readonly, assign) BOOL userContinue;
 
-    @property (nonatomic, assign) bool result;
+    @property (nonatomic, assign) BOOL result;
 
 @end
 

@@ -25,9 +25,9 @@
                                                 andRect:(CGRect)rect;
 
     - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes;
-    - (bool)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items;
-    - (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
-    - (bool)moveOnScreen;
+    - (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items;
+    - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
+    - (BOOL)moveOnScreen;
     - (NSArray <NSValue *> *)copyDropPointsHorizontal;
     - (NSArray <NSValue *> *)copyDropPoints;
 

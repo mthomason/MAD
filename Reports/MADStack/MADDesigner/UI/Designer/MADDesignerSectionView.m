@@ -52,7 +52,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 
 @property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
 @property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
-@property (nonatomic, assign) bool accessibile;
+@property (nonatomic, assign) BOOL accessibile;
 
 @end
 
@@ -67,7 +67,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
         UIColor *clearColor = [UIColor clearColor];
         
-        self.accessibile = true;
+        self.accessibile = YES;
         
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:1];

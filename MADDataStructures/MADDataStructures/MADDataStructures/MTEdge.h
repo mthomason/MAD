@@ -36,7 +36,7 @@ typedef NS_ENUM(short, MTEdgeType) {
     @property (nonatomic, weak, readonly) MTVertex *origin;
     @property (nonatomic, weak, readonly) MTVertex *destination;
 
-    @property (readonly, nonatomic, assign, getter=isDirected) bool directed;
+    @property (readonly, nonatomic, assign, getter=isDirected) BOOL directed;
     @property (atomic, assign) MTEdgeType dfsEdgeType;
 
     - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1

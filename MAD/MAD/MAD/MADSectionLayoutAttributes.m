@@ -30,16 +30,16 @@
     return instance;
 }
 
-- (bool)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
+- (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
     return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
 }
 
-+ (bool)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
-    bool intersects = false;
++ (BOOL)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
+    BOOL intersects = NO;
     for (MADSectionLayoutAttributes *existingItem in items) {
         if (item.objectID != existingItem.objectID) {
             if (CGRectIntersectsRect(item.frame, existingItem.frame)) {
-                intersects = true;
+                intersects = YES;
                 break;
             }
         }
@@ -47,19 +47,19 @@
     return intersects;
 }
 
-- (bool)moveOnScreen {
+- (BOOL)moveOnScreen {
     return [MADSectionLayoutAttributes moveItemOnScreen:self];
 }
 
-+ (bool)moveItemOnScreen:(MADSectionLayoutAttributes *)item {
-    bool moved = false;
++ (BOOL)moveItemOnScreen:(MADSectionLayoutAttributes *)item {
+    BOOL moved = NO;
     if (CGRectIsOffScreenWest(item.frame)) {
         item.frame = CGRectFlushLeft(item.frame);
-        moved = true;
+        moved = YES;
     }
     if (CGRectIsOffScreenNorth(item.frame)) {
         item.frame = CGRectFlushTop(item.frame);
-        moved = true;
+        moved = YES;
     }
     return moved;
 }
@@ -85,12 +85,12 @@
     placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
-- (bool)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+- (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
 
-    bool valid = true;
+    BOOL valid = YES;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
         if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
-            valid = false;
+            valid = NO;
             break;
         }
     }

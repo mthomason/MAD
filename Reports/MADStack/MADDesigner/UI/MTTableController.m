@@ -40,7 +40,7 @@
 
 @interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
-    bool _firstTimeViewDidAppear;
+    BOOL _firstTimeViewDidAppear;
 }
 
     @property (nonatomic, strong) MTQuery *query;
@@ -69,7 +69,7 @@
                                                                   andRowCount: rowCount];
     
     if (self = [super initWithCollectionViewLayout:tableLayout]) {
-        _firstTimeViewDidAppear = true;
+        _firstTimeViewDidAppear = YES;
         query.database.delegate = self;
         MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
@@ -126,7 +126,7 @@
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
         NSError * __autoreleasing error = NULL;
-        bool success = [strongself.tableFormatter.query performQueryWithError:&error];
+        BOOL success = [strongself.tableFormatter.query performQueryWithError:&error];
         
         MADTableController *strongself2 = weakSelf2;
         
@@ -181,7 +181,7 @@
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
     if (_firstTimeViewDidAppear) {
-        _firstTimeViewDidAppear = false;
+        _firstTimeViewDidAppear = NO;
         [self.collectionView scrollRectToVisible: MADRectOfSize(CGSizeMake(
                                                              self.collectionView.frame.size.width,
                                                              1.0000f))

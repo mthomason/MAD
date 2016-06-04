@@ -65,8 +65,8 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
                                                               NSStringFromClass([self class]));
 
-        NSString *(^sqlSelect)(NSString *, NSArray *, bool);
-        sqlSelect = ^(NSString *tableName, NSArray *columnKeys, bool includingRowID) {
+        NSString *(^sqlSelect)(NSString *, NSArray *, BOOL);
+        sqlSelect = ^(NSString *tableName, NSArray *columnKeys, BOOL includingRowID) {
             NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
             if (columnKeys.count == 0) {
                 [sql appendFormat:@" rowid FROM %@", tableName];

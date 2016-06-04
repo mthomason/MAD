@@ -19,7 +19,7 @@
 
 @interface MADCreateDocumentOperationAddConnection ()
 
-    @property (nonatomic, assign) bool success;
+    @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
 @end
@@ -37,7 +37,7 @@
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
-        self.success = false;
+        self.success = NO;
     }
     return self;
 }
@@ -63,12 +63,12 @@
     if (database) {
     
         document.database = database;
-        self.success = true;
+        self.success = YES;
         [self finish];
 
     } else {
 
-        self.success = false;
+        self.success = NO;
         NSString *domain = NSStringFromClass(self.class);
         NSError *error = [NSError errorWithDomain:domain code:289 userInfo:nil];
         [self finishWithError:error];

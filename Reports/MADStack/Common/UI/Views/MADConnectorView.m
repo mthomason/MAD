@@ -83,22 +83,22 @@
 - (CGRect)rectForOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
 
     CGFloat originX, originY, sizeWidth, sizeHeight;
-    bool topLeftToBottomRight;
+    BOOL topLeftToBottomRight;
 
     if (originPoint.x < destinationPoint.x && originPoint.y < destinationPoint.y) {
-        topLeftToBottomRight = true;
+        topLeftToBottomRight = YES;
         originX = originPoint.x;
         originY = originPoint.y;
         sizeWidth = destinationPoint.x - originPoint.x;
         sizeHeight = destinationPoint.y - originPoint.y;
     } else if (originPoint.x > destinationPoint.x && originPoint.y > destinationPoint.y) {
-        topLeftToBottomRight = true;
+        topLeftToBottomRight = YES;
         originX = destinationPoint.x;
         originY = destinationPoint.y;
         sizeWidth = originPoint.x - destinationPoint.x;
         sizeHeight = originPoint.y - destinationPoint.y;
     } else {
-        topLeftToBottomRight = false;
+        topLeftToBottomRight = NO;
         if (originPoint.x < destinationPoint.x) {
             originX = originPoint.x;
             originY = destinationPoint.y;

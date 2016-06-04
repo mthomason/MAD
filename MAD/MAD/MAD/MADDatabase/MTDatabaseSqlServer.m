@@ -271,7 +271,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    bool success = false;
+    BOOL success = NO;
     MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
     if (dbconn) {
         success = [self runQuery:query onProcess:dbconn withError: NULL];
@@ -279,8 +279,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return success;
 }
 
-- (bool)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process withError:(NSError * __autoreleasing *)error {
-    bool success = false;
+- (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process withError:(NSError * __autoreleasing *)error {
+    BOOL success = NO;
     MTDataTable *dataTable;
     if (query.dataTable) {
         dataTable = query.dataTable;
@@ -300,9 +300,9 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
 }
 
-- (bool)runSQL:(NSString *)sql onDataTable:(MTDataTable *)datatable fieldKeys:(NSArray *)fieldKeys process:(MTDatabaseProcessSqlServer *)process {
+- (BOOL)runSQL:(NSString *)sql onDataTable:(MTDataTable *)datatable fieldKeys:(NSArray *)fieldKeys process:(MTDatabaseProcessSqlServer *)process {
 
-    bool rsuccess = false;
+    BOOL rsuccess = NO;
     NSError *error = nil;
     if (sql.length > 0) {
         
@@ -1178,13 +1178,13 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 
                 [datatable endBulkInsert];
                 
-                rsuccess = true;
+                rsuccess = YES;
                 
             } else {
                 NSString *message = @"Sql Syntax Error";
                 NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                 error = [NSError errorWithDomain:MADDomainTDS code:87635 userInfo:errorInfo];
-                rsuccess = false;
+                rsuccess = NO;
             }
             dbclose(dbconn);
             
@@ -1193,7 +1193,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
             NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
             NSError *error = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
-            rsuccess = false;
+            rsuccess = NO;
         }
         
     } else {
@@ -1201,7 +1201,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
         NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
         NSError *error = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
-        rsuccess = false;
+        rsuccess = NO;
     }
     return rsuccess;
 }

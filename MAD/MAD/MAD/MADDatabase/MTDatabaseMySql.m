@@ -75,7 +75,7 @@
         credentals = [self copyCredentalsWithConnection:connection];
     }
 
-    bool success = false;
+    BOOL success = NO;
     MysqlConnection *conn = nil;
     
     if (connection && credentals) {
@@ -101,7 +101,7 @@
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    bool result = false;
+    BOOL result = NO;
     MTDatabaseConnection *connectionSettings = self.databaseConnection;
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
     if (dbconn) {
@@ -128,7 +128,7 @@
                 *error = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
             }
         } else {
-            result = true;
+            result = YES;
         }
     }
     return result;

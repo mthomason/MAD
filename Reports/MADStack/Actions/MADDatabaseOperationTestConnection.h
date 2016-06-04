@@ -18,7 +18,7 @@
 @protocol MADDatabaseOperationTestConnectionProtocol <NSObject>
 
     @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign) bool success;
+    @property (nonatomic, readonly, assign) BOOL success;
 
 @end
 
@@ -26,7 +26,7 @@
     <MADPromptOperationDisplayErrorProtocol, MADDatabaseOperationTestConnectionProtocol>
 
     @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign) bool success;
+    @property (nonatomic, readonly, assign) BOOL success;
 
     - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection;
     - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection

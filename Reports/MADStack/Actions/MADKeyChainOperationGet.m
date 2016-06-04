@@ -18,7 +18,7 @@
     @property (nonatomic, readwrite, copy) NSString *key;
     @property (nonatomic, readwrite, copy) NSString *keyDescription;
     @property (atomic, readwrite, copy) NSString *value;
-    @property (atomic, readwrite, assign) bool success;
+    @property (atomic, readwrite, assign) BOOL success;
 
 @end
 
@@ -32,7 +32,7 @@
     if (self = [super init]) {
         NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _key = key.copy;
-        _success = false;
+        _success = NO;
         _keyDescription = description.copy;
     }
     return self;
@@ -66,7 +66,7 @@
             
             result = [[NSString alloc] initWithData: resultData encoding: NSUTF8StringEncoding];
             self.value = result;
-            self.success = true;
+            self.success = YES;
             [self finish];
             break;
             

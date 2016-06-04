@@ -16,8 +16,8 @@
 @interface MTQueryCacheAddColumn : MTQueryCache
 
     - (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName
-                               column:(MADDataColumn *)column createTable:(bool)createTable
-                     uniqueColumnHack:(bool)uniqueColumnHack
+                               column:(MADDataColumn *)column createTable:(BOOL)createTable
+                     uniqueColumnHack:(BOOL)uniqueColumnHack
                        columnAffinity:(NSString *)columnAffinity;
 
 @end

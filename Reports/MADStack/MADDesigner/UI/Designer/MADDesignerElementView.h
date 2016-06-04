@@ -28,8 +28,8 @@ typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
 @interface MADDesignerElementView : MADManagedObjectView
     <UIGestureRecognizerDelegate>
 
-    @property (nonatomic, readwrite, assign) bool displayHighlighted;
-    @property (nonatomic, readwrite, assign, getter=isWobbling) bool displayWobbling;
+    @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
+    @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;
     @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
 
     @property (nonatomic, readwrite, strong) NSAttributedString *displayStringAttributed;

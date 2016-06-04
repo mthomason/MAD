@@ -50,7 +50,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 
     @property (nonatomic, strong) NSShadow *shadow;
 
-    @property (nonatomic, assign) bool enabledColor;
+    @property (nonatomic, assign) BOOL enabledColor;
 
 @end
 
@@ -227,11 +227,11 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setDisplayEnabled {
-    self.enabledColor = true;
+    self.enabledColor = YES;
 }
 
 - (void)setDisplayDisabled {
-    self.enabledColor = false;
+    self.enabledColor = NO;
 }
 
 - (MADSliderPageVertical *)pageSlider { return self.slider; }

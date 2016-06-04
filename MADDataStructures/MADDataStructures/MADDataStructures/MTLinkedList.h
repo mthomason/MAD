@@ -32,8 +32,8 @@
     - (id)getPrevious;
     - (id)getTop;
     - (id)getBottom;
-    - (bool)isNext;
-    - (bool)isPrevious;
+    - (BOOL)isNext;
+    - (BOOL)isPrevious;
     - (id)objectAtIndex:(NSUInteger)index;
     - (void)reverse;
     - (NSArray *)toArray;

@@ -48,7 +48,7 @@
         
         id keyColumnUnique = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnUnique];
         NSNumber *uniqueObj = object[keyColumnUnique];
-        bool uniqueValue = false;
+        BOOL uniqueValue = NO;
         if (uniqueObj != nil) {
             uniqueValue = uniqueObj.boolValue;
         }
@@ -67,8 +67,8 @@
 }
 
 - (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName
-                           column:(MADDataColumn *)column createTable:(bool)createTable
-                 uniqueColumnHack:(bool)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
+                           column:(MADDataColumn *)column createTable:(BOOL)createTable
+                 uniqueColumnHack:(BOOL)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
     if (self = [super init]) {
         NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
                                                           database:self.database
@@ -89,8 +89,8 @@
 
 + (NSString *)newSqlWithTableName:(NSString *)tableName columnName:(NSString *)columnName
                          database:(MTDatabaseCache *)database datatype:(MADDataType)datatype
-                     isPrimaryKey:(bool)isPrimaryKey createTable:(bool)createTable
-                 uniqueColumnHack:(bool)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
+                     isPrimaryKey:(BOOL)isPrimaryKey createTable:(BOOL)createTable
+                 uniqueColumnHack:(BOOL)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
     
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     NSString *unique = uniqueColumnHack ? @"UNIQUE" : @"";

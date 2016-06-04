@@ -16,7 +16,7 @@
     <NSFetchedResultsControllerDelegate>
 
     @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-    @property (nonatomic, assign) bool suspendAutomaticTrackingOfChangesInManagedObjectContext;
+    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
     - (void)performFetch;
 

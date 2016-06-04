@@ -153,27 +153,27 @@ static NSString * const StringEmpty = @"";
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;    
 }
 
@@ -205,7 +205,7 @@ static NSString * const StringEmpty = @"";
     [self loadWithPlist:plist];
 }
 
-- (bool)cacheWithUrl:(NSURL *)url {
+- (BOOL)cacheWithUrl:(NSURL *)url {
 
     NSLog(@"Writing cache to url %@.", url);
 
@@ -219,7 +219,7 @@ static NSString * const StringEmpty = @"";
 
     NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
 
-    bool success = false;
+    BOOL success = NO;
     if (url) {
         NSError * __autoreleasing *errorWriting = nil;
         success = [cache writeToURL: url

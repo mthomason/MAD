@@ -161,7 +161,7 @@
         __strong MTViewControllerValueBasedOnField *strongself2 = weakself2;
         
         NSError * __autoreleasing error = NULL;
-        bool success = [querySampleDataField performQueryWithError:&error];
+        BOOL success = [querySampleDataField performQueryWithError:&error];
         
         if (success) {
             MTViewControllerValueBasedOnField * __weak weakself3 = strongself2;

@@ -31,7 +31,7 @@
 
     //Results
     @property (nonatomic, readwrite, strong) NSError *error;
-    @property (nonatomic, readwrite, assign) bool success;
+    @property (nonatomic, readwrite, assign) BOOL success;
 
 @end
 
@@ -45,7 +45,7 @@
     if (self = [super init]) {
         _databaseConnection = connection;
         _credentials = nil;
-        _success = false;
+        _success = NO;
     }
     return self;
 }
@@ -55,7 +55,7 @@
     if (self = [super init]) {
         _databaseConnection = connection;
         _credentials = credentials.copy;
-        _success = false;
+        _success = NO;
     }
     return self;
 }
@@ -140,7 +140,7 @@
     }
 }
 
-- (bool)displayError { return !self.success && self.error != nil; }
+- (BOOL)displayError { return !self.success && self.error != nil; }
 
 - (NSUInteger)tag { return self.hash; }
 

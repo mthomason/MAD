@@ -22,7 +22,7 @@
 
     @property (nonatomic, readwrite, weak) MADocument *document;
     @property (nonatomic, readwrite, strong) MADGetCredentialsOperation *getCredentials;
-    @property (nonatomic, readwrite, assign) bool completedSuccessfully;
+    @property (nonatomic, readwrite, assign) BOOL completedSuccessfully;
 
 @end
 
@@ -55,7 +55,7 @@
         self.getCredentials = getCredentials;
         
         _document = document;
-        _completedSuccessfully = false;
+        _completedSuccessfully = NO;
 
     }
     return self;
@@ -87,7 +87,7 @@
     MADRefreshReloadOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADRefreshReloadOperation *sself = wself;
-        sself.completedSuccessfully = true;
+        sself.completedSuccessfully = YES;
         [sself finish];
     }];
     

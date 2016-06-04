@@ -11,8 +11,8 @@
 
 @protocol MADViewControllerProtocol <NSObject>
 
-    - (bool)hidesStatusBar;
-    - (void)setHidesStatusBar:(bool)hidesStatusBar;
+    - (BOOL)hidesStatusBar;
+    - (void)setHidesStatusBar:(BOOL)hidesStatusBar;
 
 @end
 

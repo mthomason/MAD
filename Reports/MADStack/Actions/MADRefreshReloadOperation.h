@@ -16,7 +16,7 @@
 
 @interface MADRefreshReloadOperation : MADGroupOperation
 
-    @property (readonly) bool completedSuccessfully;
+    @property (readonly) BOOL completedSuccessfully;
     @property (nonatomic, readonly, weak) MADocument *document;
 
     - (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController

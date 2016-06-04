@@ -226,12 +226,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
-    @property (nonatomic, assign) bool editAggregate;
-    @property (nonatomic, assign) bool toolboxVisible;
-    @property (nonatomic, assign) bool sectionSettingsVisible;
-    @property (nonatomic, assign) bool insetsSetup;
-    @property (nonatomic, assign) bool shownAndHidden;
-    @property (nonatomic, assign) bool lastMenuItemSelectRequiresElementView;
+    @property (nonatomic, assign) BOOL editAggregate;
+    @property (nonatomic, assign) BOOL toolboxVisible;
+    @property (nonatomic, assign) BOOL sectionSettingsVisible;
+    @property (nonatomic, assign) BOOL insetsSetup;
+    @property (nonatomic, assign) BOOL shownAndHidden;
+    @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
 
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
@@ -389,7 +389,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     self.scroller.minimumZoomScale = 0.3000f;
     self.scroller.bouncesZoom = NO;
     
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
     
     MADToolboxTransitioningDelegate *transitioningDelegate;
     transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
@@ -431,12 +431,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
     self.boundsOnDisappear = CGRectZero;
     self.zoomScaleRestore = -1.0000f;
-    self.shownAndHidden = false;
-    self.editAggregate = false;
+    self.shownAndHidden = NO;
+    self.editAggregate = NO;
         
-    self.insetsSetup = false;
-    self.toolboxVisible = false;
-    self.sectionSettingsVisible = false;
+    self.insetsSetup = NO;
+    self.toolboxVisible = NO;
+    self.sectionSettingsVisible = NO;
     
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];
@@ -521,7 +521,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     MADBackgroundScrollView __unsafe_unretained *scroller = _scroller;
     MADTabBarController * __unsafe_unretained tabBarController = self.tabBarController;
 
-    _lastMenuItemSelectRequiresElementView = false;
+    _lastMenuItemSelectRequiresElementView = NO;
     _zoomScaleRestore = scroller.zoomScale;
     [scroller setZoomScale: 1.0000f animated: NO];
     
@@ -751,7 +751,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.insetsSetup == false) self.insetsSetup = true;
+    if (self.insetsSetup == NO) self.insetsSetup = YES;
     
     [self setScrollersEnabled:YES];
     
@@ -792,7 +792,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     [self.layoutConstraintsReportSectionHeight removeAllObjects];
     
-    self.shownAndHidden = true;
+    self.shownAndHidden = YES;
     [self.document saveContext];
 }
 
@@ -1098,7 +1098,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self hideToolbox];
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(bool)newPageAfter {
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -1118,7 +1118,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
 }
 
-- (void)sectionLayoutDidUpdateVisibility:(bool)isVisible {
+- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -1308,7 +1308,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    if (self.lastMenuItemSelectRequiresElementView == false) {
+    if (self.lastMenuItemSelectRequiresElementView == NO) {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
@@ -1317,7 +1317,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         }
         self.lastElementViewToShowMenu = nil;
     }
-    self.lastMenuItemSelectRequiresElementView = false;
+    self.lastMenuItemSelectRequiresElementView = NO;
 }
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
@@ -1343,7 +1343,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     }
     
     if (selectedImage != nil) {
-        self.hidesStatusBar = false;
+        self.hidesStatusBar = NO;
         
         MADDesignerViewController * __weak reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
@@ -1362,7 +1362,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self setDisplayActive];
 }
@@ -1470,7 +1470,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     id elementView;
     
     [self deselectAllElementsAnimated:YES];
-    _lastMenuItemSelectRequiresElementView = true;
+    _lastMenuItemSelectRequiresElementView = YES;
     
     elementView = [self viewForObjectID:cell.objectIdTag];
     [self selectElementView: elementView];
@@ -1569,7 +1569,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
     
     self.aggregateToEditObjectID = objectID.copy;
-    self.editAggregate = true;
+    self.editAggregate = YES;
 
     MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -2021,7 +2021,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)viewControllerDidFinish:(id)sender {
     [self setDisplayActive];
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -2036,7 +2036,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                             objTypeKey,     MTDocumentObjectDefinationType,
                             field.objectID, MTDocumentObjectDefinationObject, nil];
     [self insertDocumentObjectWithDefination: parameters];
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -2064,7 +2064,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                                 documentObject, MTDocumentObjectDefinationObject, nil];
     
     [self insertDocumentObjectWithDefination: documentObjectDefination];
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
 }
 
 
@@ -2774,7 +2774,7 @@ END_deselectElementView:;
     if (self.sectionSettingsVisible &&
         self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.sectionSettingsVisible = false;
+        self.sectionSettingsVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self removeBorderFromAllSectionViews];
         [self.document.managedObjectContext save:nil];
@@ -2788,7 +2788,7 @@ END_deselectElementView:;
     if (self.toolboxVisible &&
         self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.toolboxVisible = false;
+        self.toolboxVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
@@ -3045,8 +3045,8 @@ END_deselectElementView:;
 
 - (void)setDisplayActive {
     [self setHidesStatusBar: NO];
-    self.sectionSettingsVisible = false;
-    self.toolboxVisible = false;
+    self.sectionSettingsVisible = NO;
+    self.toolboxVisible = NO;
     
     MADTabBarController *tabBarController = self.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
@@ -3375,7 +3375,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     return CGSizeMake(self.view.bounds.size.width, height);
 }
 
-- (bool)showOnSide {
+- (BOOL)showOnSide {
     return self.presentingViewController.traitCollection.verticalSizeClass ==
                 UIUserInterfaceSizeClassCompact;
 }
@@ -3384,7 +3384,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     if (self.presentedViewController != nil) {
         UIView *sectionView = [self detailSectionView];
         CGRect rect = sectionView.frame;
-        self.hidesStatusBar = false;
+        self.hidesStatusBar = NO;
         [self.scroller scrollRectToVisible:rect animated:YES];
     }
 }
@@ -3519,7 +3519,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (IBAction)actionCancel:(id)sender {
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:^{
         [self setDisplayActive];
     }];
@@ -3531,7 +3531,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (IBAction)hideToolbox {
-    self.hidesStatusBar = false;
+    self.hidesStatusBar = NO;
 
     typeof(self) __weak weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
@@ -3545,8 +3545,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)showToolbox {
     
-    self.toolboxVisible = true;
-    self.sectionSettingsVisible = false;
+    self.toolboxVisible = YES;
+    self.sectionSettingsVisible = NO;
     
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3574,7 +3574,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    self.toolboxVisible = false;
+    self.toolboxVisible = NO;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3584,8 +3584,8 @@ static const inline CGSize sizePopoverFonts() {
     self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
-    if (self.sectionSettingsVisible == false) {
-        self.sectionSettingsVisible = true;
+    if (self.sectionSettingsVisible == NO) {
+        self.sectionSettingsVisible = YES;
         [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
             [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
         }];

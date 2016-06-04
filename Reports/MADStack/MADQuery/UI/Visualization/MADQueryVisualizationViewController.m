@@ -370,7 +370,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
     
     RptqQuery *updatedQuery = nil;
-    bool needsLayout = false;
+    BOOL needsLayout = NO;
     
 #pragma mark Handle inserted objects
     
@@ -436,7 +436,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                                 [self.view layoutIfNeeded];
                             }
                         }
-                        needsLayout = true;
+                        needsLayout = YES;
                         
                     }
                 }
@@ -869,27 +869,27 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     rightCellAnchorPoint.x -= paddingLeft;
     rightCellAnchorPoint.y += -2.0000f;
     
-    bool topLeftToBottomRight;
+    BOOL topLeftToBottomRight;
     CGFloat extraInset = 0.0000f;
     if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = true;
+            topLeftToBottomRight = YES;
         } else {
-            topLeftToBottomRight = false;
+            topLeftToBottomRight = NO;
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
-        connectorView.leftViewIsInital = true;
+        connectorView.leftViewIsInital = YES;
     } else {
         extraInset = -20.0000f;
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = false;
+            topLeftToBottomRight = NO;
         } else {
-            topLeftToBottomRight = true;
+            topLeftToBottomRight = YES;
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
-        connectorView.leftViewIsInital = false;
+        connectorView.leftViewIsInital = NO;
     }
     connectorView.topLeftToBottomRight = topLeftToBottomRight;
     

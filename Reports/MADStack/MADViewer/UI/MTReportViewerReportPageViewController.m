@@ -81,7 +81,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, copy, readwrite) MADPageViewAttributes *pageViewAttributes;
-    @property (nonatomic, assign) bool initalLayout;
+    @property (nonatomic, assign) BOOL initalLayout;
 
 @end
 
@@ -127,7 +127,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
     if (self = [super init]) {
         _document = document;
-        _initalLayout = true;
+        _initalLayout = YES;
         MADPageViewAttributes *attributes = pageAttributes.copy;
         self.pageViewAttributes = attributes;
     }
@@ -189,7 +189,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.initalLayout) {
-        self.initalLayout = false;
+        self.initalLayout = NO;
         
         self.documentScroller.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: self.documentScroller
                                                                                                               insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];

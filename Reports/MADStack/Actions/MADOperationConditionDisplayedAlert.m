@@ -34,7 +34,7 @@
 - (instancetype)initWithTag:(NSUInteger)tag {
     if (self = [super init]) {
         _tag = tag;
-        _reverseCondition = false;
+        _reverseCondition = NO;
     }
     return self;
 }
@@ -69,7 +69,7 @@
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] &&
             dependency.hash == self.tag) {
             
-            bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
+            BOOL condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
             
             if (self.reverseCondition) { condition = !condition; }
             

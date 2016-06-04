@@ -48,7 +48,7 @@ typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
     - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
     - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
-    - (bool)cacheWithUrl:(NSURL *)url;
+    - (BOOL)cacheWithUrl:(NSURL *)url;
 
     - (MADDataTablePlist *)copyPlist;
     - (void)loadWithPlist:(MADDataTablePlist *)plist;

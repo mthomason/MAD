@@ -554,7 +554,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname
                                                               size:self.fontsize.floatValue];
     
-    //bool gotTraits = false;
+    //BOOL gotTraits = NO;
     if (self.italic.boolValue && self.bold.boolValue) {
         f = [f fontDescriptorWithSymbolicTraits:(UIFontDescriptorSymbolicTraits)
                                         (UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold)];

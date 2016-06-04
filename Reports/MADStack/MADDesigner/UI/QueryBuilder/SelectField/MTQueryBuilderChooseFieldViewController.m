@@ -311,7 +311,7 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection =
                                         self.sectionInfoArray[(NSUInteger)previousOpenSectionIndex];
         previousOpenSection.open = NO;
-        [previousOpenSection.headerView toggleOpenWithUserAction:false];
+        [previousOpenSection.headerView toggleOpenWithUserAction:NO];
         NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
         for (NSUInteger i = 0; i < countOfRowsToDelete; i++) {
             @autoreleasepool {

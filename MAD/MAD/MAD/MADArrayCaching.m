@@ -132,9 +132,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         MADDataColumn *columnKey;
         columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
         columnKey.type = MADDataTypeInteger;
-        columnKey.primaryKey = true;
-        columnKey.notNull = true;
-        columnKey.autoIncrement = false;
+        columnKey.primaryKey = YES;
+        columnKey.notNull = YES;
+        columnKey.autoIncrement = NO;
         
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier
             createTable:YES unique:NO];
@@ -142,9 +142,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         MADDataColumn *columnValue;
         columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
         columnValue.type = MADDataTypeBlob;
-        columnValue.primaryKey = false;
-        columnValue.notNull = true;
-        columnValue.autoIncrement = false;
+        columnValue.primaryKey = NO;
+        columnValue.notNull = YES;
+        columnValue.autoIncrement = NO;
 
         [self addColumn:columnValue toTable:MTArrayCachedTableName
              columnName:columnValue.identifier createTable:NO unique:NO];
@@ -264,7 +264,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                              createTable: create
                                         uniqueColumnHack: unique
                                           columnAffinity: columnAffinity];
-    bool success = false;
+    BOOL success = NO;
     NSError * __autoreleasing * error = NULL;
     success = [self.database executeQuery:queryCacheAddColumn withError:error];
 }
@@ -378,7 +378,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                                    object: queryDefination];
     
     NSError * __autoreleasing error = NULL;
-    bool success = false;
+    BOOL success = NO;
     success = [self.database executeQuery:queryDeleteAllFromTable withError:&error];
 
 }

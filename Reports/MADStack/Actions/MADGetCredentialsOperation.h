@@ -20,7 +20,7 @@
     - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
                                 viewController: (UIViewController *)viewController;
     @property (readonly) MADCredential *credentials;
-    @property (readonly) bool gotCredentials;
+    @property (readonly) BOOL gotCredentials;
 
 @end
 

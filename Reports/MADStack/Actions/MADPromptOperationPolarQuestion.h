@@ -21,8 +21,8 @@
     - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
                    viewController:(UIViewController * __weak)viewController;
 
-    @property (nonatomic, readonly, assign) bool alertDisplayed;
-    @property (nonatomic, readonly, assign) bool result;
+    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
+    @property (nonatomic, readonly, assign) BOOL result;
 
 @end
 

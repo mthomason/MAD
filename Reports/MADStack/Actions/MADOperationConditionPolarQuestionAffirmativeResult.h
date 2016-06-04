@@ -13,19 +13,19 @@
 
 @protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
 
-    - (bool)result;
+    - (BOOL)result;
 
 @end
 
 @interface MADOperationConditionPolarQuestionAffirmativeResult : MADOperationConditionResult
     <MADOperationConditionPolarQuestionResultProtocol>
-    @property (nonatomic, assign) bool result;
+    @property (nonatomic, assign) BOOL result;
 
 @end
 
 @interface MADOperationConditionPolarQuestionNegativeResult : MADOperationConditionResult
     <MADOperationConditionPolarQuestionResultProtocol>
-    @property (nonatomic, assign) bool result;
+    @property (nonatomic, assign) BOOL result;
 
 @end
 

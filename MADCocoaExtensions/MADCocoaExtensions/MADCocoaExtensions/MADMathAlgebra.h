@@ -52,7 +52,7 @@ static inline CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) 
     double b = CGInterceptBySlope(p2, m);
     double x = p2.x;
     double y = p2.y;
-    bool movingUp = p1.y < p2.y;
+    BOOL movingUp = p1.y < p2.y;
     
     if (d >= 0) {
         double mPow2 = pow(m, 2);

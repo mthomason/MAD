@@ -33,10 +33,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
     @property (nonatomic, copy) NSString *username;
     @property (nonatomic, copy) NSString *password;
-    @property (nonatomic, assign) bool passwordSet;
-    @property (nonatomic, assign) bool usernameSet;
+    @property (nonatomic, assign) BOOL passwordSet;
+    @property (nonatomic, assign) BOOL usernameSet;
 
-    @property (nonatomic, assign) bool shortCircut;
+    @property (nonatomic, assign) BOOL shortCircut;
 
 @end
 
@@ -55,7 +55,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     }
 }
 
-- (bool)gotCredentials { return self.usernameSet && self.passwordSet; }
+- (BOOL)gotCredentials { return self.usernameSet && self.passwordSet; }
 
 - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
     if (self = [super init]) {
@@ -93,14 +93,14 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
                 case MADKeyChainReadOperationTypeUsername: {
                     NSString *username = ((NSObject <MADOperationResultStringProtocol> *) operation).value.copy;
                     self.username = username;
-                    self.usernameSet = true;
+                    self.usernameSet = YES;
                     break;
                 }
                 
                 case MADKeyChainReadOperationTypePassword: {
                     NSString *password = ((NSObject <MADOperationResultStringProtocol> *) operation).value.copy;
                     self.password = password;
-                    self.passwordSet = true;
+                    self.passwordSet = YES;
                     break;
                 }
                 default:
@@ -117,9 +117,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
             NSString *username = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.username.copy;
             NSString *password = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.password.copy;
             self.username = username;
-            self.usernameSet = true;
+            self.usernameSet = YES;
             self.password = password;
-            self.passwordSet = true;
+            self.passwordSet = YES;
         }
     }
     //NSLog(@"Count   %d", self.internalQueue.operationCount);
@@ -183,7 +183,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addDependency:promptCredntials];
     
     MADOperationConditionDisplayedAlert *suppressedAlertCredntials = [[MADOperationConditionDisplayedAlert alloc] initWithTag:promptCredntials.hash];
-    suppressedAlertCredntials.reverseCondition = true;
+    suppressedAlertCredntials.reverseCondition = YES;
     
     MADOperationConditionMissingResultString *conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyPassword];
     

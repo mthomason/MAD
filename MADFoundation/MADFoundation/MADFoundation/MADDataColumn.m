@@ -200,9 +200,9 @@
 + (MADDataColumn *)newDataColumnWithIdentifier:(NSString *)identifier {
     MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:identifier];
     column.type = MADDataTypeInteger;
-    column.primaryKey = true;
-    column.notNull = true;
-    column.autoIncrement = false;
+    column.primaryKey = YES;
+    column.notNull = YES;
+    column.autoIncrement = NO;
     return column;
 }
 

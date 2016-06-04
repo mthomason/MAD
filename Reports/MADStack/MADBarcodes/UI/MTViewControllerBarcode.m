@@ -169,7 +169,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             querySampleDataField.database.delegate = self;
             self.query = querySampleDataField;
             NSError * __autoreleasing error = NULL;
-            bool success = [self.query performQueryWithError:&error];
+            BOOL success = [self.query performQueryWithError:&error];
             if (success) {
                 NSArray *allObjects = [self.dataTableSampleData allObjects];
                 (self.optionsViewController).sampleBarcodeData = allObjects;
@@ -199,7 +199,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             querySampleDataField.database.delegate = self;
             self.query2 = querySampleDataField;
             NSError * __autoreleasing error = NULL;
-            bool success = [self.query2 performQueryWithError:&error];
+            BOOL success = [self.query2 performQueryWithError:&error];
 
             if (success) {
                 NSArray *allObjects = [self.dataTableSampleData2 allObjects];
@@ -239,7 +239,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         return self.dataTableSampleData2;
 
     } else {
-        NSAssert(false, @"Unknown query at %s.", __PRETTY_FUNCTION__);
+        NSAssert(NO, @"Unknown query at %s.", __PRETTY_FUNCTION__);
         return nil;
     }
 }

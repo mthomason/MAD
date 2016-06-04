@@ -76,13 +76,13 @@
     return date;
 }
 
-- (bool)isUbiquitous {
+- (BOOL)isUbiquitous {
     if (_metadataItem) {
         NSNumber *isUbiquitous;
         isUbiquitous = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
         return isUbiquitous.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
@@ -167,43 +167,43 @@
     return url;
 }
 
-- (bool)ubiquitousItemDownloadRequested {
+- (BOOL)ubiquitousItemDownloadRequested {
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
         return result.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)ubiquitousItemIsDownloading {
+- (BOOL)ubiquitousItemIsDownloading {
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
         return result.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)ubiquitousItemIsUploading {
+- (BOOL)ubiquitousItemIsUploading {
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey];
         return result.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)ubiquitousItemIsUploaded {
+- (BOOL)ubiquitousItemIsUploaded {
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey];
         return result.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
@@ -227,47 +227,47 @@
     }
 }
 
-- (bool)ubiquitousItemIsExternalDocument {
+- (BOOL)ubiquitousItemIsExternalDocument {
     if (_metadataItem) {
         NSNumber *result;
         result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
         return result.boolValue;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)isUbiquitousItemDownloadingStatusNotDownloaded {
+- (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded {
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
                 YES : NO;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)isUbiquitousItemDownloadingStatusDownloaded {
+- (BOOL)isUbiquitousItemDownloadingStatusDownloaded {
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
                 YES : NO;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)isUbiquitousItemDownloadingStatusCurrent {
+- (BOOL)isUbiquitousItemDownloadingStatusCurrent {
     if (self.ubiquitous) {
         NSString *status = self.ubiquitousItemDownloadingStatus;
         return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
                 YES : NO;
     } else {
-        return false;
+        return NO;
     }
 }
 
-- (bool)isSyncing {
+- (BOOL)isSyncing {
     return self.ubiquitous &&
             (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }

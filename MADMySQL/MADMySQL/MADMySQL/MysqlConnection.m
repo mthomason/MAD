@@ -209,7 +209,7 @@
 {
     @autoreleasepool {
         [NSThread currentThread].name = @"Mysql Idle Thread";
-        while (true) {
+        while (YES) {
             [NSThread sleepForTimeInterval:20.0];
             @synchronized (self) {
                 mysql_query(_connection, "select 'MysqlConnect:idleTmer'");

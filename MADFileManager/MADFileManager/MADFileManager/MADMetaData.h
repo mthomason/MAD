@@ -24,7 +24,7 @@ typedef NSArray <MADMetaData *> MADMetaDataArray;
     - (instancetype)initWithURL:(NSURL *)url;
     - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
 
-    - (bool)isSyncing;
+    - (BOOL)isSyncing;
 
     - (unsigned long long)fileSystemFileNumber;
     - (unsigned long long)fileSystemNumber;
@@ -40,25 +40,25 @@ typedef NSArray <MADMetaData *> MADMetaDataArray;
 
     @property (readonly) NSString  *contentType;
 
-    @property (getter=isUbiquitous, readonly) bool ubiquitous;
+    @property (getter=isUbiquitous, readonly) BOOL ubiquitous;
 
     // Download status of this item. The values are the three strings defined below.
     @property (readonly) NSString *ubiquitousItemDownloadingStatus;
 
     // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
-    @property (getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly) bool ubiquitousItemDownloadingStatusNotDownloaded;
+    @property (getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusNotDownloaded;
 
     // there is a local version of this item available. The most current version will get downloaded as soon as possible.
-    @property (getter=isUbiquitousItemDownloadingStatusDownloaded, readonly) bool ubiquitousItemDownloadingStatusDownloaded;
+    @property (getter=isUbiquitousItemDownloadingStatusDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusDownloaded;
 
     // there is a local version of this item and it is the most up-to-date version known to this device.
-    @property (getter=isUbiquitousItemDownloadingStatusCurrent, readonly) bool ubiquitousItemDownloadingStatusCurrent;
+    @property (getter=isUbiquitousItemDownloadingStatusCurrent, readonly) BOOL ubiquitousItemDownloadingStatusCurrent;
 
-    @property (readonly) bool ubiquitousItemIsDownloading;
-    @property (readonly) bool ubiquitousItemIsUploaded;
-    @property (readonly) bool ubiquitousItemIsUploading;
-    @property (readonly) bool ubiquitousItemDownloadRequested;
-    @property (readonly) bool ubiquitousItemIsExternalDocument;
+    @property (readonly) BOOL ubiquitousItemIsDownloading;
+    @property (readonly) BOOL ubiquitousItemIsUploaded;
+    @property (readonly) BOOL ubiquitousItemIsUploading;
+    @property (readonly) BOOL ubiquitousItemDownloadRequested;
+    @property (readonly) BOOL ubiquitousItemIsExternalDocument;
 
     @property (readonly) double ubiquitousItemPercentDownloaded;
     @property (readonly) double ubiquitousItemPercentUploaded;

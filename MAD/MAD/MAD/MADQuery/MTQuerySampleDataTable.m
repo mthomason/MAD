@@ -85,7 +85,7 @@
     queryMaxFieldLenght.database.delegate = self;
 
     NSError * __autoreleasing blockError;
-    bool success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError:&blockError];
+    BOOL success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError:&blockError];
     if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
         
         for (RptqDatabaseSchemaField *field in fields) {

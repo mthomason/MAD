@@ -76,8 +76,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
     @property (nonatomic, readwrite, strong) NSArray *groupTableNames;
 
-    @property (nonatomic, readwrite, assign) bool bulkInsertLoop;
-    @property (nonatomic, readwrite, assign) bool sortDescriptorsSet;
+    @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
+    @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
 
     @property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
 
@@ -101,9 +101,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
         self.queueBulkAdd = queue;
     
-        self.bulkInsertLoop = false;
+        self.bulkInsertLoop = NO;
         self.tag = objectId;
-        self.sortDescriptorsSet = false;
+        self.sortDescriptorsSet = NO;
         
         NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
         self.groupKeyIndexes = groupKeyIndexes;
@@ -274,7 +274,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    NSAssert(false, @"Not implemented");
+    NSAssert(NO, @"Not implemented");
     return nil;
 }
 
@@ -358,7 +358,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
        columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
-    bool success = false;
+    BOOL success = NO;
     NSError * __autoreleasing errorQuery = NULL;
 
     NSString *columnAffinity = [_databaseForInserts newNativeTypeForDataType: column.type];
@@ -484,7 +484,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                     groupKeyCounter++;
                 }
                 if (newSortDescriptors.count == sortDescriptors.count) {
-                    self.sortDescriptorsSet = true;
+                    self.sortDescriptorsSet = YES;
                     self.sortDescriptors = newSortDescriptors;
                 }
             }
@@ -567,7 +567,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                      andSortDescriptors: sortDescriptorGroup];
   
         MTQuery *queryCreateIndex = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
-        bool success;
+        BOOL success;
         NSError * __autoreleasing errorQuery = NULL;
         success = [self.databaseForInserts executeQuery:queryCreateIndex withError:&errorQuery];
 
@@ -580,7 +580,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)dropIndex {
     NSUInteger sortDescCtr = self.sortDescriptors.count;
     NSUInteger groupCounter = 0;
-    bool success;
+    BOOL success;
     for (NSUInteger i = 0; i<sortDescCtr; i++) {
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
         NSDictionary *parameters = @{
@@ -594,7 +594,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (void)vacuumCacheDb {
-    bool success;
+    BOOL success;
     NSError * __autoreleasing errorQuery = NULL;
     MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
     success = [self.databaseForInserts executeQuery:queryVacuum withError:&errorQuery];
@@ -605,14 +605,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (void)dropTableName:(NSString *)tableName {
-    bool success;
+    BOOL success;
     NSError * __autoreleasing errorQuery = NULL;
     MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
     success = [self.databaseForInserts executeQuery:queryDropTable withError:&errorQuery];
 }
 
 - (void)deleteAll {
-    bool success;
+    BOOL success;
     NSError * __autoreleasing errorQuery = NULL;
     NSString *tableName = [self tableName];
     MTQuery *queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
@@ -1038,11 +1038,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 /*! Call before bulk insert of data. */
 
 - (void)beginBulkInsert {
-    self.bulkInsertLoop = true;
+    self.bulkInsertLoop = YES;
     
     [self reopenDbConnection];
     
-    self.sortDescriptorsSet = false;
+    self.sortDescriptorsSet = NO;
     [self createIndex];
     
     [self.databaseForInserts beginBulkInsert];
@@ -1070,7 +1070,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)endBulkInsert {
     __block typeof(self) myself = self;
     dispatch_barrier_sync(self.queueBulkAdd, ^{
-        myself.bulkInsertLoop = false;
+        myself.bulkInsertLoop = NO;
         [(MTDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
     });
 }

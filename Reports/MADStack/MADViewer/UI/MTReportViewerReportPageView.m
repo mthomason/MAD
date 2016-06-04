@@ -36,9 +36,9 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
     @property (nonatomic, strong) UIView *timeSinceRefreshView;
     @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
-    @property (nonatomic, assign) bool firstTime;
-    @property (nonatomic, assign) bool displaysPageCounter;
-    @property (nonatomic, assign) bool displaysCacheTimer;
+    @property (nonatomic, assign) BOOL firstTime;
+    @property (nonatomic, assign) BOOL displaysPageCounter;
+    @property (nonatomic, assign) BOOL displaysCacheTimer;
 
 @end
 
@@ -74,7 +74,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     if (self.firstTime) {
         MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
         self.dateTimeFormatter = dateTimeFormatter;
-        self.firstTime = false;
+        self.firstTime = NO;
         if (self.displaysCacheTimer) {
             [self addTimerView];
             [self uiUpdateTimeSinceLastRefresh:self];
@@ -96,10 +96,10 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 #pragma mark
 
 - (void)initialize {
-    self.displaysCacheTimer = false;
-    self.displaysPageCounter = false;
-    self.drawBlankPage = false;
-    self.firstTime = true;
+    self.displaysCacheTimer = NO;
+    self.displaysPageCounter = NO;
+    self.drawBlankPage = NO;
+    self.firstTime = YES;
 }
 
 #pragma mark - Page Counter

@@ -13,8 +13,8 @@
 
 @interface MADConnectorView : MADManagedObjectView
 
-    @property (nonatomic, assign) bool topLeftToBottomRight;
-    @property (nonatomic, assign) bool leftViewIsInital;
+    @property (nonatomic, assign) BOOL topLeftToBottomRight;
+    @property (nonatomic, assign) BOOL leftViewIsInital;
 
     - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 

@@ -64,7 +64,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     
     while (!self.dismissed) {
         for (NSString *mode in (__bridge NSArray *)allModes) {
-            CFRunLoopRunInMode((CFStringRef)mode, 0.001, false);
+            CFRunLoopRunInMode((CFStringRef)mode, 0.001, NO);
         }
     }
     

@@ -16,11 +16,11 @@ static NSString * const TextNo = @"No";
 
 @interface MADPromptOperationPolarQuestion ()
 
-    @property (nonatomic, readwrite, assign) bool result;
+    @property (nonatomic, readwrite, assign) BOOL result;
     @property (nonatomic, copy) NSString *title;
     @property (nonatomic, copy) NSString *message;
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
 
 @end
 
@@ -38,7 +38,7 @@ static NSString * const TextNo = @"No";
         _viewController = viewController;
         _title = title.copy;
         _message = message.copy;
-        _result = false;
+        _result = NO;
         MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
         
@@ -55,8 +55,8 @@ static NSString * const TextNo = @"No";
     MADPromptOperationPolarQuestion * __weak weakSelf = self;
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
-        sself.result = true;
-        sself.alertDisplayed = true;
+        sself.result = YES;
+        sself.alertDisplayed = YES;
         defer(^{
             [sself performSelectorInBackground:@selector(finish) withObject:nil];
         });
@@ -64,8 +64,8 @@ static NSString * const TextNo = @"No";
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo style: UIAlertActionStyleCancel handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
-        sself.result = false;
-        sself.alertDisplayed = true;
+        sself.result = NO;
+        sself.alertDisplayed = YES;
         defer(^{
             NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
             [sself performSelectorInBackground: @selector(finishWithError:) withObject: error];

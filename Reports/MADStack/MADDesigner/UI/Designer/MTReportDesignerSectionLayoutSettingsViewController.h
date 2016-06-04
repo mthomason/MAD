@@ -17,8 +17,8 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
 
-    - (void)sectionLayoutDidUpdateVisibility:(bool)isVisible;
-    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(bool)newPageAfter;
+    - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
+    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter;
 @optional
     - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
     - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;

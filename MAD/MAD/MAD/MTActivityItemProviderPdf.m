@@ -142,7 +142,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         reportFormatter.datasource = weakdoc;
         reportFormatter.overrideIdentifier = @"madpreview";
         [reportFormatter initialize];
-        reportFormatter.didRefresh = true;
+        reportFormatter.didRefresh = YES;
         reportFormatter.layoutSize = letterRect.size;
         
         [[NSNotificationCenter defaultCenter] addObserver: weakdoc

@@ -51,7 +51,7 @@ typedef NSString MADSqlite3SortDescription;
                        database:(void * /* sqlite3 * */)database
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
-      queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;
+      queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet;
 
 @end
 

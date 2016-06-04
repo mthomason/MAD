@@ -239,7 +239,7 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, copy, readwrite) NSURL *urlGuts;
     @property (nonatomic, copy, readwrite) NSURL *urlMetaPlaylist;
 
-    @property (nonatomic, assign) bool didRefresh;
+    @property (nonatomic, assign) BOOL didRefresh;
 
 @end
 
@@ -289,7 +289,7 @@ void madwarn(char *err,  const char*err2) { }
                               name: UIDocumentStateChangedNotification
                             object: self];
         
-        _didRefresh = false;
+        _didRefresh = NO;
     }
     return self;
 }
@@ -298,7 +298,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark Static Helpers
 
 
-+ (bool)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
++ (BOOL)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
 
     NSDirectoryEnumerator<NSURL *> * directory =
@@ -307,7 +307,7 @@ void madwarn(char *err,  const char*err2) { }
                                                 options: NSDirectoryEnumerationSkipsHiddenFiles
                                            errorHandler: nil];
 
-    bool success = false;
+    BOOL success = NO;
     int r;
     struct archive *archive;
 
@@ -366,7 +366,7 @@ void madwarn(char *err,  const char*err2) { }
         
     }
     
-    success = true;
+    success = YES;
     
     mad_file_remove_if_exist(backup);
     
@@ -389,9 +389,9 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return success;
 }
 
-+ (bool)RestoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
-                 overwrite:(bool)overwrite {
-    bool success = false;
++ (BOOL)RestoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
+                 overwrite:(BOOL)overwrite {
+    BOOL success = NO;
     NSFileWrapper *fileWrapper;
     NSError *fileWrapperError = nil;
     fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
@@ -1011,7 +1011,7 @@ READ_END:;
     self.printingReportFormatter.dataDelegate = self;
     self.printingReportFormatter.layoutSize = printInteractionController.printPaper.paperSize;
     self.printingReportFormatter.marginUsingPrintableRect = printInteractionController.printPaper.printableRect;
-    self.printingReportFormatter.didRefresh = true;
+    self.printingReportFormatter.didRefresh = YES;
     [self.printingReportFormatter formatForSize: printInteractionController.printPaper.paperSize contentChanged: NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
@@ -1163,17 +1163,17 @@ READ_END:;
     NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
     
     //NSPredicate *p = [[NSPredicate alloc] init
-    self.documentStatus.needsSave = true;
-    self.documentStatus.contextChagned = true;
+    self.documentStatus.needsSave = YES;
+    self.documentStatus.contextChagned = YES;
 }
 
 - (void)handleManagedObjectContextDidSave:(NSNotification *)notification {
-    self.documentStatus.saveInProgress = false;
-    self.documentStatus.needsSave = false;
+    self.documentStatus.saveInProgress = NO;
+    self.documentStatus.needsSave = NO;
 }
 
 - (void)handleManagedObjectContextWillSave:(NSNotification *)notification {
-    self.documentStatus.saveInProgress = true;
+    self.documentStatus.saveInProgress = YES;
 }
 
 #pragma mark - UIDocument Notifications

@@ -192,8 +192,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
     @property (nonatomic, weak)     UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-    @property (nonatomic, assign)   bool shouldShowAddDocumentPopover;
-    @property (nonatomic, assign)   bool aboutViewControllerOnScreen;
+    @property (nonatomic, assign)   BOOL shouldShowAddDocumentPopover;
+    @property (nonatomic, assign)   BOOL aboutViewControllerOnScreen;
 
     @property (nonatomic, strong)   MADSearchBar *searchBar;
 
@@ -397,7 +397,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
     
-        self.shouldShowAddDocumentPopover = true;
+        self.shouldShowAddDocumentPopover = YES;
 
         MADFileLocationManager *filesCoordnator;
         filesCoordnator = [[MADFileLocationManager alloc] init];
@@ -529,7 +529,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     [self initalInstallOperations];
     
     // init
-    _aboutViewControllerOnScreen = false;
+    _aboutViewControllerOnScreen = NO;
     _updatingEnabled = YES;
     _cloudActivityRunning = NO;
     _cloudActivityRunningDisplay = NO;
@@ -683,7 +683,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.aboutViewControllerOnScreen = false;
+    self.aboutViewControllerOnScreen = NO;
     
     if (self.pendingLaunchContext) {
         [self configureViewControllerWithLaunchContext:self.pendingLaunchContext];
@@ -1268,7 +1268,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     NSString *filename = metadata.name.copy;
     cell.labelTitle.text = filename;
     
-    bool notDownloaded, downloading, uploading;
+    BOOL notDownloaded, downloading, uploading;
     
     notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
                             NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
@@ -1365,7 +1365,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             shouldPerformSegueWithIdentifier = self.shouldShowAddDocumentPopover;
-            self.shouldShowAddDocumentPopover = false;
+            self.shouldShowAddDocumentPopover = NO;
             self.barButtonItemAddNewDocument.enabled = NO;
         }
     } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
@@ -1460,7 +1460,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UIPopoverControllerDelegate
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    self.shouldShowAddDocumentPopover = true;
+    self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
@@ -1468,12 +1468,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark MTViewControllerProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
-    self.shouldShowAddDocumentPopover = true;
+    self.shouldShowAddDocumentPopover = YES;
     MADTabBarController *tabController = self.tabController;
     [tabController setViewControllers:nil animated:YES];
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
-    self.shouldShowAddDocumentPopover = true;
+    self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
@@ -1492,7 +1492,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    self.shouldShowAddDocumentPopover = true;
+    self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
@@ -1624,7 +1624,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     if ([documentType isEqualToString:MADUtiType]) {
         return MADMimeType;
     } else {
-        NSAssert(false, @"Unknown type at %s", __PRETTY_FUNCTION__);
+        NSAssert(NO, @"Unknown type at %s", __PRETTY_FUNCTION__);
         return MADMimeType;
     }
 }
@@ -1722,10 +1722,10 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)about:(id)sender {
     if (self.aboutViewControllerOnScreen) {
-        self.aboutViewControllerOnScreen = false;
+        self.aboutViewControllerOnScreen = NO;
         [self dismissViewControllerAnimated:YES completion:^{ }];
     } else {
-        self.aboutViewControllerOnScreen = true;
+        self.aboutViewControllerOnScreen = YES;
         
         UITableViewController *aboutViewController = [UITableViewController About];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
@@ -2161,14 +2161,14 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController { return YES; }
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
-    self.aboutViewControllerOnScreen = false;
+    self.aboutViewControllerOnScreen = NO;
 }
 
 #pragma mark -
 #pragma mark Update UI
 
 - (void)updateProgressView:(UIProgressView *)progressView
-                    active:(bool)active
+                    active:(BOOL)active
                    percent:(double)percent {
     
     if (!active) {

@@ -147,8 +147,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         NSManagedObjectID *objectIdTag = documentObject.objectID.copy;
         self.objectIdTag = objectIdTag;
         self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.displayWobbling = false;
-        self.displayHighlighted = false;
+        self.displayWobbling = NO;
+        self.displayHighlighted = NO;
         
         self.backgroundColor = [UIColor clearColor];
         

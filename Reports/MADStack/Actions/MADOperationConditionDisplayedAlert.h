@@ -14,7 +14,7 @@
 
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
 
-    - (bool)alertDisplayed;
+    - (BOOL)alertDisplayed;
 
 @end
 
@@ -22,7 +22,7 @@
     <MADOperationCondition>
 
     - (instancetype)initWithTag:(NSUInteger)tag;
-    @property (nonatomic, assign) bool reverseCondition;
+    @property (nonatomic, assign) BOOL reverseCondition;
 
 @end
 

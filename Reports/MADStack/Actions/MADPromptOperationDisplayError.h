@@ -18,7 +18,7 @@
 @protocol MADPromptOperationDisplayErrorProtocol <NSObject>
 
     - (NSError *)error;
-    - (bool)displayError;
+    - (BOOL)displayError;
     - (NSUInteger)tag;
 
 @end
@@ -34,8 +34,8 @@
     - (instancetype)initWithError:(NSError *)error
                    viewController:(UIViewController * __weak)viewController;
 
-    @property (nonatomic, readonly, assign) bool alertDisplayed;
-    @property (nonatomic, readonly, assign) bool result;
+    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
+    @property (nonatomic, readonly, assign) BOOL result;
     @property (nonatomic, assign) NSUInteger tagDependency;   // If zero, then first one found is displayed.
 
 @end

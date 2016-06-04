@@ -22,7 +22,7 @@
 
 @interface MADCreateDocumentOperationImportSchema ()
 
-    @property (nonatomic, assign) bool success;
+    @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
 @end
@@ -40,7 +40,7 @@
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
-        self.success = false;
+        self.success = NO;
     }
     return self;
 }
@@ -59,7 +59,7 @@
         }
     }
 
-    bool __block success = false;
+    BOOL __block success = NO;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
     MADocument * __weak weakdoc = document;
@@ -111,7 +111,7 @@
         if (![private save:&saveError]) {
             NSLog(@"Error saving context: %@\n%@", saveError.localizedDescription, saveError.userInfo);
         } else {
-            success = true;
+            success = YES;
         }
 
     }];

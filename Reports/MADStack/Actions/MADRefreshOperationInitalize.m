@@ -34,7 +34,7 @@
 @interface MADRefreshOperationInitalize ()
 
     @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, assign) bool success;
+    @property (nonatomic, assign) BOOL success;
 
 @end
 
@@ -48,7 +48,7 @@
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
-        _success = false;
+        _success = NO;
     }
     return self;
 }

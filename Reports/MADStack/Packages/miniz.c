@@ -834,7 +834,7 @@ extern "C" {
     //  pImage, w, h, and num_chans describe the image to compress. num_chans may be 1, 2, 3, or 4.
     //  The image pitch in bytes per scanline will be w*num_chans. The leftmost pixel on the top scanline is stored first in memory.
     //  level may range from [0,10], use MZ_NO_COMPRESSION, MZ_BEST_SPEED, MZ_BEST_COMPRESSION, etc. or a decent default is MZ_DEFAULT_LEVEL
-    //  If flip is true, the image will be flipped on the Y axis (useful for OpenGL apps).
+    //  If flip is YES, the image will be flipped on the Y axis (useful for OpenGL apps).
     // On return:
     //  Function returns a pointer to the compressed data, or NULL on failure.
     //  *pLen_out will be set to the size of the PNG image file.
@@ -1134,7 +1134,7 @@ extern "C" {
     mz_ulong mz_deflateBound(mz_streamp pStream, mz_ulong source_len)
     {
         (void)pStream;
-        // This is really over conservative. (And lame, but it's actually pretty tricky to compute a true upper bound given the way tdefl's blocking works.)
+        // This is really over conservative. (And lame, but it's actually pretty tricky to compute a YES upper bound given the way tdefl's blocking works.)
         return MZ_MAX(128 + (source_len * 110) / 100, 128 + source_len + ((source_len / (31 * 1024)) + 1) * 5);
     }
     

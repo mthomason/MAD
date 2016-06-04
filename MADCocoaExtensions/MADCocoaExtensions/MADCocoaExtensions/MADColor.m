@@ -51,23 +51,23 @@ const CGFloat MADF255 = 255.00000000f;
 
 /// Supports either RGB or W
 
-- (bool)canProvideRGBComponents {
+- (BOOL)canProvideRGBComponents {
     switch (self.colorSpaceModel) {
         case kCGColorSpaceModelRGB:
         case kCGColorSpaceModelMonochrome:
-            return true;
+            return YES;
         default:
-            return false;
+            return NO;
     }
 }
 
 // Convenience: Test for Monochrome
-- (bool)usesMonochromeColorspace {
+- (BOOL)usesMonochromeColorspace {
     return (self.colorSpaceModel == kCGColorSpaceModelMonochrome);
 }
 
 // Convenience: Test for RGB
-- (bool)usesRGBColorspace {
+- (BOOL)usesRGBColorspace {
     return (self.colorSpaceModel == kCGColorSpaceModelRGB);
 }
 

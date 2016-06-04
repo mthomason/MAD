@@ -22,8 +22,8 @@
     //        [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
 }
 
-- (bool)isReportingEnabled {
-    return true;
+- (BOOL)isReportingEnabled {
+    return YES;
     //[[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"];
 }
 

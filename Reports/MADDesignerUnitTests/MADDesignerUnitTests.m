@@ -37,7 +37,7 @@
     
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     NSError * __autoreleasing error = NULL;
-    bool success = [queryTest.database executeQuery:queryTest withError:&error];
+    BOOL success = [queryTest.database executeQuery:queryTest withError:&error];
     XCTAssertNil(error, @"Got an error (%s): %@", __PRETTY_FUNCTION__, error);
     XCTAssertTrue(success, @"No success here!");
 }

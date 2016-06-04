@@ -61,7 +61,7 @@
             if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
                 
                 result = [MADOperationConditionPolarQuestionNegativeResult newOperationConditionResultSatisfied];
-                ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
+                ((MADOperationConditionPolarQuestionNegativeResult *)result).result = YES;
             } else {
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
                                                                                andMessage:@"Not satisified."];

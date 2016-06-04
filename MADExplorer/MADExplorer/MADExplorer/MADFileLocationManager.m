@@ -23,8 +23,8 @@ static NSString * const MADFirstLaunch                                     = @"M
 @interface MADFileLocationManager ()
 
     @property (nonatomic, readwrite, strong) MADFilesController *filesController;
-    @property (nonatomic, readwrite, assign) bool getUserCloudPrefsFirstCall;
-    @property (nonatomic, readonly) bool isFirstLaunch;
+    @property (nonatomic, readwrite, assign) BOOL getUserCloudPrefsFirstCall;
+    @property (nonatomic, readonly) BOOL isFirstLaunch;
 
 @end
 
@@ -42,7 +42,7 @@ static NSString * const MADFirstLaunch                                     = @"M
                                         yes,    MADFirstLaunch,
                                         notSet, MADAppConfigurationUserDefaultsStorageOption, nil];
         [[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
-        self.getUserCloudPrefsFirstCall = true;
+        self.getUserCloudPrefsFirstCall = YES;
     }
     return self;
 }
@@ -124,10 +124,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 #pragma mark - Convenience
 
-- (bool)isFirstLaunch {
+- (BOOL)isFirstLaunch {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    bool isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
+    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
                                                                                     YES : NO;
     if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
@@ -238,9 +238,9 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (void)getUserCloudPrefs {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == false) {
+    if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
 
-        self.getUserCloudPrefsFirstCall = false;
+        self.getUserCloudPrefsFirstCall = NO;
 
         MADStorageState *storageState;
         storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
@@ -269,7 +269,7 @@ static NSString * const MADFirstLaunch                                     = @"M
             
         }
     } else {
-        self.getUserCloudPrefsFirstCall = false;
+        self.getUserCloudPrefsFirstCall = NO;
         [self getUserCloudPrefsSubsquient];
     }
 }

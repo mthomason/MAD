@@ -580,7 +580,7 @@ char *mySQLTypeForType(int type) {
                         } break;
                             
                         default: {
-                            NSAssert(false, @"No binding for key %@ with type %s.", key, mySQLTypeForType(bindings[x].buffer_type));
+                            NSAssert(NO, @"No binding for key %@ with type %s.", key, mySQLTypeForType(bindings[x].buffer_type));
                         } break;
                     }
                 }
@@ -762,7 +762,7 @@ char *mySQLTypeForType(int type) {
             
             
         default:
-            NSAssert(false, @"No binding found for type %s.", mySQLTypeForType(binding.buffer_type));
+            NSAssert(NO, @"No binding found for type %s.", mySQLTypeForType(binding.buffer_type));
             binding.buffer_type = MYSQL_TYPE_NULL;
             binding.buffer = NULL;
             break;

@@ -19,7 +19,7 @@
     <MADTextRepresentationProtocol>
 
     @property (readonly) NSUInteger numberOfRows;
-    @property (nonatomic, assign, getter=isVisibile) bool visibility;
+    @property (nonatomic, assign, getter=isVisibile) BOOL visibility;
     @property (nonatomic, assign) MNSDocumentSectionType type;
 
     - (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;

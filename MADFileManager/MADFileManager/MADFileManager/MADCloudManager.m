@@ -24,7 +24,7 @@
 
 // UserDefaults/Preferences Used by this Singleton
 
-//bool value
+//BOOL value
 static NSString * const MADAppConfigurationUserDefaultsStorageOptionSet
                             = @"MADAppConfigurationUserDefaultsStorageOptionSet";
 

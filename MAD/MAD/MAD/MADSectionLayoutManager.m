@@ -22,8 +22,8 @@
 
     @property (nonatomic, strong, readwrite)    MADSectionLayoutAttributesMutableMap *items;
     @property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
-    @property (nonatomic, assign)               bool lastOpperationWasAdditon;
-    @property (nonatomic, assign)               bool visibility;
+    @property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
+    @property (nonatomic, assign)               BOOL visibility;
 
 @end
 
@@ -46,11 +46,11 @@
     return nonOverlappingDropPoints;
 }
 
-+ (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
++ (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
    dropTolerance:(CGFloat)tolerance {
     CGPoint nearestPoint = CGPointZero;
     double distanceToLastDropPoint = tolerance;
-    bool foundNearDropPoint = false;
+    BOOL foundNearDropPoint = NO;
     for (NSValue *pointObj in dropPoints) {
         
         CGPoint dropPoint = pointObj.CGPointValue;
@@ -61,7 +61,7 @@
              distanceToLastDropPoint > CGSizeZero.width)) { // Not yet found
             
             nearestPoint = dropPoint;
-            foundNearDropPoint = true;
+            foundNearDropPoint = YES;
             distanceToLastDropPoint = distanceToDropPoint;
         }
     }
@@ -100,7 +100,7 @@
     return results;
 }
 
-+ (bool)isPointGoodLocation:(CGPoint )point forItem:(MADSectionLayoutAttributes *)attr1
++ (BOOL)isPointGoodLocation:(CGPoint )point forItem:(MADSectionLayoutAttributes *)attr1
            givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
     return attr1.frame.origin.y >= point.y - 0.5f &&
             [attr1 validDropPoint:point givenPlacedItems:placedItems];
@@ -112,7 +112,7 @@
     CGPoint dropPoint = CGPointZero;
     double distance = 0.0,
            tmpDistance;
-    bool distanceSet = false;
+    BOOL distanceSet = NO;
     
     for (MADSectionLayoutAttributes *alreadyPlacedItem in alreadyPlacedItems) {
         if (itemToPlace.objectID != alreadyPlacedItem.objectID) {
@@ -125,7 +125,7 @@
                     if (!distanceSet) {
                         dropPoint = v.CGPointValue;
                         distance = MADDistance(itemToPlace.frame.origin, v.CGPointValue);
-                        distanceSet = true;
+                        distanceSet = YES;
                     } else if ((tmpDistance = MADDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
                         dropPoint = v.CGPointValue;
                         distance = tmpDistance;
@@ -142,7 +142,7 @@
 + (double)distanceToBestDropPoint:(MADSectionLayoutAttributes *)attr1
                       placedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
     double d = 0.0;
-    bool firstTime = true;
+    BOOL firstTime = YES;
     
     NSArray <NSValue *> *dropPoints;
     dropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: attr1
@@ -154,7 +154,7 @@
             double distanceToDropPoint = MADDistance(pointObj.CGPointValue, attr1.frame.origin);
             
             if (firstTime) {
-                firstTime = false;
+                firstTime = NO;
                 d = distanceToDropPoint;
             } else if (distanceToDropPoint <= d && d > 0.0) {
                 d = distanceToDropPoint;
@@ -207,7 +207,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 - (void)addItem:(MADSectionLayoutAttributes *)item {
     (self.items)[item.objectID] = item;
     self.lastItem = item;
-    self.lastOpperationWasAdditon = true;
+    self.lastOpperationWasAdditon = YES;
 }
 
 - (void)removeItem:(MADSectionLayoutAttributes *)itemToRemove {
@@ -230,7 +230,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     }];
     
     [self.items removeObjectForKey:itemToRemove.objectID];
-    self.lastOpperationWasAdditon = false;
+    self.lastOpperationWasAdditon = NO;
 }
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
@@ -270,7 +270,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     }];
     
     [self.items removeObjectForKey:objectID];
-    self.lastOpperationWasAdditon = false;
+    self.lastOpperationWasAdditon = NO;
 }
 
 - (CGSize)size {
@@ -293,7 +293,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     [MADSectionLayoutManager moveItem:item alreadyPlacedItems:placedItems];
 }
 
-- (bool)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
+- (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
    dropTolerance:(CGFloat)tolerance {
     return [MADSectionLayoutManager moveItem: item toNearestPointInGroup: dropPoints
                                dropTolerance: tolerance];
@@ -313,7 +313,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     }
     
     NSArray *allPotentalDropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: placedItem withAttributes: allValues];
-    bool anchored = [self moveItem:placedItem toNearestPointInGroup:allPotentalDropPoints dropTolerance:24.0000f];
+    BOOL anchored = [self moveItem:placedItem toNearestPointInGroup:allPotentalDropPoints dropTolerance:24.0000f];
     if (!anchored) {
         anchored = [placedItem moveOnScreen];
     }
@@ -326,19 +326,19 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     NSPredicate *unplaced = [NSPredicate predicateWithFormat:formatString, placedItem];
     NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:unplaced];
     
-    bool positionItems = true;
+    BOOL positionItems = YES;
     while (positionItems) {
     
         NSArray *placedNow = [self positionUnplacedItems:unplacedItems aroundPlacedItems:placedItems];
         [placedItems setArray:placedNow];
-        positionItems = false;
+        positionItems = NO;
         
         static NSString * const format = @"NOT objectID IN %@.objectID";
         NSPredicate *filterPlacedItems = [NSPredicate predicateWithFormat:format, placedItems];
         NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:filterPlacedItems];
         for (MADSectionLayoutAttributes *item in placedItems) {
             if ([item intersectsAnItemInArray:unplacedItems]) {
-                positionItems = true;
+                positionItems = YES;
                 break;
             }
         }
@@ -359,7 +359,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         }
     }
     
-    bool stillPlacing = true;
+    BOOL stillPlacing = YES;
     while (stillPlacing) {
 
         if ((stillPlacing = (unplacedOverlapping.count > 0))) {

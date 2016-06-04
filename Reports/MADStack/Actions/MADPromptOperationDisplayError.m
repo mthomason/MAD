@@ -15,10 +15,10 @@ static NSString * const TextYes = @"Dismiss";
 
 @interface MADPromptOperationDisplayError ()
 
-    @property (nonatomic, readwrite, assign) bool result;
+    @property (nonatomic, readwrite, assign) BOOL result;
     @property (nonatomic, copy) NSError *error;
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
 
 @end
 
@@ -49,7 +49,7 @@ static NSString * const TextYes = @"Dismiss";
         _tagDependency = tagDependency;
         _viewController = viewController;
         _error = error.copy;
-        _result = false;
+        _result = NO;
         MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
     }
@@ -112,8 +112,8 @@ static NSString * const TextYes = @"Dismiss";
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationDisplayError * __strong sself = weakSelf;
-        sself.result = true;
-        sself.alertDisplayed = true;
+        sself.result = YES;
+        sself.alertDisplayed = YES;
         defer(^{
             [sself performSelectorInBackground:@selector(finish) withObject:nil];
         });

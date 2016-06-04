@@ -29,27 +29,27 @@
 @implementation MTDataTableVirtual
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
@@ -199,7 +199,7 @@
     for (NSString *fieldKey in self.columnKeys) {
         NSArray *dataInColumn = self.columns[fieldKey];
 // FIXME: what is this?
-        NSAssert(false, @"Remove after testing this warning.");
+        NSAssert(NO, @"Remove after testing this warning.");
         id objectForField = dataInColumn[sortedIndex];
         data[fieldKey] = objectForField;
     }

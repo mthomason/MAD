@@ -24,7 +24,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
     @property (nonatomic, strong) NSMutableArray *internalErrors;
-    @property (nonatomic, assign) bool hasFinishedAlready;
+    @property (nonatomic, assign) BOOL hasFinishedAlready;
 
 @end
 
@@ -94,16 +94,16 @@ static NSString * const MADOperatorSelectorState        = @"state";
     switch (self.state) {
 
         case MADOperationStateInitialized:
-            // If the operation has been cancelled, "isReady" should return true
+            // If the operation has been cancelled, "isReady" should return YES
             return self.cancelled;
 
         case MADOperationStatePending:
-            if (self.cancelled) {                                   // If the operation has been cancelled, "isReady" should return true
+            if (self.cancelled) {                                   // If the operation has been cancelled, "isReady" should return YES
                 return YES;
             } else {
 
                 if (super.ready) { [self evaluateConditions]; }     // If super isReady, conditions can be evaluated
-                return NO;                                          // Until conditions have been evaluated, "isReady" returns false
+                return NO;                                          // Until conditions have been evaluated, "isReady" returns NO
             }
 
         case MADOperationStateReady:
@@ -126,7 +126,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     self.qualityOfService = newValue ? NSQualityOfServiceUserInitiated : NSQualityOfServiceDefault;
 }
 
-- (bool)canTransitionToState:(MADOperationState)target {
+- (BOOL)canTransitionToState:(MADOperationState)target {
     return (target == MADOperationStatePending               && self.state == MADOperationStateInitialized)
         || (target == MADOperationStateEvaluatingConditions  && self.state == MADOperationStatePending)
         || (target == MADOperationStateReady                 && self.state == MADOperationStateEvaluatingConditions)
@@ -259,7 +259,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
      */
 - (void)finish:(NSArray *)errors {
     if (!self.hasFinishedAlready) {
-        self.hasFinishedAlready = true;
+        self.hasFinishedAlready = YES;
         self.state = MADOperationStateFinishing;
         
         NSArray *combinedErrors;

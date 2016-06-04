@@ -139,7 +139,7 @@ void *NewBase64Decode(const char *inputBuffer, size_t length, size_t *outputLeng
 char *NewBase64Encode(
 	const void *buffer,
 	size_t length,
-	bool separateLines,
+	BOOL separateLines,
 	size_t *outputLength) {
 	const unsigned char *inputBuffer = (const unsigned char *)buffer;
 	
@@ -180,7 +180,7 @@ char *NewBase64Encode(
 	const size_t lineLength = separateLines ? INPUT_LINE_LENGTH : length;
 	size_t lineEnd = lineLength;
 	
-	while (true)
+	while (YES)
 	{
 		if (lineEnd > length)
 		{
@@ -279,7 +279,7 @@ char *NewBase64Encode(
 - (NSString *)base64EncodedString {
 	size_t outputLength = 0;
 	char *outputBuffer =
-		NewBase64Encode(self.bytes, self.length, true, &outputLength);
+		NewBase64Encode(self.bytes, self.length, YES, &outputLength);
 	
 	NSString *result =
 		[[NSString alloc]

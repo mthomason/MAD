@@ -462,10 +462,10 @@ CGFloatMin(CGFloat n1, CGFloat n2) {
     return n1 < n2 ? n1 : n2;
 }
 
-static inline bool CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
-static inline bool CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+static inline BOOL CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
+static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
     
-    bool result = false;
+    BOOL result = NO;
 
     //If bounding rects intercept
     if (MAX(p1a.x, p1b.x) >= MIN(p2a.x, p2b.x) &&
@@ -507,7 +507,7 @@ static inline bool CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGP
             s4 = 0;
         
         if ((s1 * s2 <= 0) && (s3 * s4 <= 0))
-            result = true;
+            result = YES;
 
     }
     
@@ -515,11 +515,11 @@ static inline bool CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGP
     
 }
 
-static inline bool CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
-static inline bool
+static inline BOOL CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
+static inline BOOL
 CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
     
-    bool result =  false;
+    BOOL result =  NO;
     
     //If bounding rects intercept
     if (MAX(lineSegment1.start.x, lineSegment1.end.x) >= MIN(lineSegment2.start.x, lineSegment2.end.x) &&
@@ -569,7 +569,7 @@ CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
             straddleTest4 = 0;
         
         if ((straddleTest1 * straddleTest2 <= 0) && (straddleTest3 * straddleTest4 <= 0))
-            result = true;
+            result = YES;
         
     }
     

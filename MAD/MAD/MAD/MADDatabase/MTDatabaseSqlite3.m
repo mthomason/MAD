@@ -50,7 +50,7 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
     sqlite3_stmt *_bulkStatement;
 }
 
-    @property (nonatomic, assign, getter=isOpen) bool open;
+    @property (nonatomic, assign, getter=isOpen) BOOL open;
     @property (nonatomic, strong) MTDatabaseConnectionSqlite3 *databaseConnection;
 
 @end
@@ -66,8 +66,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
-/*static inline bool Sqlite3ResultOK(int result);
-static inline bool Sqlite3ResultOK(int result) {
+/*static inline BOOL Sqlite3ResultOK(int result);
+static inline BOOL Sqlite3ResultOK(int result) {
     return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
 }*/
 
@@ -86,7 +86,7 @@ void sqliteLog(void *foo, const char* statement) {
     if (self = [super init]) {
         _database = NULL;
         _bulkStatement = NULL;
-        _open = false;
+        _open = NO;
     }
     return self;
 }
@@ -102,7 +102,7 @@ void sqliteLog(void *foo, const char* statement) {
     if (!self.isOpen) {
        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
         if (sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK) {
-            sqlite3_extended_result_codes((struct sqlite3 *)_database, true);
+            sqlite3_extended_result_codes((struct sqlite3 *)_database, YES);
             sqlite3_create_collation((struct sqlite3 *)_database, "LSASC",
                                         SQLITE_UTF8, (struct sqlite3 *)_database,
                                         compare_string_utf8_localized_asc_collation);
@@ -119,7 +119,7 @@ void sqliteLog(void *foo, const char* statement) {
             //                                                               andMessage: message];
             //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
         }
-        self.open = true;
+        self.open = YES;
     }
 }
 
@@ -193,9 +193,9 @@ void sqliteLog(void *foo, const char* statement) {
     
     NSString *lowerCaseString = nativeType.lowercaseString;
     
-    bool isInteger = [lowerCaseString rangeOfString:@"int"].location != NSNotFound;
-    bool isText = false;
-    bool isNone = false;
+    BOOL isInteger = [lowerCaseString rangeOfString:@"int"].location != NSNotFound;
+    BOOL isText = NO;
+    BOOL isNone = NO;
     BOOL isReal = NO;
     if (!isInteger) {
         isText = [lowerCaseString rangeOfString:@"char"].location != NSNotFound ||
@@ -357,7 +357,7 @@ void sqliteLog(void *foo, const char* statement) {
     return [MTDatabaseSqlite3 newNativeTypeForDataType:dataType];
 }
 
-- (sqlite3_stmt *)statementForQueryInTransactionSet:(bool)partOfTransactionSet andStatement:(sqlite3_stmt *)statement {
+- (sqlite3_stmt *)statementForQueryInTransactionSet:(BOOL)partOfTransactionSet andStatement:(sqlite3_stmt *)statement {
     return partOfTransactionSet ? _bulkStatement : statement;
 }
 
@@ -397,7 +397,7 @@ void sqliteLog(void *foo, const char* statement) {
                     success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
                     
                 } else {
-                    NSAssert(false, @"What else is there? %s", __PRETTY_FUNCTION__);
+                    NSAssert(NO, @"What else is there? %s", __PRETTY_FUNCTION__);
                 }
                 break;
                 
@@ -414,7 +414,7 @@ void sqliteLog(void *foo, const char* statement) {
                 break;
                 
             default:
-                NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
+                NSAssert(NO, @"This is going to end badly.  Only binding blobs right now.");
                 break;
                 
         }
@@ -433,7 +433,7 @@ void sqliteLog(void *foo, const char* statement) {
                    database:(void * /* sqlite3 * */)_database
         queryBinaryBindings:(NSArray *)queryBinaryBindings
              queryFieldKeys:(NSArray *)queryFieldKeys
-  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
+  queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet {
 
     //NSLog(@"SQL: %@", queryString);
     BOOL success = YES;
@@ -553,9 +553,9 @@ void sqliteLog(void *foo, const char* statement) {
                             MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                             dataColumn.type = columnType;
                             
-                            dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
-                            dataColumn.autoIncrement = (pAutoinc == NULL) ? false : *pAutoinc;
-                            dataColumn.notNull = (pNotNull == NULL) ? false : *pNotNull;
+                            dataColumn.primaryKey = (pPrimaryKey == NULL) ? NO : *pPrimaryKey;
+                            dataColumn.autoIncrement = (pAutoinc == NULL) ? NO : *pAutoinc;
+                            dataColumn.notNull = (pNotNull == NULL) ? NO : *pNotNull;
                             [dataTable addColumn:dataColumn];
                             dataColumn = nil;
                         }
@@ -671,7 +671,7 @@ void sqliteLog(void *foo, const char* statement) {
             break;
         }
         default:
-            NSAssert(false, @"Unhandled case");
+            NSAssert(NO, @"Unhandled case");
             break;
     }
     
@@ -750,7 +750,7 @@ void sqliteLog(void *foo, const char* statement) {
         case MADDataTypeDateTime:
         case MADDataTypeGeometry:
         default: {
-            //NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            //NSAssert(NO, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
@@ -803,7 +803,7 @@ void sqliteLog(void *foo, const char* statement) {
             NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheDeleteAllFromTable object:queryDefination];
             NSError * __autoreleasing error = NULL;
-            bool success = false;
+            BOOL success = NO;
             success = [self executeQuery:dropTable withError:&error];
         }
         
@@ -811,7 +811,7 @@ void sqliteLog(void *foo, const char* statement) {
     }];
     dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
 
-    bool success = false;
+    BOOL success = NO;
     NSError * __autoreleasing errorQuerySyncMode = NULL;
     MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncOff alloc] init];
     success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
@@ -830,7 +830,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (void)endBulkInsert {
 
-    bool success = false;
+    BOOL success = NO;
 
     NSError * __autoreleasing errorCacheEndTransaction = NULL;
     MTQuery * __autoreleasing query = [[MTQueryCacheEndTransaction alloc] init];

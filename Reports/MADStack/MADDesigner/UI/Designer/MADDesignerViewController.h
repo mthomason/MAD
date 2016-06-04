@@ -22,7 +22,7 @@
     
     @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
-    @property (nonatomic, assign) bool hidesStatusBar;
+    @property (nonatomic, assign) BOOL hidesStatusBar;
 
     - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 

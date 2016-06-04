@@ -158,12 +158,12 @@
 }
 
 - (void)endSuspensionOfUpdatesDueToContextChanges {
-    _suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
+    _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
 }
 
-- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(bool)suspend {
+- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(BOOL)suspend {
     if (suspend) {
-        _suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
+        _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
     } else {
         [self performSelector:@selector(endSuspensionOfUpdatesDueToContextChanges) withObject:0 afterDelay:0];
     }

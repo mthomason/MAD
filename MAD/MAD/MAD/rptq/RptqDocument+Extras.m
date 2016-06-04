@@ -140,7 +140,7 @@
             return [RptqDocumentSection groupFooterForLevel: level query: self.defaultDatabase.defaultQuery];
             break;
         default:
-            NSAssert(false, @"Unknown type");
+            NSAssert(NO, @"Unknown type");
             return nil;
             break;
     }

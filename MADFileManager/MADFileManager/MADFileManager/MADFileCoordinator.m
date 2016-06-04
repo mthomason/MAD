@@ -47,27 +47,27 @@
 }
 
 - (void)startQuery {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (void)stopQuery {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (void)removeFileAtURL:(NSURL *)URL {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (void)duplicateFileAtURL:(NSURL *)URL {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
                extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
 }
 - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
                     fileGroup:(NSString *)fileGroup {
-    MADAssert(false, @"Must subclass.");
+    MADAssert(NO, @"Must subclass.");
     return NO;
 }
 

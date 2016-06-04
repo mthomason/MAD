@@ -33,9 +33,9 @@ static inline UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, 
 
     @property (nonatomic, readonly) NSString *hexStringValue;
 
-    @property (nonatomic, readonly) bool canProvideRGBComponents;
-    @property (nonatomic, readonly) bool usesMonochromeColorspace;
-    @property (nonatomic, readonly) bool usesRGBColorspace;
+    @property (nonatomic, readonly) BOOL canProvideRGBComponents;
+    @property (nonatomic, readonly) BOOL usesMonochromeColorspace;
+    @property (nonatomic, readonly) BOOL usesRGBColorspace;
     @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
 
     @property (nonatomic, readonly) Byte redByte;

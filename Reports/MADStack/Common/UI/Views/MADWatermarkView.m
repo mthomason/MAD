@@ -35,8 +35,8 @@ static inline CGFloat LogoPointOriginXOffset(CGFloat marginWidth, CGSize string)
     return (marginWidth / 2.0000f - string.width / 2.0000f) - 66.0000f;
 }
 
-static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, bool moveLeft);
-static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, bool moveLeft) {
+static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, BOOL moveLeft);
+static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, BOOL moveLeft) {
     return ((columnCounter * 2) + 1) * marginWidth + columnCounter * string.width +
     (LogoPointOriginXOffset(marginWidth, string) * (moveLeft ? -1 : 2));
 }
@@ -82,8 +82,8 @@ static CGRect LRect2(CGPoint origin, CGRect (*logoRect)[2], NSUInteger counter, 
 }
 
 
-static bool ShiftDisplay(NSUInteger counter);
-static bool ShiftDisplay(NSUInteger counter) {
+static BOOL ShiftDisplay(NSUInteger counter);
+static BOOL ShiftDisplay(NSUInteger counter) {
     return counter % 2 == 0;
 }
 
@@ -94,7 +94,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 }
 
 @interface MADWatermarkView() {
-    bool _drawn;
+    BOOL _drawn;
 }
 
 @end
@@ -144,7 +144,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     if (self = [super initWithFrame:frame]) {
         UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
         self.backgroundColor =  bgColor;
-        _drawn = false;
+        _drawn = NO;
     }
     return self;
 }
@@ -152,7 +152,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 /*- (void)layoutSubviews {
     [super layoutSubviews];
     if (!_drawn) {
-        _drawn = true;
+        _drawn = YES;
         [MADWatermarkView drawBackground:self.frame onView:&self];
     }
 }*/

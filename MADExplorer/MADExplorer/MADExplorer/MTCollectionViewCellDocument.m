@@ -49,7 +49,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     @property (nonatomic, readwrite, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
     @property (nonatomic, readwrite, assign) BOOL wobbling;
-    @property (nonatomic, readwrite, assign) bool addedGestures;
+    @property (nonatomic, readwrite, assign) BOOL addedGestures;
 
 @end
 
@@ -103,7 +103,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)commonInitWithFrame:(CGRect)frame {
-    _addedGestures = false;
+    _addedGestures = NO;
     UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:frame];
     self.selectedBackgroundView = selectedBackground;
 }
@@ -135,11 +135,11 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
     if (!_addedGestures) {
         SEL actionEdit = @selector(activateEditMode:);
-        bool gotActionEdit = false, gotActionRename = false;
+        BOOL gotActionEdit = NO, gotActionRename = NO;
         SEL actionRename = @selector(rename:);
         for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
-            if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = true;
-            if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = true;
+            if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = YES;
+            if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = YES;
             if (gotActionEdit && gotActionRename) break;
         }
         
@@ -159,7 +159,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
             [self.labelTitle addGestureRecognizer:tap];
             self.tapGestureRecognizer = tap;
         }
-        _addedGestures = true;
+        _addedGestures = YES;
     }
     
     /*

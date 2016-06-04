@@ -94,8 +94,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     @property (nonatomic, weak) MTReportFormatter *reportFormatter;
     @property (nonatomic, weak) MADDataTableAggregate *dataTable;
 
-    @property (nonatomic, assign) bool showWaterMark;
-    @property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
+    @property (nonatomic, assign) BOOL showWaterMark;
+    @property (nonatomic, assign) BOOL accessibilityCacheNeedsUpdate;
 
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
     @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
@@ -151,8 +151,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                                    DISPATCH_QUEUE_SERIAL);
     self.textRepresentationQueue =  queue;
     
-    self.showWaterMark = false;
-    self.accessibilityCacheNeedsUpdate = false;
+    self.showWaterMark = NO;
+    self.accessibilityCacheNeedsUpdate = NO;
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
 
@@ -551,7 +551,7 @@ END_DrawSection:;
     if (!self.accessibilityCacheNeedsUpdate) return;
     NSArray *items = [self accessibilityDrawingObjectsOnPageAtIndex:self.accessibilityCurrentPageIndex inPageRect:self.accessibilityCurrentPageRect];
     self.accessibilityItems = [NSArray arrayWithArray:items];
-    self.accessibilityCacheNeedsUpdate = false;
+    self.accessibilityCacheNeedsUpdate = NO;
 }*/
 /*
 NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLine *  _Nonnull obj1, MADAccessibilityLine *  _Nonnull obj2) {

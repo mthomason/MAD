@@ -52,7 +52,7 @@ typedef NS_ENUM(short, MTQuerySections) {
 
 @interface MADQueryViewControllerLayout : NSObject
 
-    - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(bool)reportingEnabled;
+    - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(BOOL)reportingEnabled;
     @property (nonatomic, readonly, assign) short count;
     @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewControllerLayoutSection *> *sections;
 

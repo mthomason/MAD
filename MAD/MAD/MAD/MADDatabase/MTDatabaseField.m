@@ -15,8 +15,8 @@
 #import <Foundation/NSString.h>
 #import <MADFoundation/MADDataType.h>
 
-static inline bool isDataTypeNumeric(MADDataType type);
-static inline bool isDataTypeNumeric(MADDataType type) {
+static inline BOOL isDataTypeNumeric(MADDataType type);
+static inline BOOL isDataTypeNumeric(MADDataType type) {
     switch (type) {
         case MADDataTypeBit:
         case MADDataTypeFloat:
@@ -29,7 +29,7 @@ static inline bool isDataTypeNumeric(MADDataType type) {
         case MADDataTypeLong:
         case MADDataTypeLongLong:
         case MADDataTypeShort:
-            return true;
+            return YES;
             break;
         case MADDataTypeBlob:
         case MADDataTypeDate:
@@ -44,7 +44,7 @@ static inline bool isDataTypeNumeric(MADDataType type) {
         case MADDataTypeUnknown:
         case MADDataTypeVarChar:
         default:
-            return false;
+            return NO;
             break;
     }
 }

@@ -14,7 +14,7 @@
 @interface MADRefreshOperationInitalizeMainDataTable ()
 
     @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, assign) bool success;
+    @property (nonatomic, assign) BOOL success;
 
 @end
 
@@ -27,7 +27,7 @@
 - (instancetype)initWithDocument:(MADocument *)document {
     if (self = [super init]) {
         _document = document;
-        _success = false;
+        _success = NO;
     }
     return self;
 }

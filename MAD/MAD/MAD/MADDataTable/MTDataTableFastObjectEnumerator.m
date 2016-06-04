@@ -32,7 +32,7 @@
     sqlite3_stmt *_statement;
 }
 
-    @property (atomic, assign) bool empty;
+    @property (atomic, assign) BOOL empty;
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
 

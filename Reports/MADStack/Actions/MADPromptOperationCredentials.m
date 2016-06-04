@@ -29,17 +29,17 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, copy) NSString *usernameKey;
     @property (nonatomic, copy) NSString *passwordKey;
 
-    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
 
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) MADCredential *credentials;
 
-    @property (nonatomic, readwrite, assign) bool bypass;
-    @property (nonatomic, readwrite, assign) bool userContinue;
-    @property (nonatomic, readwrite, assign) bool displayingPrompt;
+    @property (nonatomic, readwrite, assign) BOOL bypass;
+    @property (nonatomic, readwrite, assign) BOOL userContinue;
+    @property (nonatomic, readwrite, assign) BOOL displayingPrompt;
 
-    @property (nonatomic, readwrite, assign) bool gotCredentials;
-    @property (nonatomic, readwrite, assign) bool result;
+    @property (nonatomic, readwrite, assign) BOOL gotCredentials;
+    @property (nonatomic, readwrite, assign) BOOL result;
 
 @end
 
@@ -59,10 +59,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _passwordKey = passwordKey.copy;
         _viewController = viewController;
         _source = none;
-        _result = false;
-        _displayingPrompt = false;
-        _bypass = false;
-        _gotCredentials = false;
+        _result = NO;
+        _displayingPrompt = NO;
+        _bypass = NO;
+        _gotCredentials = NO;
         MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
         
@@ -85,7 +85,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (void)execute {
     NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
-    self.displayingPrompt = true;
+    self.displayingPrompt = YES;
 
     NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
     NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
@@ -94,7 +94,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     __block NSString *password;
     __block NSString *username;
-    __block bool success = false;
+    __block BOOL success = NO;
     
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
@@ -118,15 +118,15 @@ static NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *credentials = nil;
         if (username != nil && password != nil) {
             credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-            strongself.gotCredentials = true;
+            strongself.gotCredentials = YES;
             strongself.source = credential_prompt;
         }
-        [strongself finish:true credentials:credentials];
+        [strongself finish:YES credentials:credentials];
     }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel handler: ^(UIAlertAction *action) {
         password = nil; username = nil;
-        success = false;
+        success = NO;
         [weakself userCancel];
     }];
     [alertController addAction:actionAlertOK];
@@ -141,21 +141,21 @@ static NSString * const MADButtonCancel                = @"Cancel";
     }];
 }
 
-- (void)finish:(bool)success credentials:(MADCredential *)credentials {
-    self.alertDisplayed = true;
+- (void)finish:(BOOL)success credentials:(MADCredential *)credentials {
+    self.alertDisplayed = YES;
     self.userContinue = success;
     self.credentials = credentials;
-    self.result = true;
+    self.result = YES;
     defer(^{
         [self performSelectorInBackground:@selector(finish) withObject:nil];
     });
 }
 
 - (void)userCancel {
-    self.alertDisplayed = true;
-    self.userContinue = false;
+    self.alertDisplayed = YES;
+    self.userContinue = NO;
     self.credentials = nil;
-    self.result = false;
+    self.result = NO;
     defer(^{
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
         [self performSelectorInBackground:@selector(finishWithError:) withObject:error];

@@ -85,11 +85,11 @@ static const CGFloat PaddingSize = 5.00000f;
 }
 
 - (IBAction)toggleOpen:(id)sender {
-    [self toggleOpenWithUserAction:true];
+    [self toggleOpenWithUserAction:YES];
 }
 
 
-- (void)toggleOpenWithUserAction:(bool)userAction {
+- (void)toggleOpenWithUserAction:(BOOL)userAction {
     
     (self.disclosureButton).selected = !self.disclosureButton.isSelected;
     

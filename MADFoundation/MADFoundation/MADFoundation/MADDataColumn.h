@@ -32,9 +32,9 @@ typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataC
     @property (nonatomic, copy)     NSString    *caption;
     @property (nonatomic, copy)     NSString    *fieldName;
 
-    @property (nonatomic, assign, getter = isPrimaryKey) bool primaryKey;
-    @property (nonatomic, assign, getter = isNotNull) bool notNull;
-    @property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;
+    @property (nonatomic, assign, getter = isPrimaryKey) BOOL primaryKey;
+    @property (nonatomic, assign, getter = isNotNull) BOOL notNull;
+    @property (nonatomic, assign, getter = isAutoIncrement) BOOL autoIncrement;
 
     - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
     - (instancetype)initWithPlist:(NSDictionary *)plist;

@@ -222,7 +222,7 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
 
 @implementation MADQueryViewControllerLayout
 
-- (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(bool)reportingEnabled {
+- (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(BOOL)reportingEnabled {
 
     if (self = [super init]) {
         

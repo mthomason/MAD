@@ -128,7 +128,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     if (self = [super init]) {
         self.options = options;
         self.layout = layout;
-        self.didRefresh = false;
+        self.didRefresh = NO;
     }
     return self;
 }
@@ -233,7 +233,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 #pragma mark - Reading cached data
 
-- (bool)cachedIndexesExist {
+- (BOOL)cachedIndexesExist {
     return _reportIndexes.count > 0 && _reportLayout.count > 0;
 }
 
@@ -254,7 +254,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 }
 
 - (void)loadFromCacheWithSize:(CGSize)printableSize {
-    self.didRefresh = false;
+    self.didRefresh = NO;
     self.page.layoutSize = printableSize;
     [self loadLayoutAndIndexesFromCache];
 }
@@ -537,13 +537,13 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     
     RptqDocumentSection *detailSection = self.machineState.document.hasDetailSection;
     
-    bool firstRow = true;
+    BOOL firstRow = YES;
         
     NSArray *sortedQueryGroups = [self.layout.mainQuery.queryObject sortedQueryGroups];
     self.sortedQueryGroups = sortedQueryGroups.copy;
     
-    bool rowIdOnly = true;
-    bool calculatedRowId = false;
+    BOOL rowIdOnly = YES;
+    BOOL calculatedRowId = NO;
 
     id lastResultRow = nil;
 
@@ -557,9 +557,9 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
             //Get row id
             if (!calculatedRowId) {
                 if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                    rowIdOnly = false;
+                    rowIdOnly = NO;
                 }
-                calculatedRowId = true;
+                calculatedRowId = YES;
             }
             
             self.machineState.detailRowIdLast = self.machineState.detailRowId;
@@ -571,7 +571,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
             
             //Display new footers if needed.
             if (firstRow) {
-                firstRow = false;
+                firstRow = NO;
             } else {
                 [self displayNewGroupFootersIfNeeded: keyValuesForComparson
                                        andLastValues: self.lastComparsonValues];
@@ -635,16 +635,16 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 }
 
 // FIXME: Make sure paper rect is passed in to the software
-- (bool)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
+- (BOOL)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
     
-    bool newPageCreated = false;
+    BOOL newPageCreated = NO;
     
     CGFloat pageFooterSectionHeight = [self heightForSectionWithObjectID:self.machineState.document.hasPageFooterSection.objectID];
     
     if (HeightWithNextItem(self.machineState.counterHeightUsedCurrentPage, nextItemHeight, pageFooterSectionHeight) >
         PrintableHeightForPage(self.page)) {
         
-        newPageCreated = true;
+        newPageCreated = YES;
         [self forcePageBreakWithFooterHeight:pageFooterSectionHeight];
     }
 

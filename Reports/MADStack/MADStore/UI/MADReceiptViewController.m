@@ -166,7 +166,7 @@
     [self.delegate viewControllerDidFinish:self];
 }
 
-//NSInteger indexGivenItem(NSInteger i, bool charterMember) {
+//NSInteger indexGivenItem(NSInteger i, BOOL charterMember) {
 //    return charterMember ? (i) : i;
 //}
 

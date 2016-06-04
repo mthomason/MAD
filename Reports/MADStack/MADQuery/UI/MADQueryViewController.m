@@ -124,7 +124,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         MTQueryBuilderPredicateFormatDelegate,
         MTTabBarImageProtocol>
 
-    @property (nonatomic, assign) bool suspendAutomaticTrackingOfChangesInManagedObjectContext;
+    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
@@ -577,7 +577,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     
 }
 
-- (void)sectionLayoutDidUpdateVisibility:(bool)isVisible {
+- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     MADocument *document = self.document;
     [document.activeDocumentModel setVisibility: isVisible
                                 forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
@@ -585,7 +585,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
-          newPageAfter:(bool)newPageAfter {
+          newPageAfter:(BOOL)newPageAfter {
     MADocument *document = self.document;
     [document.activeDocumentModel setNewPageAfter: newPageAfter
                                   forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
@@ -642,9 +642,9 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   false];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
 
     [self performFetchGroups];
 }
@@ -657,9 +657,9 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
     [self.document addQuerySelectTableForSchemeTableWithObjectID:       objectID];
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   false];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
 
     [self performFetchTables];
 }
@@ -1422,7 +1422,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
     NSNumber *tables = [[NSNumber alloc] initWithShort: MTQuerySectionsTables];
     NSNumber *resultCount = [[NSNumber alloc] initWithShort: MTQuerySectionsNumberOfQueryResults];
 
-    bool reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+    BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
     switch (numberOfTables) {
         case 0: { //There are three configurations for the table.  These configurations depend
                     //on the number of schemas in the query: zero, one, or more than one.
@@ -1687,14 +1687,14 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         
             RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
 
-            bool deleted = false;
+            BOOL deleted = NO;
             if ([predicateToRemove.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
 
                 [context deleteObject:predicateToRemove];
                 
                 NSIndexPath *deleteCellAtIndex = predicateIndexPath.copy;
                 [cellsToDelete addObject:deleteCellAtIndex];
-                deleted = true;
+                deleted = YES;
             }
             
             if (!deleted) {
@@ -1746,7 +1746,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 }
 
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
+    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     
@@ -1761,7 +1761,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
         
         NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
         
-        bool reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+        BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
         MADQueryViewControllerLayout *oldQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables      reportingEnabled:reportingEnabled];
         MADQueryViewControllerLayout *newQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables - 1  reportingEnabled:reportingEnabled];
 
@@ -1867,7 +1867,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
                 
                 [self ingnoreManagedObjectContextChanges:private];
                 
-                self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
+                self.suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
                 
             }];
         }

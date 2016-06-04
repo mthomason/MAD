@@ -26,7 +26,7 @@
 
 @interface MADCreateDocumentOperationFirstTimeSetup ()
 
-    @property (nonatomic, assign) bool success;
+    @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
 @end
@@ -44,7 +44,7 @@
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
-        self.success = false;
+        self.success = NO;
     }
     return self;
 }

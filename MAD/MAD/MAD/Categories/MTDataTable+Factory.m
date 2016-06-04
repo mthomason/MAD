@@ -22,7 +22,7 @@
     NSNumber *dataTableType = parameters[keyDataTableType];
     NSNumber *dataTableObjectId = parameters[keyDataTableObjectId];
     
-    bool objectIdSet = false;
+    BOOL objectIdSet = NO;
     
     //Default type is virtual. If there is no object id, then type MUST be virtual.  That's
     //  because we won't know where to store it.
@@ -33,13 +33,13 @@
     }
     
     if (dataTableObjectId != nil) {
-        objectIdSet = true;
+        objectIdSet = YES;
         objectId = dataTableObjectId.unsignedIntegerValue;
     }
     if (objectIdSet) {
         return [MTDataTable newDataTableOfType:type withObjectID:objectId];
     } else {
-        NSAssert(false, @"Not implemented.");
+        NSAssert(NO, @"Not implemented.");
         return nil;
     }
 }
@@ -57,7 +57,7 @@
             break;
         }
         default:
-            NSAssert(false, @"Not implemented.");
+            NSAssert(NO, @"Not implemented.");
             break;
     }
     return result;

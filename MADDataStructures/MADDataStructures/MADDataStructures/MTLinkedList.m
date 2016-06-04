@@ -33,9 +33,9 @@
 
 - (NSUInteger)count { return self.list.count; }
 
-- (bool)isNext { return (self.location + 1 < self.count); }
+- (BOOL)isNext { return (self.location + 1 < self.count); }
 
-- (bool)isPrevious { return (self.location - 1 < self.count && self.location > 0); }
+- (BOOL)isPrevious { return (self.location - 1 < self.count && self.location > 0); }
 
 - (void)insert:(id)object {
     if (object != nil) {

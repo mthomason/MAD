@@ -22,7 +22,7 @@
     @property (nonatomic, weak, readwrite) MTVertex *destination;
 
     @property (nonatomic, strong) NSNumber *weight;
-    @property (nonatomic, readwrite, assign, getter=isDirected) bool directed;
+    @property (nonatomic, readwrite, assign, getter=isDirected) BOOL directed;
     @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end
@@ -48,7 +48,7 @@
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
     if (self = [super initWithObject:object]) {
 
-        _directed = true;
+        _directed = YES;
         
         self.origin = vertex1;
         self.destination = vertex2;

@@ -26,7 +26,7 @@
 - (instancetype)initWithQuery:(MTQuery *)query {
     if (self = [super init]) {
         self.query = query;
-        self.didRefresh = false;
+        self.didRefresh = NO;
     }
     return self;
 }
