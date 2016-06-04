@@ -70,8 +70,10 @@ static NSString * const SqlDelimitorObject = @", %@";
     return colmunNames;
 }
 
-- (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns
-                      andTableName:(NSString *)tableName forDatabase:(MTDatabase *)database {
+- (instancetype)initWithColumnKeys:(NSArray *)columnKeys
+                           columns:(NSDictionary *)columns
+                      andTableName:(NSString *)tableName
+                       forDatabase:(MTDatabase *)database {
 
     if (self = [super initWithObject:nil]) {
     
@@ -171,7 +173,8 @@ static NSString * const SqlDelimitorObject = @", %@";
         columnCounter++;
     }
     
-    NSString *result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, self.sqlPreProcessColumnNames, values];
+    NSString *result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)",
+                        self.tableName, self.sqlPreProcessColumnNames, values];
     return result;
 }
 

@@ -397,7 +397,7 @@ void sqliteLog(void *foo, const char* statement) {
                     success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
                     
                 } else {
-                    NSAssert(NO, @"What else is there? %s", __PRETTY_FUNCTION__);
+                    //NSAssert(NO, @"What else is there? %s", __PRETTY_FUNCTION__);
                 }
                 break;
                 

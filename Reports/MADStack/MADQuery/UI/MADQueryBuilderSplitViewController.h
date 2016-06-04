@@ -13,12 +13,13 @@
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
-@class MADQueryViewController,
-        MADQueryVisualizationViewController,
-        MADocument;
+@class MADQueryVisualizationViewController;
+@class MADQueryViewController;
+@class MADocument;
 
 @interface MADQueryBuilderSplitViewController : MADSplitViewController
-    <MTViewControllerProtocol, MADViewControllerDocumentProtocol>
+    <MTViewControllerProtocol,
+        MADViewControllerDocumentProtocol>
 
     + (instancetype)newQueryBuilderSplitViewController;
 

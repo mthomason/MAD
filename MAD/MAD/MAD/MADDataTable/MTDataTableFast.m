@@ -391,11 +391,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSString *tableName = [self tableName];
         NSDictionary *columns = self.columns;
         NSArray *columKeys = self.columnKeys;
-        NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:columKeys, keyKeys,
-                                                                            columns, keyColumns,
-                                                                            row, keyData,
-                                                                            tableName, keyTableName,
-                                                                            nil];
+        
+        NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    columKeys,  keyKeys,
+                                    columns,    keyColumns,
+                                    row,        keyData,
+                                    tableName,  keyTableName, nil];
 
         MTQuery *query = self.bulkInsertLoop ? self.bulkInsertQuery :
                                                [[MTQueryCacheAddRow alloc] initWithObject:parameters];
@@ -633,10 +634,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     NSDictionary * result = nil;
     NSString *tableName = [self tableName].copy;
+    
     NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
     NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
     NSNumber *keyTableNmae = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
     NSNumber *keyFieldDef = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
+    
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     cacheId, keyRowId,
                                     self.columnKeys, keyFieldKey,

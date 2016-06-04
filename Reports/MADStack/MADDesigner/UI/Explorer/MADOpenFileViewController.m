@@ -1345,7 +1345,8 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 - (void)searchBar:(UISearchBar *)searchBar
     selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
+- (void)searchBar:(UISearchBar *)searchBar
+    textDidChange:(NSString *)searchText { }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
 

@@ -56,9 +56,8 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
 @interface MTQueryCacheAggregateFunction ()
 
     @property (nonatomic, strong) NSString *tableName;
-    @property (nonatomic, strong) NSString *columnName;
     @property (nonatomic, strong) NSString *columnKey;
-    @property (nonatomic, strong) NSArray *whereClause;
+    @property (nonatomic, strong) NSArray *predicateParamters;
     @property (nonatomic, strong) NSArray *rowids;
     @property (nonatomic, assign) MTAggregateGroupByType groupByType;
     @property (nonatomic, assign) MTAggregateFunctionType functionType;
@@ -73,33 +72,28 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *keyRowIds = @(MADQueryCacheAggregateFunctionParamatersRowids);
+        NSNumber *keyRowIds = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateRowids];
         NSArray *rowids = object[keyRowIds];
         self.rowids = rowids;
        
-        NSNumber *keyFieldDescriptors = @(MADQueryCacheAggregateFunctionParamatersFieldDescriptors);
-        NSDictionary *fieldDescriptors = [NSDictionary dictionaryWithDictionary:object[keyFieldDescriptors]];
-        self.columns = fieldDescriptors;
+        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateFieldDescriptors];
+        self.columns = object[keyFieldDescriptors];
         
-        NSNumber *keyTableName = @(MADQueryCacheAggregateFunctionParamatersTableName);
-        NSString *tableName = [NSString stringWithString:object[keyTableName]];
-        self.tableName = tableName;
+        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateTableName];
+        self.tableName = object[keyTableName];
         
-        NSNumber *keyGroupByType = @(MADQueryCacheAggregateFunctionParamatersGroupByType);
-        NSNumber *groupBy = object[keyGroupByType];
-        self.groupByType = groupBy.unsignedIntegerValue;
+        NSNumber *keyGroupByType = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateGroupByType];
+        self.groupByType = ((NSNumber *)object[keyGroupByType]).shortValue;
         
-        NSNumber *keyAggregateFunctionType = @(MADQueryCacheAggregateFunctionParamatersAggregateFunctionType);
-        NSNumber *functionType = object[keyAggregateFunctionType];
-        self.functionType = functionType.unsignedIntegerValue;
+        NSNumber *keyAggregateFunctionType = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateAggregateFunctionType];
+        self.functionType = ((NSNumber *)object[keyAggregateFunctionType]).shortValue;
         
-        NSNumber *keyParametersFieldKey = @(MADQueryCacheAggregateFunctionParamatersFieldKey);
-        NSString *columnKey = [NSString stringWithString:object[keyParametersFieldKey]];
+        NSNumber *keyParametersFieldKey = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateFieldKey];
+        NSString *columnKey = object[keyParametersFieldKey];
         self.columnKey = columnKey;
         
-        NSNumber *keyWhere = @(MADQueryCacheAggregateFunctionParamatersPredicates);
-        NSArray *whereClause = [NSArray arrayWithArray:object[keyWhere]];
-        self.whereClause = whereClause;
+        NSNumber *keyWhere = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregatePredicates];
+        self.predicateParamters = object[keyWhere];
         
     }
     return self;
@@ -107,15 +101,15 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT %s(%@) FROM %@",
+    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT %s(%@) FROM %@",
                             functionName(self.functionType), self.columnKey, self.tableName];
-
+    NSString *whereClause;
     if (self.groupByType == MTAggregateGroupByTypePage) {
-        [sql appendString:[self whereClauseWithRowIds:self.rowids]];
+        whereClause = [self whereClauseWithRowIds:self.rowids];
     } else {
-        [sql appendString:[self whereClauseWithParameters:self.whereClause]];
+        whereClause = [self whereClauseWithParameters:self.predicateParamters];
     }
-
+    [sql appendString: whereClause];
     return sql;
 }
 

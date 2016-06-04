@@ -269,6 +269,9 @@
 		4C994F511BE485F80058627A /* MADDocumentObjectType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F501BE485F80058627A /* MADDocumentObjectType.m */; };
 		4C9A35B01CEDF57C0048B71E /* madtar.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A35AE1CEDF57C0048B71E /* madtar.c */; };
 		4C9A35B11CEDF57C0048B71E /* madtar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9A35AF1CEDF57C0048B71E /* madtar.h */; };
+		4C9FB2731D031E3000A1B291 /* MADParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FB2721D031E3000A1B291 /* MADParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C9FB2761D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FB2741D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h */; };
+		4C9FB2771D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FB2751D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m */; };
 		4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA0C6C81CA56AC000222B8D /* MADNotificationProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */; };
 		4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C91CA56CAD00222B8D /* MADProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -723,6 +726,9 @@
 		4C9A35AE1CEDF57C0048B71E /* madtar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = madtar.c; sourceTree = "<group>"; };
 		4C9A35AF1CEDF57C0048B71E /* madtar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = madtar.h; sourceTree = "<group>"; };
 		4C9A35BE1CEF01F70048B71E /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = ../../../../../usr/lib/libiconv.2.dylib; sourceTree = "<group>"; };
+		4C9FB2721D031E3000A1B291 /* MADParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADParameters.h; path = MAD/MADParameters.h; sourceTree = "<group>"; };
+		4C9FB2741D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADParameters+QueryCacheAggregate.h"; path = "MAD/MADParameters+QueryCacheAggregate.h"; sourceTree = "<group>"; };
+		4C9FB2751D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADParameters+QueryCacheAggregate.m"; path = "MAD/MADParameters+QueryCacheAggregate.m"; sourceTree = "<group>"; };
 		4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNotificationProgress.h; path = MAD/MADNotificationProgress.h; sourceTree = "<group>"; };
 		4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNotificationProgress.m; path = MAD/MADNotificationProgress.m; sourceTree = "<group>"; };
 		4CA0C6C91CA56CAD00222B8D /* MADProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADProgress.h; path = MAD/MADProgress.h; sourceTree = "<group>"; };
@@ -1052,6 +1058,7 @@
 		4C401D701BAE3BC100BAE5FC /* MADQuery */ = {
 			isa = PBXGroup;
 			children = (
+				4C9FB2781D03774C00A1B291 /* MADQueryCache */,
 				4CEFDD0F1CF5AEA80092C148 /* Subclasses */,
 				4CEFDCF61CF5A8710092C148 /* MADQueryType.h */,
 				4C401D711BAE3BD500BAE5FC /* MTQuery.h */,
@@ -1260,6 +1267,7 @@
 				4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */,
 				4C47543A1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.m */,
 				4CBBA9481CFE94FB0033F63B /* MADActivityItemProviderPdfDelegate.h */,
+				4C9FB2721D031E3000A1B291 /* MADParameters.h */,
 			);
 			name = MAD;
 			sourceTree = "<group>";
@@ -1291,6 +1299,27 @@
 				4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */,
 			);
 			name = MADReportObjectRepresentation;
+			sourceTree = "<group>";
+		};
+		4C9FB2781D03774C00A1B291 /* MADQueryCache */ = {
+			isa = PBXGroup;
+			children = (
+				4CEFDCFE1CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h */,
+				4CEFDCFF1CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h */,
+				4CEFDD001CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h */,
+				4CEFDD011CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h */,
+				4CEFDD021CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h */,
+				4CEFDD031CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h */,
+				4CEFDD0A1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h */,
+				4CEFDCFA1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h */,
+				4CEFDCF81CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h */,
+				4CEFDCFC1CF5ABE40092C148 /* MADQueryCacheFullParameters.h */,
+				4C9FB2741D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h */,
+				4C9FB2751D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m */,
+				4C401D731BAE3BD500BAE5FC /* MTQueryCache.h */,
+				4C401D741BAE3BD500BAE5FC /* MTQueryCache.m */,
+			);
+			name = MADQueryCache;
 			sourceTree = "<group>";
 		};
 		4CA0C6C41CA564C000222B8D /* Notifications */ = {
@@ -1485,18 +1514,6 @@
 			isa = PBXGroup;
 			children = (
 				4CEFDD0C1CF5AE510092C148 /* MADQuerySelectParameters.h */,
-				4CEFDCFE1CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h */,
-				4CEFDCFF1CF5AC7C0092C148 /* MADQueryCacheAddRowParameters.h */,
-				4CEFDD001CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h */,
-				4CEFDD011CF5AC7C0092C148 /* MADQueryCacheIndexCreateParameters.h */,
-				4CEFDD021CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h */,
-				4CEFDD031CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h */,
-				4CEFDD0A1CF5AE170092C148 /* MADQueryCacheConnectionParameters.h */,
-				4CEFDCF81CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h */,
-				4CEFDCFA1CF5AAEA0092C148 /* MADQueryCacheSelectLimitOffsetParamaters.h */,
-				4CEFDCFC1CF5ABE40092C148 /* MADQueryCacheFullParameters.h */,
-				4C401D731BAE3BD500BAE5FC /* MTQueryCache.h */,
-				4C401D741BAE3BD500BAE5FC /* MTQueryCache.m */,
 				4C401D751BAE3BD500BAE5FC /* MTQueryCacheAddColumn.h */,
 				4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */,
 				4C401D771BAE3BD500BAE5FC /* MTQueryCacheAddRow.h */,
@@ -1624,6 +1641,7 @@
 				4C401E251BAE3DCB00BAE5FC /* MTDatabaseCache.h in Headers */,
 				4CBBA9521CFEB9DE0033F63B /* MADPredicateOperator.h in Headers */,
 				4CC282421BADE81A00775B72 /* MADSectionLayoutManager.h in Headers */,
+				4C9FB2761D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h in Headers */,
 				4C82C9871CF2077A00F244F6 /* madpath.h in Headers */,
 				4C0590CF1C7B6F3C00A1EC4A /* MTReportFormatterState.h in Headers */,
 				4C6B014E1CEF625E00D29F3A /* archive_entry_locale.h in Headers */,
@@ -1791,6 +1809,7 @@
 				4CEFDD0D1CF5AE510092C148 /* MADQuerySelectParameters.h in Headers */,
 				4C401D461BAE3AF800BAE5FC /* MTPaperB5.h in Headers */,
 				4C401D661BAE3AF800BAE5FC /* MTPaperC10.h in Headers */,
+				4C9FB2731D031E3000A1B291 /* MADParameters.h in Headers */,
 				4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */,
 				4CEFDD131CF5B2050092C148 /* madsqlite3.h in Headers */,
 				4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */,
@@ -2122,6 +2141,7 @@
 				4CC284A01BADE9F700775B72 /* RptqRelationship+Extras.m in Sources */,
 				4C401D531BAE3AF800BAE5FC /* MTPaperC0.m in Sources */,
 				4CC2841C1BADE94D00775B72 /* RptqDocumentSection.m in Sources */,
+				4C9FB2771D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m in Sources */,
 				4CC2842E1BADE96900775B72 /* RptqQueryTable.m in Sources */,
 				4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */,
 				4CC2849C1BADE9EF00775B72 /* RptqQuerySort+Extras.m in Sources */,

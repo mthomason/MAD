@@ -72,6 +72,8 @@
 #import <MTDataTableFast.h>
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
+#import "MADParameters+QueryCacheAggregate.h"
+
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
@@ -82,11 +84,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     return sc == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f;
 }
 
-@protocol MADDataTableAggregateResultesProtocol <NSObject>
-
-@end
-
-typedef MTDataTableFast <MADDataTableAggregateResultesProtocol> MADDataTableAggregate;
+typedef MTDataTableFast MADDataTableAggregate;
 typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutableFontDescriptorMap;
 
 @interface MTReportViewerPrintPageRenderer ()
@@ -130,16 +128,18 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 }
 
 + (MTReportViewerPrintPageRenderer *)newReportViewerPrintPageRenderWithDocument:(MADocument *)document {
-    MTReportFormatter *reportFormatter = [MTReportFormatter newReportFormatterWithLayout: document
-                                                                                 options: MTReportFormatterOptionsMargin];
+    MTReportFormatter *reportFormatter;
+    reportFormatter = [MTReportFormatter newReportFormatterWithLayout: document
+                                                              options: MTReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.dataDelegate = document;
     reportFormatter.datasource = document;
     reportFormatter.cachedDelegate = document;
     [reportFormatter initialize];
     
-    id printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                dataTable: document.mainDataTable];
+    id printPageRender;
+    printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                             dataTable: document.mainDataTable];
     document.printingReportFormatter = reportFormatter;
     return printPageRender;
     
@@ -828,8 +828,8 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                 
                 NSNumber * __unsafe_unretained groupType = isAggregate.groupType;
                 MADIndexArray *rowIdsForPage = [reportFormatter rowidsForPage:pageIndex];
-                aggregateResult = [MTReportViewerPrintPageRenderer newResultsForAggregateType: groupType.unsignedIntegerValue
-                                                                                     function: function.unsignedIntegerValue
+                aggregateResult = [MTReportViewerPrintPageRenderer newResultsForAggregateType: groupType.shortValue
+                                                                                     function: function.shortValue
                                                                                      fieldKey: fieldKey
                                                                                     groupKeys: groupKeys
                                                                                        rowids: rowIdsForPage
@@ -987,9 +987,9 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                         fieldKey:(NSString *)fieldKey
                        groupKeys:(NSArray *)groupKeys
                           rowids:(NSArray *)rowids
-                   fromDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
+                   fromDataTable:(MTDataTableFast *)dataTable {
+
     id result = nil;
-    
     NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
     
     if (columnKey) {
@@ -998,26 +998,26 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
         MADQueryType queryType = MADQueryTypeCacheAggregateFunction;
         switch (groupByType) {
             case MTAggregateGroupByTypePage: {
-                NSDictionary *d = [MTReportViewerPrintPageRenderer newParamatersAggregateByPageWithFieldKey: columnKey
+                NSDictionary *d = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
                                                                                                   andRowIds: rowids
                                                                                             andFunctionType: function
                                                                                                andDataTable: dataTable];
                 queryParameters = [[NSMutableDictionary alloc] initWithDictionary:d copyItems:NO];
                 
                 NSNumber *groupByTypeNumber = [[NSNumber alloc] initWithUnsignedInteger: groupByType];
-                NSNumber *groupByTypeKey = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersGroupByType];
+                NSNumber *groupByTypeKey = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateGroupByType];
                 ((NSMutableDictionary *)queryParameters)[groupByTypeKey] = groupByTypeNumber;
                 
                 break;
             }
             case MTAggregateGroupByTypeReport:
-                queryParameters = [MTReportViewerPrintPageRenderer newParametersAggregateByReportWithFieldKey: columnKey
+                queryParameters = [MADParameters newParametersAggregateByReportWithFieldKey: columnKey
                                                                                               andFunctionType: function
                                                                                                  andDataTable: dataTable];
                 break;
                 
             case MTAggregateGroupByTypeSection:
-                queryParameters = [MTReportViewerPrintPageRenderer newParamatersAggregateByGroupKeys: groupKeys
+                queryParameters = [MADParameters newParamatersAggregateByGroupKeys: groupKeys
                                                                                          andFieldKey: columnKey
                                                                                      andFunctionType: function
                                                                                         andDataTable: dataTable];
@@ -1033,56 +1033,6 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     }
     
     return result;
-}
-
-+ (NSDictionary *)newParamatersAggregateWithFieldKey:(NSString *)fieldKey
-                                     andFunctionType:(MTAggregateFunctionType)functionType
-                                        andDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
-    
-    id keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersTableName];
-    id keyFieldKey = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersFieldKey];
-    id keyAggregateFunctionType = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersAggregateFunctionType];
-    id keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersFieldDescriptors];
-    NSNumber *objFunctionType = [[NSNumber alloc] initWithUnsignedInteger: functionType];
-    NSString *tableName = [dataTable tableName].copy;
-    NSDictionary *paramaters = [[NSDictionary alloc] initWithObjectsAndKeys:tableName, keyTableName,
-                                fieldKey, keyFieldKey, dataTable.columns, keyFieldDescriptors,
-                                objFunctionType, keyAggregateFunctionType, nil];
-    return paramaters;
-}
-
-+ (NSDictionary *)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
-                                                 andRowIds:(NSArray *)rowids
-                                           andFunctionType:(MTAggregateFunctionType)functionType
-                                              andDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
-    
-    NSDictionary *d = [MTReportViewerPrintPageRenderer newParamatersAggregateWithFieldKey: fieldKey
-                                                                          andFunctionType: functionType
-                                                                             andDataTable: dataTable];
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:d];
-    NSNumber *keyRowids = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersRowids];
-    parameters[keyRowids] = rowids;
-    return parameters;
-}
-
-+ (NSDictionary *)newParamatersAggregateByGroupKeys:(NSArray *)groupKeys
-                                        andFieldKey:(NSString *)fieldKey
-                                    andFunctionType:(MTAggregateFunctionType)functionType
-                                       andDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
-    id d = [MTReportViewerPrintPageRenderer newParamatersAggregateWithFieldKey:fieldKey andFunctionType:functionType
-                                    andDataTable:dataTable];
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:d];
-    NSNumber *keyWhereClause = [[NSNumber alloc] initWithShort: MADQueryCacheAggregateFunctionParamatersPredicates];
-    parameters[keyWhereClause] = [dataTable whereClauseForGroupKeys:groupKeys];
-    return parameters;
-}
-
-+ (NSDictionary *)newParametersAggregateByReportWithFieldKey:(NSString *)fieldKey
-                                          andFunctionType:(MTAggregateFunctionType)functionType
-                                          andDataTable:(MTDataTableFast <MADDataTableAggregateResultesProtocol> *)dataTable {
-    return [MTReportViewerPrintPageRenderer newParamatersAggregateWithFieldKey: fieldKey
-                                                               andFunctionType: functionType
-                                                                  andDataTable: dataTable];
 }
 
 + (void)DrawWatermarkWithContext:(CGContextRef *)ctx inPageRect:(CGRect)pageRect {
