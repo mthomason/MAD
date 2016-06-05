@@ -41,14 +41,17 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     NSInteger ctr = 0;
     BOOL isDir1;
     NSString *path = fileUrl.path;
+    
     while ([[NSFileManager defaultManager] fileExistsAtPath: path
-                                                isDirectory: &isDir1] ||
-           [[NSFileManager defaultManager] isUbiquitousItemAtURL:fileUrl]) {
-        
-        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
-        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
-        fileUrl = [baseUrlFormatted URLByAppendingPathExtension: extension];
-        ctr++;
+                                                  isDirectory: &isDir1] ||
+             [[NSFileManager defaultManager] isUbiquitousItemAtURL:fileUrl]) {
+        @autoreleasepool {
+            NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
+            NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
+            fileUrl = [baseUrlFormatted URLByAppendingPathExtension: extension];
+            path = fileUrl.path;
+            ctr++;
+        }
     }
     return fileUrl;
     
