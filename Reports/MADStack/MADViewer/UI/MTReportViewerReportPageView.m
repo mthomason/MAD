@@ -56,17 +56,17 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (instancetype)init {
-    if (self = [super init]) { [self initialize]; }
+    if (self = [super init]) { [self setup]; }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { [self initialize]; }
+    if (self = [super initWithCoder:aDecoder]) { [self setup]; }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) { [self initialize]; }
+    if (self = [super initWithFrame:frame]) { [self setup]; }
     return self;
 }
 
@@ -95,11 +95,11 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 #pragma mark
 
-- (void)initialize {
-    self.displaysCacheTimer = NO;
-    self.displaysPageCounter = NO;
-    self.drawBlankPage = NO;
-    self.firstTime = YES;
+- (void)setup {
+    _displaysCacheTimer = NO;
+    _displaysPageCounter = NO;
+    _drawBlankPage = NO;
+    _firstTime = YES;
 }
 
 #pragma mark - Page Counter

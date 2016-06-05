@@ -182,15 +182,15 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 #pragma -
 #pragma Helpers Drawing
 
-+ (void)drawWhiteCanvas:(CGContextRef *)ctx pageRect:(CGRect)pageRect {
++ (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
     [[UIColor whiteColor] setFill];
     CGPathRef path = CGPathCreateWithRect(pageRect, NULL);
-    CGContextAddPath(*ctx, path);
-    CGContextDrawPath(*ctx, kCGPathFill);
+    CGContextAddPath(ctx, path);
+    CGContextDrawPath(ctx, kCGPathFill);
     CGPathRelease(path);
 }
 
-+ (void)drawWatermarkWithContext:(CGContextRef *)ctx
++ (void)drawWatermarkWithContext:(CGContextRef)ctx
                       inPageRect:(CGRect)pageRect {
 
     UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
@@ -228,17 +228,17 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
             CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
             logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
             
-            CGContextSaveGState(*ctx);
+            CGContextSaveGState(ctx);
             {
                 static CGFloat angle315Degrees = 7.0000f * (CGFloat)M_PI / 4.0000f;
-                CGContextTranslateCTM(*ctx, x, columnCounter % 2 == 0 ?
+                CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
                                       y :
                                       y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
-                CGContextRotateCTM(*ctx, angle315Degrees);
+                CGContextRotateCTM(ctx, angle315Degrees);
                 [getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y,
                                               logoRect.size.width, logoRect.size.height)];
             }
-            CGContextRestoreGState(*ctx);
+            CGContextRestoreGState(ctx);
             columnCounter++;
         } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
         rowCounter++;
@@ -377,35 +377,36 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                 scale: traits.displayScale];
 }
 
-- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection inRect:(CGRect)rect {
+- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
+                                      inRect:(CGRect)rect {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     [[UIColor whiteColor] setFill];
     
     switch ([documentSection getDocumentSectionType]) {
         case MNSDocumentSectionTypeBody:
-            [[UIColor whiteColor] setFill];
+            [[UIColor redColor] setFill];
             break;
         case MNSDocumentSectionTypeGroupFooter:
-            [[UIColor whiteColor] setFill];
+            [[UIColor purpleColor] setFill];
             break;
         case MNSDocumentSectionTypeGroupHeader:
-            [[UIColor whiteColor] setFill];
+            [[UIColor yellowColor] setFill];
             break;
         case MNSDocumentSectionTypePageFooter:
-            [[UIColor whiteColor] setFill];
+            [[UIColor grayColor] setFill];
             break;
         case MNSDocumentSectionTypePageHeader:
-            [[UIColor whiteColor] setFill];
+            [[UIColor greenColor] setFill];
             break;
         case MNSDocumentSectionTypeReportFooter:
-            [[UIColor whiteColor] setFill];
+            [[UIColor brownColor] setFill];
             break;
         case MNSDocumentSectionTypeReportHeader:
-            [[UIColor whiteColor] setFill];
+            [[UIColor blueColor] setFill];
             break;
         default:
-            [[UIColor whiteColor] setFill];
+            [[UIColor magentaColor] setFill];
             break;
     }
     
@@ -426,7 +427,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                   offsetElement: (NSUInteger)offsetElement
                                 offsetCharacter: (NSUInteger)offsetCharacter {
     
-    NSOrderedSet *rows = documentSection.hasRows;
+    NSOrderedSet *rows = [[NSOrderedSet alloc] initWithOrderedSet: documentSection.hasRows];
+    
     MADReportSectionRepresentation * _Nonnull sectionRepresentation;
     CGRect sectionRect, elementCanvasRect;
     NSArray *groupLevelKeys;
@@ -439,6 +441,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     id drawingObject;
     UIFontDescriptor *fontDescriptor;
     NSDictionary *attributes;
+    
+    NSNumber *detailRowID = pageSection.detailRowId.copy;
 
     sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
     sectionRepresentation.type = pageSection.sectionType;
@@ -457,13 +461,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                             pageIndex: pageIndex
                                                offset: originY];
     
-    groupLevelKeys = [self newObjectArrayOfGroupLevelKeysForDetailRow:pageSection.detailRowId];
+    groupLevelKeys = [self newObjectArrayOfGroupLevelKeysForDetailRow:detailRowID];
     
     for (row in rows) {
         
-        @autoreleasepool {
+        //@autoreleasepool {
             
-            items = row.hasObjects;
+            items = [[NSOrderedSet alloc] initWithOrderedSet: row.hasObjects];
             
             rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
                                  initWithNumberOfSectionRowElements:items.count];
@@ -471,12 +475,12 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
             fontDescriptors = [[MADMutableFontDescriptorMap alloc] initWithCapacity:items.count];
             
             for (item in items) {
-                @autoreleasepool {
+                //@autoreleasepool {
                     
                     drawingObject = [self newDrawingObjectForDatabase: database
                                                             pageIndex: pageIndex
                                                        groupLevelKeys: groupLevelKeys
-                                                          detailRowId: pageSection.detailRowId
+                                                          detailRowId: detailRowID
                                                               andItem: item];
                     
                     elementCanvasRect = item.frame;
@@ -510,13 +514,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                     
                     [rowRepresentation addLine:line];
                     
-                }
+                //}
                 
             }
             
             [sectionRepresentation addRow:rowRepresentation];
             [fontDescriptors removeAllObjects];
-        }
+        //}
     }
 
 END_DrawSection:;
@@ -588,7 +592,8 @@ END_DrawSection:;
 }
 
 - (NSString *)newDocumentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item
-                                   forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
+                                   forDatabase:(MTDatabase *)database
+                                      forRowID:(NSNumber *)rowID {
     NSString *drawingObject;
     NSDictionary *rowData = [self.dataTable copyDataForCacheId:rowID];
     if (rowData != nil) {
@@ -612,7 +617,10 @@ END_DrawSection:;
     return [NSString stringWithString:item.text];
 }
 
-- (MTBarcode *)newDocumentObjectForBarcode:(RptqDocumentObjectBarcode *)item forDatabase:(MTDatabase *)database forRowID:(NSNumber *)rowID {
+- (MTBarcode *)newDocumentObjectForBarcode:(RptqDocumentObjectBarcode *)item
+                               forDatabase:(MTDatabase *)database
+                                  forRowID:(NSNumber *)rowID {
+    
     NSDictionary *rowData = [self.dataTable copyDataForCacheId:rowID];
     
     NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
@@ -621,6 +629,7 @@ END_DrawSection:;
                                                            andTable: tableQueryAlias1];
     MADSafeQueryField *tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
                                                            andTable: tableQueryAlias2];
+                                                           
     NSString *input1 = [self inputForField: item.referencesField1
                          forDocumentObject: item.parentObjectBarcode
                                      value: rowData[tableFieldKey1]];
@@ -866,39 +875,33 @@ END_DrawSection:;
     if (columnKey) {
         NSDictionary *queryParameters;
         
-        MADQueryType queryType = MADQueryTypeCacheAggregateFunction;
         switch (groupByType) {
             case MTAggregateGroupByTypePage: {
-                NSDictionary *d = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
-                                                                                                  andRowIds: rowids
-                                                                                            andFunctionType: function
-                                                                                               andDataTable: dataTable];
-                queryParameters = [[NSMutableDictionary alloc] initWithDictionary:d copyItems:NO];
-                
-                NSNumber *groupByTypeNumber = [[NSNumber alloc] initWithUnsignedInteger: groupByType];
-                NSNumber *groupByTypeKey = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateGroupByType];
-                ((NSMutableDictionary *)queryParameters)[groupByTypeKey] = groupByTypeNumber;
-                
+                queryParameters = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
+                                                                                andRowIds: rowids
+                                                                          andFunctionType: function
+                                                                             andDataTable: dataTable];
                 break;
             }
             case MTAggregateGroupByTypeReport:
                 queryParameters = [MADParameters newParametersAggregateByReportWithFieldKey: columnKey
-                                                                                              andFunctionType: function
-                                                                                                 andDataTable: dataTable];
+                                                                            andFunctionType: function
+                                                                               andDataTable: dataTable];
                 break;
                 
             case MTAggregateGroupByTypeSection:
                 queryParameters = [MADParameters newParamatersAggregateByGroupKeys: groupKeys
-                                                                                         andFieldKey: columnKey
-                                                                                     andFunctionType: function
-                                                                                        andDataTable: dataTable];
+                                                                       andFieldKey: columnKey
+                                                                   andFunctionType: function
+                                                                      andDataTable: dataTable];
                 break;
                 
             default:
                 break;
         }
         
-        MTQuery *query = [[MTQuery alloc] initWithQueryType:queryType object:queryParameters];
+        MTQuery *query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+                                                     object: queryParameters];
         result = [dataTable runSelectQuery:query];
         
     }
@@ -910,12 +913,12 @@ END_DrawSection:;
                        withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [MTReportViewerPrintPageRenderer drawWhiteCanvas: &ctx pageRect: pageRect];
+    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
     
     [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 
     if (self.showWaterMark) {
-        [MTReportViewerPrintPageRenderer drawWatermarkWithContext: &ctx inPageRect: pageRect];
+        [MTReportViewerPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
     }
 
 }
@@ -1008,8 +1011,9 @@ END_DrawSection:;
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
+    CGRect rect = pageRect;
     [self drawPageAtIndex: (unsigned long)labs(index)
-                   inRect: pageRect withTransparentBackground: NO];
+                   inRect: rect withTransparentBackground: NO];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {

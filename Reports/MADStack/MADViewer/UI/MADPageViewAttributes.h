@@ -14,6 +14,10 @@
 @interface MADPageViewAttributes : NSObject
     <NSCoding, NSCopying>
 
+    - (instancetype)initWithCurrentPageNumber:(NSUInteger)currentPageNumber
+                           totalNumberOfPages:(NSUInteger)numberOfPages
+                            contentSizeInital:(CGSize)contentSizeInital;
+
     @property (nonatomic, assign, readwrite) NSUInteger pageNumber;
     @property (nonatomic, assign, readwrite) NSUInteger numberOfPages;
     @property (nonatomic, assign, readwrite) CGPoint contentOffsetInital;

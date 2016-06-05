@@ -70,8 +70,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @implementation MTQuery
 
-- (instancetype)initWithQueryType:(MADQueryType)type object:(id)object {
-
+- (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
+    id object = parameters;
+    
     switch (type) {
             
         case MADQueryTypeCacheSelectRowIds:

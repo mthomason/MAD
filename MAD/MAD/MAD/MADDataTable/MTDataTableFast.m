@@ -12,6 +12,7 @@
 
 #import "MTDataTableFast.h"
 
+#import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSCoder.h>
@@ -155,7 +156,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     if (self.groupKeyIndexes != nil) {
         NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
-        plist[keyGroupKeys] = self.groupKeyIndexes;
+        plist[keyGroupKeys] = [NSKeyedArchiver archivedDataWithRootObject: _groupKeyIndexes];
     }
     
     NSNumber *sortSet = [[NSNumber alloc] initWithBool:self.sortDescriptorsSet];
@@ -185,7 +186,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
     
     id keyGroupKeys = [MTDataTableFast keyGroupKeys];
-    NSIndexSet *groupKeysArray = plist[keyGroupKeys];
+    NSData *groupKeysData = plist[keyGroupKeys];
+    NSIndexSet *groupKeysArray = [NSKeyedUnarchiver unarchiveObjectWithData:groupKeysData];
     NSMutableIndexSet *groupKeys;
     if (groupKeysArray) {
         groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
@@ -641,10 +643,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSNumber *keyFieldDef = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
     
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    cacheId, keyRowId,
-                                    self.columnKeys, keyFieldKey,
-                                    tableName, keyTableNmae,
-                                    self.columns, keyFieldDef , nil];
+                                    cacheId,            keyRowId,
+                                    self.columnKeys,    keyFieldKey,
+                                    tableName,          keyTableNmae,
+                                    self.columns,       keyFieldDef , nil];
     
     MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
                                                   object: options];

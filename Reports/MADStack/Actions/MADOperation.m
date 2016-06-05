@@ -141,11 +141,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
     
     self.state = MADOperationStateEvaluatingConditions;
     
+    MADOperation __weak *weakself = self;
     [MADOperationConditionResult evaluateConditions: self.conditions
                                           operation: self
                                          completion: ^(NSArray * failures) {
-        [self.internalErrors addObjectsFromArray:failures];
-        self.state = MADOperationStateReady;
+        MADOperation *sself = weakself;
+        if (sself) {
+            [sself.internalErrors addObjectsFromArray:failures];
+            sself.state = MADOperationStateReady;
+        }
     }];
 }
 

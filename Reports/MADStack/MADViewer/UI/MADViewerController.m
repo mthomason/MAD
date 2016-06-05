@@ -359,24 +359,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
     [self uiUpdateNumberOfPages];
     
-    MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
-    pageAttributes.pageNumber = self.currentPageNumber;
-    pageAttributes.numberOfPages = self.numberOfPages;
-    pageAttributes.zoomScaleInital = 1.0000f;
-    pageAttributes.contentSizeInital = document.paper.paperSize;
-    pageAttributes.contentOffsetInital = CGPointZero;
-    pageAttributes.contentScaleFactor = 0.0;
-    
-    MADReportPageViewController *pageOne =
-        [MADReportPageViewController newReportPageViewControllerWithDocument: document
-                                                              pageAttributes: pageAttributes
-                                                                       frame: self.view.bounds
-                                                                 andDelegate: self];
-    
-    NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
-    [self setViewControllers: viewControllers
-                   direction: UIPageViewControllerNavigationDirectionForward
-                    animated: NO completion: nil];
     
     self.refreshing = NO;
     self.startedRefresh = NO;
@@ -434,6 +416,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     [self.view bringSubviewToFront:self.toolbarSlider];
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
+    
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -457,6 +440,29 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (self.firstTimeViewWillLayoutSubviews) {
+        
+        MADocument *document = self.document;
+        MADPageViewAttributes *pageAttributes;
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
+                                                               totalNumberOfPages: self.numberOfPages
+                                                                contentSizeInital: document.paper.paperSize];
+        CGRect bounds = self.view.bounds;
+        MADReportPageViewController *pageOne =
+        [MADReportPageViewController newReportPageViewControllerWithDocument: document
+                                                              pageAttributes: pageAttributes
+                                                                       frame: bounds
+                                                                 andDelegate: self];
+        
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
+        [self setViewControllers: viewControllers
+                       direction: UIPageViewControllerNavigationDirectionForward
+                        animated: NO completion: nil];
+    }
 }
 
 #pragma mark - properties

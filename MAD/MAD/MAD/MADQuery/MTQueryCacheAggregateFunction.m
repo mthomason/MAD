@@ -67,8 +67,8 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
 @implementation MTQueryCacheAggregateFunction
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         

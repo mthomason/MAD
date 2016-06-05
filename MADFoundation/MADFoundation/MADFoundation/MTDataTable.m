@@ -206,28 +206,29 @@ static NSString * const StringEmpty = @"";
 }
 
 - (BOOL)cacheWithUrl:(NSURL *)url {
+    static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
 
     NSLog(@"Writing cache to url %@.", url);
 
-    NSDictionary *plist = [self copyPlist];
-
-    NSError * __autoreleasing *error = nil;
-    static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
+    NSDictionary *plist = [self copyPlist].copy;
+    
+    NSError *error = NULL;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
                                                                format: propertyListFormat
-                                                              options: 0 error: error];
+                                                              options: 0
+                                                                error: &error];
 
-    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
+    NSAssert(error == NULL, @"%s %@", __PRETTY_FUNCTION__, error);
 
     BOOL success = NO;
     if (url) {
-        NSError * __autoreleasing *errorWriting = nil;
+        NSError *errorWriting = NULL;
         success = [cache writeToURL: url
                             options: NSDataWritingAtomic |
                                      NSDataWritingFileProtectionCompleteUnlessOpen
-                              error: errorWriting];
+                              error: &errorWriting];
 
-        NSAssert(errorWriting == nil, @"%s %@", __PRETTY_FUNCTION__, *error);
+        NSAssert(errorWriting == NULL, @"%s %@", __PRETTY_FUNCTION__, errorWriting);
 
     }
     
@@ -298,8 +299,8 @@ static NSString * const StringEmpty = @"";
 
 - (NSDictionary *)columnsPlist {
     
-    MADMutableMapPlist *columnsPlist;
-    columnsPlist = [[MADMutableMapPlist alloc] initWithCapacity:[self numberOfColumns]];
+    NSMutableDictionary *columnsPlist;
+    columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
     for (NSString *key in self.columnKeys) {
         MADDataColumn *dataColumn = self.columns[key];
         columnsPlist[key] = [dataColumn copyPlist];
@@ -355,7 +356,8 @@ static NSString * const StringEmpty = @"";
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len {
+                                  objects:(__unsafe_unretained id [])buffer
+                                    count:(NSUInteger)len {
     return 0;
 }
 
