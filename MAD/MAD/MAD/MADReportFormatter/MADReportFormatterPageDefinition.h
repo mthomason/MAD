@@ -9,11 +9,9 @@
 #ifndef MAD_MTReportFormatterPageDefinition_h
 #define MAD_MTReportFormatterPageDefinition_h
 
-#import <Foundation/NSObject.h>
-#import <CoreGraphics/CGGeometry.h>
 #import <UIKit/UIGeometry.h>
 
-@interface MTReportFormatterPageDefinition : NSObject
+@interface MADReportFormatterPageDefinition : NSObject
 
     @property (nonatomic, assign) CGSize layoutSize;
     @property (nonatomic, assign) UIEdgeInsets margins;
