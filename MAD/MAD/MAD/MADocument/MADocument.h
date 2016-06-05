@@ -99,8 +99,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (void)saveContext;
 
-    - (void)regenThumbnail;
-
     - (void)initializeSectionLayoutManagers:(RptqDocument *)document;
     - (void)initializeMainDataTable;
     - (void)initializeMainQuery:(RptqDocument *)document;

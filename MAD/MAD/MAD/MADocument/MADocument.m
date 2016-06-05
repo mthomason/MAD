@@ -113,6 +113,7 @@
 #import "archive.h"
 #import "archive_entry.h"
 
+#import "UIImage+MADDocument.h"
 
 #import "miniz.h"
 #import "madtar.h"
@@ -836,7 +837,7 @@ READ_END:;
                             forSaveOperation: (UIDocumentSaveOperation)saveOperation
                                        error: (NSError * __autoreleasing *)outError {
     
-    UIImage *thumbnail = [self newFullyRenderedThumbnail];
+    UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:self];
     NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 thumbnail, NSThumbnail1024x1024SizeKey, nil];
     
@@ -1510,7 +1511,7 @@ READ_END:;
     }
     contentChanged = YES;
     if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {
-        UIImage *thumbnail = [self newFullyRenderedThumbnail];
+        UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:self];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         size_t newImageSize = 0;
         
@@ -1610,23 +1611,6 @@ READ_END:;
 
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
-}
-
-- (UIImage *)newFullyRenderedThumbnail {
-    MTReportViewerPrintPageRenderer *printPageRender =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
-    
-    CGRect letterRect = [MTPaper rectLetter];
-    UIImage *thumbnail = [printPageRender newThumbnailWithRect: MADRectOfSize(CGSizeMake(
-                                                                           (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
-                                                                           (MADFloat_1024 * letterRect.size.height) / MADFloat_1024))
-                                                          size: MADFloat_1024
-                                                    edgeEffect: NO
-                                                    zoomEffect: NO
-                                                  squareEffect: YES
-                                                    cornerSize: 0.0000f
-                                                         scale: 1.0000f];
-    return thumbnail;
 }
 
 #pragma mark File Name
