@@ -9,7 +9,8 @@
 #ifndef Reports_MADPageViewAttributes_h
 #define Reports_MADPageViewAttributes_h
 
-#import <UIKit/UIGeometry.h>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
 
 @interface MADPageViewAttributes : NSObject
     <NSCoding, NSCopying>

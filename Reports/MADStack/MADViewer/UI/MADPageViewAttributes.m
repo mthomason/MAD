@@ -7,6 +7,7 @@
 //
 
 #import "MADPageViewAttributes.h"
+#import <UIKit/UIGeometry.h>
 
 static NSString * const keyPageNumber           = @"p";
 static NSString * const keyNumberOfPages        = @"n";
@@ -50,7 +51,6 @@ static NSString * const keyContentScaleFactor   = @"f";
         
         _contentOffsetInital = [decoder decodeCGPointForKey:keyOffsetInital];
         _contentSizeInital = [decoder decodeCGSizeForKey:keySizeInital];
-        
 
         NSTimeInterval reportLastCacheDate = [decoder decodeDoubleForKey:keyReportLastCacheDate];
         _reportLastCacheDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:reportLastCacheDate];

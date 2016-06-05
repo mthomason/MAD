@@ -12,10 +12,12 @@
 
 #import "MADTableViewControllerCoreDataResults.h"
 #import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
 @interface MADTableViewControllerCoreDataResults()
+    <NSFetchedResultsControllerDelegate>
     @property (nonatomic, assign) BOOL beganUpdates;
 @end
 
@@ -34,11 +36,12 @@
 - (void)setFetchedResultsController:(NSFetchedResultsController *)newfrc {
     NSFetchedResultsController *oldfrc = _fetchedResultsController;
     if (newfrc != oldfrc) {
+        NSString *oldEntityName = oldfrc.fetchRequest.entity.name.copy;
         _fetchedResultsController = newfrc;
         newfrc.delegate = self;
-        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) &&
+        if ((!self.title || [self.title isEqualToString:oldEntityName]) &&
             (!self.navigationController || !self.navigationItem.title)) {
-            self.title = newfrc.fetchRequest.entity.name;
+            self.title = newfrc.fetchRequest.entity.name.copy;
         }
         if (newfrc) {
             [self performFetch];

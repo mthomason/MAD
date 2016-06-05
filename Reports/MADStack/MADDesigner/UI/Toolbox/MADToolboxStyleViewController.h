@@ -14,7 +14,9 @@
 #import "MADFontSelectorViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 
-@class MADocument, MADToolboxStyleViewController, MTFont;
+@class MADocument;
+@class MADToolboxStyleViewController;
+@class MTFont;
 
 @protocol MTReportDesignerFontSettingsDelegate
 
@@ -24,7 +26,7 @@
 
 @interface MADToolboxStyleViewController : UITableViewController
     <MADToolboxDisplayProtocol, MTToolboxViewControllerProtocol,
-        MTReportDesignerFontSelectorDelegate>
+        MADReportDesignerFontSelectorDelegate>
 
     @property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;

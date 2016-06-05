@@ -16,14 +16,12 @@
 @class MADFontSelectorViewController;
 @class MADFont;
 
-@protocol MTReportDesignerFontSelectorDelegate
-    - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
-@end
+@protocol MADReportDesignerFontSelectorDelegate;
 
 @interface MADFontSelectorViewController : MADTableViewController
     <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>
 
-    @property (nonatomic, weak) id <MTReportDesignerFontSelectorDelegate> delegate;
+    @property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> delegate;
     @property (nonatomic, assign) BOOL clearsBackground;
 
     - (void)setFamilyName:(NSString *)familyName;

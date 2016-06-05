@@ -18,7 +18,7 @@
     @required
     - (NSUInteger)pageNumber;
     - (NSDate * _Nullable)lastCacheDate;
-    - (MTReportViewerPrintPageRenderer * _Nullable)printPageRender;
+    - (MTReportViewerPrintPageRenderer * _Nullable)printPageRenderer;
 
     @optional
     - (NSUInteger)numberOfPages;

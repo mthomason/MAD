@@ -10,9 +10,9 @@
 #define Reports_MTCollectionViewCellDocument_h
 
 #import <UIKit/UICollectionViewCell.h>
-#import <UIKit/UIGestureRecognizer.h>
 
 @protocol MTDocumentCellProtocol;
+@protocol UIGestureRecognizerDelegate;
 
 @class MTCollectionViewCellDocument;
 @class UILabel;

@@ -10,7 +10,6 @@
 #define Reports_MADTabBar_h
 
 #import <UIKit/UITabBar.h>
-//#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MADTabBar : UITabBar
 

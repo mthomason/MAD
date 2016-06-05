@@ -17,13 +17,26 @@
 #import <UIKit/UILabel.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MAD/MADFont.h>
 #import <MAD/MADFonts.h>
+#import "MADReportDesignerFontSelectorDelegateProtocol.h"
+
+static inline CGRect frameWithTopGuide(CGRect frame, CGFloat topGuideLength);
+static inline CGRect frameWithTopGuide(CGRect frame, CGFloat topGuideLength) {
+    return CGRectMake(frame.origin.x,
+                      topGuideLength - frame.size.height,
+                      frame.size.width,
+                      frame.size.height);
+}
+
+static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGuideLength);
+static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGuideLength) {
+    return UIEdgeInsetsMake(topGuideLength, CGSizeZero.width, bottomGuideLength, CGSizeZero.width);
+}
 
 @interface MADFontSelectorViewController()
 
-@property (nonatomic, strong) NSString *familyName;
-@property (nonatomic, strong) MADFonts *madFonts;
+    @property (nonatomic, strong) NSString *familyName;
+    @property (nonatomic, strong) MADFonts *madFonts;
 
 @end
 
@@ -87,14 +100,14 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 680.0000f);
+    self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f,
+                                                                                     680.0000f);
 
-    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
-                                                               self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height,
-                                                               self.navigationController.navigationBar.frame.size.width,
-                                                               self.navigationController.navigationBar.frame.size.height);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.navigationController.navigationBar.frame = frameWithTopGuide(self.navigationController.navigationBar.frame,
+                                                                      self.topLayoutGuide.length);
+    
+    self.tableView.contentInset = contentInset(self.topLayoutGuide.length, self.bottomLayoutGuide.length);
+    self.tableView.scrollIndicatorInsets = contentInset(self.topLayoutGuide.length, self.bottomLayoutGuide.length);
     if (self.firstTimeViewWillLayoutSubviews) {
         self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
     }
@@ -109,7 +122,7 @@
 #pragma mark Table view datasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.madFonts.familyNames.count;
+    return (NSInteger)self.madFonts.familyNames.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -117,7 +130,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCellWithIdentifier forIndexPath:indexPath];
     
     if (cell) {
-        NSString *familyName = self.madFonts.familyNames[indexPath.row];
+        NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
         cell.textLabel.text = familyName;
         cell.textLabel.font = [UIFont fontWithName: familyName
                                               size: cell.textLabel.font.pointSize];
@@ -146,8 +159,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 
-    NSString *familyName = self.madFonts.familyNames[indexPath.row];
-    [self.delegate uITableViewControllerDidUpdateFontToFontWithName:familyName];
+    NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
+    [self.delegate tableViewControllerDidUpdateFontToFontWithName:familyName];
 }
 
 - (void)setSelectedFamilyName:(NSString *)name {

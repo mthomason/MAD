@@ -9,7 +9,7 @@
 #ifndef MAD_Feedback_UIAlertController_Feedback_h
 #define MAD_Feedback_UIAlertController_Feedback_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIAlertController.h>
 
 @interface UIAlertController (Feedback)
 

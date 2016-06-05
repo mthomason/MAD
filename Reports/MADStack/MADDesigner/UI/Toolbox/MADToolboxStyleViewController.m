@@ -27,7 +27,7 @@
 #import <MAD/MADFont.h>
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
-//#import <MAD/NSManagedObject+Extras.h>
+#import "MADReportDesignerFontSelectorDelegateProtocol.h"
 
 static const CGFloat CornerRadius = 6.6666f;
 static const CGFloat BorderWidth = 1.0000f;
@@ -1162,7 +1162,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 }
 
-- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
+- (void)tableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
     [self chooseFamilyName:fontName];
 }
 

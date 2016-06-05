@@ -14,9 +14,9 @@
 
 @interface UIImage (MADDocument)
 
-+ (instancetype)newImageThumbnailWithDocument:(MADocument *)document;
+    + (instancetype)newImageThumbnailWithDocument:(MADocument *)document;
 
-+ (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
-                                        andDataTable:(MTDataTableFast *)dataTable;
+    + (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
+                                            andDataTable:(MTDataTableFast *)dataTable;
 
 @end

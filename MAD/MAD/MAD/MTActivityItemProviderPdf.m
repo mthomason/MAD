@@ -159,8 +159,8 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                                                         name: MADNotificationDidFormatPagesName
                                                       object: reportFormatter];
         
-        MTReportViewerPrintPageRenderer *printPageRender;
-        printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+        MTReportViewerPrintPageRenderer *printPageRenderer;
+        printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
                                                                                  dataTable: weakdoc.mainDataTable];
 
         UIGraphicsBeginPDFContextToFile(filepath.path, letterRect, options);
@@ -180,7 +180,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
             NSString *page, *text;
 
             UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-            [printPageRender drawPageAtIndex:(NSInteger)i inRect:PdfTrimBox(letterRect)];
+            [printPageRenderer drawPageAtIndex:(NSInteger)i inRect:PdfTrimBox(letterRect)];
             
             pageNumber = [[NSNumber alloc] initWithUnsignedInteger: i];
             

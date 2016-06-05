@@ -15,6 +15,9 @@
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIInterface.h>
+#import <UIKit/NSParagraphStyle.h>
+#import <UIKit/UITraitCollection.h>
 
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"
@@ -79,11 +82,6 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 static const char *MADQueueTextRepresentation = "com.everdayapps.mad.accessibility";
 
-static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc);
-static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClass sc) {
-    return sc == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f;
-}
-
 static inline NSRange MADRangeToGroup(NSNumber *groupNumber);
 static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     return NSMakeRange(0, groupNumber.unsignedIntegerValue + 1);
@@ -146,11 +144,11 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     reportFormatter.cachedDelegate = document;
     [reportFormatter initialize];
     
-    id printPageRender;
-    printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                             dataTable: document.mainDataTable];
+    id printPageRenderer;
+    printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                               dataTable: document.mainDataTable];
     document.printingReportFormatter = reportFormatter;
-    return printPageRender;
+    return printPageRenderer;
     
 }
 
@@ -255,126 +253,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                             (NSUInteger)self.reportFormatter.reportLayout.count];
     }
     return _textRepresentation;
-}
-
-- (UIImage *)newThumbnailWithRect:(CGRect)rect size:(CGFloat)size
-                       edgeEffect:(BOOL)edgeEffect
-                       zoomEffect:(BOOL)zoomEffect
-                     squareEffect:(BOOL)squareEffect
-                       cornerSize:(CGFloat)cornerSize
-                            scale:(CGFloat)scale {
-    size = size * scale;
-    cornerSize = cornerSize * scale;
-    CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
-    CGRect zoomRect = CGRectMake(CGPointZero.x, CGPointZero.y, imageSizeWidth, size);
-    CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y,
-                                 zoomRect.size.width/scale, zoomRect.size.height/scale);
-    CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
-    CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
-    CGPoint topRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
-    CGPoint bottomRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, startPointY);
-    
-    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0000f);
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    if (zoomEffect) {
-        CGMutablePathRef cornerPath = CGPathCreateMutable();
-        CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
-        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
-        CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, cornerPath);
-        CGContextClosePath (context);
-        CGContextClip(context);
-        CGPathRelease(cornerPath);
-    }
-    
-    if (edgeEffect) {
-
-        CGMutablePathRef zigPath = CGPathCreateMutable();
-        CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
-
-        //zig
-        CGFloat zigDivisor = 4.0000f;
-        const unsigned int topRandNumber = 4;
-        
-        CGFloat numberOfZigs = pathRect.size.height / zigDivisor;
-        for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
-            NSUInteger zigNumber = madRandomNumberBetween(0, topRandNumber);
-            CGFloat zigReal = zigNumber / scale;
-            CGFloat zigDistance = (CGFloat)pow(zigNumber, 1.0001) + zigReal;
-            CGFloat zigX = topRightPoint.x - zigDistance;
-            CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
-            CGPoint zigPoint = CGPointMake(zigX, zigY);
-            CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
-        }
-        CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, zigPath);
-        CGContextClip(context);
-        CGPathRelease(zigPath);
-        
-        
-        CGMutablePathRef zagPath = CGPathCreateMutable();
-        CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-        CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
-        CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
-        CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
-        
-        //zag
-        CGFloat zagDivisor = 4.0000f;
-        CGFloat numberOfZags = pathRect.size.height / zagDivisor;
-        for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
-            
-            NSUInteger zagNumber = madRandomNumberBetween(0, topRandNumber);
-            CGFloat zagReal = zagNumber / scale;
-            CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
-            CGFloat zagDistance = (CGFloat)pow(zagNumber, 1.0001) + zagReal;
-            CGFloat zagY = bottomRightPoint.y - zagDistance;
-            CGPoint zagPoint = CGPointMake(zagX, zagY);
-            CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
-        }
-        CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-        CGContextAddPath(context, zagPath);
-        CGContextClip(context);
-        CGPathRelease(zagPath);
-    }
-    
-
-    CGContextSaveGState(context);
-    
-    [self drawPageAtIndex:0 inRect:rect withTransparentBackground:YES];
-
-    CGContextRestoreGState(context);
-        
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *croppedImage;
-    
-    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
-    croppedImage = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    UIGraphicsEndImageContext();
-    
-    if (squareEffect) {
-        croppedImage = [MADImage imageMadeSquare:croppedImage];
-    }
-    
-    return croppedImage;
-
-}
-
-- (UIImage *)newThumbnailWithTraits:(UITraitCollection *)traits {
-    return [self newThumbnailWithRect: [MTPaper rectLetter]
-                                 size: MADFloat_1024
-                           edgeEffect: YES
-                           zoomEffect: YES
-                         squareEffect: NO
-                           cornerSize: cornerRadiusForHorizontalSizeClass(traits.horizontalSizeClass)
-                                scale: traits.displayScale];
 }
 
 - (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
@@ -625,10 +503,12 @@ END_DrawSection:;
     
     NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
     NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable copyQueryAlias];
-    MADSafeQueryField *tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name
-                                                           andTable: tableQueryAlias1];
-    MADSafeQueryField *tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
-                                                           andTable: tableQueryAlias2];
+
+    MADSafeQueryField *tableFieldKey1, *tableFieldKey2;
+    tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name
+                                        andTable: tableQueryAlias1];
+    tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
+                                        andTable: tableQueryAlias2];
                                                            
     NSString *input1 = [self inputForField: item.referencesField1
                          forDocumentObject: item.parentObjectBarcode
@@ -643,7 +523,8 @@ END_DrawSection:;
     return barcode;
 }
 
-- (NSString *)inputForField:(RptqQueryField *)field forDocumentObject:(RptqDocumentObject *)item value:(id)value {
+- (NSString *)inputForField:(RptqQueryField *)field forDocumentObject:(RptqDocumentObject *)item
+                      value:(id)value {
     NSString *input1 = [item formattedString: field.databaseSchemaField.dataType.shortValue
                                     forValue: value];
     if ([input1 isEqualToString:MTNullIdentifier]) {
@@ -684,8 +565,9 @@ END_DrawSection:;
             RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
             
             NSString *queryAlias = [inQueryTable copyQueryAlias];
-            MADSafeQueryField *fieldKey = [database newSafeQueryField: aggregateField.databaseSchemaField.name
-                                                             andTable: queryAlias];
+            MADSafeQueryField *fieldKey;
+            fieldKey = [database newSafeQueryField: aggregateField.databaseSchemaField.name
+                                          andTable: queryAlias];
             
             NSArray *groupKeys;
             

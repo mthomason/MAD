@@ -10,10 +10,10 @@
 #define Reports_MADTableViewControllerCoreDataResults_h
 
 #import <UIKit/UITableViewController.h>
-#import <CoreData/NSFetchedResultsController.h>
+
+@class NSFetchedResultsController;
 
 @interface MADTableViewControllerCoreDataResults : UITableViewController
-    <NSFetchedResultsControllerDelegate>
 
     @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
     @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;

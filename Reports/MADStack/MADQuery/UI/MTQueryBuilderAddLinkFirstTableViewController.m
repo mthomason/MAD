@@ -14,6 +14,7 @@
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryTable+Extras.h>
 #import <UIKit/UILabel.h>
+#import <CoreData/NSFetchedResultsController.h>
 
 @implementation MTQueryBuilderAddLinkFirstTableViewController
 

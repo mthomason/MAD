@@ -21,6 +21,7 @@
 #import <UIKit/UIImage.h>
 #import <UIKit/UIPrintPaper.h>
 #import <UIKit/UILabel.h>
+#import <UIKit/UIPrintInteractionController.h>
 
 #import <setjmp.h>
 #import <copyfile.h>
@@ -38,6 +39,7 @@
 #import <MADBarcodes/png.h>
 
 #import "MADDocumentProtocol.h"
+#import "MADDatabaseProtocol.h"
 
 #import "MADSortOrder.h"
 #import "MADConstants.h"
@@ -229,12 +231,16 @@ void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
 @interface MADocument ()
+    <UIPrintInteractionControllerDelegate,
+        MTReportFormatterDataSource,
+        MTCacheProtocol,
+        MTDatabaseProtocol>
 
     @property (nonatomic, strong, readwrite) NSManagedObjectModel *madManagedObjectModel;
     @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
     @property (nonatomic, strong, readwrite) NSDictionary *madPersistentStoreOptions;
 
-    @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
+    @property (nonatomic, strong, readwrite) NSMutableDictionary *extraInformation;        //Structure for extra info
 
     @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
     @property (nonatomic, copy, readwrite) NSURL *urlGuts;

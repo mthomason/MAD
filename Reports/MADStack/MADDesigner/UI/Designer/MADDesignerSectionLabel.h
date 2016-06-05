@@ -9,28 +9,27 @@
 #ifndef Reports_DesignerSectionLabel_h
 #define Reports_DesignerSectionLabel_h
 
-#import <CoreData/CoreData.h>
 #import <UIKit/UILabel.h>
-#import <UIKit/UITapGestureRecognizer.h>
 
 extern const CGFloat MADesignerSectionLabelFontSize;
 
 @protocol MADDesignerSectionLabelDelegate;
 
 @class RptqDocumentSection;
+@class UITapGestureRecognizer;
 
 @interface MADDesignerSectionLabel : UILabel
 
-@property (nonatomic, assign, readonly) BOOL selected;
-@property (nonatomic, assign) BOOL indicatorFormFeed;
-@property (nonatomic, assign) BOOL indicatorVisible;
-@property (nonatomic, assign) CGFloat scale;
+    @property (nonatomic, assign, readonly) BOOL selected;
+    @property (nonatomic, assign) BOOL indicatorFormFeed;
+    @property (nonatomic, assign) BOOL indicatorVisible;
+    @property (nonatomic, assign) CGFloat scale;
 
-- (instancetype)initWithSection:(RptqDocumentSection *)section;
-- (void)dimView;
-- (void)normalView;
+    - (instancetype)initWithSection:(RptqDocumentSection *)section;
+    - (void)dimView;
+    - (void)normalView;
 
-@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+    @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 

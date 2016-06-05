@@ -10,23 +10,19 @@
 #define Reports_MTElementView_h
 
 #import "MADManagedObjectView.h"
-#import <UIKit/UIGestureRecognizer.h>
+
+@protocol UIGestureRecognizerDelegate;
 
 @class UIPanGestureRecognizer;
-
 @class NSManagedObjectID;
 @class NSManagedObjectContext;
-
 @class MADDesignerElementView;
-
 @class MTBarcode;
-
 @class RptqDocumentObject;
 
 typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
 
 @interface MADDesignerElementView : MADManagedObjectView
-    <UIGestureRecognizerDelegate>
 
     @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;

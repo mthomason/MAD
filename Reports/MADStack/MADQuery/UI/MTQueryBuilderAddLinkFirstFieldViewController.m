@@ -14,6 +14,7 @@
 #import <UIKit/UILabel.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import <CoreData/NSFetchedResultsController.h>
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController
 

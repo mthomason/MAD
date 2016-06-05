@@ -7,6 +7,8 @@
 //
 
 #import "MADBackgroundScrollView.h"
+#import <UIKit/UITapGestureRecognizer.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 

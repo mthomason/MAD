@@ -13,6 +13,7 @@
 #import "MADQueryViewController.h"
 
 #import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSFetchedResultsController.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/NSAttributedString.h>

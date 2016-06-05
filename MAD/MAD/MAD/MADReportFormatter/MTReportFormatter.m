@@ -39,7 +39,7 @@
 #import "MADArrayCaching.h"
 
 #import "MADNotificationDidFormatPage.h"
-#import "MTReportFormatterPageDefinition.h"
+#import "MADReportFormatterPageDefinition.h"
 
 #import "NSData+Comparson.h"
 
@@ -47,6 +47,8 @@
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <CoreData/NSManagedObjectID.h>
+
+#import <UIKit/UIPrintInteractionController.h>
 
 NSString * const MTNullIdentifier = @"(null)";
 
@@ -71,8 +73,8 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
                             layoutSize.width - printableRect.size.width - printableRect.origin.x);
 }
 
-static inline CGFloat PrintableHeightForPage(MTReportFormatterPageDefinition *page);
-static inline CGFloat PrintableHeightForPage(MTReportFormatterPageDefinition *page) {
+static inline CGFloat PrintableHeightForPage(MADReportFormatterPageDefinition *page);
+static inline CGFloat PrintableHeightForPage(MADReportFormatterPageDefinition *page) {
     return page.layoutSize.height - page.margins.top - page.margins.bottom;
 }
 
@@ -96,7 +98,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     @property (nonatomic, readwrite, weak)      MADocument *layout;
     @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
 
-    @property (nonatomic, readwrite, strong)    MTReportFormatterPageDefinition *page;
+    @property (nonatomic, readwrite, strong)    MADReportFormatterPageDefinition *page;
 
     @property (nonatomic, readwrite, strong)    MADCachingIndexes *reportIndexes;
     @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
@@ -179,7 +181,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 - (void)initialize {
     
-    MTReportFormatterPageDefinition *page = [[MTReportFormatterPageDefinition alloc] init];
+    MADReportFormatterPageDefinition *page = [[MADReportFormatterPageDefinition alloc] init];
     self.page = page;
     
     self.page.margins = (self.options & MTReportFormatterOptionsMargin) ?

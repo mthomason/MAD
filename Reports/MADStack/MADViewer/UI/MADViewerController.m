@@ -211,7 +211,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTPrintingProtocol
 
-- (MTReportViewerPrintPageRenderer *)printPageRender {
+- (MTReportViewerPrintPageRenderer *)printPageRenderer {
     return self.printPageRendererReport;
 }
 
@@ -352,10 +352,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [document prepareForQuery];
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
-    MTReportViewerPrintPageRenderer *printPageRender =
+    MTReportViewerPrintPageRenderer *printPageRenderer =
         [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                dataTable: document.mainDataTable];
-    self.printPageRendererReport = printPageRender;
+    self.printPageRendererReport = printPageRenderer;
         
     [self uiUpdateNumberOfPages];
     
@@ -658,9 +658,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
                     if (sharedController) {
                         
-                        MTReportViewerPrintPageRenderer *printPageRender;
-                        printPageRender = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: sself.document];
-                        sharedController.printPageRenderer = printPageRender;
+                        MTReportViewerPrintPageRenderer *printPageRenderer;
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: sself.document];
+                        sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = _document;
                         
                         
@@ -817,10 +817,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         document.reportFormatter.didRefresh = sself.startedRefresh;
         [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
         
-        MTReportViewerPrintPageRenderer *printPageRender =
+        MTReportViewerPrintPageRenderer *printPageRenderer =
         [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                dataTable: document.mainDataTable];
-        sself.printPageRendererReport = printPageRender;
+        sself.printPageRendererReport = printPageRenderer;
         
         [sself ignoreFormatter: document.reportFormatter];
         
@@ -1111,9 +1111,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         MADocument *document = sself.document;
                         document.activityDelegate = sself;
                         
-                        UIPrintPageRenderer *printPageRender;
-                        printPageRender = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: document];
-                        sharedController.printPageRenderer = printPageRender;
+                        UIPrintPageRenderer *printPageRenderer;
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: document];
+                        sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = document;
                         
                         MADViewerController * __weak weakself2 = sself;

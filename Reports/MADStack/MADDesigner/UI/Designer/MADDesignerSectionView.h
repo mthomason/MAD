@@ -10,7 +10,6 @@
 #define Reports_MTDocumentSectionView_h
 
 #import "MADManagedObjectCollectionView.h"
-#import <UIKit/UIGestureRecognizer.h>
 
 @class MADDesignerSectionLabel;
 
@@ -21,7 +20,6 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 };
 
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
-    <UIGestureRecognizerDelegate>
 
     @property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 
@@ -29,10 +27,14 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
     @property (nonatomic, assign) BOOL selected;
 
     - (void)removeItemAtIndex:(NSIndexPath *)deletePath
-                       update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+                       update:(void (^)())update
+            animationComplete:(void (^)())animationComplete
+                   completion:(void (^)())completion;
                        
     - (void)insertItemAtIndex:(NSIndexPath *)path
-                       update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+                       update:(void (^)())update
+            animationComplete:(void (^)())animationComplete
+                   completion:(void (^)())completion;
 
 @end
 

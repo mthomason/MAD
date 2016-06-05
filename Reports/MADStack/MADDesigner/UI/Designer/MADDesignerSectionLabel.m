@@ -12,6 +12,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
+#import <UIKit/UITapGestureRecognizer.h>
 #import <QuartzCore/CALayer.h>
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0000f;

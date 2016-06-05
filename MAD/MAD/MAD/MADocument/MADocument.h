@@ -12,14 +12,10 @@
 #define Reports_MADocument_h
 
 #import <UIKit/UIManagedDocument.h>
-#import "MADReportFormatterDataSourceProtocol.h"
-
-#import <UIKit/UIPrintInteractionController.h>
-
-#import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 
-#import <MAD/MADDatabaseProtocol.h>
+#import "MADReportFormatterDataSourceProtocol.h"
+#import <MADFoundation/MTCacheProtocol.h>
 #import <MAD/MADSortOrder.h>
 
 @protocol MADActivityProtocol;
@@ -57,18 +53,14 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 
 @interface MADocument : UIManagedDocument
-    <UIPrintInteractionControllerDelegate,
-        MTReportFormatterDataSource,
-        MTCacheProtocol,
-        MTDatabaseProtocol,
-        MADDataProtocol>
-
+    <MADDataProtocol, MTCacheProtocol, MTReportFormatterDataSource>
+    
     @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
-    @property (nonatomic, strong, readwrite)    MTReportFormatter *printingReportFormatter;
-    @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
-    @property (nonatomic, strong, readwrite)    MTDatabase *database;
+    @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
+    @property (nonatomic, readwrite, strong)    MTDataTableFast *mainDataTable;
+    @property (nonatomic, readwrite, strong)    MTDatabase *database;
 
     // Set and used by export operations
     @property (nonatomic, weak)                 MADActivityIndicator *statusLabel;
@@ -85,7 +77,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
 
     @property (nonatomic, strong)               MTPaper *paper;
-    @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
+    @property (nonatomic, readonly, copy)       NSURL *urlDataTableCache;
     @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;

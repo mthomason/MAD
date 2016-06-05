@@ -10,10 +10,8 @@
 #define MAD_MADToolboxDisplayProtocol_h
 
 @protocol MADToolboxDisplayProtocol <NSObject>
-
-@required
+  @required
     - (void)setClearsBackground:(BOOL)clearsBackground;
-
 @end
 
 #endif

@@ -44,9 +44,12 @@ static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
     return 1 +  ( l2 - l1 - (m * 2) )  / l1;
 }
 
-static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength, CGFloat margin);
-static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength, CGFloat margin) {
-    return parentViewLength > subViewLength ? ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
+static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
+                                                  CGFloat layoutGuideLength, CGFloat margin);
+static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
+                                                  CGFloat layoutGuideLength, CGFloat margin) {
+    return parentViewLength > subViewLength ?
+            ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
 }
 
 static inline CGFloat maximumZoomScaleForPaperInContainer(CGSize paper, CGSize container, CGFloat margin);
@@ -100,11 +103,24 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     
 }
 
-+ (UIEdgeInsets)ScrollIndicatorInsetForScrollView:(UIScrollView *)scrollView insets:(UIEdgeInsets)insets {
-    return UIEdgeInsetsMake(edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.top, PageEdgeInsetMargin),
-                            edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.left, PageEdgeInsetMargin),
-                            edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.bottom, PageEdgeInsetMargin),
-                            edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.right, PageEdgeInsetMargin));
++ (UIEdgeInsets)ScrollIndicatorInsetForScrollView:(UIScrollView *)scrollView
+                                           insets:(UIEdgeInsets)insets {
+    return UIEdgeInsetsMake(edgeInsetForScrollIndicator(scrollView.bounds.size.height,
+                                                        scrollView.contentSize.height,
+                                                        insets.top,
+                                                        PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.width,
+                                                        scrollView.contentSize.width,
+                                                        insets.left,
+                                                        PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.height,
+                                                        scrollView.contentSize.height,
+                                                        insets.bottom,
+                                                        PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.width,
+                                                        scrollView.contentSize.width,
+                                                        insets.right,
+                                                        PageEdgeInsetMargin));
 }
 
 #pragma mark - Static Constructors
@@ -147,14 +163,16 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     
     MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:CGRectZero];
     scrollView.contentSize = paper.paperSize;
-    scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin);
+    scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin,
+                                               PageEdgeInsetMargin, PageEdgeInsetMargin);
     scrollView.autoresizingMask = MADViewAutoresizingFlexable();
     scrollView.translatesAutoresizingMaskIntoConstraints = YES;
     scrollView.delegate = self;
     
     MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
     renderedReportView.backgroundColor = [UIColor whiteColor];
-    renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                          UIViewAutoresizingFlexibleRightMargin;
     renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
     renderedReportView.delegatePage = self;
     [scrollView addSubview:renderedReportView];
@@ -266,7 +284,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                              margin: PageEdgeInsetMargin];
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view
+                        atScale:(CGFloat)scale {
     [MADReportPageViewController centerDocumentView: view
                                    insideScrollView: scrollView
                                      topLayoutGuide: self.topLayoutGuide
@@ -297,7 +316,9 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (NSDate * _Nullable)lastCacheDate {
     if (self.pageViewAttributes.reportLastCacheDate == nil) {
         NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: self.document.urlDataTableCache.path error: &error];
+        NSString *path = self.document.urlDataTableCache.path;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+                                                                                    error: &error];
         if (error == nil) {
             NSDate *lastD = [attributes fileModificationDate];
             self.pageViewAttributes.reportLastCacheDate = lastD.copy;
@@ -308,8 +329,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 #pragma mark - MTPrintingProtocol
 
-- (MTReportViewerPrintPageRenderer *)printPageRender {
-    return [self.delegate printPageRender];
+- (MTReportViewerPrintPageRenderer *)printPageRenderer {
+    return [self.delegate printPageRenderer];
 }
 
 @end

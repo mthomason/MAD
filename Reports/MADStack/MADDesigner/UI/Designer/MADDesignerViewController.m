@@ -12,6 +12,9 @@
 
 #import "MADDesignerViewController.h"
 
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <math.h>
 
 #import <MADCocoaExtensions/MADCompassDirection.h>

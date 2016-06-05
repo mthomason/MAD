@@ -12,7 +12,9 @@
 #import "MADTableViewControllerCoreDataResults.h"
 #import "MUIViewControllerDelegate.h"
 
-@class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
+@class MTQueryBuilderAddTableViewController;
+@class RptqDatabaseSchemaTable;
+@class NSManagedObjectID;
 
 @protocol MTQueryBuilderAddTableDelegate
     - (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectID;

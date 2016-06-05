@@ -10,14 +10,18 @@
 #define Reports_MADBackgroundScrollView_h
 
 #import <UIKit/UIScrollView.h>
-#import <UIKit/UITapGestureRecognizer.h>
+
+@class UITapGestureRecognizer;
 
 @interface MADBackgroundScrollView : UIScrollView
 
     @property (nonatomic, strong) UIView *container;
     @property (nonatomic, strong) UITapGestureRecognizer *doubleTapToZoom;
 
-    - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
+    - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest
+                      withPresentedRect:(CGRect)presentedRect
+                          containerSize:(CGSize)containerSize
+                             adjustment:(CGFloat)adjustment;
 
 @end
 

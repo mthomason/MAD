@@ -29,7 +29,7 @@ extern NSString * const MTNullIdentifier;
 @class RptqDocumentSection;
 @class RptqDocument;
 @class MADArrayCaching;
-@class MTReportFormatterPageDefinition;
+@class MADReportFormatterPageDefinition;
 @class NSManagedObjectID;
 @class MADArrayCaching <ObjectType>;
 
@@ -56,7 +56,7 @@ typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachi
     @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
     @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
 
-    @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
+    @property (nonatomic, strong, readonly) MADReportFormatterPageDefinition *page;
     @property (nonatomic, weak,   readonly) MADocument *layout;
 
     @property (readonly) NSUInteger numberOfPages;

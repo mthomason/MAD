@@ -10,7 +10,6 @@
 #define MAD_MTSliderPageVertical_h
 
 #import <UIKit/UISlider.h>
-#import <CoreGraphics/CoreGraphics.h>
 
 @interface MADSliderPageVertical : UISlider
 

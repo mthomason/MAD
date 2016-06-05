@@ -11,10 +11,9 @@
 #endif
 
 #import "MTQueryBuilderAddTableViewController.h"
-
 #import <MAD/RptqDatabaseSchemaTable.h>
-
 #import <UIKit/UILabel.h>
+#import <CoreData/NSFetchedResultsController.h>
 
 @implementation MTQueryBuilderAddTableViewController
 
