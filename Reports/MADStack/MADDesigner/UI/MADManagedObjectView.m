@@ -9,4 +9,5 @@
 #import "MADManagedObjectView.h"
 
 @implementation MADManagedObjectView
+
 @end

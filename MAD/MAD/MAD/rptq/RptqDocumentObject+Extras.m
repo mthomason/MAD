@@ -599,7 +599,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     }
     
     NSNumber *baselineOffset = @0.00000000f;
-    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger:self.underline.boolValue ?
+    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: self.underline.boolValue ?
                                          NSUnderlineStyleSingle : NSUnderlineStyleNone];
     NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ?
                                              NSUnderlineStyleSingle : NSUnderlineStyleNone];

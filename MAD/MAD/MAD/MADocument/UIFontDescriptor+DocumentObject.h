@@ -6,8 +6,12 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIFontDescriptor.h>
+
+@class RptqDocumentObject;
 
 @interface UIFontDescriptor (DocumentObject)
+
+    + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)documentObject;
 
 @end

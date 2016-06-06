@@ -10,4 +10,11 @@
 
 @implementation MADDocumentObject
 
+    - (instancetype)initWithType:(MTDocumentObjectType)type
+                       andObject:(RptqDocumentObject *)documentObject {
+        return self = [super init];
+    }
+
+    - (void)drawInRect:(CGRect)rect { }
+
 @end

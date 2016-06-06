@@ -13,7 +13,6 @@
 
 #import <UIKit/UIManagedDocument.h>
 #import <MADFoundation/MADDataProtocol.h>
-
 #import "MADReportFormatterDataSourceProtocol.h"
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MAD/MADSortOrder.h>
@@ -53,7 +52,9 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 
 @interface MADocument : UIManagedDocument
-    <MADDataProtocol, MTCacheProtocol, MTReportFormatterDataSource>
+    <MADDataProtocol,
+        MTCacheProtocol,
+        MTReportFormatterDataSource>
     
     @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
 

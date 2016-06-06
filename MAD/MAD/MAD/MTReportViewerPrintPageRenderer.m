@@ -17,7 +17,6 @@
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIInterface.h>
 #import <UIKit/NSParagraphStyle.h>
-#import <UIKit/UITraitCollection.h>
 
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"
@@ -32,14 +31,9 @@
 #import "RptqQueryField.h"
 #import "RptqUserCredentals.h"
 
-#import "RptqDocumentSection+Extras.h"
-
 #import "RptqDocumentSectionRows.h"
-
-#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
-
-#import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 
 #import "RptqDatabaseSchemaField.h"
@@ -67,7 +61,6 @@
 #import "MADReportLineRepresentation.h"
 
 #import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADImage.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MADBarcodes/MTBarcode.h>
@@ -76,6 +69,8 @@
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
 #import "MADParameters+QueryCacheAggregate.h"
+
+#import "MADocumentObjectAttributesText.h"
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
@@ -211,7 +206,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                               NSParagraphStyleAttributeName: paragraphStyle
                               };
     NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
-    NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:results];
+    NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS
+                                                                 attributes: results];
     
     NSInteger rowCounter = 0, columnCounter = 0;
     CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
@@ -368,16 +364,26 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                     if ([drawingObject isKindOfClass:[NSString class]]) {
                         
                         fontDescriptor = fontDescriptors[item.objectID];
+                        //if (!fontDescriptor) {
+                        //    fontDescriptor = [item newFontDescriptor];
+                        //    fontDescriptors[item.objectID] = fontDescriptor;
+                        //}
+                        
+                        MADocumentObjectAttributesText *attt;
+                        attt = [[MADocumentObjectAttributesText alloc] initWithObject: item
+                                                                    andFontDescriptor: fontDescriptor];
+                        
                         if (!fontDescriptor) {
-                            fontDescriptor = [item newFontDescriptor];
+                            fontDescriptor = attt.fontDescriptor.copy;
                             fontDescriptors[item.objectID] = fontDescriptor;
                         }
+
                         
                         attributes = [item newTextAttributesWithFontDescriptor:fontDescriptor];
                         
                         [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
                                                             elementCanvasRect: &elementCanvasRect
-                                                               withAttributes: &attributes];
+                                                               withAttributes: attt.fontAttributes];
                         
                     } else {
                         [MTReportViewerPrintPageRenderer displayDrawingObject: &drawingObject
@@ -458,10 +464,10 @@ END_DrawSection:;
 
 + (void)displayDrawingString: (NSString * __autoreleasing *)drawingString
            elementCanvasRect: (CGRect *)elementCanvasFrame
-              withAttributes: (NSDictionary * __autoreleasing *)attributes {
+              withAttributes: (NSDictionary *)attributes {
     [*drawingString drawWithRect: *elementCanvasFrame
                          options: NSStringDrawingUsesLineFragmentOrigin
-                      attributes: *attributes
+                      attributes: attributes
                          context: nil];
 }
 
@@ -479,8 +485,8 @@ END_DrawSection:;
         MADSafeQueryField *tableFieldKey = [database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                               andTable: qa];
         
-        NSString *text = [item formattedString:item.referencesQueryField.databaseSchemaField.dataType.shortValue
-                                      forValue:rowData[tableFieldKey]];
+        NSString *text = [item formattedString: item.referencesQueryField.databaseSchemaField.dataType.shortValue
+                                      forValue: rowData[tableFieldKey]];
         drawingObject = [NSString stringWithString:text];
         if ([drawingObject isEqualToString:MTNullIdentifier]) {
             drawingObject = @"";

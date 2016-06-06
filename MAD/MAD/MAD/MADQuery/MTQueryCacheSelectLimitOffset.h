@@ -14,14 +14,14 @@
 
 @interface MTQueryCacheSelectLimitOffset : MTQuery
 
-+ (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
-                                                 columnKeys:(NSArray *)columnKeys
-                                            sortDescriptors:(NSArray *)sortDescriptors;
+    + (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
+                                                     columnKeys:(NSArray *)columnKeys
+                                                sortDescriptors:(NSArray *)sortDescriptors;
 
-+ (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
-                                                 columnKeys:(NSArray *)columnKeys
-                                                    columns:(MADMutableMapDataColumns *)columns
-                                            sortDescriptors:(NSArray *)sortDescriptors;
+    + (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
+                                                     columnKeys:(NSArray *)columnKeys
+                                                        columns:(MADMutableMapDataColumns *)columns
+                                                sortDescriptors:(NSArray *)sortDescriptors;
 
 @end
 

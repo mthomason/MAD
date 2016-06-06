@@ -9,11 +9,7 @@
 #ifndef MAD_Feedback_MADFeedbackFrustration_h
 #define MAD_Feedback_MADFeedbackFrustration_h
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIResponder.h>
-#import <MessageUI/MessageUI.h>
-#import <MADCocoaExtensions/UIViewController+Utilities.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @interface MADFeedbackFrustration : UIResponder
 

@@ -10,4 +10,8 @@
 
 @implementation MADocumentObjectAttributes
 
+- (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object {
+    return self = [super init];
+}
+
 @end

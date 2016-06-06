@@ -10,9 +10,8 @@
 #define Reports_RptqDocumentSection_Extras_h
 
 #import "RptqDocumentSection.h"
-#import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGGeometry.h>
-#import <MAD/MADReportSectionRepresentation.h>
+#import "MADocumentSectionType.h"
 
 typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,
@@ -26,25 +25,32 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
 @interface RptqDocumentSection (Extras)
 
+    + (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type
+                     forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+    + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
+                        inManagedObjectContext:(NSManagedObjectContext *)moc;
+
     - (NSManagedObjectID *)copySectionKey;
 
-    + (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
-    + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
-
-    + (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups;
+    + (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
+                                withNumberOfGroups:(NSUInteger)numberOfGroups;
     + (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
     + (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
 
+    - (MNSDocumentSectionType)getDocumentSectionType;
+
     - (CGFloat)layoutHeightCalculated;
+
     - (NSString *)localizedDisplayName;
+
+    - (BOOL)producesFormFeed;
     - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin
          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
     - (void)setInterfaceHeight:(CGFloat)height;
-    - (MNSDocumentSectionType)getDocumentSectionType;
-    - (BOOL)producesFormFeed;
     - (void)setProducesFormFeed:(BOOL)producesFormFeed;
 
 @end

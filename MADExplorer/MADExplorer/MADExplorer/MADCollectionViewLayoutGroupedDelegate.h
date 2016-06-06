@@ -16,7 +16,8 @@
 @protocol MADCollectionViewLayoutFilesDelegate;
 
 @interface MADCollectionViewLayoutGroupedDelegate : NSObject
-    <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+    <UICollectionViewDelegate,
+        UICollectionViewDelegateFlowLayout>
 
     @property (nonatomic, weak) id <MADCollectionViewLayoutFilesDelegate> delegate;
 

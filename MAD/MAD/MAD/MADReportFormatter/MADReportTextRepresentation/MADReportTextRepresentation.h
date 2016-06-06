@@ -10,7 +10,6 @@
 #define MAD_MADReportTextRepresentation_h
 
 #import <Foundation/NSObject.h>
-
 #import "MADDocumentTextRepresentationProtocol.h"
 
 @class MADReportPageRepresentation;

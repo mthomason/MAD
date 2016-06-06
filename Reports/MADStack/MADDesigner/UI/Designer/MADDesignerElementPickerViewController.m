@@ -441,8 +441,9 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark - Accessibility
 
 - (BOOL)accessibilityPerformEscape {
-    [self.objectSelectorDelegate viewControllerDidFinish: self];
-    return self.objectSelectorDelegate != nil;
+    id <MADDesignerElementPickerDelegate> objectSelectorDelegate = self.objectSelectorDelegate;
+    [objectSelectorDelegate viewControllerDidFinish: self];
+    return objectSelectorDelegate != nil;
 }
 
 @end

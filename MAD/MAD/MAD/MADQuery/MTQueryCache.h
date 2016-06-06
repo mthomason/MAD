@@ -10,7 +10,6 @@
 #define Reports_MTQueryCache_h
 
 #import "MTQuery.h"
-#import "MTDatabaseCache.h"
 
 @class MTDatabaseCache;
 

@@ -6,8 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MADocumentObjectAttributes.h"
 
-@interface MADocumentObjectAttributesText : NSObject
+@class UIFontDescriptor;
+
+@interface MADocumentObjectAttributesText : MADocumentObjectAttributes
+
+    - (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object
+                          andFontDescriptor:(UIFontDescriptor * _Nullable)fontDescriptor
+                                                                    NS_DESIGNATED_INITIALIZER;
+
+    @property (nonnull, nonatomic, strong, readonly) UIFontDescriptor    *fontDescriptor;
+    @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
 
 @end

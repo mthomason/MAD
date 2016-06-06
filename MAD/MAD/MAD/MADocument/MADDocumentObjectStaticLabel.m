@@ -7,7 +7,30 @@
 //
 
 #import "MADDocumentObjectStaticLabel.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObjectLabel.h"
+#import <Foundation/NSString.h>
+
+@interface MADDocumentObjectStaticLabel ()
+
+    @property (nonatomic, copy, readwrite) NSString *text;
+
+@end
 
 @implementation MADDocumentObjectStaticLabel
+
+- (instancetype)initWithObject:(RptqDocumentObject *)object {
+    if (self = [super initWithType:MTDocumentObjectTypeLabelStatic andObject:object]) {
+        _text = object.isLabel.text.copy;
+    }
+    return self;
+}
+
+- (void)drawInRect:(CGRect)rect {
+    /*[_text drawWithRect: rect
+                options: NSStringDrawingUsesLineFragmentOrigin
+             attributes: attributes
+                context: nil];*/
+}
 
 @end

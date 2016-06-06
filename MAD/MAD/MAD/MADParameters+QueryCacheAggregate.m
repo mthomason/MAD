@@ -8,6 +8,7 @@
 
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADQueryCacheAggregateFunctionParamaters.h"
+#import "MTDataTableFast.h"
 
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>

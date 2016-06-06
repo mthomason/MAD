@@ -13,7 +13,8 @@
 #import <Foundation/NSEnumerator.h>
 #import "MTProtocolLog.h"
 
-@interface MTStack : MTObject  <NSFastEnumeration,  MTProtocolLog>
+@interface MTStack : MTObject
+    <NSFastEnumeration,  MTProtocolLog>
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
     - (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;

@@ -6,8 +6,14 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+
+@class RptqDocumentObject;
 
 @interface MADocumentObjectAttributes : NSObject
+
+    - (nullable instancetype)init NS_UNAVAILABLE;
+    - (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object
+                                                                    NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -8,6 +8,10 @@
 
 #import "MADFeedbackFrustration.h"
 #import "UIAlertController+Feedback.h"
+#import <Foundation/Foundation.h>
+#import <MessageUI/MessageUI.h>
+#import <MADCocoaExtensions/UIViewController+Utilities.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @interface MADFeedbackFrustration()
     <MFMailComposeViewControllerDelegate>
