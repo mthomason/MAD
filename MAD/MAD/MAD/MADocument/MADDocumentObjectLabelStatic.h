@@ -8,6 +8,6 @@
 
 #import "MADDocumentObject.h"
 
-@interface MADDocumentObjectStaticLabel : MADDocumentObject
+@interface MADDocumentObjectLabelStatic : MADDocumentObject
 
 @end

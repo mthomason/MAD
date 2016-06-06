@@ -6,18 +6,18 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectStaticLabel.h"
+#import "MADDocumentObjectLabelStatic.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectLabel.h"
 #import <Foundation/NSString.h>
 
-@interface MADDocumentObjectStaticLabel ()
+@interface MADDocumentObjectLabelStatic ()
 
     @property (nonatomic, copy, readwrite) NSString *text;
 
 @end
 
-@implementation MADDocumentObjectStaticLabel
+@implementation MADDocumentObjectLabelStatic
 
 - (instancetype)initWithObject:(RptqDocumentObject *)object {
     if (self = [super initWithType:MTDocumentObjectTypeLabelStatic andObject:object]) {
