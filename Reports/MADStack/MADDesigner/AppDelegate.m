@@ -18,6 +18,7 @@
 #import <MAD/MADConstants.h>
 #import "Constants.h"
 
+#import <MADDataStructures/MADVectorBool.h>
 
 @class MADTransparentPresentationController;
 @class MFMailComposeViewController;
@@ -145,6 +146,28 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (BOOL)application:(UIApplication *)application
                             didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    MADVectorBool *vectorBool = [[MADVectorBool alloc] init];
+    [vectorBool addTrue];
+    [vectorBool addTrue];
+    [vectorBool addFalse];
+    [vectorBool addTrue];
+    [vectorBool addTrue];
+    [vectorBool addFalse];
+    [vectorBool addTrue];
+    [vectorBool addTrue];
+    [vectorBool addFalse];
+    [vectorBool addTrue];
+    [vectorBool addTrue];
+    [vectorBool addFalse];
+    [vectorBool addTrue];
+    [vectorBool addTrue];
+    [vectorBool addFalse];
+    [vectorBool enumerateBools:^(NSUInteger inx, BOOL valid, BOOL *stop) {
+        NSLog(@"Valid %@\n", valid ? @"YES" : @"NO");
+    }];
+//    [vectorBool enum]
 /*
     srand((unsigned)time(NULL));
     char *cr;

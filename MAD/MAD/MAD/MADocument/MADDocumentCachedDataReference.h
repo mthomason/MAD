@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class MTDatabase;
+@class MTDataTableFast;
+
 @interface MADDocumentCachedDataReference : NSObject
+
+    - (instancetype)initWithTableName:(NSString *)tableName
+                            fieldName:(NSString *)fieldName
+                                rowID:(NSUInteger)rowID;
 
 @end

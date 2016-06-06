@@ -12,8 +12,7 @@
 
 #import "RptqDocumentObject+Extras.h"
 
-#import <UIKit/NSAttributedString.h>
-#import <UIKit/UITextView.h>
+//#import <UIKit/UITextView.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -37,9 +36,11 @@
 
 #import <MADBarcodes/MTBarcode.h>
 
-//#import <Foundation/NSNumberFormatter.h>
-//#import <Foundation/NSSortDescriptor.h>
-//#import <Foundation/NSBundle.h>
+#import <Foundation/NSNumberFormatter.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSDateFormatter.h>
+#import <Foundation/NSLocale.h>
 
 #import "MADSectionLayoutManager.h"
 
@@ -546,80 +547,6 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
         result = @"";
     }
     return result;
-}
-
-- (UIFontDescriptor *)newFontDescriptor {
-
-    UIFontDescriptorSymbolicTraits traits = 0;
-    UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname
-                                                              size:self.fontsize.floatValue];
-    
-    //BOOL gotTraits = NO;
-    if (self.italic.boolValue && self.bold.boolValue) {
-        f = [f fontDescriptorWithSymbolicTraits:(UIFontDescriptorSymbolicTraits)
-                                        (UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold)];
-    } else if (self.italic.boolValue) {
-        traits = UIFontDescriptorTraitItalic;
-        f = [f fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
-    } else if (self.bold.boolValue) {
-        f = [f fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
-    }
-    return f;
-}
-
-- (NSDictionary *)newTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor {
-    
-    UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
-                                               size: 0.0];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    
-    switch (self.horizontalAlignment.integerValue) {
-        case MTHorizontalAlignmentLeft:
-            paragraphStyle.alignment = NSTextAlignmentLeft;
-            break;
-        case MTHorizontalAlignmentRight:
-            paragraphStyle.alignment = NSTextAlignmentRight;
-            break;
-        case MTHorizontalAlignmentCenter:
-            paragraphStyle.alignment = NSTextAlignmentCenter;
-            break;
-        case MTHorizontalAlignmentJustified:
-            paragraphStyle.alignment = NSTextAlignmentJustified;
-            break;
-        case MTHorizontalAlignmentNatrual:
-            paragraphStyle.alignment = NSTextAlignmentNatural;
-            break;
-        default:
-            paragraphStyle.alignment = NSTextAlignmentLeft;
-            break;
-    }
-    
-    NSNumber *baselineOffset = @0.00000000f;
-    NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: self.underline.boolValue ?
-                                         NSUnderlineStyleSingle : NSUnderlineStyleNone];
-    NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:self.strike.boolValue ?
-                                             NSUnderlineStyleSingle : NSUnderlineStyleNone];
-    
-    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                customFont, NSFontAttributeName,
-                                baselineOffset, NSBaselineOffsetAttributeName,
-                                underlineStyle, NSUnderlineStyleAttributeName,
-                                strikethroughStyle, NSStrikethroughStyleAttributeName,
-                                paragraphStyle, NSParagraphStyleAttributeName, nil];
-    
-    return  attributes;
-}
-
-- (NSDictionary *)newDictionaryOfTextAttributes {
-
-    UIFontDescriptor *f = [self newFontDescriptor];
-    id attributes = [self newTextAttributesWithFontDescriptor: f];
-    return attributes;
-    
 }
 
 #pragma mark - MTProtocolLog

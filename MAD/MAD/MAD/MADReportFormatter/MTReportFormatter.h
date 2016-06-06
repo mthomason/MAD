@@ -33,12 +33,12 @@ extern NSString * const MTNullIdentifier;
 @class NSManagedObjectID;
 @class MADArrayCaching <ObjectType>;
 
-typedef NSArray         <__kindof id>                                   MADObjectArray;
-typedef NSArray         <__kindof MADSectionPlist *>                    MADSectionArray;
-typedef NSArray         <__kindof NSNumber *>                           MADIndexArray;
+typedef NSArray         <id>                                            MADObjectArray;
+typedef NSArray         <MADSectionPlist *>                             MADSectionArray;
+typedef NSArray         <NSNumber *>                                    MADIndexArray;
 
-typedef MADArrayCaching <__kindof MADIndexArray *>                      MADCachingIndexes;
-typedef MADArrayCaching <__kindof MADSectionArray *>                    MADCachingLayout;
+typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
+typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
 
 @interface MTReportFormatter : MTTableFormatter
 

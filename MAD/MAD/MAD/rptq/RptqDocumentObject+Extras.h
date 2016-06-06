@@ -59,10 +59,6 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGFloat)spacingBottom;
     - (CGFloat)spacingRight;
 
-    - (UIFontDescriptor *)newFontDescriptor;
-    - (NSDictionary *)newTextAttributesWithFontDescriptor:(UIFontDescriptor *)fontDescriptor;
-    - (NSDictionary *)newDictionaryOfTextAttributes;
-
 @end
 
 #endif

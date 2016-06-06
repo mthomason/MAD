@@ -23,6 +23,8 @@
 #import <MAD/RptqDocumentObjectBarcode.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
+#import <MAD/MADocumentObjectAttributesText.h>
+
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
 #import "MTResizeHandleView.h"
@@ -321,41 +323,12 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 break;
         }
         
-        UIFontDescriptor *fontDescriptor = [documentObject newFontDescriptor];
-        NSDictionary *attributes = [documentObject newTextAttributesWithFontDescriptor:fontDescriptor];
+        MADocumentObjectAttributesText *attributesText = [[MADocumentObjectAttributesText alloc] initWithObject: documentObject
+                                                                                              andFontDescriptor: nil];
+        
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
-                                                                                attributes: attributes];
+                                                                                attributes: attributesText.fontAttributes];
         self.displayStringAttributed = attributtedString;
-        
-        /*
-        CGSize sizeContentView = [documentObject sizeContentView];
-        CGRect boundsContentView = [documentObject boundsContentView]; //x1
-        CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize: sizeContentView
-                                                                           options: self.canvasView.drawingOptions
-                                                                           context: nil];
-        CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
-        
-        switch ([documentObject.verticalAlignment integerValue]) {
-            case MTVerticalAlignmentCenter: {
-                CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
-                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                break;
-            }
-            case MTVerticalAlignmentBottom: {
-                CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
-                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                break;
-            }
-            case MTVerticalAlignmentTop:
-            default:
-                break;
-        }*/
-        
-        //CGAffineTransform transformSpacing = CGAffineTransformMakeTranslation([documentObject spacingLeft],
-        //                                                                      [documentObject spacingTop]);
-        //drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformSpacing);
         [self setNeedsLayout];
         [self setNeedsDisplay];
     }

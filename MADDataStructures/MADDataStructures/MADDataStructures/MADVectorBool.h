@@ -10,4 +10,9 @@
 
 @interface MADVectorBool : NSObject
 
+    - (void)addTrue;
+    - (void)addFalse;
+    - (unsigned long)count;
+    - (void)enumerateBools:(void (^)(NSUInteger idx, BOOL valid, BOOL *stop))valueHandler;
+
 @end

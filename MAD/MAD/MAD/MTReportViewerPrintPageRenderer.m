@@ -314,7 +314,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     RptqDocumentObject *item;
     id drawingObject;
     UIFontDescriptor *fontDescriptor;
-    NSDictionary *attributes;
     
     NSNumber *detailRowID = pageSection.detailRowId.copy;
 
@@ -350,7 +349,9 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
             
             for (item in items) {
                 //@autoreleasepool {
-                    
+                
+                
+                
                     drawingObject = [self newDrawingObjectForDatabase: database
                                                             pageIndex: pageIndex
                                                        groupLevelKeys: groupLevelKeys
@@ -364,10 +365,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                     if ([drawingObject isKindOfClass:[NSString class]]) {
                         
                         fontDescriptor = fontDescriptors[item.objectID];
-                        //if (!fontDescriptor) {
-                        //    fontDescriptor = [item newFontDescriptor];
-                        //    fontDescriptors[item.objectID] = fontDescriptor;
-                        //}
                         
                         MADocumentObjectAttributesText *attt;
                         attt = [[MADocumentObjectAttributesText alloc] initWithObject: item
@@ -378,9 +375,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                             fontDescriptors[item.objectID] = fontDescriptor;
                         }
 
-                        
-                        attributes = [item newTextAttributesWithFontDescriptor:fontDescriptor];
-                        
                         [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
                                                             elementCanvasRect: &elementCanvasRect
                                                                withAttributes: attt.fontAttributes];
@@ -557,9 +551,11 @@ END_DrawSection:;
     return dictionary;
 }
 
-- (id)newDrawingObjectForDatabase:(MTDatabase *)database pageIndex:(NSUInteger)pageIndex
-                   groupLevelKeys:(NSArray *)groupLevelKeys detailRowId:(NSNumber *)detailRowId
-                          andItem:(RptqDocumentObject *)item {
+- (id)newDrawingObjectForDatabase: (MTDatabase *)database
+                        pageIndex: (NSUInteger)pageIndex
+                   groupLevelKeys: (NSArray *)groupLevelKeys
+                      detailRowId: (NSNumber *)detailRowId
+                          andItem: (RptqDocumentObject *)item {
 
     id drawingObject = nil;
     switch (item.getType) {
@@ -728,7 +724,8 @@ END_DrawSection:;
             
         case MTDocumentObjectTypeBarcode:
             drawingObject = [self newDocumentObjectForBarcode: item.isBarcode
-                                                  forDatabase: database forRowID: detailRowId];
+                                                  forDatabase: database
+                                                     forRowID: detailRowId];
             break;
             
         case MTDocumentObjectTypeLabelDynamic:
