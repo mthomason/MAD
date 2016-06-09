@@ -147,7 +147,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 - (BOOL)application:(UIApplication *)application
                             didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
+    /*
     MADVectorBool *vectorBool = [[MADVectorBool alloc] init];
     [vectorBool addTrue];
     [vectorBool addTrue];
@@ -166,7 +166,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
     [vectorBool addFalse];
     [vectorBool enumerateBools:^(NSUInteger inx, BOOL valid, BOOL *stop) {
         NSLog(@"Valid %@\n", valid ? @"YES" : @"NO");
-    }];
+    }];*/
 //    [vectorBool enum]
 /*
     srand((unsigned)time(NULL));

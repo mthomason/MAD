@@ -6,6 +6,6 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADConstants.h"
+#import "MADConstantsDocumentExtentions.h"
 
 NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";

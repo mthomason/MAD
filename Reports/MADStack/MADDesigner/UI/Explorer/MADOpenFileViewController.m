@@ -33,6 +33,7 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/NSURL+Document.h>
+#import <MADFoundation/MADConstantsDocumentExtentions.h>
 
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>

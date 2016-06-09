@@ -120,7 +120,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark Viewer State
 
-    @property (atomic, assign, getter=isRefreshing) BOOL refreshing;
+    @property (nonatomic, assign, getter=isRefreshing) BOOL refreshing;
     @property (nonatomic, assign) BOOL didRefreshBeforeReaload;
     @property (nonatomic, assign) BOOL activityExporting;
     @property (nonatomic, assign) BOOL startedRefresh;
@@ -348,7 +348,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     RptqDocument *activeDocumentModel = document.activeDocumentModel;
 
     [document initializeMainQuery:activeDocumentModel];
-    document.activeDocumentModel;
+    [document activeDocumentModel];
     [document prepareForQuery];
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
@@ -368,7 +368,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = NO;
     
     if (self.printPageRendererReport == nil) {
-        document.activeDocumentModel;
+        [document activeDocumentModel];
         
         MTReportViewerPrintPageRenderer *prtingPageRendererReport =
             [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter

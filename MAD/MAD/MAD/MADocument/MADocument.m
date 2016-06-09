@@ -119,6 +119,7 @@
 
 #import "UIImage+MADDocument.h"
 #import "NSError+Document.h"
+#import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
 #import "madtar.h"
@@ -190,8 +191,6 @@ typedef struct png_control {
     parentContext = "<NSManagedObjectContext: 0xffffffff>";
  }
  */
-
-typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MADMimeType                                    = @"application/vnd.everydayapps.mad";
 NSString * const MADDocumentInfoKeyThumbnail                    = @"thumbnail";
@@ -407,38 +406,6 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return success;
 }
 
-+ (void)deletePersistentStoreForManagedObjectContext:(NSManagedObjectContext *)context {
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = context.persistentStoreCoordinator;
-    NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
-    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
-    
-    [context performBlockAndWait:^{
-        [context reset];//to drop pending changes
-    }];
-    NSError *error = nil;
-    
-    //delete the store from the current managedObjectContext
-    BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
-                                                               error: &error];
-    if (success) {
-        
-        [MADFileUtilities removeFileAtURL:storeURL];
-        
-        NSNumber *o1 = @YES;
-        NSNumber *o2 = @YES;
-        id options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                      o1, NSMigratePersistentStoresAutomaticallyOption,
-                      o2, NSInferMappingModelAutomaticallyOption, nil];
-        
-        [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
-                                                 configuration: nil
-                                                           URL: storeURL
-                                                       options: options
-                                                         error: &error];
-    }
-    
-}
-
 + (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion  {
     
     [document regenThumbnail];
@@ -457,20 +424,6 @@ ARCHIVE_FILE_AT_URL_SHORT:;
             }];
         }
 
-    }];
-}
-
-+ (void)closeAndDelete:(MADocument *)document completion:(void (^)(BOOL success))completion  {
-    [self close:document completion:^(BOOL success) {
-    
-        [self deletePersistentStoreForManagedObjectContext:document.managedObjectContext];
-        
-        NSURL *fileURL = document.fileURL.copy;
-        MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-            [MADFileUtilities removeFileAndArchiveAtURL:fileURL];
-            completion(YES);
-        };
-        [document performAsynchronousFileAccessUsingBlock:asyncBlock];
     }];
 }
 
@@ -579,13 +532,12 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                                                   withIntermediateDirectories: YES
                                                                    attributes: nil
                                                                         error: errorCreate];
-        if (!successCreate) goto READ_FAIL;
-        
+                                                                                
         BOOL sucessExist;
         sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
                                                            isDirectory: &isDirectory];
         
-        if (!sucessExist || !isDirectory) goto READ_FAIL;
+        if (!sucessExist) goto READ_FAIL;
     }
     
     urlArchive = url;
@@ -1131,7 +1083,10 @@ READ_END:;
         
         if (self.reportFormatter == nil) {
             [self initializeMainQuery:document];
-            [self initializeSectionLayoutManagers:document];
+            
+            [self resetSectionLayoutManagers: document];
+            
+            
             [self initializeReportFormatter];
         }
 
@@ -1141,7 +1096,7 @@ READ_END:;
     return document;
 }
 
-- (void)initializeSectionLayoutManagers:(RptqDocument *)document {
+- (void)resetSectionLayoutManagers:(RptqDocument *)document {
     NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
     RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
@@ -1154,11 +1109,10 @@ READ_END:;
     
 }
 
-- (void)removeDocumentObjectWithObjectID: (NSManagedObjectID *)objectID
-                    managedObjectContext: (NSManagedObjectContext *)managedObjectContext {
+- (void)removeDocumentObjectWithObjectID: (NSManagedObjectID *)objectID {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = managedObjectContext;
+    private.parentContext = self.managedObjectContext;
     [private performBlockAndWait:^{
 
         RptqDocumentObject *documentObject = [private objectWithID:objectID];
@@ -1229,6 +1183,7 @@ READ_END:;
             
             RptqDocumentSection *section0 = sections[0];
             RptqDocumentSection *section1 = sections[1];
+            
             [self.sectionLayoutManagers removeObjectForKey:section0.objectID];
             [self.sectionLayoutManagers removeObjectForKey:section1.objectID];
             
@@ -1271,31 +1226,31 @@ READ_END:;
 
 - (void)initializeMainQuery:(RptqDocument *)document {
     RptqDatabase *database = document.defaultDatabase;
-    if (database) {
+    if (!database) return;
     
-        RptqQuery *rquery = database.defaultQuery;
-        MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
-        NSMutableDictionary *extraParameters = parameters.mutableCopy;
-
-        NSNumber *queryLimit = [[NSNumber alloc] initWithInteger: self.limitResultsDesignMode ? 50 : NSNotFound];
-        extraParameters[@"MADQueryLimit"] = queryLimit;
-        
-        MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
-        defaultQuery.dataDelegate = self;
-        
-        NSArray *sortDescriptors = [self readCurrentSortDescriptors];
-        [self.mainDataTable sortUsingDescriptors:sortDescriptors];
-        self.mainQuery = defaultQuery;
-    }
+    RptqQuery *rquery = database.defaultQuery;
+    MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
+    NSMutableDictionary *extraParameters = parameters.mutableCopy;
+    
+    NSNumber *queryLimit;
+    queryLimit = [[NSNumber alloc] initWithInteger: self.limitResultsDesignMode ? 50 : NSNotFound];
+    extraParameters[@"MADQueryLimit"] = queryLimit;
+    
+    MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
+    defaultQuery.dataDelegate = self;
+    
+    NSArray *sortDescriptors = [self readCurrentSortDescriptors];
+    [self.mainDataTable sortUsingDescriptors:sortDescriptors];
+    self.mainQuery = defaultQuery;
 }
 
 - (void)initializeReportFormatter {
-    MTReportFormatter *reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
-                                                                             options: MTReportFormatterOptionsNone];
+    MTReportFormatter *reportFormatter;
+    reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
+                                                          options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.datasource = self;
     reportFormatter.cachedDelegate = self;
-    [reportFormatter initialize];
 
     self.reportFormatter = reportFormatter;
 }
@@ -1303,8 +1258,9 @@ READ_END:;
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.defaultDatabase;
     RptqQuery *query = database.defaultQuery;
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    MTDatabaseConnection *connection;
+    connection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;
 }
@@ -1312,21 +1268,6 @@ READ_END:;
 - (void)prepareForQuery {
     NSArray *sortDescriptors = [self readCurrentSortDescriptors];
     [self.mainDataTable sortUsingDescriptors:sortDescriptors];
-}
-
-- (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-    NSURL *gutsUrl = self.urlGuts.copy;
-    [self removeObservers];
-    MADocument * __weak weakself = self;
-    [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
-    
-    [self closeWithCompletionHandler:^(BOOL successClosingReport) {
-        if (successClosingReport) {
-            [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
-            NSError *error = [NSError newErrorConnectionProblem];
-            [MADThread completeOnMainThread:completion withObject:error andSuccess:NO];
-        }
-    }];
 }
 
 - (void)regenThumbnail {
@@ -1413,42 +1354,10 @@ READ_END:;
     return storeURL.copy;
 }
 
-- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
-    
-    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSURL *fileURL = self.fileURL;
-        NSError *deleteError = nil;
-
-        NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
-        
-        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: fileURL
-                                                                 includingPropertiesForKeys: properties
-                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles
-                                                                               errorHandler: ^BOOL(NSURL *url, NSError *error) {
-            return YES;
-        }];
-        for (NSURL *file in enumerator) {
-            [MADFileUtilities removeFileAtURL:file];
-        }
-        [MADFileUtilities removeFileAtURL:fileURL];
-        NSAssert(deleteError == nil, @"%@", deleteError);
-        completion(YES);
-    };
-    
-    NSAssert(self.documentState == UIDocumentStateClosed, @"Document must be closed to call this!");
-    [MADocument deletePersistentStoreForManagedObjectContext:self.managedObjectContext];
-
-    
-    [self performAsynchronousFileAccessUsingBlock:asyncBlock];
-}
-
 #pragma mark File Name
 
-- (void)removeGuts {
+- (void)archiveAndRemoveFileWrapper {
     [MADFileUtilities removeFileAndArchiveAtURL:self.urlGuts];
-    
 }
-
-- (NSString *)mimetype { return MADMimeType; }
 
 @end

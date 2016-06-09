@@ -83,12 +83,9 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
 
-    - (NSString *)mimetype;
-
     - (void)saveContext;
 
-    - (void)initializeSectionLayoutManagers:(RptqDocument *)document;
-//    - (void)initializeMainDataTable;
+    - (void)resetSectionLayoutManagers:(RptqDocument *)document;
     - (void)initializeMainQuery:(RptqDocument *)document;
 
     - (void)prepareForQuery;
@@ -100,8 +97,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 
-    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID
-                        managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID;
 
     - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
                                  inContent:(NSManagedObjectContext *)context;
@@ -116,9 +112,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     + (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion;
 
-    - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
-    - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
-    - (void)removeGuts; //Cleans any cache that may exist.
+    - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 
 @end
 

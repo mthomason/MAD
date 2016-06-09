@@ -2713,8 +2713,7 @@ END_deselectElementView:;
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
         MADocument *maDocument = self.document;
-        [maDocument removeDocumentObjectWithObjectID: objectId
-                                managedObjectContext: maDocument.managedObjectContext];
+        [maDocument removeDocumentObjectWithObjectID: objectId];
     
     } animationComplete:^() {
 
@@ -2864,8 +2863,7 @@ END_deselectElementView:;
             [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
             
                 MADocument *sdocument = wdocument;
-                [sdocument removeDocumentObjectWithObjectID: pieceObjectIDTag
-                                       managedObjectContext: sdocument.managedObjectContext];
+                [sdocument removeDocumentObjectWithObjectID: pieceObjectIDTag];
                 
             } animationComplete:^() {
 
@@ -2934,6 +2932,7 @@ END_deselectElementView:;
         
         NSManagedObjectID *sectionViewObjectIdTag = sectionView.objectIdTag;
         NSManagedObjectContext *private;
+        
         private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         private.parentContext = self.document.managedObjectContext;
         [private performBlockAndWait:^{

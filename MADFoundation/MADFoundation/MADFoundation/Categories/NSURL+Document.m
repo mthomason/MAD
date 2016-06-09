@@ -8,7 +8,7 @@
 
 #import "NSURL+Document.h"
 #import "UIScreen+Properties.h"
-#import "MADConstants.h"
+#import "MADConstantsDocumentExtentions.h"
 #import "MADFilename.h"
 #import "NSURL+CommonURLs.h"
 #import <Foundation/NSPathUtilities.h>

@@ -69,7 +69,7 @@
     //Create MADocument File and Remove Cache
     MADocument *document = [[MADocument alloc] initWithFileURL: self.url];
     document.documentDelegate = self;
-    [document removeGuts];
+    [document archiveAndRemoveFileWrapper];
     self.document = document;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self.document saveToURL:self.url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {

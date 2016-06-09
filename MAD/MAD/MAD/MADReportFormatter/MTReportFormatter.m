@@ -128,6 +128,30 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 - (instancetype)initWithDocument: (MADocument *)layout
                          options: (MTReportFormatterOptions)options  {
     if (self = [super init]) {
+    
+        MADReportFormatterPageDefinition *page = [[MADReportFormatterPageDefinition alloc] init];
+        self.page = page;
+        
+        self.page.margins = (options & MTReportFormatterOptionsMargin) ?
+        MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
+        
+        MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
+        self.machineState = machineState;
+        
+        [self initializeStateMachine];
+        
+        MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
+        self.reportFormatterCache = reportFormatterCache;
+        
+        MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];
+        self.pageLayoutTemporary = temporaryLayoutForPage;
+        
+        NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
+        self.pageIndexesTemporary = temporaryDataForPage;
+        
+        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
+        self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
+    
         self.options = options;
         self.layout = layout;
         self.didRefresh = NO;
@@ -179,45 +203,9 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     return name;
 }
 
-- (void)initialize {
-    
-    MADReportFormatterPageDefinition *page = [[MADReportFormatterPageDefinition alloc] init];
-    self.page = page;
-    
-    self.page.margins = (self.options & MTReportFormatterOptionsMargin) ?
-                            MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
-    
-    MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
-    self.machineState = machineState;
-
-    [self initializeStateMachine];
-    
-    MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
-    self.reportFormatterCache = reportFormatterCache;
-    
-    MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];
-    self.pageLayoutTemporary = temporaryLayoutForPage;
-    
-    NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
-    self.pageIndexesTemporary = temporaryDataForPage;
-    
-    MADocument * __unsafe_unretained layout = self.layout;
-    if (layout) {
-    
-        [layout initializeSectionLayoutManagers: self.machineState.document];
-        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
-        self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
-        
-    } else {
-        
-        [self setLayoutHeightsBySectionKey:nil];
-        
-    }
-}
-
 - (void)initializeStateMachine {
     NSArray *sd = [self.dataDelegate sortDescriptors];
-    NSArray *sortDescriptors = [NSArray arrayWithArray:sd];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithArray:sd];
     
     _machineState.rowCounter = 0;
     _machineState.groupCounter = 0;
@@ -282,12 +270,17 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 - (void)formatDocument {
 
-    [self initializeStateMachine];
+    MADocument *layout = _layout;
+
+    [self.machineState resetWithDocument:(layout).activeDocumentModel
+                         andDataDelegate:self.dataDelegate];
+
+    [layout resetSectionLayoutManagers: self.machineState.document];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
     MADNumberMapByObjectID *layoutHeightsBySectionKeys;
-    layoutHeightsBySectionKeys = [self.layout copyLayoutHeightsBySectionKey];
+    layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
     
     self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     [self cleanupTemporaryIndexes];
@@ -336,7 +329,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 }
 
 - (void)loadLayoutAndIndexesFromCache {
-    
+
     [self.reportIndexes finalizeDatabase];
     [self.reportLayout finalizeDatabase];
 

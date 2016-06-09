@@ -249,6 +249,8 @@
 		4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4F12521D0917B20002294E /* NSError+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12501D0917B20002294E /* NSError+Document.h */; };
 		4C4F12531D0917B20002294E /* NSError+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12511D0917B20002294E /* NSError+Document.m */; };
+		4C4F12561D091D4D0002294E /* UIManagedDocument+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */; };
+		4C4F12571D091D4D0002294E /* UIManagedDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */; };
 		4C5EBD021CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EA1CEF77040058986B /* libz.1.dylib */; };
 		4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */; };
@@ -731,6 +733,8 @@
 		4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentProtocol.h; path = MAD/MADocument/MADDocumentProtocol.h; sourceTree = "<group>"; };
 		4C4F12501D0917B20002294E /* NSError+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Document.h"; path = "MAD/MADocument/NSError+Document.h"; sourceTree = "<group>"; };
 		4C4F12511D0917B20002294E /* NSError+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Document.m"; path = "MAD/MADocument/NSError+Document.m"; sourceTree = "<group>"; };
+		4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIManagedDocument+Extras.h"; path = "MAD/MADocument/UIManagedDocument+Extras.h"; sourceTree = "<group>"; };
+		4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIManagedDocument+Extras.m"; path = "MAD/MADocument/UIManagedDocument+Extras.m"; sourceTree = "<group>"; };
 		4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportFormatterDataSourceProtocol.h; path = MAD/MADReportFormatter/MADReportFormatterDataSourceProtocol.h; sourceTree = "<group>"; };
 		4C6652EA1CEF77040058986B /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = ../../../../../usr/lib/libbz2.1.0.dylib; sourceTree = "<group>"; };
@@ -1244,6 +1248,8 @@
 				4C401E441BAE4D8C00BAE5FC /* MADocument.h */,
 				4C401E451BAE4D8C00BAE5FC /* MADocument.m */,
 				4C1CFF051D050E5F009DBA4F /* MADDocumentObject */,
+				4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */,
+				4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */,
 			);
 			name = MADocument;
 			sourceTree = "<group>";
@@ -1817,6 +1823,7 @@
 				4C401DC71BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.h in Headers */,
 				4C6B015B1CEF625E00D29F3A /* archive_rb.h in Headers */,
 				4CC284891BADE9C900775B72 /* RptqDocumentSection+Extras.h in Headers */,
+				4C4F12561D091D4D0002294E /* UIManagedDocument+Extras.h in Headers */,
 				4CC2849B1BADE9EC00775B72 /* RptqQuerySort+Extras.h in Headers */,
 				4CC284741BADE99F00775B72 /* RptqDocumentObject+Extras.h in Headers */,
 				4CC284721BADE99C00775B72 /* RptqDocument+Extras.h in Headers */,
@@ -2111,6 +2118,7 @@
 				4C401E5C1BAE4E9400BAE5FC /* MTDataTableVirtual.m in Sources */,
 				4C401D5F1BAE3AF800BAE5FC /* MTPaperC6.m in Sources */,
 				4CC284711BADE99B00775B72 /* RptqDatabaseSchemaTable+Extras.m in Sources */,
+				4C4F12571D091D4D0002294E /* UIManagedDocument+Extras.m in Sources */,
 				4C401D631BAE3AF800BAE5FC /* MTPaperC8.m in Sources */,
 				4C401DDA1BAE3BD700BAE5FC /* MTQueryCacheSyncDefault.m in Sources */,
 				4C401D271BAE3AF800BAE5FC /* MTPaperA0.m in Sources */,

@@ -12,9 +12,17 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 
+@protocol MADDataProtocol;
+
 @class RptqDocument;
 
 @interface MTReportFormatterState : NSObject
+
+    - (instancetype)initWithDocument:(RptqDocument *)document
+                     andDataDelegate:(id <MADDataProtocol>)dataDelegate;
+
+    - (void)resetWithDocument:(RptqDocument *)document
+              andDataDelegate:(id <MADDataProtocol>)dataDelegate;
 
     @property (nonatomic, strong) NSArray *sortDescriptors;
     @property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
