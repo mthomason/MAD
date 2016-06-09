@@ -24,7 +24,7 @@
 #import "MADFileUtilities.h"
 #import "MADMetaData.h"
 
-#import "NSURL+CommonURLs.h"
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
 NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
@@ -188,7 +188,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
     typeof(_delegate) wdelegate = _delegate;
-    [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
     
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
@@ -211,7 +211,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)removeFileAtURL:(NSURL *)URL {
 
     typeof(_delegate) wdelegate = _delegate;
-    [MADFileUtilities removeFileAtURL:URL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities removeFileAtURL:URL completion:^(NSError *error) {
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
             [delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
@@ -231,7 +231,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
-    [MADFileUtilities duplicateFileAtURL:URL withCompletionHandler:^(NSURL *newURL,
+    [MADFileUtilities duplicateFileAtURL:URL completion:^(NSURL *newURL,
                                                                      NSError *error) {
         if (error) {
             [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
@@ -250,7 +250,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
-    [MADFileUtilities renameFileAtURL:URL toName:name withCompletionHandler:^(NSURL *sourceURL,
+    [MADFileUtilities renameFileAtURL:URL toName:name completion:^(NSURL *sourceURL,
                                                                               NSURL *newURL,
                                                                               NSError *error) {
         if (error) {

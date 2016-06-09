@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class MTDatabase;
+@class MTDataTable;
+
 @interface MADDocumentObjectCachedDataReferenceItem : NSObject
+
+    - (instancetype)initWithDatabase:(MTDatabase *)database
+                           datatable:(MTDataTable *)datatable
+                               rowID:(NSUInteger)rowID;
 
 @end

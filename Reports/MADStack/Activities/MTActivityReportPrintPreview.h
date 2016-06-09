@@ -15,7 +15,7 @@
 
 @protocol MTActivityReportPrintPreviewDelegate <NSObject>
  @required
-    - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler;
+    - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller completion:(void (^)(BOOL))completion;
 
     - (UIViewController *)previewViewControllerForInteractionController:(UIDocumentInteractionController *)controller;
 @end

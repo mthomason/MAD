@@ -17,7 +17,7 @@
 
 #import <MADCocoaExtensions/BDHost.h>
 
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MADConstants.h"

@@ -7,7 +7,8 @@
 //
 
 #import "MADFileUtilities.h"
-#import "NSURL+CommonURLs.h"
+#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+Document.h>
 
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSFileCoordinator.h>
@@ -17,6 +18,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSFileWrapper.h>
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";
@@ -25,6 +27,52 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 static NSString * const MADPathComponentData       = @"Data";
 
 @implementation MADFileUtilities
+
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
+    BOOL isDirectory;
+    
+    NSString *destinationPath = destinationUrl.path.copy;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
+                                                       isDirectory: &isDirectory];
+    if (exists) {
+        if (isDirectory) {
+            
+            BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
+                NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
+                return YES;
+            };
+            
+            NSArray *requestedKeys = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
+            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: destinationUrl
+                                                                     includingPropertiesForKeys: requestedKeys
+                                                                                        options: NSDirectoryEnumerationSkipsPackageDescendants
+                                                                                   errorHandler: ErrorHandler];
+            
+            dispatch_queue_t queueHigh = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0);
+            dispatch_group_t group = dispatch_group_create();
+            dispatch_group_enter(group);
+            
+            for (NSURL *fileURL in enumerator) {
+                NSURL *file = fileURL.copy;
+                dispatch_group_async(group, queueHigh, ^{
+                    //@autoreleasepool {
+                    [MADFileUtilities removeFileAtURL:file];
+                    //}
+                });
+            }
+            
+            NSURL *file = destinationUrl.copy;
+            dispatch_group_async(group, queueHigh, ^{
+                //@autoreleasepool {
+                [MADFileUtilities removeFileAtURL:file];
+                //}
+            });
+            dispatch_group_leave(group);
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+            
+        }
+    }
+}
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
     
@@ -88,7 +136,7 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)makeItemUbiquitousAtURL:(NSURL *)sourceURL
-            documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
+          documentsDirectoryURL:(NSURL *)documentsDirectoryURL {
     
     NSString *destinationFileName = sourceURL.lastPathComponent;
     
@@ -110,7 +158,7 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)readFileAtURL:(NSURL *)url
-            withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler {
+            completion:(void (^)(MADFile *list, NSError *error))completion {
     
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
@@ -129,14 +177,13 @@ static NSString * const MADPathComponentData       = @"Data";
                 [url stopAccessingSecurityScopedResource];
             }
             
-            if (completionHandler) {
-                completionHandler(nil, accessError);
+            if (completion) {
+                completion(nil, accessError);
             }
             
             return;
         }
         
-        // Local variables that will be used as parameters to `completionHandler`.
         NSError *readError;
         MADFile *deserializedList;
         
@@ -154,14 +201,14 @@ static NSString * const MADPathComponentData       = @"Data";
             [url stopAccessingSecurityScopedResource];
         }
         
-        if (completionHandler) {
-            completionHandler(deserializedList, readError);
+        if (completion) {
+            completion(deserializedList, readError);
         }
     }];
 }
 
 + (void)createFile:(MADFile *)list atURL:(NSURL *)url
-                   withCompletionHandler:(void (^)(NSError *))completionHandler {
+                              completion:(void (^)(NSError *))completion {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     NSFileAccessIntent *writing;
@@ -171,8 +218,8 @@ static NSString * const MADPathComponentData       = @"Data";
     [fileCoordinator coordinateAccessWithIntents: intents
                                            queue: [self queue] byAccessor:^(NSError *accessError) {
         if (accessError) {
-            if (completionHandler) {
-                completionHandler(accessError);
+            if (completion) {
+                completion(accessError);
             }
             
             return;
@@ -192,15 +239,15 @@ static NSString * const MADPathComponentData       = @"Data";
                                              ofItemAtPath: path error: nil];
         }
         
-        if (completionHandler) {
-            completionHandler(error);
+        if (completion) {
+            completion(error);
         }
     }];
 }
 
 + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name
-  withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL,
-                                  NSError *error))completionHandler {
+             completion:(void (^)(NSURL *sourceURL, NSURL *newURL,
+                                  NSError *error))completion {
     
     NSString *pathExtension = source.lastPathComponent.pathExtension;
     NSString *filename = [name stringByAppendingPathExtension: pathExtension];
@@ -214,31 +261,31 @@ static NSString * const MADPathComponentData       = @"Data";
                            error:&errorGettingAttributes] &&
         [status isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
         [self moveFileAtURL:source toUrl:destination
-                   withCompletionHandler:^(NSURL *result, NSError *error) {
-            completionHandler(source, result, error);
+                   completion:^(NSURL *result, NSError *error) {
+            completion(source, result, error);
         }];
     } else {
         [self moveRemoveFileAtURL:source toUrl:destination
-            withCompletionHandler:^(NSURL *result, NSError *error) {
-            completionHandler(source, result, error);
+            completion:^(NSURL *result, NSError *error) {
+            completion(source, result, error);
         }];
     }
 }
 
 + (void)moveRemoveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination
-      withCompletionHandler:(void (^)(NSURL *, NSError *))completionHandler {
+      completion:(void (^)(NSURL *, NSError *))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [self moveFileAtURL:source toUrl:destination
-                   withCompletionHandler:^(NSURL *result, NSError *error) {
-            completionHandler(destination, error);
+                   completion:^(NSURL *result, NSError *error) {
+            completion(destination, error);
         }];
         
     });
 }
 
 + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination
-                      withCompletionHandler:(void (^)(NSURL *result,
-                                                      NSError *error))completionHandler {
+                                 completion:(void (^)(NSURL *result,
+                                                      NSError *error))completion {
     NSError *coordinatorError = nil;
     
     BOOL successfulSecurityScopedResourceAccess = [source startAccessingSecurityScopedResource];
@@ -261,14 +308,14 @@ static NSString * const MADPathComponentData       = @"Data";
             [source stopAccessingSecurityScopedResource];
         }
                                      
-        completionHandler(accessorDestination, moveError);
+        completion(accessorDestination, moveError);
 
     }];
 
 }
 
 + (void)duplicateFileAtURL:(NSURL *)url
-     withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {
+                completion:(void (^)(NSURL *result, NSError *error))completion {
     
     NSURL *uniqueUrl;
     uniqueUrl = [NSURL newURLUniqueUrlInDirectory: url.URLByDeletingLastPathComponent
@@ -287,8 +334,8 @@ static NSString * const MADPathComponentData       = @"Data";
                                       error: &error
                                  byAccessor: ^(NSURL *source, NSURL *destinaion) {
         if (error) {
-            if (completionHandler) {
-                completionHandler(nil, error);
+            if (completion) {
+                completion(nil, error);
             }
             
             return;
@@ -307,14 +354,40 @@ static NSString * const MADPathComponentData       = @"Data";
         if (successfulSecurityScopedResourceAccess) {
             [url stopAccessingSecurityScopedResource];
         }
-        if (completionHandler) {
-            completionHandler(destinaion, errorCopy);
+        if (completion) {
+            completion(destinaion, errorCopy);
         }
 
     }];
 }
 
-+ (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler {
++ (void)removeFileAndArchiveAtURL:(NSURL *)url {
+    NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
+    NSDirectoryEnumerator *enumerator;
+    enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
+                                      includingPropertiesForKeys: propertyKeys
+                                                         options: NSNotFound
+                                                    errorHandler: ^BOOL(NSURL *errorUrl,
+                                                                        NSError *error) {
+                                                        return YES;
+                                                    }];
+    
+    NSError *error;
+    for (NSURL *fileURL in enumerator) {
+        error = nil;
+        [MADFileUtilities removeFileAtURL:fileURL];
+    }
+    
+    error = nil;
+    [MADFileUtilities removeFileAtURL:url];
+    
+}
+
++ (void)removeFileAtURL:(NSURL *)url {
+    [self removeFileAtURL:url completion:NULL];
+}
+
++ (void)removeFileAtURL:(NSURL *)url completion:(void (^)(NSError *error))completion {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
@@ -328,8 +401,8 @@ static NSString * const MADPathComponentData       = @"Data";
                                            queue:[self queue]
                                       byAccessor:^(NSError *accessError) {
         if (accessError) {
-            if (completionHandler) {
-                completionHandler(accessError);
+            if (completion) {
+                completion(accessError);
             }
             
             return;
@@ -345,8 +418,8 @@ static NSString * const MADPathComponentData       = @"Data";
             [url stopAccessingSecurityScopedResource];
         }
         
-        if (completionHandler) {
-            completionHandler(error);
+        if (completion) {
+            completion(error);
         }
     }];
 }
@@ -549,6 +622,33 @@ static NSString * const MADPathComponentData       = @"Data";
     }
     [[NSFileManager defaultManager] removeItemAtURL: directory error: &error];
     return YES;
+}
+
++ (BOOL)restoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
+                 overwrite:(BOOL)overwrite {
+    BOOL success = NO;
+    NSFileWrapper *fileWrapper;
+    NSError *fileWrapperError = nil;
+    fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
+                                             options: NSFileWrapperReadingImmediate
+                                               error: &fileWrapperError];
+    
+    NSURL *resultUrl;
+    
+    if (fileWrapperError == nil) {
+        if (overwrite) {
+            NSData *data = fileWrapper.serializedRepresentation;
+            NSError *errorWriting = nil;
+            success = [data writeToURL: archiveURL
+                               options: NSDataWritingAtomic
+                                 error: &errorWriting];
+        } else {
+            resultUrl = [archiveURL uniqueUrl];
+            NSData *data = fileWrapper.serializedRepresentation;
+            success = [data writeToURL:resultUrl atomically:YES];
+        }
+    }
+    return success;
 }
 
 @end

@@ -32,6 +32,7 @@
 
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
@@ -1305,7 +1306,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 
     @autoreleasepool {
-        NSURL *thumbnailUrl = [MADocument newThumbnailUrlForMadUrl:metadata.URL];
+        NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
         NSString *path = thumbnailUrl.path;
         if (!path) goto END_ReadThumbnail;
         {

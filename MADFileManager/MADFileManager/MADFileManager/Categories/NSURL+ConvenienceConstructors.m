@@ -7,7 +7,7 @@
 //
 
 #import "NSURL+ConvenienceConstructors.h"
-#import "NSURL+CommonURLs.h"
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 @implementation NSURL (ConvenienceConstructors)
 

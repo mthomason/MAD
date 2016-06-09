@@ -29,10 +29,11 @@
 #import <MADDataStructures/MTLinkedList.h>
 
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/UIScreen+Properties.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 #import <MAD/MADConstants.h>
 
@@ -215,7 +216,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     
     self.definesPresentationContext = NO;
     
-    self.backgroundContainer.layer.borderWidth = [MADocument isRetnaDisplay] ? 0.5000f : 1.0000f;
+    self.backgroundContainer.layer.borderWidth = [UIScreen mainScreen].isRetnaDisplay ? 0.5000f : 1.0000f;
     
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
@@ -231,15 +232,23 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     NSDictionary *viewDictionary = @{@"sv" : scrollView, @"bg" : self.backgroundContainer};
     
     NSMutableArray *constraints = [NSMutableArray new];
-    NSArray *constraints5 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
-    NSArray *constraints6 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary];
+    NSArray *constraints5 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|"
+                                                                    options:0 metrics:0
+                                                                      views:viewDictionary];
+    NSArray *constraints6 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|"
+                                                                    options:0 metrics:0
+                                                                      views:viewDictionary];
     [constraints addObjectsFromArray:constraints5];
     [constraints addObjectsFromArray:constraints6];
     [self.view addConstraints:constraints];
     [constraints removeAllObjects];
     
-    NSArray *constraints1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|" options:0 metrics:0 views:viewDictionary];
-    NSArray *constraints2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|" options:0 metrics:0 views:viewDictionary];
+    NSArray *constraints1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|"
+                                                                    options:0 metrics:0
+                                                                      views:viewDictionary];
+    NSArray *constraints2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|"
+                                                                    options:0 metrics:0
+                                                                      views:viewDictionary];
     [constraints addObjectsFromArray:constraints1];
     [constraints addObjectsFromArray:constraints2];
     [self.backgroundContainer addConstraints:constraints];

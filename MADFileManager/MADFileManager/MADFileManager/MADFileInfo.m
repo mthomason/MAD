@@ -49,9 +49,9 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
     return _fetchQueue;
 }
 
-- (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler {
+- (void)fetchInfoWithCompletionHandler:(void (^)(void))completion {
     dispatch_async(self.fetchQueue, ^{
-        completionHandler();
+        completion();
         return;
     });
 }

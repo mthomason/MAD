@@ -23,7 +23,7 @@
 #import <dispatch/dispatch.h>
 
 #import "MADFileUtilities.h"
-#import "NSURL+CommonURLs.h"
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 NSInteger finderSortWithLocale(id string1, id string2, void *locale);
 NSInteger finderSortWithLocale(id string1, id string2, void *locale) {

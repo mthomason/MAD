@@ -64,7 +64,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
     
     UIDocumentInteractionController * __unsafe_unretained weakController = self.activityController;
     [self.delegate prepareForInteractionController: weakController
-                             withCompletionHandler: ^(BOOL success) {
+                                        completion: ^(BOOL success) {
         if (success) {
             [weakController presentPreviewAnimated:YES];
         }

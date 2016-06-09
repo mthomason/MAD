@@ -15,16 +15,40 @@
 
 @interface MADFileUtilities : NSObject
 
+    + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
+
     + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
     + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
-    + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID extension:(NSString *)extension;
-    + (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADFile *list, NSError *error))completionHandler;
-    + (void)createFile:(MADFile *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
-    + (void)duplicateFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
-    + (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
-    + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler;
-    + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
+
+    + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID
+                    extension:(NSString *)extension;
+
+    + (void)readFileAtURL:(NSURL *)url
+               completion:(void (^)(MADFile *list, NSError *error))completion;
+
+    + (void)createFile:(MADFile *)list atURL:(NSURL *)url
+            completion:(void (^)(NSError *error))completion;
+
+    + (void)duplicateFileAtURL:(NSURL *)url
+                    completion:(void (^)(NSURL *result, NSError *error))completion;
+
+    + (void)removeFileAndArchiveAtURL:(NSURL *)url;
+    
+    + (void)removeFileAtURL:(NSURL *)url;
+
+    + (void)removeFileAtURL:(NSURL *)url
+                 completion:(void (^)(NSError *error))completion;
+
+    + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name
+                 completion:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completion;
+
+    + (void)moveFileAtURL:(NSURL *)source
+                    toUrl:(NSURL *)destination
+               completion:(void (^)(NSURL *result, NSError *error))completion;
+
+    + (BOOL)restoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
+                     overwrite:(BOOL)overwrite;
 
 @end
 

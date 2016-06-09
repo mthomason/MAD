@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C2480A41C8B2D7F0058E6B4 /* MADFilename.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C24809E1C8B2D7F0058E6B4 /* MADFilename.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2480A51C8B2D7F0058E6B4 /* MADFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809F1C8B2D7F0058E6B4 /* MADFilename.m */; };
 		4C2480A61C8B2D7F0058E6B4 /* MADImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480A01C8B2D7F0058E6B4 /* MADImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480A71C8B2D7F0058E6B4 /* MADImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A11C8B2D7F0058E6B4 /* MADImage.m */; };
 		4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,8 +70,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C24809E1C8B2D7F0058E6B4 /* MADFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFilename.h; path = MADCocoaExtensions/MADFilename.h; sourceTree = "<group>"; };
-		4C24809F1C8B2D7F0058E6B4 /* MADFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFilename.m; path = MADCocoaExtensions/MADFilename.m; sourceTree = "<group>"; };
 		4C2480A01C8B2D7F0058E6B4 /* MADImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADImage.h; path = MADCocoaExtensions/MADImage.h; sourceTree = "<group>"; };
 		4C2480A11C8B2D7F0058E6B4 /* MADImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADImage.m; path = MADCocoaExtensions/MADImage.m; sourceTree = "<group>"; };
 		4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabel.h; path = MADCocoaExtensions/MADLabel.h; sourceTree = "<group>"; };
@@ -195,8 +191,6 @@
 				4C3622B41CF343D9002B8649 /* MADCompassDirection.h */,
 				4CB9AAE51C8C244B00420CFF /* MADThread.h */,
 				4CB9AAE61C8C244B00420CFF /* MADThread.m */,
-				4C24809E1C8B2D7F0058E6B4 /* MADFilename.h */,
-				4C24809F1C8B2D7F0058E6B4 /* MADFilename.m */,
 				4C2480A01C8B2D7F0058E6B4 /* MADImage.h */,
 				4C2480A11C8B2D7F0058E6B4 /* MADImage.m */,
 				4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */,
@@ -278,7 +272,6 @@
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
 				4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */,
 				4C3622B91CF34AB8002B8649 /* MADAspectRatio.h in Headers */,
-				4C2480A41C8B2D7F0058E6B4 /* MADFilename.h in Headers */,
 				4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */,
 				4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */,
 				4C5205B41BA7E2A2000E6A59 /* UIAlertController+Constructors.h in Headers */,
@@ -396,7 +389,6 @@
 			files = (
 				4C5205B51BA7E2A2000E6A59 /* UIAlertController+Constructors.m in Sources */,
 				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
-				4C2480A51C8B2D7F0058E6B4 /* MADFilename.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
 				4C2480A71C8B2D7F0058E6B4 /* MADImage.m in Sources */,
 				4C2480BB1C8BFA340058E6B4 /* MADColor.m in Sources */,

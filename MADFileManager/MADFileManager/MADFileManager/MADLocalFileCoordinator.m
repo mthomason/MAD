@@ -19,7 +19,7 @@
 
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
-#import "NSURL+CommonURLs.h"
+#import <MADFoundation/NSURL+CommonURLs.h>
 #import "NSURL+ConvenienceConstructors.h"
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
@@ -114,7 +114,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 - (void)removeFileAtURL:(NSURL *)URL {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
-    [MADFileUtilities removeFileAtURL:URL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities removeFileAtURL:URL completion:^(NSError *error) {
         if (error) {
             id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailRemovingFileAtURL: URL
@@ -134,7 +134,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
-    [MADFileUtilities duplicateFileAtURL:URL withCompletionHandler:^(NSURL *newURL, NSError *error) {
+    [MADFileUtilities duplicateFileAtURL:URL completion:^(NSURL *newURL, NSError *error) {
         if (error) {
             id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
@@ -153,7 +153,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
-    [MADFileUtilities renameFileAtURL:URL toName:name withCompletionHandler:^(NSURL *sourceURL,
+    [MADFileUtilities renameFileAtURL:URL toName:name completion:^(NSURL *sourceURL,
                                                                               NSURL *newURL,
                                                                               NSError *error) {
         if (error) {
@@ -178,7 +178,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
                                                   fileGroup:fileGroup];
     
     id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
-    [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
 
         if (error) {
             id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;

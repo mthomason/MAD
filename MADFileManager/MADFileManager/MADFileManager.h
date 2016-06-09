@@ -22,4 +22,3 @@ FOUNDATION_EXPORT const unsigned char MADFileManagerVersionString[];
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFileManager/MADFileInfo.h>
-#import <MADFileManager/NSURL+CommonURLs.h>

@@ -8,7 +8,7 @@
 
 #import "MADInstallOperationSampleDatabase.h"
 #import <MAD/MADConstants.h>
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>

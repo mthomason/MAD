@@ -10,4 +10,7 @@
 
 @interface NSError (Document)
 
+    + (instancetype)newErrorConnectionProblem;
+    + (instancetype)newErrorFailedToOpenDocument;
+
 @end

@@ -8,6 +8,4 @@
 
 #import "MADConstants.h"
 
-@implementation MADConstants
-
-@end
+NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";

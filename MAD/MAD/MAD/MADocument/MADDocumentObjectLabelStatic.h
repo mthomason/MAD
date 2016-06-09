@@ -8,6 +8,11 @@
 
 #import "MADDocumentObject.h"
 
+@class MADocumentObjectAttributesText;
+
 @interface MADDocumentObjectLabelStatic : MADDocumentObject
+
+    - (void)drawInRect:(CGRect)rect
+        withAttributes:(__kindof MADocumentObjectAttributesText *)attributes;
 
 @end

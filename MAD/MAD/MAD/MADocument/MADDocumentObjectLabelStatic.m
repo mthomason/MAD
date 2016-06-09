@@ -7,9 +7,10 @@
 //
 
 #import "MADDocumentObjectLabelStatic.h"
+#import <UIKit/NSStringDrawing.h>
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectLabel.h"
-#import <Foundation/NSString.h>
+#import "MADocumentObjectAttributesText.h"
 
 @interface MADDocumentObjectLabelStatic ()
 
@@ -26,11 +27,12 @@
     return self;
 }
 
-- (void)drawInRect:(CGRect)rect {
-    /*[_text drawWithRect: rect
+- (void)drawInRect:(CGRect)rect
+    withAttributes:(__kindof MADocumentObjectAttributesText *)attributes {
+    [_text drawWithRect: rect
                 options: NSStringDrawingUsesLineFragmentOrigin
-             attributes: attributes
-                context: nil];*/
+             attributes: attributes.fontAttributes
+                context: nil];
 }
 
 @end

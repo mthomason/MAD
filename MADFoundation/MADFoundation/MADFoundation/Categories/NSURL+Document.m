@@ -7,10 +7,44 @@
 //
 
 #import "NSURL+Document.h"
+#import "UIScreen+Properties.h"
+#import "MADConstants.h"
+#import "MADFilename.h"
+#import "NSURL+CommonURLs.h"
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
 
+
 @implementation NSURL (Document)
+
++ (instancetype)newURLCacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
+    return [NSURL newURLForLocalCacheDirectoryNamed:filenameId];
+}
+
++ (instancetype)newURLDocumentArchiveForFileURL:(NSURL *)madUrl extension:(NSString *)extension {
+    NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
+    NSString *destinationName;
+    destinationName = [name stringByAppendingPathExtension: extension];
+    NSURL *destinationDirectoryUrl = [NSURL newURLLocalTemporaryDirectory];
+    id url = [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
+                                                      isDirectory: YES];
+    return url;
+}
+
++ (instancetype)newThumbnailUrlForMadUrl:(NSURL *)madUrl {
+    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
+    return [self newUrlThumbnailForHandle: handle andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
+    
+}
+
++ (instancetype)newUrlThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
+    NSString *name = [UIScreen mainScreen].isRetnaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
+    NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+    NSURL *cacheDirectory = [NSURL newURLForLocalCacheDirectoryNamed:fileNameId];
+    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
 
 - (NSURL *)uniqueUrl {
 

@@ -18,7 +18,7 @@
     @property (readonly) NSString *name;
 
     - (instancetype)initWithURL:(NSURL *)URL;
-    - (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler;
+    - (void)fetchInfoWithCompletionHandler:(void (^)(void))completion;
 
 @end
 

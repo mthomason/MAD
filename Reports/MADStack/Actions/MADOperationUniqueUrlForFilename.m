@@ -11,7 +11,7 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSPathUtilities.h>
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 @interface MADOperationUniqueUrlForFilename ()
 

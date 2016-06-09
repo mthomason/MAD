@@ -26,11 +26,13 @@
 #import <setjmp.h>
 #import <copyfile.h>
 
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/UIScreen+Properties.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADFilename.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MADFilename.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
@@ -116,6 +118,7 @@
 #import "archive_entry.h"
 
 #import "UIImage+MADDocument.h"
+#import "NSError+Document.h"
 
 #import "miniz.h"
 #import "madtar.h"
@@ -192,7 +195,6 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MADMimeType                                    = @"application/vnd.everydayapps.mad";
 NSString * const MADDocumentInfoKeyThumbnail                    = @"thumbnail";
-NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 
 static NSString * const MTDocumentAdditionalContentKey          = @"additionalContent";
 static NSString * const MTDocumentFileTypeKey                   = @"fileType";
@@ -214,8 +216,6 @@ static NSString * const MNSInterfaceTitleProblem                        = @"Prob
 
 static NSString * const MADManagedObjectModelName                       = @"MAD";
 static NSString * const MADManagedObjectModelExtention                  = @"momd";
-
-static NSString * const MADDocumentErrorDomain                          = @"MADocument";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
   NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
@@ -240,7 +240,7 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
     @property (nonatomic, strong, readwrite) NSDictionary *madPersistentStoreOptions;
 
-    @property (nonatomic, strong, readwrite) NSMutableDictionary *extraInformation;        //Structure for extra info
+    @property (nonatomic, strong, readwrite) NSMutableDictionary *extraInformation;
 
     @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
     @property (nonatomic, copy, readwrite) NSURL *urlGuts;
@@ -263,15 +263,26 @@ void madwarn(char *err,  const char*err2) { }
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
         
-        _urlGuts = [MADocument newArchiveUrlForMadUrl: url];
+        _urlGuts = [NSURL newURLDocumentArchiveForFileURL: url
+                                                extension: MADFileExtentionMobleApplicationDocumentArchive];
         _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
         
+        //Initalize the main data table.
+        NSString *filename = self.filename;
+        MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
+        datatable.cacheDelegate = self;
         
-        [self initializeMainDataTable];
+        NSString *cacheName = [datatable newFilenameMDCache];
+        NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
+        self.urlDataTableCache = cacheUrl;
+        [datatable loadFromCacheWithUrl:cacheUrl];
+        self.mainDataTable = datatable;
         
+        //Initzlize the main document state
         id documentState = [[MADocumentState alloc] init];
         self.documentStatus = documentState;
         
+        //Initzlize the extra info output container
         id extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
         self.extraInformation = extraInfo;
         
@@ -396,73 +407,13 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return success;
 }
 
-+ (BOOL)RestoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
-                 overwrite:(BOOL)overwrite {
-    BOOL success = NO;
-    NSFileWrapper *fileWrapper;
-    NSError *fileWrapperError = nil;
-    fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
-                                             options: NSFileWrapperReadingImmediate
-                                               error: &fileWrapperError];
-    
-    NSURL *resultUrl;
-    
-    if (fileWrapperError == nil) {
-        if (overwrite) {
-            NSData *data = fileWrapper.serializedRepresentation;
-            NSError *errorWriting = nil;
-            success = [data writeToURL: archiveURL
-                               options: NSDataWritingAtomic
-                                 error: &errorWriting];
-        } else {
-            resultUrl = [archiveURL uniqueUrl];
-            NSData *data = fileWrapper.serializedRepresentation;
-            success = [data writeToURL:resultUrl atomically:YES];
-        }
-    }
-    return success;
-}
-
-+ (BOOL)isRetnaDisplay {
-    return [UIScreen mainScreen].scale > 1.5;
-}
-
-+ (NSURL *)newArchiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
-    NSString *destinationName;
-    destinationName = [name stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [NSURL newURLLocalTemporaryDirectory];
-    id url = [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
-                                                      isDirectory: YES];
-    return url;
-}
-
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
-    return [NSURL newURLForLocalCacheDirectoryNamed:filenameId];
-}
-
-+ (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl {
-    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
-    return [self newUrlThumbnailForHandle: handle andRetinaDisplay: [self isRetnaDisplay]];
-    
-}
-
-+ (NSURL *)newUrlThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
-    NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
-    NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
-    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
-    NSURL *cacheDirectory = [NSURL newURLForLocalCacheDirectoryNamed:fileNameId];
-    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-}
-
-+ (void)DeletePersistentStoreForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = managedObjectContext.persistentStoreCoordinator;
++ (void)deletePersistentStoreForManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = context.persistentStoreCoordinator;
     NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
     NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
     
-    [managedObjectContext performBlockAndWait:^{
-        [managedObjectContext reset];//to drop pending changes
+    [context performBlockAndWait:^{
+        [context reset];//to drop pending changes
     }];
     NSError *error = nil;
     
@@ -471,7 +422,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                                                                error: &error];
     if (success) {
         
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+        [MADFileUtilities removeFileAtURL:storeURL];
         
         NSNumber *o1 = @YES;
         NSNumber *o2 = @YES;
@@ -488,126 +439,6 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     
 }
 
-+ (void)DeleteDocument:(MADocument *)document fromDiskCompletion:(void (^)(BOOL success))completion {
-    
-    NSURL *fileURL = document.fileURL;
-    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        
-        NSError *deleteError = nil;
-        
-        NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
-        
-        NSDirectoryEnumerator *enumerator;
-        enumerator = [[NSFileManager defaultManager] enumeratorAtURL: document.fileURL
-                                          includingPropertiesForKeys: properties
-                                                             options: NSDirectoryEnumerationSkipsHiddenFiles
-                                                        errorHandler: ^BOOL(NSURL *url, NSError *error) {
-                                                            return YES;
-                                                        }];
-        for (NSURL *file in enumerator) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
-        }
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
-        NSAssert(deleteError == nil, @"%@", deleteError);
-        completion(YES);
-    };
-    
-    
-    [document performAsynchronousFileAccessUsingBlock:asyncBlock];
-}
-
-+ (NSError *)errorConnectionProblem {
-    NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
-    NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 36732];
-}
-
-+ (NSError *)errorFailedToOpenDocument {
-    NSString *title = NSLocalizedString(@"Failed to open document.", @"Failed to open document.");
-    NSString *message = NSLocalizedString(@"Document may be incomplete, missing, or corrupt.", @"Document may be incomplete, missing, or corrupt.");
-    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 260];
-}
-
-+ (void)RemoveGutsAtUrl:(NSURL *)url {
-    NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
-    NSDirectoryEnumerator *enumerator;
-    enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
-                                      includingPropertiesForKeys: propertyKeys options: NSNotFound
-                                                    errorHandler: ^BOOL(NSURL *errorUrl,
-                                                                        NSError *error) {
-                                                        return YES;
-                                                    }];
-    
-    NSError *error;
-    for (NSURL *fileURL in enumerator) {
-        error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&error];
-    }
-    
-    error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
-    
-}
-
-+ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
-    BOOL isDirectory;
-    
-    NSString *destinationPath = destinationUrl.path.copy;
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
-                                                       isDirectory: &isDirectory];
-    if (exists) {
-        if (isDirectory) {
-            
-            BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
-                NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
-                return YES;
-            };
-            
-            NSArray *requestedKeys = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
-            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: destinationUrl
-                                                                     includingPropertiesForKeys: requestedKeys
-                                                                                        options: NSDirectoryEnumerationSkipsPackageDescendants
-                                                                                   errorHandler: ErrorHandler];
-            
-            dispatch_queue_t queueHigh = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0);
-            dispatch_group_t group = dispatch_group_create();
-            dispatch_group_enter(group);
-            
-            for (NSURL *fileURL in enumerator) {
-                NSURL *file = fileURL.copy;
-                dispatch_group_async(group, queueHigh, ^{
-                    //@autoreleasepool {
-                    [MADocument removeItemAtURL:file];
-                    //}
-                });
-            }
-            
-            NSURL *file = destinationUrl.copy;
-            dispatch_group_async(group, queueHigh, ^{
-                //@autoreleasepool {
-                [MADocument removeItemAtURL:file];
-                //}
-            });
-            dispatch_group_leave(group);
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-            
-        }
-    }
-}
-
-+ (void)removeItemAtURL:(NSURL *)url {
-    NSError * __autoreleasing *deleteError = NULL;
-    [[NSFileManager defaultManager] removeItemAtURL:url error:deleteError];
-    if (deleteError != nil) {
-        NSAssert(*deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, *deleteError);
-        *deleteError = NULL;
-        [[NSFileManager defaultManager] removeItemAtURL:url error:deleteError];
-    }
-}
-
 + (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion  {
     
     [document regenThumbnail];
@@ -621,7 +452,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
         if (success) {
             [document closeWithCompletionHandler:^(BOOL successClose) {
-                [self RemoveGutsAtUrl:gutsUrl];
+                [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
                 completion(successClose);
             }];
         }
@@ -631,10 +462,15 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
 + (void)closeAndDelete:(MADocument *)document completion:(void (^)(BOOL success))completion  {
     [self close:document completion:^(BOOL success) {
-        [self DeletePersistentStoreForManagedObjectContext:document.managedObjectContext];
-        [self DeleteDocument:document fromDiskCompletion:^(BOOL successDelete) {
+    
+        [self deletePersistentStoreForManagedObjectContext:document.managedObjectContext];
+        
+        NSURL *fileURL = document.fileURL.copy;
+        MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+            [MADFileUtilities removeFileAndArchiveAtURL:fileURL];
             completion(YES);
-        }];
+        };
+        [document performAsynchronousFileAccessUsingBlock:asyncBlock];
     }];
 }
 
@@ -642,8 +478,8 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
 - (NSURL *)copyThumbnailURL {
     NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
-    NSURL *url = [MADocument newUrlThumbnailForHandle: name
-                                     andRetinaDisplay: [MADocument isRetnaDisplay]];
+    NSURL *url = [NSURL newUrlThumbnailForHandle: name
+                                andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
     return url;
 }
 
@@ -654,7 +490,8 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = self.filename;
-    return [MADocument cacheFilesDirectoryForFilename:filename];
+    NSURL *result = [NSURL newURLCacheFilesDirectoryForFilename:filename];
+    return result;
 }
 
 - (NSURL *)newUrlCacheForFilename:(NSString *)filename {
@@ -714,7 +551,6 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return _madPersistentStoreOptions;
 }
 
-
 - (NSString *)filename {
     return self.fileURL.lastPathComponent.stringByDeletingPathExtension;
 }
@@ -732,7 +568,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     success = [pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
     if (!success) goto READ_END;
  
-    [MADocument deleteCoreDataFilesAtDirectory: urlGuts];
+    [MADFileUtilities deleteCoreDataFilesAtDirectory: urlGuts];
 
     success = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
                                                    isDirectory: &isDirectory];
@@ -752,7 +588,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
         if (!sucessExist || !isDirectory) goto READ_FAIL;
     }
     
-    urlArchive = url;// [url URLByAppendingPathExtension:@"tar.gz"];
+    urlArchive = url;
     
     const char *fileWrapperDirectoryCString = urlGuts.fileSystemRepresentation;
     r = chdir(fileWrapperDirectoryCString);
@@ -824,7 +660,7 @@ READ_END:;
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
     //if (userInteractionPermitted) {
         if (error.code == 260) {
-            NSError *err = [MADocument errorFailedToOpenDocument];
+            NSError *err = [NSError newErrorFailedToOpenDocument];
             NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
             //[NSError presentError: err
             NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
@@ -860,16 +696,16 @@ READ_END:;
     return MADFileExtentionMobleApplicationDocument;
 }
 
-- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completionHandler {
+- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
     if ([self hasUnsavedChanges]) {
         
         NSURL *url = self.fileURL.copy;
         [self saveToURL: url
        forSaveOperation: UIDocumentSaveForOverwriting
-      completionHandler: completionHandler];
+      completionHandler: completion];
         
     } else {
-        completionHandler(YES);
+        completion(YES);
     }
 }
 
@@ -929,7 +765,7 @@ READ_END:;
         if (image != nil) {
 
             UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [MADocument isRetnaDisplay] ?
+            NSString *key = [UIScreen mainScreen].isRetnaDisplay ?
                                     MADDocumentInfoKeyThumbnailRetna :
                                     MADDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
@@ -1009,19 +845,20 @@ READ_END:;
 #pragma mark -
 #pragma mark UIPrintInteractionControllerDelegate
 
-- (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)ic { }
+- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)ic { }
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)ic { }
+- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)ic { }
 
-- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
+- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)controller {
     self.printingReportFormatter.dataDelegate = self;
-    self.printingReportFormatter.layoutSize = printInteractionController.printPaper.paperSize;
-    self.printingReportFormatter.marginUsingPrintableRect = printInteractionController.printPaper.printableRect;
+    self.printingReportFormatter.layoutSize = controller.printPaper.paperSize;
+    self.printingReportFormatter.marginUsingPrintableRect = controller.printPaper.printableRect;
     self.printingReportFormatter.didRefresh = YES;
-    [self.printingReportFormatter formatForSize: printInteractionController.printPaper.paperSize contentChanged: NO];
+    [self.printingReportFormatter formatForSize: controller.printPaper.paperSize
+                                 contentChanged: NO];
 }
-- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
+- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)controller {
     self.printingReportFormatter = nil;
 }
 
@@ -1452,19 +1289,6 @@ READ_END:;
     }
 }
 
-- (void)initializeMainDataTable {
-
-    NSString *filename = self.filename;
-    MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
-    datatable.cacheDelegate = self;
-
-    NSString *cacheName = [datatable newFilenameMDCache];
-    NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
-    self.urlDataTableCache = cacheUrl;
-    [datatable loadFromCacheWithUrl:cacheUrl];
-    self.mainDataTable = datatable;
-}
-
 - (void)initializeReportFormatter {
     MTReportFormatter *reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
                                                                              options: MTReportFormatterOptionsNone];
@@ -1494,12 +1318,12 @@ READ_END:;
     NSURL *gutsUrl = self.urlGuts.copy;
     [self removeObservers];
     MADocument * __weak weakself = self;
-    [MADocument RemoveGutsAtUrl:gutsUrl];
+    [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
     
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
         if (successClosingReport) {
             [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
-            NSError *error = [MADocument errorConnectionProblem];
+            NSError *error = [NSError newErrorConnectionProblem];
             [MADThread completeOnMainThread:completion withObject:error andSuccess:NO];
         }
     }];
@@ -1604,16 +1428,15 @@ READ_END:;
             return YES;
         }];
         for (NSURL *file in enumerator) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] removeItemAtURL:file error:&error];
+            [MADFileUtilities removeFileAtURL:file];
         }
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
+        [MADFileUtilities removeFileAtURL:fileURL];
         NSAssert(deleteError == nil, @"%@", deleteError);
         completion(YES);
     };
     
     NSAssert(self.documentState == UIDocumentStateClosed, @"Document must be closed to call this!");
-    [MADocument DeletePersistentStoreForManagedObjectContext:self.managedObjectContext];
+    [MADocument deletePersistentStoreForManagedObjectContext:self.managedObjectContext];
 
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
@@ -1622,7 +1445,7 @@ READ_END:;
 #pragma mark File Name
 
 - (void)removeGuts {
-    [MADocument RemoveGutsAtUrl:self.urlGuts];
+    [MADFileUtilities removeFileAndArchiveAtURL:self.urlGuts];
     
 }
 

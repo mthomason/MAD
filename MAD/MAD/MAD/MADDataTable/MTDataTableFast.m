@@ -59,7 +59,7 @@
 #import "MADQueryCacheIndexCreateParameters.h"
 
 #import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/NSURL+CommonURLs.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <stdio.h>

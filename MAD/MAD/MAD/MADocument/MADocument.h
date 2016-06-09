@@ -48,8 +48,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
 
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
-extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
-
 
 @interface MADocument : UIManagedDocument
     <MADDataProtocol,
@@ -85,15 +83,12 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
 
-    + (NSURL *)newThumbnailUrlForMadUrl:(NSURL *)madUrl;
-    + (BOOL)isRetnaDisplay;
-
     - (NSString *)mimetype;
 
     - (void)saveContext;
 
     - (void)initializeSectionLayoutManagers:(RptqDocument *)document;
-    - (void)initializeMainDataTable;
+//    - (void)initializeMainDataTable;
     - (void)initializeMainQuery:(RptqDocument *)document;
 
     - (void)prepareForQuery;

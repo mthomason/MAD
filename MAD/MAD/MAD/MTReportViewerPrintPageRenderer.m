@@ -240,7 +240,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 }
 
 #pragma -
-#pragma Propery Getter Overrides
+#pragma Propery Overrides
 
 - (MADReportTextRepresentation *)textRepresentation {
     if (_textRepresentation == nil) {
@@ -250,6 +250,9 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     }
     return _textRepresentation;
 }
+
+#pragma -
+#pragma Drawing Helpers
 
 - (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
                                       inRect:(CGRect)rect {
@@ -289,6 +292,104 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     CGContextDrawPath(ctx, kCGPathFill);
     CGPathRelease(path);
 
+}
+
+#pragma -
+#pragma Drawing loop
+
+- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
+                       withTransparentBackground:(BOOL)transparentBackground {
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
+    
+    [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
+
+    if (self.showWaterMark) {
+        [MTReportViewerPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
+    }
+
+}
+
+- (void)drawPageAtIndex:(NSUInteger)pageIndex
+            withContext:(CGContextRef)ctx
+             inPageRect:(CGRect)pageRect {
+
+    MTReportFormatter *reportFormatter = self.reportFormatter;
+    if (pageIndex >= reportFormatter.numberOfPages) {
+        return;
+    }
+
+    CGFloat originY = pageRect.origin.y;
+    NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
+    NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
+    CGRect sectionRect;
+    
+    RptqDocument *document;
+    RptqDatabase *databaseSchemas;
+    MTDatabaseConnection *databaseConnection;
+    
+    document = (reportFormatter.layout).activeDocumentModel;
+    databaseSchemas = document.hasDatabaseSchemas.anyObject;
+    
+    RptqUserCredentals *credentals = databaseSchemas.ownedByUser;
+    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals: credentals];
+    
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    
+    NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
+    NSArray *pageSections = layoutEnumerator.allObjects;
+    
+    MADReportPageRepresentation *pageRepresentation =
+            [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
+    
+    RptqDocumentSection *documentSection;
+    MADReportSectionRepresentation *sectionRepresentation;
+    
+    for (MADSectionPlist *pageSection in pageSections) {
+        
+        documentSection = [document documentSectionForType: pageSection.sectionType
+                                                  andLevel: pageSection.groupLevel];
+        
+        sectionRect = [self sectionRectForDocumentSection: documentSection
+                                              pageSection: pageSection
+                                               inDocument: document
+                                                 pageRect: pageRect
+                                            numberOfPages: reportFormatter.numberOfPages
+                                                pageIndex: pageIndex
+                                                   offset: originY];
+        
+        [self setBackgroundColorForDocumentSection: documentSection
+                                            inRect: sectionRect];
+        
+        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter &&
+            pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
+            readGroupCounter++;
+        }
+        
+        sectionRepresentation = [self drawSection: documentSection
+                                         pageRect: pageRect
+                                      pageSection: pageSection
+                                         document: document
+                                           onPage: pageIndex
+                                     withDatabase: database
+                                           offset: originY
+                                    offsetElement: offsetElement
+                                  offsetCharacter: offsetCharacter];
+        
+        [pageRepresentation addSection:sectionRepresentation];
+        
+        if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
+            rowIndex++;
+        }
+        
+        originY += sectionRect.size.height;
+        layoutSectionCounter++;
+    }
+    
+    
+    [self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
+    
 }
 
 - (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection
@@ -469,6 +570,11 @@ END_DrawSection:;
     return item.image;
 }
 
+
+- (NSString *)newDocumentObjectForLabelStatic:(RptqDocumentObjectLabel *)item {
+    return [NSString stringWithString:item.text];
+}
+
 - (NSString *)newDocumentObjectForLabelDynamic:(RptqDocumentObjectLabelDataField *)item
                                    forDatabase:(MTDatabase *)database
                                       forRowID:(NSNumber *)rowID {
@@ -489,10 +595,6 @@ END_DrawSection:;
         drawingObject = @"";
     }
     return drawingObject;
-}
-
-- (NSString *)newDocumentObjectForLabelStatic:(RptqDocumentObjectLabel *)item {
-    return [NSString stringWithString:item.text];
 }
 
 - (MTBarcode *)newDocumentObjectForBarcode:(RptqDocumentObjectBarcode *)item
@@ -792,100 +894,6 @@ END_DrawSection:;
     }
     
     return result;
-}
-
-- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
-                       withTransparentBackground:(BOOL)transparentBackground {
-
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
-    
-    [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
-
-    if (self.showWaterMark) {
-        [MTReportViewerPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
-    }
-
-}
-
-- (void)drawPageAtIndex:(NSUInteger)pageIndex
-            withContext:(CGContextRef)ctx
-             inPageRect:(CGRect)pageRect {
-
-    MTReportFormatter *reportFormatter = self.reportFormatter;
-    if (pageIndex >= reportFormatter.numberOfPages) {
-        return;
-    }
-
-    CGFloat originY = pageRect.origin.y;
-    NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
-    NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
-    CGRect sectionRect;
-    
-    RptqDocument *document;
-    RptqDatabase *databaseSchemas;
-    MTDatabaseConnection *databaseConnection;
-    
-    document = (reportFormatter.layout).activeDocumentModel;
-    databaseSchemas = document.hasDatabaseSchemas.anyObject;
-    
-    RptqUserCredentals *credentals = databaseSchemas.ownedByUser;
-    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals: credentals];
-    
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
-    
-    NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
-    NSArray *pageSections = layoutEnumerator.allObjects;
-    MADReportPageRepresentation *pageRepresentation =
-            [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
-    
-    RptqDocumentSection *documentSection;
-    MADReportSectionRepresentation *sectionRepresentation;
-    
-    for (MADSectionPlist *pageSection in pageSections) {
-        
-        documentSection = [document documentSectionForType: pageSection.sectionType
-                                                  andLevel: pageSection.groupLevel];
-        
-        sectionRect = [self sectionRectForDocumentSection: documentSection
-                                              pageSection: pageSection
-                                               inDocument: document
-                                                 pageRect: pageRect
-                                            numberOfPages: reportFormatter.numberOfPages
-                                                pageIndex: pageIndex
-                                                   offset: originY];
-        
-        [self setBackgroundColorForDocumentSection: documentSection
-                                            inRect: sectionRect];
-        
-        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter &&
-            pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
-            readGroupCounter++;
-        }
-        
-        sectionRepresentation = [self drawSection: documentSection
-                                         pageRect: pageRect
-                                      pageSection: pageSection
-                                         document: document
-                                           onPage: pageIndex
-                                     withDatabase: database
-                                           offset: originY
-                                    offsetElement: offsetElement
-                                  offsetCharacter: offsetCharacter];
-        
-        [pageRepresentation addSection:sectionRepresentation];
-        
-        if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
-            rowIndex++;
-        }
-        
-        originY += sectionRect.size.height;
-        layoutSectionCounter++;
-    }
-    
-    
-    [self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
-    
 }
 
 #pragma mark -

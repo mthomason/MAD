@@ -781,13 +781,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return self;
 }
 
-- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller completion:(void (^)(BOOL))completion {
     
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        completionHandler(YES);
+        completion(YES);
     } else {
         [self.popoverControllerActivity dismissPopoverAnimated:YES];
-        completionHandler(YES);
+        completion(YES);
     }
 }
 
@@ -1118,7 +1118,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         
                         MADViewerController * __weak weakself2 = sself;
                         
-                        void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+                        void (^completion)(UIPrintInteractionController *, BOOL, NSError *) =
                             ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             
                             MADViewerController *sself2 = weakself2;
@@ -1127,7 +1127,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                             [sself2.tabBarController enableTabBarItems];
                         };
                         
-                        [sharedController presentFromBarButtonItem:sself.barButtonItemActivity animated:YES completionHandler:completionHandler];
+                        [sharedController presentFromBarButtonItem:sself.barButtonItemActivity animated:YES completionHandler:completion];
                     }
                 });
             });

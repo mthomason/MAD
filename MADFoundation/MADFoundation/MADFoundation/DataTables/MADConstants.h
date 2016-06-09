@@ -6,8 +6,6 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@class NSString;
 
-@interface MADConstants : NSObject
-
-@end
+extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;

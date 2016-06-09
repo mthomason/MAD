@@ -10,4 +10,8 @@
 
 @implementation UIScreen (Properties)
 
+- (BOOL)isRetnaDisplay {
+    return [UIScreen mainScreen].scale > 1.5;
+}
+
 @end
