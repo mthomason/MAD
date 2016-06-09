@@ -107,8 +107,8 @@
             rptqQuery = rptqDatabase.hasQueries.anyObject;
         }
         
-        MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQueryObjectId: rptqQuery.objectID
-                                                             andQueryLimit: NSNotFound];
+        MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQuery: rptqQuery
+                                                     andQueryLimit: NSNotFound];
         madQuery.dataDelegate = document;
         document.mainQuery = madQuery;
         

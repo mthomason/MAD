@@ -347,7 +347,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     RptqDocument *activeDocumentModel = document.activeDocumentModel;
 
-    [document initializeMainQuery:activeDocumentModel];
+    [document resetMainQueryWithDocumentModel:activeDocumentModel];
     [document activeDocumentModel];
     [document prepareForQuery];
     [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];

@@ -15,8 +15,9 @@
 
 @interface MTQueryFull : MTQuery
 
-    - (instancetype)initWithQueryObjectId:(NSManagedObjectID *)objectID andQueryLimit:(NSInteger)queryLimit;
-    - (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError * __autoreleasing *)error;
+    - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSInteger)queryLimit;
+    - (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                           error:(NSError * __autoreleasing *)error;
 
     @property (nonatomic, assign) NSInteger limitResults;
 

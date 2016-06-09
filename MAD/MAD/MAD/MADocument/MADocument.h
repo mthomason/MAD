@@ -86,7 +86,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)saveContext;
 
     - (void)resetSectionLayoutManagers:(RptqDocument *)document;
-    - (void)initializeMainQuery:(RptqDocument *)document;
+    - (void)resetMainQueryWithDocumentModel:(RptqDocument *)document;
 
     - (void)prepareForQuery;
 

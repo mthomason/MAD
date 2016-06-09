@@ -504,10 +504,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return _madPersistentStoreOptions;
 }
 
-- (NSString *)filename {
-    return self.fileURL.lastPathComponent.stringByDeletingPathExtension;
-}
-
+#pragma mark -
 #pragma mark Reading
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
@@ -953,7 +950,8 @@ READ_END:;
 
 }
 
-#pragma mark - NSManagedObjectContext Notifications
+#pragma mark -
+#pragma mark NSManagedObjectContext Notifications
 
 - (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
     NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
@@ -1082,7 +1080,7 @@ READ_END:;
         }
         
         if (self.reportFormatter == nil) {
-            [self initializeMainQuery:document];
+            [self resetMainQueryWithDocumentModel:document];
             
             [self resetSectionLayoutManagers: document];
             
@@ -1224,7 +1222,7 @@ READ_END:;
 
 }
 
-- (void)initializeMainQuery:(RptqDocument *)document {
+- (void)resetMainQueryWithDocumentModel:(RptqDocument *)document {
     RptqDatabase *database = document.defaultDatabase;
     if (!database) return;
     
@@ -1354,10 +1352,18 @@ READ_END:;
     return storeURL.copy;
 }
 
-#pragma mark File Name
+#pragma mark -
+#pragma mark Public
 
 - (void)archiveAndRemoveFileWrapper {
     [MADFileUtilities removeFileAndArchiveAtURL:self.urlGuts];
+}
+
+#pragma mark -
+#pragma mark Helper
+
+- (NSString *)filename {
+    return self.fileURL.lastPathComponent.stringByDeletingPathExtension;
 }
 
 @end

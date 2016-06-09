@@ -23,6 +23,7 @@
 #import <Foundation/NSCharacterSet.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSNotification.h>
 
 #import <MADDataStructures/MTGraph.h>
 #import <MADDataStructures/MTLinkedList.h>
@@ -54,6 +55,19 @@
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
+#import "RptqQuerySort.h"
+
+static inline BOOL isKindOfRptqQuery(id obj);
+static inline BOOL isKindOfRptqQuery(id obj) {
+    return [obj isKindOfClass:[RptqQuery class]] ||
+    [obj isKindOfClass:[RptqQueryField class]] ||
+    [obj isKindOfClass:[RptqQueryGroup class]] ||
+    [obj isKindOfClass:[RptqQueryLinks class]] ||
+    [obj isKindOfClass:[RptqQueryPredicate class]] ||
+    [obj isKindOfClass:[RptqQuerySort  class]] ||
+    [obj isKindOfClass:[RptqQueryTable class]];
+}
+
 @interface MTQueryFull ()
 
     @property (nonatomic, copy) NSManagedObjectID *objectID;
@@ -62,12 +76,22 @@
 
 @implementation MTQueryFull
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
-- (instancetype)initWithQueryObjectId: (NSManagedObjectID *)objectID
-                        andQueryLimit: (NSInteger)queryLimit {
+
+- (instancetype)initWithQuery: (RptqQuery *)query
+                andQueryLimit: (NSInteger)queryLimit {
     if (self = [super init]) {
-        _objectID = objectID.copy;
+        _objectID = query.objectID.copy;
         _limitResults = queryLimit;
+        
+        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+        [defaultCenter addObserver: self
+                          selector: @selector(handleManagedObjectContextDidChange:)
+                              name: NSManagedObjectContextObjectsDidChangeNotification
+                            object: query.managedObjectContext];
     }
     return self;
 }
@@ -83,9 +107,14 @@
         NSNumber *numberOfResults = object[@"MADQueryLimit"];
         self.limitResults = numberOfResults.integerValue;
         
-        RptqQuery *queryObject = object[parameterScheam];
-        _objectID = queryObject.objectID.copy;
+        RptqQuery *query = object[parameterScheam];
+        _objectID = query.objectID.copy;
 
+        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+        [defaultCenter addObserver: self
+                          selector: @selector(handleManagedObjectContextDidChange:)
+                              name: NSManagedObjectContextObjectsDidChangeNotification
+                            object: query.managedObjectContext];
         
     }
     return self;
@@ -105,95 +134,103 @@
     RptqDatabase *databaseSchema = document.hasDatabaseSchemas.anyObject;
     RptqQuery *queryObject = databaseSchema.hasQueries.anyObject;
 
-    NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
     
-    if (queryObject.hasQueryTables.count > 0) {
+    if (queryObject.hasQueryTables.count <= 0) return @"";
         
+    NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
         MTDatabase *database = [self.dataDelegate database];
-        
-        NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
-        NSString *predicatePart = [self sqlWhereClauseWithQuery: queryObject];
-        NSString *limitPart = [database sqlLimitClause:self.limitResults];
-        
-        [result appendString:selectPart];
-        
-        //Use a graph to represent the query: verticies are tables and edges are links.
-        MTGraph *graph = [[MTGraph alloc] init];
-        NSSet *hasTables = queryObject.hasQueryTables;
-        
-        //Add a vertex to the graph for each table.
-        for (RptqDatabaseSchemaTable *table in hasTables) {
-            @autoreleasepool {
-                [graph addVertexWithObject: table.objectID];
-            }
+    
+    NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
+    NSString *predicatePart = [self sqlWhereClauseWithQuery: queryObject];
+    NSString *limitPart = [database sqlLimitClause:self.limitResults];
+    
+    [result appendString:selectPart];
+    
+    //Use a graph to represent the query: verticies are tables and edges are links.
+    MTGraph *graph = [[MTGraph alloc] init];
+    NSSet *hasTables = queryObject.hasQueryTables;
+    
+    //Add a vertex to the graph for each table.
+    for (RptqDatabaseSchemaTable *table in hasTables) {
+        @autoreleasepool {
+            [graph addVertexWithObject: table.objectID];
         }
+    }
+    
+    //Create an edge in the graph for each query link.
+    NSSet *hasQueryLinks = queryObject.hasQueryLinks;
+    NSNumber *weight = @1;
+    
+    MTVertex *origin, *destination;
+    for (RptqQueryLinks *queryLink in hasQueryLinks) {
         
-        //Create an edge in the graph for each query link.
-        NSSet *hasQueryLinks = queryObject.hasQueryLinks;
-        NSNumber *weight = @1;
-        for (RptqQueryLinks *queryLink in hasQueryLinks) {
+        origin =        [graph vertexForObject: queryLink.hasLeftField.inQueryTable.objectID];
+        destination =   [graph vertexForObject: queryLink.hasRightField.inQueryTable.objectID];
+        
+        [graph addEdgeWithOrigin:origin destination:destination
+                          object:queryLink.objectID andWeight:weight];
+    }
+    
+    
+    // MARK: Sort the vectors topologically.
+    if (error != NULL) *error = nil;
+    BOOL  isDirectedAcyclicGraph;
+    NSAssert(graph != nil, @"Where's the graph?");
+    
+    MTLinkedList *topologicalSort = [graph topologicalSortWithError:error
+                                             isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
+    
+    // MARK: Error on circuts or other bad query.
+    if (error == nil) {
+        [result setString:@""];
+    } else {
+        
+        NSArray *topologicalSortArray = [topologicalSort toArray];
+        
+        // MAKR: List each field in the query.
+        NSArray *sort = [topologicalSort toArray];
+        NSString *sqlSelect = [self sqlSelectExpressionWithTables: sort
+                                            usingOnlyActiveFields: onlyActiveFields
+                                          forManagedObjectContext: managedObjectContext];
+        if (sqlSelect.length > 0) {
+            [result appendString:sqlSelect];
+            [result appendString:MADSqlTextFromPart];
             
-            MTVertex *vertexOrigin =        [graph vertexForObject: queryLink.hasLeftField.inQueryTable.objectID];
-            MTVertex *vertexDestination =   [graph vertexForObject: queryLink.hasRightField.inQueryTable.objectID];
-
-            [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination
-                              object:queryLink.objectID andWeight:weight];
-        }
-        
-        
-        // MARK: Sort the vectors topologically.
-        if (error != NULL) *error = nil;
-        BOOL  isDirectedAcyclicGraph;
-        NSAssert(graph != nil, @"Where's the graph?");
-        
-        MTLinkedList *topologicalSort = [graph topologicalSortWithError:error
-                                                 isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
-        
-        // MARK: Error on circuts or other bad query.
-        if (error == nil) {
-            [result setString:@""];
-        } else {
+            NSNumber *linkDepth = @0;
+            NSMutableArray *vertexArray;
+            vertexArray = [[NSMutableArray alloc] initWithCapacity: topologicalSortArray.count];
             
-            NSArray *topologicalSortArray = [topologicalSort toArray];
-            
-            // MAKR: List each field in the query.
-            NSArray *sort = [topologicalSort toArray];
-            NSString *sqlSelect = [self sqlSelectExpressionWithTables: sort
-                                                usingOnlyActiveFields: onlyActiveFields
-                                              forManagedObjectContext: managedObjectContext];
-            if (sqlSelect.length > 0) {
-                [result appendString:sqlSelect];
-                [result appendString:MADSqlTextFromPart];
-                
-                NSNumber *linkDepth = @0;
-                NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity: topologicalSortArray.count];
-                
-                for (MTPair *pair in topologicalSortArray) {
-                    MTVertex *vertexTable = pair.former;
-                    if (vertexTable) {
-                        vertexTable.properties.vertexColor = MTColorWhite;
-                        [vertexArray addObject:vertexTable];
-                    }
+            for (MTPair *pair in topologicalSortArray) {
+                MTVertex *vertexTable = pair.former;
+                if (vertexTable) {
+                    vertexTable.properties.vertexColor = MTColorWhite;
+                    [vertexArray addObject:vertexTable];
                 }
-                [result appendString:[self sqlTableReferenceWithTables: vertexArray
-                                                             linkDepth: &linkDepth
-                                               forManagedObjectContext: managedObjectContext]];
-                
-            } else {
-                NSString *message = NSLocalizedString(@"Empty query while using \"only active fields.\" You may need to reference some query fields.", @"Empty query while using \"only active fields.\" You may need to reference some query fields.");
-                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                *error = [NSError errorWithDomain:@"MTQuery" code:5774 userInfo:errorInfo];
-                [result setString:@""];
             }
+            [result appendString:[self sqlTableReferenceWithTables: vertexArray
+                                                         linkDepth: &linkDepth
+                                           forManagedObjectContext: managedObjectContext]];
             
-        }
-        
-        if (result.length > 0) {
-            [result appendString:predicatePart];
-            [result appendString:limitPart];
+        } else {
+            NSString *message = NSLocalizedString(@"Empty query while using \"only "
+                                                  @"active fields.\" You may need to reference "
+                                                  @"some query fields.",
+                                                  @"Empty query while using \"only active "
+                                                  @"fields.\" You may need to reference some "
+                                                  @"query fields.");
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            *error = [NSError errorWithDomain:@"MTQuery" code:5774 userInfo:errorInfo];
+            [result setString:@""];
         }
         
     }
+    
+    if (result.length > 0) {
+        [result appendString:predicatePart];
+        [result appendString:limitPart];
+    }
+    
+
     return result;
 }
 
@@ -202,6 +239,10 @@
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     NSUInteger loopCounter = 0;
     
+    
+    id <MADDataProtocol> dataDelegate = self.dataDelegate;
+    
+    MTDatabase *database;
     for (RptqQueryPredicate *queryPredicate in query.hasQueryPredicate) {
         
         if (loopCounter == 0) {
@@ -214,7 +255,7 @@
         
         if (queryPredicate.hasLeftField != nil) {
             
-            MTDatabase * __weak database = [self.dataDelegate database];
+            if (database == nil) database = [dataDelegate database];
             RptqQueryField *leftField = queryPredicate.hasLeftField;
             NSString *leftTableName = [leftField.inQueryTable copyQueryAlias];
             leftValue = [database newSafeQueryField: leftField.databaseSchemaField.name
@@ -230,7 +271,7 @@
 
         if (queryPredicate.hasRightField != nil) {
             
-            MTDatabase * __weak database = [self.dataDelegate database];
+            if (database == nil) database = [dataDelegate database];
             RptqQueryField *rightField = queryPredicate.hasRightField;
             NSString *rightTableName = [rightField.inQueryTable copyQueryAlias];
             rightValue = [database newSafeQueryField: rightField.databaseSchemaField.name
@@ -241,7 +282,7 @@
             RptqQueryField *leftField = queryPredicate.hasLeftField;
             MADDataType dataType = leftField.databaseSchemaField.dataType.shortValue;
             
-            NSString * __weak fieldrightpred = queryPredicate.fieldrightpred;
+            NSString *fieldrightpred = queryPredicate.fieldrightpred;
             rightValue = [MTDatabaseField isNumeric:dataType] ? fieldrightpred :
                                     [[NSString alloc] initWithFormat: @"\"%@\"", fieldrightpred];
         }
@@ -254,20 +295,20 @@
     return result;
 }
 
-- (NSArray *)activeBarcodesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (NSArray *)activeBarcodesForManagedObjectContext:(NSManagedObjectContext *)context {
     
     //Fields in barcode bitches.
     NSString *entityObjectBarcode = NSStringFromClass([RptqDocumentObjectBarcode class]);
-    NSFetchRequest *fetchRequestBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
+    NSFetchRequest *fetchBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
     NSPredicate *predicateBarcode = [NSPredicate predicateWithValue:YES];
-    fetchRequestBarcode.predicate = predicateBarcode;
+    fetchBarcode.predicate = predicateBarcode;
     
     NSError *fetchBarcodeError = nil;
-    NSArray *barcodes = [managedObjectContext executeFetchRequest: fetchRequestBarcode
-                                                            error: &fetchBarcodeError];
+    NSArray *barcodes = [context executeFetchRequest: fetchBarcode
+                                               error: &fetchBarcodeError];
     if (fetchBarcodeError != nil) {
-        barcodes = [managedObjectContext executeFetchRequest: fetchRequestBarcode
-                                                       error: &fetchBarcodeError];
+        barcodes = [context executeFetchRequest: fetchBarcode
+                                          error: &fetchBarcodeError];
     }
     return barcodes;
 }
@@ -275,14 +316,16 @@
 - (NSArray *)activeDataLabelsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     //Fields in data label.
-    NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
-    NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
+    NSString *entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+    NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityName];
     NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
     fetchRequestDataField.predicate = predicateDataField;
     NSError *fetchFieldsError = nil;
-    NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+    NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField
+                                                                    error:&fetchFieldsError];
     if (fetchFieldsError != nil) {
-        dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+        dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField
+                                                               error:&fetchFieldsError];
     }
     return dataObjectFields;
 }
@@ -611,6 +654,38 @@
         }
     }
     return result;
+}
+
+#pragma mark -
+#pragma mark NSNotification
+
+- (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
+
+    BOOL queryChanged = NO;
+    
+    BOOL (^queryObjectInSet)(NSSet <NSManagedObjectContext *> *);
+    queryObjectInSet = ^(NSSet <NSManagedObjectContext *> *changes){
+        for (id change in changes) {
+            if (isKindOfRptqQuery(change)) {
+                return YES;
+            }
+        }
+        return NO;
+    };
+    
+    NSSet *changes;
+    changes = notification.userInfo[NSUpdatedObjectsKey];
+    queryChanged = queryObjectInSet(changes);
+    if (!queryChanged) {
+        changes = notification.userInfo[NSDeletedObjectsKey];
+        queryChanged = queryObjectInSet(changes);
+    }
+    if (!queryChanged) {
+        changes = notification.userInfo[NSInsertedObjectsKey];
+        queryChanged = queryObjectInSet(changes);
+    }
+    
+
 }
 
 @end
