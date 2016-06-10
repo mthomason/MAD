@@ -108,7 +108,7 @@
         }
         
         MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQuery: rptqQuery
-                                                     andQueryLimit: NSNotFound];
+                                                     andQueryLimit: NSUIntegerMax];
         madQuery.dataDelegate = document;
         document.mainQuery = madQuery;
         

@@ -169,17 +169,17 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return MADSqlSqlite3SelectPart;
 }
 
-- (NSString *)selectPartWithLimitedResults:(NSInteger)limit {   //Generally limited resuls are in a LIMIT part, but
+- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {   //Generally limited resuls are in a LIMIT part, but
     return MADSqlSqlite3SelectPart;                                   //  SQL Server uses the TOP part (not default here).
 }
 
 - (NSString *)sqlLimitClause {
-    return [self sqlLimitClause:  NSNotFound];                    //No limit by default
+    return [self sqlLimitClause:  NSUIntegerMax];                    //No limit by default
 }
 
-- (NSString *)sqlLimitClause:(NSInteger)limit {
+- (NSString *)sqlLimitClause:(NSUInteger)limit {
     return (limit > 0 && limit != NSNotFound) ?
-                [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
+                [NSString stringWithFormat: @"\nLIMIT %ld", (unsigned long)limit] : @"";
 }
 
 - (NSString *)sqlAggregateFunctionLength {

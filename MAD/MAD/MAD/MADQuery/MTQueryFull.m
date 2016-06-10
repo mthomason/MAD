@@ -54,18 +54,23 @@
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
+#import "MADQueryPredicate.h"
+#import "MADQueryLimitClause.h"
 
 #import "RptqQuerySort.h"
+
+#import "MADQueryActiveQueryFields.h"
+#import "MADQuerySelectExpression.h"
 
 static inline BOOL isKindOfRptqQuery(id obj);
 static inline BOOL isKindOfRptqQuery(id obj) {
     return [obj isKindOfClass:[RptqQuery class]] ||
-    [obj isKindOfClass:[RptqQueryField class]] ||
-    [obj isKindOfClass:[RptqQueryGroup class]] ||
-    [obj isKindOfClass:[RptqQueryLinks class]] ||
-    [obj isKindOfClass:[RptqQueryPredicate class]] ||
-    [obj isKindOfClass:[RptqQuerySort  class]] ||
-    [obj isKindOfClass:[RptqQueryTable class]];
+           [obj isKindOfClass:[RptqQueryField class]] ||
+           [obj isKindOfClass:[RptqQueryGroup class]] ||
+           [obj isKindOfClass:[RptqQueryLinks class]] ||
+           [obj isKindOfClass:[RptqQueryPredicate class]] ||
+           [obj isKindOfClass:[RptqQuerySort  class]] ||
+           [obj isKindOfClass:[RptqQueryTable class]];
 }
 
 @interface MTQueryFull ()
@@ -80,9 +85,8 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
 - (instancetype)initWithQuery: (RptqQuery *)query
-                andQueryLimit: (NSInteger)queryLimit {
+                andQueryLimit: (NSUInteger)queryLimit {
     if (self = [super init]) {
         _objectID = query.objectID.copy;
         _limitResults = queryLimit;
@@ -105,7 +109,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
         
         NSNumber *numberOfResults = object[@"MADQueryLimit"];
-        self.limitResults = numberOfResults.integerValue;
+        self.limitResults = numberOfResults.unsignedIntegerValue;
         
         RptqQuery *query = object[parameterScheam];
         _objectID = query.objectID.copy;
@@ -138,11 +142,22 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     if (queryObject.hasQueryTables.count <= 0) return @"";
         
     NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
-        MTDatabase *database = [self.dataDelegate database];
+    
+    MTDatabase *database = [self.dataDelegate database];
     
     NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
-    NSString *predicatePart = [self sqlWhereClauseWithQuery: queryObject];
-    NSString *limitPart = [database sqlLimitClause:self.limitResults];
+
+
+    MADQueryPredicate *predicate;
+    predicate = [[MADQueryPredicate alloc] initWithQueryPredicates: queryObject.hasQueryPredicate
+                                                       andDatabase: database];
+    NSString *predicatePart = predicate.sql.copy;
+    
+    MADQueryLimitClause *limitClause = [[MADQueryLimitClause alloc] initWithLimit:_limitResults
+                                                                      andDatabase:database];
+    NSString *limitPart = limitClause.sql.copy;
+    
+    
     
     [result appendString:selectPart];
     
@@ -189,15 +204,20 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         
         // MAKR: List each field in the query.
         NSArray *sort = [topologicalSort toArray];
-        NSString *sqlSelect = [self sqlSelectExpressionWithTables: sort
-                                            usingOnlyActiveFields: onlyActiveFields
-                                          forManagedObjectContext: managedObjectContext];
+        
+        MADQuerySelectExpression *select;
+        select = [[MADQuerySelectExpression alloc] initWithDatabase: database
+                                                             tables: sort
+                                              usingOnlyActiveFields: onlyActiveFields
+                                            forManagedObjectContext: managedObjectContext];
+        NSString *sqlSelect = select.sql.copy;
+        
         if (sqlSelect.length > 0) {
             [result appendString:sqlSelect];
             [result appendString:MADSqlTextFromPart];
             
             NSNumber *linkDepth = @0;
-            NSMutableArray *vertexArray;
+            NSMutableArray <MTVertex *> *vertexArray;
             vertexArray = [[NSMutableArray alloc] initWithCapacity: topologicalSortArray.count];
             
             for (MTPair *pair in topologicalSortArray) {
@@ -218,7 +238,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                                                   @"Empty query while using \"only active "
                                                   @"fields.\" You may need to reference some "
                                                   @"query fields.");
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            NSDictionary *errorInfo;
+            errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            message, NSLocalizedDescriptionKey, nil];
             *error = [NSError errorWithDomain:@"MTQuery" code:5774 userInfo:errorInfo];
             [result setString:@""];
         }
@@ -234,286 +256,14 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     return result;
 }
 
-- (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
-    
-    NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
-    NSUInteger loopCounter = 0;
-    
-    
-    id <MADDataProtocol> dataDelegate = self.dataDelegate;
-    
-    MTDatabase *database;
-    for (RptqQueryPredicate *queryPredicate in query.hasQueryPredicate) {
-        
-        if (loopCounter == 0) {
-            [result appendString:@"\nWHERE\n"];
-        } else {
-            [result appendString:@" AND \n"];
-        }
-        
-        NSString *leftValue = nil;
-        
-        if (queryPredicate.hasLeftField != nil) {
-            
-            if (database == nil) database = [dataDelegate database];
-            RptqQueryField *leftField = queryPredicate.hasLeftField;
-            NSString *leftTableName = [leftField.inQueryTable copyQueryAlias];
-            leftValue = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                           andTable: leftTableName];
-            
-        } else if (queryPredicate.fieldleftpred != nil) {
-            
-            leftValue = queryPredicate.fieldleftpred;
-            
-        }
-        
-        NSString *rightValue = nil;
-
-        if (queryPredicate.hasRightField != nil) {
-            
-            if (database == nil) database = [dataDelegate database];
-            RptqQueryField *rightField = queryPredicate.hasRightField;
-            NSString *rightTableName = [rightField.inQueryTable copyQueryAlias];
-            rightValue = [database newSafeQueryField: rightField.databaseSchemaField.name
-                                            andTable: rightTableName];
-            
-        } else if (queryPredicate.fieldrightpred != nil) {
-            
-            RptqQueryField *leftField = queryPredicate.hasLeftField;
-            MADDataType dataType = leftField.databaseSchemaField.dataType.shortValue;
-            
-            NSString *fieldrightpred = queryPredicate.fieldrightpred;
-            rightValue = [MTDatabaseField isNumeric:dataType] ? fieldrightpred :
-                                    [[NSString alloc] initWithFormat: @"\"%@\"", fieldrightpred];
-        }
-        NSString *symbolForComparson = [queryPredicate symbolForComparson];
-        [result appendFormat:@"\t(%@ %@ %@)", leftValue, symbolForComparson, rightValue];
-        
-        loopCounter++;
-    }
-    
-    return result;
-}
-
-- (NSArray *)activeBarcodesForManagedObjectContext:(NSManagedObjectContext *)context {
-    
-    //Fields in barcode bitches.
-    NSString *entityObjectBarcode = NSStringFromClass([RptqDocumentObjectBarcode class]);
-    NSFetchRequest *fetchBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
-    NSPredicate *predicateBarcode = [NSPredicate predicateWithValue:YES];
-    fetchBarcode.predicate = predicateBarcode;
-    
-    NSError *fetchBarcodeError = nil;
-    NSArray *barcodes = [context executeFetchRequest: fetchBarcode
-                                               error: &fetchBarcodeError];
-    if (fetchBarcodeError != nil) {
-        barcodes = [context executeFetchRequest: fetchBarcode
-                                          error: &fetchBarcodeError];
-    }
-    return barcodes;
-}
-
-- (NSArray *)activeDataLabelsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    //Fields in data label.
-    NSString *entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
-    NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityName];
-    NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
-    fetchRequestDataField.predicate = predicateDataField;
-    NSError *fetchFieldsError = nil;
-    NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField
-                                                                    error:&fetchFieldsError];
-    if (fetchFieldsError != nil) {
-        dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField
-                                                               error:&fetchFieldsError];
-    }
-    return dataObjectFields;
-}
-
-- (NSArray *)activeAggregateObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    //Fields in aggregate function.
-    NSString *entityObjectAggregate = NSStringFromClass([RptqDocumentObjectAggregate class]);
-    NSFetchRequest *fetchRequestAggregate = [[NSFetchRequest alloc] initWithEntityName:entityObjectAggregate];
-    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-    fetchRequestAggregate.predicate = predicate;
-    NSError *fetchAggregateError = nil;
-    id aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate
-                                                                   error:&fetchAggregateError];
-    if (fetchAggregateError != nil) {
-        aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate
-                                                                    error:&fetchAggregateError];
-    }
-    return aggregateObjectFields;
-}
-
-- (NSArray *)activeGroupedObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    //Fields in query groups.
-    NSString *entityObjectQueryGroup = NSStringFromClass([RptqQueryGroup class]);
-    NSFetchRequest *fetchRequestQueryGroup = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryGroup];
-    NSPredicate *predicateQueryGroups = [NSPredicate predicateWithValue:YES];
-    fetchRequestQueryGroup.predicate = predicateQueryGroups;
-    NSError *fetchQueryGroupError = nil;
-    id queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup
-                                                         error:&fetchQueryGroupError];
-    if (fetchQueryGroupError != nil) {
-        queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup
-                                                          error:&fetchQueryGroupError];
-    }
-    return queryGroups;
-}
-
-- (NSArray *)activeQueryLinkObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    //Fields in query links.
-    NSString *entityObjectQueryLinks = NSStringFromClass([RptqQueryLinks class]);
-    NSFetchRequest *fetchRequestQueryLinks = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryLinks];
-    NSPredicate *predicateQueryLinks = [NSPredicate predicateWithValue:YES];
-    fetchRequestQueryLinks.predicate = predicateQueryLinks;
-    NSError *fetchQueryLinksError = nil;
-    id queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks
-                                                        error:&fetchQueryLinksError];
-    if (fetchQueryLinksError != nil) {
-        queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks
-                                                         error:&fetchQueryLinksError];
-    }
-    return queryLinks;
-}
-
-- (NSSet *)activeQueryFieldsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSArray *barcodes = [NSArray arrayWithArray:[self activeBarcodesForManagedObjectContext:managedObjectContext]];
-    NSArray *dataObjectFields = [NSArray arrayWithArray:[self activeDataLabelsForManagedObjectContext:managedObjectContext]];
-    NSArray *aggregateObjectFields = [NSArray arrayWithArray:[self activeAggregateObjectsForManagedObjectContext:managedObjectContext]];;
-    NSArray *queryGroups = [NSArray arrayWithArray:[self activeGroupedObjectsForManagedObjectContext:managedObjectContext]];
-    NSArray *queryLinks = [NSArray arrayWithArray:[self activeQueryLinkObjectsForManagedObjectContext:managedObjectContext]];
-    
-    NSUInteger estimatedSetSize = dataObjectFields.count + aggregateObjectFields.count + queryGroups.count;
-    NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
-    
-    for (RptqDocumentObjectBarcode *dataField in barcodes) {
-        RptqQueryField *queryField = dataField.referencesField1;
-        if (queryField != nil) {
-            [queryFields addObject:queryField];
-        }
-        RptqQueryField *queryField2 = dataField.referencesField2;
-        if (queryField2 != nil) {
-            [queryFields addObject:queryField2];
-        }
-    }
-    
-    for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
-        RptqQueryField *queryField = dataField.referencesQueryField;
-        if (queryField != nil) {
-            [queryFields addObject:queryField];
-        }
-    }
-    
-    for (RptqDocumentObjectAggregate *dataField in aggregateObjectFields) {
-        RptqQueryField *queryField = dataField.aggregateField;
-        if (queryField != nil) {
-            [queryFields addObject:queryField];
-        }
-    }
-    
-    for (RptqQueryGroup *queryGroup in queryGroups) {
-        RptqQueryField *queryField = queryGroup.hasField;
-        if (queryField != nil) {
-            [queryFields addObject:queryField];
-        }
-    }
-    
-    for (RptqQueryLinks *queryLink in queryLinks) {
-        RptqQueryField *queryFieldLeft = queryLink.hasLeftField;
-        if (queryFieldLeft != nil) {
-            [queryFields addObject:queryFieldLeft];
-        }
-        RptqQueryField *queryFieldRight = queryLink.hasRightField;
-        if (queryFieldRight != nil) {
-            [queryFields addObject:queryFieldRight];
-        }
-    }
-
-    return queryFields;
-}
-
-- (NSString *)sqlSelectExpressionWithTables:(NSArray *)tables
-                      usingOnlyActiveFields:(BOOL)onlyActiveFields
-                    forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    NSMutableString *result = [[NSMutableString alloc] init];
-    
-    MTDatabase * __weak database = self.dataDelegate.database;
-    if (onlyActiveFields) {
-        
-        NSSet *queryFields = [NSSet setWithSet:[self activeQueryFieldsForManagedObjectContext:managedObjectContext]];
-        
-        
-        NSUInteger fieldCounter = 0;
-        for (RptqQueryField *queryField in queryFields) {
-            
-            
-            RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
-            if (fieldCounter != 0)  [result appendString:@",\n"];
-            
-            NSString *tableName = [queryField.inQueryTable copyQueryAlias];
-            MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
-            NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-            MADSafeQueryField *fieldName = [database newSafeIdentifier: field.name];
-            NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
-            [result appendFormat: @"\t%@", fieldAlias];
-            
-            self.fields[fieldAlias] = field;
-            [self.fieldKeys addObject:fieldAlias];
-            fieldCounter++;
-        }
-        if (fieldCounter == 0) {
-            result = nil;
-        }
-    } else {
-        
-        // Logic to return all fields.
-        NSUInteger tableCounter = 0;
-        for (MTPair *pair in tables) {
-            MTVertex *queryTable = pair.former;
-            NSManagedObjectID *objectID = queryTable.object;
-            
-            RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID
-                                                      managedObjectContext:managedObjectContext];
-            if (table != nil) {
-                if (tableCounter != 0) [result appendString:@",\n"];
-                
-                NSString *tableName = [table copyQueryAlias];
-                MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
-                NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-                
-                NSUInteger fieldCounter = 0;
-                
-                for (RptqQueryField *queryField in table.hasQueryFields) {
-                    RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
-                    if (fieldCounter != 0)  [result appendString:@",\n"];
-                    NSString *fieldName = field.name;
-                    MADSafeQueryField *safeFieldName = [database newSafeIdentifier:fieldName];
-                    NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
-                    [result appendFormat: @"\t%@", fieldAlias];
-                    fieldCounter++;
-                }
-                tableCounter++;
-            }
-        }
-    }
-    
-    return result;
-}
-
-- (NSString *)sqlTableReferenceWithTables:(NSArray *)tables
+- (NSString *)sqlTableReferenceWithTables:(NSArray <MTVertex *> *)tables
                                 linkDepth:(NSNumber * __autoreleasing *)linkDepth
                   forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 
     NSInteger tableCounter = 0;
-    MTDatabase * __weak database = [self.dataDelegate database];
+    MTDatabase *database = [self.dataDelegate database];
 
     for (MTVertex *vertexTable in tables) {
         if (vertexTable) {
@@ -626,7 +376,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
                 *linkDepth = [[NSNumber alloc] initWithInteger:(*linkDepth).integerValue + 1];
 
-                NSString *tableFactor = [self sqlTableReferenceWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
+                NSString *tableFactor = [self sqlTableReferenceWithTables: destinationVertices
+                                                                linkDepth: linkDepth
+                                                  forManagedObjectContext: managedObjectContext];
                 if (tableFactor.length > 0) {
                 
                     NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
@@ -689,3 +441,4 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 }
 
 @end
+

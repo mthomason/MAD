@@ -1365,19 +1365,20 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (NSString *)selectPart {
-    return [self selectPartWithLimitedResults:NSNotFound];  // No limit by default
+    return [self selectPartWithLimitedResults:NSUIntegerMax];  // No limit by default
 }
 
-- (NSString *)selectPartWithLimitedResults:(NSInteger)limit {
+- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {
     NSString *selectPart = [super selectPart];
-    return limit > 0 && limit != NSNotFound ? [selectPart stringByAppendingFormat:@"TOP %ld\n", (long)limit] : selectPart;
+    return limit > 0 && limit != NSUIntegerMax ?
+                [selectPart stringByAppendingFormat:@"TOP %ld\n", (long)limit] : selectPart;
 }
 
 - (NSString *)sqlLimitClause {
     return @"";
 }
 
-- (NSString *)sqlLimitClause:(NSInteger)limit {
+- (NSString *)sqlLimitClause:(NSUInteger)limit {
     return @"";
 }
 

@@ -15,11 +15,11 @@
 
 @interface MTQueryFull : MTQuery
 
-    - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSInteger)queryLimit;
+    - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
     - (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                            error:(NSError * __autoreleasing *)error;
 
-    @property (nonatomic, assign) NSInteger limitResults;
+    @property (nonatomic, assign) NSUInteger limitResults;
 
 @end
 

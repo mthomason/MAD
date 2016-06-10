@@ -83,7 +83,11 @@ static const short errCache = 2;
     //NSLog(@"QueryString: %@", queryString);
     
     NSError *executeError = NULL;
-    BOOL success = [document.database executeSql:queryString fieldKeys:query.fieldKeys onConnection:dbconn intoResultTable:document.mainDataTable withError:&executeError];
+    BOOL success = [document.database executeSql: queryString
+                                       fieldKeys: query.fieldKeys
+                                    onConnection: dbconn
+                                 intoResultTable: document.mainDataTable
+                                       withError: &executeError];
 
     if (!success) {
         NSLog(@"Failed to execute sql!");

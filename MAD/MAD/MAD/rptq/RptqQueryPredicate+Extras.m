@@ -144,6 +144,9 @@
     }
 }
 
+#pragma mark -
+#pragma mark Public
+
 - (NSString *)symbolForDisplay {
     return MADPredicateOperatorSymbolsDisplay[self.comparson.unsignedIntegerValue];
 }
