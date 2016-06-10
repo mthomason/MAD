@@ -77,7 +77,7 @@ static const short errCache = 2;
     MTQueryFull *query = document.mainQuery;
     [private performBlockAndWait:^{
         NSError *sqlError = NULL;
-        queryString = [query getSqlWithManagedObjectContext:private error:&sqlError];
+        queryString = [query copySQLWithManagedObjectContext:private error:&sqlError];
     }];
     
     //NSLog(@"QueryString: %@", queryString);

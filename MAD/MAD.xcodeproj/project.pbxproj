@@ -259,6 +259,10 @@
 		4C4F12751D0A656B0002294E /* MADQueryLimitClause.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12731D0A656B0002294E /* MADQueryLimitClause.m */; };
 		4C4F12781D0A70A90002294E /* MADQuerySelectExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12761D0A70A90002294E /* MADQuerySelectExpression.h */; };
 		4C4F12791D0A70A90002294E /* MADQuerySelectExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12771D0A70A90002294E /* MADQuerySelectExpression.m */; };
+		4C4F127C1D0A956A0002294E /* MADQuerySelectExpressionAllFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F127A1D0A956A0002294E /* MADQuerySelectExpressionAllFields.h */; };
+		4C4F127D1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */; };
+		4C4F12801D0A95810002294E /* MADQuerySelectExpressionActiveFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */; };
+		4C4F12811D0A95810002294E /* MADQuerySelectExpressionActiveFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */; };
 		4C5EBD021CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EA1CEF77040058986B /* libz.1.dylib */; };
 		4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */; };
@@ -751,6 +755,10 @@
 		4C4F12731D0A656B0002294E /* MADQueryLimitClause.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryLimitClause.m; sourceTree = "<group>"; };
 		4C4F12761D0A70A90002294E /* MADQuerySelectExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuerySelectExpression.h; path = MAD/MADQuerySelectExpression.h; sourceTree = "<group>"; };
 		4C4F12771D0A70A90002294E /* MADQuerySelectExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQuerySelectExpression.m; path = MAD/MADQuerySelectExpression.m; sourceTree = "<group>"; };
+		4C4F127A1D0A956A0002294E /* MADQuerySelectExpressionAllFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuerySelectExpressionAllFields.h; path = MAD/MADQuery/MADQuerySelectExpressionAllFields.h; sourceTree = "<group>"; };
+		4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQuerySelectExpressionAllFields.m; path = MAD/MADQuery/MADQuerySelectExpressionAllFields.m; sourceTree = "<group>"; };
+		4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuerySelectExpressionActiveFields.h; path = MAD/MADQuery/MADQuerySelectExpressionActiveFields.h; sourceTree = "<group>"; };
+		4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQuerySelectExpressionActiveFields.m; path = MAD/MADQuery/MADQuerySelectExpressionActiveFields.m; sourceTree = "<group>"; };
 		4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportFormatterDataSourceProtocol.h; path = MAD/MADReportFormatter/MADReportFormatterDataSourceProtocol.h; sourceTree = "<group>"; };
 		4C6652EA1CEF77040058986B /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		4C6652EC1CEF772D0058986B /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = ../../../../../usr/lib/libbz2.1.0.dylib; sourceTree = "<group>"; };
@@ -1209,6 +1217,10 @@
 				4C4F12731D0A656B0002294E /* MADQueryLimitClause.m */,
 				4C4F12761D0A70A90002294E /* MADQuerySelectExpression.h */,
 				4C4F12771D0A70A90002294E /* MADQuerySelectExpression.m */,
+				4C4F127A1D0A956A0002294E /* MADQuerySelectExpressionAllFields.h */,
+				4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */,
+				4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */,
+				4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */,
 			);
 			name = MADQuery;
 			sourceTree = "<group>";
@@ -1960,6 +1972,7 @@
 				4C6B01591CEF625E00D29F3A /* archive_private.h in Headers */,
 				4C401DC51BAE3BD600BAE5FC /* MTQueryCacheEndTransaction.h in Headers */,
 				4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */,
+				4C4F12801D0A95810002294E /* MADQuerySelectExpressionActiveFields.h in Headers */,
 				4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */,
@@ -1989,6 +2002,7 @@
 				4C9FB2731D031E3000A1B291 /* MADParameters.h in Headers */,
 				4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */,
 				4CEFDD131CF5B2050092C148 /* madsqlite3.h in Headers */,
+				4C4F127C1D0A956A0002294E /* MADQuerySelectExpressionAllFields.h in Headers */,
 				4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */,
 				4C6B014D1CEF625E00D29F3A /* archive_endian.h in Headers */,
 				4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */,
@@ -2223,6 +2237,7 @@
 				4C401D351BAE3AF800BAE5FC /* MTPaperA7.m in Sources */,
 				4C401E261BAE3DCB00BAE5FC /* MTDatabaseCache.m in Sources */,
 				4C401D431BAE3AF800BAE5FC /* MTPaperB3.m in Sources */,
+				4C4F127D1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m in Sources */,
 				4CC284321BADE97000775B72 /* RptqUserCredentals.m in Sources */,
 				4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */,
 				4C401DF21BAE3BD900BAE5FC /* MTQuerySampleDataField.m in Sources */,
@@ -2350,6 +2365,7 @@
 				4C994F361BDDD85D0058627A /* MADAccessibilityLine.m in Sources */,
 				4C401DC81BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.m in Sources */,
 				4C3080F61D0552EB00A7D597 /* MADDocumentCachedDataReference.m in Sources */,
+				4C4F12811D0A95810002294E /* MADQuerySelectExpressionActiveFields.m in Sources */,
 				4CC284141BADE94200775B72 /* RptqDocumentObjectImage.m in Sources */,
 				4CC284731BADE99E00775B72 /* RptqDocument+Extras.m in Sources */,
 				4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */,

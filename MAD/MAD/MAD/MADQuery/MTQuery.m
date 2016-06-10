@@ -222,12 +222,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return @"";
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields
-                managedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                               error:(NSError * __autoreleasing *)error {
-    return @"";
-}
-
 - (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {
     NSString *tableName = table.toString;
     return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];

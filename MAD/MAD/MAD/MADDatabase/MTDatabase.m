@@ -41,7 +41,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 @implementation MTDatabase
 
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         NSMutableArray *errors = [[NSMutableArray alloc] init];
         self.errors = errors;
@@ -178,8 +178,10 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (NSString *)sqlLimitClause:(NSUInteger)limit {
-    return (limit > 0 && limit != NSNotFound) ?
-                [NSString stringWithFormat: @"\nLIMIT %ld", (unsigned long)limit] : @"";
+    NSString *sqlLimitClause = (limit > 0 && limit != NSUIntegerMax) ?
+        [[NSString alloc] initWithFormat: @"\nLIMIT %ld", (unsigned long)limit] :
+        @"";
+    return sqlLimitClause;
 }
 
 - (NSString *)sqlAggregateFunctionLength {

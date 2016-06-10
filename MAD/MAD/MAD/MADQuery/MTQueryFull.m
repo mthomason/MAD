@@ -61,6 +61,9 @@
 
 #import "MADQueryActiveQueryFields.h"
 #import "MADQuerySelectExpression.h"
+#import "MADQuerySelectExpressionAllFields.h"
+#import "MADQuerySelectExpressionActiveFields.h"
+
 
 static inline BOOL isKindOfRptqQuery(id obj);
 static inline BOOL isKindOfRptqQuery(id obj) {
@@ -124,17 +127,21 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     return self;
 }
 
-- (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                       error:(NSError * __autoreleasing *)error {
+- (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                        error:(NSError * __autoreleasing *)error {
     [super getSqlWithError:error];
-    return [self getSqlOnlyActiveFields:YES managedObjectContext:managedObjectContext error:error];
+    NSString *activeFields = [self copySQLOnlyActiveFields:YES
+                                      managedObjectContext:managedObjectContext
+                                                     error:error];
+    return activeFields;
 }
 
-- (NSString *)getSqlOnlyActiveFields: (BOOL)onlyActiveFields
-                managedObjectContext: (NSManagedObjectContext *)managedObjectContext
-                               error: (NSError * __autoreleasing *)error {
+- (NSString *)copySQLOnlyActiveFields: (BOOL)onlyActiveFields
+                 managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+                                error: (NSError * __autoreleasing *)error {
     
-    RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
+    RptqDocument *document;
+    document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
     RptqDatabase *databaseSchema = document.hasDatabaseSchemas.anyObject;
     RptqQuery *queryObject = databaseSchema.hasQueries.anyObject;
 
@@ -202,14 +209,21 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         
         NSArray *topologicalSortArray = [topologicalSort toArray];
         
-        // MAKR: List each field in the query.
-        NSArray *sort = [topologicalSort toArray];
         
         MADQuerySelectExpression *select;
-        select = [[MADQuerySelectExpression alloc] initWithDatabase: database
-                                                             tables: sort
-                                              usingOnlyActiveFields: onlyActiveFields
-                                            forManagedObjectContext: managedObjectContext];
+        if (onlyActiveFields) {
+            select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase: database
+                                                            forManagedObjectContext: managedObjectContext];
+            self.fieldKeys = ((MADQuerySelectExpressionActiveFields *)select).fieldKeys.copy;
+            self.fields = ((MADQuerySelectExpressionActiveFields *)select).fields.copy;
+        } else {
+            // MAKR: List each field in the query.
+            NSArray *sort = [topologicalSort toArray];
+            select = [[MADQuerySelectExpressionAllFields alloc] initWithDatabase: database
+                                                                          tables: sort
+                                                         forManagedObjectContext: managedObjectContext];
+        }
+        
         NSString *sqlSelect = select.sql.copy;
         
         if (sqlSelect.length > 0) {
@@ -325,7 +339,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                                 [result appendString:Tab];
                             }
                             
-                            NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:queryLink.jointypeenum.unsignedCharValue];
+                            NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:queryLink.jointypeenum.shortValue];
                             [result appendFormat:@" %@ ", sqlForLink];
                             
                             RptqQueryField *rightField = queryLink.hasRightField;
@@ -352,10 +366,10 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                             RptqQueryField *leftField = queryLink.hasLeftField;
                             
                             NSString *lft = [leftField.inQueryTable copyQueryAlias];
-                            MADSafeQueryField *safeField = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                                                              andTable: lft];
+                            MADSafeQueryField *safeField;
+                            safeField = [database newSafeQueryField: leftField.databaseSchemaField.name
+                                                           andTable: lft];
                             [result appendString: safeField];
-                            
                             [result appendString:@" = "];
                             
                             NSString *rft = [rightField.inQueryTable copyQueryAlias];
@@ -367,16 +381,17 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                 }
                 
                 // MARK: Destination vertices.
-                NSMutableArray *destinationVertices = [[NSMutableArray alloc] initWithCapacity:vertexTable.numberOfIncidentEdges];
+                NSMutableArray <MTVertex *> *destination;
+                destination = [[NSMutableArray alloc] initWithCapacity:vertexTable.numberOfIncidentEdges];
                 NSArray *edges = vertexTable.incidentEdges;
                 for (MTEdge *edge in edges) {
                     MTVertex *vertexTableDestination = edge.destination;
-                    [destinationVertices addObject:vertexTableDestination];
+                    [destination addObject:vertexTableDestination];
                 }
 
                 *linkDepth = [[NSNumber alloc] initWithInteger:(*linkDepth).integerValue + 1];
 
-                NSString *tableFactor = [self sqlTableReferenceWithTables: destinationVertices
+                NSString *tableFactor = [self sqlTableReferenceWithTables: destination
                                                                 linkDepth: linkDepth
                                                   forManagedObjectContext: managedObjectContext];
                 if (tableFactor.length > 0) {

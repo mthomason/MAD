@@ -19,6 +19,6 @@
                usingOnlyActiveFields:(BOOL)onlyActiveFields
              forManagedObjectContext:(NSManagedObjectContext *)context;
 
-    @property (nonatomic, readonly, strong) NSString *sql;
+    @property (nonatomic, readwrite, strong) NSString *sql;
 
 @end
