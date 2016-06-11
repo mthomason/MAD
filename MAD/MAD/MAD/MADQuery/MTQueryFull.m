@@ -244,7 +244,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
             NSString *tableReference = [self sqlTableReferenceWithTables: vertexArray
                                                                linkDepth: &linkDepth
                                                  forManagedObjectContext: managedObjectContext];
-            [result appendString: gtableReference];
+            [result appendString: tableReference];
             
         } else {
             NSString *message = NSLocalizedString(@"Empty query while using \"only "
