@@ -241,9 +241,10 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                     [vertexArray addObject:vertexTable];
                 }
             }
-            [result appendString:[self sqlTableReferenceWithTables: vertexArray
-                                                         linkDepth: &linkDepth
-                                           forManagedObjectContext: managedObjectContext]];
+            NSString *tableReference = [self sqlTableReferenceWithTables: vertexArray
+                                                               linkDepth: &linkDepth
+                                                 forManagedObjectContext: managedObjectContext];
+            [result appendString: gtableReference];
             
         } else {
             NSString *message = NSLocalizedString(@"Empty query while using \"only "
