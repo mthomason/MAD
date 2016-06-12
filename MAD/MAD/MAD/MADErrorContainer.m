@@ -61,11 +61,16 @@ static NSString * const MADErrorContainerDate   = @"d";
 - (NSString *)errorLogWithFormatString:(NSString *)formatString {
     NSMutableString *result = [NSMutableString new];
     for (NSDictionary *errorHolder in self.errors) {
-        NSString *dateString = [NSDateFormatter localizedStringFromDate: errorHolder[MADErrorContainerDate]
+        NSDate * _Nonnull date = (errorHolder[MADErrorContainerDate] != nil) ?
+                                (id _Nonnull)errorHolder[MADErrorContainerDate] : [NSDate date];
+        NSString *dateString = [NSDateFormatter localizedStringFromDate: date
                                                               dateStyle: NSDateFormatterShortStyle
                                                               timeStyle: NSDateFormatterShortStyle];
         NSError *error = errorHolder[MADErrorContainerError];
-        NSString *errorString = [NSString stringWithFormat:formatString, dateString, error.localizedFailureReason, error.localizedDescription];
+        NSString *errorString = [[NSString alloc] initWithFormat:formatString,
+                                                                 dateString,
+                                                                 error.localizedFailureReason,
+                                                                 error.localizedDescription];
         [result appendString:errorString];
     }
     return result;

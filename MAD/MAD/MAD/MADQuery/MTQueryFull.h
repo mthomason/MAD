@@ -16,13 +16,13 @@
 @interface MTQueryFull : MTQuery
 
     - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
+
     - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                             error:(NSError * __autoreleasing *)error;
 
     - (NSString *)copySQLOnlyActiveFields:(BOOL)onlyActiveFields
                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                     error:(NSError **)error;
-
 
     @property (nonatomic, assign) NSUInteger limitResults;
 

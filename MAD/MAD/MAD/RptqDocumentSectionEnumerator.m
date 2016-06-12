@@ -23,8 +23,8 @@
 
 @interface RptqDocumentSectionEnumerator ()
 
-    @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, copy) NSManagedObjectID *documentObjectID;
+    @property (nonatomic, assign) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, copy) NSManagedObjectID *queryObjectID;
 
 @end
 
@@ -32,7 +32,9 @@
 
 - (id)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
-        _documentObjectID = document.objectID.copy;
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query = database.hasQueries.anyObject;
+        _queryObjectID = query.objectID.copy;
         self.managedObjectContext = document.managedObjectContext;
         self.current = 0;
     }
@@ -40,22 +42,17 @@
 }
 
 - (NSUInteger)count {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
+    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
     return [query sectionCount];
 }
 
 - (NSArray *)allObjects {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
-    NSUInteger current = self.current;
+    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
     NSUInteger total = [self count];
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - current)];
-    for (; self.current<total; self.current++) {
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - _current)];
+    for (; _current<total; _current++) {
         @autoreleasepool {
-            RptqDocumentSection *section = [query documentSectionForSelectedIndex: current];
+            RptqDocumentSection *section = [query documentSectionForSelectedIndex: _current];
             [result addObject:section];
         }
     }
@@ -63,14 +60,9 @@
 }
 
 - (id)nextObject {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
-
-    NSUInteger current = self.current;
-    id result = [query documentSectionForSelectedIndex: current];
-    current++;
-    self.current = current;
+    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
+    id result = [query documentSectionForSelectedIndex: _current];
+    _current++;
     return result;
 }
 

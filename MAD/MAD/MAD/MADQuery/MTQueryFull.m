@@ -151,17 +151,19 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
     
     MTDatabase *database = [self.dataDelegate database];
-    
     NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
 
 
     MADQueryPredicate *predicate;
+    MADQueryLimitClause *limitClause;
+
     predicate = [[MADQueryPredicate alloc] initWithQueryPredicates: queryObject.hasQueryPredicate
                                                        andDatabase: database];
-    NSString *predicatePart = predicate.sql.copy;
     
-    MADQueryLimitClause *limitClause = [[MADQueryLimitClause alloc] initWithLimit:_limitResults
-                                                                      andDatabase:database];
+    limitClause = [[MADQueryLimitClause alloc] initWithLimit: _limitResults
+                                                 andDatabase: database];
+
+    NSString *predicatePart = predicate.sql.copy;
     NSString *limitPart = limitClause.sql.copy;
     
     
@@ -256,7 +258,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
             NSDictionary *errorInfo;
             errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                             message, NSLocalizedDescriptionKey, nil];
-            *error = [NSError errorWithDomain:@"MTQuery" code:5774 userInfo:errorInfo];
+            *error = [NSError errorWithDomain: @"MTQuery"
+                                         code: 5774
+                                     userInfo: errorInfo];
             [result setString:@""];
         }
         
