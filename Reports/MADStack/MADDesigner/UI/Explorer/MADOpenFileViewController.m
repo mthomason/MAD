@@ -304,9 +304,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 + (NSString *)keySubviews {
     return NSStringFromSelector(@selector(subviews));
 }
-+ (NSString *)keyLeftView {
-    return NSStringFromSelector(@selector(leftView));
-}
 
 + (NSOperationQueue *)queue {
 // ???: Does this run?
@@ -319,30 +316,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     return queue;
 }
 
-
-#pragma mark -
-#pragma mark MADOperationObserver
-
-- (void)operationDidStart:(MADOperation *)operation { }
-
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
-
-- (void)operationDidFinish:(MADOperation *)operation
-                    errors:(NSArray *)errors {
-
-    switch (operation.tag) {
-
-        case MADIDInstallOperationSampleDocumentMusic:
-        case MADIDInstallOperationSampleDocumentLondon: {
-// FIXME: Trigger reload after install... without crashing.
-            break;
-        }
-            
-        default:
-            break;
-    }
-}
-
 - (void)initalInstallOperations {
     MADOperationQueue *operationQueueBackground;
     operationQueueBackground = [[MADOperationQueue alloc] init];
@@ -352,11 +325,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     MADOperation *operation;
     NSOperation *resetReceipt;
     
-    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self
-                                                                   selector: @selector(getUserCloudPrefs)
-                                                                     object: NULL];
-    [operationQueueBackground addOperation:getUserCloudPreferences];
-
     
     operation = [[MADInstallOperationSampleDatabase alloc] init];
     [operationQueueBackground addOperation:operation];
@@ -382,6 +350,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
                                                           object: NULL];
     
     [operationQueueBackground addOperation:resetReceipt];
+    
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                   selector: @selector(getUserCloudPrefs)
+                                                                     object: NULL];
+    [operationQueueBackground addOperation:getUserCloudPreferences];
+
 }
 
 #pragma mark -
@@ -982,10 +956,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             [collectionView reloadItemsAtIndexPaths: updates];
         }
     } completion:^(BOOL finished) {
-        
+        completion(YES, nil);
     }];
 
-    completion(YES, nil);
 }
 
 - (void)filesController:(MADFilesController *)filesController
@@ -2236,6 +2209,29 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     if (_cloudActivityRunning) {
         _cloudActivityRunningDisplay = YES;
         [_headerCloud startAnimating];
+    }
+}
+
+#pragma mark -
+#pragma mark MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation { }
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation
+                    errors:(NSArray *)errors {
+
+    switch (operation.tag) {
+
+        case MADIDInstallOperationSampleDocumentMusic:
+        case MADIDInstallOperationSampleDocumentLondon: {
+// FIXME: Trigger reload after install... without crashing.
+            break;
+        }
+            
+        default:
+            break;
     }
 }
 
