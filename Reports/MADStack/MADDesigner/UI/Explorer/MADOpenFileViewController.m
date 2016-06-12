@@ -325,7 +325,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     MADOperation *operation;
     NSOperation *resetReceipt;
     
-    
     operation = [[MADInstallOperationSampleDatabase alloc] init];
     [operationQueueBackground addOperation:operation];
     NSString *groupID = [self groupIdentifier];
