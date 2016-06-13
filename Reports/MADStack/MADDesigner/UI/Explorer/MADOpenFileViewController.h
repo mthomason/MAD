@@ -13,8 +13,6 @@
 
 @interface MADFileExplorerViewController : UICollectionViewController
 
-    - (void)getUserCloudPrefs;
-
 @end
 
 #endif

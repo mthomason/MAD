@@ -48,7 +48,8 @@
         // SATOSHI: return only IPv4 address
         // http://h30097.www3.hp.com/docs/base%5Fdoc/DOCUMENTATION/V50A%5FHTML/MAN/MAN7/0052%5F%5F%5F%5F.HTM
         if (address->sa_family == AF_INET) {
-            [addresses addObject:[NSString stringWithCString:ipAddress encoding:NSASCIIStringEncoding]];
+            NSString *string = [[NSString alloc] initWithCString:ipAddress encoding:NSASCIIStringEncoding];
+            [addresses addObject:string];
         }
     }
     

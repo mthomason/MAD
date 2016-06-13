@@ -251,6 +251,30 @@ void madwarn(char *err,  const char*err2) { }
 
 @implementation MADocument
 
+#pragma mark - NSObject
+
+- (void)dealloc { }
+
+- (void)removeObservers {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+                                                  object: self.managedObjectContext];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextDidSaveNotification
+                                                  object: self.managedObjectContext];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextWillSaveNotification
+                                                  object: self];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIDocumentStateChangedNotification
+                                                  object: self];
+    
+}
+
 #pragma mark -
 #pragma mark Initalization
 
@@ -315,7 +339,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark Static Helpers
 
 
-+ (BOOL)ArchiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
++ (BOOL)archiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
                 overwrite:(BOOL)overwrite {
 
     NSDirectoryEnumerator<NSURL *> * directory =
@@ -417,7 +441,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
        forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: ^(BOOL success) {
 
-        if (success) {
+        if (success && document != nil) {
             [document closeWithCompletionHandler:^(BOOL successClose) {
                 [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
                 completion(successClose);
@@ -441,40 +465,19 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     return [self newUrlCacheForFilename:cacheName];
 }
 
-- (NSURL *)cachedFilesDirectory {
-    NSString *filename = self.filename;
-    NSURL *result = [NSURL newURLCacheFilesDirectoryForFilename:filename];
-    return result;
-}
-
 - (NSURL *)newUrlCacheForFilename:(NSString *)filename {
     NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent: filename
                                                                  isDirectory: NO];
     return cacheUrl;
 }
 
-#pragma mark - NSObject
+#pragma mark -
+#pragma mark MTCacheProtocol
 
-- (void)dealloc { }
-
-- (void)removeObservers {
-
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: self.managedObjectContext];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextDidSaveNotification
-                                                  object: self.managedObjectContext];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextWillSaveNotification
-                                                  object: self];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIDocumentStateChangedNotification
-                                                  object: self];
-    
+- (NSURL *)cachedFilesDirectory {
+    NSString *filename = self.filename;
+    NSURL *result = [NSURL newURLCacheFilesDirectoryForFilename:filename];
+    return result;
 }
 
 #pragma mark -
@@ -599,7 +602,7 @@ READ_END:;
     
     if (!success) return NO;
 
-    return [MADocument ArchiveFilesAtURL: self.urlGuts
+    return [MADocument archiveFilesAtURL: self.urlGuts
                                    toURL: self.fileURL
                                overwrite: YES];
     

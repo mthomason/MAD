@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADQueryActiveQueryFields_h
+#define Reports_MADQueryActiveQueryFields_h
+
 #import <Foundation/Foundation.h>
 
 @class NSManagedObjectContext;
@@ -25,3 +28,5 @@
 
 
 @end
+
+#endif

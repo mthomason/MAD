@@ -350,7 +350,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     
     [operationQueueBackground addOperation:resetReceipt];
     
-    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.filesCoordnator
                                                                    selector: @selector(getUserCloudPrefs)
                                                                      object: NULL];
     [operationQueueBackground addOperation:getUserCloudPreferences];
@@ -427,7 +427,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
             UIAlertController *alert;
             alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
                 MADFileExplorerViewController *sself2 = weakself2;
-                [sself2 getUserCloudPrefs];
+                [sself2.filesCoordnator getUserCloudPrefs];
             }];
             
             [sself presentViewController:alert animated:YES completion:nil];
@@ -449,14 +449,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 - (NSURL *)documentDirectory {
     return self.filesCoordnator.filesController.documentDirectory;
-}
-
-#pragma mark -
-#pragma mark Public
-
-- (void)getUserCloudPrefs {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self.filesCoordnator getUserCloudPrefs];
 }
 
 #pragma mark -
@@ -1110,7 +1102,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
             MADFileExplorerViewController *strongself = weakself;
             if (strongself) {
-                [strongself getUserCloudPrefs];
+                [strongself.filesCoordnator getUserCloudPrefs];
             }
         }];
         

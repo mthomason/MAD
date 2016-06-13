@@ -174,20 +174,16 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     
     NSOperationQueue *operationQueueBackground;
-    NSOperation *getUserCloudPreferences, *resetReceipt;
+    NSOperation *resetReceipt;
     
     operationQueueBackground = [[NSOperationQueue alloc] init];
-    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground; //Guess app delegate
+    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground;
+    //Guess app delegate
     // can leak, but
     // this should be
     // removed from
     // underlying queue
     // at dealloc
-    
-    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.openFileViewController
-                                                                   selector: @selector(getUserCloudPrefs)
-                                                                     object: NULL];
-    
     
     MTVerificationController *verificationController;
     verificationController = [MTVerificationController sharedInstance];
@@ -195,7 +191,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
                                                         selector: @selector(resetReceipt)
                                                           object: NULL];
     
-    [operationQueueBackground addOperation:getUserCloudPreferences];
     [operationQueueBackground addOperation:resetReceipt];
 
     return YES;
@@ -294,16 +289,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    
-    UIAlertController *signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-        [self.openFileViewController getUserCloudPrefs];
-    }];
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
-    }];
-
 }
 
 - (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
