@@ -406,7 +406,7 @@ BOOL storeEnabled() {
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
     [self.tabBarController.navigationItem setRightBarButtonItem:nil animated:animated];;
 }
 

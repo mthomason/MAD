@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerFontSettingsViewController_h
 
 #import <UIKit/UITableViewController.h>
+#import "MADReportDesignerFontSelectorDelegateProtocol.h"
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADFontSelectorViewController.h"
 #import "MADToolboxDisplayProtocol.h"

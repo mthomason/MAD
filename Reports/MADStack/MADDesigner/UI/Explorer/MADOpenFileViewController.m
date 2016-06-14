@@ -100,7 +100,7 @@
 #import "UITableViewController+Designer.h"
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
-
+#import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADExplorer/MADDocumentState.h>
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook = 1;
@@ -194,9 +194,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
     @property (nonatomic, weak)     UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-    @property (nonatomic, assign)   BOOL shouldShowAddDocumentPopover;
-    @property (nonatomic, assign)   BOOL aboutViewControllerOnScreen;
-
     @property (nonatomic, strong)   MADSearchBar *searchBar;
 
     @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
@@ -206,16 +203,18 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
     @property (nonatomic, assign) BOOL cloudActivityRunning;
     @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
+    @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
+    @property (nonatomic, assign) BOOL aboutViewControllerOnScreen;
+
     @property (nonatomic, assign, getter=isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
     @property (nonatomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
+    @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
     @property (nonatomic, strong) UIProgressView *progressViewFileManager;
 
     @property (nonatomic, strong) NSMutableIndexSet *batchInserts;
     @property (nonatomic, strong) NSMutableIndexSet *batchRemoves;
     @property (nonatomic, strong) NSMutableIndexSet *batchUpdates;
-
-    @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import "MADDatabaseOperationTestConnection.h"
+#import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>

@@ -31,6 +31,10 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/MADImage.h>
 
+#import <MADCocoaExtensions/MAD2dDirection.h>
+#import <MADCocoaExtensions/MADAspectRatio.h>
+#import <MADCocoaExtensions/MADResizeAspect.h>
+
 #import <MADCocoaExtensions/UIColor+Social.h>
 #import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
 #import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>

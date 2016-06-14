@@ -35,13 +35,13 @@
                     NSURL *twitterFriendships = [NSURL URLWithString:@"https://api.twitter.com/1.1/friendships/create.json"];
                     SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:twitterFriendships parameters:tempDict];
                     [postRequest setAccount:twitterAccount];
-                    [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                    [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *returendError) {
                         if (!(success = urlResponse.statusCode == 200)) {
-                            errorResponse = error;
+                            errorResponse = returendError;
                         }
                         #if DEBUG
-                            NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)error.code];
-                            NSLog(@"%@error %@", output,error.description);
+                            NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)returendError.code];
+                            NSLog(@"%@error %@", output,returendError.description);
                         #endif
                     }];
                 }
@@ -49,7 +49,8 @@
                 
             } else {
                 NSString *title = NSLocalizedString(@"No Accounts Found", @"No Accounts Found");
-                NSString *message = NSLocalizedString(@"Please add a Twitter account to your device.", @"Please add a Twitter account to your device.");
+                NSString *message = NSLocalizedString(@"Please add a Twitter account to your device.",
+                                                      @"Please add a Twitter account to your device.");
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
                 NSError *noTwitterFound = [errorUserInfo errorWithDomain: @"MADSocial" code: 3782];
                 completion(NO, noTwitterFound);

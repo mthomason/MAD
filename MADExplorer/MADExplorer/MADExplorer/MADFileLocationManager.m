@@ -7,13 +7,15 @@
 //
 
 #import "MADFileLocationManager.h"
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIAlertController.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADStorageState.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/MADFileCoordinator.h>
-#import <UIKit/UIViewController.h>
-
+#import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
@@ -24,7 +26,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
     @property (nonatomic, readwrite, strong) MADFilesController *filesController;
     @property (nonatomic, readwrite, assign) BOOL getUserCloudPrefsFirstCall;
-    @property (nonatomic, readonly) BOOL isFirstLaunch;
+    @property (nonatomic, readonly)          BOOL isFirstLaunch;
 
 @end
 
@@ -75,7 +77,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    id<NSObject, NSCopying, NSCoding> storedToken = nil;
+    id <NSObject, NSCopying, NSCoding> storedToken = nil;
     
     // Determine if the iCloud account associated with this device has changed since the last
     //    time the user launched the app.

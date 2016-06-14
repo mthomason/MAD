@@ -12,6 +12,7 @@
 
 #import "MTConnectionViewController.h"
 #import <MAD/MADDocumentProtocol.h>
+#import <MAD/MADDatabaseProtocol.h>
 
 #import "MUIViewControllerDelegate.h"
 #import <MADExplorer/MADSaveFileProtocol.h>

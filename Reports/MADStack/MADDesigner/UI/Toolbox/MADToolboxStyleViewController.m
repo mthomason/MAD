@@ -430,8 +430,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     if (!self.isViewLoaded) return;
     
     
-    UISegmentedControl *segmentedControlHorizontalAlignment;
+    UISegmentedControl *segmentedControlHorizontalAlignment, *segmentedControlVerticalAlignment;
     segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
+    segmentedControlVerticalAlignment = _segmentedControlVerticalAlignment;
     
     if (self.userSelectedObjectIds.count == 0) {
         
@@ -710,32 +711,36 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         _labelSizeWidth.attributedText = labelSizeWidthAttributedText;
         _stepperSizeWidth.value = sizeWidthHolder.doubleValue;
         
+        
+        UILabel *labelFontName = _labelFontName, *labelFontSize = _labelFontSize;
+        NSAttributedString *display;
         switch (numberFonts) {
             case 0: {
                 fontDisplayName = NSLocalizedString(@"Undefined", @"Undefined");
-                NSAttributedString *attributedText = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                _labelFontName.attributedText = attributedText;
+                display = [MADToolboxStrings newBoldSystemString:fontDisplayName];
+                labelFontName.attributedText = display;
                 break;
             }
             case 1: {
-                NSAttributedString *displayNameBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                NSAttributedString *displaySizeBold = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: fontSizeHolder
-                                                                                                            withFontSize: _labelFontSize.font.pointSize];
-                _labelFontName.attributedText = displayNameBold;
-                _labelFontSize.attributedText = displaySizeBold;
+                display = [MADToolboxStrings newBoldSystemString:fontDisplayName];
+                labelFontName.attributedText = display;
+                display = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: fontSizeHolder
+                                                                                withFontSize: labelFontSize.font.pointSize];
+                labelFontSize.attributedText = display;
                 break;
             }
             default: {
                 fontDisplayName = NSLocalizedString(@"Ambiguous", @"Ambiguous");
-                NSAttributedString *displayNameBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                NSAttributedString *displaySizeBold = [MADToolboxStrings newBoldSystemString:fontDisplayName];
-                _labelFontName.attributedText = displayNameBold;
-                _labelFontSize.attributedText = displaySizeBold;
+                display = [MADToolboxStrings newBoldSystemString:fontDisplayName];
+                labelFontName.attributedText = display;
+                display = [MADToolboxStrings newBoldSystemString:fontDisplayName];
+                labelFontSize.attributedText = display;
                 break;
             }
         }
         
-        _stepperFontSize.value = fontSizeHolder;
+        UIStepper *stepperFontSize = _stepperFontSize;
+        stepperFontSize.value = fontSizeHolder;
         
         _controlStateBold = numberBold > 0 ? ( numberNotBold > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
         _controlStateItalic = numberItalic > 0 ? ( numberNotItalic > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
@@ -769,19 +774,19 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
          */
         
         
-        [self setStateInControl:_segmentedControlHorizontalAlignment forState:controlStateHorizontalAlignment];
-        [self setStateInControl:_segmentedControlVerticalAlignment forState:controlStateVerticalAlignment];
+        [self setStateInControl:segmentedControlHorizontalAlignment forState:controlStateHorizontalAlignment];
+        [self setStateInControl:segmentedControlVerticalAlignment forState:controlStateVerticalAlignment];
         
         _fontLabelTableViewCell.userInteractionEnabled = YES;
-        _stepperFontSize.userInteractionEnabled = YES;
-        _segmentedControlHorizontalAlignment.userInteractionEnabled = YES;
-        _segmentedControlVerticalAlignment.userInteractionEnabled = YES;
+        stepperFontSize.userInteractionEnabled = YES;
+        segmentedControlHorizontalAlignment.userInteractionEnabled = YES;
+        segmentedControlVerticalAlignment.userInteractionEnabled = YES;
         
     }
-    [self setStateInControl: _buttonBold forState: _controlStateBold];
-    [self setStateInControl: _buttonItalic forState: _controlStateItalic];
-    [self setStateInControl: _buttonStrike forState: _controlStateStrike];
-    [self setStateInControl: _buttonUnderline forState: _controlStateUnderline];
+    [self setStateInControl: _buttonBold        forState: _controlStateBold];
+    [self setStateInControl: _buttonItalic      forState: _controlStateItalic];
+    [self setStateInControl: _buttonStrike      forState: _controlStateStrike];
+    [self setStateInControl: _buttonUnderline   forState: _controlStateUnderline];
 }
 
 + (NSAttributedString *)newAttributedStringFontSizeInPoints:(double)pointsDisplay
@@ -982,7 +987,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
     NSNumber *value = [[NSNumber alloc] initWithInteger: index];
-    [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.segmentedControlHorizontalAlignment setBackgroundImage: nil forState: UIControlStateNormal
+                                                      barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -993,7 +999,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updateVerticalAlignment:(NSInteger)index {
     NSNumber *value = [[NSNumber alloc] initWithInteger: index];
-    [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.segmentedControlVerticalAlignment setBackgroundImage: nil forState: UIControlStateNormal
+                                                    barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1016,8 +1023,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updatePaddingBottom:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue:value];
-    self.labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
+    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
+    self.labelPaddingBottom.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1028,8 +1035,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updatePaddingLeft:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue:value];
-    self.labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:value];
+    self.labelPaddingLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1040,8 +1047,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updatePaddingRight:(double)padding {
     NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *labelPaddingRight = [MADToolboxStrings newMarginRightForValue:value];
-    self.labelPaddingRight.attributedText = labelPaddingRight;
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:value];
+    self.labelPaddingRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1076,8 +1083,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updateMarginLeft:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: value];
-    self.labelMarginLeft.attributedText = labelMarginLeftAttributedText;
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: value];
+    self.labelMarginLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1088,8 +1095,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)updateMarginRight:(double)margin {
     NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *labelMarginRight = [MADToolboxStrings newMarginRightForValue: value];
-    self.labelMarginRight.attributedText = labelMarginRight;
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: value];
+    self.labelMarginRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -1170,16 +1177,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     if ([segue.identifier isEqualToString:MADIdentifierStoryboardSeguePushFontPicker]) {
         
-        ((MADFontSelectorViewController *)segue.destinationViewController).delegate = self;
-        ((MADFontSelectorViewController *)segue.destinationViewController).clearsBackground = self.clearsBackground;
+        MADFontSelectorViewController __unsafe_unretained *destination = segue.destinationViewController;
+        destination.delegate = self;
+        destination.clearsBackground = self.clearsBackground;
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            fontname = documentObject.fontname;
+            fontname = documentObject.fontname.copy;
             break;
         }
 
-        [((MADFontSelectorViewController *)segue.destinationViewController) setFamilyName:fontname];
+        [destination setFamilyName:fontname];
         
     }
 }

@@ -12,30 +12,12 @@
 #import <Foundation/NSObject.h>
 #import <MADExplorer/MADDocumentState.h>
 
+@protocol MADFileLocationManagerDelegate;
+
 @class MADFilesController;
 @class UIAlertController;
 @class UIAlertAction;
 @class UIViewController;
-
-@protocol MADFileLocationManagerDelegate <NSObject>
-
-    @required
-        - (void)didConfigureFilesController:(MADFilesController *)filesController;
-        - (void)didDisconnectFromCloud:(id)sender;
-
-        - (NSString *)groupIdentifier;
-        - (NSString *)ubiquityIdentifier;
-        - (NSString *)fileExtention;
-
-
-        - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
-
-
-    @optional
-        - (void)startLongRunningActivity;
-        - (void)completedLongRunningActivity;
-
-@end
 
 @interface MADFileLocationManager : NSObject
 
