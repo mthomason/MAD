@@ -8,7 +8,7 @@
 #import "MADFileCoordinator.h"
 #import "MADLocalFileCoordinator.h"
 #import "MADCloudFileCoordinator.h"
-#import "MADStorageState.h"
+#import <MADFileManager/MADAppStorageOption.h>
 
 #import <MADFoundation/MADAssert.h>
 

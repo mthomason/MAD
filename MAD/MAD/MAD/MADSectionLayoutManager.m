@@ -11,7 +11,6 @@
 
 #import "MADSectionLayoutAttributes.h"
 
-#import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"

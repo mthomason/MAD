@@ -16,11 +16,12 @@
 @class MTQueryBuilderPredicateFormatViewController;
 
 @protocol MTQueryBuilderPredicateFormatDelegate <MTViewControllerProtocol>
-- (void)addQueryPredicate:(RptqQueryPredicate *)predicate;
+    - (void)addQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
 
 @interface MTQueryBuilderPredicateFormatViewController : UITableViewController
-    <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
+    <MTViewControllerProtocol,
+        MTQueryBuilderAddPredicateDelegate>
 
 @property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;

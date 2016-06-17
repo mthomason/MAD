@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MAD_MADDocumentObjectCachedDataReferenceItem_h
+#define Reports_MAD_MADDocumentObjectCachedDataReferenceItem_h
+
+#import <Foundation/NSObject.h>
 
 @class MTDatabase;
 @class MTDataTable;
@@ -18,3 +21,5 @@
                                rowID:(NSUInteger)rowID;
 
 @end
+
+#endif

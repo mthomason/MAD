@@ -5,9 +5,13 @@
 //  Created by Michael Thomason on 2/9/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
 #import "UIColor+EverydayApps.h"
 
- @implementation MADColorEverydayApps
+#import <UIKit/UIColor.h>
+
+
+@implementation MADColorEverydayApps
  
  static const CGFloat selectedAlpha = 0.33333333f;
  

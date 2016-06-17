@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MAD_MADocumentObjectAttributesText_h
+#define Reports_MAD_MADocumentObjectAttributesText_h
+
 #import "MADocumentObjectAttributes.h"
 
 @class UIFontDescriptor;
@@ -20,3 +23,5 @@
     @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
 
 @end
+
+#endif

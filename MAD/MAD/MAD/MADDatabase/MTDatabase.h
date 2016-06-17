@@ -69,12 +69,12 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
+    - (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
 
     - (NSString *)selectPart;
     - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit;
     - (NSString *)sqlLimitClause;
     - (NSString *)sqlLimitClause:(NSUInteger)limit;
-    - (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
     - (NSString *)fieldAliasForField:(NSString *)field
                    withSafeTableName:(NSString *)safeTableName;
     - (NSString *)fieldAliasForField:(NSString *)fieldName
@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
                                usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                                completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
-@property (nonatomic, assign, readonly) BOOL isLicensedUser;
+    @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
 @end
 

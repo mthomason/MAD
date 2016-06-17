@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MTQuery_MADQueryLimitClause_h
+#define Reports_MTQuery_MADQueryLimitClause_h
+
+#import <Foundation/NSObject.h>
 
 @class MTDatabase;
 
@@ -18,3 +21,5 @@
     @property (nonatomic, readonly, strong) NSString *sql;
     
 @end
+
+#endif

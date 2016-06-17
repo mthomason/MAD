@@ -19,7 +19,8 @@ extern NSString * const MTDatabaseNumberOfPagesFormattedKey;
 @interface MADNotificationDidFormatPage : NSObject
 
     + (MADNotificationDidFormatPage *)sharedObject;
-    - (void)reportFormatter:(MTReportFormatter *)reportFormatter formattedPage:(NSUInteger)page;
+    - (void)reportFormatter:(MTReportFormatter *)reportFormatter
+              formattedPage:(NSUInteger)page;
 
 @end
 

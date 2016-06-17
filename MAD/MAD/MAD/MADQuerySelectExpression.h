@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MTQuery_MADQuerySelectExpression_h
+#define Reports_MTQuery_MADQuerySelectExpression_h
+
+#import <Foundation/NSObject.h>
 
 @class RptqQuery;
 @class MTDatabase;
@@ -22,3 +25,5 @@
     @property (nonatomic, readwrite, strong) NSString *sql;
 
 @end
+
+#endif

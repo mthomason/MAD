@@ -333,9 +333,8 @@ static NSString * const MADFirstLaunch                                     = @"M
     if (self.filesController != nil && !accountChanged) return;
 
     
-    UIViewController <MADFileLocationManagerDelegate> *delegate;
+    id <MADFileLocationManagerDelegate> delegate;
     delegate = _delegate;
-    
     
     if (!_filesController) {
         
@@ -370,7 +369,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    UIViewController <MADFileLocationManagerDelegate> *delegate;
+    id <MADFileLocationManagerDelegate> delegate;
     NSString *groupIdentifer;
 
     delegate = _delegate;

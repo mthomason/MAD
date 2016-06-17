@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_NSError__Document_h
+#define Reports_NSError__Document_h
+
+#import <Foundation/NSError.h>
 
 @interface NSError (Document)
 
@@ -14,3 +17,5 @@
     + (instancetype)newErrorFailedToOpenDocument;
 
 @end
+
+#endif

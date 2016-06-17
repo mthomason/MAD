@@ -15,8 +15,8 @@
 @class MTQuery;
 
 @protocol MTDatabaseProtocol <NSObject>
-@required
-@optional
+  @required
+  @optional
     - (MADCredential *)getCredentialsForKey:(NSString *)key;
     - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
 @end

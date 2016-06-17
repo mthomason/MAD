@@ -14,21 +14,9 @@
 
 #import "MTBarcodeProtocol.h"
 #import "MADBarcodeType.h"
-#import "zint.h"
 
 #import "MADBarcodeBorderStyle.h"
-
-typedef NS_ENUM(unsigned char, MTBarcodeSizingMode) {
-    MTBarcodeSizingModeAutomaticResizing     = 1,
-    MTBarcodeSizingModeSpecificSize          = 2,
-    MTBarcodeSizingModeSpecificErrorLevel    = 3
-};
-
-typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
-    MTBarcodeDataTypeUnicode = UNICODE_MODE,
-    MTBarcodeDataTypeData = DATA_MODE,
-    MTBarcodeDataTypeGs1 = GS1_MODE
-};
+#import "MADBarcodeSizingMode.h"
 
 @class MADColor;
 

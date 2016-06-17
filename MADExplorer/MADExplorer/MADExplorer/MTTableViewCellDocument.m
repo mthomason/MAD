@@ -23,18 +23,18 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
-    if (action == @selector(email:) || action == @selector(rename:)) {
+    if (action == @selector(actionEmail:) || action == @selector(actionRename:)) {
         result = YES;
     }
     return result;
 }
 
-- (void)email:(id)sender {
-    [self.delegate email:self];
+- (void)actionEmail:(id)sender {
+    [self.delegate actionEmail:self];
 }
 
-- (void)rename:(id)sender {
-    [self.delegate rename:self];
+- (void)actionRename:(id)sender {
+    [self.delegate actionRename:self];
 }
 
 @end

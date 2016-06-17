@@ -6,11 +6,12 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MAD_UIManagedDocument__Extras_h
+#define Reports_MAD_UIManagedDocument__Extras_h
 
-@class MTDatabase;
-@class MTDataTableFast;
-@class RptqQueryField;
+#import <Foundation/NSObject.h>
+
+@class NSString;
 
 @interface MADDocumentCachedDataReference : NSObject
 
@@ -18,8 +19,6 @@
                             fieldName:(NSString *)fieldName
                                 rowID:(NSUInteger)rowID;
 
-    - (instancetype)initWithDatabase:(MTDatabase *)database
-                referencesQueryField:(RptqQueryField *)referencesQueryField
-                               rowID:(NSUInteger)rowID;
-
 @end
+
+#endif

@@ -24,10 +24,6 @@
         - (NSString *)ubiquityIdentifier;
         - (NSString *)fileExtention;
 
-
-        - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
-
-
     @optional
         - (void)startLongRunningActivity;
         - (void)completedLongRunningActivity;

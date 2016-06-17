@@ -66,6 +66,11 @@
     }
 }
 
+- (NSString *)copyBarcodeTypeName {
+    NSString *result = [MTBarcode newBarcodeNameForType:self.type.unsignedIntegerValue];
+    return result;
+}
+
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
     self.add2dComponent = @(barcode.has2dComponent);
@@ -103,6 +108,15 @@
     barcode.scale =                     documentObject.scale.floatValue;
     barcode.input =                     @"Sample data";
     barcode.primaryData =               @"";
+    return barcode;
+}
+
++ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject
+                                     input1:(NSString *)input1
+                                     input2:(NSString *)input2 {
+    MTBarcode *barcode = [self newBarcodeWithDocumentObject:documentObject];
+    barcode.input = input1.copy;
+    barcode.primaryData = input2.copy;
     return barcode;
 }
 

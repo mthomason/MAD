@@ -11,9 +11,11 @@
 
 #import "MTObject.h"
 
-@class MTVertex, MTEdge, MTLinkedList;
+@class MTVertex;
+@class MTEdge;
+@class MTLinkedList;
 
-@interface MTGraph : MTObject <MTProtocolLog>
+@interface MTGraph : MTObject
 
     - (instancetype)init;
     - (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;

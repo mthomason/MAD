@@ -11,6 +11,7 @@
 #endif
 
 #import "MTViewControllerBarcode.h"
+#import "MADViewControllerBarcodeDelegate.h"
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -40,6 +41,7 @@
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 
 #import <MAD/MTDatabase.h>
+#import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MTDatabaseConnection.h>
 
 #import <MAD/RptqQueryField.h>
@@ -53,11 +55,13 @@
 
 #import <CoreData/NSManagedObjectID.h>
 
+#import "MTViewControllerBarcodePreviewDelegate.h"
+
 static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
-    <MTDatabaseProtocol>
+    <MTDatabaseProtocol, MTViewControllerBarcodePreviewDelegate>
 
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 

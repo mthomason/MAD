@@ -42,15 +42,15 @@ typedef id <MTQueryBuilderAddPredicateDelegate,
         MTViewControllerValueBasedOnFieldDelegate>
 
 
-    @property (nonatomic, weak) IBOutlet MADQueryBuilderPredicateDelegate queryPredicateDelegate;
-    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak)     IBOutlet MADQueryBuilderPredicateDelegate queryPredicateDelegate;
+    @property (nonatomic, weak)     MADocument *document;
 
-    @property (nonatomic, assign) MNSPredicatePart currentlyEditingPart;
-    @property (nonatomic, assign) MADPredicateOperator predicateOperator;
+    @property (nonatomic, assign)   MNSPredicatePart currentlyEditingPart;
+    @property (nonatomic, assign)   MADPredicateOperator predicateOperator;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellLeftSide;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellRightSide;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellOperator;
+    @property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellLeftSide;
+    @property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellRightSide;
+    @property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellOperator;
 
     @property (nonatomic, copy)     NSString *leftValue;
     @property (nonatomic, copy)     NSString *rightValue;

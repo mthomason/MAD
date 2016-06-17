@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryBuilderLinkBuilderViewController_h
 #define Reports_MTQueryBuilderLinkBuilderViewController_h
 
-#import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import <UIKit/UITableViewController.h>
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MUIViewControllerDelegate.h"

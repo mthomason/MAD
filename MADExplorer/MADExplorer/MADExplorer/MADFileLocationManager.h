@@ -21,7 +21,7 @@
 
 @interface MADFileLocationManager : NSObject
 
-    @property (nonatomic, weak) UIViewController <MADFileLocationManagerDelegate> *delegate;
+    @property (nonatomic, weak) id <MADFileLocationManagerDelegate> delegate;
     @property (nonatomic, strong, readonly) MADFilesController *filesController;
 
     - (void)getUserCloudPrefs;

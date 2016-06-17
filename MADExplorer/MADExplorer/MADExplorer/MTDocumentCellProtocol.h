@@ -13,10 +13,10 @@
 
 @protocol MTDocumentCellProtocol <NSObject>
 
-    - (void)email:(id)cell;
-    - (void)rename:(id)sender;
+    - (void)actionEmail:(id)cell;
+    - (void)actionRename:(id)sender;
     - (void)actionDuplicate:(id)sender;
-    - (void)activateEditMode:(id)sender;
+    - (void)actionActivateEditMode:(id)sender;
 
 @end
 

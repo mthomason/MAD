@@ -6,12 +6,16 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MTQuery_MADQuerySelectExpressionActiveFields_h
+#define Reports_MTQuery_MADQuerySelectExpressionActiveFields_h
+
 #import "MADQuerySelectExpression.h"
 
 @class MTDatabase;
 @class NSManagedObjectContext;
 @class RptqDatabaseSchemaField;
+@class NSMutableDictionary<KeyType, ObjectType>;
+@class NSMutableArray<ObjectType>;
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 
@@ -21,5 +25,6 @@
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;
     @property (nonatomic, readonly, strong) NSMutableArray <NSString *> *fieldKeys;
 
-
 @end
+
+#endif

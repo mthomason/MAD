@@ -13,18 +13,16 @@
 #import "RptqDocumentSectionEnumerator.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
-#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryGroup.h"
-#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
 @interface RptqDocumentSectionEnumerator ()
 
-    @property (nonatomic, assign) NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, copy) NSManagedObjectID *queryObjectID;
+    @property (nonatomic, assign)   NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, copy)     NSManagedObjectID *queryObjectID;
 
 @end
 

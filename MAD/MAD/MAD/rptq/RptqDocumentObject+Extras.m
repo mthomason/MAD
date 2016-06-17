@@ -12,11 +12,16 @@
 
 #import "RptqDocumentObject+Extras.h"
 
-//#import <UIKit/UITextView.h>
-
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
+#import <Foundation/NSNumberFormatter.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSDateFormatter.h>
+#import <Foundation/NSLocale.h>
+#import <Foundation/NSData.h>
 
 #import "MTAlignment.h"
 #import "MADFont.h"
@@ -34,15 +39,8 @@
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows.h"
 
-#import <MADBarcodes/MTBarcode.h>
-
-#import <Foundation/NSNumberFormatter.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSDateFormatter.h>
-#import <Foundation/NSLocale.h>
-
 #import "MADSectionLayoutManager.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -403,7 +401,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            NSString *barcodeName = [MTBarcode newBarcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
+            NSString *barcodeName = [self.isBarcode copyBarcodeTypeName];
+            // [MTBarcode newBarcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
             result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }

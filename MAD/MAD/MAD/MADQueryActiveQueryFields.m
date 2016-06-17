@@ -9,6 +9,8 @@
 #import "MADQueryActiveQueryFields.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSFetchRequest.h>
+#import <Foundation/NSPredicate.h>
+
 #import "MADDocumentObjectType.h"
 
 #import "RptqDocumentObjectBarcode.h"

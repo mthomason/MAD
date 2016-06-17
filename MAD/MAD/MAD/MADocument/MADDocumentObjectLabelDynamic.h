@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MAD_UMADDocumentObjectLabelDynamic_h
+#define Reports_MAD_UMADDocumentObjectLabelDynamic_h
+
 #import "MADDocumentObject.h"
 
 @interface MADDocumentObjectLabelDynamic : MADDocumentObject
 
 @end
+
+#endif

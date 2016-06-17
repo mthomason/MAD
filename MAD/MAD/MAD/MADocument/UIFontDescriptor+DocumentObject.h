@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MAD_UIFontDescriptor__DocumentObject_h
+#define Reports_MAD_UIFontDescriptor__DocumentObject_h
+
 #import <UIKit/UIFontDescriptor.h>
 
 @class RptqDocumentObject;
@@ -15,3 +18,5 @@
     + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)documentObject;
 
 @end
+
+#endif

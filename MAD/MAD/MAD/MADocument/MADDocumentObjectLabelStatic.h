@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MAD_MADDocumentObjectLabelStatic_h
+#define Reports_MAD_MADDocumentObjectLabelStatic_h
+
 #import "MADDocumentObject.h"
 
 @class MADocumentObjectAttributesText;
@@ -16,3 +19,5 @@
         withAttributes:(__kindof MADocumentObjectAttributesText *)attributes;
 
 @end
+
+#endif

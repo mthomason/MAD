@@ -7,6 +7,9 @@
 //
 
 #import "MADDocumentCachedDataReference.h"
+
+#import <Foundation/NSString.h>
+
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"

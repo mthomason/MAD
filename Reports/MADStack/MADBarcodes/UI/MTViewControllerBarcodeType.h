@@ -9,7 +9,6 @@
 #ifndef Barcodes_MTViewControllerBarcodeType_h
 #define Barcodes_MTViewControllerBarcodeType_h
 
-
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIPickerView.h>
 

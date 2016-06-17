@@ -73,10 +73,13 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
+#import <MADCocoaExtensions/MADColor.h>
+
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIColor.h>
 
-#import <MADCocoaExtensions/MADColor.h>
+#import "MADBarcodeDataInputType.h"
 
 @interface MTBarcode ()
 

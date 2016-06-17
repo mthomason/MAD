@@ -12,6 +12,14 @@
 
 const CGFloat MADF255 = 255.00000000f;
 
+UIColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b) {
+    return [[UIColor alloc] initWithRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:1.00000000f];
+}
+
+UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
+    return [[UIColor alloc] initWithRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:a];
+}
+
 @interface MADColor ()
     @property (nonatomic, copy, readwrite) UIColor *color;
 @end

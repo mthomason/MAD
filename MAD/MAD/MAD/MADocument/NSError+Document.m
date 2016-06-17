@@ -8,6 +8,7 @@
 
 #import "NSError+Document.h"
 #import "MADErrorUserInfo.h"
+#import <Foundation/NSBundle.h>
 
 static NSString * const MADDocumentErrorDomain = @"MADocument";
 

@@ -63,14 +63,14 @@
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADBarcodes/MTBarcode.h>
-
 #import <MTDataTableFast.h>
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
 #import "MADParameters+QueryCacheAggregate.h"
 
 #import "MADocumentObjectAttributesText.h"
+
+@class MTBarcode;
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
@@ -618,9 +618,9 @@ END_DrawSection:;
                          forDocumentObject: item.parentObjectBarcode
                                      value: rowData[tableFieldKey2]];
     
-    MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:item];
-    barcode.input = input1;
-    barcode.primaryData = input2;
+    MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:item
+                                                                          input1:input1
+                                                                          input2:input2];
     return barcode;
 }
 

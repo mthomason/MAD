@@ -134,9 +134,9 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     UIColor *lightGrayColor = [UIColor lightGrayColor];
 
     if (!_addedGestures) {
-        SEL actionEdit = @selector(activateEditMode:);
+        SEL actionEdit = @selector(actionActivateEditMode:);
         BOOL gotActionEdit = NO, gotActionRename = NO;
-        SEL actionRename = @selector(rename:);
+        SEL actionRename = @selector(actionRename:);
         for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
             if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = YES;
             if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = YES;
@@ -292,9 +292,9 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return action == @selector(email:) ||
+    return action == @selector(actionEmail:) ||
            action == @selector(delete:) ||
-           action == @selector(rename:) ||
+           action == @selector(actionRename:) ||
            action == @selector(duplicate:);
 }
 
@@ -306,16 +306,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     return YES;
 }
 
-- (void)email:(id)sender {
-    [_delegate email:self];
+- (void)actionEmail:(id)sender {
+    [_delegate actionEmail:self];
 }
 
-- (void)activateEditMode:(id)sender {
-    [_delegate activateEditMode:sender];
+- (void)actionActivateEditMode:(id)sender {
+    [_delegate actionActivateEditMode:sender];
 }
 
-- (void)rename:(id)sender {
-    [_delegate rename:self];
+- (void)actionRename:(id)sender {
+    [_delegate actionRename:self];
 }
 
 - (void)duplicate:(id)sender {

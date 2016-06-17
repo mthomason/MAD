@@ -21,7 +21,8 @@
   #endif
 #endif
 
-@interface MTObject : NSObject <NSCopying, MTProtocolCompare, MTProtocolLog>
+@interface MTObject : NSObject
+    <NSCopying, MTProtocolCompare, MTProtocolLog>
 
     @property (atomic, strong) id object;
 

@@ -24,6 +24,7 @@
 #import <MAD/RptqQueryLinks+Extras.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 

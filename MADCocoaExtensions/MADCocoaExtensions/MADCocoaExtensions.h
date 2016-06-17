@@ -29,7 +29,6 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MTLog.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
-#import <MADCocoaExtensions/MADImage.h>
 
 #import <MADCocoaExtensions/MAD2dDirection.h>
 #import <MADCocoaExtensions/MADAspectRatio.h>

@@ -10,24 +10,19 @@
 #define Barcodes_MTViewControllerBarcode_h
 
 #import "MADViewController.h"
-#import "MTViewControllerBarcodePreviewDelegate.h"
+#import "MADViewControllerBarcodeOptionsDelegate.h"
+
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"
 
+@protocol MTViewControllerBarcodeDelegate;
+
 @class RptqDocumentObjectBarcode;
 @class NSManagedObjectID;
 
-@protocol MTViewControllerBarcodeDelegate
-    - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
-                           barcodeObject:(MTBarcode *)barcode
-                            withFieldOne:(RptqQueryField *)fieldOne
-                             andFieldTwo:(RptqQueryField *)fieldTwo;
-@end
-
 @interface MTViewControllerBarcode : MADViewController
-    <MTViewControllerBarcodePreviewDelegate,
-        MTViewControllerBarcodeOptionsDelegate,
+    <MTViewControllerBarcodeOptionsDelegate,
         MTUnwindProtocol>
 
     @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;

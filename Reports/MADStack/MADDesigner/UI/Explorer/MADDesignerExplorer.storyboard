@@ -134,37 +134,37 @@
                     <toolbarItems>
                         <barButtonItem enabled="NO" systemItem="trash" id="wuY-ge-Gue">
                             <connections>
-                                <action selector="delete:" destination="RNf-Mn-Gwm" id="Dlz-fU-hMl"/>
+                                <action selector="actionDelete:" destination="RNf-Mn-Gwm" id="VtW-kr-ccy"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem enabled="NO" systemItem="action" id="Osq-33-oRg">
                             <connections>
-                                <action selector="activity:" destination="RNf-Mn-Gwm" id="mYG-86-FgR"/>
+                                <action selector="actionActivity:" destination="RNf-Mn-Gwm" id="PCe-jL-Flk"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem enabled="NO" image="MADImageIconInfo.png" id="rW5-Le-DOq">
                             <connections>
-                                <action selector="documentInformation:" destination="RNf-Mn-Gwm" id="grP-Da-Oqw"/>
+                                <action selector="actionDocumentInformation:" destination="RNf-Mn-Gwm" id="WaP-Og-NBc"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem image="MADImageToolbarCloudDownload.png" id="OMr-Ce-L5Y">
                             <connections>
-                                <action selector="download:" destination="RNf-Mn-Gwm" id="MHK-Tj-qIX"/>
+                                <action selector="actionDownload:" destination="RNf-Mn-Gwm" id="473-Nj-w5T"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem title="Information" id="6Un-o8-5Jw">
                             <connections>
-                                <action selector="info:" destination="RNf-Mn-Gwm" id="GZl-VY-07i"/>
+                                <action selector="actionInformation:" destination="RNf-Mn-Gwm" id="NzC-HJ-GLA"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem title="About" id="G1q-mJ-H8h">
                             <connections>
-                                <action selector="about:" destination="RNf-Mn-Gwm" id="foC-Hk-h5w"/>
+                                <action selector="actionAbout:" destination="RNf-Mn-Gwm" id="8BC-Nh-TwT"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem title="Store" id="JzB-Jd-m01">
                             <connections>
-                                <action selector="store:" destination="RNf-Mn-Gwm" id="zwd-Fz-j7N"/>
+                                <action selector="actionStore:" destination="RNf-Mn-Gwm" id="EHd-oJ-1OP"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="R7M-aS-znj"/>
@@ -172,7 +172,7 @@
                     <navigationItem key="navigationItem" title="MAD Designer" id="2wQ-Oa-qQW">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="XYO-c1-wHk">
                             <connections>
-                                <action selector="addDocument:" destination="RNf-Mn-Gwm" id="9CV-5K-g9Q"/>
+                                <action selector="actionAddDocument:" destination="RNf-Mn-Gwm" id="BqH-XB-zfF"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

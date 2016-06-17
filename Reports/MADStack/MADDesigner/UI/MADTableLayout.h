@@ -14,7 +14,9 @@
 typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *stop);
 
 @protocol MADTableLayoutDelegate <NSObject>
-    - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section;
+    - (CGFloat)collectionView:(UICollectionView *)collectionView
+                       layout:(UICollectionViewLayout*)collectionViewLayout
+          widthRequiredColumn:(NSInteger)section;
 @end
 
 @interface MADTableLayout : UICollectionViewLayout

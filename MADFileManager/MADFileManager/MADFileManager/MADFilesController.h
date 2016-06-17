@@ -9,9 +9,8 @@
 #ifndef MADDesigner_MADFilesController_h
 #define MADDesigner_MADFilesController_h
 
-#import "MADStorageState.h"
 #import <Foundation/NSObject.h>
-
+#import <MADFileManager/MADAppStorageOption.h>
 
 @protocol MADFileCoordinatorProtocol;
 @protocol MADFilesControllerDelegate;
@@ -26,10 +25,11 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
 @interface MADFilesController : NSObject
 
     @property (nonatomic, weak) id <MADFilesControllerDelegate> delegate;
+    @property (nonatomic, strong) id <MADFileCoordinatorProtocol> fileCoordinator;
+
     @property (readonly) NSURL *documentDirectory;
 
     @property (nonatomic, readonly) NSUInteger count;
-    @property (nonatomic, strong) id <MADFileCoordinatorProtocol> fileCoordinator;
 
     - (instancetype)initWithFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator
                               delegateQueue:(NSOperationQueue *)delegateQueue

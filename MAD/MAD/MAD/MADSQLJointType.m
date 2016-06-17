@@ -7,7 +7,6 @@
 //
 
 #import "MADSQLJoinType.h"
-#import <Foundation/NSString.h>
 
 NSString * const MNSJoinTypeInnerJoin           = @"MNSJoinTypeInnerJoin";
 NSString * const MNSJoinTypeEquiJoin            = @"MNSJoinTypeEquiJoin";

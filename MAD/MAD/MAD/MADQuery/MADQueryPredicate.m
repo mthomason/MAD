@@ -7,14 +7,19 @@
 //
 
 #import "MADQueryPredicate.h"
+
+#import "MTDatabase.h"
+#import "MTDatabaseField.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqDatabaseSchemaField.h"
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
+
 #import <MADFoundation/MADDataType.h>
+
+#import <Foundation/NSString.h>
 
 @interface MADQueryPredicate ()
 

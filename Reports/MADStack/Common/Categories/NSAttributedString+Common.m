@@ -12,6 +12,7 @@
 #import <UIKit/UIFont.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
+#import <UIKit/UIColor.h>
 
 @implementation NSAttributedString (Common)
 

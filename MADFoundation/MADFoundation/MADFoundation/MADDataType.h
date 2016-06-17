@@ -10,9 +10,6 @@
 #define MADFoundation_MADDataType_h
 
 #import <Foundation/NSObjCRuntime.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSString.h>
-#import "NSData+Comparson.h"
 
 typedef NS_ENUM(short, MADDataType) {
     MADDataTypeBit           = 0,
@@ -42,39 +39,7 @@ typedef NS_ENUM(short, MADDataType) {
 };
 
 
-static inline SEL MADDataTypeSelectorForSorting(MADDataType dataType);
-static inline SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
-    switch (dataType) {
-        case MADDataTypeDate:
-        case MADDataTypeDateTime:
-        case MADDataTypeGeometry:
-        case MADDataTypeImage:
-        case MADDataTypeSet:
-        case MADDataTypeTime:
-        case MADDataTypeTimeStamp:
-        case MADDataTypeYear:
-        case MADDataTypeUnknown:
-            //NSAssert(NO, @"Not implemented: selectorForSorted in MTDatabaseField.");
-        case MADDataTypeBit:
-        case MADDataTypeFloat:
-        case MADDataTypeInteger:
-        case MADDataTypeNumber:
-            return @selector(compare:);
-            break;
-
-        case MADDataTypeBlob:
-            return @selector(compareData:);
-            break;
-
-        case MADDataTypeString:
-            return @selector(localizedCaseInsensitiveCompare:);
-            break;
-            
-        default:
-            return @selector(compare:);
-            break;
-    }
-}
+SEL MADDataTypeSelectorForSorting(MADDataType dataType);
 
 #endif
 

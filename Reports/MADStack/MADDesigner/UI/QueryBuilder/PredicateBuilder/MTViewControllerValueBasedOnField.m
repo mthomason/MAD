@@ -14,6 +14,8 @@
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
 
 #import <UIKit/UIWindow.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UIPickerView.h>
 
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -36,7 +38,11 @@
 #import "MTCellEnterText.h"
 
 @interface MTViewControllerValueBasedOnField ()
-    <UITextFieldDelegate>
+    <UITextFieldDelegate,
+        UITableViewDataSource,
+        UITableViewDelegate,
+        UIPickerViewDataSource,
+        UIPickerViewDelegate>
 
     @property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
     @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;

@@ -18,6 +18,7 @@
 #import <UIKit/UIStepper.h>
 #import <UIKit/UILabel.h>
 
+#import "MADViewControllerBarcodeOptionsDelegate.h"
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>

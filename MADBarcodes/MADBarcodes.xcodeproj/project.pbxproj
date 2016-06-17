@@ -203,6 +203,7 @@
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
 		4C66C1381BA814A400663575 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1371BA814A400663575 /* libpng16.a */; };
 		4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */; };
+		4CC909011D0FC4FC007A1C75 /* MADBarcodeSizingMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD51CF3184600D93406 /* MADBarcodeBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -416,6 +417,8 @@
 		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4C66C1371BA814A400663575 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
 		4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeSizingMode.h; path = MADBarcodes/MADBarcodeSizingMode.h; sourceTree = "<group>"; };
+		4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodeDataInputType.h; sourceTree = "<group>"; };
 		4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeBorderStyle.h; path = MADBarcodes/MADBarcodeBorderStyle.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -615,6 +618,8 @@
 				4C130A261BA8075B0022665F /* MTBarcodeView.h */,
 				4C130A271BA8075B0022665F /* MTBarcodeView.m */,
 				4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */,
+				4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */,
+				4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */,
 			);
 			name = MADBarcodes;
 			sourceTree = "<group>";
@@ -755,6 +760,7 @@
 				4C130A6A1BA8075B0022665F /* MTBarcodeAztec.h in Headers */,
 				4C130ABA1BA8075B0022665F /* MTBarcodeMicroQrCode.h in Headers */,
 				4C130AC01BA8075B0022665F /* MTBarcodePdf417Iso15438.h in Headers */,
+				4CC909011D0FC4FC007A1C75 /* MADBarcodeSizingMode.h in Headers */,
 				4C130ABC1BA8075B0022665F /* MTBarcodeMsiPlessey.h in Headers */,
 				4C130AB81BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h in Headers */,
 				4C130A961BA8075B0022665F /* MTBarcodeDatabarStacked.h in Headers */,

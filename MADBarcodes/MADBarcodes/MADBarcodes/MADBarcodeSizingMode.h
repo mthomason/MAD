@@ -9,5 +9,10 @@
 #ifndef MADBarcodeSizingMode_h
 #define MADBarcodeSizingMode_h
 
+typedef NS_ENUM(unsigned char, MTBarcodeSizingMode) {
+    MTBarcodeSizingModeAutomaticResizing     = 1,
+    MTBarcodeSizingModeSpecificSize          = 2,
+    MTBarcodeSizingModeSpecificErrorLevel    = 3
+};
 
 #endif /* MADBarcodeSizingMode_h */

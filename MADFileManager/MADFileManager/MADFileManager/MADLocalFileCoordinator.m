@@ -14,12 +14,12 @@
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
+#import <MADFoundation/NSURL+CommonURLs.h>
 
 #import <dispatch/queue.h>
 
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
-#import <MADFoundation/NSURL+CommonURLs.h>
 #import "NSURL+ConvenienceConstructors.h"
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";

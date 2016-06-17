@@ -6,7 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MTQuery_MADQuerySelectExpressionAllFields_h
+#define Reports_MTQuery_MADQuerySelectExpressionAllFields_h
+
 #import "MADQuerySelectExpression.h"
 
 @class MTDatabase;
@@ -20,3 +22,5 @@
              forManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
+
+#endif

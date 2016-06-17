@@ -9,10 +9,10 @@
 
 // FIXME: Not yet implemented.
 
-#import <UIKit/UITableViewController.h>
-
 #ifndef Barcodes_MTTableViewControllerBarcodeExtraPdf417Iso24728_h
 #define Barcodes_MTTableViewControllerBarcodeExtraPdf417Iso24728_h
+
+#import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate
 

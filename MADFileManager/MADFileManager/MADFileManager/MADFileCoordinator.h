@@ -10,8 +10,8 @@
 #define MAD_Designer_MADFileCoordinator_h
 
 #import <Foundation/NSObject.h>
-#import "MADStorageState.h"
 #import "MADFileCoordinatorProtocol.h"
+#import <MADFileManager/MADAppStorageOption.h>
 
 @class MADFile;
 

@@ -10,12 +10,6 @@
 #define Reports_MTViewControllerValueBasedOnField_h
 
 #import <UIKit/UIViewController.h>
-#import <UIKit/UITableView.h>
-#import <UIKit/UIPickerView.h>
-
-//#import <MAD/MTQuery.h>
-//#import <MAD/MTKeyChain.h>
-//#import <MADFoundation/MTDataTable.h>
 
 @protocol MTViewControllerValueBasedOnFieldDelegate;
 
@@ -23,10 +17,6 @@
 @class MADocument;
 
 @interface MTViewControllerValueBasedOnField : UIViewController
-    <UITableViewDataSource,
-        UITableViewDelegate,
-        UIPickerViewDataSource,
-        UIPickerViewDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
     @property (nonatomic, weak) MADocument *document;

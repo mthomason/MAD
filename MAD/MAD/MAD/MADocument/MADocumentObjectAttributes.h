@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MAD_MADocumentObjectAttributes_h
+#define Reports_MAD_MADocumentObjectAttributes_h
+
 #import <Foundation/NSObject.h>
 
 @class RptqDocumentObject;
@@ -17,3 +20,5 @@
                                                                     NS_DESIGNATED_INITIALIZER;
 
 @end
+
+#endif
