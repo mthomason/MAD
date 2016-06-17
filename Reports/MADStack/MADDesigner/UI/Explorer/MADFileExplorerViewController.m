@@ -1,5 +1,5 @@
 //
-//  MADOpenFileViewController
+//  MADFileExplorerViewController
 //  MAD Designer
 //
 //  Created by Michael Thomason on 1/2/12.
@@ -10,8 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADOpenFileViewController.h"
-#import "MADOpenFileViewControllerProtocol.h"
+#import "MADFileExplorerViewController.h"
+#import "MADFileExplorerViewControllerProtocol.h"
 
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
 //#import <MADFileManager/MADFilesControllerDelegate.h>
@@ -1332,7 +1332,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 }
 
 #pragma mark -
-#pragma mark MADOpenFileViewControllerDelegate
+#pragma mark MADFileExplorerViewControllerDelegate
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
