@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOpenDocumentManager.h"
+#import "MADActiveDocumentManager.h"
 #import <UIKit/UIManagedDocument.h>
 
 NSString * const MADFileManagerOpenUrl      = @"MADFileManagerOpenUrl";
@@ -14,14 +14,14 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 
 typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocumentHolder;
 
-@interface MADOpenDocumentManager ()
+@interface MADActiveDocumentManager ()
 
     @property (nonatomic, strong) MADDocumentHolder *openFiles;   //MADocument stored by their NSURLS
     @property (nonatomic, copy, readwrite) NSURL *openUrl;
 
 @end
 
-@implementation MADOpenDocumentManager
+@implementation MADActiveDocumentManager
 
 - (void)dealloc {
     [self.openFiles removeAllObjects];

@@ -14,7 +14,7 @@
 @class UIManagedDocument;
 @class NSURL;
 
-@interface MADOpenDocumentManager : NSObject
+@interface MADActiveDocumentManager : NSObject
 
     @property (nonatomic, copy, readonly) NSURL *openUrl;
 
