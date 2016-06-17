@@ -10,16 +10,11 @@
 
 @implementation MADCollectionViewLayoutGrouped
 
-//- (void)prepareLayout {
-//    [super prepareLayout];
-//    self.scrollDirection = UICollectionViewScrollDirectionVertical;
-//}
-
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 
     NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
     if (attributes == nil) {
-        attributes = [NSArray array];
+        attributes = [[NSArray alloc] init];
     }
     
     NSMutableArray *elementAttributes = [[NSMutableArray alloc] initWithCapacity:attributes.count];

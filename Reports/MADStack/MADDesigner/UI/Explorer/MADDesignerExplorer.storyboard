@@ -45,7 +45,7 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewLayout key="collectionViewLayout" id="qcZ-5i-0HU" customClass="MADCollectionViewLayoutGrouped"/>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="Rio-Z9-4ZH" customClass="MTCollectionViewCellDocument">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" reuseIdentifier="MADCollectionViewCellDocumentIdentifier" id="Rio-Z9-4ZH" customClass="MADCollectionViewCellDocument">
                                 <rect key="frame" x="0.0" y="64" width="140" height="300"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">

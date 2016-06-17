@@ -6,20 +6,20 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTCollectionViewCellDocument_h
-#define Reports_MTCollectionViewCellDocument_h
+#ifndef Reports_MADCollectionViewCellDocument_h
+#define Reports_MADCollectionViewCellDocument_h
 
 #import <UIKit/UICollectionViewCell.h>
 
 @protocol MTDocumentCellProtocol;
 @protocol UIGestureRecognizerDelegate;
 
-@class MTCollectionViewCellDocument;
+@class MADCollectionViewCellDocument;
 @class UILabel;
 @class UIActivityIndicatorView;
 @class UIProgressView;
 
-@interface MTCollectionViewCellDocument : UICollectionViewCell
+@interface MADCollectionViewCellDocument : UICollectionViewCell
 
     @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
     @property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;

@@ -42,7 +42,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView
-       willDisplayCell:(nonnull MTCollectionViewCellDocument *)cell
+       willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath { }
 
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action
@@ -51,7 +51,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
-            didEndDisplayingCell:(MTCollectionViewCellDocument *)cell
+            didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
               forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -73,8 +73,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     if ([delegate respondsToSelector:@selector(selectionsUpdated)]) {
         [delegate selectionsUpdated];
     }
-    MTCollectionViewCellDocument *cell;
-    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MADCollectionViewCellDocument *cell;
+    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
 }
@@ -82,8 +82,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
                                         didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTCollectionViewCellDocument *cell;
-    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MADCollectionViewCellDocument *cell;
+    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
 }
@@ -125,8 +125,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         [delegate selectionsUpdated];
     }
     
-    MTCollectionViewCellDocument *cell;
-    cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    MADCollectionViewCellDocument *cell;
+    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
 }
@@ -189,11 +189,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                                                 sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     id <MADCollectionViewLayoutFilesDelegate> delegate = self.delegate;
-    NSString *filename = [delegate titleForItemAtIndexPath:indexPath];
-    NSString *size = [delegate subtitleForItemAtIndexPath:indexPath];
+    NSString *filename = [delegate titleForItemAtIndexPath:indexPath].copy;
+    NSString *size = [delegate subtitleForItemAtIndexPath:indexPath].copy;
     
-    NSDictionary *attributesCaption = [MTCollectionViewCellDocument newAttributesCaption];
-    NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument newAttributesCaption];
+    NSDictionary *attributesCaption = [MADCollectionViewCellDocument newAttributesCaption];
+    NSDictionary *attributesCaption2 = [MADCollectionViewCellDocument newAttributesCaption];
     
     NSAttributedString *attributedString;
     attributedString = [[NSAttributedString alloc] initWithString: filename

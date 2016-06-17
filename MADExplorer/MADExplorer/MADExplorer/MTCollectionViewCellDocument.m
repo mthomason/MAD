@@ -38,7 +38,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
-@interface MTCollectionViewCellDocument ()
+@interface MADCollectionViewCellDocument ()
 
     @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
 
@@ -53,7 +53,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @end
 
-@implementation MTCollectionViewCellDocument
+@implementation MADCollectionViewCellDocument
 
 + (UIActivityIndicatorView *)newActivityIndicatorView {
     
@@ -199,7 +199,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (UIActivityIndicatorView *)activityIndicator {
     UIActivityIndicatorView *result = _activityIndicator;
     if (result == nil) {
-        result = [MTCollectionViewCellDocument newActivityIndicatorView];
+        result = [MADCollectionViewCellDocument newActivityIndicatorView];
         result.center = self.contentView.center;
         [self.contentView addSubview:result];
         _activityIndicator = result;
@@ -248,7 +248,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 - (void)setText:(NSString *)text {
 
-    NSDictionary *attributes = [MTCollectionViewCellDocument newAttributesCaption];
+    NSDictionary *attributes = [MADCollectionViewCellDocument newAttributesCaption];
     NSMutableAttributedString *attributedString;
     attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                               attributes: attributes];
@@ -347,16 +347,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
         
         self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-        MTCollectionViewCellDocument __weak *weakself = self;
+        MADCollectionViewCellDocument __weak *weakself = self;
         [UIView animateWithDuration:0.2 animations:^{
-            MTCollectionViewCellDocument *strongself = weakself;
+            MADCollectionViewCellDocument *strongself = weakself;
             if (strongself) {
                 strongself.transform = leftWobble;
             }
         } completion:^(BOOL finished) {
-            MTCollectionViewCellDocument *strongself = weakself;
+            MADCollectionViewCellDocument *strongself = weakself;
             if (strongself) {
-                MTCollectionViewCellDocument __weak *weakself2 = strongself;
+                MADCollectionViewCellDocument __weak *weakself2 = strongself;
                 [UIView animateWithDuration:0.2
                                       delay:0
                                     options:UIViewAnimationOptionAllowUserInteraction |
@@ -365,7 +365,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
                                             UIViewAnimationOptionBeginFromCurrentState
                                  animations:^{
                                      [UIView setAnimationRepeatCount: MAXFLOAT];
-                                     MTCollectionViewCellDocument *strongself2 = weakself2;
+                                     MADCollectionViewCellDocument *strongself2 = weakself2;
                                      if (strongself2) {
                                          strongself2.transform = rightWobble;
                                      }

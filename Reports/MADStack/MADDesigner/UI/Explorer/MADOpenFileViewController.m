@@ -139,10 +139,8 @@ static const CGFloat Float_100                  = 100.00000000f;
         UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
         MADDocumentManagerProtocol,
-//        MADFilesControllerDelegate,
         MADocumentDelegate,
         MTViewControllerProtocol,
-//        MADFileLocationManagerDelegate,
         MADOperationObserver,
         MADSaveFileProtocol,
         MADCollectionViewLayoutFilesDelegate>
@@ -155,10 +153,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     // Document Manager manages the file location for the documents.
     @property (nonatomic, readwrite, strong) MADDocumentManager *documentManager;
 
-//    @property (nonatomic, strong) MADFileLocationManager *fileLocationManager;
-
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-
 
     @property (nonatomic, strong)   MADAppLaunchContext *pendingLaunchContext;
 
@@ -349,7 +344,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     self.collectionView.delegate = layoutGroupedDelegate;
     self.collectionView.dataSource = self;
     
-    _collectionViewDelegate = layoutGroupedDelegate;
+    self.collectionViewDelegate = layoutGroupedDelegate;
     
 #pragma mark Start observing
     
@@ -613,13 +608,13 @@ static const CGFloat Float_100                  = 100.00000000f;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
-    MTCollectionViewCellDocument *cell;
+    static NSString *CellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
+    MADCollectionViewCellDocument *cell;
     cell = [collectionView dequeueReusableCellWithReuseIdentifier: CellDocumentIdentifier
                                                      forIndexPath: indexPath];
     
     if (cell.delegate == nil) {
-        ((MTCollectionViewCellDocument *)cell).delegate = self;
+        ((MADCollectionViewCellDocument *)cell).delegate = self;
     }
     
     MADMetaData *metadata = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
@@ -674,7 +669,7 @@ static const CGFloat Float_100                  = 100.00000000f;
             if (image != nil) {
                 cell.imagePreview.image = image;
             } else {
-                image = [MTCollectionViewCellDocument newDefaultThumbnail];
+                image = [MADCollectionViewCellDocument newDefaultThumbnail];
                 cell.imagePreview.image = image;
             }
             image = nil;
@@ -983,7 +978,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
     NSArray<__kindof UICollectionViewCell *> *visibleCells;
     visibleCells = self.collectionView.visibleCells;
-    MTCollectionViewCellDocument *cell;
+    MADCollectionViewCellDocument *cell;
     for (cell in visibleCells) {
         [cell updateFont];
     }
@@ -1139,7 +1134,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     
     MADMetaData *metadata;
     metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)
+    MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)
                                             [self.collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
@@ -1149,13 +1144,16 @@ static const CGFloat Float_100                  = 100.00000000f;
         
         if (metadata.isUbiquitous) {
             if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
+            
                 NSURL *url = metadata.URL.copy;
-                
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                void (^startDownload)(void);
+                startDownload = ^{
                     NSError *error = nil;
                     [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
                                                                                   error:&error];
-                }];
+                };
+                [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
+                
             }
         }
     } else {
@@ -1667,7 +1665,7 @@ static const CGFloat Float_100                  = 100.00000000f;
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
         
-        for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+        for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
             [cell startWobble];
         }
         [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
@@ -1695,7 +1693,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
         [self.collectionView deselectItemAtIndexPath:path animated:YES];
     }
-    for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+    for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
         [cell stopWobble];
         [cell normalizeTint];
     }
@@ -1753,8 +1751,8 @@ static const CGFloat Float_100                  = 100.00000000f;
     NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
     for (NSInteger i=0; i<numberOfItemsInSection; i++) {
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-        MTCollectionViewCellDocument *documentCell;
-        documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
+        MADCollectionViewCellDocument *documentCell;
+        documentCell = (MADCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         if (documentCell != nil) {
             [documentCell normalizeTint];
         }
@@ -1777,7 +1775,7 @@ static const CGFloat Float_100                  = 100.00000000f;
                                                           NSArray *returnedItems, NSError *activityError) {
     
         for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
-            MTCollectionViewCellDocument * __weak documentCell = (MTCollectionViewCellDocument *)cell;
+            MADCollectionViewCellDocument * __weak documentCell = (MADCollectionViewCellDocument *)cell;
             [documentCell normalizeTint];
         }
         
@@ -1824,12 +1822,12 @@ static const CGFloat Float_100                  = 100.00000000f;
 
 - (IBAction)actionRename:(id)sender {
     
-    MTCollectionViewCellDocument *cellDocument;
-    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+    MADCollectionViewCellDocument *cellDocument;
+    if ([sender isKindOfClass:[MADCollectionViewCellDocument class]]) {
         cellDocument = sender;
     } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
         UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
-        cellDocument = (MTCollectionViewCellDocument *)contentView.superview;
+        cellDocument = (MADCollectionViewCellDocument *)contentView.superview;
     }
     
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
@@ -1884,7 +1882,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     
 }
 
-- (IBAction)actionEmail:(MTCollectionViewCellDocument *)cell {
+- (IBAction)actionEmail:(MADCollectionViewCellDocument *)cell {
     
     NSIndexPath *indexPath;
     MADMetaData *metadata;
@@ -1930,7 +1928,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 - (IBAction)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MADCollectionViewCellDocument *)sender.view)];
         if (self.isEditing == NO) [self actionEdit:self];
         
         [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
