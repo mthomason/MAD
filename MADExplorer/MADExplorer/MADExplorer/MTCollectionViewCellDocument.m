@@ -38,6 +38,11 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
+float wobbleFactor(void);
+float wobbleFactor() {
+    return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
+}
+
 @interface MADCollectionViewCellDocument ()
 
     @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
@@ -332,39 +337,51 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (void)startWobble {
     if (_wobbling == NO) {
         self.wobbling = YES;
-        u_int32_t randomInt = arc4random_uniform(500);
-        float r = (randomInt / 500.0000f) + 0.5000f;
-        CGAffineTransform leftWobble, rightWobble;
-        leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-        rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
+        float r = wobbleFactor();
         
         self.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        
+        void (^animationFinish)(void);
+        void (^animationStart)(void);
+        void (^ animationStartCompletion)(BOOL finished);
+        
+
         MADCollectionViewCellDocument __weak *weakself = self;
-        [UIView animateWithDuration:0.2 animations:^{
+
+        animationFinish = ^(void){
+            [UIView setAnimationRepeatCount: MAXFLOAT];
             MADCollectionViewCellDocument *strongself = weakself;
             if (strongself) {
+                CGAffineTransform rightWobble;
+                rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
+                strongself.transform = rightWobble;
+            }
+        };
+        
+        animationStart = ^{
+            MADCollectionViewCellDocument *strongself = weakself;
+            if (strongself) {
+                CGAffineTransform leftWobble;
+                leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
                 strongself.transform = leftWobble;
             }
-        } completion:^(BOOL finished) {
-            MADCollectionViewCellDocument *strongself = weakself;
-            if (strongself) {
-                MADCollectionViewCellDocument __weak *weakself2 = strongself;
-                [UIView animateWithDuration:0.2
-                                      delay:0
-                                    options:UIViewAnimationOptionAllowUserInteraction |
+        };
+        
+        animationStartCompletion = ^(BOOL finished) {
+
+            [UIView animateWithDuration: 0.2
+                                  delay: 0
+                                options: UIViewAnimationOptionAllowUserInteraction |
                                             UIViewAnimationOptionRepeat |
                                             UIViewAnimationOptionAutoreverse |
                                             UIViewAnimationOptionBeginFromCurrentState
-                                 animations:^{
-                                     [UIView setAnimationRepeatCount: MAXFLOAT];
-                                     MADCollectionViewCellDocument *strongself2 = weakself2;
-                                     if (strongself2) {
-                                         strongself2.transform = rightWobble;
-                                     }
-                                 }
-                                 completion:nil];
-            }
-        }];
+                             animations: animationFinish
+                             completion: nil];
+        };
+        
+        [UIView animateWithDuration: 0.2
+                         animations: animationStart
+                         completion: animationStartCompletion];
     }
     
 }
