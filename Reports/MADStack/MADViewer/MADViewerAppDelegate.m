@@ -22,7 +22,7 @@
 #import "MTVerificationController.h"
 #import "MADQueryViewController.h"
 
-#import "MADOpenFileViewController.h"
+#import "MADFileExplorerViewController.h"
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @class MADTransparentPresentationController;

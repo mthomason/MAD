@@ -1,5 +1,5 @@
 //
-//  MADOpenFileViewController.h
+//  MADFileExplorerViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 9/11/14.

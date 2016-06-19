@@ -162,13 +162,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         _addedGestures = YES;
     }
     
-    /*
-    self.imagePreview.layer.shadowColor = color.CGColor;
-    self.imagePreview.layer.shadowRadius = 2.0000f;
-    self.imagePreview.layer.shadowOpacity = 0.4500f;
-    self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
-    */
-    
     self.labelTitle.userInteractionEnabled = YES;
     
     self.labelTitle.textColor = self.colorTextNormal.copy;
@@ -187,7 +180,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.labelTitleSub.font = font;
-    //[self.labelTitleSub setNeedsLayout];
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -338,7 +330,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)startWobble {
-    if (self.wobbling == NO) {
+    if (_wobbling == NO) {
         self.wobbling = YES;
         u_int32_t randomInt = arc4random_uniform(500);
         float r = (randomInt / 500.0000f) + 0.5000f;
@@ -378,9 +370,11 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)stopWobble {
-    self.wobbling = NO;
-    [self.layer removeAllAnimations];
-    self.transform = CGAffineTransformIdentity;
+    if (_wobbling) {
+        self.wobbling = NO;
+        [self.layer removeAllAnimations];
+        self.transform = CGAffineTransformIdentity;
+    }
 }
 
 -(BOOL)shouldGroupAccessibilityChildren{

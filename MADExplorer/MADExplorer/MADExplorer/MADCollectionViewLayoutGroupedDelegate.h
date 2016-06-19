@@ -1,25 +1,31 @@
 //
-//  MADCollectionViewLayoutGroupedDelegate.h
+//  MADFileExplorerViewDelegate.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/30/15.
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADCollectionViewLayoutGroupedDelegate_h
-#define Reports_MADCollectionViewLayoutGroupedDelegate_h
+#ifndef Reports_MADFileExplorerViewDelegate_h
+#define Reports_MADFileExplorerViewDelegate_h
 
-#import <Foundation/NSObject.h>
-#import <UIKit/UICollectionView.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 
-@protocol MADCollectionViewLayoutFilesDelegate;
+@protocol MADFileExplorerViewDelegateProtocol;
 
-@interface MADCollectionViewLayoutGroupedDelegate : NSObject
+@interface MADFileExplorerViewDelegate : NSObject
     <UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout>
 
-    @property (nonatomic, weak) id <MADCollectionViewLayoutFilesDelegate> delegate;
+    - (id)initWithNumberOfSections:(NSUInteger)numberOfSections;
+    
+    @property (nonatomic, weak) NSObject <MADFileExplorerViewDelegateProtocol> *delegate;
+    @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *selected;
+    @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
+    @property (nonatomic, readwrite, assign, getter=isEditing) BOOL edit;
+
+    @property (readonly) NSUInteger numberOfItemsSelected;
+    @property (readonly) NSUInteger numberOfItemsHighlighted;
 
 @end
 

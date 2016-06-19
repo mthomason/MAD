@@ -41,7 +41,6 @@
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
 
-//#import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
@@ -122,6 +121,17 @@ static NSString * const MADIDNotificationCloudActivityCompleted             = @"
 static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
 
+static NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
+static NSString * const MADHintBarButtonItemEdit = @"Enables document list edit mode.";
+static NSString * const MADHintBarButtonItemAddNewDocument = @"Adds a new document.";
+static NSString * const MADHintBarButtonItemStore = @"Displays the store.";
+static NSString * const MADHintBarButtonItemDelete = @"Deletes the selected documents.";
+static NSString * const MADHintBarButtonItemAction = @"Preforms an action on the selected document.";
+static NSString * const MADHintBarButtonItemDuplicate = @"Duplicates the selected documents.";
+static NSString * const MADHintBarButtonItemDetails = @"Displays selected document details.";
+static NSString * const MADHintBarButtonItemInformation = @"Displays selected document details.";
+static NSString * const MADHintBarButtonItemAbout = @"Displays selected document details.";
+
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 //NSString * const MADUtiPublicData                               = @"public.data";
 
@@ -143,9 +153,9 @@ static const CGFloat Float_100                  = 100.00000000f;
         MTViewControllerProtocol,
         MADOperationObserver,
         MADSaveFileProtocol,
-        MADCollectionViewLayoutFilesDelegate>
+        MADFileExplorerViewDelegateProtocol>
 
-    @property (nonatomic, readwrite, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+    @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *collectionViewDelegate;
 
     // ActiveDocumentManager holds strong reference to open documents.
     @property (nonatomic, readwrite, strong) MADActiveDocumentManager *activeDocumentManager;
@@ -194,7 +204,8 @@ static const CGFloat Float_100                  = 100.00000000f;
     @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
     @property (nonatomic, assign) BOOL aboutViewControllerOnScreen;
 
-    @property (nonatomic, assign, getter=isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
+    @property (nonatomic, assign, getter=isRightBarButtonItemActivityIndicatorVisible)
+                                                BOOL rightBarButtonItemActivityIndicatorVisible;
     @property (nonatomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
     @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
@@ -337,8 +348,8 @@ static const CGFloat Float_100                  = 100.00000000f;
     [super viewDidLoad];
     
     // set delegates
-    MADCollectionViewLayoutGroupedDelegate *layoutGroupedDelegate;
-    layoutGroupedDelegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    MADFileExplorerViewDelegate *layoutGroupedDelegate;
+    layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
     layoutGroupedDelegate.delegate = self;
     
     self.collectionView.delegate = layoutGroupedDelegate;
@@ -436,8 +447,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     MADAppDelegate delegate = [MADApplication AppDelegate];
     NSString *name = [delegate name];
     titleView.text = name.copy;
-    titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.",
-                                                    @"MAD Designer is the mobile analytics document designer.");
+    titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     
     self.navigationItem.titleView = titleView;
@@ -470,41 +480,35 @@ static const CGFloat Float_100                  = 100.00000000f;
     _barButtonItemDuplicate = barButtonItemDuplicate;
     
     UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit: self
-                                                                 action: @selector(edit:)];
+                                                                 action: @selector(actionEdit:)];
     _barButtonItemEdit = editButton;
     
-    hint = NSLocalizedString(@"Enables document list edit mode.",
-                             @"Enables document list edit mode.");
+    hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
     _barButtonItemEdit.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
+    hint = NSLocalizedString(MADHintBarButtonItemAddNewDocument,
+                             MADHintBarButtonItemAddNewDocument);
     _barButtonItemAddNewDocument.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
+    hint = NSLocalizedString(MADHintBarButtonItemStore, MADHintBarButtonItemStore);
     _barButtonItemLicensing.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Deletes the selected documents.",
-                             @"Deletes the selected documents.");
+    hint = NSLocalizedString(MADHintBarButtonItemDelete, MADHintBarButtonItemDelete);
     _barButtonItemTrash.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Preforms an action on the selected document.",
-                             @"Preforms an action on the selected document.");
+    hint = NSLocalizedString(MADHintBarButtonItemAction, MADHintBarButtonItemAction);
     _barButtonItemAction.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Duplicates the selected documents.",
-                             @"Duplicates the selected documents.");
+    hint = NSLocalizedString(MADHintBarButtonItemDuplicate, MADHintBarButtonItemDuplicate);
     _barButtonItemDuplicate.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Displays selected document details.",
-                             @"Displays selected document details.");
+    hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
     _barButtonItemInformationDocument.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Displays application information.",
-                             @"Displays application information.");
+    hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
     _barButtonItemInformation.accessibilityHint = hint;
     
-    hint = NSLocalizedString(@"Displays application about screen.",
-                             @"Displays application about screen.");
+    hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
     _barButtonItemAbout.accessibilityHint = hint;
     
     [self.navigationItem setRightBarButtonItem:_barButtonItemEdit animated:NO];
@@ -602,15 +606,16 @@ static const CGFloat Float_100                  = 100.00000000f;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView
      numberOfItemsInSection:(NSInteger)section {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)section);
     return (NSInteger)_documentManager.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
     MADCollectionViewCellDocument *cell;
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier: CellDocumentIdentifier
+    cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
                                                      forIndexPath: indexPath];
     
     if (cell.delegate == nil) {
@@ -639,13 +644,16 @@ static const CGFloat Float_100                  = 100.00000000f;
         cell.labelTitleSub.text = subtitle.copy;
     }
     
-    [self updateProgressView:cell.progressViewUpload active:uploading
-                     percent:metadata.ubiquitousItemPercentUploaded];
+    [self updateProgressView: cell.progressViewUpload
+                      active: uploading
+                     percent: metadata.ubiquitousItemPercentUploaded];
     
-    [self updateProgressView:cell.progressViewDownload active:downloading
-                     percent:metadata.ubiquitousItemPercentDownloaded];
+    [self updateProgressView: cell.progressViewDownload
+                      active: downloading
+                     percent: metadata.ubiquitousItemPercentDownloaded];
     
     UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
+    
     if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
         [activityIndicator startAnimating];
     else
@@ -662,6 +670,7 @@ static const CGFloat Float_100                  = 100.00000000f;
         NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
         NSString *path = thumbnailUrl.path;
         if (!path) goto END_ReadThumbnail;
+        
         {
             NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
             UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
@@ -675,20 +684,12 @@ static const CGFloat Float_100                  = 100.00000000f;
             image = nil;
             imageData = nil;
         }
+        
         END_ReadThumbnail:;
     }
     
-    /*[cell normalizeTint];
-    
-    if ([self isFileViewEditing]) {
-        [cell startWobble];
-    } else {
-        [cell stopWobble];
-    }*/
-    
     return cell;
 }
-
 
 #pragma mark -
 #pragma mark MADDocumentManagerProtocol
@@ -904,7 +905,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 }
 
 #pragma mark -
-#pragma mark MADCollectionViewLayoutFilesDelegate
+#pragma mark MADFileExplorerViewDelegateProtocol
 
 #pragma mark -
 #pragma mark Touch Event Handlers
@@ -1049,7 +1050,12 @@ static const CGFloat Float_100                  = 100.00000000f;
     NSLog(@"Ubiquity did indeed change..... %@", notification.userInfo);
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    MADDocumentManager *documentManager = self.documentManager;
+    void (^handleSignout)(UIAlertAction *action) = ^(UIAlertAction *action) {
+        [documentManager updateCloudPreferences];
+    };
+    
+    void (^ubiquityIdentityDidChange)(void) = ^ {
         
         NSLog(@"%s", __PRETTY_FUNCTION__);
         
@@ -1057,17 +1063,14 @@ static const CGFloat Float_100                  = 100.00000000f;
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
         [navController popToRootViewControllerAnimated:YES];
         
-        typeof(self) __weak weakself = self;
         UIAlertController *signedOutController;
-        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-            MADFileExplorerViewController *strongself = weakself;
-            if (strongself) {
-                [strongself.documentManager updateCloudPreferences];
-            }
-        }];
+        
+        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:handleSignout];
         
         [self presentViewController:signedOutController animated:YES completion:nil];
-    }];
+    };
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:ubiquityIdentityDidChange];
     
 }
 
@@ -1097,7 +1100,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
         _barButtonItemEditDone = [UIBarButtonItem newBarButtonItemEditDone: self
-                                                                    action: @selector(edit:)];
+                                                                    action: @selector(actionEdit:)];
     }
     return _barButtonItemEditDone;
 }
@@ -1110,7 +1113,7 @@ static const CGFloat Float_100                  = 100.00000000f;
 }
 
 #pragma mark - 
-#pragma mark MADCollectionViewLayoutFilesDelegate
+#pragma mark MADFileExplorerViewDelegateProtocol
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata;
@@ -1130,43 +1133,9 @@ static const CGFloat Float_100                  = 100.00000000f;
     return [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
 }
 
-- (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MADMetaData *metadata;
-    metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
-    MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)
-                                            [self.collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-    
-    if (self.isEditing) {
-        [self.collectionView selectItemAtIndexPath:indexPath animated:YES
-                                    scrollPosition:UICollectionViewScrollPositionCenteredVertically];
-        
-        if (metadata.isUbiquitous) {
-            if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
-            
-                NSURL *url = metadata.URL.copy;
-                void (^startDownload)(void);
-                startDownload = ^{
-                    NSError *error = nil;
-                    [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
-                                                                                  error:&error];
-                };
-                [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
-                
-            }
-        }
-    } else {
-        [cell stopWobble];
-        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        [cell.activityIndicator startAnimating];
-        
-        id open = [[NSInvocationOperation alloc] initWithTarget:self
-                                                       selector:@selector(openDocumentAtURL:)
-                                                         object:metadata.URL.copy];
-        [[NSOperationQueue mainQueue] addOperation:open];
-        [cell normalizeTint];
-    }
+- (MADMetaData *)metaDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
+    return metadata;
 }
 
 #pragma mark -
@@ -1693,6 +1662,7 @@ static const CGFloat Float_100                  = 100.00000000f;
     for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
         [self.collectionView deselectItemAtIndexPath:path animated:YES];
     }
+
     for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
         [cell stopWobble];
         [cell normalizeTint];
@@ -1836,33 +1806,46 @@ static const CGFloat Float_100                  = 100.00000000f;
     MADMetaData *metaData = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
     
     NSString *textFieldText = cellDocument.labelTitle.text.copy;
-    UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
+    
+    void (^handleRename)(UITextField *);
+    handleRename = ^(UITextField *textField) {
         
-        textField.text = textFieldText;
+        textField.text = textFieldText.copy;
         textField.clearButtonMode = UITextFieldViewModeAlways;
         textField.delegate = self;
         
-    } confirm:^(UIAlertAction *action, NSString *text) {
+    };
+    
+    void (^handleConfermation)(UIAlertAction *action, NSString *text);
+    handleConfermation = ^(UIAlertAction *action, NSString *text) {
         
         NSString *name = [NSURL newStringFileNameFilter:text];
         if (name.length > 0) {
             NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent
-                                            URLByAppendingPathComponent:name isDirectory:NO];
+                             URLByAppendingPathComponent:name isDirectory:NO];
             NSString *path = newUrl.path;
             if ([[NSFileManager defaultManager] fileExistsAtPath:path] == NO &&
                 [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
                     
+                    MADDocumentManager *documentManager = self.documentManager;
+                    
+                    void (^closeCompletion)(BOOL success);
+                    void (^openCompletion)(BOOL success);
+                    
+                    closeCompletion = ^(BOOL successClose) {
+                        if (successClose)
+                            [documentManager rename:text
+                                        itemAtIndex:(NSUInteger)indexPath.item];
+                    };
+                    
                     MADocument *doc = [MADocument newManagedDocumentForURL:metaData.URL];
-                    [doc openWithCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            [MADocument close: doc completion:^(BOOL successClose) {
-                                if (successClose) {
-                                    [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
-                                }
-                            }];
-                        }
-                    }];
+                    
+                    openCompletion = ^(BOOL success) {
+                        if (success) [MADocument close: doc completion:closeCompletion];
+                    };
+                    
+                    [doc openWithCompletionHandler:openCompletion];
                     
                 } else {
                     [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
@@ -1876,7 +1859,11 @@ static const CGFloat Float_100                  = 100.00000000f;
             [self showViewController:alertFilename sender:self];
         }
         
-    } cancel:nil];
+    };
+
+    UIAlertController *alert = [UIAlertController renameDocument: handleRename
+                                                         confirm: handleConfermation
+                                                          cancel: nil];
     
     [self showViewController:alert sender:self];
     
@@ -1928,11 +1915,20 @@ static const CGFloat Float_100                  = 100.00000000f;
 - (IBAction)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MADCollectionViewCellDocument *)sender.view)];
+        NSIndexPath *indexPath;
+        indexPath = [self.collectionView indexPathForCell:((MADCollectionViewCellDocument *)sender.view)];
+        self.collectionViewDelegate.edit = YES;
+        NSArray <NSIndexPath *> *indexPathsForVisibleItems = self.collectionView.indexPathsForVisibleItems;
+        if (indexPathsForVisibleItems != nil)
+            [self.collectionView reloadItemsAtIndexPaths:indexPathsForVisibleItems];
+
+        /*
         if (self.isEditing == NO) [self actionEdit:self];
         
-        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        [self selectionsUpdated];
+        [self.collectionView selectItemAtIndexPath: indexPath
+                                          animated: NO
+                                    scrollPosition: UICollectionViewScrollPositionNone];
+                                    */
     }
 }
 
@@ -1996,11 +1992,10 @@ static const CGFloat Float_100                  = 100.00000000f;
     }
 }
 
-- (void)selectionsUpdated {
-    
-    NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
-    
-    switch (indexPaths.count) {
+- (void)collectionView:(UICollectionView *)collectionView
+                    didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected {
+
+    switch (numberOfItemsSelected.unsignedIntegerValue) {
             
         case 0:
             [self disableBarButtonItems];
@@ -2015,7 +2010,6 @@ static const CGFloat Float_100                  = 100.00000000f;
             break;
             
     }
-    
 }
 
 - (void)defaultBarButtonItemState {

@@ -147,7 +147,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    SKProduct *product = [MTStoreKitController sharedObject].products[indexPath.item];
+    SKProduct *product = [MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
     if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
         NSString *title = NSLocalizedString(@"You Got It", @"You Got It");
         NSString *message = NSLocalizedString(@"Access to this feature is a free gift for charter members. That's you! How rare is that?",

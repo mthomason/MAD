@@ -17,6 +17,11 @@
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+
+const NSUInteger MADIndexPathOffsetSection = 0;
+const NSUInteger MADIndexPathOffsetItem = 1;
+const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
+
 @interface MADSectionLayoutManager ()
 
     @property (nonatomic, strong, readwrite)    MADSectionLayoutAttributesMutableMap *items;
@@ -164,10 +169,6 @@
 }
 
 #pragma mark - Creation
-
-const NSUInteger MADIndexPathOffsetSection = 0;
-const NSUInteger MADIndexPathOffsetItem = 1;
-const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
 
@@ -349,7 +350,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 - (NSArray *)positionUnplacedItems:(NSArray *)unplacedItems aroundPlacedItems:(NSArray *)placedItems {
 
-    NSMutableArray <MADSectionLayoutAttributes *> *unplacedOverlapping = [[NSMutableArray alloc] initWithCapacity:unplacedItems.count];
+    NSMutableArray <MADSectionLayoutAttributes *> *unplacedOverlapping;
+    unplacedOverlapping = [[NSMutableArray alloc] initWithCapacity:unplacedItems.count];
     NSMutableArray *placedItemsTracker = [[NSMutableArray alloc] initWithArray:placedItems];
     
     for (MADSectionLayoutAttributes *unplacedItem in unplacedItems) {

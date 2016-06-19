@@ -1,28 +1,27 @@
 //
-//  MADCollectionViewLayoutGroupedDelegateProtocol.h
+//  MADFileExplorerViewDelegateProtocol.h
 //  MADExplorer
 //
 //  Created by Michael Thomason on 5/24/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADCollectionViewLayoutGroupedDelegateProtocol_h
-#define MADCollectionViewLayoutGroupedDelegateProtocol_h
+#ifndef MADFileExplorerViewDelegateProtocol_h
+#define MADFileExplorerViewDelegateProtocol_h
 
 @class  MADMetaData;
 
-@protocol MADCollectionViewLayoutFilesDelegate <NSObject>
+@protocol MADFileExplorerViewDelegateProtocol <NSObject>
   @required
 
     - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (BOOL)isFileViewEditing;
-
-  @optional
-    - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (void)selectionsUpdated;
+    - (void)openDocumentAtURL:(NSURL *)url;
+    - (void)collectionView:(UICollectionView *)collectionView
+                didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected;
 
 @end
 
-#endif /* MADCollectionViewLayoutGroupedDelegateProtocol_h */
+#endif /* MADFileExplorerViewDelegateProtocol_h */
