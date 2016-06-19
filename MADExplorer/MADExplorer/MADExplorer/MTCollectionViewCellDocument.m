@@ -38,6 +38,9 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
+static const CGFloat Float_0                    =   0.00000000f;
+static const CGFloat Float_100                  = 100.00000000f;
+
 float wobbleFactor(void);
 float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
@@ -471,6 +474,39 @@ float wobbleFactor() {
 
 - (UIAccessibilityTraits)accessibilityTraits {
     return UIAccessibilityTraitButton;
+}
+
+- (void)setUploadingActive:(BOOL)active
+                   percent:(double)percent {
+    [self updateProgressView: _progressViewUpload
+                      active: active
+                     percent: percent];
+
+}
+
+- (void)setDownloadingActive:(BOOL)active
+                     percent:(double)percent {
+    [self updateProgressView: _progressViewDownload
+                      active: active
+                     percent: percent];
+    
+}
+
+- (void)updateProgressView:(UIProgressView *)progressView
+                    active:(BOOL)active
+                   percent:(double)percent {
+    
+    if (!active) {
+        progressView.hidden = YES;
+        [progressView setProgress:Float_0 animated:YES];
+        return;
+    }
+    
+    progressView.hidden = NO;
+    if (progressView.progress < percent / Float_100) {
+        [progressView setProgress: (float) (percent / Float_100)
+                         animated: YES];
+    }
 }
 
 @end

@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Navigation Controller File Explorer-->
         <scene sceneID="r0Z-cR-s1d">
             <objects>
-                <navigationController restorationIdentifier="MADIdentifierRestorationRootNavigationController" storyboardIdentifier="MADIdentifierStoryboardRootNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="noS-r8-mf8" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="MADIdentifierRestorationRootNavigationController" storyboardIdentifier="MADIdentifierStoryboardRootNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="noS-r8-mf8" customClass="MADNavigationControllerFileExplorer" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -43,7 +43,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <collectionViewLayout key="collectionViewLayout" id="qcZ-5i-0HU" customClass="MADCollectionViewLayoutGrouped"/>
+                        <collectionViewLayout key="collectionViewLayout" id="qcZ-5i-0HU" customClass="MADFileExplorerViewLayout"/>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" reuseIdentifier="MADCollectionViewCellDocumentIdentifier" id="Rio-Z9-4ZH" customClass="MADCollectionViewCellDocument">
                                 <rect key="frame" x="0.0" y="64" width="140" height="300"/>

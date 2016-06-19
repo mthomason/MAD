@@ -118,9 +118,6 @@ NSString * const MADIdentifierOpenFileSectionHeader                         = @"
 static NSString * const MADIDNotificationCloudActivityStarted               = @"MADNotificationCloudActivityStarted";
 static NSString * const MADIDNotificationCloudActivityCompleted             = @"MADNotificationCloudActivityCompleted";
 
-static const CGFloat Float_0                    =   0.00000000f;
-static const CGFloat Float_100                  = 100.00000000f;
-
 static NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
 static NSString * const MADHintBarButtonItemEdit = @"Enables document list edit mode.";
 static NSString * const MADHintBarButtonItemAddNewDocument = @"Adds a new document.";
@@ -182,11 +179,9 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     @property (nonatomic, weak)     MADQueryBuilderSplitViewController *splitViewController;
     @property (nonatomic, weak)     MADTabBarController *tabController;
 
-
     @property (nonatomic, strong)   UIPopoverController *openDocumentPopoverController;
     @property (nonatomic, strong)   UIPopoverController *licensingPopoverController;
     @property (nonatomic, strong)   UIPopoverController *popoverControllerActivity;
-
 
     @property (nonatomic, weak)     UIPopoverPresentationController *infoPopoverPresentationController;
     @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
@@ -204,16 +199,12 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
     @property (nonatomic, assign) BOOL aboutViewControllerOnScreen;
 
-    @property (nonatomic, assign, getter=isRightBarButtonItemActivityIndicatorVisible)
-                                                BOOL rightBarButtonItemActivityIndicatorVisible;
+    @property (nonatomic, assign, getter=isActivityIndicatorRightVisible)
+                                                BOOL activityIndicatorRightVisible;
     @property (nonatomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
     @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
     @property (nonatomic, strong) UIProgressView *progressViewFileManager;
-
-    @property (nonatomic, strong) NSMutableIndexSet *batchInserts;
-    @property (nonatomic, strong) NSMutableIndexSet *batchRemoves;
-    @property (nonatomic, strong) NSMutableIndexSet *batchUpdates;
 
 @end
 
@@ -224,11 +215,24 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
 - (void)dealloc {
     _barButtonItemAction = nil;
-    [_batchInserts removeAllIndexes];
-    [_batchUpdates removeAllIndexes];
-    [_batchRemoves removeAllIndexes];
     _subtitleNumberFormatter = nil;
-    [self removeObservers];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquityIdentityDidChangeNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADIDNotificationCloudActivityStarted
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADIDNotificationCloudActivityCompleted
+                                                  object: nil];
+
 }
 
 + (void)initialize {
@@ -326,16 +330,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         MADProgressView *progressView;
         progressView= [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
         self.progressViewFileManager = progressView;
-        
-        NSMutableIndexSet *indexSet;
-        indexSet = [[NSMutableIndexSet alloc] init];
-        self.batchInserts = indexSet;
-        
-        indexSet = [[NSMutableIndexSet alloc] init];
-        self.batchRemoves = indexSet;
-        
-        indexSet = [[NSMutableIndexSet alloc] init];
-        self.batchUpdates = indexSet;
 
     }
     return self;
@@ -347,6 +341,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    
     // set delegates
     MADFileExplorerViewDelegate *layoutGroupedDelegate;
     layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
@@ -354,7 +350,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     self.collectionView.delegate = layoutGroupedDelegate;
     self.collectionView.dataSource = self;
-    
     self.collectionViewDelegate = layoutGroupedDelegate;
     
 #pragma mark Start observing
@@ -434,7 +429,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     _updatingEnabled = YES;
     _cloudActivityRunning = NO;
     _cloudActivityRunningDisplay = NO;
-    _rightBarButtonItemActivityIndicatorVisible = NO;
+    _activityIndicatorRightVisible = NO;
     
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
@@ -552,18 +547,23 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
     typeof (self.collectionView) __weak wCollectionView = self.collectionView;
-    [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
-                                     usingBlock: ^(NSIndexPath * _Nonnull indexPath,
-                                                   NSUInteger idx, BOOL * _Nonnull stop) {
     
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    void (^enumerateSelectedIndexes)(NSIndexPath * _Nonnull, NSUInteger, BOOL *) =
+    ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        void (^deselect)(void) = ^{
             UICollectionView *collectionView = wCollectionView;
             if (collectionView) {
                 id cell = [collectionView cellForItemAtIndexPath:indexPath];
                 [cell performDeselectionAnimations];
             }
-        }];
-    }];
+        };
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:deselect];
+    };
+    
+    [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
+                                     usingBlock: enumerateSelectedIndexes];
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
@@ -643,14 +643,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         NSString *subtitle = [self copySubtitleForMetadata:metadata];
         cell.labelTitleSub.text = subtitle.copy;
     }
-    
-    [self updateProgressView: cell.progressViewUpload
-                      active: uploading
-                     percent: metadata.ubiquitousItemPercentUploaded];
-    
-    [self updateProgressView: cell.progressViewDownload
-                      active: downloading
-                     percent: metadata.ubiquitousItemPercentDownloaded];
+    [cell setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
+    [cell setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
     
     UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
     
@@ -696,19 +690,25 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
 - (void)handleDidDisconnectFromClound:(id)sender {
     typeof(self) __weak weakself = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    
+    void (^actionConfirm)(UIAlertAction *action);
+    actionConfirm = ^(UIAlertAction *action) {
         MADFileExplorerViewController *sself = weakself;
-        if (sself) {
-            id __weak weakself2 = sself;
-            UIAlertController *alert;
-            alert = [UIAlertController newAlertControlerNotifyCloudSignOut:^(UIAlertAction *action) {
-                MADFileExplorerViewController *sself2 = weakself2;
-                [sself2.documentManager updateCloudPreferences];
-            }];
-            
-            [sself presentViewController:alert animated:YES completion:nil];
-        }
-    }];
+        [sself.documentManager updateCloudPreferences];
+    };
+
+    void (^block)(void) = ^ {
+
+        MADFileExplorerViewController *sself = weakself;
+        if (!sself) return;
+        
+        UIAlertController *alert;
+        alert = [UIAlertController newAlertControlerNotifyCloudSignOut:actionConfirm];
+        [sself presentViewController:alert animated:YES completion:nil];
+
+    };
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:block];
 }
 
 - (void)handleDidStartLongRunningActivity {
@@ -726,7 +726,11 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
                                 updates:(NSArray *)updates
                              completion:(void (^)(BOOL, NSError *))completion {
     UICollectionView *__weak weakCollectionView = self.collectionView;
-    [self.collectionView performBatchUpdates:^{
+    
+    void (^ batchUpdates)(void);
+    void (^ batchCompletion)(BOOL finished);
+
+    batchUpdates = ^{
         
         NSLog(@"%s", __PRETTY_FUNCTION__);
         
@@ -740,9 +744,14 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         if (updates.count > 0) {
             [collectionView reloadItemsAtIndexPaths: updates];
         }
-    } completion:^(BOOL finished) {
+    };
+    
+    batchCompletion = ^(BOOL finished) {
         completion(YES, nil);
-    }];
+    };
+    
+    [self.collectionView performBatchUpdates:batchUpdates
+                                  completion:batchCompletion];
 }
 
 #pragma mark -
@@ -881,8 +890,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
 - (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error
     movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
-    
-    //Only allow the thumbnails to proceed to after an error.
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
 }
 
@@ -942,12 +949,12 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated {
     
-    if (_rightBarButtonItemActivityIndicatorVisible == rightBarButtonItemActivityIndicatorVisible) {
+    if (_activityIndicatorRightVisible == rightBarButtonItemActivityIndicatorVisible) {
         return;
     }
     UIBarButtonItem *barButtonItem;
     
-    if ((_rightBarButtonItemActivityIndicatorVisible = rightBarButtonItemActivityIndicatorVisible)) {
+    if ((_activityIndicatorRightVisible = rightBarButtonItemActivityIndicatorVisible)) {
         self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
         
         UIActivityIndicatorView *activityIndicator;
@@ -1026,24 +1033,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         self.pendingLaunchContext = launchContext;
         return;
     }
-}
-
-- (void)removeObservers {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSUbiquityIdentityDidChangeNotification
-                                                  object: nil];
-
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIContentSizeCategoryDidChangeNotification
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADIDNotificationCloudActivityStarted
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADIDNotificationCloudActivityCompleted
-                                                  object: nil];
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
@@ -1434,7 +1423,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 }
 
 - (NSArray *)supportedUTIs {
-    NSArray *UTIs = @[MADUtiType];
+    NSArray *UTIs = [[NSArray alloc] initWithObjects: MADUtiType, nil];
     return UTIs;
 }
 
@@ -1915,20 +1904,32 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (IBAction)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSIndexPath *indexPath;
-        indexPath = [self.collectionView indexPathForCell:((MADCollectionViewCellDocument *)sender.view)];
-        self.collectionViewDelegate.edit = YES;
-        NSArray <NSIndexPath *> *indexPathsForVisibleItems = self.collectionView.indexPathsForVisibleItems;
-        if (indexPathsForVisibleItems != nil)
-            [self.collectionView reloadItemsAtIndexPaths:indexPathsForVisibleItems];
 
-        /*
-        if (self.isEditing == NO) [self actionEdit:self];
+        self.collectionViewDelegate.edit = YES;
+
+        NSIndexPath *indexPath;
+        id cell = sender.view;
         
-        [self.collectionView selectItemAtIndexPath: indexPath
-                                          animated: NO
-                                    scrollPosition: UICollectionViewScrollPositionNone];
-                                    */
+        if ((indexPath = [self.collectionView indexPathForCell:cell])) {
+            UICollectionView *collectionView = self.collectionView;
+            
+            if ([self.collectionViewDelegate collectionView: collectionView
+                                shouldSelectItemAtIndexPath: indexPath]) {
+
+                [collectionView selectItemAtIndexPath: indexPath
+                                             animated: YES
+                                       scrollPosition: UICollectionViewScrollPositionNone];
+
+                [self.collectionViewDelegate collectionView: collectionView
+                                   didSelectItemAtIndexPath: indexPath];
+            }
+            
+        }
+                
+        NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+        if (visibleItems != nil)
+            [self.collectionView reloadItemsAtIndexPaths:visibleItems];
+
     }
 }
 
@@ -1952,7 +1953,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 #pragma mark - 
 #pragma mark UIAdaptivePresentationControllerDelegate
 
-- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:
+                        (UIPresentationController *)controller {
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
     if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController] ||
         [controller isEqual:self.documentInformationPopoverPresentationController]) {
@@ -1964,33 +1966,19 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 #pragma mark - 
 #pragma mark UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController { }
+- (void)prepareForPopoverPresentation:
+                        (UIPopoverPresentationController *)popoverPresentationController { }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController { return YES; }
+- (BOOL)popoverPresentationControllerShouldDismissPopover:
+                        (UIPopoverPresentationController *)popoverPresentationController { return YES; }
 
-- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (void)popoverPresentationControllerDidDismissPopover:
+                        (UIPopoverPresentationController *)popoverPresentationController {
     _aboutViewControllerOnScreen = NO;
 }
 
 #pragma mark -
 #pragma mark Update UI
-
-- (void)updateProgressView:(UIProgressView *)progressView
-                    active:(BOOL)active
-                   percent:(double)percent {
-    
-    if (!active) {
-        progressView.hidden = YES;
-        [progressView setProgress:Float_0 animated:YES];
-        return;
-    }
-    
-    progressView.hidden = NO;
-    if (progressView.progress < percent / Float_100) {
-        [progressView setProgress: (float) (percent / Float_100)
-                         animated: YES];
-    }
-}
 
 - (void)collectionView:(UICollectionView *)collectionView
                     didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected {

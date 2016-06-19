@@ -224,7 +224,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (BOOL)collectionView:(UICollectionView *)collectionView
                                         shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    return YES;
+    
+    //Deselect when not editing, or when editing and already selected.
+    return _edit ?
+        [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView

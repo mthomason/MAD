@@ -11,6 +11,22 @@
 #import "MTReportDesignerSectionDecorationView.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 
+static inline CGRect rectAvailablePosition1(CGRect rect, CGRect centerRect);
+static inline CGRect rectAvailablePosition1(CGRect rect, CGRect centerRect) {
+    return CGRectMake(centerRect.origin.x + centerRect.size.width,
+                      centerRect.origin.y,
+                      rect.size.width,
+                      rect.size.height);
+}
+
+static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect);
+static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
+    return CGRectMake(centerRect.origin.x,
+                      centerRect.origin.y + centerRect.size.height,
+                      rect.size.width,
+                      rect.size.height);
+}
+
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
 @property (nonatomic, assign) NSUInteger numberOfSections;
@@ -21,19 +37,18 @@
 
 @implementation MTReportDesignerSectionViewLayoutLiquid
 
-
 - (instancetype)init {
     self = [super init];
-    if (self) {
+    if (!self) return nil;
 
-        NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
-        self.itemAttributesBySection = itemAttributesBySection;
+    NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
+    self.itemAttributesBySection = itemAttributesBySection;
+    
+    Class class = [MTReportDesignerSectionDecorationView class];
+    NSString *decorationViewKind = NSStringFromClass(class);
+    [self registerClass: class forDecorationViewOfKind: decorationViewKind];
 
-        NSString *decorationViewKind = NSStringFromClass([MTReportDesignerSectionDecorationView class]);
-        [self registerClass: [MTReportDesignerSectionDecorationView class]
-    forDecorationViewOfKind: decorationViewKind];
 
-    }
     return self;
 }
 
@@ -61,32 +76,27 @@
             [NSValue valueWithCGRect: placement3], nil];
 }
 
-+ (NSSet *)availablePositionsOfRect: (CGRect)rect
-                         aroundRect: (CGRect)centerRect {
++ (NSSet <NSValue *> *)availablePositionsOfRect: (CGRect)rect
+                                     aroundRect: (CGRect)centerRect {
     
     //There exist two potental placement spots around a rect to put another rect.
-    
-    CGRect placement1 = CGRectMake(centerRect.origin.x + centerRect.size.width, centerRect.origin.y,
-                                   rect.size.width, rect.size.height);
-    
-    CGRect placement3 = CGRectMake(centerRect.origin.x, centerRect.origin.y + centerRect.size.height,
-                                   rect.size.width, rect.size.height);
-    
-    NSValue *value1 = [NSValue valueWithCGRect: placement1];
-    NSValue *value2 = [NSValue valueWithCGRect: placement3];
-    return [NSSet setWithObjects:
-            value1,
-            value2, nil];
+    id value1 = [NSValue valueWithCGRect: rectAvailablePosition1(rect, centerRect)];
+    id value2 = [NSValue valueWithCGRect: rectAvailablePosition2(rect, centerRect)];
+    NSSet *result = [[NSSet alloc] initWithObjects:value1, value2, nil];
+    return result;
 }
 
 - (void)prepareLayout {
     [super prepareLayout];
     
-    [self.delegate collectionView:self.collectionView prepareLayout:self];
+    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    delegate = self.delegate;
+    [delegate collectionView:self.collectionView prepareLayout:self];
     
     self.numberOfSections = 1;
-    self.numberOfItems = [self.delegate numberOfItemsInSection: 0
-                                              ofCollectionView: self.collectionView];
+    self.numberOfItems = delegate != nil ? [delegate numberOfItemsInSection: 0
+                                                           ofCollectionView: self.collectionView] :
+                                                           0;
 }
 
 - (CGSize)collectionViewContentSize {
@@ -95,7 +105,8 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 
-    NSArray *layoutAttributes = [self.delegate collectionView: self.collectionView attributesForLayout: self];
+    NSArray *layoutAttributes = [self.delegate collectionView: self.collectionView
+                                          attributesForLayout: self];
     NSArray *results = @[];
     UICollectionViewLayoutAttributes *itemAttributes;
     for (itemAttributes in layoutAttributes) {
@@ -107,15 +118,26 @@
     return results;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (MADSectionLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    return [self.delegate collectionView:self.collectionView layout:self layoutAttributesForItemAtIndexPath:indexPath];
+    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    delegate = self.delegate;
+    id attributes = [delegate collectionView: self.collectionView
+                                      layout: self
+          layoutAttributesForItemAtIndexPath: indexPath];
+    return attributes;
 
 }
 
-- (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
+- (MADSectionLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:
+                                                                        (NSIndexPath *)indexPath {
 
-    return [self.delegate collectionView:self.collectionView layout:self layoutAttributesForItemAtIndexPath:indexPath];
+    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    delegate = self.delegate;
+    id attributes = [delegate collectionView: self.collectionView
+                                      layout: self
+          layoutAttributesForItemAtIndexPath: indexPath];
+    return attributes;
 
 }
 

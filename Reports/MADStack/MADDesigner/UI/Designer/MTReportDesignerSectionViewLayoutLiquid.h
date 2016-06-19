@@ -22,7 +22,7 @@
              prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
 
     - (MADSectionLayoutAttributes *)collectionView: (UICollectionView *)collectionView
-                                            layout: (UICollectionViewLayout *)collectionViewLayout
+                                            layout: (__kindof UICollectionViewLayout *)collectionViewLayout
                 layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
 
     - (CGSize)collectionView: (UICollectionView *)collectionView
