@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCollectionViewLayoutGrouped.h"
+#import "MADFileExplorerViewLayout.h"
 
-@implementation MADCollectionViewLayoutGrouped
+@implementation MADFileExplorerViewLayout
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 

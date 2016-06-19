@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionViewFlowLayout.h>
 
-@interface MADCollectionViewLayoutGrouped : UICollectionViewFlowLayout
+@interface MADFileExplorerViewLayout : UICollectionViewFlowLayout
 
 @end
 
