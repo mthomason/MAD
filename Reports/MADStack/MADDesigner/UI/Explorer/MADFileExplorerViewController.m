@@ -599,6 +599,16 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     [self.searchBar sizeToFit];
 }
 
+- (void)setEditing:(BOOL)editing {
+    [super setEditing:editing];
+    _collectionViewDelegate.editing = editing;
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    _collectionViewDelegate.editing = editing;
+}
+
 #pragma mark - 
 #pragma mark UICollectionViewDataSource
 
@@ -613,6 +623,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    
     static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
     MADCollectionViewCellDocument *cell;
     cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
@@ -623,25 +634,23 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     }
     
     MADMetaData *metadata = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
+    cell.labelTitle.text = metadata.name.copy;
+    
+    BOOL notDownloaded  = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
+                           NSMetadataUbiquitousItemDownloadingStatusNotDownloaded],
+         downloading    = metadata.ubiquitousItemIsDownloading,
+         uploading      = metadata.ubiquitousItemIsUploading;
 
-    NSString *filename = metadata.name.copy;
-    cell.labelTitle.text = filename;
-    
-    BOOL notDownloaded, downloading, uploading;
-    
-    notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
-                            NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    
-    downloading = metadata.ubiquitousItemIsDownloading,
-    uploading   = metadata.ubiquitousItemIsUploading;
-
+    id cellText;
     if (downloading) {
-        cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
+        cellText = NSLocalizedString(Downloading, Downloading);
+        cell.labelTitleSub.text = cellText;
     } else if (uploading) {
-        cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
+        cellText = NSLocalizedString(Syncing, Syncing);
+        cell.labelTitleSub.text = cellText;
     } else {
         NSString *subtitle = [self copySubtitleForMetadata:metadata];
-        cell.labelTitleSub.text = subtitle.copy;
+        cell.labelTitleSub.text = subtitle;
     }
     [cell setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
     [cell setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
@@ -658,7 +667,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
-
 
     @autoreleasepool {
         NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
@@ -1905,7 +1913,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     if (sender.state == UIGestureRecognizerStateBegan) {
 
-        self.collectionViewDelegate.edit = YES;
+        self.collectionViewDelegate.editing = YES;
 
         NSIndexPath *indexPath;
         id cell = sender.view;

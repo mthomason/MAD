@@ -22,7 +22,7 @@
     @property (nonatomic, weak) NSObject <MADFileExplorerViewDelegateProtocol> *delegate;
     @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
-    @property (nonatomic, readwrite, assign, getter=isEditing) BOOL edit;
+    @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
 
     @property (readonly) NSUInteger numberOfItemsSelected;
     @property (readonly) NSUInteger numberOfItemsHighlighted;

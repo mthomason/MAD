@@ -50,6 +50,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     return c;
 }
 
+- (id)init {
+    id delegate = [self initWithNumberOfSections:1];
+    return delegate;
+}
+
 - (id)initWithNumberOfSections:(NSUInteger)numberOfSections {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
     if (self = [super init]) {
@@ -73,16 +78,16 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         }
         self.highlighted = array;
         
-        _edit = NO;
+        _editing = NO;
         
     }
     return self;
 }
 
-- (void)setEditing:(BOOL)edit {
-    NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, edit);
-    if (_edit != edit) {
-        _edit = edit;
+- (void)setEditing:(BOOL)editing {
+    NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
+    if (_editing != editing) {
+        _editing = editing;
     }
 }
 
@@ -92,7 +97,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    if (_edit) {
+    if (_editing) {
         [cell startWobble];
     } else {
         [cell stopWobble];
@@ -226,7 +231,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     //Deselect when not editing, or when editing and already selected.
-    return _edit ?
+    return _editing ?
         [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
 }
 
