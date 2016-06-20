@@ -97,10 +97,6 @@ const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
 
 static NSString * const MADIdentifierFileLondon                 = @"London";
 static NSString * const MADIdentifierFileMusic                  = @"Music";
-static NSString * const MADImageToolbarCloudDownload            = @"MADImageToolbarCloudDownload";
-static NSString * const NotDownloaded                           = @"Not Downloaded";
-static NSString * const Syncing                                 = @"Syncing";
-static NSString * const Downloading                             = @"Downloading";
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -392,6 +388,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     operation = [[MADInstallOperationSampleDatabase alloc] init];
     [operationQueueBackground addOperation:operation];
+    
     NSString *groupID = [self.documentManager groupIdentifier].copy;
     operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
                                                               fileExtension: MADFileExtentionMobleApplicationDocument
@@ -513,11 +510,9 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
     
     // inital layout
-    
     self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
     
     // not editing
-    
     [self setEditing: NO animated: NO];
     
     // add gestures
@@ -530,9 +525,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
     // update statusbar?
-    
     [self setNeedsStatusBarAppearanceUpdate];
-
 
 }
 
@@ -631,63 +624,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     if (cell.delegate == nil) {
         ((MADCollectionViewCellDocument *)cell).delegate = self;
-    }
-    
-    MADMetaData *metadata = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
-    cell.labelTitle.text = metadata.name.copy;
-    
-    BOOL notDownloaded  = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
-                           NSMetadataUbiquitousItemDownloadingStatusNotDownloaded],
-         downloading    = metadata.ubiquitousItemIsDownloading,
-         uploading      = metadata.ubiquitousItemIsUploading;
-
-    id cellText;
-    if (downloading) {
-        cellText = NSLocalizedString(Downloading, Downloading);
-        cell.labelTitleSub.text = cellText;
-    } else if (uploading) {
-        cellText = NSLocalizedString(Syncing, Syncing);
-        cell.labelTitleSub.text = cellText;
-    } else {
-        NSString *subtitle = [self copySubtitleForMetadata:metadata];
-        cell.labelTitleSub.text = subtitle;
-    }
-    [cell setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
-    [cell setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
-    
-    UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
-    
-    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
-        [activityIndicator startAnimating];
-    else
-        [activityIndicator stopAnimating];
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
-                                        [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell.labelTitleSub layoutIfNeeded];
-
-    @autoreleasepool {
-        NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
-        NSString *path = thumbnailUrl.path;
-        if (!path) goto END_ReadThumbnail;
-        
-        {
-            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
-            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-        
-            if (image != nil) {
-                cell.imagePreview.image = image;
-            } else {
-                image = [MADCollectionViewCellDocument newDefaultThumbnail];
-                cell.imagePreview.image = image;
-            }
-            image = nil;
-            imageData = nil;
-        }
-        
-        END_ReadThumbnail:;
     }
     
     return cell;
@@ -1111,18 +1047,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
 #pragma mark - 
 #pragma mark MADFileExplorerViewDelegateProtocol
-
-- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata;
-    metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
-    return metadata.URL.lastPathComponent.stringByDeletingPathExtension;
-}
-
-- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata;
-    metadata = [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
-    return [self copySubtitleForMetadata:metadata];
-}
 
 - (BOOL)isFileViewEditing { return self.editing; }
 
@@ -1940,23 +1864,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     }
 }
-
-#pragma mark -
-#pragma mark Helpers
-
-- (NSString *)copySubtitleForMetadata:(MADMetaData *)metadata {
-    NSString *result;
-    NSString *downloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
-    if ([downloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
-    } else {
-        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(metadata.fileSystemFileSize)];
-        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
-        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
-    }
-    return result;
-}
-
 
 #pragma mark - 
 #pragma mark UIAdaptivePresentationControllerDelegate

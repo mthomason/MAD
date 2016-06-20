@@ -13,11 +13,20 @@
 #import <MADCocoaExtensions/MADLabel.h>
 #import <UIKit/UITableView.h>
 #import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIImageView.h>
 #import <MADFileManager/MADMetaData.h>
-#import <Foundation/NSObject.h>
+#import <MADFoundation/NSURL+Document.h>
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
 
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
+
+static NSString * const NotDownloaded                           = @"Not Downloaded";
+static NSString * const Syncing                                 = @"Syncing";
+static NSString * const Downloading                             = @"Downloading";
+static NSString * const MADImageToolbarCloudDownload            = @"MADImageToolbarCloudDownload";
 
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect();
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
@@ -29,10 +38,33 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     @property (nonatomic, readwrite, strong) UILabel *testLabel;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
+    @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 @end
 
 @implementation MADFileExplorerViewDelegate
+
+- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata;
+    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    NSString *title = metadata.URL.lastPathComponent.stringByDeletingPathExtension;
+    return title;
+}
+
+- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata;
+    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
+                                            fileSize:metadata.fileSystemFileSize];
+    return subtitle;
+}
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
+}
 
 - (NSUInteger)numberOfItemsSelected {
     NSUInteger c = 0;
@@ -97,12 +129,84 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    
+    id <MADFileExplorerViewDelegateProtocol> delegate = _delegate;
+    MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
+    cell.labelTitle.text = metadata.name.copy;
+    
+    BOOL notDownloaded  = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
+                           NSMetadataUbiquitousItemDownloadingStatusNotDownloaded],
+    downloading    = metadata.ubiquitousItemIsDownloading,
+    uploading      = metadata.ubiquitousItemIsUploading;
+    
+    id cellText;
+    if (downloading) {
+        cellText = NSLocalizedString(Downloading, Downloading);
+        cell.labelTitleSub.text = cellText;
+    } else if (uploading) {
+        cellText = NSLocalizedString(Syncing, Syncing);
+        cell.labelTitleSub.text = cellText;
+    } else {
+        NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
+                                                fileSize:metadata.fileSystemFileSize];
+        cell.labelTitleSub.text = subtitle;
+    }
+    [cell setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
+    [cell setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
+    
+    UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
+    
+    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
+        [activityIndicator startAnimating];
+    else
+        [activityIndicator stopAnimating];
+    
+    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
+    [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+    
+    [cell.labelTitle layoutIfNeeded];
+    [cell.labelTitleSub layoutIfNeeded];
+    
+    @autoreleasepool {
+        NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
+        NSString *path = thumbnailUrl.path;
+        if (!path) goto END_ReadThumbnail;
+        
+        {
+            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
+            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
+            
+            if (image != nil) {
+                cell.imagePreview.image = image;
+            } else {
+                image = [MADCollectionViewCellDocument newDefaultThumbnail];
+                cell.imagePreview.image = image;
+            }
+            image = nil;
+            imageData = nil;
+        }
+        
+    END_ReadThumbnail:;
+    }
+    
     if (_editing) {
         [cell startWobble];
     } else {
         [cell stopWobble];
     }
     
+}
+
+- (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
+    NSString *result;
+    if ([status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
+    } else {
+        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(fileSize)];
+        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
+        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
+    }
+    return result;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -293,8 +397,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     id <MADFileExplorerViewDelegateProtocol> delegate = self.delegate;
-    NSString *filename = [delegate titleForItemAtIndexPath:indexPath].copy;
-    NSString *size = [delegate subtitleForItemAtIndexPath:indexPath].copy;
+    NSString *filename = [self titleForItemAtIndexPath:indexPath].copy;
+    NSString *size = [self subtitleForItemAtIndexPath:indexPath].copy;
     
     NSDictionary *attributesCaption = [MADCollectionViewCellDocument newAttributesCaption];
     NSDictionary *attributesCaption2 = [MADCollectionViewCellDocument newAttributesCaption];

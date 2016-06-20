@@ -14,8 +14,6 @@
 @protocol MADFileExplorerViewDelegateProtocol <NSObject>
   @required
 
-    - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (BOOL)isFileViewEditing;
     - (void)openDocumentAtURL:(NSURL *)url;
