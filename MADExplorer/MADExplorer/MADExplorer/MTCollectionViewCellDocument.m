@@ -18,7 +18,6 @@
 
 #import <UIKit/UINibLoading.h>
 #import <UIKit/NSAttributedString.h>
-#import <UIKit/UITapGestureRecognizer.h>
 #import <UIKit/UIProgressView.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UIImage.h>
@@ -46,21 +45,29 @@ float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
-@interface MADCollectionViewCellDocument ()
-
-    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
+@interface MADCollectionViewCellDocument () {
+    bool _wobbling;
+}
 
     @property (nonatomic, readwrite, copy) UIColor *colorTextNormal;
     @property (nonatomic, readwrite, copy) UIColor *colorTextSelected;
 
-    @property (nonatomic, readwrite, weak) UITapGestureRecognizer *tapGestureRecognizer;
-
-    @property (nonatomic, readwrite, assign) BOOL wobbling;
-    @property (nonatomic, readwrite, assign) BOOL addedGestures;
+    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation MADCollectionViewCellDocument
+
+- (void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+    _labelTitle.textColor = selected ? _colorTextSelected.copy : _colorTextNormal.copy;
+}
+
+- (void)setHighlighted:(BOOL)highlighted {
+    [super setHighlighted: highlighted];
+    _labelTitle.textColor = highlighted   ? [UIColor whiteColor] :
+                            self.selected ? _colorTextSelected.copy : _colorTextNormal.copy;
+}
 
 + (UIActivityIndicatorView *)newActivityIndicatorView {
     
@@ -110,7 +117,6 @@ float wobbleFactor() {
 }
 
 - (void)commonInitWithFrame:(CGRect)frame {
-    _addedGestures = NO;
     UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:frame];
     self.selectedBackgroundView = selectedBackground;
 }
@@ -125,7 +131,7 @@ float wobbleFactor() {
 
 - (void)awakeFromNib {
     
-    _wobbling = NO;
+    _wobbling = false;
     
     UIColor *colorTextSelected = [UIColor lightTextColor];
     self.colorTextSelected = colorTextSelected.copy;
@@ -139,27 +145,6 @@ float wobbleFactor() {
     //UIColor *color = [UIColor darkGrayColor];
     UIColor *clearColor = [UIColor clearColor];
     UIColor *lightGrayColor = [UIColor lightGrayColor];
-
-    if (!_addedGestures) {
-        BOOL gotActionEdit = NO, gotActionRename = NO;
-        SEL actionRename = @selector(actionRename:);
-        for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
-            gotActionEdit = YES;
-            if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = YES;
-            if (gotActionEdit && gotActionRename) break;
-        }
-        
-        if (!gotActionRename) {
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                                  action: actionRename];
-            tap.numberOfTapsRequired = 1;
-            tap.numberOfTouchesRequired = 1;
-            
-            [self.labelTitle addGestureRecognizer:tap];
-            self.tapGestureRecognizer = tap;
-        }
-        _addedGestures = YES;
-    }
     
     self.labelTitle.userInteractionEnabled = YES;
     
@@ -181,8 +166,6 @@ float wobbleFactor() {
     self.labelTitleSub.font = font;
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
-
-    [self normalizeTint];
     
     [super awakeFromNib];
 }
@@ -216,13 +199,9 @@ float wobbleFactor() {
     }
 }
 
-- (void)performSelectionAnimations {
-    [self normalizeTint];
-}
+- (void)performSelectionAnimations { }
 
-- (void)performDeselectionAnimations {
-    [self normalizeTint];
-}
+- (void)performDeselectionAnimations { }
 
 - (void)setNeedsLayout {
     [super setNeedsLayout];
@@ -277,76 +256,62 @@ float wobbleFactor() {
     [_delegate actionDuplicate:self];
 }
 
-- (void)normalizeTint {
-    UITapGestureRecognizer __unsafe_unretained * tapGestureRecognizer = _tapGestureRecognizer;
-    UILabel                __unsafe_unretained * labelTitle           = _labelTitle;
-    if (self.highlighted) {
-        id colorTextSelectedHighlighted = [UIColor whiteColor];
-        labelTitle.textColor = colorTextSelectedHighlighted;
-    } else if (self.selected) {
-        labelTitle.textColor = _colorTextSelected.copy;
-        tapGestureRecognizer.enabled = NO;
-    } else {
-        labelTitle.textColor = _colorTextNormal.copy;
-        tapGestureRecognizer.enabled = YES;
-    }
-}
-
 - (void)startWobble {
-    if (_wobbling == NO) {
-        self.wobbling = YES;
-        float r = wobbleFactor();
-        
-        self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-        
-        void (^animationFinish)(void);
-        void (^animationStart)(void);
-        void (^ animationStartCompletion)(BOOL finished);
-        
-
-        MADCollectionViewCellDocument __weak *weakself = self;
-
-        animationFinish = ^(void){
-            [UIView setAnimationRepeatCount: MAXFLOAT];
-            MADCollectionViewCellDocument *strongself = weakself;
-            if (strongself) {
-                CGAffineTransform rightWobble;
-                rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
-                strongself.transform = rightWobble;
-            }
-        };
-        
-        animationStart = ^{
-            MADCollectionViewCellDocument *strongself = weakself;
-            if (strongself) {
-                CGAffineTransform leftWobble;
-                leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-                strongself.transform = leftWobble;
-            }
-        };
-        
-        animationStartCompletion = ^(BOOL finished) {
-
-            [UIView animateWithDuration: 0.2
-                                  delay: 0
-                                options: UIViewAnimationOptionAllowUserInteraction |
-                                            UIViewAnimationOptionRepeat |
-                                            UIViewAnimationOptionAutoreverse |
-                                            UIViewAnimationOptionBeginFromCurrentState
-                             animations: animationFinish
-                             completion: nil];
-        };
+    if (_wobbling) return;
+    
+    _wobbling = true;
+    float r = wobbleFactor();
+    
+    self.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    
+    void (^animationFinish)(void);
+    void (^animationStart)(void);
+    void (^ animationStartCompletion)(BOOL finished);
+    
+    
+    MADCollectionViewCellDocument __weak *weakself = self;
+    
+    animationFinish = ^(void){
+        [UIView setAnimationRepeatCount: MAXFLOAT];
+        MADCollectionViewCellDocument *strongself = weakself;
+        if (strongself) {
+            CGAffineTransform rightWobble;
+            rightWobble = CGAffineTransformMakeRotation(
+                                    (CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
+            strongself.transform = rightWobble;
+        }
+    };
+    
+    animationStart = ^{
+        MADCollectionViewCellDocument *strongself = weakself;
+        if (strongself) {
+            CGAffineTransform leftWobble;
+            leftWobble = CGAffineTransformMakeRotation(
+                                    (CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+            strongself.transform = leftWobble;
+        }
+    };
+    
+    animationStartCompletion = ^(BOOL finished) {
         
         [UIView animateWithDuration: 0.2
-                         animations: animationStart
-                         completion: animationStartCompletion];
-    }
+                              delay: 0
+                            options: UIViewAnimationOptionAllowUserInteraction |
+         UIViewAnimationOptionRepeat |
+         UIViewAnimationOptionAutoreverse |
+         UIViewAnimationOptionBeginFromCurrentState
+                         animations: animationFinish
+                         completion: nil];
+    };
     
+    [UIView animateWithDuration: 0.2
+                     animations: animationStart
+                     completion: animationStartCompletion];
 }
 
 - (void)stopWobble {
     if (_wobbling) {
-        self.wobbling = NO;
+        _wobbling = false;
         [self.layer removeAllAnimations];
         self.transform = CGAffineTransformIdentity;
     }
@@ -370,7 +335,8 @@ float wobbleFactor() {
 
 - (NSString *)accessibilityLabel {
     NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
-    return [NSString stringWithFormat: documentName, _labelTitle.text];
+    NSString *label = [[NSString alloc] initWithFormat: documentName, _labelTitle.text];
+    return label;
 }
 
 - (NSInteger)accessibilityElementCount {
@@ -378,11 +344,7 @@ float wobbleFactor() {
 }
 
 - (NSInteger)indexOfAccessibilityElement:(id)element {
-    if ([element isKindOfClass:[UIImageView class]]) {
-        return 0;
-    } else {
-        return 1;
-    }
+    return [element isKindOfClass:[UIImageView class]] ? 0 : 1;
 }
 
 - (id)accessibilityElementAtIndex:(NSInteger)index {

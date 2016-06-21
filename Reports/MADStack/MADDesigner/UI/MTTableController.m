@@ -12,6 +12,7 @@
 
 #import "MTTableController.h"
 #import <CoreData/NSManagedObjectID.h>
+#import <MAD/MADDatabaseProtocol.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -53,9 +54,7 @@
 
 @implementation MADTableController
 
-- (void)dealloc {
-    _query.database.delegate = nil;
-}
+- (void)dealloc { }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.datatable;
@@ -111,17 +110,25 @@
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIActivityIndicatorView *activityIndicator;
+    activityIndicator = [[UIActivityIndicatorView alloc]
+                         initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;
     activityIndicator.hidesWhenStopped = YES;
     
-    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    UIBarButtonItem *barButtonItemActive;
+    barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    
     [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
     MADTableController * __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
+    
+
+    
+    dispatch_block_t block;
+    block = ^{
         
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
@@ -130,51 +137,45 @@
         
         MADTableController *strongself2 = weakSelf2;
         
-        [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
-                                                     withObject: strongself2.navigationItem.rightBarButtonItem
+        UIBarButtonItem *rightBarButtonItem = strongself2.navigationItem.rightBarButtonItem;
+        SEL selector = @selector(setRightBarButtonItem:);
+        [strongself2.navigationItem performSelectorOnMainThread: selector
+                                                     withObject: rightBarButtonItem
                                                   waitUntilDone: NO];
         
-        [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
+        selector = @selector(stopAnimating);
+        [activityIndicator performSelectorOnMainThread: selector
+                                            withObject: nil
+                                         waitUntilDone: NO];
         
         if (!success && error) {
             
-            if ([NSThread isMainThread]) {
-                //__strong MTTableController *strongself3 = weakSelf3;
-                __strong MADTableController *weakself4 = strongself2;
-                
-                [NSError presentError: error
-                     onViewController: strongself2
-                           completion:^(BOOL displayErrorSuccess) {
-                               NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                               [MTKeyChain deleteKey:key];
-                           }];
-                
-            } else {
-                
-                NSError *serror = error;
-                MADTableController * __weak weakself4 = strongself2;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    MADTableController *strongself3 = weakself4;
-                    MADTableController * __weak weakself5 = strongself3;
-                    
-                    [NSError presentError: serror
-                         onViewController: strongself3
-                               completion:^(BOOL displayErrorSuccess) {
-                                   NSString *key = [[NSString alloc] initWithString:weakself5.query.database.databaseConnection.connectionString];
-                                   [MTKeyChain deleteKey:key];
-                               }];
-                    
-                });
-                
-            }
+            NSString *key = strongself2.query.database.databaseConnection.connectionString.copy;
+            void (^deleteKey)(BOOL);
+            deleteKey = ^(BOOL displayErrorSuccess) {
+                [MTKeyChain deleteKey:key];
+            };
+
+            NSError *serror = error;
+            MADTableController * __weak weakself4 = strongself2;
+            dispatch_block_t showError = ^{
+                MADTableController *sself = weakself4;
+                [NSError presentError: serror
+                     onViewController: sself
+                           completion: deleteKey];
+            };
+
+            [NSThread isMainThread] ?
+                showError() :
+                dispatch_sync(dispatch_get_main_queue(), showError);
             
         }
         [strongself2 performSelectorOnMainThread: @selector(invalidateLayout)
                                       withObject: strongself2 waitUntilDone: NO];
         
         
-    });
+    };
+    dispatch_async(queue, block);
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -16,6 +16,7 @@
 #import <UIKit/UIImage.h>
 #import <UIKit/UIImageView.h>
 #import <UIKit/UILongPressGestureRecognizer.h>
+#import <UIKit/UITapGestureRecognizer.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <MADCocoaExtensions/MTMath.h>
@@ -59,11 +60,17 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-    @property (nonatomic, strong) NSMutableDictionary *longPressGestures;
+
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> *longPressGestures;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, UITapGestureRecognizer *> *tapGestures;
 
 @end
 
 @implementation MADFileExplorerViewDelegate
+
+- (void)dealloc {
+    [_longPressGestures removeAllObjects];
+}
 
 #pragma mark -
 #pragma mark Constructors
@@ -98,8 +105,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         
         _editing = NO;
         
-        NSMutableDictionary *longPressGestures = [[NSMutableDictionary alloc] init];
-        self.longPressGestures = longPressGestures;
+        NSMutableDictionary *gestures = [[NSMutableDictionary alloc] init];
+        self.longPressGestures = gestures;
+
+        gestures = [[NSMutableDictionary alloc] init];
+        self.tapGestures = gestures;
         
     }
     return self;
@@ -140,14 +150,24 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
+    
     UILongPressGestureRecognizer *longPressGesture;
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
                                                                      action: actionEdit];
     longPressGesture.delegate = delegate;
     [cell addGestureRecognizer: longPressGesture];
-    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
-    self.longPressGestures[hash] = longPressGesture;
     
+    SEL actionRename = @selector(actionRename:);
+    UITapGestureRecognizer *tapGesture;
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                         action: actionRename];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [cell.labelTitle addGestureRecognizer:tapGesture];
+    
+    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
+    _longPressGestures[hash] = longPressGesture;
+    _tapGestures[hash] = tapGesture;
     
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
     cell.labelTitle.text = metadata.name.copy;
@@ -258,9 +278,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 //    if ([delegate respondsToSelector:@selector(collectionView:didChangeNumberOfItemsSelected:)]) {
 //        [delegate collectionView:collectionView didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
 //    }
-    MADCollectionViewCellDocument *cell;
-    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
+    //MADCollectionViewCellDocument *cell;
+    //cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    //[cell performSelectionAnimations];
     
 }
 
@@ -270,9 +290,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
     
-    MADCollectionViewCellDocument *cell;
-    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performDeselectionAnimations];
+//    MADCollectionViewCellDocument *cell;
+//    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+//    [cell performDeselectionAnimations];
     
 }
 
@@ -286,7 +306,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
     MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)
     [collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
+//    [cell performSelectionAnimations];
+
+    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
+    _tapGestures[hash].enabled = NO;
     
     if (self.isEditing) {
         [self downloadIfNotYetDownloaded:metadata];
@@ -302,6 +325,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                                             didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
+
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
@@ -309,6 +333,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     MADCollectionViewCellDocument *cell;
     cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
+
+    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
+    _tapGestures[hash].enabled = NO;
     
 }
 
@@ -507,7 +534,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)actionRename:(id)sender {
-    [_delegate actionRename:self];
+    [_delegate actionRename:sender];
 }
 
 - (void)duplicate:(id)sender {

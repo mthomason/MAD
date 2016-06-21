@@ -1547,19 +1547,22 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     if (startEdit) {
         
-        //self.barButtonItemLicensing.enabled = NO;
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
         
-        for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+        NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+        if (visibleItems != nil)
+            [self.collectionView reloadItemsAtIndexPaths:visibleItems];
+        
+        /*for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
             [cell startWobble];
-        }
+        }*/
         [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
         
     } else {
-        [self actionDone:sender];
+        [self actionDone:nil];
     }
 }
 
@@ -1584,7 +1587,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
         [cell stopWobble];
-        [cell normalizeTint];
+        cell.selected = NO;
     }
 
 }
@@ -1607,10 +1610,11 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 }
 
 - (IBAction)actionPaste:(id)sender {
-    NSURL *url = [UIPasteboard generalPasteboard].URL;
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    id url = [UIPasteboard generalPasteboard].URL;
+    id data = [[NSData alloc] initWithContentsOfURL:url];
+    id destinationUrl = [url uniqueUrl];
+
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSURL *destinationUrl = [url uniqueUrl];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic |
                                                  NSFileWrapperWritingWithNameUpdating;
@@ -1642,9 +1646,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         MADCollectionViewCellDocument *documentCell;
         documentCell = (MADCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-        if (documentCell != nil) {
-            [documentCell normalizeTint];
-        }
+        documentCell.selected = NO;
     }
     
     NSArray *applicationActivities, *excludedActivityTypes;
@@ -1665,7 +1667,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
         for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
             MADCollectionViewCellDocument * __weak documentCell = (MADCollectionViewCellDocument *)cell;
-            [documentCell normalizeTint];
+            documentCell.selected = NO;
         }
         
     };
@@ -1835,12 +1837,10 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     if (sender.state == UIGestureRecognizerStateBegan) {
 
-        self.collectionViewDelegate.editing = YES;
+        [self actionEdit:nil];
 
         NSIndexPath *indexPath;
-        id cell = sender.view;
-        
-        if ((indexPath = [self.collectionView indexPathForCell:cell])) {
+
             UICollectionView *collectionView = self.collectionView;
             
             if ([self.collectionViewDelegate collectionView: collectionView
@@ -1852,13 +1852,11 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
                 [self.collectionViewDelegate collectionView: collectionView
                                    didSelectItemAtIndexPath: indexPath];
+                NSArray <NSIndexPath *> *selectedPath =
+                                            [[NSArray alloc] initWithObjects:indexPath, nil];
+                [collectionView reloadItemsAtIndexPaths:selectedPath];
             }
             
-        }
-                
-        NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
-        if (visibleItems != nil)
-            [self.collectionView reloadItemsAtIndexPaths:visibleItems];
 
     }
 }
