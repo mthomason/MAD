@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADNavigationControllerFileExplorer_h
+#define Reports_MADNavigationControllerFileExplorer_h
+
+#import <UIKit/UINavigationController.h>
 
 @interface MADNavigationControllerFileExplorer : UINavigationController
 
 @end
+
+#endif

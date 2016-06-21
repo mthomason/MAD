@@ -19,6 +19,25 @@
 #import <MADFoundation/NSURL+Document.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+#import <MADExplorer/NSAttributedString+FileExplorer.h>
+
+//#include <MAD/madlib.h>
+#import "MADStandard.h"
+
+/*char *string_for_n(unsigned long fileSize) {
+    char buffer_int[12];
+    const double one_for_div = 1;
+    double integral, fraction;
+    fraction = modf(madSystemFileSizeToMB(fileSize), &integral);
+    itoa(integral, buffer_int);
+
+
+
+    double i = integral / 10;
+    strcat(&buffer_int, <#const char *#>)
+    i = integral / one_for_div;
+    
+}*/
 
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
@@ -202,9 +221,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     if ([status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
         result = NSLocalizedString(NotDownloaded, NotDownloaded);;
     } else {
-        NSNumber *systemFileSizeMB = [[NSNumber alloc] initWithDouble:madSystemFileSizeToMB(fileSize)];
-        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
-        result = [[NSString alloc] initWithFormat:@"%@ MB", systemFileSizeString];
+        result = [MADStandard newStringForFileSize:fileSize];
     }
     return result;
 }
@@ -396,25 +413,19 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    id <MADFileExplorerViewDelegateProtocol> delegate = self.delegate;
+
     NSString *filename = [self titleForItemAtIndexPath:indexPath].copy;
     NSString *size = [self subtitleForItemAtIndexPath:indexPath].copy;
     
-    NSDictionary *attributesCaption = [MADCollectionViewCellDocument newAttributesCaption];
-    NSDictionary *attributesCaption2 = [MADCollectionViewCellDocument newAttributesCaption];
-    
-    NSAttributedString *attributedString;
-    attributedString = [[NSAttributedString alloc] initWithString: filename
-                                                       attributes: attributesCaption];
+    NSAttributedString *attributedString = [NSAttributedString newAttributedStringCaptionWithText:filename];
+    NSAttributedString *attributedStringSub;
     
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
                                            contentScaleFactor: collectionView.contentScaleFactor
                                                          font: font];
     
-    NSAttributedString *attributedStringSub;
-    attributedStringSub = [[NSAttributedString alloc] initWithString: size
-                                                          attributes: attributesCaption2];
+    attributedStringSub = [NSAttributedString newAttributedStringCaptionWithText: size];
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub

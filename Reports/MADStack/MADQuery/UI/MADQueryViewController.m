@@ -179,24 +179,24 @@ BOOL storeEnabled() {
 #pragma mark - Static
 
 + (void)deleteCoreDataCache {
-    @autoreleasepool {
+    //@autoreleasepool {
         [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
         [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
         [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
         [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
         [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-    }
+    //}
 }
 
 #pragma mark - NSObject
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        @autoreleasepool {
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        //@autoreleasepool {
             [MADQueryViewController deleteCoreDataCache];
-        }
-    });
+        //}
+    //});
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

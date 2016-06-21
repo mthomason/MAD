@@ -113,7 +113,7 @@
     char buf[12]; char *ptr;
     itoa(self.dropIndex.integerValue, buf);
     ptr = buf;
-    NSString *indexString = [[NSString alloc]  initWithCString:ptr encoding:NSUTF8StringEncoding];
+    NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     NSString *databaseName = self.databaseSchemaTable.name.copy;
     NSString *alias = [databaseName stringByAppendingString:indexString];
     return alias;

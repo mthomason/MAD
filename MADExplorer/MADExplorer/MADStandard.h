@@ -10,4 +10,8 @@
 
 @interface MADStandard : NSObject
 
++ (NSString *)newStringForDouble:(double)d;
++ (NSString *)newStringForUnsignedLong:(unsigned long)ul;
++ (NSString *)newStringForFileSize:(unsigned long long)filesize;
+
 @end

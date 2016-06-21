@@ -12,6 +12,7 @@
 
 #import "MTCollectionViewCellDocument.h"
 #import "MTDocumentCellProtocol.h"
+#import "NSAttributedString+FileExplorer.h"
 
 #import <QuartzCore/CALayer.h>
 
@@ -248,42 +249,12 @@ float wobbleFactor() {
 
 - (void)setText:(NSString *)text {
 
-    NSDictionary *attributes = [MADCollectionViewCellDocument newAttributesCaption];
-    NSMutableAttributedString *attributedString;
-    attributedString = [[NSMutableAttributedString alloc] initWithString: text
-                                                              attributes: attributes];
+    NSString *string = text.copy;
+    id attributedString = [NSAttributedString newAttributedStringCaptionWithText:string];
+
     UILabel *labelTitle = _labelTitle;
     labelTitle.attributedText = attributedString;
-    labelTitle.text = text.copy;
-}
-
-+ (NSDictionary *)newAttributesCaption {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    
-    id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNull null], NSKernAttributeName,
-                                    font, NSFontAttributeName,
-                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
-    return attributes;
-}
-
-+ (NSDictionary *)newAttributesCaption2 {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    id attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                [NSNull null], NSKernAttributeName,
-                                font, NSFontAttributeName,
-                                paragraphStyle, NSParagraphStyleAttributeName, nil];
-    return attributes;
+    labelTitle.text = string;
 }
 
 - (void)updateFont {

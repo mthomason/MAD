@@ -25,8 +25,7 @@
                      [NSNull null], NSKernAttributeName,
                      font, NSFontAttributeName,
                      paragraphStyle, NSParagraphStyleAttributeName, nil];
-    NSString *string = text.copy;
-    id attributedString = [[NSMutableAttributedString alloc] initWithString: string
+    id attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                                  attributes: attributes];
     return attributedString;
 }

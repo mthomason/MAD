@@ -65,7 +65,6 @@
 #import "MADStoreViewController.h"
 
 #import "MADNavigationBarTitleView.h"
-#import "MADWatermarkView.h"
 #import "MADNavigationController.h"
 
 #import "MADQueryBuilderSplitViewController.h"
@@ -444,12 +443,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
-    
-    // setup ui - background
-    MADWatermarkView *watermarkView;
-    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    self.collectionView.backgroundView = watermarkView;
-    
+        
     // setup ui - search bar
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];

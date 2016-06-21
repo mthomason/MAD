@@ -33,9 +33,6 @@
 
     @property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
 
-    + (NSDictionary *)newAttributesCaption;
-    + (NSDictionary *)newAttributesCaption2;
-
     + (UIImage *)newDefaultThumbnail;
 
     - (void)normalizeTint;

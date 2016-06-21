@@ -17,6 +17,11 @@
 		4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */; };
 		4C744EF21CE9B62100243830 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF01CE9B62100243830 /* MADFileManager.framework */; };
 		4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4D6291D17CCE400A1240C /* NSAttributedString+FileExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4D6271D17CCE400A1240C /* NSAttributedString+FileExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4D62A1D17CCE400A1240C /* NSAttributedString+FileExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D6281D17CCE400A1240C /* NSAttributedString+FileExplorer.m */; };
+		4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4D62B1D183DD400A1240C /* MADStandard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D62C1D183DD400A1240C /* MADStandard.mm */; };
+		4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA4D62F1D18451200A1240C /* libc++.tbd */; };
 		4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */; };
 		4CC641561BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641541BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,6 +59,11 @@
 		4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C744EF01CE9B62100243830 /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../Debug-iphonesimulator/MADFileManager.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSaveFileProtocol.h; path = MADExplorer/MADSaveFileProtocol.h; sourceTree = "<group>"; };
+		4CA4D6271D17CCE400A1240C /* NSAttributedString+FileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSAttributedString+FileExplorer.h"; path = "../../Reports/MADStack/MADDesigner/UI/Explorer/NSAttributedString+FileExplorer.h"; sourceTree = "<group>"; };
+		4CA4D6281D17CCE400A1240C /* NSAttributedString+FileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+FileExplorer.m"; path = "../../Reports/MADStack/MADDesigner/UI/Explorer/NSAttributedString+FileExplorer.m"; sourceTree = "<group>"; };
+		4CA4D62B1D183DD400A1240C /* MADStandard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStandard.h; sourceTree = "<group>"; };
+		4CA4D62C1D183DD400A1240C /* MADStandard.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MADStandard.mm; sourceTree = "<group>"; };
+		4CA4D62F1D18451200A1240C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileLocationManager.h; path = MADExplorer/MADFileLocationManager.h; sourceTree = "<group>"; };
 		4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileLocationManager.m; path = MADExplorer/MADFileLocationManager.m; sourceTree = "<group>"; };
 		4CC641541BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCollectionViewLayoutGroupedDelegate.h; path = MADExplorer/MADCollectionViewLayoutGroupedDelegate.h; sourceTree = "<group>"; };
@@ -72,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */,
 				4C744EF21CE9B62100243830 /* MADFileManager.framework in Frameworks */,
 				4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */,
 			);
@@ -100,6 +111,7 @@
 		4C6700E11BA20633001C9D5A = {
 			isa = PBXGroup;
 			children = (
+				4CA4D62F1D18451200A1240C /* libc++.tbd */,
 				4CC641601BA77BB700F3ECCE /* Resources */,
 				4C6700ED1BA20633001C9D5A /* MADExplorer */,
 				4C6700F91BA20633001C9D5A /* MADExplorerTests */,
@@ -138,6 +150,10 @@
 		4CC6414B1BA7791100F3ECCE /* MADExplorer */ = {
 			isa = PBXGroup;
 			children = (
+				4CA4D62B1D183DD400A1240C /* MADStandard.h */,
+				4CA4D62C1D183DD400A1240C /* MADStandard.mm */,
+				4CA4D6271D17CCE400A1240C /* NSAttributedString+FileExplorer.h */,
+				4CA4D6281D17CCE400A1240C /* NSAttributedString+FileExplorer.m */,
 				4C401E3D1BAE42DD00BAE5FC /* MADActiveDocumentManager.h */,
 				4C401E3E1BAE42DD00BAE5FC /* MADActiveDocumentManager.m */,
 				4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */,
@@ -191,6 +207,7 @@
 			files = (
 				4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */,
 				4C401E3F1BAE42DD00BAE5FC /* MADActiveDocumentManager.h in Headers */,
+				4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */,
 				4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */,
 				4CC641561BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.h in Headers */,
 				4C4754571CF41A6500BC9E02 /* MADCollectionViewLayoutGroupedDelegateProtocol.h in Headers */,
@@ -198,6 +215,7 @@
 				4CC6415A1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h in Headers */,
 				4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */,
 				4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */,
+				4CA4D6291D17CCE400A1240C /* NSAttributedString+FileExplorer.h in Headers */,
 				4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */,
 				4C401E421BAE44B200BAE5FC /* MADDocumentState.h in Headers */,
 			);
@@ -303,9 +321,11 @@
 				4CC6415B1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m in Sources */,
 				4CC641731BA77D6100F3ECCE /* MADBackgroundViewSelected.m in Sources */,
 				4CC641571BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
+				4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */,
 				4CC641871BA78A1300F3ECCE /* MTTableViewCellDocument.m in Sources */,
 				4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */,
 				4C401E401BAE42DD00BAE5FC /* MADActiveDocumentManager.m in Sources */,
+				4CA4D62A1D17CCE400A1240C /* NSAttributedString+FileExplorer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

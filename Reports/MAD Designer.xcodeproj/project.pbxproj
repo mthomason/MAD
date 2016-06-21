@@ -791,6 +791,7 @@
 		4CA0C6D01CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */; };
 		4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */; };
 		4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */; };
+		4CA4D6231D17C5F000A1240C /* MADFileExplorerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -2054,6 +2055,8 @@
 		4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
+		4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerView.h; sourceTree = "<group>"; };
+		4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerView.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -2860,6 +2863,8 @@
 			isa = PBXGroup;
 			children = (
 				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
+				4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */,
+				4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */,
 				4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */,
 				4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */,
 				4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */,
@@ -6478,6 +6483,7 @@
 				4C401F281BAE703200BAE5FC /* MADTableViewCellQueryGroup.m in Sources */,
 				4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */,
 				4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */,
+				4CA4D6231D17C5F000A1240C /* MADFileExplorerView.m in Sources */,
 				4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */,
 				4CC886161C7AADC0003E18D2 /* UIStoryboard+ObjectSelector.m in Sources */,
 				4CA0C6BD1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m in Sources */,
