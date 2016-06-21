@@ -199,10 +199,6 @@ float wobbleFactor() {
     }
 }
 
-- (void)performSelectionAnimations { }
-
-- (void)performDeselectionAnimations { }
-
 - (void)setNeedsLayout {
     [super setNeedsLayout];
     [_labelTitle setNeedsLayout];
@@ -229,32 +225,13 @@ float wobbleFactor() {
     [self setText: text];
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return action == @selector(actionEmail:) ||
-           action == @selector(delete:) ||
-           action == @selector(actionRename:) ||
-           action == @selector(duplicate:);
-}
-
-- (BOOL)becomeFirstResponder {
+/*- (BOOL)becomeFirstResponder {
     return YES;
 }
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
-}
-
-- (void)actionEmail:(id)sender {
-    [_delegate actionEmail:self];
-}
-
-- (void)actionRename:(id)sender {
-    [_delegate actionRename:self];
-}
-
-- (void)duplicate:(id)sender {
-    [_delegate actionDuplicate:self];
-}
+}*/
 
 - (void)startWobble {
     if (_wobbling) return;

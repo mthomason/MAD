@@ -18,7 +18,7 @@
     - (BOOL)isFileViewEditing;
     - (void)openDocumentAtURL:(NSURL *)url;
     - (void)collectionView:(UICollectionView *)collectionView
-                didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected;
+                didChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected;
 
     - (void)actionEmail:(id)sender;
     - (void)actionRename:(id)sender;

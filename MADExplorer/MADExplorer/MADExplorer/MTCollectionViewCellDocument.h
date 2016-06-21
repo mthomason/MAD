@@ -35,8 +35,6 @@
 
     + (UIImage *)newDefaultThumbnail;
 
-    - (void)performSelectionAnimations;
-    - (void)performDeselectionAnimations;
     - (void)setText:(NSString *)text;
 
     - (void)updateFont;

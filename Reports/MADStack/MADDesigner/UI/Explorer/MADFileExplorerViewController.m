@@ -536,26 +536,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         _barButtonItemLicensing.enabled = canMakePayments;
     }
 
-    NSArray <NSIndexPath *> *selectedIndexs = self.collectionView.indexPathsForSelectedItems.copy;
-    typeof (self.collectionView) __weak wCollectionView = self.collectionView;
-    
-    void (^enumerateSelectedIndexes)(NSIndexPath * _Nonnull, NSUInteger, BOOL *) =
-    ^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        void (^deselect)(void) = ^{
-            UICollectionView *collectionView = wCollectionView;
-            if (collectionView) {
-                id cell = [collectionView cellForItemAtIndexPath:indexPath];
-                [cell performDeselectionAnimations];
-            }
-        };
-
-        [[NSOperationQueue mainQueue] addOperationWithBlock:deselect];
-    };
-    
-    [selectedIndexs enumerateObjectsWithOptions: NSEnumerationConcurrent
-                                     usingBlock: enumerateSelectedIndexes];
-
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
         [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
@@ -1808,11 +1788,11 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     if (documentReport.documentState != UIDocumentStateClosed) {
         
-        [MADocument close: documentReport completion:^(BOOL success) {
-            if (success) {
-                [self actionEmail:cell];
-            }
-        }];
+        void (^handleCloseDocumentCompletion)(BOOL success);
+        handleCloseDocumentCompletion = ^(BOOL success) {
+            if (success) { [self actionEmail:cell]; }
+        };
+        [MADocument close: documentReport completion:handleCloseDocumentCompletion];
         
     } else {
         
@@ -1892,9 +1872,9 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 #pragma mark Update UI
 
 - (void)collectionView:(UICollectionView *)collectionView
-                    didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected {
+                    didChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
 
-    switch (numberOfItemsSelected.unsignedIntegerValue) {
+    switch (numberOfItemsSelected) {
             
         case 0:
             [self disableBarButtonItems];

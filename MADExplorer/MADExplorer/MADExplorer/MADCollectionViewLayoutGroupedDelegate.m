@@ -273,15 +273,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     [self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
-    
-//    id <MADFileExplorerViewDelegateProtocol> delegate = self.delegate;
-//    if ([delegate respondsToSelector:@selector(collectionView:didChangeNumberOfItemsSelected:)]) {
-//        [delegate collectionView:collectionView didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
-//    }
-    //MADCollectionViewCellDocument *cell;
-    //cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    //[cell performSelectionAnimations];
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -289,11 +280,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
-    
-//    MADCollectionViewCellDocument *cell;
-//    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-//    [cell performDeselectionAnimations];
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -306,7 +292,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
     MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)
     [collectionView cellForItemAtIndexPath:indexPath];
-//    [cell performSelectionAnimations];
 
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
     _tapGestures[hash].enabled = NO;
@@ -332,7 +317,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     MADCollectionViewCellDocument *cell;
     cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performDeselectionAnimations];
 
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
     _tapGestures[hash].enabled = NO;
@@ -457,6 +441,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
+    [delegate collectionView:collectionView didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
+    /*
     NSInvocationOperation *operations;
     SEL selector = @selector(collectionView:didChangeNumberOfItemsSelected:);
     if ([delegate respondsToSelector:selector]) {
@@ -467,7 +453,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         [invocation setArgument:&count atIndex:3];
         operations = [[NSInvocationOperation alloc] initWithInvocation:invocation];
         [[NSOperationQueue mainQueue] addOperation:operations];
-    }
+    }*/
 }
 
 - (void)openURL:(NSURL *)url {
