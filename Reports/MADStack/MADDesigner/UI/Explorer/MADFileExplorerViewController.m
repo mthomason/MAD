@@ -20,6 +20,8 @@
 
 #import "MADDocumentManager.h"
 
+#import "MADFileExplorerView.h"
+
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
@@ -154,6 +156,9 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     // Document Manager manages the file location for the documents.
     @property (nonatomic, readwrite, strong) MADDocumentManager *documentManager;
+
+    // This is the collection view
+    @property (weak, nonatomic) IBOutlet MADFileExplorerView *fileExplorerView;
 
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
@@ -443,7 +448,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
-        
+    
     // setup ui - search bar
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
@@ -501,7 +506,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
     self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
     self.navigationController.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
-    self.collectionView.backgroundColor = [UIColor lightGrayColor];
     
     // inital layout
     self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
@@ -1198,7 +1202,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
-        MADActiveDocumentManager * __unsafe_unretained fileManager = self.activeDocumentManager;
+        MADActiveDocumentManager *fileManager = self.activeDocumentManager;
         [MADocument close:openDocument completion:^(BOOL success) {
             if (success) {
                 [fileManager unload];

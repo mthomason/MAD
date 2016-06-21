@@ -19,7 +19,6 @@
 #import <UIKit/UINibLoading.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UITapGestureRecognizer.h>
-#import <UIKit/UILongPressGestureRecognizer.h>
 #import <UIKit/UIProgressView.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UIImage.h>
@@ -54,7 +53,6 @@ float wobbleFactor() {
     @property (nonatomic, readwrite, copy) UIColor *colorTextNormal;
     @property (nonatomic, readwrite, copy) UIColor *colorTextSelected;
 
-    @property (nonatomic, readwrite, weak) UILongPressGestureRecognizer *longPressGestureRecognizer;
     @property (nonatomic, readwrite, weak) UITapGestureRecognizer *tapGestureRecognizer;
 
     @property (nonatomic, readwrite, assign) BOOL wobbling;
@@ -143,20 +141,12 @@ float wobbleFactor() {
     UIColor *lightGrayColor = [UIColor lightGrayColor];
 
     if (!_addedGestures) {
-        SEL actionEdit = @selector(actionActivateEditMode:);
         BOOL gotActionEdit = NO, gotActionRename = NO;
         SEL actionRename = @selector(actionRename:);
         for (UIGestureRecognizer *gestureRecognizer in  self.gestureRecognizers) {
-            if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) gotActionEdit = YES;
+            gotActionEdit = YES;
             if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) gotActionRename = YES;
             if (gotActionEdit && gotActionRename) break;
-        }
-        
-        if (!gotActionEdit) {
-            id longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                                action: actionEdit];
-            [self addGestureRecognizer: longPressGesture];
-            self.longPressGestureRecognizer = longPressGesture;
         }
         
         if (!gotActionRename) {
@@ -222,7 +212,6 @@ float wobbleFactor() {
 
 - (void)setDelegate:(id<MTDocumentCellProtocol, UIGestureRecognizerDelegate>)delegate {
     if (_delegate != delegate) {
-        self.longPressGestureRecognizer.delegate = delegate;
         _delegate = delegate;
     }
 }
@@ -240,7 +229,6 @@ float wobbleFactor() {
     [_labelTitle setNeedsLayout];
     [_labelTitleSub setNeedsLayout];
 }
-
 
 - (void)setBounds:(CGRect)bounds {
     super.bounds = bounds;
@@ -279,10 +267,6 @@ float wobbleFactor() {
 
 - (void)actionEmail:(id)sender {
     [_delegate actionEmail:self];
-}
-
-- (void)actionActivateEditMode:(id)sender {
-    [_delegate actionActivateEditMode:sender];
 }
 
 - (void)actionRename:(id)sender {

@@ -15,6 +15,7 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UIImageView.h>
+#import <UIKit/UILongPressGestureRecognizer.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <MADCocoaExtensions/MTMath.h>
@@ -58,48 +59,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
+    @property (nonatomic, strong) NSMutableDictionary *longPressGestures;
 
 @end
 
 @implementation MADFileExplorerViewDelegate
 
-- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata;
-    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-    NSString *title = metadata.URL.lastPathComponent.stringByDeletingPathExtension;
-    return title;
-}
-
-- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata;
-    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-    NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
-                                            fileSize:metadata.fileSystemFileSize];
-    return subtitle;
-}
-
-- (NSNumberFormatter *)subtitleNumberFormatter {
-    if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
-    }
-    return _subtitleNumberFormatter;
-}
-
-- (NSUInteger)numberOfItemsSelected {
-    NSUInteger c = 0;
-    for (NSIndexSet *set in _selected) {
-        c += set.count;
-    }
-    return c;
-}
-
-- (NSUInteger)numberOfItemsHighlighted {
-    NSUInteger c = 0;
-    for (NSIndexSet *set in _highlighted) {
-        c += set.count;
-    }
-    return c;
-}
+#pragma mark -
+#pragma mark Constructors
 
 - (id)init {
     id delegate = [self initWithNumberOfSections:1];
@@ -121,7 +88,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
             [array addObject:indexSet];
         }
         self.selected = array;
-
+        
         array = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
         for (NSUInteger i = 0; i < numberOfSections; i++) {
             indexSet = [[NSMutableIndexSet alloc] init];
@@ -131,8 +98,30 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         
         _editing = NO;
         
+        NSMutableDictionary *longPressGestures = [[NSMutableDictionary alloc] init];
+        self.longPressGestures = longPressGestures;
+        
     }
     return self;
+}
+
+#pragma mark -
+#pragma mark Properties
+
+- (NSUInteger)numberOfItemsSelected {
+    NSUInteger c = 0;
+    for (NSIndexSet *set in _selected) {
+        c += set.count;
+    }
+    return c;
+}
+
+- (NSUInteger)numberOfItemsHighlighted {
+    NSUInteger c = 0;
+    for (NSIndexSet *set in _highlighted) {
+        c += set.count;
+    }
+    return c;
 }
 
 - (void)setEditing:(BOOL)editing {
@@ -149,7 +138,17 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
-    id <MADFileExplorerViewDelegateProtocol> delegate = _delegate;
+    id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
+    SEL actionEdit = @selector(actionActivateEditMode:);
+    UILongPressGestureRecognizer *longPressGesture;
+    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                     action: actionEdit];
+    longPressGesture.delegate = delegate;
+    [cell addGestureRecognizer: longPressGesture];
+    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
+    self.longPressGestures[hash] = longPressGesture;
+    
+    
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
     cell.labelTitle.text = metadata.name.copy;
     
@@ -216,19 +215,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
 }
 
-- (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
-    NSString *result;
-    if ([status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
-    } else {
-        result = [MADStandard newStringForFileSize:fileSize];
-    }
-    return result;
-}
-
 - (void)collectionView:(UICollectionView *)collectionView
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
+    id gestureToRemove = _longPressGestures[hash];
+    [cell removeGestureRecognizer: gestureToRemove];
+    [_longPressGestures removeObjectForKey:hash];
     [cell stopWobble];
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
@@ -302,28 +296,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
     
-}
-
-- (void)openURL:(NSURL *)url {
-    id open = [[NSInvocationOperation alloc] initWithTarget:self.delegate
-                                                   selector:@selector(openDocumentAtURL:)
-                                                     object:url];
-    [[NSOperationQueue mainQueue] addOperation:open];
-}
-
-- (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
-    if (metadata.isUbiquitous && metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
-        
-        NSURL *url = metadata.URL.copy;
-        void (^startDownload)(void);
-        startDownload = ^{
-            NSError *error = nil;
-            [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
-                                                                          error:&error];
-        };
-        [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
-        
-    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -469,6 +441,77 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         operations = [[NSInvocationOperation alloc] initWithInvocation:invocation];
         [[NSOperationQueue mainQueue] addOperation:operations];
     }
+}
+
+- (void)openURL:(NSURL *)url {
+    id open = [[NSInvocationOperation alloc] initWithTarget:self.delegate
+                                                   selector:@selector(openDocumentAtURL:)
+                                                     object:url];
+    [[NSOperationQueue mainQueue] addOperation:open];
+}
+
+- (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
+    if (metadata.isUbiquitous && metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
+        
+        NSURL *url = metadata.URL.copy;
+        void (^startDownload)(void);
+        startDownload = ^{
+            NSError *error = nil;
+            [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
+                                                                          error:&error];
+        };
+        [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
+        
+    }
+}
+
+
+- (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
+    NSString *result;
+    if ([status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
+    } else {
+        result = [MADStandard newStringForFileSize:fileSize];
+    }
+    return result;
+}
+
+- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata;
+    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    NSString *title = metadata.URL.lastPathComponent.stringByDeletingPathExtension;
+    return title;
+}
+
+- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata;
+    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
+                                            fileSize:metadata.fileSystemFileSize];
+    return subtitle;
+}
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
+}
+
+- (void)actionEmail:(id)sender {
+    [_delegate actionEmail:self];
+}
+
+- (void)actionActivateEditMode:(id)sender {
+    [_delegate actionActivateEditMode:sender];
+}
+
+- (void)actionRename:(id)sender {
+    [_delegate actionRename:self];
+}
+
+- (void)duplicate:(id)sender {
+    [_delegate actionDuplicate:self];
 }
 
 @end

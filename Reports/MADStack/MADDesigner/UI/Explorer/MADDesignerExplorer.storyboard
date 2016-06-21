@@ -185,6 +185,7 @@
                         <outlet property="barButtonItemInformationDocument" destination="rW5-Le-DOq" id="Wiq-wO-NZY"/>
                         <outlet property="barButtonItemLicensing" destination="JzB-Jd-m01" id="sRs-Yo-Zko"/>
                         <outlet property="barButtonItemTrash" destination="wuY-ge-Gue" id="WOn-hf-VLR"/>
+                        <outlet property="fileExplorerView" destination="S1Y-rx-yH8" id="Z7e-cu-970"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jk9-mR-YZK" userLabel="First Responder" sceneMemberID="firstResponder"/>

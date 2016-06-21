@@ -28,6 +28,8 @@
 - (void)setup {
     id watermarkView = [[MADWatermarkView alloc] initWithFrame: self.bounds];
     self.backgroundView = watermarkView;
+    self.backgroundColor = [UIColor lightGrayColor];
+
 }
 
 @end

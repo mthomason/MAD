@@ -20,6 +20,11 @@
     - (void)collectionView:(UICollectionView *)collectionView
                 didChangeNumberOfItemsSelected:(NSNumber *)numberOfItemsSelected;
 
+    - (void)actionEmail:(id)sender;
+    - (void)actionRename:(id)sender;
+    - (void)actionDuplicate:(id)sender;
+    - (void)actionActivateEditMode:(id)sender;
+
 @end
 
 #endif /* MADFileExplorerViewDelegateProtocol_h */
