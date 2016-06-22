@@ -13,12 +13,7 @@
 
 @implementation MADDocumentOperationCloseDocument
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
-
 - (void)execute {
-
 
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -28,7 +23,6 @@
             break;
         }
     }
-
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;

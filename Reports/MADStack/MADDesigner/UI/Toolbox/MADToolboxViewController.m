@@ -49,6 +49,16 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 @implementation MADToolboxViewController
 
++ (void)initialize {
+    [super initialize];
+    if (self == [MADToolboxViewController class]) {
+        UISegmentedControl *segmentedControl;
+        id controlClass = [UINavigationBar class];
+        segmentedControl = [UISegmentedControl appearanceWhenContainedIn:controlClass, nil];
+        segmentedControl.tintColor = [UIColor whiteColor];
+    }
+}
+
 - (void)dealloc {
 
     [self removeObserver: self

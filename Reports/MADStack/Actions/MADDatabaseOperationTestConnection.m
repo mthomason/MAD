@@ -38,10 +38,6 @@
 
 @implementation MADDatabaseOperationTestConnection
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
-
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
     if (self = [super init]) {
         _databaseConnection = connection;

@@ -11,7 +11,6 @@
 
 #import <UIKit/UICollectionViewCell.h>
 
-@protocol MTDocumentCellProtocol;
 @protocol UIGestureRecognizerDelegate;
 
 @class MADCollectionViewCellDocument;
@@ -31,7 +30,7 @@
 
     @property (nonatomic, weak, readonly) UIActivityIndicatorView *activityIndicator;
 
-    @property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
+    @property (nonatomic, weak) id <UIGestureRecognizerDelegate> delegate;
 
     + (UIImage *)newDefaultThumbnail;
 

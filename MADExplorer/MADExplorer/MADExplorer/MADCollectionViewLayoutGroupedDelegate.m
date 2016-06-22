@@ -41,6 +41,9 @@
     
 }*/
 
+typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
+typedef NSMutableDictionary <NSNumber *, UITapGestureRecognizer *>       MADMutableMapGesturesTap;
+
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
 
@@ -61,8 +64,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
-    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> *longPressGestures;
-    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, UITapGestureRecognizer *> *tapGestures;
+    @property (nonatomic, strong) MADMutableMapGesturesLongPress *longPressGestures;
+    @property (nonatomic, strong) MADMutableMapGesturesTap *tapGestures;
 
 @end
 
@@ -105,11 +108,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         
         _editing = NO;
         
-        NSMutableDictionary *gestures = [[NSMutableDictionary alloc] init];
+        MADMutableMapGesturesLongPress *gestures = [[MADMutableMapGesturesLongPress alloc] init];
         self.longPressGestures = gestures;
 
-        gestures = [[NSMutableDictionary alloc] init];
-        self.tapGestures = gestures;
+        MADMutableMapGesturesTap *taps = [[MADMutableMapGesturesTap alloc] init];
+        self.tapGestures = taps;
         
     }
     return self;
@@ -146,6 +149,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
@@ -204,34 +208,26 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
-    
-    @autoreleasepool {
-        NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
-        NSString *path = thumbnailUrl.path;
-        if (!path) goto END_ReadThumbnail;
-        
-        {
+
+    NSURL *fileURL = metadata.URL.copy;
+    dispatch_block_t read_iamge = ^{
+        @autoreleasepool {
+            
+            NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:fileURL];
+            NSString *path = thumbnailUrl.path;
             NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
             UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-            
-            if (image != nil) {
+            if (image == nil) image = [MADCollectionViewCellDocument newDefaultThumbnail];
+            dispatch_sync(dispatch_get_main_queue(), ^{
                 cell.imagePreview.image = image;
-            } else {
-                image = [MADCollectionViewCellDocument newDefaultThumbnail];
-                cell.imagePreview.image = image;
-            }
-            image = nil;
-            imageData = nil;
+            });
         }
-        
-    END_ReadThumbnail:;
-    }
+    };
     
-    if (_editing) {
-        [cell startWobble];
-    } else {
-        [cell stopWobble];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
+    
+    if (_editing) [cell startWobble];
+    else [cell stopWobble];
     
 }
 
@@ -442,18 +438,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
     [delegate collectionView:collectionView didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
-    /*
-    NSInvocationOperation *operations;
-    SEL selector = @selector(collectionView:didChangeNumberOfItemsSelected:);
-    if ([delegate respondsToSelector:selector]) {
-        NSMethodSignature *signature = [delegate methodSignatureForSelector:selector];
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        [invocation setArgument:&collectionView atIndex:2];
-        NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:self.numberOfItemsSelected];
-        [invocation setArgument:&count atIndex:3];
-        operations = [[NSInvocationOperation alloc] initWithInvocation:invocation];
-        [[NSOperationQueue mainQueue] addOperation:operations];
-    }*/
 }
 
 - (void)openURL:(NSURL *)url {

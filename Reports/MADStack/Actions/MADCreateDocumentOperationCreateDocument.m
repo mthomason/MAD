@@ -26,7 +26,7 @@
 @implementation MADCreateDocumentOperationCreateDocument
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -57,7 +57,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (_url == nil) {
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {

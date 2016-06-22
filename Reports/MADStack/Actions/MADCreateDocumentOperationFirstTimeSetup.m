@@ -34,7 +34,7 @@
 @implementation MADCreateDocumentOperationFirstTimeSetup
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)init {
@@ -52,7 +52,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -71,7 +71,8 @@
         doc.documentObjectID = rptqDocument.objectID;
 
         NSError *error = nil;
-        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
+        [private save:&error];
+//        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
     }];
 
     [self finish];

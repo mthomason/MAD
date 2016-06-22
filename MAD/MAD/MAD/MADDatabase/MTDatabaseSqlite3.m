@@ -426,7 +426,7 @@ void sqliteLog(void *foo, const char* statement) {
                          file:(NSString *)fileName
                    lineNumber:(NSInteger)line
                   description:(NSString *)format {
-    NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
+    //NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
 }
 
 + (void)executeQueryWithSql:(NSString *)queryString

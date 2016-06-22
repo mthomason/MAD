@@ -11,7 +11,6 @@
 #endif
 
 #import "MTCollectionViewCellDocument.h"
-#import "MTDocumentCellProtocol.h"
 #import "NSAttributedString+FileExplorer.h"
 
 #import <QuartzCore/CALayer.h>
@@ -47,6 +46,8 @@ float wobbleFactor() {
 
 @interface MADCollectionViewCellDocument () {
     bool _wobbling;
+  @protected
+    UIView * _selectedBackgroundView;
 }
 
     @property (nonatomic, readwrite, copy) UIColor *colorTextNormal;
@@ -57,6 +58,14 @@ float wobbleFactor() {
 @end
 
 @implementation MADCollectionViewCellDocument
+
+- (UIView *)selectedBackgroundView {
+    if (_selectedBackgroundView == nil) {
+        _selectedBackgroundView = [[MADBackgroundViewSelected alloc] initWithFrame:self.contentView.frame];
+        self.selectedBackgroundView = _selectedBackgroundView;
+    }
+    return _selectedBackgroundView;
+}
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
@@ -95,46 +104,11 @@ float wobbleFactor() {
     return result;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self commonInitWithFrame:self.frame];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self commonInitWithFrame:frame];
-    }
-    return self;
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        [self commonInitWithFrame:self.frame];
-    }
-    return self;
-}
-
-- (void)commonInitWithFrame:(CGRect)frame {
-    UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:frame];
-    self.selectedBackgroundView = selectedBackground;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    [super willMoveToSuperview:newSuperview];
-}
-
-- (void)didMoveToSuperview {
-    [super didMoveToSuperview];
-}
-
 - (void)awakeFromNib {
     
     _wobbling = false;
     
-    UIColor *colorTextSelected = [UIColor lightTextColor];
-    self.colorTextSelected = colorTextSelected.copy;
+    self.colorTextSelected = [UIColor lightTextColor];
     
     UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
     self.colorTextNormal = colorTextNormal.copy;
@@ -142,7 +116,6 @@ float wobbleFactor() {
     self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    //UIColor *color = [UIColor darkGrayColor];
     UIColor *clearColor = [UIColor clearColor];
     UIColor *lightGrayColor = [UIColor lightGrayColor];
     
@@ -155,7 +128,6 @@ float wobbleFactor() {
     
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     self.labelTitle.font = font;
-    //[self.labelTitle setNeedsLayout];
     
     self.labelTitleSub.textColor = lightGrayColor;
     self.labelTitleSub.clipsToBounds = NO;
@@ -193,12 +165,6 @@ float wobbleFactor() {
     [self.progressViewUpload removeMotionEffect:effect];
 }
 
-- (void)setDelegate:(id<MTDocumentCellProtocol, UIGestureRecognizerDelegate>)delegate {
-    if (_delegate != delegate) {
-        _delegate = delegate;
-    }
-}
-
 - (void)setNeedsLayout {
     [super setNeedsLayout];
     [_labelTitle setNeedsLayout];
@@ -224,14 +190,6 @@ float wobbleFactor() {
     NSString *text = self.labelTitle.text.copy;
     [self setText: text];
 }
-
-/*- (BOOL)becomeFirstResponder {
-    return YES;
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}*/
 
 - (void)startWobble {
     if (_wobbling) return;

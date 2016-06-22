@@ -13,10 +13,6 @@
 
 @implementation MADCreateDocumentOperationSaveAndCloseNewDocument
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
-
 - (BOOL)isAsynchronous {
     return YES;
 }

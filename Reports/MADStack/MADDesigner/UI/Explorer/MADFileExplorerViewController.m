@@ -36,7 +36,6 @@
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/NSURL+Document.h>
 
-#import <MADExplorer/MTDocumentCellProtocol.h>
 #import <MADExplorer/MADDocumentState.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADActiveDocumentManager.h>
@@ -139,7 +138,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         UITextFieldDelegate,
         UISearchBarDelegate,
         UIPopoverControllerDelegate,
-        MTDocumentCellProtocol,
         UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
         MADDocumentManagerProtocol,
@@ -280,11 +278,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         controlClass = [UIToolbar class];
         barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
         barButtonItem.tintColor = whiteColor.copy;
-
-        UISegmentedControl *segmentedControl;
-        controlClass = [UINavigationBar class];
-        segmentedControl = [UISegmentedControl appearanceWhenContainedIn:controlClass, nil];
-        segmentedControl.tintColor = whiteColor.copy;
         
         id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                   whiteColor, NSForegroundColorAttributeName, nil];
@@ -316,20 +309,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     if (self = [super initWithCoder:aDecoder]) {
     
         _shouldShowAddDocumentPopover = YES;
-        
-        self.getUserCloudPrefsFirstCall = YES;
-
-        MADDocumentManager *documentManager = [[MADDocumentManager alloc] init];
-        documentManager.delegate = self;
-        self.documentManager = documentManager;
-        
-        MADActiveDocumentManager *openFiles;
-        openFiles = [[MADActiveDocumentManager alloc] init];
-        self.activeDocumentManager = openFiles;
-
-        MADProgressView *progressView;
-        progressView= [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
-        self.progressViewFileManager = progressView;
+        _getUserCloudPrefsFirstCall = YES;
 
     }
     return self;
@@ -341,8 +321,18 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    MADDocumentManager *documentManager = [[MADDocumentManager alloc] init];
+    documentManager.delegate = self;
+    self.documentManager = documentManager;
     
+    MADActiveDocumentManager *openFiles;
+    openFiles = [[MADActiveDocumentManager alloc] init];
+    self.activeDocumentManager = openFiles;
     
+    MADProgressView *progressView;
+    progressView= [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
+    self.progressViewFileManager = progressView;
+        
     // set delegates
     MADFileExplorerViewDelegate *layoutGroupedDelegate;
     layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
@@ -587,13 +577,11 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView
      numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)section);
     return (NSInteger)_documentManager.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
     MADCollectionViewCellDocument *cell;
@@ -958,8 +946,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
-    NSLog(@"Ubiquity did indeed change..... %@", notification.userInfo);
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     MADDocumentManager *documentManager = self.documentManager;
     void (^handleSignout)(UIAlertAction *action) = ^(UIAlertAction *action) {
@@ -967,8 +953,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     };
     
     void (^ubiquityIdentityDidChange)(void) = ^ {
-        
-        NSLog(@"%s", __PRETTY_FUNCTION__);
         
         UINavigationController *navController;
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;

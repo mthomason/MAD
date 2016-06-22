@@ -27,7 +27,7 @@
 @implementation MADCreateDocumentOperationAddConnection
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)init {
@@ -45,7 +45,8 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -57,7 +58,7 @@
         
     }
 
-    document.activeDocumentModel;
+    [document activeDocumentModel];
     MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
 
     if (database) {

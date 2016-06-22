@@ -19,6 +19,5 @@ FOUNDATION_EXPORT const unsigned char MADExplorerVersionString[];
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADBackgroundViewSelected.h>
 #import <MADExplorer/MADFileLocationManager.h>
-#import <MADExplorer/MTDocumentCellProtocol.h>
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
 #import <MADExplorer/MADSaveFileProtocol.h>

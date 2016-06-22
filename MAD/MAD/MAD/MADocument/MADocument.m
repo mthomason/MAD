@@ -139,12 +139,12 @@ static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
 }
 
 static void png_error_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"PNG: %s", message);
+    //NSLog(@"PNG: %s", message);
     longjmp(png_jmpbuf(png_ptr), 1);
 }
 
 static void png_warn_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"%s", message);
+    //NSLog(@"%s", message);
 }
 
 int process_data(png_structp *png_ptr, png_infop *info_ptr,
@@ -557,7 +557,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 READ_FAIL:;
     
     {
-        NSLog(@"%s", strerror(errno));
+        //NSLog(@"%s", strerror(errno));
         
         NSError * __autoreleasing *errorReading = NULL;
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
@@ -573,9 +573,7 @@ READ_FAIL:;
                                   options: NSFileWrapperWritingAtomic
                       originalContentsURL: url
                                     error: error];
-        if (!success) {
-            NSLog(@"Break");
-        }
+
         NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
     }
     
@@ -613,13 +611,13 @@ READ_END:;
     //if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [NSError newErrorFailedToOpenDocument];
-            NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
+            //NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
             //[NSError presentError: err
-            NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
+            //NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
             //     onViewController: nil
             //           completion: NULL];
         } else {
-            NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
+            //NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
             //[NSError presentError: error
             //     onViewController: nil
             //           completion: NULL];
