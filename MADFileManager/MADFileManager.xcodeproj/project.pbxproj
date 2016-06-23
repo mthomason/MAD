@@ -38,6 +38,10 @@
 		4CB2D3D11BA407FB00AA473B /* MADStorageState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */; };
 		4CC1C6F91CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC1C6F71CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h */; };
 		4CC1C6FA1CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC1C6F81CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m */; };
+		4CCB735E1D1ADE6000D7AE84 /* MADMetaDataCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */; };
+		4CCB735F1D1ADE6000D7AE84 /* MADMetaDataCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */; };
+		4CCB73621D1ADE6A00D7AE84 /* MADMetaDataLocal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB73601D1ADE6A00D7AE84 /* MADMetaDataLocal.h */; };
+		4CCB73631D1ADE6A00D7AE84 /* MADMetaDataLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB73611D1ADE6A00D7AE84 /* MADMetaDataLocal.m */; };
 		4CE1CA4B1CFAF74A001BD2D5 /* MADCloudManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */; };
 		4CE1CA4C1CFAF74A001BD2D5 /* MADCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */; };
 		4CE1CA4E1CFB70BA001BD2D5 /* MADAppStorageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,6 +92,10 @@
 		4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADStorageState.m; path = MADFileManager/MADStorageState.m; sourceTree = "<group>"; };
 		4CC1C6F71CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ConvenienceConstructors.h"; path = "MADFileManager/Categories/NSURL+ConvenienceConstructors.h"; sourceTree = "<group>"; };
 		4CC1C6F81CFDDDEC006F1546 /* NSURL+ConvenienceConstructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ConvenienceConstructors.m"; path = "MADFileManager/Categories/NSURL+ConvenienceConstructors.m"; sourceTree = "<group>"; };
+		4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaDataCloud.h; path = MADFileManager/MADMetaDataCloud.h; sourceTree = "<group>"; };
+		4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMetaDataCloud.m; path = MADFileManager/MADMetaDataCloud.m; sourceTree = "<group>"; };
+		4CCB73601D1ADE6A00D7AE84 /* MADMetaDataLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaDataLocal.h; sourceTree = "<group>"; };
+		4CCB73611D1ADE6A00D7AE84 /* MADMetaDataLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaDataLocal.m; sourceTree = "<group>"; };
 		4CE1CA451CF87323001BD2D5 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 		4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudManager.h; path = MADFileManager/MADCloudManager.h; sourceTree = "<group>"; };
 		4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCloudManager.m; path = MADFileManager/MADCloudManager.m; sourceTree = "<group>"; };
@@ -206,6 +214,10 @@
 				4CB2D3CE1BA407FB00AA473B /* MADStorageState.h */,
 				4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */,
 				4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */,
+				4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */,
+				4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */,
+				4CCB73601D1ADE6A00D7AE84 /* MADMetaDataLocal.h */,
+				4CCB73611D1ADE6A00D7AE84 /* MADMetaDataLocal.m */,
 			);
 			name = MADFileManager;
 			sourceTree = "<group>";
@@ -264,7 +276,9 @@
 			files = (
 				4C41DA861BA22C5700FF63EC /* MADFileUtilities.h in Headers */,
 				4CB2D3D01BA407FB00AA473B /* MADStorageState.h in Headers */,
+				4CCB73621D1ADE6A00D7AE84 /* MADMetaDataLocal.h in Headers */,
 				4C4754551CF4178E00BC9E02 /* MADFilesControllerDelegate.h in Headers */,
+				4CCB735E1D1ADE6000D7AE84 /* MADMetaDataCloud.h in Headers */,
 				4C21E3FB1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h in Headers */,
 				4C41DA8D1BA22C5700FF63EC /* MADCloudFileCoordinator.h in Headers */,
 				4C4754531CF4160F00BC9E02 /* MADFileCoordinatorProtocol.h in Headers */,
@@ -381,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C41DA831BA22C5700FF63EC /* MADFileInfo.m in Sources */,
+				4CCB73631D1ADE6A00D7AE84 /* MADMetaDataLocal.m in Sources */,
 				4C41DA7D1BA22C5700FF63EC /* MADFile.m in Sources */,
 				4C41DA8C1BA22C5700FF63EC /* MADLocalFileCoordinator.m in Sources */,
 				4C41DA851BA22C5700FF63EC /* MADFilesController.m in Sources */,
@@ -392,6 +407,7 @@
 				4C4144181CCDF68A0050BAF6 /* MADFileCoordinator.m in Sources */,
 				4C41DA891BA22C5700FF63EC /* MADDirectoryMonitor.m in Sources */,
 				4CB2D3D11BA407FB00AA473B /* MADStorageState.m in Sources */,
+				4CCB735F1D1ADE6000D7AE84 /* MADMetaDataCloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

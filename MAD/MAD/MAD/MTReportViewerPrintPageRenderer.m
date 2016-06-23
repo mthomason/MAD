@@ -191,10 +191,10 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f
+    UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0000f/256.0000f
                                            green:170.0000f/256.0000f
                                             blue:170.0000f/256.0000f alpha:0.8000f];
-    UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f
+    UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0000f/256.0000f
                                                green:85.0000f/256.0000f
                                                 blue:85.0000f/256.0000f alpha:0.8000f];
     NSNumber *strokeWidth = @3.0000f;

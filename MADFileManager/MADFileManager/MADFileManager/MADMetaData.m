@@ -11,12 +11,23 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSMetadataAttributes.h>
 #import <Foundation/NSMetadata.h>
+#import <Foundation/NSException.h>
 #import <MobileCoreServices/UTType.h>
 #import <sys/stat.h>
+#import "MADMetaDataLocal.h"
+#import "MADMetaDataCloud.h"
+
+NSException *exceptionNotImplemented(SEL);
+NSException *exceptionNotImplemented(SEL thwoingSelector) {
+    NSString *functionName = NSStringFromSelector(thwoingSelector);
+    NSString *format = @"You must override %@ in a subclass";
+    NSString *message = [[NSString alloc] initWithFormat:format, functionName];
+    return [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:message
+                                 userInfo:nil];
+}
 
 @interface MADMetaData ()
-
-    @property (nonatomic, copy, readwrite) NSURL *URL;
 
     @property (nonatomic, strong) NSMetadataItem *metadataItem;
     @property (nonatomic, strong) NSDictionary *attributes;
@@ -26,250 +37,13 @@
 @implementation MADMetaData
 
 - (instancetype)initWithURL:(NSURL *)url {
-
-    if (self = [super init]) {
-        
-        NSString *path;
-        if ((path = url.path)) {
-            NSDictionary *attributes;
-            NSError *__autoreleasing * error = nil;
-            attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                          error: error];
-            _attributes = attributes;
-        }
-
-        _URL = url.copy;
-        
-    }
-    return self;
+    id metadata = [[MADMetaDataLocal alloc] initWithURL:url];
+    return metadata;
 }
 
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
-
-    if (self = [super init]) {
-        self.metadataItem = item;
-        
-        NSURL *url = [item valueForAttribute: NSMetadataItemURLKey];
-        _URL = url.copy;
-        
-    }
-    return self;
-}
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = self.metadataItem == nil ?
-                [[[self class] alloc] initWithURL: self.URL] :
-                [[[self class] alloc] initWithMetadataItem:self.metadataItem];
-    return copy;
-}
-
-- (NSData *)fileSystemFileCreationDate {
-    id date = _metadataItem ? [_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] :
-                              _attributes[NSFileCreationDate];
-    return date;
-}
-
-- (NSData *)fileSystemContentChangeDate {
-    id date = _metadataItem ?
-                [_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] :
-                _attributes[NSFileModificationDate];
-    return date;
-}
-
-- (BOOL)isUbiquitous {
-    if (_metadataItem) {
-        NSNumber *isUbiquitous;
-        isUbiquitous = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
-        return isUbiquitous.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (NSError *)ubiquitousItemUploadingError {
-    return self.metadataItem ?
-        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey] :
-        nil;
-}
-
-- (NSError *)ubiquitousItemDownloadingError {
-    return self.metadataItem ?
-        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey] :
-        nil;
-}
-
-- (NSString *)ubiquitousItemDownloadingStatus {
-    return self.metadataItem ?
-        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] :
-        NSMetadataUbiquitousItemDownloadingStatusCurrent;
-}
-
-- (NSString *)name {
-    NSString *displayName;
-    if (self.metadataItem) {
-        displayName = [self.metadataItem valueForAttribute: NSMetadataItemDisplayNameKey];
-    } else {
-        NSString *path;
-        if ((path = _URL.path)) {
-            displayName = [[NSFileManager defaultManager] displayNameAtPath:path];
-        } else {
-            displayName = @"";
-        }
-    }
-    return displayName.stringByDeletingPathExtension;
-}
-
-- (NSString *)fileSystemName {
-    id name = _metadataItem ? [_metadataItem valueForAttribute: NSMetadataItemFSNameKey] :
-                              _URL.path.lastPathComponent;
-    return  name;
-}
-
-- (unsigned long long)fileSystemFileSize {
-    NSNumber *fileSize;
-    fileSize = _metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey] :
-                               (self.attributes)[NSFileSize];
-    return fileSize.unsignedLongLongValue;
-}
-
-- (NSString *)contentType {
-    if (_metadataItem) {
-        id key = [self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey];
-        return key;
-    } else {
-        NSString * __nonnull pathExtension = (_URL.pathExtension) ?
-                                (NSString * __nonnull)_URL.pathExtension :@"";
-        __nullable CFStringRef cfkey;
-        cfkey = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-                                                      (__bridge CFStringRef)pathExtension,
-                                                      NULL);
-        id key = CFBridgingRelease(cfkey);
-        return key;
-    }
-}
-
-- (NSString *)ubiquitousItemContainerDisplayName {
-    if (_metadataItem) {
-        NSString *name;
-        name = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
-        return name;
-    } else {
-        NSString *path = _URL.path;
-        return path.lastPathComponent;
-    }
-}
-
-- (NSURL *)ubiquitousItemURLInLocalContainer {
-    id url;
-    url = _metadataItem ?
-        [_metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey] :
-        _URL;
-    return url;
-}
-
-- (BOOL)ubiquitousItemDownloadRequested {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
-        return result.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)ubiquitousItemIsDownloading {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
-        return result.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)ubiquitousItemIsUploading {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey];
-        return result.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)ubiquitousItemIsUploaded {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey];
-        return result.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (double)ubiquitousItemPercentUploaded {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
-        return result.doubleValue;
-    } else {
-        return 100.0;
-    }
-}
-
-- (double)ubiquitousItemPercentDownloaded {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
-        return result.doubleValue;
-    } else {
-        return 100.0;
-    }
-}
-
-- (BOOL)ubiquitousItemIsExternalDocument {
-    if (_metadataItem) {
-        NSNumber *result;
-        result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
-        return result.boolValue;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded {
-    if (self.ubiquitous) {
-        NSString *status = self.ubiquitousItemDownloadingStatus;
-        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
-                YES : NO;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isUbiquitousItemDownloadingStatusDownloaded {
-    if (self.ubiquitous) {
-        NSString *status = self.ubiquitousItemDownloadingStatus;
-        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
-                YES : NO;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isUbiquitousItemDownloadingStatusCurrent {
-    if (self.ubiquitous) {
-        NSString *status = self.ubiquitousItemDownloadingStatus;
-        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
-                YES : NO;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isSyncing {
-    return self.ubiquitous &&
-            (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
+    id metadata = [[MADMetaDataCloud alloc] initWithMetadataItem:item];
+    return metadata;
 }
 
 + (MADMetaDataArray *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
@@ -281,9 +55,57 @@
     return madMetaDataItems;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone { @throw exceptionNotImplemented(_cmd); }
+- (NSData *)fileSystemFileCreationDate { @throw exceptionNotImplemented(_cmd); }
+- (NSData *)fileSystemContentChangeDate { @throw exceptionNotImplemented(_cmd); }
+- (BOOL)isUbiquitous { @throw exceptionNotImplemented(_cmd); }
+
+- (NSError *)ubiquitousItemUploadingError { @throw exceptionNotImplemented(_cmd); }
+
+- (NSError *)ubiquitousItemDownloadingError { @throw exceptionNotImplemented(_cmd); }
+
+- (NSString *)ubiquitousItemDownloadingStatus { @throw exceptionNotImplemented(_cmd); }
+
+- (NSString *)name { @throw exceptionNotImplemented(_cmd); }
+
+- (NSString *)fileSystemName { @throw exceptionNotImplemented(_cmd); }
+
+- (unsigned long long)fileSystemFileSize { @throw exceptionNotImplemented(_cmd); }
+
+- (NSString *)contentType { @throw exceptionNotImplemented(_cmd); }
+
+- (NSString *)ubiquitousItemContainerDisplayName { @throw exceptionNotImplemented(_cmd); }
+
+- (NSURL *)ubiquitousItemURLInLocalContainer { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)ubiquitousItemDownloadRequested { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)ubiquitousItemIsDownloading { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)ubiquitousItemIsUploading { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)ubiquitousItemIsUploaded { @throw exceptionNotImplemented(_cmd); }
+
+- (double)ubiquitousItemPercentUploaded { @throw exceptionNotImplemented(_cmd); }
+
+- (double)ubiquitousItemPercentDownloaded { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)ubiquitousItemIsExternalDocument { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)isUbiquitousItemDownloadingStatusDownloaded { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)isUbiquitousItemDownloadingStatusCurrent { @throw exceptionNotImplemented(_cmd); }
+
+- (BOOL)isSyncing {
+    return self.ubiquitous &&
+            (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
+}
+
 - (unsigned long long)fileSystemFileNumber {
     NSString *path;
-    if ((path = _URL.path)) {
+    if ((path = self.URL.path)) {
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
                                                                                     error: &error];
@@ -296,11 +118,11 @@
 
 - (unsigned long long)fileSystemNumber {
     NSString *path;
-    if ((path = _URL.path)) {
+    if ((path = self.URL.path)) {
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
                                                                                     error: &error];
-        NSNumber * __weak fsf = attributes[NSFileSystemNumber];
+        NSNumber *fsf = attributes[NSFileSystemNumber];
         return fsf.unsignedLongLongValue;
     } else {
         return 0;

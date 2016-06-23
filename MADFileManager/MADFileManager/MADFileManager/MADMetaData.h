@@ -29,8 +29,8 @@ typedef NSArray <MADMetaData *> MADMetaDataArray;
     - (unsigned long long)fileSystemFileNumber;
     - (unsigned long long)fileSystemNumber;
 
-    @property (nonatomic, copy, readonly) NSURL *URL;
-    @property (readonly) NSString  *fileSystemName;
+    @property (nonatomic, readonly) NSURL *URL;
+    @property (nonatomic, readonly) NSString  *fileSystemName;
     @property (readonly) NSString  *name;
 
     @property (readonly) unsigned long long fileSystemFileSize;

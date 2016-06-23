@@ -101,7 +101,8 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
     return self;
 }
 
-- (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
+- (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers
+                               completion:(MTBlockCompletion)completion {
     if (self.initializeProductsCompletion == nil && self.products.count == 0) {
         
         self.initializeProductsCompletion = [completion copy];

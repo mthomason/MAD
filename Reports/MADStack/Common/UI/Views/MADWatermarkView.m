@@ -167,10 +167,12 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     NSUInteger counter[2] = {0, 0};
     CGRect logoRect[2];
 
-    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string, UIView * const __strong *backgroundView) {
+    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string,
+                                      UIView * const __strong *backgroundView) {
         UILabel *l2 = [[UILabel alloc] initWithFrame:labelFrame];
         l2.attributedText = string;
-        l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+        l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
+                              UIViewAutoresizingFlexibleBottomMargin;
         [*backgroundView addSubview:l2];
     };
     

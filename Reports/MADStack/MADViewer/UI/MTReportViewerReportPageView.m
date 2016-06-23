@@ -112,7 +112,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
                                                                       CGPointZero.y + PageCounterBuffer,
                                                                       PageCounterWidth,
                                                                       PageCounterHeight)];
-        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
+        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
         numberView.backgroundColor = bgColor;
         numberView.userInteractionEnabled = NO;
         numberView.alpha = 0.0000f;
@@ -160,7 +160,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         CGRect viewFrame = CGRectMake(self.frame.size.width - 220.0000f, self.frame.size.height - 23.0000f,
                                       220.0000f, 23.0000f);
         UIView *view = [[UIView alloc] initWithFrame:viewFrame];
-        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
+        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
         view.backgroundColor = bgColor;
         view.userInteractionEnabled = NO;
         view.alpha = 0.0000f;

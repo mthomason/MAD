@@ -33,7 +33,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
     @property (nonatomic, strong) NSMetadataQuery *metadataQuery;
     @property (nonatomic, strong) dispatch_queue_t documentsDirectoryQueue;
-    @property (nonatomic, strong) void (^firstQueryUpdateHandler)(void);
+    @property (nonatomic, copy) void (^firstQueryUpdateHandler)(void);
 
 @end
 
@@ -275,25 +275,28 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
                                                         object: nil];
     
-    NSArray *results = [NSArray arrayWithArray:_metadataQuery.results];
-    NSArray *i = [MADMetaData madMetaDataItemsForNSMetadataItems:results];
+    NSArray *i = [MADMetaData madMetaDataItemsForNSMetadataItems:_metadataQuery.results];
     
-    NSArray *inserted = [NSArray arrayWithArray:i];
-    NSArray *removed = @[];
-    NSArray *updated = @[];
+    id inserted = [[NSArray alloc] initWithArray:i],
+       removed = [[NSArray alloc] init],
+       updated = [[NSArray alloc] init];
 
     NSMetadataQuery __weak *wmetadataQuery = _metadataQuery;
+    
+    void (^ __weak weakQueryUpdateHandler)(void) = _firstQueryUpdateHandler;
+    void (^handleDidUpdateCompletion)(BOOL, NSError *);
+    handleDidUpdateCompletion = ^(BOOL success, NSError *error) {
+        [wmetadataQuery enableUpdates];
+        void (^firstQueryUpdateHandler)(void) = weakQueryUpdateHandler;
+        if (firstQueryUpdateHandler) {
+            firstQueryUpdateHandler();
+            firstQueryUpdateHandler = nil;
+        }
+    };
     [_delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                     removedMetaDatum: removed
                                                     updatedMetaDatum: updated
-                                                          completion: ^(BOOL success,
-                                                                        NSError *error) {
-        [wmetadataQuery enableUpdates];
-    }];
-    if (_firstQueryUpdateHandler) {
-        _firstQueryUpdateHandler();
-        _firstQueryUpdateHandler = nil;
-    }
+                                                          completion: handleDidUpdateCompletion];
 }
 
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {
@@ -305,15 +308,13 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey],
     updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
     
-    NSArray *insertedMetadata, *removedMetadata, *updatedMetadata;
-    insertedMetadata = insertedMetadataItemsOrNil ?: [[NSArray alloc] init];
-    removedMetadata = removedMetadataItemsOrNil ?: [[NSArray alloc] init];
-    updatedMetadata = updatedMetadataItemsOrNil ?: [[NSArray alloc] init];
+    NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: [[NSArray alloc] init],
+            *removedMetadata  = removedMetadataItemsOrNil  ?: [[NSArray alloc] init],
+            *updatedMetadata  = updatedMetadataItemsOrNil  ?: [[NSArray alloc] init];
     
-    NSArray *inserted, *removed, *updated;
-    inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata];
-    removed = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata];
-    updated = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
+    NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata],
+            *removed  = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata],
+            *updated  = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
 
     NSMetadataQuery __weak *metadataQuery = self.metadataQuery;
     [self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted

@@ -14,7 +14,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        UIColor *backgroundColor = [UIColor colorWithWhite: 0.0000f
+        UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0000f
                                                      alpha: 0.3333f];
         self.backgroundColor = backgroundColor;
         self.alpha = 0.0000f;

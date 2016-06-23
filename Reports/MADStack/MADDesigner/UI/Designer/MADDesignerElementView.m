@@ -129,8 +129,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 - (void)setAlpha:(CGFloat)alpha {
     super.alpha = alpha;
     
-    UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f
-                                                     blue:1.0000f alpha:alpha];
+    UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed: 1.0000f
+                                                           green: 1.0000f
+                                                            blue: 1.0000f
+                                                           alpha: alpha];
     self.backgroundColor = labelBackgroundColor;
 }
 
@@ -157,10 +159,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
         MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
         for (UIView *view in resizeHandles.resizeHandles) {
-            //UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesturePanResizeHandle:)];
-            //[panGesture setDelegate:self];
-            //[view addGestureRecognizer:panGesture];
-            //view.userInteractionEnabled = YES;
             [self addSubview:view];
         }
         self.resizeHandles = resizeHandles;
@@ -185,12 +183,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     }
 }
 
-- (void)showResizeHandles {
-    //id resizeView;
-    //for (resizeView in self.resizeHandles.resizeHandles) {
-    //    ((UIView *)resizeView).hidden = NO;
-    //}
-}
+- (void)showResizeHandles { }
 
 - (void)hideResizeHandles {
     id resizeView;
@@ -257,13 +250,22 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 #pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
-    [UIView animateWithDuration: 0.6666f delay: 0.3333f options: UIViewAnimationOptionAutoreverse
-                     animations: ^{
-                         self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
-                     } completion:^(BOOL finished) {
-                         if (finished) self.backgroundColor = [UIColor clearColor];
-                         completion(finished);
-                     }];
+
+
+    void (^animates)(void);
+    animates = ^{
+        self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
+    };
+    void (^handleAnimatesCompletion)(BOOL);
+    handleAnimatesCompletion = ^(BOOL finished) {
+        if (finished) self.backgroundColor = [UIColor clearColor];
+        completion(finished);
+    };
+    [UIView animateWithDuration: 0.6666f
+                          delay: 0.3333f
+                        options: UIViewAnimationOptionAutoreverse
+                     animations: animates
+                     completion: handleAnimatesCompletion];
 }
 
 - (void)setWobbleRunning:(BOOL)running {

@@ -9,163 +9,373 @@
 #import "UIColor+PaperPatterns.h"
 #import <UIKit/UIImage.h>
 
+@implementation UIImage (PaperPatterns)
+
++ (instancetype)newImagePaperHomemade {
+    UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
+    return image;
+}
+
++ (instancetype)newImagePaperAqua {
+    return [UIImage imageNamed:@"UIImagePatternAqua"];
+}
++ (instancetype)newImagePaperBeigeWithWhiteFlecks {
+    return [UIImage imageNamed:@"UIImagePatternBeigeWithWhiteFlecks"];
+}
++ (instancetype)newImagePaperBlackWeave {
+    return [UIImage imageNamed:@"UIImagePatternBlackWeave"];
+}
++ (instancetype)newImagePaperBlueCrepe {
+    return [UIImage imageNamed:@"UIImagePatternBlueCrepe"];
+}
++ (instancetype)newImagePaperBlueSpecks {
+    return [UIImage imageNamed:@"UIImagePatternBlueSpecks"];
+}
++ (instancetype)newImagePaperBlueTextured {
+    return [UIImage imageNamed:@"UIImagePatternBlueTextured"];
+}
++ (instancetype)newImagePaperBlueVellum {
+    return [UIImage imageNamed:@"UIImagePatternBlueVellum"];
+}
++ (instancetype)newImagePaperBuffTextured {
+    return [UIImage imageNamed:@"UIImagePatternBuffTextured"];
+}
++ (instancetype)newImagePaperCharcoalFlecks {
+    return [UIImage imageNamed:@"UIImagePatternCharcoalFlecks"];
+}
++ (instancetype)newImagePaperCrepe {
+    return [UIImage imageNamed:@"UIImagePatternCrepe"];
+}
++ (instancetype)newImagePaperFiberDarkGray {
+    return [UIImage imageNamed:@"UIImagePatternFiberDarkGray"];
+}
++ (instancetype)newImagePaperFiber1 {
+    return [UIImage imageNamed:@"UIImagePatternFiber1"];
+}
++ (instancetype)newImagePaperFiber2 {
+    return [UIImage imageNamed:@"UIImagePatternFiber2"];
+}
++ (instancetype)newImagePaperGoldMetallic {
+    return [UIImage imageNamed:@"UIImagePatternGoldMetallic"];
+}
++ (instancetype)newImagePaperGoldParchment {
+    return [UIImage imageNamed:@"UIImagePatternGoldParchment"];
+}
++ (instancetype)newImagePaperGoldVellum {
+    return [UIImage imageNamed:@"UIImagePatternGoldVellum"];
+}
++ (instancetype)newImagePaperGraphPaper {
+    return [UIImage imageNamed:@"UIImagePatternGraphPaper"];
+}
++ (instancetype)newImagePaperGrayGranite {
+    return [UIImage imageNamed:@"UIImagePatternGrayGranite"];
+}
++ (instancetype)newImagePaperGreenAndBlack {
+    return [UIImage imageNamed:@"UIImagePatternGreenAndBlack"];
+}
++ (instancetype)newImagePaperGreenWithFibers {
+    return [UIImage imageNamed:@"UIImagePatternGreenWithFibers"];
+}
++ (instancetype)newImagePaperGreyVellum {
+    return [UIImage imageNamed:@"UIImagePatternGreyVellum"];
+}
++ (instancetype)newImagePaperKraftPaper {
+    return [UIImage imageNamed:@"UIImagePatternKraftPaper"];
+}
++ (instancetype)newImagePaperKraftPaper2 {
+    return [UIImage imageNamed:@"UIImagePatternKraftPaper2"];
+}
++ (instancetype)newImagePaperKraftPaperWaffle {
+    return [UIImage imageNamed:@"UIImagePatternKraftWaffle"];
+}
++ (instancetype)newImagePaperKraftPaperWaffle2 {
+    return [UIImage imageNamed:@"UIImagePatternKraftPaperWaffle"];
+}
++ (instancetype)newImagePaperLeaf {
+    return [UIImage imageNamed:@"UIImagePatternLeaf"];
+}
++ (instancetype)newImagePaperLined {
+    return [UIImage imageNamed:@"UIImagePatternLined"];
+}
++ (instancetype)newImagePaperLinen {
+    return [UIImage imageNamed:@"UIImagePatternLinen"];
+}
++ (instancetype)newImagePaperLinenWeave {
+    return [UIImage imageNamed:@"UIImagePatternLinenWeave"];
+}
++ (instancetype)newImagePaperMarbled {
+    return [UIImage imageNamed:@"UIImagePatternMarbled"];
+}
++ (instancetype)newImagePaperMarbled2 {
+    return [UIImage imageNamed:@"UIImagePatternMarbled2"];
+};
++ (instancetype)newImagePaperMetallicBlack {
+    return [UIImage imageNamed:@"UIImagePatternMetallicBlack"];
+}
++ (instancetype)newImagePaperMetallicFlecks {
+    return [UIImage imageNamed:@"UIImagePatternMetallicFlecks"];
+}
++ (instancetype)newImagePaperMetallicFlecks2 {
+    return [UIImage imageNamed:@"UIImagePatternMetallicFlecks2"];
+}
++ (instancetype)newImagePaperNotebook {
+    return [UIImage imageNamed:@"UIImagePatternNotebook"];
+}
++ (instancetype)newImagePaperPebbled {
+    return [UIImage imageNamed:@"UIImagePatternPebbled"];
+}
++ (instancetype)newImagePaperPeachPebbled {
+    return [UIImage imageNamed:@"UIImagePatternPeachPebbled"];
+}
++ (instancetype)newImagePaperPinkTextured {
+    return [UIImage imageNamed:@"UIImagePatternPinkTextured"];
+}
++ (instancetype)newImagePaperPinkWithFlecks {
+    return [UIImage imageNamed:@"UIImagePatternPinkWithFlecks"];
+}
++ (instancetype)newImagePaperRedTextured {
+    return [UIImage imageNamed:@"UIImagePatternRedTextured"];
+}
++ (instancetype)newImagePaperRedVellum {
+    return [UIImage imageNamed:@"UIImagePatternRedVellum"];
+}
++ (instancetype)newImagePaperSketchPaper {
+    return [UIImage imageNamed:@"UIImagePatternSketchPaper"];
+}
++ (instancetype)newImagePaperStationary {
+    return [UIImage imageNamed:@"UIImagePatternStationary"];
+}
++ (instancetype)newImagePaperTextured {
+    return [UIImage imageNamed:@"UIImagePatternTextured"];
+}
++ (instancetype)newImagePaperWhiteColumns {
+    return [UIImage imageNamed:@"UIImagePatternWhiteColumns"];
+}
++ (instancetype)newImagePaperWhiteDiagonal {
+    return [UIImage imageNamed:@"UIImagePatternWhiteDiagonal"];
+}
++ (instancetype)newImagePaperWhiteStationary {
+    return [UIImage imageNamed:@"UIImagePatternWhiteStationary"];
+}
++ (instancetype)newImagePaperWhiteTextured {
+    return [UIImage imageNamed:@"UIImagePatternWhiteTextured"];
+}
++ (instancetype)newImagePaperWhiteWithWoodFibers {
+    return [UIImage imageNamed:@"UIImagePatternWhiteWithWoodFibers"];
+}
++ (instancetype)newImagePaperYellowLined {
+    return [UIImage imageNamed:@"UIImagePatternYellowLined"];
+}
+
+@end
+
 @implementation UIColor (PaperPatterns)
 
-+ (UIColor *)paperHomemade {
-    UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
-    return [UIColor colorWithPatternImage:image];
++ (instancetype)newColorPaperHomemade {
+    UIImage *image = [UIImage newImagePaperHomemade];
+    return [[UIColor alloc] initWithPatternImage:image];
 }
-/*
-+ (instancetype)paperAqua {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternAqua"]];
+
++ (instancetype)newColorPaperAqua {
+    UIImage *image = [UIImage newImagePaperAqua];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBeigeWithWhiteFlecks {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBeigeWithWhiteFlecks"]];
++ (instancetype)newColorPaperBeigeWithWhiteFlecks {
+    UIImage *image = [UIImage newImagePaperBeigeWithWhiteFlecks];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBlackWeave {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlackWeave"]];
++ (instancetype)newColorPaperBlackWeave {
+    UIImage *image = [UIImage newImagePaperBlackWeave];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBlueCrepe {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueCrepe"]];
++ (instancetype)newColorPaperBlueCrepe {
+    UIImage *image = [UIImage newImagePaperBlueCrepe];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBlueSpecks {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueSpecks"]];
++ (instancetype)newColorPaperBlueSpecks {
+    UIImage *image = [UIImage newImagePaperBlueSpecks];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBlueTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueTextured"]];
++ (instancetype)newColorPaperBlueTextured {
+    UIImage *image = [UIImage newImagePaperBlueTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBlueVellum {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueVellum"]];
++ (instancetype)newColorPaperBlueVellum {
+    UIImage *image = [UIImage newImagePaperBlueVellum];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperBuffTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBuffTextured"]];
++ (instancetype)newColorPaperBuffTextured {
+    UIImage *image = [UIImage newImagePaperBuffTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperCharcoalFlecks {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternCharcoalFlecks"]];
++ (instancetype)newColorPaperCharcoalFlecks {
+    UIImage *image = [UIImage newImagePaperCharcoalFlecks];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperCrepe {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternCrepe"]];
++ (instancetype)newColorPaperCrepe {
+    UIImage *image = [UIImage newImagePaperCrepe];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperFiberDarkGray {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiberDarkGray"]];
++ (instancetype)newColorPaperFiberDarkGray {
+    UIImage *image = [UIImage newImagePaperFiberDarkGray];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperFiber1 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiber1"]];
++ (instancetype)newColorPaperFiber1 {
+    UIImage *image = [UIImage newImagePaperFiber1];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperFiber2 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiber2"]];
++ (instancetype)newColorPaperFiber2 {
+    UIImage *image = [UIImage newImagePaperFiber2];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGoldMetallic {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldMetallic"]];
++ (instancetype)newColorPaperGoldMetallic {
+    UIImage *image = [UIImage newImagePaperGoldMetallic];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGoldParchment {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldParchment"]];
++ (instancetype)newColorPaperGoldParchment {
+    UIImage *image = [UIImage newImagePaperGoldParchment];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGoldVellum {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldVellum"]];
++ (instancetype)newColorPaperGoldVellum {
+    UIImage *image = [UIImage newImagePaperGoldVellum];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGraphPaper {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGraphPaper"]];
++ (instancetype)newColorPaperGraphPaper {
+    UIImage *image = [UIImage newImagePaperGraphPaper];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGrayGranite {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGrayGranite"]];
++ (instancetype)newColorPaperGrayGranite {
+    UIImage *image = [UIImage newImagePaperGrayGranite];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGreenAndBlack {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreenAndBlack"]];
++ (instancetype)newColorPaperGreenAndBlack {
+    UIImage *image = [UIImage newImagePaperGreenAndBlack];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGreenWithFibers {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreenWithFibers"]];
++ (instancetype)newColorPaperGreenWithFibers {
+    UIImage *image = [UIImage newImagePaperGreenWithFibers];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperGreyVellum {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreyVellum"]];
++ (instancetype)newColorPaperGreyVellum {
+    UIImage *image = [UIImage newImagePaperGreyVellum];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperKraft {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaper"]];
++ (instancetype)newColorPaperKraft {
+    UIImage *image = [UIImage newImagePaperKraftPaper];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperKraft2 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaper2"]];
++ (instancetype)newColorPaperKraft2 {
+    UIImage *image = [UIImage newImagePaperKraftPaper2];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperKraftWaffle {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftWaffle"]];
++ (instancetype)newColorPaperKraftWaffle {
+    UIImage *image = [UIImage newImagePaperKraftPaperWaffle];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperKraftWaffle2 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaperWaffle"]];
++ (instancetype)newColorPaperKraftWaffle2 {
+    UIImage *image = [UIImage newImagePaperKraftPaperWaffle2];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperLeaf {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLeaf"]];
++ (instancetype)newColorPaperLeaf {
+    UIImage *image = [UIImage newImagePaperLeaf];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperLined {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLined"]];
++ (instancetype)newColorPaperLined {
+    UIImage *image = [UIImage newImagePaperLined];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperLinen {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLinen"]];
++ (instancetype)newColorPaperLinen {
+    UIImage *image = [UIImage newImagePaperLinen];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperLinenWeave {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLinenWeave"]];
++ (instancetype)newColorPaperLinenWeave {
+    UIImage *image = [UIImage newImagePaperLinenWeave];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperMarbled {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMarbled"]];
++ (instancetype)newColorPaperMarbled {
+    UIImage *image = [UIImage newImagePaperMarbled];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperMarbled2 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMarbled2"]];
++ (instancetype)newColorPaperMarbled2 {
+    UIImage *image = [UIImage newImagePaperMarbled2];
+    return [[UIColor alloc] initWithPatternImage: image];
 };
-+ (instancetype)paperMetallicBlack {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicBlack"]];
++ (instancetype)newColorPaperMetallicBlack {
+    UIImage *image = [UIImage newImagePaperMetallicBlack];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperMetallicFlecks {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicFlecks"]];
++ (instancetype)newColorPaperMetallicFlecks {
+    UIImage *image = [UIImage newImagePaperMetallicFlecks];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperMetallicFlecks2 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicFlecks2"]];
++ (instancetype)newColorPaperMetallicFlecks2 {
+    UIImage *image = [UIImage newImagePaperMetallicFlecks2];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperNotebook {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternNotebook"]];
++ (instancetype)newColorPaperNotebook {
+    UIImage *image = [UIImage newImagePaperNotebook];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperPebbled {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPebbled"]];
++ (instancetype)newColorPaperPebbled {
+    UIImage *image = [UIImage newImagePaperPebbled];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperPebbledPeach {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPeachPebbled"]];
++ (instancetype)newColorPaperPebbledPeach {
+    UIImage *image = [UIImage newImagePaperPeachPebbled];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperPinkTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPinkTextured"]];
++ (instancetype)newColorPaperPinkTextured {
+    UIImage *image = [UIImage newImagePaperPinkTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperPinkWithFlecks {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPinkWithFlecks"]];
++ (instancetype)newColorPaperPinkWithFlecks {
+    UIImage *image = [UIImage newImagePaperPinkWithFlecks];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperRedTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternRedTextured"]];
++ (instancetype)newColorPaperRedTextured {
+    UIImage *image = [UIImage newImagePaperRedTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperRedVellum {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternRedVellum"]];
++ (instancetype)newColorPaperRedVellum {
+    UIImage *image = [UIImage newImagePaperRedVellum];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperSketchPaper {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternSketchPaper"]];
++ (instancetype)newColorPaperSketchPaper {
+    UIImage *image = [UIImage newImagePaperSketchPaper];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperStationary {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternStationary"]];
++ (instancetype)newColorPaperStationary {
+    UIImage *image = [UIImage newImagePaperStationary];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternTextured"]];
++ (instancetype)newColorPaperTextured {
+    UIImage *image = [UIImage newImagePaperTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperWhiteColumns {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteColumns"]];
++ (instancetype)newColorPaperWhiteColumns {
+    UIImage *image = [UIImage newImagePaperWhiteColumns];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperWhiteDiagonal {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteDiagonal"]];
++ (instancetype)newColorPaperWhiteDiagonal {
+    UIImage *image = [UIImage newImagePaperWhiteDiagonal];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperWhiteStationary {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteStationary"]];
++ (instancetype)newColorPaperWhiteStationary {
+    UIImage *image = [UIImage newImagePaperWhiteStationary];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperWhiteTextured {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteTextured"]];
++ (instancetype)newColorPaperWhiteTextured {
+    UIImage *image = [UIImage newImagePaperWhiteTextured];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperWhiteWithWoodFibers {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteWithWoodFibers"]];
++ (instancetype)newColorPaperWhiteWithWoodFibers {
+    UIImage *image = [UIImage newImagePaperWhiteWithWoodFibers];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-+ (instancetype)paperYellowLined {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternYellowLined"]];
++ (instancetype)newColorPaperYellowLined {
+    UIImage *image = [UIImage newImagePaperYellowLined];
+    return [[UIColor alloc] initWithPatternImage: image];
 }
-*/
+
 
 @end

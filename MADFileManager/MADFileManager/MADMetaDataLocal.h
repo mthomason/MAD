@@ -10,4 +10,6 @@
 
 @interface MADMetaDataLocal : MADMetaData
 
+- (instancetype)initWithURL:(NSURL *)url;
+
 @end

@@ -9,6 +9,9 @@
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MADCollectionViewLayoutGroupedDelegateProtocol.h"
 
+#import "MADLabelFileExplorerDocumentCellTitle.h"
+#import "MADLabelFileExplorerDocumentCellSubtitle.h"
+
 #import "MTCollectionViewCellDocument.h"
 #import <MADCocoaExtensions/MADLabel.h>
 #import <UIKit/UITableView.h>
@@ -47,10 +50,6 @@ typedef NSMutableDictionary <NSNumber *, UITapGestureRecognizer *>       MADMuta
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
 
-static NSString * const NotDownloaded                           = @"Not Downloaded";
-static NSString * const Syncing                                 = @"Syncing";
-static NSString * const Downloading                             = @"Downloading";
-static NSString * const MADImageToolbarCloudDownload            = @"MADImageToolbarCloudDownload";
 
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect();
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
@@ -65,7 +64,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
     @property (nonatomic, strong) MADMutableMapGesturesLongPress *longPressGestures;
-    @property (nonatomic, strong) MADMutableMapGesturesTap *tapGestures;
 
 @end
 
@@ -110,9 +108,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         
         MADMutableMapGesturesLongPress *gestures = [[MADMutableMapGesturesLongPress alloc] init];
         self.longPressGestures = gestures;
-
-        MADMutableMapGesturesTap *taps = [[MADMutableMapGesturesTap alloc] init];
-        self.tapGestures = taps;
         
     }
     return self;
@@ -161,74 +156,17 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     longPressGesture.delegate = delegate;
     [cell addGestureRecognizer: longPressGesture];
     
-    SEL actionRename = @selector(actionRename:);
-    UITapGestureRecognizer *tapGesture;
-    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                         action: actionRename];
-    tapGesture.numberOfTapsRequired = 1;
-    tapGesture.numberOfTouchesRequired = 1;
-    [cell.labelTitle addGestureRecognizer:tapGesture];
+    cell.labelTitle.handleTap = ^(id sender) {
+        [self actionRename:sender];
+    };
+
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     _longPressGestures[hash] = longPressGesture;
-    _tapGestures[hash] = tapGesture;
     
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
-    cell.labelTitle.text = metadata.name.copy;
-    
-    BOOL notDownloaded  = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
-                           NSMetadataUbiquitousItemDownloadingStatusNotDownloaded],
-    downloading    = metadata.ubiquitousItemIsDownloading,
-    uploading      = metadata.ubiquitousItemIsUploading;
-    
-    id cellText;
-    if (downloading) {
-        cellText = NSLocalizedString(Downloading, Downloading);
-        cell.labelTitleSub.text = cellText;
-    } else if (uploading) {
-        cellText = NSLocalizedString(Syncing, Syncing);
-        cell.labelTitleSub.text = cellText;
-    } else {
-        NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
-                                                fileSize:metadata.fileSystemFileSize];
-        cell.labelTitleSub.text = subtitle;
-    }
-    [cell setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
-    [cell setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
-    
-    UIActivityIndicatorView *activityIndicator = cell.activityIndicator;
-    
-    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
-        [activityIndicator startAnimating];
-    else
-        [activityIndicator stopAnimating];
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
-    [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell.labelTitleSub layoutIfNeeded];
+    [cell updateDisplayForMetaData:metadata editing:_editing];
 
-    NSURL *fileURL = metadata.URL.copy;
-    dispatch_block_t read_iamge = ^{
-        @autoreleasepool {
-            
-            NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:fileURL];
-            NSString *path = thumbnailUrl.path;
-            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
-            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-            if (image == nil) image = [MADCollectionViewCellDocument newDefaultThumbnail];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                cell.imagePreview.image = image;
-            });
-        }
-    };
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
-    
-    if (_editing) [cell startWobble];
-    else [cell stopWobble];
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -239,7 +177,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     id gestureToRemove = _longPressGestures[hash];
     [cell removeGestureRecognizer: gestureToRemove];
     [_longPressGestures removeObjectForKey:hash];
-    [cell stopWobble];
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
 }
@@ -286,11 +223,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     id <MADFileExplorerViewDelegateProtocol> delegate = _delegate;
     MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
-    MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)
-    [collectionView cellForItemAtIndexPath:indexPath];
-
-    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
-    _tapGestures[hash].enabled = NO;
     
     if (self.isEditing) {
         [self downloadIfNotYetDownloaded:metadata];
@@ -313,9 +245,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     MADCollectionViewCellDocument *cell;
     cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-
-    NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger: cell.hash];
-    _tapGestures[hash].enabled = NO;
     
 }
 
@@ -465,11 +394,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
     NSString *result;
-    if ([status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
-    } else {
-        result = [MADStandard newStringForFileSize:fileSize];
-    }
+    result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
+                        NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :
+                        [MADStandard newStringForFileSize:fileSize];
     return result;
 }
 

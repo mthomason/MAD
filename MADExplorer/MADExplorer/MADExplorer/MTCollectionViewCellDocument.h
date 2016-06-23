@@ -11,17 +11,23 @@
 
 #import <UIKit/UICollectionViewCell.h>
 
+extern NSString * const MADTextNotDownloaded;
+
 @protocol UIGestureRecognizerDelegate;
 
-@class MADCollectionViewCellDocument;
+@class MADMetaData;
+@class MADLabelFileExplorerDocumentCellTitle;
+@class MADLabelFileExplorerDocumentCellSubtitle;
 @class UILabel;
 @class UIActivityIndicatorView;
 @class UIProgressView;
 
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
-    @property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;
+    @property (nonatomic, assign, getter=isEditing) BOOL editing;
+
+    @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellTitle *labelTitle;
+    @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
     @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
     @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
 
@@ -32,20 +38,19 @@
 
     @property (nonatomic, weak) id <UIGestureRecognizerDelegate> delegate;
 
+    @property (nonatomic, readonly) NSString *titleLabelText;
+
     + (UIImage *)newDefaultThumbnail;
 
-    - (void)setText:(NSString *)text;
-
     - (void)updateFont;
-
-    - (void)startWobble;
-    - (void)stopWobble;
 
     - (void)setUploadingActive:(BOOL)active
                        percent:(double)percent;
 
     - (void)setDownloadingActive:(BOOL)active
                          percent:(double)percent;
+
+    - (void)updateDisplayForMetaData:(MADMetaData *)metadata editing:(BOOL)editing;
 
 @end
 

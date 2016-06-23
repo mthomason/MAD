@@ -37,8 +37,8 @@ static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef sta
 static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
     
     
-    UIColor *highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3500f];
-    UIColor *highlightEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
+    UIColor *highlightStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.3500f];
+    UIColor *highlightEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
     
     if (reverse) {
         CGRect half = CGRectMake(rect.origin.x, rect.origin.y+rect.size.height/2, rect.size.width, rect.size.height/2);
@@ -52,8 +52,8 @@ static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
 
 static void drawCurvedGloss(CGContextRef context, CGRect rect, CGFloat radius) {
     
-    UIColor *glossStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.6000f];
-    UIColor *glossEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
+    UIColor *glossStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.6000f];
+    UIColor *glossEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
     
     CGMutablePathRef glossPath = CGPathCreateMutable();
     CGContextSaveGState(context);
@@ -121,12 +121,12 @@ static inline CGRect OuterRect(CGRect bounds) {
     const CGFloat _brightness = 0.8000f, _hue = 0.5500f, _saturation = 0.8000f;
     const CGFloat zStrokeColour1[4]    = {0.0, 0.0, 1.0, 1.0};
     
-    UIColor *black =            [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    UIColor *black =            [[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
     
-    UIColor *outerTopColor =    [UIColor colorWithHue:_hue saturation:_saturation
+    UIColor *outerTopColor =    [[UIColor alloc] initWithHue:_hue saturation:_saturation
                                            brightness:1.0000f * _brightness alpha:1.0];
     
-    UIColor *outerBottomColor = [UIColor colorWithHue:_hue saturation:_saturation
+    UIColor *outerBottomColor = [[UIColor alloc] initWithHue:_hue saturation:_saturation
                                            brightness:0.80000f * _brightness alpha:1.0];
 
     CGContextRef context = UIGraphicsGetCurrentContext();

@@ -6,8 +6,16 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADLabelFileExplorerDocumentCellTitle_h
+#define Reports_MADLabelFileExplorerDocumentCellTitle_h
+
+#import <UIKit/UILabel.h>
 
 @interface MADLabelFileExplorerDocumentCellTitle : UILabel
 
+    @property (nonatomic, assign, getter=isSelected) BOOL selected;
+    @property (nonatomic, copy) void (^handleTap)(id sender);
+
 @end
+
+#endif

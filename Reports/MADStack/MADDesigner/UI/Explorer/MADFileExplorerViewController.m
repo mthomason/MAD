@@ -41,6 +41,7 @@
 #import <MADExplorer/MADActiveDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
+#import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
 
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
@@ -1545,14 +1546,15 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
-    for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
-        [self.collectionView deselectItemAtIndexPath:path animated:YES];
+    UICollectionView *collectionView = self.collectionView;
+    for (NSIndexPath *path in collectionView.indexPathsForSelectedItems) {
+        [collectionView deselectItemAtIndexPath:path animated:YES];
     }
-
-    for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-        [cell stopWobble];
-        cell.selected = NO;
-    }
+    [collectionView reloadItemsAtIndexPaths:collectionView.indexPathsForVisibleItems];
+    //for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+    //    [cell stopWobble];
+    //    cell.selected = NO;
+    //}
 
 }
 
@@ -1690,7 +1692,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
     
-    NSString *textFieldText = cellDocument.labelTitle.text.copy;
+    NSString *textFieldText = cellDocument.titleLabelText.copy;
     
     void (^handleRename)(UITextField *);
     handleRename = ^(UITextField *textField) {

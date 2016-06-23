@@ -7,15 +7,45 @@
 //
 
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADLabelFileExplorerDocumentCellSubtitle
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [MADLabelFileExplorerDocumentCellSubtitle commonInitalization:self];
+    }
+    return self;
 }
-*/
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [MADLabelFileExplorerDocumentCellSubtitle commonInitalization:self];
+    }
+    return self;
+}
+
++ (void)commonInitalization:(MADLabelFileExplorerDocumentCellSubtitle *)this {
+
+    UIColor *clearColor = [UIColor clearColor];
+    UIColor *lightGrayColor = [UIColor lightGrayColor];
+    this.textColor = lightGrayColor;
+    this.clipsToBounds = NO;
+    this.numberOfLines = 0;
+    this.backgroundColor = clearColor;
+    this.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    
+}
+
+- (UIColor *)highlightedTextColor {
+    return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorRed];
+}
+
+- (void)setSelected:(BOOL)selected {
+    if (_selected != selected) {
+        _selected = selected;
+        [self setNeedsDisplay];
+    }
+}
 
 @end

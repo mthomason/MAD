@@ -24,24 +24,33 @@
         }
     }
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        MADocument *doc = document;
-        if (doc.documentState != UIDocumentStateClosed) {
-            [MADocument close:doc completion:^(BOOL success) {
-                if (success) {
-                    [self finish];
-                } else {
-                    NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
-                    NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
-                    MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-                    NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
-                    [self finishWithError:error];
-                }
-            }];
-        } else {
+    void (^handleCloseCompletion)(BOOL success);
+    handleCloseCompletion = ^(BOOL success) {
+        if (success) {
             [self finish];
+        } else {
+            NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
+            NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
+            MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+            NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
+            [self finishWithError:error];
         }
-    }];
+    };
+    
+    void (^mainBlock)(void);
+    mainBlock = ^ {
+        MADocument *doc = document;
+        switch (doc.documentState) {
+            case UIDocumentStateClosed:
+                [self finish];
+                break;
+            default:
+                [MADocument close:doc completion:handleCloseCompletion];
+                break;
+        }
+    };
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:mainBlock];
 }
 
 @end

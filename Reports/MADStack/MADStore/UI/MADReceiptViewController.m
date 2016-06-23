@@ -32,7 +32,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.tableView.backgroundColor = [UIColor paperHomemade];
+    self.tableView.backgroundColor = [UIColor newColorPaperHomemade];
 }
 
 - (void)viewDidLoad {

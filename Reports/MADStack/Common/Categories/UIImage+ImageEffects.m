@@ -106,21 +106,21 @@
 
 
 - (UIImage *)applyLightEffect {
-    UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.3f];
+    UIColor *tintColor = [[UIColor alloc] initWithWhite:1.0f alpha:0.3f];
     return [self applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)applyExtraLightEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.97f alpha:0.82f];
+    UIColor *tintColor = [[UIColor alloc] initWithWhite:0.97f alpha:0.82f];
     return [self applyBlurWithRadius:20 tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)applyDarkEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11f alpha:0.73f];
+    UIColor *tintColor = [[UIColor alloc] initWithWhite:0.11f alpha:0.73f];
     return [self applyBlurWithRadius:20 tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
@@ -133,13 +133,13 @@
     if (componentCount == 2) {
         CGFloat b;
         if ([tintColor getWhite:&b alpha:NULL]) {
-            effectColor = [UIColor colorWithWhite:b alpha:EffectColorAlpha];
+            effectColor = [[UIColor alloc] initWithWhite:b alpha:EffectColorAlpha];
         }
     }
     else {
         CGFloat r, g, b;
         if ([tintColor getRed:&r green:&g blue:&b alpha:NULL]) {
-            effectColor = [UIColor colorWithRed:r green:g blue:b alpha:EffectColorAlpha];
+            effectColor = [[UIColor alloc] initWithRed:r green:g blue:b alpha:EffectColorAlpha];
         }
     }
     return [self applyBlurWithRadius:10 tintColor:effectColor saturationDeltaFactor:-1.0 maskImage:nil];

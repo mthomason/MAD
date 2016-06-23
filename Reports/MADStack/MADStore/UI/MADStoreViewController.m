@@ -19,26 +19,32 @@
 #import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
+static NSString * const MADTextYouGotIt     = @"You Got It";
+static NSString * const MADTextYouItsYours  = @"It's Yours";
+static NSString * const MADTextFreeGift     = @"Access to this feature is a free gift for charter "
+                                              @"members. That's you! How rare is that?";
+static NSString * const MADTextAlready      = @"You already got this feature. Make sure to collect them all.";
+
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>
 
-@property (nonatomic, strong) NSNumberFormatter *priceFormatter;
-@property (nonatomic, assign) BOOL charterMember;
+    @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
+    @property (nonatomic, assign) BOOL charterMember;
 
 @end
 
 @implementation MADStoreViewController
 
-static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
+static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
 
 - (void)viewControllerDidCancel:(id)sender {
     [self viewControllerDidFinish:sender];
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.collectionView reloadData];
-    }];
+    void (^reload)(void);
+    reload = ^{ [self.collectionView reloadData]; };
+    [self dismissViewControllerAnimated:YES completion:reload];
 }
 
 - (IBAction)unwindToStore:(UIStoryboardSegue*)sender { }
@@ -55,7 +61,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
     self.priceFormatter = priceFormatter;
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    MADNavigationBarTitleView *titleView;
+    titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = @"MAD Features";
     self.navigationItem.titleView = titleView;
     
@@ -65,13 +72,15 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    MADWatermarkView *watermarkView;
+    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
     
     self.collectionView.scrollEnabled = YES;
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
-    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
+    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset =
+                                        UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -84,14 +93,18 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         UIBarButtonItem *barButtonItem = [UIBarButtonItem newBarButtonItemActivityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 
-        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
+        MTBlockCompletion handleStoreCompletion;
+        handleStoreCompletion = ^(BOOL success, NSError *error) {
             if (!success && error) {
                 UIAlertController *alert = [UIAlertController newAlertControllerError:error];
                 [self presentViewController:alert animated:YES completion:NULL];
             }
             [self.navigationItem setLeftBarButtonItem:nil animated:YES];
             [self.collectionView reloadData];
-        }];
+        };
+        
+        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: products
+                                                                    completion: handleStoreCompletion];
     } else {
         [self.collectionView reloadData];
     }
@@ -107,12 +120,17 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section {
     return (NSInteger)[MTStoreKitController sharedObject].products.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADCollectionViewCellProductFeature *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    MADCollectionViewCellProductFeature *cell;
+    cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADStoreCellReuseIdentifier
+                                                     forIndexPath: indexPath];
     SKProduct *product =[MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
     cell.labelTitle.text = product.localizedTitle;
     cell.labelDescription.text = product.localizedDescription;
@@ -120,7 +138,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     
     if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
         cell.labelPrice.text = @"";
-        cell.labelPrice.font = [UIFont fontWithName:@"FontAwesome" size:cell.labelPrice.font.pointSize];
+        cell.labelPrice.font = [UIFont fontWithName: @"FontAwesome"
+                                               size: cell.labelPrice.font.pointSize];
     } else {
         BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
         if (!ownIt) {
@@ -149,30 +168,34 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     SKProduct *product = [MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
     if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
-        NSString *title = NSLocalizedString(@"You Got It", @"You Got It");
-        NSString *message = NSLocalizedString(@"Access to this feature is a free gift for charter members. That's you! How rare is that?",
-                                              @"Access to this feature is a free gift for charter members. That's you! How rare is that?");
-        UIAlertController *alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                                           message: message
-                                                                                     andCompletion: ^(UIAlertAction *action) { }];
+        NSString *title = NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt);
+        NSString *message = NSLocalizedString(MADTextFreeGift, MADTextFreeGift);
+        UIAlertController *alert;
+        alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                        message: message
+                                                                  andCompletion: nil];
         [self presentViewController:alert animated:YES completion:NULL];
     } else {
         BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
         if (ownIt) {
-            NSString *title = NSLocalizedString(@"It's Yours", @"It's Yours");
-            NSString *message = NSLocalizedString(@"You already got this feature. Make sure to collect them all.",
-                                                  @"You already got this feature. Make sure to collect them all.");
-            UIAlertController *alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                                               message: message
-                                                                                         andCompletion: ^(UIAlertAction *action) { }];
+            NSString *title = NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours);
+            NSString *message = NSLocalizedString(MADTextAlready, MADTextAlready);
+            UIAlertController *alert;
+            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                            message: message
+                                                                      andCompletion: nil];
             [self presentViewController:alert animated:YES completion:NULL];
         } else {
-            [[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
-            [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
-                UIAlertController *alert = success ? [UIAlertController newAlertControllerNofityTransactionComplete] : [UIAlertController newAlertControllerError:error];
+            MTBlockCompletion handleStoreCompletion;
+            handleStoreCompletion = ^(BOOL success, NSError *error) {
+                UIAlertController *alert = success ? [UIAlertController newAlertControllerNofityTransactionComplete] :
+                [UIAlertController newAlertControllerError:error];
                 [self presentViewController: alert animated: YES completion: nil];
                 [self.collectionView reloadData];
-            }];
+            };
+            [[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
+            [[MTStoreKitController sharedObject] purchaseProduct: product
+                                                      completion: handleStoreCompletion];
         }
     }
 }
@@ -185,10 +208,14 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 #pragma mark - UICollectionViewFlowLayout Delegate
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+  
     return CGSizeMake(collectionView.bounds.size.width >= 480 ?
                       (collectionView.bounds.size.width / 2.0000f) - (8.0000f * 3) :
                       collectionView.bounds.size.width - 8.0000f * 2, 220.0000f);
+
 }
 
 @end

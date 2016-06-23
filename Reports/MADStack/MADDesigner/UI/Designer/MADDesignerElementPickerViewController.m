@@ -191,7 +191,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     if (result.selectedBackgroundView == nil) {
     
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
-        UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
+        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.30000f alpha:0.30000f];
         selectedBackgroundView.backgroundColor = bgColor;
         result.selectedBackgroundView = selectedBackgroundView;
         

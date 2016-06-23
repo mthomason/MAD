@@ -19,7 +19,6 @@
 
 - (void)execute {
 
-
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -29,25 +28,40 @@
         }
     }
 
+    void (^handleCloseCompletion)(BOOL success);
+    handleCloseCompletion = ^(BOOL success) {
+        if (success) {
+            [self finish];
+        } else {
+            NSString *title = NSLocalizedString(@"Error Creating Document",
+                                                @"Error Creating Document");
+            NSString *message = NSLocalizedString(@"Failed to close.",
+                                                  @"Failed to close.");
+            MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle: title
+                                                                      andMessage: message];
+            NSError *error = [userInfo errorWithDomain: NSStringFromClass(self.class)
+                                                  code: 893];
+            [self finishWithError:error];
+        }
+    };
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    void (^mainBlock)(void);
+    mainBlock = ^ {
         MADocument *doc = document;
         if (doc.documentState != UIDocumentStateClosed) {
-            [MADocument close: doc completion:^(BOOL success) {
-                if (success) {
-                    [self finish];
-                } else {
-                    NSString *title = NSLocalizedString(@"Error Creating Document", @"Error Creating Document");
-                    NSString *message = NSLocalizedString(@"Failed to close.", @"Failed to close.");
-                    MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-                    NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
-                    [self finishWithError:error];
-                }
-            }];
+            
+            [MADocument close: doc completion:handleCloseCompletion];
+            
+            
         } else {
             [self finish];
         }
-    }];
+        
+    };
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:mainBlock];
+    
+    
 }
 
 @end

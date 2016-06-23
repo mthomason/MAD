@@ -10,4 +10,6 @@
 
 @interface MADMetaDataCloud : MADMetaData
 
+- (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
+
 @end
