@@ -11,6 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
+#import "MADQueryViewControllerSections.h"
 
 @class NSArray <__covariant ObjectType>;
 @class NSSet <__covariant ObjectType>;
@@ -18,37 +19,7 @@
 @class NSIndexSet;
 @class MADQueryViewControllerLayoutSection;
 
-typedef NS_ENUM(short, MTQuerySections) {
-    MTQuerySectionsDocumentGroups = 0,
-    MTQuerySectionsDatasource = 1,
-    MTQuerySectionsTables = 2,
-    MTQuerySectionsLinks = 3,
-    MTQuerySectionsGroups = 4,
-    MTQuerySectionsPredicate = 5,
-    MTQuerySectionsSql = 6,
-    MTQuerySectionsNumberOfQueryResults = 7
-};
-
-@protocol MADQueryViewControllerLayoutSectionSelectorProtocol <NSObject>
-
-    - (void)addConnection:(id)sender;
-    - (void)addTable:(id)sender;
-    - (void)addLink:(id)sender;
-    - (void)addPredicate:(id)sender;
-    - (void)addGroup:(id)sender;
-
-@end
-
-@interface MADQueryViewControllerLayoutSection : NSObject
-
-    @property (nonatomic, assign, readonly) MTQuerySections querySection;
-    @property (readonly) NSString   *name;
-    @property (readonly) NSUInteger count;
-    @property (readonly) NSInteger  numberOfRows;
-    @property (readonly) CGFloat    height;
-    @property (readonly) SEL        selector;
-
-@end
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
 @interface MADQueryViewControllerLayout : NSObject
 
@@ -58,7 +29,7 @@ typedef NS_ENUM(short, MTQuerySections) {
 
     - (NSSet <NSNumber *> *)sectionTypes;
     - (NSIndexSet *)sectionTypesIndexs;
-    - (MTQuerySections)sectionAtIndex:(short)index;
+    - (MADQueryViewControllerSections)sectionAtIndex:(short)index;
     - (MADQueryViewControllerLayoutSection *)layoutAtIndex:(short)index;
     
 @end

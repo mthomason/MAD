@@ -9,7 +9,7 @@
 #import "MADQueryViewControllerTableLayout.h"
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
-#import "MADQuerySections.h"
+#import "MADQueryViewControllerSections.h"
 
 static NSString * const MTTableHeaderSectionKey        = @"MTTableHeaderSectionKey";
 static NSString * const MTTableSectionRowKey           = @"MTTableSectionRowKey";
@@ -38,9 +38,9 @@ static NSString * const MTTableSectionSectionsKey      = @"MTTableSectionSection
         
         NSNumber *one = [[NSNumber alloc] initWithInteger:1];
         NSNumber *unknown = [[NSNumber alloc] initWithInteger:-1];
-        NSNumber *datasource = [[NSNumber alloc] initWithShort: MTQuerySectionsDatasource];
-        NSNumber *tables = [[NSNumber alloc] initWithShort: MTQuerySectionsTables];
-        NSNumber *resultCount = [[NSNumber alloc] initWithShort: MTQuerySectionsNumberOfQueryResults];
+        NSNumber *datasource = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsDatasource];
+        NSNumber *tables = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsTables];
+        NSNumber *resultCount = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsNumberOfQueryResults];
         
         switch (numberOfTables) {
             case 0: { //There are three configurations for the table.  These configurations depend
@@ -75,8 +75,8 @@ static NSString * const MTTableSectionSectionsKey      = @"MTTableSectionSection
             }
             case 1: {   //Only one table in query.  No ability to add links.
                 
-                NSNumber *groups = [[NSNumber alloc] initWithShort: MTQuerySectionsGroups];
-                NSNumber *predicate = [[NSNumber alloc] initWithShort: MTQuerySectionsPredicate];
+                NSNumber *groups = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsGroups];
+                NSNumber *predicate = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsPredicate];
                 
                 NSArray *sections = reportingEnabled ? [[NSArray alloc] initWithObjects: datasource, tables, groups, predicate, resultCount, nil] :
                 [[NSArray alloc] initWithObjects: datasource, tables, groups, predicate, nil];
@@ -108,9 +108,9 @@ static NSString * const MTTableSectionSectionsKey      = @"MTTableSectionSection
             }
             default: {   //Two more more tables in query.  All features available.
                 
-                NSNumber *links = [[NSNumber alloc] initWithShort: MTQuerySectionsLinks];
-                NSNumber *groups = [[NSNumber alloc] initWithShort: MTQuerySectionsGroups];
-                NSNumber *predicate = [[NSNumber alloc] initWithShort: MTQuerySectionsPredicate];
+                NSNumber *links = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsLinks];
+                NSNumber *groups = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsGroups];
+                NSNumber *predicate = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsPredicate];
                 
                 NSArray *sections;
                 if (reportingEnabled) {

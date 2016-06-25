@@ -11,6 +11,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIButton.h>
 #import <UIKit/UIAccessibility.h>
+#import "MADQueryViewControllerLayoutSections.h"
 
 @implementation MADTableViewHeader (QueryViewSectionTypes)
 
@@ -19,14 +20,14 @@
     MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {
 
-        case MTQuerySectionsDatasource:
+        case MADQueryViewControllerSectionsDatasource:
             view.labelTitle.text = layout.name.copy;
             view.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             view.buttonAdd.hidden = YES;
             view.buttonAdd.isAccessibilityElement = NO;
             break;
 
-        case MTQuerySectionsTables:
+        case MADQueryViewControllerSectionsTables:
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
@@ -34,7 +35,7 @@
             view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table.", @"Adds a new table.");
             break;
             
-        case MTQuerySectionsLinks:
+        case MADQueryViewControllerSectionsLinks:
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
@@ -42,8 +43,8 @@
             view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table join.", @"Adds a new table join.");
             break;
             
-        case MTQuerySectionsDocumentGroups:
-        case MTQuerySectionsGroups:
+        case MADQueryViewControllerSectionsDocumentGroups:
+        case MADQueryViewControllerSectionsGroups:
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
@@ -51,7 +52,7 @@
             view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new query grouping.", @"Adds a new query grouping.");
             break;
             
-        case MTQuerySectionsPredicate:
+        case MADQueryViewControllerSectionsPredicate:
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             [view.labelTitle sizeToFit];
@@ -60,7 +61,7 @@
             view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a predicate to filter the query results.", @"Adds a predicate to filter the query results.");
             break;
             
-        case MTQuerySectionsNumberOfQueryResults:
+        case MADQueryViewControllerSectionsNumberOfQueryResults:
             view.labelTitle.text = layout.name.copy;
             view.buttonAdd.enabled = NO;
             view.buttonAdd.hidden = YES;
@@ -68,7 +69,7 @@
             view.buttonAdd.isAccessibilityElement = NO;
             break;
             
-        case MTQuerySectionsSql:
+        case MADQueryViewControllerSectionsSql:
         default:
             break;
     }

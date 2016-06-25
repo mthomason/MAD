@@ -9,5 +9,14 @@
 #ifndef MADQueryViewControllerLayoutSectionSelectorProtocol_h
 #define MADQueryViewControllerLayoutSectionSelectorProtocol_h
 
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol <NSObject>
+
+    - (void)addConnection:(id)sender;
+    - (void)addTable:(id)sender;
+    - (void)addLink:(id)sender;
+    - (void)addPredicate:(id)sender;
+    - (void)addGroup:(id)sender;
+
+@end
 
 #endif /* MADQueryViewControllerLayoutSectionSelectorProtocol_h */

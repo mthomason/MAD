@@ -1,5 +1,5 @@
 //
-//  UITableViewCellTableName.h
+//  MADTableViewCellQueryTableName.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.

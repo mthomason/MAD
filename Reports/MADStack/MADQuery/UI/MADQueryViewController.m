@@ -11,7 +11,6 @@
 #endif
 
 #import "MADQueryViewController.h"
-
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSFetchedResultsController.h>
 
@@ -24,6 +23,8 @@
 #import <UIKit/UIImage.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import "MADQueryViewControllerLayoutSections.h"
 
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
@@ -88,6 +89,8 @@
 #import "NSAttributedString+QueryViewController.h"
 #import "MADQueryViewControllerTableLayout.h"
 
+#import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -105,6 +108,8 @@ static NSString * const NSFetchedResultsCacheGroups                 = @"NSFetche
 static NSString * const NSFetchedResultsCachePredicates             = @"NSFetchedResultsCachePredicates";
 
 static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
+
+static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
 #pragma mark - Private Category
 
@@ -142,7 +147,7 @@ static NSString * const TextFormatConnection =  @"You are connecting to %1$@ dat
 
     @property (nonatomic, strong) MADQueryViewControllerLayout *datamodel;
 
-    - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec;
+    - (MADQueryViewControllerSections)sectionPositionForTableSectionType:(MADQueryViewControllerSections)sec;
 
 @end
 
@@ -235,7 +240,9 @@ BOOL storeEnabled() {
 
             
             NSDictionary <NSString *, id> *changes = [query changedValues];
+            
             NSLog(@"Changed values: %@", changes.debugDescription);
+            
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
@@ -630,8 +637,8 @@ BOOL storeEnabled() {
     [document saveContext];
     NSInteger suspectedSection = 2;
     
-    MTQuerySections tableSection = [self.datamodel sectionAtIndex:(short)suspectedSection];
-    if (tableSection == MTQuerySectionsLinks) {
+    MADQueryViewControllerSections tableSection = [self.datamodel sectionAtIndex:(short)suspectedSection];
+    if (tableSection == MADQueryViewControllerSectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
         [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
     }
@@ -684,22 +691,22 @@ BOOL storeEnabled() {
     if (layoutSection.numberOfRows == NSNotFound) {
         id<NSFetchedResultsSectionInfo> sectionData;
         switch (layoutSection.querySection) {
-            case MTQuerySectionsTables: {
+            case MADQueryViewControllerSectionsTables: {
                 sectionData = self.queryTablesController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
-            case MTQuerySectionsLinks: {
+            case MADQueryViewControllerSectionsLinks: {
                 sectionData = self.queryLinksController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
-            case MTQuerySectionsPredicate: {
+            case MADQueryViewControllerSectionsPredicate: {
                 sectionData = self.queryPredicatesController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
-            case MTQuerySectionsGroups: {
+            case MADQueryViewControllerSectionsGroups: {
                 sectionData = self.queryGroupsController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
@@ -713,22 +720,22 @@ BOOL storeEnabled() {
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    MTQuerySections sectionType = [self.datamodel sectionAtIndex:(short)indexPath.section];
-	return (sectionType == MTQuerySectionsTables ||
-            sectionType == MTQuerySectionsGroups ||
-            sectionType == MTQuerySectionsPredicate ||
-            sectionType == MTQuerySectionsLinks);
+    MADQueryViewControllerSections sectionType = [self.datamodel sectionAtIndex:(short)indexPath.section];
+	return (sectionType == MADQueryViewControllerSectionsTables ||
+            sectionType == MADQueryViewControllerSectionsGroups ||
+            sectionType == MADQueryViewControllerSectionsPredicate ||
+            sectionType == MADQueryViewControllerSectionsLinks);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsGroups);
+    return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MADQueryViewControllerSectionsGroups);
 }
 
 - (void)tableView:(UITableView *)tableView
                                 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
                                  forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTQuerySections querySection = [self.datamodel sectionAtIndex:(short)indexPath.section];
+    MADQueryViewControllerSections querySection = [self.datamodel sectionAtIndex:(short)indexPath.section];
 
     switch (editingStyle) {
 
@@ -750,9 +757,9 @@ BOOL storeEnabled() {
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
       toIndexPath:(NSIndexPath *)toIndexPath {
     
-    MTQuerySections ts = [self.datamodel sectionAtIndex:(short)toIndexPath.section];
+    MADQueryViewControllerSections ts = [self.datamodel sectionAtIndex:(short)toIndexPath.section];
     switch (ts) {
-        case MTQuerySectionsGroups: {
+        case MADQueryViewControllerSectionsGroups: {
 
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0],
                         *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
@@ -783,12 +790,12 @@ BOOL storeEnabled() {
     UITableViewCell *result = nil;
 
     NSInteger row = indexPath.row;
-    MTQuerySections section = [self.datamodel sectionAtIndex:(short)indexPath.section];
+    MADQueryViewControllerSections section = [self.datamodel sectionAtIndex:(short)indexPath.section];
 
     switch (section) {
 
         // MARK: Display and identify the data source and data sources
-        case MTQuerySectionsDatasource: {
+        case MADQueryViewControllerSectionsDatasource: {
         
             static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
@@ -813,7 +820,7 @@ BOOL storeEnabled() {
         }
 
         // MARK: Display the table names that are used in the query
-        case MTQuerySectionsTables: {
+        case MADQueryViewControllerSectionsTables: {
         
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
@@ -832,7 +839,7 @@ BOOL storeEnabled() {
         }
         
         // MARK: Display the table links or joins that are used in the query.
-        case MTQuerySectionsLinks: {
+        case MADQueryViewControllerSectionsLinks: {
 
             static NSString *MADIDCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
@@ -858,7 +865,7 @@ BOOL storeEnabled() {
         }
 
         // MARK: Display the groupings used in the query.
-        case MTQuerySectionsGroups: {
+        case MADQueryViewControllerSectionsGroups: {
             static NSString *MADIDCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
@@ -877,7 +884,7 @@ BOOL storeEnabled() {
         }
         
         // MARK: Display the predicates or conditions on the query.
-        case MTQuerySectionsPredicate: {
+        case MADQueryViewControllerSectionsPredicate: {
             static NSString *MADIDCellPredicate = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MADIDCellPredicate];
             
@@ -907,7 +914,7 @@ BOOL storeEnabled() {
             break;
         }
         
-        case MTQuerySectionsSql: {
+        case MADQueryViewControllerSectionsSql: {
             switch (row) {
                 case 0: {
                     static NSString *MADIDCellOverride = @"UITableViewCellOverride";
@@ -923,14 +930,15 @@ BOOL storeEnabled() {
             break;
         }
             
-        case MTQuerySectionsNumberOfQueryResults: {
+        case MADQueryViewControllerSectionsNumberOfQueryResults: {
+        
             static NSString *idNumberOfQueryResults = @"UITableViewCellNumberOfQueryResultsIdentifier";
             result = [tableView dequeueReusableCellWithIdentifier: idNumberOfQueryResults];
             UISwitch *s = [[UISwitch alloc] initWithFrame:CGRectZero];
-            s.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
-            [s addTarget:self action:@selector(wantsToChangeReportingMode:) forControlEvents:UIControlEventValueChanged];
+            s.on = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired];
+            [s addTarget:self action:@selector(handleToggleReportingMode:) forControlEvents:UIControlEventValueChanged];
             result.accessoryView = s;
-            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"] ?
+            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired] ?
                                                     @"Reporting Mode" : @"Designer Mode (limited)";
             break;
         }
@@ -949,25 +957,6 @@ BOOL storeEnabled() {
     return result;
 }
 
-- (void)wantsToChangeReportingMode:(UISwitch *)switchControl {
-    if (switchControl.on) {
-        if ([MTStoreKitController sharedObject].isReportingEnabled) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"defaults.everydayapps.features.viewer.desired"];
-        } else {
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"defaults.everydayapps.features.viewer.desired"];
-            [switchControl setOn:NO animated:YES];
-        }
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"defaults.everydayapps.features.viewer.desired"];
-    }
-    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
-  //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
-    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
-    NSArray *paths = @[i];
-    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
-//    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     MADQueryViewControllerLayoutSection *layout = [self.datamodel layoutAtIndex:(short)section];
     id header = [MADTableViewHeader newTableViewHeaderWithType: layout
@@ -976,11 +965,35 @@ BOOL storeEnabled() {
     return header;
 }
 
-#pragma mark - UITableViewDelegate
+
+- (void)handleToggleReportingMode:(UISwitch *)switchControl {
+    if (switchControl.on) {
+        if ([MTStoreKitController sharedObject].isReportingEnabled) {
+            [[NSUserDefaults standardUserDefaults] setBool: YES
+                                                    forKey: MADIdentifierDefaultsViewerDesired];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool: NO
+                                                    forKey: MADIdentifierDefaultsViewerDesired];
+            [switchControl setOn:NO animated:YES];
+        }
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADIdentifierDefaultsViewerDesired];
+    }
+    
+    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
+    //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
+    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
+    NSArray *paths = @[i];
+    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+    //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark -
+#pragma mark UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsTables) {
+    if ([self.datamodel sectionAtIndex:(short)indexPath.section] == MADQueryViewControllerSectionsTables) {
         [self displayTableSampleDataForIndexPath:indexPath];
     }
 }
@@ -1023,23 +1036,23 @@ BOOL storeEnabled() {
     NSNumber *sectionNumber;
     if ([controller isEqual:self.queryTablesController]) {
         
-        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MADQueryViewControllerSectionsTables]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:self.queryLinksController]) {
 
-        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MADQueryViewControllerSectionsLinks]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:self.queryGroupsController]) {
 
-        short sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
+        short sectionGroup = [self sectionPositionForTableSectionType: MADQueryViewControllerSectionsGroups];
         sectionNumber = [[NSNumber alloc] initWithShort: sectionGroup];
         [result addObject: sectionNumber];
     
     } else if ([controller isEqual:self.queryPredicatesController]) {
     
-        short section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
+        short section = [self sectionPositionForTableSectionType: MADQueryViewControllerSectionsPredicate];
         sectionNumber = [[NSNumber alloc] initWithShort:section];
         [result addObject: sectionNumber];
     }
@@ -1057,7 +1070,7 @@ BOOL storeEnabled() {
     
     for (NSNumber *section in sections) {
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            MTQuerySections updateSection = section.shortValue;
+            MADQueryViewControllerSections updateSection = section.shortValue;
             switch(type) {
                 case NSFetchedResultsChangeInsert: {
                     NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
@@ -1094,7 +1107,7 @@ BOOL storeEnabled() {
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
-        MTQuerySections updateSection = section.shortValue;
+        MADQueryViewControllerSections updateSection = section.shortValue;
         
         NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                inSection: updateSection];
@@ -1538,23 +1551,23 @@ BOOL storeEnabled() {
     [document.managedObjectContext save:nil];
 }
 
-- (void)deleteItemFromQuerySection:(MTQuerySections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+- (void)deleteItemFromQuerySection:(MADQueryViewControllerSections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
     switch (querySection) {
             
-        case MTQuerySectionsTables:
+        case MADQueryViewControllerSectionsTables:
             [self deleteQueryTableFromTableView: tableView atIndexPath: indexPath];
             break;
             
-        case MTQuerySectionsLinks:
+        case MADQueryViewControllerSectionsLinks:
             [self deleteQueryLinksFromTableView: tableView atIndexPath: indexPath];
             break;
             
-        case MTQuerySectionsGroups:
+        case MADQueryViewControllerSectionsGroups:
             [self deleteQueryGroupFromTableView: tableView atIndexPath: indexPath];
             break;
             
-        case MTQuerySectionsPredicate:
+        case MADQueryViewControllerSectionsPredicate:
             [self deleteQueryPredicateFromTableView: tableView atIndexPath: indexPath];
             break;
             
@@ -1636,21 +1649,21 @@ BOOL storeEnabled() {
             NSArray *cells = nil;
             
             switch ([self.datamodel sectionAtIndex:section]) {
-                case MTQuerySectionsLinks:
+                case MADQueryViewControllerSectionsLinks:
                     cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section
                                                              table: deleatedTableObjectId
                                                        inTableView: tableView
                                                          inContext: private];
                     break;
 
-                case MTQuerySectionsGroups:
+                case MADQueryViewControllerSectionsGroups:
                     cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section
                                                               table: deleatedTableObjectId
                                                         inTableView: tableView
                                                           inContext: private];
                     break;
 
-                case MTQuerySectionsPredicate:
+                case MADQueryViewControllerSectionsPredicate:
                     cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section
                                                                  table: deleatedTableObjectId
                                                            inTableView: tableView
@@ -1739,8 +1752,8 @@ BOOL storeEnabled() {
     [private performBlockAndWait:deleteGroup];
 }
 
-- (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec {
-    MTQuerySections result = 0;
+- (MADQueryViewControllerSections)sectionPositionForTableSectionType:(MADQueryViewControllerSections)sec {
+    MADQueryViewControllerSections result = 0;
     NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
     MADQueryViewControllerTableLayout *tableLayout;
     tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
@@ -1750,7 +1763,7 @@ BOOL storeEnabled() {
     
     for (NSNumber *num in sectionTypes) {
         if (num.unsignedIntegerValue == sec) {
-            result = (MTQuerySections)secPos;
+            result = (MADQueryViewControllerSections)secPos;
             break;
         }
         secPos++;
