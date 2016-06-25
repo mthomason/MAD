@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryViewControllerLayout.h"
+#import "MADQueryViewDataSource.h"
 
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
@@ -30,7 +30,7 @@
 #import <Foundation/NSIndexPath.h>
 #import <UIKit/UITableView.h>
 
-@interface MADQueryViewControllerLayout ()
+@interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>
 
     @property (nonatomic, weak) MADocument *document;

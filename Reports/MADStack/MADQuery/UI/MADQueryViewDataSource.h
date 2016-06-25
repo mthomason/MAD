@@ -31,7 +31,7 @@
 
 @end
 
-@interface MADQueryViewControllerLayout : NSObject
+@interface MADQueryViewDataSource : NSObject
     
     - (instancetype)initWithNumberOfTables: (NSUInteger)numberOfTables
                           reportingEnabled: (BOOL)reportingEnabled;
