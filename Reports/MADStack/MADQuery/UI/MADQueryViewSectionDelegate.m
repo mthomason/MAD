@@ -1,12 +1,12 @@
 //
-//  MADQueryViewControllerLayoutSections.m
+//  MADQueryViewSectionDelegate.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/24/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryViewControllerLayoutSections.h"
+#import "MADQueryViewSectionDelegate.h"
 #import <CoreGraphics/CGBase.h>
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
@@ -19,11 +19,11 @@ static NSString * const TextHeaderGroups        = @"Grouped By";
 static NSString * const TextHeaderPredicate     = @"Having Specified Criteria";
 static NSString * const TextHeaderSettings      = @"Limit Query Result";
 
-@interface MADQueryViewControllerLayoutSection ()
+@interface MADQueryViewSectionDelegate ()
     @property (nonatomic, assign, readwrite) MADIdentifierQueryViewSections querySection;
 @end
 
-@implementation MADQueryViewControllerLayoutSection
+@implementation MADQueryViewSectionDelegate
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position {
     if (self = [super init]) {
@@ -103,19 +103,19 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
 }
 
 - (NSInteger)numberOfRows {
-    return [MADQueryViewControllerLayoutSection numberOfRowsForSection:_querySection];
+    return [MADQueryViewSectionDelegate numberOfRowsForSection:_querySection];
 }
 
 - (NSString *)name {
-    return [MADQueryViewControllerLayoutSection nameForSection:_querySection];
+    return [MADQueryViewSectionDelegate nameForSection:_querySection];
 }
 
 - (CGFloat)height {
-    return [MADQueryViewControllerLayoutSection heightForSection:_querySection];
+    return [MADQueryViewSectionDelegate heightForSection:_querySection];
 }
 
 - (SEL)selector {
-    return [MADQueryViewControllerLayoutSection selectorForSection:_querySection];
+    return [MADQueryViewSectionDelegate selectorForSection:_querySection];
 }
 
 + (NSInteger)numberOfRowsForSection:(MADIdentifierQueryViewSections)section {
