@@ -3600,6 +3600,7 @@
 		4C401F121BAE703200BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CF304121D1EF54400466560 /* QueryView */,
 				4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */,
 				4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */,
 				4CA0C6D21CA79F0C00222B8D /* Misc */,
@@ -4425,7 +4426,6 @@
 		4CA0C6D21CA79F0C00222B8D /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */,
 				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */,
 				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
 				4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */,
@@ -4446,12 +4446,8 @@
 				4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */,
 				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
 				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
-				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
-				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
 				4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */,
 				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
-				4C539C2F1CB5607D002E4CD5 /* MADQueryViewDataSource.h */,
-				4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */,
 				4C4F128D1D0CF8C20002294E /* MADQueryViewControllerTableLayout.h */,
 				4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */,
 				4CF304081D1E160000466560 /* MADQueryViewControllerLayoutSectionSelectorProtocol.h */,
@@ -4999,6 +4995,18 @@
 				4C26BA361BAF99BE00456DC8 /* MADPromptManager.m */,
 			);
 			name = Managers;
+			sourceTree = "<group>";
+		};
+		4CF304121D1EF54400466560 /* QueryView */ = {
+			isa = PBXGroup;
+			children = (
+				4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */,
+				4C539C2F1CB5607D002E4CD5 /* MADQueryViewDataSource.h */,
+				4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */,
+				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
+				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
+			);
+			name = QueryView;
 			sourceTree = "<group>";
 		};
 		4CF46F5A1AC64A2F007C0A82 /* Libraries */ = {

@@ -13,7 +13,6 @@
 #import <UIKit/UITableView.h>
 
 @interface MADQueryViewControllerTableLayout : NSObject
-    //<UITableViewDataSource>
 
     - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
                           reportingEnabled:(BOOL)reportingEnabled;
