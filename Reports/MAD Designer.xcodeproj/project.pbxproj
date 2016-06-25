@@ -1085,6 +1085,7 @@
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF3040D1D1E175700466560 /* MADQueryViewControllerLayoutSections.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3040C1D1E175700466560 /* MADQueryViewControllerLayoutSections.m */; };
+		4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */; };
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
 		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
@@ -2486,6 +2487,8 @@
 		4CF304091D1E166900466560 /* MADQueryViewControllerSections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerSections.h; sourceTree = "<group>"; };
 		4CF3040B1D1E175700466560 /* MADQueryViewControllerLayoutSections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerLayoutSections.h; sourceTree = "<group>"; };
 		4CF3040C1D1E175700466560 /* MADQueryViewControllerLayoutSections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryViewControllerLayoutSections.m; sourceTree = "<group>"; };
+		4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+QueryViewControllerTableLayout.h"; sourceTree = "<group>"; };
+		4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+QueryViewControllerTableLayout.m"; sourceTree = "<group>"; };
 		4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectCollectionView.m; sourceTree = "<group>"; };
 		4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectCollectionView.h; sourceTree = "<group>"; };
 		4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -4456,6 +4459,8 @@
 				4CF304091D1E166900466560 /* MADQueryViewControllerSections.h */,
 				4CF3040B1D1E175700466560 /* MADQueryViewControllerLayoutSections.h */,
 				4CF3040C1D1E175700466560 /* MADQueryViewControllerLayoutSections.m */,
+				4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */,
+				4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -6303,6 +6308,7 @@
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
+				4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */,
 				4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionResult.m in Sources */,
 				4C539C311CB5607D002E4CD5 /* MADQueryViewControllerLayout.m in Sources */,
 				4C5C0DBC1C9CED3C00826BC2 /* MADGetCredentialsOperation.m in Sources */,

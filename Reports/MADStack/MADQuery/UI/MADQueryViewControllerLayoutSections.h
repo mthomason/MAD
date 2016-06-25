@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MADQueryViewControllerLayoutSections_h
+#define MADQueryViewControllerLayoutSections_h
+
+#import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 #import "MADQueryViewControllerSections.h"
 
@@ -21,3 +24,5 @@
     @property (readonly) SEL        selector;
 
 @end
+
+#endif

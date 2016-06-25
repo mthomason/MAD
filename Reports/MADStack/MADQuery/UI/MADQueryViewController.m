@@ -675,7 +675,8 @@ BOOL storeEnabled() {
     [self performFetchTables];
 }
 
-#pragma mark - Table View Data Source Protocol
+#pragma mark -
+#pragma mark Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return (NSInteger)self.datamodel.count;
@@ -957,6 +958,9 @@ BOOL storeEnabled() {
     return result;
 }
 
+#pragma mark -
+#pragma mark UITableViewDelegate
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     MADQueryViewControllerLayoutSection *layout = [self.datamodel layoutAtIndex:(short)section];
     id header = [MADTableViewHeader newTableViewHeaderWithType: layout
@@ -964,32 +968,6 @@ BOOL storeEnabled() {
                                                         target: self];
     return header;
 }
-
-
-- (void)handleToggleReportingMode:(UISwitch *)switchControl {
-    if (switchControl.on) {
-        if ([MTStoreKitController sharedObject].isReportingEnabled) {
-            [[NSUserDefaults standardUserDefaults] setBool: YES
-                                                    forKey: MADIdentifierDefaultsViewerDesired];
-        } else {
-            [[NSUserDefaults standardUserDefaults] setBool: NO
-                                                    forKey: MADIdentifierDefaultsViewerDesired];
-            [switchControl setOn:NO animated:YES];
-        }
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADIdentifierDefaultsViewerDesired];
-    }
-    
-    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
-    //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
-    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
-    NSArray *paths = @[i];
-    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
-    //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
-}
-
-#pragma mark -
-#pragma mark UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -1019,6 +997,31 @@ BOOL storeEnabled() {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
                                          forRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+#pragma mark -
+#pragma mark Event handlers
+
+- (void)handleToggleReportingMode:(UISwitch *)switchControl {
+    if (switchControl.on) {
+        if ([MTStoreKitController sharedObject].isReportingEnabled) {
+            [[NSUserDefaults standardUserDefaults] setBool: YES
+                                                    forKey: MADIdentifierDefaultsViewerDesired];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool: NO
+                                                    forKey: MADIdentifierDefaultsViewerDesired];
+            [switchControl setOn:NO animated:YES];
+        }
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADIdentifierDefaultsViewerDesired];
+    }
+    
+    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
+    //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
+    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
+    NSArray *paths = [[NSArray alloc] initWithObjects: i, nil];
+    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+    //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+}
 
 #pragma mark - NSFetchedResultsControllerDelegate
 

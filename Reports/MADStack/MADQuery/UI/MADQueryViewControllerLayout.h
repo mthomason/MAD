@@ -22,8 +22,10 @@
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
 @interface MADQueryViewControllerLayout : NSObject
+    
+    - (instancetype)initWithNumberOfTables: (NSUInteger)numberOfTables
+                          reportingEnabled: (BOOL)reportingEnabled;
 
-    - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(BOOL)reportingEnabled;
     @property (nonatomic, readonly, assign) short count;
     @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewControllerLayoutSection *> *sections;
 

@@ -1,5 +1,5 @@
 //
-//  UITableViewCellQueryLink.h
+//  MADTableViewCellQueryLink.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/23/12.
