@@ -16,6 +16,7 @@
 @class NSArray <__covariant ObjectType>;
 @class NSSet <__covariant ObjectType>;
 @class NSNumber;
+@class NSFetchedResultsController;
 @class UITableView;
 @class NSIndexPath;
 @class NSIndexSet;
@@ -28,6 +29,7 @@
     - (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
                          fromTableView:(UITableView *)tableView
                            atIndexPath:(NSIndexPath *)indexPath;
+    - (void)reloadQueryViewData;
 
 @end
 
@@ -38,6 +40,11 @@
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
+    @property (nonatomic, strong) NSFetchedResultsController *queryTablesController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryLinksController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryGroupsController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
+
     @property (nonatomic, readonly, assign) short count;
     @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
@@ -45,7 +52,16 @@
     - (NSIndexSet *)sectionTypesIndexs;
     - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;
     - (MADQueryViewSectionDelegate *)layoutAtIndex:(short)index;
-    
+
+    - (NSInteger)numberOfRowsInSectionAtIndex:(short)index;
+    - (BOOL)canEditSectionAtIndex:(short)index;
+
+    - (void)performFetchAll;
+    - (void)performFetchTables;
+    - (void)performFetchLinks;
+    - (void)performFetchGroups;
+    - (void)performFetchPredicate;
+
 @end
 
 #endif

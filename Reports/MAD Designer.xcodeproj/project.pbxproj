@@ -4997,12 +4997,12 @@
 			isa = PBXGroup;
 			children = (
 				4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */,
+				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
+				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
 				4C539C2F1CB5607D002E4CD5 /* MADQueryViewDataSource.h */,
 				4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */,
 				4CF3040B1D1E175700466560 /* MADQueryViewSectionDelegate.h */,
 				4CF3040C1D1E175700466560 /* MADQueryViewSectionDelegate.m */,
-				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
-				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
 				4C4F128D1D0CF8C20002294E /* MADQueryViewControllerTableLayout.h */,
 				4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */,
 			);

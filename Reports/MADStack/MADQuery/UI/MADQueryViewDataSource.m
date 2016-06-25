@@ -112,4 +112,79 @@
     }
 }
 
+- (NSInteger)numberOfRowsInSectionAtIndex:(short)index {
+    MADQueryViewSectionDelegate *layoutSection = [self layoutAtIndex:(short)index];
+    NSInteger numberOfRows = 1;
+    if (layoutSection.numberOfRows == NSNotFound) {
+        id<NSFetchedResultsSectionInfo> sectionData;
+        switch (layoutSection.querySection) {
+            case MADIdentifierQueryViewSectionsTables: {
+                sectionData = self.queryTablesController.sections[0];
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
+                break;
+            }
+            case MADIdentifierQueryViewSectionsLinks: {
+                sectionData = self.queryLinksController.sections[0];
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
+                break;
+            }
+            case MADIdentifierQueryViewSectionsPredicate: {
+                sectionData = self.queryPredicatesController.sections[0];
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
+                break;
+            }
+            case MADIdentifierQueryViewSectionsGroups: {
+                sectionData = self.queryGroupsController.sections[0];
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
+                break;
+            }
+            default:
+                numberOfRows = 0;
+                break;
+        }
+    }
+    return numberOfRows;
+}
+
+- (BOOL)canEditSectionAtIndex:(short)index {
+    MADIdentifierQueryViewSections sectionType = [self sectionAtIndex:index];
+    return (sectionType == MADIdentifierQueryViewSectionsTables ||
+            sectionType == MADIdentifierQueryViewSectionsGroups ||
+            sectionType == MADIdentifierQueryViewSectionsPredicate ||
+            sectionType == MADIdentifierQueryViewSectionsLinks);
+}
+
+#pragma mark -
+#pragma mark Fetching
+
+- (void)performFetchWithController:(NSFetchedResultsController *)controller {
+    if (controller) {
+        [controller performFetch:nil];
+    }
+    [self.datasoruce reloadQueryViewData];
+}
+
+- (void)performFetchAll {
+    [self performFetchTables];
+    [self performFetchLinks];
+    [self performFetchGroups];
+    [self performFetchPredicate];
+}
+
+- (void)performFetchTables {
+    [self performFetchWithController:self.queryTablesController];
+}
+
+- (void)performFetchLinks {
+    [self performFetchWithController:self.queryLinksController];
+}
+
+- (void)performFetchGroups {
+    [self performFetchWithController:self.queryGroupsController];
+}
+
+- (void)performFetchPredicate {
+    [self performFetchWithController:self.queryPredicatesController];
+}
+
 @end
