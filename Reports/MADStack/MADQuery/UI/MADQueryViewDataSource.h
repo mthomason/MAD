@@ -9,8 +9,7 @@
 #ifndef MAD_Designer_MADQueryViewControllerLayoutSection_h
 #define MAD_Designer_MADQueryViewControllerLayoutSection_h
 
-#import <Foundation/NSObject.h>
-#import <CoreGraphics/CGBase.h>
+#import <UIKit/UITableView.h>
 #import "MADIdentifierQueryViewSections.h"
 
 @class NSArray <__covariant ObjectType>;
@@ -21,6 +20,9 @@
 @class NSIndexPath;
 @class NSIndexSet;
 @class MADQueryViewSectionDelegate;
+@class UITableViewCell;
+
+typedef void (^MADQueryViewConfigureCell)(UITableViewCell *, MADIdentifierQueryViewSections, NSInteger /* row */);
 
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
@@ -34,9 +36,11 @@
 @end
 
 @interface MADQueryViewDataSource : NSObject
+    <UITableViewDataSource>
     
-    - (instancetype)initWithNumberOfTables: (NSUInteger)numberOfTables
-                          reportingEnabled: (BOOL)reportingEnabled;
+    - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
+                          reportingEnabled:(BOOL)reportingEnabled
+                       handleConfigureCell:(MADQueryViewConfigureCell)handleConfigureCell;
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 

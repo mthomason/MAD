@@ -82,7 +82,6 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     
     if (self = [super initWithCoder:aDecoder]) {
-        
         id redraw = NSLocalizedString(@"Redraw", @"Redraw");
         id whiteColor = [UIColor whiteColor];
         id traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];

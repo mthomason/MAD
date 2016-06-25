@@ -106,8 +106,7 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 #pragma mark - Private Category
 
 @interface MADQueryViewController()
-    <UITableViewDataSource,
-        UITableViewDelegate,
+    <UITableViewDelegate,
         NSFetchedResultsControllerDelegate,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
@@ -145,6 +144,11 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 BOOL storeEnabled(void);
 BOOL storeEnabled() {
     return [MTStoreKitController sharedObject].reportingEnabled;
+}
+
+CGRect headerSectionFrame(CGFloat);
+CGRect headerSectionFrame(CGFloat headerSectionHeight) {
+    return CGRectMake(0.0000f, 0.0000f, 320.0000f, headerSectionHeight);
 }
 
 @implementation MADQueryViewController
@@ -237,10 +241,16 @@ BOOL storeEnabled() {
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
-                    MADQueryViewDataSource *datamodel;
-                    datamodel = [[MADQueryViewDataSource alloc] initWithNumberOfTables:query.numberOfTables
-                                                                      reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
-                    self.queryViewDataSource = datamodel;
+                    MADQueryViewDataSource *dataSource;
+                    MADQueryViewConfigureCell handleConfigureCell;
+                    handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
+                        [self configureCell:cell forSection:forSection andRow:row];
+                    };
+                    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: query.numberOfTables
+                                                                      reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                                   handleConfigureCell: handleConfigureCell];
+                    self.tableView.dataSource = dataSource;
+                    self.queryViewDataSource = dataSource;
                 }
             }
         }
@@ -328,6 +338,8 @@ BOOL storeEnabled() {
 - (void)viewDidLoad {
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
+
+    self.tableView.dataSource = self.queryViewDataSource;
 
     MADWatermarkView *watermarkView;
     watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
@@ -619,6 +631,7 @@ BOOL storeEnabled() {
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
 
+    
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
@@ -626,6 +639,7 @@ BOOL storeEnabled() {
     MADocument *document = self.document;
     [document.activeDocumentModel addQueryLink:link];
     [document saveContext];
+    
     NSInteger suspectedSection = 2;
     
     MADIdentifierQueryViewSections tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
@@ -667,96 +681,18 @@ BOOL storeEnabled() {
 }
 
 #pragma mark -
-#pragma mark Table View Data Source Protocol
+#pragma mark Helper
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return (NSInteger)self.queryViewDataSource.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.queryViewDataSource numberOfRowsInSectionAtIndex:(short)section];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.queryViewDataSource canEditSectionAtIndex:(short)indexPath.section];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self.queryViewDataSource sectionAtIndex:(short)indexPath.section] == MADIdentifierQueryViewSectionsGroups);
-}
-
-- (void)tableView:(UITableView *)tableView
-                                commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-                                 forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(UITableViewCell *)cell forSection:(MADIdentifierQueryViewSections)section andRow:(NSInteger)row {
     
-    MADIdentifierQueryViewSections querySection = [self.queryViewDataSource sectionAtIndex:(short)indexPath.section];
-
-    switch (editingStyle) {
-
-        case UITableViewCellEditingStyleDelete:
-            [self deleteItemFromQuerySection:querySection fromTableView:tableView atIndexPath:indexPath];
-            break;
-
-        case UITableViewCellEditingStyleInsert:
-            break;
-
-        case UITableViewCellEditingStyleNone:
-            break;
-
-        default:
-            break;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
-      toIndexPath:(NSIndexPath *)toIndexPath {
-    
-    MADIdentifierQueryViewSections ts = [self.queryViewDataSource sectionAtIndex:(short)toIndexPath.section];
-    switch (ts) {
-        case MADIdentifierQueryViewSectionsGroups: {
-
-            NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0],
-                        *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
-            RptqQueryGroup *fromGroup = [self.queryViewDataSource.queryGroupsController objectAtIndexPath: fromIndex],
-                           *toGroup = [self.queryViewDataSource.queryGroupsController objectAtIndexPath: toIndex];
-            
-            id fromWeight = [[NSNumber alloc] initWithInteger: toGroup.weight.integerValue],
-               toWeight = [[NSNumber alloc] initWithInteger: fromGroup.weight.integerValue];
-
-            fromGroup.weight = fromWeight;
-            toGroup.weight = toWeight;
-
-            NSError *error = nil;
-            [(self.queryViewDataSource.queryGroupsController).managedObjectContext save:&error];
-            [_queryViewDataSource performFetchGroups];
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView { return nil; }
-
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *result = nil;
-
-    NSInteger row = indexPath.row;
-    MADIdentifierQueryViewSections section = [self.queryViewDataSource sectionAtIndex:(short)indexPath.section];
-
     switch (section) {
-
-        // MARK: Display and identify the data source and data sources
+            
+            // MARK: Display and identify the data source and data sources
         case MADIdentifierQueryViewSectionsDatasource: {
-        
-            static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
-            result = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
-
+            
             RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
-
+                
                 id databaseType = database.ownedByUser.database_driver_type.copy;
                 id schemaName = [database.ownedByUser copyDatabaseSchemaName];
                 id localizedMessage = NSLocalizedString(TextFormatConnection, TextFormatConnection);
@@ -764,151 +700,72 @@ BOOL storeEnabled() {
                                                                                         databaseType: databaseType
                                                                                           schemaName: schemaName];
                 
-                result.textLabel.attributedText = message;
-                result.detailTextLabel.text = @"";
-                result.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
-
+                cell.textLabel.attributedText = message;
+                cell.detailTextLabel.text = @"";
+                cell.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
+                
             }
-            result.textLabel.numberOfLines = 0;
+            cell.textLabel.numberOfLines = 0;
             break;
         }
-
-        // MARK: Display the table names that are used in the query
+            
+            // MARK: Display the table names that are used in the query
         case MADIdentifierQueryViewSectionsTables: {
-        
-            static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
-            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
-            NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryTable *tablea = [self.queryViewDataSource.queryTablesController objectAtIndexPath: path];
-            NSString *alias = tablea.alias.copy;
+            
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            result.textLabel.text = alias;
-            result.textLabel.font = font;
-            result.textLabel.backgroundColor = [UIColor whiteColor];
-            result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            result.indentationLevel = 1;
-            result.tintColor = [MADColorEverydayApps newColorBlue];
-            result.backgroundColor = [UIColor whiteColor];
+            cell.textLabel.font = font;
+            cell.textLabel.backgroundColor = [UIColor whiteColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.indentationLevel = 1;
+            cell.tintColor = [MADColorEverydayApps newColorBlue];
+            cell.backgroundColor = [UIColor whiteColor];
             break;
         }
-        
-        // MARK: Display the table links or joins that are used in the query.
+            
+            // MARK: Display the table links or joins that are used in the query.
         case MADIdentifierQueryViewSectionsLinks: {
-
-            static NSString *MADIDCellInstruction = @"UITableViewCellQueryLink";
-            result = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
-            NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryLinks *links = [self.queryViewDataSource.queryLinksController objectAtIndexPath: indexPathLinks];
             
-            NSString *leftString = [NSString newStringFieldDisplayWithTable:links.tableleft
-                                                                   andField:links.fieldleft];
 
-            NSString *rightString = [NSString newStringFieldDisplayWithTable:links.tableright
-                                                                    andField:links.fieldright];
-
-            NSString *linksDescription = [links copyLinkDescription];
-            NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQuerySectionLinks:leftString
-                                                                   rightString:rightString
-                                                              linksDescription: linksDescription];
-            ((MADTableViewCellQueryLink *)result).tableID = links.objectID.copy;
-            result.textLabel.numberOfLines = 0;
-            result.textLabel.attributedText = message;
-
+            cell.textLabel.numberOfLines = 0;
+            
             break;
         }
-
-        // MARK: Display the groupings used in the query.
+            
+            // MARK: Display the groupings used in the query.
         case MADIdentifierQueryViewSectionsGroups: {
-            static NSString *MADIDCellInstruction = @"UITableViewCellQueryGroup";
-            result = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
-            NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryGroup *group = [self.queryViewDataSource.queryGroupsController objectAtIndexPath: path];
-            result.backgroundView.backgroundColor = [UIColor whiteColor];
-            
-            NSString *field = [group fieldNameNice].copy,
-                     *sort  = [group sortDisplayNice].copy;
-            NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQuerySectionGroupWithField: field
-                                                                                andSort: sort];
-            result.textLabel.attributedText = message;
-            result.textLabel.numberOfLines = 0;
-            ((MADTableViewCellQueryGroup *)result).tableID = group.objectID.copy;
+
+            cell.textLabel.numberOfLines = 0;
             break;
         }
-        
-        // MARK: Display the predicates or conditions on the query.
+            
+            // MARK: Display the predicates or conditions on the query.
         case MADIdentifierQueryViewSectionsPredicate: {
-            static NSString *MADIDCellPredicate = @"UITableViewCellQueryPredicate";
-            result = [tableView dequeueReusableCellWithIdentifier: MADIDCellPredicate];
             
-            NSIndexPath *indexPathPredicates = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryPredicate *predicate = [self.queryViewDataSource.queryPredicatesController objectAtIndexPath: indexPathPredicates];
+
+            cell.textLabel.numberOfLines = 0;
             
-            NSString *leftFieldDisplay, *rightFieldDisplay, *symbol = [predicate symbolForDisplay];
-            if (predicate.fieldleftpred != nil) {
-                leftFieldDisplay = predicate.fieldleftpred;
-            } else {
-                leftFieldDisplay = [predicate.hasLeftField toString];
-            }
-            
-            if (predicate.fieldrightpred != nil) {
-                rightFieldDisplay = predicate.fieldrightpred;
-            } else {
-                rightFieldDisplay = [predicate.hasRightField toString];
-            }
-            NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQueryPredicate: leftFieldDisplay
-                                                                     symbol: symbol
-                                                                  rightText: rightFieldDisplay];
-            result.textLabel.numberOfLines = 0;
-            result.textLabel.attributedText = message;
-            ((MADTableViewCellQueryPredicate *)result).tableID = predicate.objectID.copy;
-            
-            break;
-        }
-        
-        case MADIdentifierQueryViewSectionsSql: {
-            switch (row) {
-                case 0: {
-                    static NSString *MADIDCellOverride = @"UITableViewCellOverride";
-                    result = [tableView dequeueReusableCellWithIdentifier: MADIDCellOverride];
-                    break;
-                }
-                default: {
-                    static NSString *MADIDCellQueryInput = @"UITableViewCellQueryInput";
-                    result = [tableView dequeueReusableCellWithIdentifier: MADIDCellQueryInput];
-                    break;
-                }
-            }
             break;
         }
             
         case MADIdentifierQueryViewSectionsNumberOfQueryResults: {
-        
-            static NSString *idNumberOfQueryResults = @"UITableViewCellNumberOfQueryResultsIdentifier";
-            result = [tableView dequeueReusableCellWithIdentifier: idNumberOfQueryResults];
-            UISwitch *s = [[UISwitch alloc] initWithFrame:CGRectZero];
-            s.on = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired];
-            [s addTarget:self action:@selector(handleToggleReportingMode:) forControlEvents:UIControlEventValueChanged];
-            result.accessoryView = s;
-            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired] ?
-                                                    @"Reporting Mode" : @"Designer Mode (limited)";
+            
+            UISwitch *switchQueryMode = [[UISwitch alloc] initWithFrame:CGRectZero];
+            switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired];
+            [switchQueryMode addTarget: self action: @selector(handleToggleReportingMode:)
+                      forControlEvents: UIControlEventValueChanged];
+            cell.accessoryView = switchQueryMode;
+            cell.textLabel.text = switchQueryMode.on ?
+                                    @"Reporting Mode" :
+                                    @"Designer Mode (limited)";
             break;
         }
-        
+            
         default: {
             break;
         }
-
+            
     }
     
-    if (!result) {
-        result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DefaultCellShouldNotGetHere"];
-        (result.textLabel).text = @"Err";
-    }
-
-    return result;
 }
 
 #pragma mark -
@@ -917,7 +774,7 @@ BOOL storeEnabled() {
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     MADQueryViewSectionDelegate *layout = [self.queryViewDataSource layoutAtIndex:(short)section];
     id header = [MADTableViewHeader newTableViewHeaderWithType: layout
-                                                      andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight)
+                                                      andFrame: headerSectionFrame(_headerSectionHeight)
                                                         target: self];
     return header;
 }
@@ -1165,7 +1022,8 @@ BOOL storeEnabled() {
 }
 
 - (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
+                              sender: sender];
     [self.tabBarController disableTabBarItems];
 }
 
@@ -1302,9 +1160,16 @@ BOOL storeEnabled() {
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
-        MADQueryViewDataSource *datamodel = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
-                                                                                  reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled];
-        _queryViewDataSource = datamodel;
+        MADQueryViewDataSource *dataSource;
+        MADQueryViewConfigureCell handleConfigureCell;
+        handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
+            [self configureCell:cell forSection:forSection andRow:row];
+        };
+        dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
+                                                          reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                       handleConfigureCell: handleConfigureCell];
+        self.tableView.dataSource = dataSource;
+        _queryViewDataSource = dataSource;
     }
     return _queryViewDataSource;
 }
@@ -1542,9 +1407,12 @@ BOOL storeEnabled() {
         BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
         MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
         oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
-                                                                     reportingEnabled: reportingEnabled];
+                                                               reportingEnabled: reportingEnabled
+                                                            handleConfigureCell: nil];
+        
         newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables - 1
-                                                                     reportingEnabled: reportingEnabled];
+                                                               reportingEnabled: reportingEnabled
+                                                            handleConfigureCell: nil];
         
         NSIndexSet *oldIndexesSectionTypes = oldQueryLayout.sectionTypesIndexs;
         NSMutableIndexSet *oldIndexes = oldIndexesSectionTypes.mutableCopy;
