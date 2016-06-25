@@ -34,8 +34,7 @@
 
 #import "MADBackgroundViewSelected.h"
 #import "MADStandard.h"
-
-static NSString * const MADImageBlank = @"UIImageDocumentBlank";
+#import "MADThumbnailView.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 const CGFloat MTAnimationRotateDeg = 1.0000f;
@@ -107,13 +106,8 @@ float wobbleFactor() {
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    UIImage *result = [UIImage imageNamed:MADImageBlank];
-    self.imagePreview.image = result;
-}
-
-+ (UIImage *)newDefaultThumbnail {
-    UIImage *result = [UIImage imageNamed:MADImageBlank];
-    return result;
+    [self stopWobble];
+    [self.imagePreview prepareForReuse];
 }
 
 - (void)awakeFromNib {
@@ -122,8 +116,6 @@ float wobbleFactor() {
     
     self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
-
-    self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
     
     [super awakeFromNib];
 }
@@ -187,7 +179,7 @@ float wobbleFactor() {
     
     void (^animationFinish)(void);
     void (^animationStart)(void);
-    void (^ animationStartCompletion)(BOOL finished);
+    void (^animationStartCompletion)(BOOL finished);
     
     
     MADCollectionViewCellDocument __weak *weakself = self;
@@ -218,9 +210,9 @@ float wobbleFactor() {
         [UIView animateWithDuration: 0.2
                               delay: 0
                             options: UIViewAnimationOptionAllowUserInteraction |
-         UIViewAnimationOptionRepeat |
-         UIViewAnimationOptionAutoreverse |
-         UIViewAnimationOptionBeginFromCurrentState
+                                     UIViewAnimationOptionRepeat |
+                                     UIViewAnimationOptionAutoreverse |
+                                     UIViewAnimationOptionBeginFromCurrentState
                          animations: animationFinish
                          completion: nil];
     };
@@ -238,7 +230,7 @@ float wobbleFactor() {
     }
 }
 
--(BOOL)shouldGroupAccessibilityChildren{
+- (BOOL)shouldGroupAccessibilityChildren{
     return YES;
 }
 
@@ -392,12 +384,11 @@ float wobbleFactor() {
     else
         [activityIndicator stopAnimating];
     
-
-    
-    NSURL *fileURL = metadata.URL.copy;
-    dispatch_block_t read_iamge = ^{
+    NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
+    self.imagePreview.thumbnailURL = thumbnailUrl;
+/*    dispatch_block_t read_iamge = ^{
         @autoreleasepool {
-            
+            //MADMetaData *thumbnailMetadata = [[MADMetaData alloc] initWithURL:fileURL];
             NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:fileURL];
             NSString *path = thumbnailUrl.path;
             NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
@@ -410,10 +401,17 @@ float wobbleFactor() {
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
-    
+   */ 
     if (_editing) [self startWobble];
     else [self stopWobble];
 
+}
+
+- (void)setEditing:(BOOL)editing {
+    if (_editing != editing) {
+        if ((_editing = editing)) [self startWobble];
+        else [self stopWobble];
+    }
 }
 
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {

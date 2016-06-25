@@ -6,8 +6,19 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADArchiveManager_h
+#define Reports_MADArchiveManager_h
+
+#import <Foundation/NSObject.h>
+
+@class NSURL;
 
 @interface MADArchiveManager : NSObject
 
+    - (instancetype)initWithFileWrapperURL:(NSURL *)fileWrapper archiveURL:(NSURL *)archive;
+    - (BOOL)archive:(BOOL)overwrite;
+    - (BOOL)unarchive;
+    
 @end
+
+#endif

@@ -6,25 +6,22 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADDocumentManager_h
+#define Reports_MADDocumentManager_h
+
 #import <Foundation/Foundation.h>
+#import <UIKit/UICollectionView.h>
 
-@protocol MADDocumentManagerProtocol <NSObject>
-
-    - (void)documentManagerDidChangeContent:(NSArray *)inserts
-                                    removes:(NSArray *)removes
-                                    updates:(NSArray *)updates
-                                 completion:(void (^)(BOOL, NSError *))completion;
-
-    - (void)handleDidDisconnectFromClound:(id)sender;
-    - (void)handleDidStartLongRunningActivity;
-    - (void)handleDidCompletedLongRunningActivity;
-
-@end
+@protocol MADDocumentManagerProtocol;
 
 @class MADMetaData;
+@class MADCollectionViewCellDocument;
 
 @interface MADDocumentManager : NSObject
+    <UICollectionViewDataSource>
 
+    - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration;
+                                        
     @property (nonatomic, weak) NSObject <MADDocumentManagerProtocol> * delegate;
 
     - (MADMetaData *)metadataAtIndex:(NSUInteger)index;
@@ -42,3 +39,5 @@
     - (NSURL *)documentsDirectory;
 
 @end
+
+#endif

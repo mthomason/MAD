@@ -24,7 +24,6 @@
 #import <UIKit/UIPrintInteractionController.h>
 
 #import <setjmp.h>
-#import <copyfile.h>
 
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSURL+CommonURLs.h>
@@ -64,47 +63,21 @@
 
 #import "MADNotificationDidFormatPage.h"
 
-#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-
-#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
-
-#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
-
-#import "RptqDocumentSectionRows.h"
 #import "RptqDocumentSectionRows+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-
-#import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
-
-#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
-
-#import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
-
-#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-
-#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-
 #import "RptqDocumentSectionRows.h"
-
-#import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
-
 #import "RptqDocumentSectionEnumerator.h"
 #import "MADSectionLayoutManager.h"
-
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
@@ -114,16 +87,13 @@
 
 #import "NSString+RelativePath.h"
 
-#import "archive.h"
-#import "archive_entry.h"
-
 #import "UIImage+MADDocument.h"
 #import "NSError+Document.h"
 #import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
-#import "madtar.h"
-#import "madpath.h"
+
+#import "MADArchiveManager.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -338,113 +308,20 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Static Helpers
 
-
-+ (BOOL)archiveFilesAtURL:(NSURL *)originURL toURL:(NSURL *)archiveURL
-                overwrite:(BOOL)overwrite {
-
-    NSDirectoryEnumerator<NSURL *> * directory =
-        [[NSFileManager defaultManager] enumeratorAtURL: originURL
-                             includingPropertiesForKeys: nil
-                                                options: NSDirectoryEnumerationSkipsHiddenFiles
-                                           errorHandler: nil];
-
-    BOOL success = NO;
-    int r;
-    struct archive *archive;
-
-    char *relativePathFileSystem;
-    char *origionalURLFileSystem;
-    char *archiveFilename;
-    char *filename;
-    
-    NSString *basePath = originURL.path;
-    NSString *relativePath;
-
-    
-    origionalURLFileSystem = strdup(originURL.fileSystemRepresentation);
-    chdir(origionalURLFileSystem);
-    
-    archiveFilename = strdup(archiveURL.fileSystemRepresentation);
-    
-    
-    char *outname = malloc( (strlen(archiveFilename) + 1 ) * sizeof(char *) + 1 );
-    char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) + 2 );
-    
-    strcpy(outname, archiveFilename);
-    strcpy(backup, archiveFilename);
-    strcat(backup, "~\0");
-    
-    mad_file_remove_if_exist(backup);
-    
-    
-    r = copyfile(archiveFilename, backup, NULL,
-                 COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
-                 COPYFILE_COPY_XATTR | COPYFILE_DATA);
-    
-    if (r < 0) goto ARCHIVE_FILE_AT_URL_SHORT;
-    
-    archive = archive_write_new();
-
-    r = archive_write_set_format_pax_restricted(archive);   // Note 1
-    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
-
-    r = archive_write_add_filter_bzip2(archive);
-    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
-
-    r = archive_write_open_filename(archive, outname);
-    if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
-    
-    for (NSURL *url in directory) {
-
-        relativePath = [url.path stringWithPathRelativeTo:basePath];
-        
-        filename = strdup(url.fileSystemRepresentation);
-        relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
-        
-        mad_archive_write_file(archive, filename, relativePathFileSystem);
-
-        free(relativePathFileSystem); free(filename);
-        
-    }
-    
-    success = YES;
-    
-    mad_file_remove_if_exist(backup);
-    
-    archive_write_close(archive);
-    archive_write_free(archive);
-
-ARCHIVE_FILE_AT_URL_SHORT:;
-    
-    //restore backup on error
-    if (!success && access(backup, F_OK)) {
-        copyfile(backup, archiveFilename, NULL,
-                 COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
-                 COPYFILE_COPY_XATTR | COPYFILE_DATA);
-    }
-    
-    free(backup); free(outname);
-    free(origionalURLFileSystem);
-    free(archiveFilename);
-    
-    return success;
-}
-
-+ (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion  {
++ (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *cleanupURL))completion  {
     
     [document regenThumbnail];
     [document removeObservers];
-    NSURL *gutsUrl = document.urlGuts.copy;
 
-    NSURL *fileURL = document.fileURL;
+    NSURL *fileURL = document.fileURL.copy;
+    NSURL *gutsUrl = document.urlGuts.copy;
     [document saveToURL: fileURL
        forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: ^(BOOL success) {
 
         if (success && document != nil) {
             [document closeWithCompletionHandler:^(BOOL successClose) {
-                [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
-                completion(successClose);
+                completion(successClose, gutsUrl);
             }];
         }
 
@@ -512,79 +389,17 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
-    BOOL success = NO, isDirectory;
-    int r;
-    NSURL *urlGuts = _urlGuts.copy, *urlArchive;
-    NSString *urlGutsPath = urlGuts.path, *pathExtension = url.pathExtension;
-    NSError * __autoreleasing *errorCreate = nil;
-    
-    success = [pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
-    if (!success) goto READ_END;
- 
-    [MADFileUtilities deleteCoreDataFilesAtDirectory: urlGuts];
+    MADArchiveManager *archiveManager;
+    BOOL success = [url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
+    if (!success) goto READFROMURL_END;
 
-    success = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
-                                                   isDirectory: &isDirectory];
+    archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:_urlGuts archiveURL:url];
+    success = [archiveManager unarchive];
 
-    if (!success || !isDirectory) {
-        BOOL successCreate;
-        successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: urlGutsPath
-                                                  withIntermediateDirectories: YES
-                                                                   attributes: nil
-                                                                        error: errorCreate];
-                                                                                
-        BOOL sucessExist;
-        sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: urlGutsPath
-                                                           isDirectory: &isDirectory];
-        
-        if (!sucessExist) goto READ_FAIL;
-    }
-    
-    urlArchive = url;
-    
-    const char *fileWrapperDirectoryCString = urlGuts.fileSystemRepresentation;
-    r = chdir(fileWrapperDirectoryCString);
-    if (r != 0) goto READ_FAIL;
-    
-    const char *madArchivePathCString = urlArchive.fileSystemRepresentation;
+READFROMURL_END:;
 
-    success = mad_extract(madArchivePathCString) == 0;
-    if (!success) goto READ_FAIL;
-
-    goto READ_END;
-
+    return success ? [super readFromURL:_urlGuts error:outError] : NO;
     
-READ_FAIL:;
-    
-    {
-        //NSLog(@"%s", strerror(errno));
-        
-        NSError * __autoreleasing *errorReading = NULL;
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        
-        NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
-                 url, *errorReading, __PRETTY_FUNCTION__);
-        
-        NSFileWrapper *fileWrapper;
-        fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        
-        NSError * __autoreleasing *error = NULL;
-        success = [fileWrapper writeToURL: urlGuts
-                                  options: NSFileWrapperWritingAtomic
-                      originalContentsURL: url
-                                    error: error];
-
-        NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
-    }
-    
-READ_END:;
-
-    
-    if (success) {
-        return [super readFromURL:urlGuts error:outError];
-    }
-    
-    return NO;
 }
 
 #pragma mark Writing
@@ -599,11 +414,10 @@ READ_END:;
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
     
     if (!success) return NO;
-
-    return [MADocument archiveFilesAtURL: self.urlGuts
-                                   toURL: self.fileURL
-                               overwrite: YES];
-    
+    MADArchiveManager *archiveManager;
+    archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
+                                                            archiveURL: self.fileURL];
+    return [archiveManager archive:YES];
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
@@ -773,14 +587,14 @@ READ_END:;
         
         writeAdditionalContent  = YES;
         
-        NSURL *metaUrl = self.urlMetaPlaylist;
+        NSDictionary *additionalContent;
         id version = content[MADDocumentInfoKeyVersion];
         id generator = content[MADDocumentInfoKeyGenerator];
         
-        NSDictionary *additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
+        additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
                                            version, MADDocumentInfoKeyVersion,
                                            generator, MADDocumentInfoKeyGenerator, nil];
-        [additionalContent writeToURL:metaUrl atomically:NO];
+        [additionalContent writeToURL:_urlMetaPlaylist atomically:NO];
         
     } else {
         
@@ -817,7 +631,8 @@ READ_END:;
 
 - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID {
 
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
     [private performBlockAndWait:^{
 
@@ -831,8 +646,8 @@ READ_END:;
                                                             forManagedObjectContext: private];
         newQueryTable.inQuery = query;
         
-        NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables];
-        NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
+        NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables],
+                     *newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
         
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
             @autoreleasepool {
@@ -1233,7 +1048,7 @@ READ_END:;
     
     NSNumber *queryLimit;
     queryLimit = [[NSNumber alloc] initWithUnsignedInteger: self.limitResultsDesignMode ?
-                                        50 : NSUIntegerMax];
+                                                                50 : NSUIntegerMax];
     extraParameters[@"MADQueryLimit"] = queryLimit;
     
     MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];

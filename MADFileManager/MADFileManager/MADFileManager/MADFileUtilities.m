@@ -362,23 +362,20 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFileAndArchiveAtURL:(NSURL *)url {
+    BOOL (^errorHandler)(NSURL *, NSError *);
+    errorHandler = ^BOOL(NSURL *errorUrl, NSError *error) {
+        NSLog(@"Error %@", error);
+        return YES;
+    };
     NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
     NSDirectoryEnumerator *enumerator;
     enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
                                       includingPropertiesForKeys: propertyKeys
                                                          options: NSNotFound
-                                                    errorHandler: ^BOOL(NSURL *errorUrl,
-                                                                        NSError *error) {
-                                                        return YES;
-                                                    }];
-    
-    NSError *error;
+                                                    errorHandler: errorHandler];
     for (NSURL *fileURL in enumerator) {
-        error = nil;
         [MADFileUtilities removeFileAtURL:fileURL];
     }
-    
-    error = nil;
     [MADFileUtilities removeFileAtURL:url];
     
 }

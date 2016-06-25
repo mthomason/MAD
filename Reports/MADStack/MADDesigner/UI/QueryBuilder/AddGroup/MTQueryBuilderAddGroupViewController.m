@@ -46,14 +46,8 @@ static NSString * const TextDefault = @"Default";
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
-    if (self) {
-
-    }
+    if (self) { }
     return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
@@ -64,22 +58,6 @@ static NSString * const TextDefault = @"Default";
     self.sortOrder = MNSSortOrderAccending;
     NSString *accending = NSLocalizedString(@"Accending", @"Accending");
     self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -93,7 +71,8 @@ static NSString * const TextDefault = @"Default";
             
             MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
-                dvc.excludeTables = @[];
+                NSArray *empty = [[NSArray alloc] init];
+                dvc.excludeTables = empty;
                 dvc.delegate = self;
                 dvc.document = self.document;
             }

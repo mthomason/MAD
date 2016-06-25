@@ -18,6 +18,7 @@
 #import <MAD/MADConstants.h>
 #import "Constants.h"
 
+#import "MADDocumentManagerProtocol.h"
 
 @interface MADDocumentManager ()
     <MADFilesControllerDelegate,
@@ -28,27 +29,40 @@
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *batchRemoves;
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *batchUpdates;
 
+    @property (nonatomic, copy) void (^handleCellConfiguration)(MADCollectionViewCellDocument *);
+
 @end
 
 @implementation MADDocumentManager
 
-- (instancetype)init {
+- (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration {
     if (self = [super init]) {
-    
-        MADFileLocationManager *fileLocationManager;
-        fileLocationManager = [[MADFileLocationManager alloc] init];
-        fileLocationManager.delegate = self;
-        fileLocationManager.filesController.delegate = self;
-        self.fileLocationManager = fileLocationManager;
-
-        NSMutableIndexSet *inserts = [[NSMutableIndexSet alloc] init],
-                          *removes = [[NSMutableIndexSet alloc] init],
-                          *updates = [[NSMutableIndexSet alloc] init];
-        self.batchInserts = inserts,
-        self.batchRemoves = removes,
-        self.batchUpdates = updates;
+        _handleCellConfiguration = cellCondiguration;
+        [MADDocumentManager commonInitalization:self];
     }
     return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [MADDocumentManager commonInitalization:self];
+    }
+    return self;
+}
+
++ (void)commonInitalization:(MADDocumentManager *)this {
+    MADFileLocationManager *fileLocationManager;
+    fileLocationManager = [[MADFileLocationManager alloc] init];
+    fileLocationManager.delegate = this;
+    fileLocationManager.filesController.delegate = this;
+    this.fileLocationManager = fileLocationManager;
+    
+    NSMutableIndexSet *inserts = [[NSMutableIndexSet alloc] init],
+    *removes = [[NSMutableIndexSet alloc] init],
+    *updates = [[NSMutableIndexSet alloc] init];
+    this.batchInserts = inserts,
+    this.batchRemoves = removes,
+    this.batchUpdates = updates;
 }
 
 #pragma mark -
@@ -179,32 +193,13 @@
     [updates removeObjectsInArray:removes];
 
 
-    [self.delegate documentManagerDidChangeContent:inserts
-                                           removes:removes
-                                           updates:updates
-                                        completion:^(BOOL success, NSError *error) {
-         completion(YES, nil);
-    }];
-/*
-    UICollectionView *__weak weakCollectionView = self.collectionView;
-    [self.collectionView performBatchUpdates:^{
-    
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+    void (^handleCompletion)(BOOL, NSError *);
+    handleCompletion = ^(BOOL success, NSError *error) { completion(YES, nil); };
+    [self.delegate documentManagerDidChangeContent: inserts
+                                           removes: removes
+                                           updates: updates
+                                        completion: handleCompletion];
 
-        UICollectionView *collectionView = weakCollectionView;
-        if (inserts.count > 0) {
-            [collectionView insertItemsAtIndexPaths: inserts];
-        }
-        if (removes.count > 0) {
-            [collectionView deleteItemsAtIndexPaths: removes];
-        }
-        if (updates.count > 0) {
-            [collectionView reloadItemsAtIndexPaths: updates];
-        }
-    } completion:^(BOOL finished) {
-        completion(YES, nil);
-    }];
-*/
 }
 
 - (void)filesController:(MADFilesController *)filesController
@@ -224,6 +219,29 @@
 
 - (NSURL *)documentsDirectory {
     return _fileLocationManager.filesController.documentDirectory;
+}
+
+#pragma mark -
+#pragma mark UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section {
+    return (NSInteger)self.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
+    id cell;
+    cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
+                                                     forIndexPath: indexPath];
+    
+    _handleCellConfiguration(cell);
+    
+    return cell;
 }
 
 @end

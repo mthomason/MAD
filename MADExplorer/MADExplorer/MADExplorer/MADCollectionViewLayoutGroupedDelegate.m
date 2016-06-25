@@ -176,6 +176,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     id gestureToRemove = _longPressGestures[hash];
     [cell removeGestureRecognizer: gestureToRemove];
+    [cell prepareForReuse];
     [_longPressGestures removeObjectForKey:hash];
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     

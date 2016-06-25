@@ -14,13 +14,14 @@
 #import "MADFileExplorerViewControllerProtocol.h"
 
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
-//#import <MADFileManager/MADFilesControllerDelegate.h>
 
 #import <QuickLook/QLPreviewController.h>
 
 #import "MADDocumentManager.h"
 
 #import "MADFileExplorerView.h"
+
+#import <MADFileManager/MADFileUtilities.h>
 
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -92,6 +93,8 @@
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
 
+#import "MADDocumentManagerProtocol.h"
+
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
 const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
@@ -129,6 +132,14 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 //NSString * const MADUtiPublicData                               = @"public.data";
 
+BOOL fileFound(NSURL *, NSString *);
+BOOL fileFound(NSURL *URL, NSString *name) {
+    NSURL *newUrl = [URL.URLByDeletingLastPathComponent
+                     URLByAppendingPathComponent:name isDirectory:NO];
+    NSString *path = newUrl.path;
+    return [[NSFileManager defaultManager] fileExistsAtPath:path] ||
+    [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl];
+}
 
 @interface MADFileExplorerViewController()
     <NSFileManagerDelegate,
@@ -322,8 +333,14 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADDocumentManager *documentManager = [[MADDocumentManager alloc] init];
+    void (^handleCellConfiguration)(MADCollectionViewCellDocument *cell);
+    handleCellConfiguration = ^(MADCollectionViewCellDocument *cell) {
+        if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+    };
+    MADDocumentManager *documentManager;
+    documentManager = [[MADDocumentManager alloc] initWithCellConfiguration:handleCellConfiguration];
     documentManager.delegate = self;
+    self.collectionView.dataSource = documentManager;
     self.documentManager = documentManager;
     
     MADActiveDocumentManager *openFiles;
@@ -340,7 +357,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     layoutGroupedDelegate.delegate = self;
     
     self.collectionView.delegate = layoutGroupedDelegate;
-    self.collectionView.dataSource = self;
     self.collectionViewDelegate = layoutGroupedDelegate;
     
 #pragma mark Start observing
@@ -571,31 +587,6 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     _collectionViewDelegate.editing = editing;
 }
 
-#pragma mark - 
-#pragma mark UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-     numberOfItemsInSection:(NSInteger)section {
-    return (NSInteger)_documentManager.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
-    MADCollectionViewCellDocument *cell;
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
-                                                     forIndexPath: indexPath];
-    
-    if (cell.delegate == nil) {
-        ((MADCollectionViewCellDocument *)cell).delegate = self;
-    }
-    
-    return cell;
-}
-
 #pragma mark -
 #pragma mark MADDocumentManagerProtocol
 
@@ -607,31 +598,32 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         MADFileExplorerViewController *sself = weakself;
         [sself.documentManager updateCloudPreferences];
     };
-
+    
     void (^block)(void) = ^ {
-
+        
         MADFileExplorerViewController *sself = weakself;
         if (!sself) return;
         
         UIAlertController *alert;
         alert = [UIAlertController newAlertControlerNotifyCloudSignOut:actionConfirm];
         [sself presentViewController:alert animated:YES completion:nil];
-
+        
     };
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:block];
 }
 
 - (void)handleDidStartLongRunningActivity {
-    
+    // FIXME: Show activity indicator.
 }
 
 - (void)handleDidCompletedLongRunningActivity {
-    
+    // FIXME: Hide activity indicator.
 }
 
 #pragma mark -
 #pragma mark MADDocumentManagerProtocol
+
 - (void)documentManagerDidChangeContent:(NSArray *)inserts
                                 removes:(NSArray *)removes
                                 updates:(NSArray *)updates
@@ -640,7 +632,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     void (^ batchUpdates)(void);
     void (^ batchCompletion)(BOOL finished);
-
+    
     batchUpdates = ^{
         
         NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -875,6 +867,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         activityIndicator.hidesWhenStopped = NO;
         barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
         barButtonItem.isAccessibilityElement = NO;
+        
     } else {
         barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;
     }
@@ -1168,11 +1161,18 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         MADActiveDocumentManager *fileManager = self.activeDocumentManager;
-        [MADocument close:openDocument completion:^(BOOL success) {
+        //NSURL *gutsUrl = openDocument.urlGuts.copy;
+        void (^handleCloseCompletion)(BOOL, NSURL *);
+        handleCloseCompletion = ^(BOOL success, NSURL *cleanupURL) {
             if (success) {
                 [fileManager unload];
+                [MADFileUtilities removeFileAndArchiveAtURL:cleanupURL];
+
+          //      [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
+
             }
-        }];
+        };
+        [MADocument close:openDocument completion:handleCloseCompletion];
     }
 
 }
@@ -1226,10 +1226,10 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
                                                   object: document];
-    id o = [[NSInvocationOperation alloc] initWithTarget:self
+/*    id o = [[NSInvocationOperation alloc] initWithTarget:self
                                                 selector:@selector(handleReloadAfterClose)
                                                   object:nil];
-    [[NSOperationQueue mainQueue] addOperation:o];
+    [[NSOperationQueue mainQueue] addOperation:o];*/
     NSLog(@"\n\n\tDocument state closed.\n\n");
 }
 
@@ -1264,7 +1264,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     MADViewerController *viewerViewController = [MADViewerController newViewerController];
     viewerViewController.viewControllerDelegate = self ;
     
-    MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
+    MADNavigationController *navControllerViewer;
+    navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
     navControllerViewer.document = document;
     [navControllerViewer setNavigationBarHidden:YES animated:NO];
     [navControllerViewer setToolbarHidden:NO animated:NO];
@@ -1276,7 +1277,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
     self.tabController = tabBarController;
     
-    MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
+    MADNavigationController *navigationController;
+    navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
     
     UIColor *color = [MADColorEverydayApps newColorBlue];
     navigationController.navigationBar.barTintColor = color;
@@ -1473,8 +1475,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
             UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
             [UIView transitionWithView: titleView
                               duration: 0.2000f
-                               options: UIViewAnimationOptionCurveEaseOut animations:^{
-                               
+                               options: UIViewAnimationOptionCurveEaseOut
+                            animations: ^{
                                    self.searchBar.alpha = 1.0000f;
                                    self.navigationItem.titleView.alpha = 0.0000f;
                                    self.navigationItem.titleView = searchViewHolder;
@@ -1517,13 +1519,13 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
         
-        NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
-        if (visibleItems != nil)
-            [self.collectionView reloadItemsAtIndexPaths:visibleItems];
+        //NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+        //if (visibleItems != nil)
+        //    [self.collectionView reloadItemsAtIndexPaths:visibleItems];
         
-        /*for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-            [cell startWobble];
-        }*/
+        for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+            [cell setEditing:YES];
+        }
         [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
         
     } else {
@@ -1550,11 +1552,9 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     for (NSIndexPath *path in collectionView.indexPathsForSelectedItems) {
         [collectionView deselectItemAtIndexPath:path animated:YES];
     }
-    [collectionView reloadItemsAtIndexPaths:collectionView.indexPathsForVisibleItems];
-    //for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-    //    [cell stopWobble];
-    //    cell.selected = NO;
-    //}
+    for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+        cell.editing = NO;
+    }
 
 }
 
@@ -1707,44 +1707,49 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     handleConfermation = ^(UIAlertAction *action, NSString *text) {
         
         NSString *name = [NSURL newStringFileNameFilter:text];
-        if (name.length > 0) {
-            NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent
-                             URLByAppendingPathComponent:name isDirectory:NO];
-            NSString *path = newUrl.path;
-            if ([[NSFileManager defaultManager] fileExistsAtPath:path] == NO &&
-                [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
-                if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
-                    
-                    MADDocumentManager *documentManager = self.documentManager;
-                    
-                    void (^closeCompletion)(BOOL success);
-                    void (^openCompletion)(BOOL success);
-                    
-                    closeCompletion = ^(BOOL successClose) {
-                        if (successClose)
-                            [documentManager rename:text
-                                        itemAtIndex:(NSUInteger)indexPath.item];
-                    };
-                    
-                    MADocument *doc = [MADocument newManagedDocumentForURL:metaData.URL];
-                    
-                    openCompletion = ^(BOOL success) {
-                        if (success) [MADocument close: doc completion:closeCompletion];
-                    };
-                    
-                    [doc openWithCompletionHandler:openCompletion];
-                    
-                } else {
-                    [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
-                }
-            } else {
-                UIAlertController *alertFileExist = [UIAlertController newAlertControllerErrorFileExist];
-                [self showViewController:alertFileExist sender:self];
-            }
-        } else {
-            UIAlertController *alertFilename = [UIAlertController newAlertControllerErrorValidationFilename];
-            [self showViewController:alertFilename sender:self];
+        BOOL shortcircut = NO;
+        
+        //Test for input
+        UIAlertController *alert;
+        if (name.length <= 0) {
+            alert = [UIAlertController newAlertControllerErrorValidationFilename];
+            [self showViewController:alert sender:self];
+            shortcircut = YES;
         }
+        
+        //Check if file exist
+        if (!shortcircut && (fileFound(metaData.URL, name))) {
+            alert = [UIAlertController newAlertControllerErrorFileExist];
+            [self showViewController:alert sender:self];
+            shortcircut = YES;
+        }
+        
+        
+        if (!shortcircut && metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
+            
+            MADDocumentManager *documentManager = self.documentManager;
+            
+            void (^closeCompletion)(BOOL, NSURL *);
+            void (^openCompletion)(BOOL);
+            
+            closeCompletion = ^(BOOL successClose, NSURL *cleanupURL) {
+                if (successClose)
+                    [documentManager rename:text
+                                itemAtIndex:(NSUInteger)indexPath.item];
+            };
+            
+            MADocument *doc = [MADocument newManagedDocumentForURL:metaData.URL];
+            
+            openCompletion = ^(BOOL success) {
+                if (success) [MADocument close: doc completion:closeCompletion];
+            };
+            
+            [doc openWithCompletionHandler:openCompletion];
+            
+        } else {
+            [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
+        }
+
         
     };
 
@@ -1755,6 +1760,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     [self showViewController:alert sender:self];
     
 }
+
+static NSString * const MADTextOpenWithViewer = @"The attached document can be opened with MAD Viewer.";
 
 - (IBAction)actionEmail:(MADCollectionViewCellDocument *)cell {
     
@@ -1774,8 +1781,8 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     
     if (documentReport.documentState != UIDocumentStateClosed) {
         
-        void (^handleCloseDocumentCompletion)(BOOL success);
-        handleCloseDocumentCompletion = ^(BOOL success) {
+        void (^handleCloseDocumentCompletion)(BOOL, NSURL *);
+        handleCloseDocumentCompletion = ^(BOOL success, NSURL *cleanupURL) {
             if (success) { [self actionEmail:cell]; }
         };
         [MADocument close: documentReport completion:handleCloseDocumentCompletion];
@@ -1783,8 +1790,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
     } else {
         
         NSString *mimeType = [self mimeTypeForDocumentUTI:documentReport.fileType];
-        NSString *messageStringStart = NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
-                                                         @"The attached document can be opened with MAD Viewer.");
+        NSString *messageStringStart = NSLocalizedString(MADTextOpenWithViewer, MADTextOpenWithViewer);
         NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
         [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
         MFMailComposeViewController	*mailComposer;

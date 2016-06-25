@@ -1967,6 +1967,7 @@
 		4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaPresentationController.h; sourceTree = "<group>"; };
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentManagerProtocol.h; sourceTree = "<group>"; };
 		4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -2863,17 +2864,18 @@
 			isa = PBXGroup;
 			children = (
 				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
-				4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */,
-				4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */,
-				4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */,
-				4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */,
 				4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */,
 				4C26B99C1BAF123A00456DC8 /* MADFileExplorerViewController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADFileExplorerViewController.m */,
+				4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */,
+				4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */,
+				4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */,
+				4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */,
 				4CE7EC361D128B300072DF34 /* MADDocumentManager.h */,
 				4CE7EC371D128B300072DF34 /* MADDocumentManager.m */,
 				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
 				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
+				4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */,
 			);
 			path = Explorer;
 			sourceTree = "<group>";

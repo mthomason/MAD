@@ -6,8 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADThumbnailView_h
+#define Reports_MADThumbnailView_h
+
+#import <UIKit/UIImageView.h>
 
 @interface MADThumbnailView : UIImageView
 
+    @property (nonatomic, copy) NSURL *thumbnailURL;
+
+    - (void)prepareForReuse;
+
 @end
+
+#endif

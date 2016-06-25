@@ -24,8 +24,8 @@
         }
     }
     
-    void (^handleCloseCompletion)(BOOL success);
-    handleCloseCompletion = ^(BOOL success) {
+    void (^handleCloseCompletion)(BOOL, NSURL *);
+    handleCloseCompletion = ^(BOOL success, NSURL *cleanupURL) {
         if (success) {
             [self finish];
         } else {

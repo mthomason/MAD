@@ -239,8 +239,9 @@ BOOL storeEnabled() {
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
-                    MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables
-                                                                                                          reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
+                    MADQueryViewControllerLayout *datamodel;
+                    datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables
+                                                                            reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
                     self.datamodel = datamodel;
                 }
             }
@@ -274,43 +275,43 @@ BOOL storeEnabled() {
 - (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)category {
     
     if ([category isEqualToString: UIContentSizeCategoryExtraSmall]) {
-        self.headerSectionHeight = 24.0000f;
+        _headerSectionHeight = 24.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategorySmall]) {
-        self.headerSectionHeight = 26.0000f;
+        _headerSectionHeight = 26.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryMedium]) {
-        self.headerSectionHeight = 29.0000f;
+        _headerSectionHeight = 29.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryLarge]) {
-        self.headerSectionHeight = 32.0000f;
+        _headerSectionHeight = 32.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraLarge]) {
-        self.headerSectionHeight = 34.0000f;
+        _headerSectionHeight = 34.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraLarge]) {
-        self.headerSectionHeight = 36.0000f;
+        _headerSectionHeight = 36.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraExtraLarge]) {
-        self.headerSectionHeight = 38.0000f;
+        _headerSectionHeight = 38.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityMedium]) {
-        self.headerSectionHeight = 40.0000f;
+        _headerSectionHeight = 40.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityLarge]) {
-        self.headerSectionHeight = 42.0000f;
+        _headerSectionHeight = 42.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraLarge]) {
-        self.headerSectionHeight = 44.0000f;
+        _headerSectionHeight = 44.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
-        self.headerSectionHeight = 46.0000f;
+        _headerSectionHeight = 46.0000f;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
-        self.headerSectionHeight = 48.0000f;
+        _headerSectionHeight = 48.0000f;
         
     } else {
-        self.headerSectionHeight = 29.0000f;
+        _headerSectionHeight = 29.0000f;
     }
 }
 
@@ -753,14 +754,17 @@ BOOL storeEnabled() {
     switch (ts) {
         case MTQuerySectionsGroups: {
 
-            NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
-            NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
-            RptqQueryGroup *fromGroup = [self.queryGroupsController objectAtIndexPath: fromIndex];
-            RptqQueryGroup *toGroup = [self.queryGroupsController objectAtIndexPath: toIndex];
-            NSInteger fromWeight = toGroup.weight.integerValue;
-            NSInteger toWeight = fromGroup.weight.integerValue;
-            toGroup.weight = @(toWeight);
-            fromGroup.weight = @(fromWeight);
+            NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0],
+                        *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
+            RptqQueryGroup *fromGroup = [self.queryGroupsController objectAtIndexPath: fromIndex],
+                           *toGroup = [self.queryGroupsController objectAtIndexPath: toIndex];
+            
+            id fromWeight = [[NSNumber alloc] initWithInteger: toGroup.weight.integerValue],
+               toWeight = [[NSNumber alloc] initWithInteger: fromGroup.weight.integerValue];
+
+            fromGroup.weight = fromWeight;
+            toGroup.weight = toWeight;
+
             NSError *error = nil;
             [(self.queryGroupsController).managedObjectContext save:&error];
             [self performFetchGroups];
@@ -926,7 +930,8 @@ BOOL storeEnabled() {
             s.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
             [s addTarget:self action:@selector(wantsToChangeReportingMode:) forControlEvents:UIControlEventValueChanged];
             result.accessoryView = s;
-            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"] ? @"Reporting Mode" : @"Designer Mode (limited)";
+            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"] ?
+                                                    @"Reporting Mode" : @"Designer Mode (limited)";
             break;
         }
         
@@ -1080,9 +1085,11 @@ BOOL storeEnabled() {
 }
 
 
-- (void)controller: (NSFetchedResultsController *)controller didChangeObject:(id)anObject
+- (void)controller: (NSFetchedResultsController *)controller
+   didChangeObject: (id)anObject
        atIndexPath: (NSIndexPath *)indexPath
-     forChangeType: (NSFetchedResultsChangeType)type newIndexPath: (NSIndexPath *)newIndexPath {
+     forChangeType: (NSFetchedResultsChangeType)type
+      newIndexPath: (NSIndexPath *)newIndexPath {
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
@@ -1258,25 +1265,36 @@ BOOL storeEnabled() {
         
         NSManagedObjectContext *managedObjectContext = reportDocument.managedObjectContext;
         
-        {
-            
-            RptqDatabase *database = reportDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
-            RptqQuery *query = database.hasQueries.anyObject;
-            
-            NSString *entityName = NSStringFromClass([RptqQueryTable class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"alias"
-                                                                           ascending: YES];
+        NSFetchedResultsController * (^newFetchedResultsController)(NSString *, NSPredicate *, NSSortDescriptor *, id <NSFetchedResultsControllerDelegate>);
+        newFetchedResultsController = ^NSFetchedResultsController *(NSString *entityName,
+                                                                    NSPredicate *predicate,
+                                                                    NSSortDescriptor *sortDescriptor,
+                                                                    id <NSFetchedResultsControllerDelegate> delegate) {
 
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+            request.predicate = predicate;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
             request.sortDescriptors = sortDescriptors;
-
+            
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
-            frc.delegate = self;
+            frc.delegate = delegate;
+            return frc;
+        };
+        
+        {
+            RptqDatabase *database = reportDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
+            RptqQuery *query = database.hasQueries.anyObject;
+            
+            NSString *entityName = NSStringFromClass([RptqQueryTable class]);
+            id predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"alias"
+                                                                           ascending: YES];
+            NSFetchedResultsController *frc;
+            frc = newFetchedResultsController(entityName, predicate, sortDescriptor, self);
+            
             self.queryTablesController = frc;
             [self performFetchTables];
             frc = nil;
@@ -1284,18 +1302,11 @@ BOOL storeEnabled() {
         
         {
             NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"tableleft"
                                                                            ascending: YES];
 
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            request.sortDescriptors = sortDescriptors;
-
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: nil];
-            frc.delegate = self;
+            NSFetchedResultsController *frc;
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
             self.queryLinksController = frc;
             [self performFetchLinks];
             frc = nil;
@@ -1303,18 +1314,11 @@ BOOL storeEnabled() {
         
         {
             NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
                                                                            ascending: YES];
 
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            request.sortDescriptors = sortDescriptors;
-
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: nil];
-            frc.delegate = self;
+            NSFetchedResultsController *frc;
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
             self.queryGroupsController = frc;
             [self performFetchGroups];
             frc = nil;
@@ -1323,18 +1327,10 @@ BOOL storeEnabled() {
         
         {
             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"fieldleftpred"
                                                                            ascending: YES];
-
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            request.sortDescriptors = sortDescriptors;
-
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: nil];
-            frc.delegate = self;
+            NSFetchedResultsController *frc;
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
             self.queryPredicatesController = frc;
             [self performFetchPredicate];
             frc = nil;
@@ -1480,9 +1476,10 @@ BOOL storeEnabled() {
     return cellsToDelete;
 }
 
-- (NSArray <__kindof NSIndexPath *> *)deletePredicateRelatedToSectionIndex:(NSInteger)section table:(NSManagedObjectID *)deleatedTableObjectId
-                                                               inTableView:(UITableView *)tableView
-                                                                 inContext:(NSManagedObjectContext *)context {
+- (NSArray <__kindof NSIndexPath *> *)deletePredicateRelatedToSectionIndex: (NSInteger)section
+                                                                     table: (NSManagedObjectID *)deleatedTableObjectId
+                                                               inTableView: (UITableView *)tableView
+                                                                 inContext: (NSManagedObjectContext *)context {
 
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray <__kindof NSIndexPath *> *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1492,7 +1489,8 @@ BOOL storeEnabled() {
         NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         
         
-        MADTableViewCellQueryPredicate *tableViewCellPredicate = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
+        MADTableViewCellQueryPredicate *tableViewCellPredicate;
+        tableViewCellPredicate = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
         NSError *error = nil;
         NSManagedObject *object = nil;
         
@@ -1671,9 +1669,10 @@ BOOL storeEnabled() {
         BOOL success = [private save:error];
         if (success) {
 
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            void (^updateTable)(void) = ^{
                 
-                NSArray *indexPaths = @[indexPath];
+                NSArray <NSIndexPath *> *indexPaths;
+                indexPaths = [[NSArray <NSIndexPath *> alloc] initWithObjects:indexPath, nil];
                 if (indexesToRemove.count > 0) {
                     [tableView deleteSections: indexesToRemove
                              withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -1695,7 +1694,8 @@ BOOL storeEnabled() {
                 
                 self.suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
                 
-            }];
+            };
+            [[NSOperationQueue mainQueue] addOperationWithBlock:updateTable];
         }
         
     }];
@@ -1708,7 +1708,7 @@ BOOL storeEnabled() {
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
-    [private performBlockAndWait:^{
+    void (^deleteLinks)(void) = ^{
         
         NSManagedObject *table = [private objectRegisteredForID:tableID];
         [private deleteObject:table];
@@ -1716,15 +1716,17 @@ BOOL storeEnabled() {
         NSError * __autoreleasing *error = nil;
         [private save:error];
         
-    }];
+    };
+    
+    [private performBlockAndWait:deleteLinks];
 }
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
-    [private performBlockAndWait:^{
     
+    void (^deleteGroup)(void) = ^{
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
@@ -1733,8 +1735,8 @@ BOOL storeEnabled() {
         
         NSError * __autoreleasing * error = NULL;
         [private save:error];
-
-    }];
+    };
+    [private performBlockAndWait:deleteGroup];
 }
 
 - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec {

@@ -110,7 +110,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (NSDictionary *)copyLayoutHeightsBySectionKey;
 
-    + (void)close:(MADocument *)document completion:(void (^)(BOOL success))completion;
+    + (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *cleanupURL))completion;
 
     - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 

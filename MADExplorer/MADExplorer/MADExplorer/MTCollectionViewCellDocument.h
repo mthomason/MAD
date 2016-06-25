@@ -16,6 +16,7 @@ extern NSString * const MADTextNotDownloaded;
 @protocol UIGestureRecognizerDelegate;
 
 @class MADMetaData;
+@class MADThumbnailView;
 @class MADLabelFileExplorerDocumentCellTitle;
 @class MADLabelFileExplorerDocumentCellSubtitle;
 @class UILabel;
@@ -28,7 +29,7 @@ extern NSString * const MADTextNotDownloaded;
 
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellTitle *labelTitle;
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
-    @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
+    @property (nonatomic, weak) IBOutlet MADThumbnailView *imagePreview;
     @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
 
     @property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
@@ -39,8 +40,6 @@ extern NSString * const MADTextNotDownloaded;
     @property (nonatomic, weak) id <UIGestureRecognizerDelegate> delegate;
 
     @property (nonatomic, readonly) NSString *titleLabelText;
-
-    + (UIImage *)newDefaultThumbnail;
 
     - (void)updateFont;
 

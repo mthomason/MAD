@@ -28,14 +28,6 @@
     }
 }
 
-/*- (void)viewDidLoad {
-    [super viewDidLoad];
-    if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-        ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
-    }
-    //[self setNeedsStatusBarAppearanceUpdate];
-}*/
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
@@ -57,37 +49,6 @@
     }
 }
 
-/*- (UITabBarItem *)tabBarItem {
-    return ((UITabBarController *)self.topViewController).tabBarItem;
-}*/
-
-/*- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    UIViewController *foundViewController;
-    
-    for (UIViewController *childViewController in self.viewControllers) {
-        foundViewController = [childViewController viewControllerForUnwindSegueAction: action
-                                                                   fromViewController: fromViewController
-                                                                           withSender: sender];
-        
-        if (foundViewController) {
-            break;
-        }
-    }
-    
-    if (!foundViewController) {
-        foundViewController = [super viewControllerForUnwindSegueAction: action
-                                                     fromViewController: self
-                                                             withSender: sender];
-    }
-    
-    return [super viewControllerForUnwindSegueAction: action
-                                  fromViewController: self
-                                          withSender: sender];
-}*/
-
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
@@ -102,15 +63,5 @@
     }
     return result;
 }
-
-/*- (IBAction)done:(id)sender {
-    for (UIViewController *viewController in self.childViewControllers) {
-        if ([viewController respondsToSelector:@selector(done:)]) {
-            [viewController performSelectorOnMainThread: @selector(done:)
-                                             withObject: self
-                                          waitUntilDone: NO];
-        }
-    }
-}*/
 
 @end
