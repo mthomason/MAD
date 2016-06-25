@@ -11,12 +11,12 @@
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
-#import "MADQueryViewControllerSections.h"
+#import "MADIdentifierQueryViewSections.h"
 
 @interface MADQueryViewControllerLayoutSection : NSObject
 
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position;
-    @property (nonatomic, assign, readonly) MADQueryViewControllerSections querySection;
+    @property (nonatomic, assign, readonly) MADIdentifierQueryViewSections querySection;
     @property (readonly) NSString   *name;
     @property (readonly) NSUInteger count;
     @property (readonly) NSInteger  numberOfRows;

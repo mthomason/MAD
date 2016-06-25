@@ -20,7 +20,7 @@ static NSString * const TextHeaderPredicate     = @"Having Specified Criteria";
 static NSString * const TextHeaderSettings      = @"Limit Query Result";
 
 @interface MADQueryViewControllerLayoutSection ()
-    @property (nonatomic, assign, readwrite) MADQueryViewControllerSections querySection;
+    @property (nonatomic, assign, readwrite) MADIdentifierQueryViewSections querySection;
 @end
 
 @implementation MADQueryViewControllerLayoutSection
@@ -33,13 +33,13 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
                 
                 switch (position) {
                     case 0:
-                        _querySection = MADQueryViewControllerSectionsDatasource;
+                        _querySection = MADIdentifierQueryViewSectionsDatasource;
                         break;
                     case 1:
-                        _querySection = MADQueryViewControllerSectionsTables;
+                        _querySection = MADIdentifierQueryViewSectionsTables;
                         break;
                     case 2:
-                        _querySection = MADQueryViewControllerSectionsNumberOfQueryResults;
+                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
                         break;
                     default:
                         break;
@@ -51,19 +51,19 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
                 
                 switch (position) {
                     case 0:
-                        _querySection = MADQueryViewControllerSectionsDatasource;
+                        _querySection = MADIdentifierQueryViewSectionsDatasource;
                         break;
                     case 1:
-                        _querySection = MADQueryViewControllerSectionsTables;
+                        _querySection = MADIdentifierQueryViewSectionsTables;
                         break;
                     case 2:
-                        _querySection = MADQueryViewControllerSectionsGroups;
+                        _querySection = MADIdentifierQueryViewSectionsGroups;
                         break;
                     case 3:
-                        _querySection = MADQueryViewControllerSectionsPredicate;
+                        _querySection = MADIdentifierQueryViewSectionsPredicate;
                         break;
                     case 4:
-                        _querySection = MADQueryViewControllerSectionsNumberOfQueryResults;
+                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
                         break;
                     default:
                         break;
@@ -75,22 +75,22 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
                 
                 switch (position) {
                     case 0:
-                        _querySection = MADQueryViewControllerSectionsDatasource;
+                        _querySection = MADIdentifierQueryViewSectionsDatasource;
                         break;
                     case 1:
-                        _querySection = MADQueryViewControllerSectionsTables;
+                        _querySection = MADIdentifierQueryViewSectionsTables;
                         break;
                     case 2:
-                        _querySection = MADQueryViewControllerSectionsLinks;
+                        _querySection = MADIdentifierQueryViewSectionsLinks;
                         break;
                     case 3:
-                        _querySection = MADQueryViewControllerSectionsGroups;
+                        _querySection = MADIdentifierQueryViewSectionsGroups;
                         break;
                     case 4:
-                        _querySection = MADQueryViewControllerSectionsPredicate;
+                        _querySection = MADIdentifierQueryViewSectionsPredicate;
                         break;
                     case 5:
-                        _querySection = MADQueryViewControllerSectionsNumberOfQueryResults;
+                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
                         break;
                     default:
                         break;
@@ -118,49 +118,49 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
     return [MADQueryViewControllerLayoutSection selectorForSection:_querySection];
 }
 
-+ (NSInteger)numberOfRowsForSection:(MADQueryViewControllerSections)section {
++ (NSInteger)numberOfRowsForSection:(MADIdentifierQueryViewSections)section {
     switch (section) {
             
-        case MADQueryViewControllerSectionsDatasource:
-        case MADQueryViewControllerSectionsSql:
-        case MADQueryViewControllerSectionsNumberOfQueryResults:
+        case MADIdentifierQueryViewSectionsDatasource:
+        case MADIdentifierQueryViewSectionsSql:
+        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
             return 1;
             break;
-        case MADQueryViewControllerSectionsDocumentGroups:
-        case MADQueryViewControllerSectionsTables:
-        case MADQueryViewControllerSectionsLinks:
-        case MADQueryViewControllerSectionsGroups:
-        case MADQueryViewControllerSectionsPredicate:
+        case MADIdentifierQueryViewSectionsDocumentGroups:
+        case MADIdentifierQueryViewSectionsTables:
+        case MADIdentifierQueryViewSectionsLinks:
+        case MADIdentifierQueryViewSectionsGroups:
+        case MADIdentifierQueryViewSectionsPredicate:
         default:
             return NSNotFound;
             break;
     }
 }
 
-+ (NSString *)nameForSection:(MADQueryViewControllerSections)section {
++ (NSString *)nameForSection:(MADIdentifierQueryViewSections)section {
     switch (section) {
-        case MADQueryViewControllerSectionsDocumentGroups:
+        case MADIdentifierQueryViewSectionsDocumentGroups:
             return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
             break;
-        case MADQueryViewControllerSectionsDatasource:
+        case MADIdentifierQueryViewSectionsDatasource:
             return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
             break;
-        case MADQueryViewControllerSectionsTables:
+        case MADIdentifierQueryViewSectionsTables:
             return NSLocalizedString(TextHeaderTable, TextHeaderTable);
             break;
-        case MADQueryViewControllerSectionsLinks:
+        case MADIdentifierQueryViewSectionsLinks:
             return NSLocalizedString(TextHeaderLink, TextHeaderLink);
             break;
-        case MADQueryViewControllerSectionsGroups:
+        case MADIdentifierQueryViewSectionsGroups:
             return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
             break;
-        case MADQueryViewControllerSectionsPredicate:
+        case MADIdentifierQueryViewSectionsPredicate:
             return NSLocalizedString(TextHeaderPredicate, TextHeaderPredicate);
             break;
-        case MADQueryViewControllerSectionsSql:
+        case MADIdentifierQueryViewSectionsSql:
             return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
             break;
-        case MADQueryViewControllerSectionsNumberOfQueryResults:
+        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
             return NSLocalizedString(TextHeaderSettings, TextHeaderSettings);
             break;
         default:
@@ -169,41 +169,41 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
     }
 }
 
-+ (CGFloat)heightForSection:(MADQueryViewControllerSections)section {
++ (CGFloat)heightForSection:(MADIdentifierQueryViewSections)section {
     switch (section) {
             
-        case MADQueryViewControllerSectionsTables:
+        case MADIdentifierQueryViewSectionsTables:
             return [MADTableViewCellQueryTableName defaultHeight];
             break;
             
-        case MADQueryViewControllerSectionsLinks:
+        case MADIdentifierQueryViewSectionsLinks:
             return [MADTableViewCellQueryLink defaultHeight];
             break;
             
-        case MADQueryViewControllerSectionsDocumentGroups:
-        case MADQueryViewControllerSectionsDatasource:
-        case MADQueryViewControllerSectionsGroups:
-        case MADQueryViewControllerSectionsNumberOfQueryResults:
-        case MADQueryViewControllerSectionsPredicate:
-        case MADQueryViewControllerSectionsSql:
+        case MADIdentifierQueryViewSectionsDocumentGroups:
+        case MADIdentifierQueryViewSectionsDatasource:
+        case MADIdentifierQueryViewSectionsGroups:
+        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
+        case MADIdentifierQueryViewSectionsPredicate:
+        case MADIdentifierQueryViewSectionsSql:
         default:
             return 44.0000f;
             break;
     }
 }
 
-+ (SEL)selectorForSection:(MADQueryViewControllerSections)section {
++ (SEL)selectorForSection:(MADIdentifierQueryViewSections)section {
     switch (section) {
-        case MADQueryViewControllerSectionsTables:
+        case MADIdentifierQueryViewSectionsTables:
             return @selector(addTable:);
             break;
-        case MADQueryViewControllerSectionsLinks:
+        case MADIdentifierQueryViewSectionsLinks:
             return @selector(addLink:);
             break;
-        case MADQueryViewControllerSectionsGroups:
+        case MADIdentifierQueryViewSectionsGroups:
             return @selector(addGroup:);
             break;
-        case MADQueryViewControllerSectionsPredicate:
+        case MADIdentifierQueryViewSectionsPredicate:
             return @selector(addPredicate:);
             break;
         default:

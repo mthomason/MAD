@@ -2484,7 +2484,7 @@
 		4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+MADDesigner.m"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF304081D1E160000466560 /* MADQueryViewControllerLayoutSectionSelectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerLayoutSectionSelectorProtocol.h; sourceTree = "<group>"; };
-		4CF304091D1E166900466560 /* MADQueryViewControllerSections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerSections.h; sourceTree = "<group>"; };
+		4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADIdentifierQueryViewSections.h; sourceTree = "<group>"; };
 		4CF3040B1D1E175700466560 /* MADQueryViewControllerLayoutSections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerLayoutSections.h; sourceTree = "<group>"; };
 		4CF3040C1D1E175700466560 /* MADQueryViewControllerLayoutSections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryViewControllerLayoutSections.m; sourceTree = "<group>"; };
 		4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+QueryViewControllerTableLayout.h"; sourceTree = "<group>"; };
@@ -4425,6 +4425,7 @@
 		4CA0C6D21CA79F0C00222B8D /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */,
 				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */,
 				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
 				4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */,
@@ -4451,16 +4452,15 @@
 				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
 				4C539C2F1CB5607D002E4CD5 /* MADQueryViewControllerLayout.h */,
 				4C539C301CB5607D002E4CD5 /* MADQueryViewControllerLayout.m */,
-				4C4F128A1D0C777D0002294E /* NSAttributedString+QueryViewController.h */,
-				4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */,
 				4C4F128D1D0CF8C20002294E /* MADQueryViewControllerTableLayout.h */,
 				4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */,
 				4CF304081D1E160000466560 /* MADQueryViewControllerLayoutSectionSelectorProtocol.h */,
-				4CF304091D1E166900466560 /* MADQueryViewControllerSections.h */,
 				4CF3040B1D1E175700466560 /* MADQueryViewControllerLayoutSections.h */,
 				4CF3040C1D1E175700466560 /* MADQueryViewControllerLayoutSections.m */,
 				4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */,
 				4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */,
+				4C4F128A1D0C777D0002294E /* NSAttributedString+QueryViewController.h */,
+				4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */,
 			);
 			name = Misc;
 			sourceTree = "<group>";

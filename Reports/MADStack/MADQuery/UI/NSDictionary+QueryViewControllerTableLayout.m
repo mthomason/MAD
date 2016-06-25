@@ -7,7 +7,7 @@
 //
 
 #import "NSDictionary+QueryViewControllerTableLayout.h"
-#import "MADQueryViewControllerSections.h"
+#import "MADIdentifierQueryViewSections.h"
 #import "MADTableViewCellQueryTableName.h"
 #import "MTAutoLayoutTableViewCell.h"
 #import "MADTableViewCellQueryLink.h"
@@ -29,9 +29,9 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 + (instancetype)newDictionaryQueryLayoutTableZeroReportingEnabled:(BOOL)reportingEnabled {
     id one =         [[NSNumber alloc] initWithInteger: 1];
     id unknown =     [[NSNumber alloc] initWithInteger: -1];
-    id datasource =  [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsDatasource];
-    id tables =      [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsTables];
-    id resultCount = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsNumberOfQueryResults];
+    id datasource =  [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsDatasource];
+    id tables =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsTables];
+    id resultCount = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsNumberOfQueryResults];
     id h2 = NSLocalizedString(MADTextQuerySetupDatasource,   MADTextQuerySetupDatasource);
     id h3 = NSLocalizedString(MADTextQuerySelectTables,      MADTextQuerySelectTables);
     id h7 = NSLocalizedString(MADTextQueryReportingMode,     MADTextQueryReportingMode);
@@ -70,17 +70,17 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 + (instancetype)newDictionaryQueryLayoutTableOneReportingEnabled:(BOOL)reportingEnabled {
     id one =         [[NSNumber alloc] initWithInteger: 1];
     id unknown =     [[NSNumber alloc] initWithInteger: -1];
-    id datasource =  [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsDatasource];
-    id tables =      [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsTables];
-    id resultCount = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsNumberOfQueryResults];
+    id datasource =  [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsDatasource];
+    id tables =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsTables];
+    id resultCount = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsNumberOfQueryResults];
     id h2 = NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource);
     id h3 = NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables);
     id h5 = NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups);
     id h6 = NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate);
     id h7 = NSLocalizedString(MADTextQueryReportingMode, MADTextQueryReportingMode);
 
-    NSNumber *groups = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsGroups];
-    NSNumber *predicate = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsPredicate];
+    NSNumber *groups = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsGroups];
+    NSNumber *predicate = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsPredicate];
     
     NSArray *sections = reportingEnabled ?
         [[NSArray alloc] initWithObjects: datasource, tables, groups, predicate, resultCount, nil] :
@@ -120,19 +120,19 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 + (instancetype)newDictionaryQueryLayoutTableMoreThanOneReportingEnabled:(BOOL)reportingEnabled {
     id one =         [[NSNumber alloc] initWithInteger: 1];
     id unknown =     [[NSNumber alloc] initWithInteger: -1];
-    id datasource =  [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsDatasource];
-    id tables =      [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsTables];
-    id resultCount = [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsNumberOfQueryResults];
-    id links =       [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsLinks];
-    id groups =      [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsGroups];
-    id predicate =   [[NSNumber alloc] initWithShort: MADQueryViewControllerSectionsPredicate];
+    id datasource =  [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsDatasource];
+    id tables =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsTables];
+    id resultCount = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsNumberOfQueryResults];
+    id links =       [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsLinks];
+    id groups =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsGroups];
+    id predicate =   [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsPredicate];
 
-    id h2 = NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource);
-    id h3 = NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables);
-    id h4 = NSLocalizedString(MADTextQueryLinks, MADTextQueryLinks);
-    id h5 = NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups);
-    id h6 = NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate);
-    id h7 = NSLocalizedString(MADTextQueryReportingMode, MADTextQueryReportingMode);
+    id h2 = NSLocalizedString(MADTextQuerySetupDatasource,  MADTextQuerySetupDatasource);
+    id h3 = NSLocalizedString(MADTextQuerySelectTables,     MADTextQuerySelectTables);
+    id h4 = NSLocalizedString(MADTextQueryLinks,            MADTextQueryLinks);
+    id h5 = NSLocalizedString(MADTextQueryGroups,           MADTextQueryGroups);
+    id h6 = NSLocalizedString(MADTextQueryPredicate,        MADTextQueryPredicate);
+    id h7 = NSLocalizedString(MADTextQueryReportingMode,    MADTextQueryReportingMode);
     
     NSArray *sections;
     sections = reportingEnabled ?
