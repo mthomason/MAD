@@ -11,11 +11,11 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIButton.h>
 #import <UIKit/UIAccessibility.h>
-#import "MADQueryViewControllerLayoutSections.h"
+#import "MADQueryViewSectionDelegate.h"
 
 @implementation MADTableViewHeader (QueryViewSectionTypes)
 
-+ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame target:(nullable id)target {
++ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewSectionDelegate *)layout andFrame:(CGRect)frame target:(nullable id)target {
 
     MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {

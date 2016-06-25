@@ -19,7 +19,7 @@
 @class UITableView;
 @class NSIndexPath;
 @class NSIndexSet;
-@class MADQueryViewControllerLayoutSection;
+@class MADQueryViewSectionDelegate;
 
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
@@ -39,12 +39,12 @@
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
     @property (nonatomic, readonly, assign) short count;
-    @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewControllerLayoutSection *> *sections;
+    @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
     - (NSSet <NSNumber *> *)sectionTypes;
     - (NSIndexSet *)sectionTypesIndexs;
     - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;
-    - (MADQueryViewControllerLayoutSection *)layoutAtIndex:(short)index;
+    - (MADQueryViewSectionDelegate *)layoutAtIndex:(short)index;
     
 @end
 

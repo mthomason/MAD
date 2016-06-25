@@ -24,7 +24,7 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import "MADQueryViewControllerLayoutSections.h"
+#import "MADQueryViewSectionDelegate.h"
 
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
@@ -679,7 +679,7 @@ BOOL storeEnabled() {
     
     
     MADQueryViewDataSource *datamodel = self.datamodel;
-    MADQueryViewControllerLayoutSection *layoutSection = [datamodel layoutAtIndex:(short)section];
+    MADQueryViewSectionDelegate *layoutSection = [datamodel layoutAtIndex:(short)section];
     
     NSInteger numberOfRows = 1;
     if (layoutSection.numberOfRows == NSNotFound) {
@@ -955,7 +955,7 @@ BOOL storeEnabled() {
 #pragma mark UITableViewDelegate
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    MADQueryViewControllerLayoutSection *layout = [self.datamodel layoutAtIndex:(short)section];
+    MADQueryViewSectionDelegate *layout = [self.datamodel layoutAtIndex:(short)section];
     id header = [MADTableViewHeader newTableViewHeaderWithType: layout
                                                       andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight)
                                                         target: self];

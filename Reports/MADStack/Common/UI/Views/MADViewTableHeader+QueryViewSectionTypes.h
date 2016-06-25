@@ -11,11 +11,11 @@
 
 #import "MADTableViewHeader.h"
 
-@class MADQueryViewControllerLayoutSection;
+@class MADQueryViewSectionDelegate;
 
 @interface MADTableViewHeader (QueryViewSectionTypes)
 
-    + (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout
+    + (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewSectionDelegate *)layout
                                               andFrame:(CGRect)frame
                                                 target:(nullable id)target;
 
