@@ -11,7 +11,7 @@
 #import "MADTableViewCellQueryLink.h"
 #import "MADIdentifierQueryViewSections.h"
 #import "NSDictionary+QueryViewControllerTableLayout.h"
-#import "MADQueryViewControllerLayout.h"
+#import "MADQueryViewDataSource.h"
 
 @interface MADQueryViewControllerTableLayout ()
 

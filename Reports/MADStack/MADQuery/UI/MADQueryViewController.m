@@ -73,7 +73,7 @@
 
 #import "NSParagraphStyle+CommonStyles.h"
 
-#import "MADQueryViewControllerLayout.h"
+#import "MADQueryViewDataSource.h"
 
 #import "MADViewTableHeader+QueryViewSectionTypes.h"
 
@@ -138,7 +138,7 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 
     @property (nonatomic, assign) CGFloat headerSectionHeight;
 
-    @property (nonatomic, strong) MADQueryViewControllerLayout *datamodel;
+    @property (nonatomic, strong) MADQueryViewDataSource *datamodel;
 
     - (MADIdentifierQueryViewSections)sectionPositionForTableSectionType:(MADIdentifierQueryViewSections)sec;
 
@@ -239,9 +239,9 @@ BOOL storeEnabled() {
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
-                    MADQueryViewControllerLayout *datamodel;
-                    datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables
-                                                                            reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
+                    MADQueryViewDataSource *datamodel;
+                    datamodel = [[MADQueryViewDataSource alloc] initWithNumberOfTables:query.numberOfTables
+                                                                      reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled];
                     self.datamodel = datamodel;
                 }
             }
@@ -678,7 +678,7 @@ BOOL storeEnabled() {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     
-    MADQueryViewControllerLayout *datamodel = self.datamodel;
+    MADQueryViewDataSource *datamodel = self.datamodel;
     MADQueryViewControllerLayoutSection *layoutSection = [datamodel layoutAtIndex:(short)section];
     
     NSInteger numberOfRows = 1;
@@ -1348,15 +1348,15 @@ BOOL storeEnabled() {
     }
 }
 
-- (MADQueryViewControllerLayout *)datamodel {
+- (MADQueryViewDataSource *)datamodel {
 
     if (_datamodel == nil) {
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: self.document.managedObjectContext];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
-        MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables: rptqQuery.numberOfTables
-                                                                                              reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled];
+        MADQueryViewDataSource *datamodel = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
+                                                                                  reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled];
         _datamodel = datamodel;
     }
     return _datamodel;
@@ -1589,10 +1589,10 @@ BOOL storeEnabled() {
         NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
         
         BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
-        MADQueryViewControllerLayout *oldQueryLayout, *newQueryLayout;
-        oldQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables: numberOfTables
+        MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
+        oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
                                                                      reportingEnabled: reportingEnabled];
-        newQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables: numberOfTables - 1
+        newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables - 1
                                                                      reportingEnabled: reportingEnabled];
         
         NSIndexSet *oldIndexesSectionTypes = oldQueryLayout.sectionTypesIndexs;

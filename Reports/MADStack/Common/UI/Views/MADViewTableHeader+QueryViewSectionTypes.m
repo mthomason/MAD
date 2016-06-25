@@ -7,7 +7,7 @@
 //
 
 #import "MADViewTableHeader+QueryViewSectionTypes.h"
-#import "MADQueryViewControllerLayout.h"
+#import "MADQueryViewDataSource.h"
 #import <UIKit/UILabel.h>
 #import <UIKit/UIButton.h>
 #import <UIKit/UIAccessibility.h>

@@ -46,7 +46,7 @@
 
 @end
 
-@implementation MADQueryViewControllerLayout
+@implementation MADQueryViewDataSource
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(BOOL)reportingEnabled {
 
