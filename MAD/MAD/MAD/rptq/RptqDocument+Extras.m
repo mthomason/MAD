@@ -13,6 +13,7 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSPathUtilities.h>
@@ -109,34 +110,34 @@
     return self.papersize.unsignedShortValue;
 }
 
-- (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level {
+- (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type andLevel:(NSUInteger)level {
     
     switch (type) {
             
-        case MNSDocumentSectionTypeBody:
+        case MADDocumentSectionTypeBody:
             return self.hasDetailSection;
             break;
             
-        case MNSDocumentSectionTypePageHeader:
+        case MADDocumentSectionTypePageHeader:
             return self.hasPageHeaderSection;
             break;
             
-        case MNSDocumentSectionTypePageFooter:
+        case MADDocumentSectionTypePageFooter:
             return self.hasPageFooterSection;
             break;
             
-        case MNSDocumentSectionTypeReportHeader:
+        case MADDocumentSectionTypeReportHeader:
             return self.hasReportHeaderSection;
             break;
             
-        case MNSDocumentSectionTypeReportFooter:
+        case MADDocumentSectionTypeReportFooter:
             return self.hasReportFooterSection;
             break;
             
-        case MNSDocumentSectionTypeGroupHeader:
+        case MADDocumentSectionTypeGroupHeader:
             return [RptqDocumentSection groupHeaderForLevel: level query: self.defaultDatabase.defaultQuery];
             break;
-        case MNSDocumentSectionTypeGroupFooter:
+        case MADDocumentSectionTypeGroupFooter:
             return [RptqDocumentSection groupFooterForLevel: level query: self.defaultDatabase.defaultQuery];
             break;
         default:
@@ -167,6 +168,7 @@
     }
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
                                                          inManagedObjectContext: objectContext];
+    
     RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription
                                    insertIntoManagedObjectContext: objectContext];
 
@@ -226,26 +228,26 @@
     document.hasDetailSection.hasRows = hasRows5;
     detailSectionRow.inSection = document.hasDetailSection;
     
-    NSNumber *headerType = [[NSNumber alloc] initWithShort: MNSDocumentSectionTypeReportHeader];
+    NSNumber *headerType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeReportHeader];
     document.hasReportHeaderSection.type = headerType;
     
-    NSNumber *footerType = [[NSNumber alloc] initWithShort: MNSDocumentSectionTypeReportFooter];
+    NSNumber *footerType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeReportFooter];
     document.hasReportFooterSection.type = footerType;
 
-    NSNumber *pageHeaderType = [[NSNumber alloc] initWithShort: MNSDocumentSectionTypePageHeader];
+    NSNumber *pageHeaderType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypePageHeader];
     document.hasPageHeaderSection.type = pageHeaderType;
     
-    NSNumber *pageFooterType = [[NSNumber alloc] initWithShort: MNSDocumentSectionTypePageFooter];
+    NSNumber *pageFooterType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypePageFooter];
     document.hasPageFooterSection.type = pageFooterType;
     
-    NSNumber *bodyType = [[NSNumber alloc] initWithShort: MNSDocumentSectionTypeBody];
+    NSNumber *bodyType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeBody];
     document.hasDetailSection.type = bodyType;
 
-    [document.hasReportHeaderSection setInterfaceHeight:44.0000f];
-    [document.hasReportFooterSection setInterfaceHeight:44.0000f];
-    [document.hasPageHeaderSection setInterfaceHeight:44.0000f];
-    [document.hasPageFooterSection setInterfaceHeight:44.0000f];
-    [document.hasDetailSection setInterfaceHeight: 88.0000f];
+    [document.hasReportHeaderSection    setInterfaceHeight: 44.0000f];
+    [document.hasReportFooterSection    setInterfaceHeight: 44.0000f];
+    [document.hasPageHeaderSection      setInterfaceHeight: 44.0000f];
+    [document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
+    [document.hasDetailSection          setInterfaceHeight: 88.0000f];
 
     NSNumber *hasReportHeaderSectionVisibility = @YES;
     document.hasReportHeaderSection.visibility = hasReportHeaderSectionVisibility;
@@ -295,8 +297,9 @@
         
         //Add row
         NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-        RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                                inManagedObjectContext: managedObjectContext];
+        RptqDocumentSectionRows *newRowToAppend;
+        newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                       inManagedObjectContext: managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
         newRowToAppend.inSection = section;
         [hasRows addObject:newRowToAppend];
@@ -595,16 +598,21 @@
     RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                                      insertIntoManagedObjectContext: mangedObjectContext];
     documentObject.origin = CGPointZero;
-    documentObject.sizewidth = @(75.0000f);
-    documentObject.sizeheight = @(22.0000f);
+
+    id size = [[NSNumber alloc] initWithFloat:75.0000f];
+    documentObject.sizewidth = size;
+    
+    size = [[NSNumber alloc] initWithFloat:22.0000f];
+    documentObject.sizeheight = size;
     
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
-            NSString *entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName inManagedObjectContext: mangedObjectContext];
+            entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
+                                                                 inManagedObjectContext: mangedObjectContext];
             
             NSManagedObjectID *fieldObjectId = defination[MTDocumentObjectDefinationObject];
             RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId managedObjectContext: mangedObjectContext];
@@ -618,13 +626,15 @@
 
             reportObject.referencesQueryField = field;
             
-            documentObject.type = @(MTDocumentObjectTypeLabelDynamic);
+            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
+            documentObject.type = type;
             
             break;
         }
         case MTDocumentObjectTypeLabelStatic: {
             
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
+            entityName = NSStringFromClass([RptqDocumentObjectLabel class]);
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: mangedObjectContext];
             
             NSString *labelText = defination[MTDocumentObjectDefinationObject];
@@ -634,13 +644,16 @@
             
             documentObject.isLabel = reportObject;
             documentObject.isLabel.text = labelText;
-            documentObject.type = @(MTDocumentObjectTypeLabelStatic);
+
+            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
+            documentObject.type = type;
             
             break;
         }
         case MTDocumentObjectTypeAggregate: {
             
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectAggregate class])
+            entityName = NSStringFromClass([RptqDocumentObjectAggregate class]);
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: mangedObjectContext];
             
             NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
@@ -673,13 +686,16 @@
             }
             
             documentObject.isAggregate = reportObject;
-            documentObject.type = @(MTDocumentObjectTypeAggregate);
+            
+            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeAggregate];
+            documentObject.type = type;
             
             break;
         }
         case MTDocumentObjectTypeImage: {
             
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
+            entityName = NSStringFromClass([RptqDocumentObjectImage class]);
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: mangedObjectContext];
             
             UIImage *image = defination[MTDocumentObjectDefinationObject];
@@ -688,15 +704,22 @@
                                                                      insertIntoManagedObjectContext: mangedObjectContext];
             reportObject.image = image;
             documentObject.isImage = reportObject;
-            documentObject.sizeheight = @(image.size.height);
-            documentObject.sizewidth = @(image.size.width);
-            documentObject.type = @(MTDocumentObjectTypeImage);
+
+            id number = [[NSNumber alloc] initWithFloat:image.size.height];
+            documentObject.sizeheight = number;
+            
+            number = [[NSNumber alloc] initWithFloat:image.size.width];
+            documentObject.sizewidth = number;
+            
+            number = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
+            documentObject.type = number;
             
             break;
         }
         case MTDocumentObjectTypeWhtiespace: {
             
-            documentObject.type = @(MTDocumentObjectTypeWhtiespace);
+            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeWhtiespace];
+            documentObject.type = type;
             
             break;
         }
@@ -713,7 +736,8 @@
                                                                                         queryFieldOne:field1
                                                                                         queryFieldTwo:field2];
             documentObject.isBarcode = reportObject;
-            documentObject.type = @(MTDocumentObjectTypeBarcode);
+            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeBarcode];
+            documentObject.type = type;
             
             break;
         }

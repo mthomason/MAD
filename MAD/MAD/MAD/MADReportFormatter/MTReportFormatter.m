@@ -473,7 +473,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 - (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.shortValue == MNSDocumentSectionTypeGroupHeader) {
+            if (documentSection.type.shortValue == MADDocumentSectionTypeGroupHeader) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;
@@ -486,7 +486,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 - (void)addHeightFromGroupFooterWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.shortValue == MNSDocumentSectionTypeGroupFooter) {
+            if (documentSection.type.shortValue == MADDocumentSectionTypeGroupFooter) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;
@@ -703,7 +703,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
     MADSectionPlist *header;
-    header = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupHeader
+    header = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypeGroupHeader
                                                     groupLevel: groupLevel
                                                            row: _machineState.detailRowId];
     if (groupLevel == self.numberOfGroups - 1) {
@@ -714,21 +714,21 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 - (void)addPageFooter {
     MADSectionPlist *footer;
-    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageFooter
+    footer = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypePageFooter
                                                            row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addReportFooter {
     MADSectionPlist *footer;
-    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportFooter
+    footer = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypeReportFooter
                                                            row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
     MADSectionPlist *footer;
-    footer = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeGroupFooter
+    footer = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypeGroupFooter
                                                     groupLevel: groupLevel
                                                            row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: footer];
@@ -738,7 +738,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
                pageLayout:(byref inout MADMutableSectionArray *)pageLayout
               pageIndexes:(byref inout MADMutableIndexArray *)pageIndexes {
     MADSectionPlist *detail;
-    detail = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeBody
+    detail = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypeBody
                                                            row: rowID];
     [pageLayout     addObject: detail];
     [pageIndexes    addObject: rowID];
@@ -746,14 +746,14 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 - (void)addReportHeader {
     MADSectionPlist *obj;
-    obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypeReportHeader
+    obj = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypeReportHeader
                                                         row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject: obj];
 }
 
 - (void)addPageHeader {
     MADSectionPlist *obj;
-    obj = [MADSectionPlist newSectionRepresentationWithType: MNSDocumentSectionTypePageHeader
+    obj = [MADSectionPlist newSectionRepresentationWithType: MADDocumentSectionTypePageHeader
                                                         row: _machineState.detailRowId];
     [self.pageLayoutTemporary addObject:  obj];
 }

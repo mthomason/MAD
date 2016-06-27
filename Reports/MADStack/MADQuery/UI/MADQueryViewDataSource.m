@@ -95,10 +95,8 @@
 - (NSSet <__kindof NSNumber *> *)sectionTypes {
     NSMutableSet <__kindof NSNumber *> *sectionTypes = [[NSMutableSet alloc] initWithCapacity:(NSUInteger)_count];
     for (MADQueryViewSectionDelegate *section in self.sections) {
-        @autoreleasepool {
-            NSNumber *sectionType = [[NSNumber alloc] initWithShort:section.querySection];
-            [sectionTypes addObject:sectionType];
-        }
+        NSNumber *sectionType = [[NSNumber alloc] initWithShort:section.querySection];
+        [sectionTypes addObject:sectionType];
     }
     return sectionTypes;
 }
@@ -111,12 +109,12 @@
     if (_sections != nil) {
         return _sections;
     } else {
+    
         NSMutableArray <__kindof MADQueryViewSectionDelegate *> *sections = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)_count];
         for (short i = 0; i < _count; i++) {
-            @autoreleasepool {
-                MADQueryViewSectionDelegate *section = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables:_numberOfTables position:i];
-                [sections addObject:section];
-            }
+            MADQueryViewSectionDelegate *section = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables: _numberOfTables
+                                                                                                      position: i];
+            [sections addObject:section];
         }
         _sections = sections;
         return _sections;
@@ -125,36 +123,33 @@
 
 - (NSInteger)numberOfRowsInSectionAtIndex:(short)index {
     MADQueryViewSectionDelegate *layoutSection = [self layoutAtIndex:(short)index];
-    NSInteger numberOfRows = 1;
-    if (layoutSection.numberOfRows == NSNotFound) {
-        id<NSFetchedResultsSectionInfo> sectionData;
-        switch (layoutSection.querySection) {
-            case MADIdentifierQueryViewSectionsTables: {
-                sectionData = self.queryTablesController.sections[0];
-                numberOfRows = (NSInteger)sectionData.numberOfObjects;
-                break;
-            }
-            case MADIdentifierQueryViewSectionsLinks: {
-                sectionData = self.queryLinksController.sections[0];
-                numberOfRows = (NSInteger)sectionData.numberOfObjects;
-                break;
-            }
-            case MADIdentifierQueryViewSectionsPredicate: {
-                sectionData = self.queryPredicatesController.sections[0];
-                numberOfRows = (NSInteger)sectionData.numberOfObjects;
-                break;
-            }
-            case MADIdentifierQueryViewSectionsGroups: {
-                sectionData = self.queryGroupsController.sections[0];
-                numberOfRows = (NSInteger)sectionData.numberOfObjects;
-                break;
-            }
-            default:
-                numberOfRows = 0;
-                break;
-        }
+    return layoutSection.numberOfRows == NSNotFound ?
+                [self numberOfRowsInSection:layoutSection.querySection] : 1;
+}
+
+- (NSInteger)numberOfRowsInSection:(MADIdentifierQueryViewSections)section {
+    switch (section) {
+
+        case MADIdentifierQueryViewSectionsTables:
+            return (NSInteger)_queryTablesController.sections[0].numberOfObjects;
+            break;
+
+        case MADIdentifierQueryViewSectionsLinks:
+            return (NSInteger)_queryLinksController.sections[0].numberOfObjects;
+            break;
+
+        case MADIdentifierQueryViewSectionsPredicate:
+            return (NSInteger)_queryPredicatesController.sections[0].numberOfObjects;
+            break;
+
+        case MADIdentifierQueryViewSectionsGroups:
+            return (NSInteger)_queryGroupsController.sections[0].numberOfObjects;
+            break;
+
+        default:
+            return 0;
+            break;
     }
-    return numberOfRows;
 }
 
 - (BOOL)canEditSectionAtIndex:(short)index {
@@ -249,6 +244,7 @@
                                                            inSection: 0],
                         *toIndex =      [NSIndexPath indexPathForRow: toIndexPath.row
                                                            inSection: 0];
+            
             RptqQueryGroup *fromGroup = [_queryGroupsController objectAtIndexPath: fromIndex],
                            *toGroup =   [_queryGroupsController objectAtIndexPath: toIndex];
             
@@ -310,16 +306,16 @@
             NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryLinks *links = [self.queryLinksController objectAtIndexPath: indexPathLinks];
             
-            NSString *leftString = [NSString newStringFieldDisplayWithTable:links.tableleft
-                                                                   andField:links.fieldleft];
+            NSString *leftString = [NSString newStringFieldDisplayWithTable: links.tableleft
+                                                                   andField: links.fieldleft];
             
-            NSString *rightString = [NSString newStringFieldDisplayWithTable:links.tableright
-                                                                    andField:links.fieldright];
+            NSString *rightString = [NSString newStringFieldDisplayWithTable: links.tableright
+                                                                    andField: links.fieldright];
             
             NSString *linksDescription = [links copyLinkDescription];
             NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQuerySectionLinks:leftString
-                                                                   rightString:rightString
+            message = [NSAttributedString newAttributedStringQuerySectionLinks: leftString
+                                                                   rightString: rightString
                                                               linksDescription: linksDescription];
             ((MADTableViewCellQueryLink *)cell).tableID = links.objectID.copy;
             cell.textLabel.attributedText = message;

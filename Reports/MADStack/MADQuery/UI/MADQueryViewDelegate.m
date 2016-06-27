@@ -7,7 +7,56 @@
 //
 
 #import "MADQueryViewDelegate.h"
+#import "MADQueryViewSectionDelegate.h"
+#import "MADViewTableHeader+QueryViewSectionTypes.h"
+
+CGRect headerSectionFrame(CGFloat);
+CGRect headerSectionFrame(CGFloat headerSectionHeight) {
+    return CGRectMake(0.0000f, 0.0000f, 320.0000f, headerSectionHeight);
+}
 
 @implementation MADQueryViewDelegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    id <MADQueryViewDelegateProtocol> delegate = _delegate;
+    MADQueryViewSectionDelegate *layout = [delegate sectionLayoutForDisplayIndex:(short)section];
+    
+    id header = [MADTableViewHeader newTableViewHeaderWithType: layout
+                                                      andFrame: headerSectionFrame([delegate headerHeight])
+                                                        target: self];
+    return header;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    id <MADQueryViewDelegateProtocol> delegate = _delegate;
+    if ([delegate sectionIdentifierForDisplayIndex:(short)indexPath.section] ==
+            MADIdentifierQueryViewSectionsTables) {
+        [delegate handleUserRequestedSampleDataForTableAtIndex: indexPath.row];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [_delegate headerHeight];
+}
+
+- (NSString *)tableView:(UITableView *)tableView
+                    titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *title = NSLocalizedString(@"Remove", @"Remove button title.");
+    return title;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
+                                         forRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 @end

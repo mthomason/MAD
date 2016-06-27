@@ -83,6 +83,8 @@
 
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
 
+#import "MADQueryViewDelegate.h"
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -106,8 +108,8 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 #pragma mark - Private Category
 
 @interface MADQueryViewController()
-    <UITableViewDelegate,
-        NSFetchedResultsControllerDelegate,
+    <NSFetchedResultsControllerDelegate,
+        MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
         MTQueryBuilderAddTableDelegate,
@@ -120,15 +122,13 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
         MTTabBarImageProtocol,
         MADQueryViewControllerDatasourceProtocol>
 
+    @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
+    @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
+
     @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
-
-    //@property (nonatomic, strong) NSFetchedResultsController *queryTablesController;
-    //@property (nonatomic, strong) NSFetchedResultsController *queryLinksController;
-    //@property (nonatomic, strong) NSFetchedResultsController *queryGroupsController;
-    //@property (nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
 
     @property (nonatomic, assign) BOOL beganUpdates;
     @property (nonatomic, assign) BOOL toolbarIconShown;
@@ -137,18 +137,13 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 
     @property (nonatomic, assign) CGFloat headerSectionHeight;
 
-    @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
+    @property (nonatomic, copy) MADQueryViewConfigureCell handleConfigureCell;
 
 @end
 
 BOOL storeEnabled(void);
 BOOL storeEnabled() {
     return [MTStoreKitController sharedObject].reportingEnabled;
-}
-
-CGRect headerSectionFrame(CGFloat);
-CGRect headerSectionFrame(CGFloat headerSectionHeight) {
-    return CGRectMake(0.0000f, 0.0000f, 320.0000f, headerSectionHeight);
 }
 
 @implementation MADQueryViewController
@@ -176,7 +171,31 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
                                                        withSender: sender];
 }
 
-#pragma mark - Static
+#pragma mark -
+#pragma mark MADQueryViewDelegateProtocol
+
+- (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex {
+    return [_queryViewDataSource sectionAtIndex:displayIndex];
+}
+
+- (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex {
+    return [_queryViewDataSource layoutAtIndex:displayIndex];
+}
+
+- (CGFloat)headerHeight {
+    return _headerSectionHeight;
+}
+
+- (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
+    NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
+    RptqQueryTable *table = [_queryViewDataSource.queryTablesController objectAtIndexPath: indexPathUpdate];
+    MADTableController *tableController = [self tableControllerForTable:table];
+    [self.navigationController pushViewController: tableController animated: YES];
+    
+}
+
+#pragma mark -
+#pragma mark Static
 
 + (void)deleteCoreDataCache {
     //@autoreleasepool {
@@ -188,7 +207,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     //}
 }
 
-#pragma mark - NSObject
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -209,7 +229,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     return self;
 }
 
-#pragma mark - Property Overrides
+#pragma mark -
+#pragma mark Property Overrides
 
 - (void)setDocument:(MADocument *)document {
     if (_document == nil) {
@@ -218,7 +239,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     _document = document;
 }
 
-#pragma mark - CoreData
+#pragma mark -
+#pragma mark CoreData
 
 #pragma mark NSManagedObjectContext Notifications
 
@@ -242,13 +264,9 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
                     
                     MADQueryViewDataSource *dataSource;
-                    MADQueryViewConfigureCell handleConfigureCell;
-                    handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
-                        [self configureCell:cell forSection:forSection andRow:row];
-                    };
                     dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: query.numberOfTables
-                                                                      reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-                                                                   handleConfigureCell: handleConfigureCell];
+                                                                       reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                                    handleConfigureCell: _handleConfigureCell];
                     self.tableView.dataSource = dataSource;
                     self.queryViewDataSource = dataSource;
                 }
@@ -336,11 +354,35 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 }
 
 - (void)viewDidLoad {
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    MADocument *document = self.document;
+    NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
 
-    self.tableView.dataSource = self.queryViewDataSource;
+    
+    MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
+    queryViewDelegate.delegate = self;
 
+    self.tableView.delegate = queryViewDelegate;
+    self.queryViewDelegate = queryViewDelegate;
+    
+    
+    RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.managedObjectContext];
+    RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+    RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
+    
+    MADQueryViewDataSource *dataSource;
+    MADQueryViewConfigureCell handleConfigureCell;
+    handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
+        [self configureCell:cell forSection:forSection andRow:row];
+    };
+    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
+                                                       reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                    handleConfigureCell: handleConfigureCell];
+    self.handleConfigureCell = handleConfigureCell;
+    
+    self.tableView.dataSource = dataSource;
+    self.queryViewDataSource = dataSource;
+    
     MADWatermarkView *watermarkView;
     watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
     self.tableView.backgroundView = watermarkView;
@@ -432,6 +474,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
                                                             CGSizeZero.width,
                                                             self.bottomLayoutGuide.length,
                                                             CGSizeZero.width);
+    
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                                    self.bottomLayoutGuide.length, CGSizeZero.width);
 }
@@ -475,6 +518,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name"
                                                                                      ascending: YES];
+                    
                     request.sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 
                     MADocument *document = self.document;
@@ -561,11 +605,12 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            
-            [self.tableView.backgroundView setNeedsDisplay];
-        
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+        UIView *backgroundView = self.tableView.backgroundView;
+        void (^ handleAnimate)(id <UIViewControllerTransitionCoordinatorContext>context);
+        handleAnimate = ^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [backgroundView setNeedsDisplay];
+        };
+        [coordinator animateAlongsideTransition: handleAnimate completion: nil];
     }
     
 }
@@ -573,9 +618,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 #pragma mark - MTQueryBuilderPredicateFormatDelegate
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
+
     MADocument *document = self.document;
     [document.activeDocumentModel addPredicate:predicate];
     [document saveContext];
@@ -586,55 +630,62 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
     MADocument *document = self.document;
-    [document.activeDocumentModel setHeight:height forSectionAtRow:(NSUInteger)self.lastSelectedRowNumber];
+    [document.activeDocumentModel setHeight: height
+                            forSectionAtRow: (NSUInteger)self.lastSelectedRowNumber];
     [document saveContext];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
+
     MADocument *document = self.document;
     [document.activeDocumentModel setVisibility: isVisible
                                 forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
+
 }
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
           newPageAfter:(BOOL)newPageAfter {
+
     MADocument *document = self.document;
     [document.activeDocumentModel setNewPageAfter: newPageAfter
                                   forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
+
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
+
     MADocument *document = self.document;
     [document.activeDocumentModel setNumberOfRows: numberOfRows
                                   forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
     [document saveContext];
+
 }
 
 #pragma mark MUIViewControllerDelegate
 
+- (void)dismissViewController {
+    void (^handleCompletion)(void);
+    MADTabBarController *tabBarController = self.tabBarController;
+    handleCompletion = ^{ [tabBarController enableTabBarItems]; };
+    [self dismissViewControllerAnimated:YES completion:handleCompletion];
+}
+
 - (void)viewControllerDidFinish:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
 }
 
 #pragma mark - MTQueryBuilderLinkBuilderDelegate
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
 
-    
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
 
     MADocument *document = self.document;
     [document.activeDocumentModel addQueryLink:link];
@@ -642,17 +693,23 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     
     NSInteger suspectedSection = 2;
     
-    MADIdentifierQueryViewSections tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
+    MADIdentifierQueryViewSections tableSection;
+    tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
+    
     if (tableSection == MADIdentifierQueryViewSectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
-        [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections: linksSection
+                      withRowAnimation: UITableViewRowAnimationAutomatic];
     }
-    [document saveToURL: document.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
+    
+    [document saveToURL: document.fileURL
+       forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
 #pragma mark - MTQueryBuilderAddGroupDelegate
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID andSortOrder:(MNSSortOrder)sortOrder {
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
+                       andSortOrder:(MNSSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
@@ -683,7 +740,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 #pragma mark -
 #pragma mark Helper
 
-- (void)configureCell:(UITableViewCell *)cell forSection:(MADIdentifierQueryViewSections)section andRow:(NSInteger)row {
+- (void)configureCell:(UITableViewCell *)cell forSection:(MADIdentifierQueryViewSections)section
+               andRow:(NSInteger)row {
     
     switch (section) {
             
@@ -771,31 +829,6 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 #pragma mark -
 #pragma mark UITableViewDelegate
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    MADQueryViewSectionDelegate *layout = [self.queryViewDataSource layoutAtIndex:(short)section];
-    id header = [MADTableViewHeader newTableViewHeaderWithType: layout
-                                                      andFrame: headerSectionFrame(_headerSectionHeight)
-                                                        target: self];
-    return header;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.queryViewDataSource sectionAtIndex:(short)indexPath.section] == MADIdentifierQueryViewSectionsTables) {
-        [self displayTableSampleDataForIndexPath:indexPath];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return self.headerSectionHeight;
 }
@@ -833,13 +866,26 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - NSFetchedResultsControllerDelegate
+#pragma mark -
+#pragma mark NSFetchedResultsControllerDelegate
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-        [self.tableView beginUpdates];
-        [self setBeganUpdates: YES];
+- (MADIdentifierQueryViewSections)sectionPositionForTableSectionType:(MADIdentifierQueryViewSections)sec {
+    MADIdentifierQueryViewSections result = 0;
+    NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
+    MADQueryViewControllerTableLayout *tableLayout;
+    tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
+                                                                   reportingEnabled:storeEnabled()];
+    NSArray *sectionTypes = [tableLayout sectionTypes].copy;
+    NSInteger secPos = 0;
+    
+    for (NSNumber *num in sectionTypes) {
+        if (num.unsignedIntegerValue == sec) {
+            result = (MADIdentifierQueryViewSections)secPos;
+            break;
+        }
+        secPos++;
     }
+    return result;
 }
 
 - (NSMutableArray *)sectionsUsedByFetchedResultsController:(NSFetchedResultsController *)controller {
@@ -872,25 +918,6 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     
     return result;
 
-}
-
-- (MADIdentifierQueryViewSections)sectionPositionForTableSectionType:(MADIdentifierQueryViewSections)sec {
-    MADIdentifierQueryViewSections result = 0;
-    NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
-    MADQueryViewControllerTableLayout *tableLayout;
-    tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
-                                                                   reportingEnabled:storeEnabled()];
-    NSArray *sectionTypes = [tableLayout sectionTypes].copy;
-    NSInteger secPos = 0;
-    
-    for (NSNumber *num in sectionTypes) {
-        if (num.unsignedIntegerValue == sec) {
-            result = (MADIdentifierQueryViewSections)secPos;
-            break;
-        }
-        secPos++;
-    }
-    return result;
 }
 
 - (void)controller: (NSFetchedResultsController *)controller
@@ -972,6 +999,13 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
                 }
             }
         }
+    }
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        [self.tableView beginUpdates];
+        [self setBeganUpdates: YES];
     }
 }
 
@@ -1153,27 +1187,6 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     }
 }
 
-- (MADQueryViewDataSource *)queryViewDataSource {
-
-    if (_queryViewDataSource == nil) {
-        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: self.document.managedObjectContext];
-        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-        RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
-        
-        MADQueryViewDataSource *dataSource;
-        MADQueryViewConfigureCell handleConfigureCell;
-        handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
-            [self configureCell:cell forSection:forSection andRow:row];
-        };
-        dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
-                                                          reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-                                                       handleConfigureCell: handleConfigureCell];
-        self.tableView.dataSource = dataSource;
-        _queryViewDataSource = dataSource;
-    }
-    return _queryViewDataSource;
-}
-
 - (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
     RptqDatabaseSchemaTable *schemaTable = table.databaseSchemaTable;
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
@@ -1186,44 +1199,6 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     tableController.navigationItem.title = schemaTable.name;
     tableController.navigationItem.titleView = sampleDataTitleView;
     return tableController;
-}
-
-- (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
-    
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle newParagraphStyleTitleBar];
-    
-    NSString *firstPart = @"Data Sample";
-    NSString *titleString = [[NSString alloc] initWithFormat:@"%1@ %2@",
-                                                             firstPart, tableName];
-    
-    NSRange rangeFirstPart = NSMakeRange(0, firstPart.length);
-    NSRange rangeSecondPart = NSMakeRange(firstPart.length, titleString.length - firstPart.length);
-    
-    UIFont *fontb = [UIFont fontWithName: @"HelveticaNeue-Light" size: 20.0000f];
-    UIFont *fonti = [UIFont fontWithName: @"HelveticaNeue-LightItalic" size: 18.0000f];
-    
-    UIColor *foregroundColor = [UIColor whiteColor];
-    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                paragraphStyle, NSParagraphStyleAttributeName,
-                                                foregroundColor, NSForegroundColorAttributeName,
-                                                nil];
-    NSMutableAttributedString *titleViewText;
-    titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
-                                                           attributes:attributes];
-    
-    [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
-    [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
-    
-    return titleViewText;
-}
-
-- (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
-    
-    NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
-    RptqQueryTable *table = [self.queryViewDataSource.queryTablesController objectAtIndexPath: indexPathUpdate];
-    MADTableController *tableController = [self tableControllerForTable:table];
-    [self.navigationController pushViewController: tableController animated: YES];
-
 }
 
 - (NSArray <__kindof NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
@@ -1363,7 +1338,9 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     [self.tableView reloadData];
 }
 
-- (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+- (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
+                     fromTableView:(UITableView *)tableView
+                       atIndexPath:(NSIndexPath *)indexPath {
     
     switch (querySection) {
             

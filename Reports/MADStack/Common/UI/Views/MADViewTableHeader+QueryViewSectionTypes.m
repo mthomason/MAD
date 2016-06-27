@@ -13,9 +13,18 @@
 #import <UIKit/UIAccessibility.h>
 #import "MADQueryViewSectionDelegate.h"
 
+static NSString * const MADTextButtonAdd                = @"Add";
+static NSString * const MADTextButtonAddHintTables      = @"Adds a new table.";
+static NSString * const MADTextButtonAddHintLinks       = @"Adds a new table join.";
+static NSString * const MADTextButtonAddHintGroups      = @"Adds a new query grouping.";
+static NSString * const MADTextButtonAddHintPredicate   = @"Adds a predicate to filter the "
+                                                            @"query results.";
+
 @implementation MADTableViewHeader (QueryViewSectionTypes)
 
-+ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewSectionDelegate *)layout andFrame:(CGRect)frame target:(nullable id)target {
++ (nonnull instancetype)newTableViewHeaderWithType: (nonnull MADQueryViewSectionDelegate *)layout
+                                          andFrame: (CGRect)frame
+                                            target: (nullable id)target {
 
     MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {
@@ -31,16 +40,16 @@
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
-            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table.", @"Adds a new table.");
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(MADTextButtonAdd, MADTextButtonAdd);
+            view.buttonAdd.accessibilityHint = NSLocalizedString(MADTextButtonAddHintTables, MADTextButtonAddHintTables);
             break;
             
         case MADIdentifierQueryViewSectionsLinks:
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
-            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table join.", @"Adds a new table join.");
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(MADTextButtonAdd, MADTextButtonAdd);
+            view.buttonAdd.accessibilityHint = NSLocalizedString(MADTextButtonAddHintLinks, MADTextButtonAddHintLinks);
             break;
             
         case MADIdentifierQueryViewSectionsDocumentGroups:
@@ -48,8 +57,8 @@
             view.labelTitle.text = layout.name.copy;
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             view.buttonAdd.isAccessibilityElement = YES;
-            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new query grouping.", @"Adds a new query grouping.");
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(MADTextButtonAdd, MADTextButtonAdd);
+            view.buttonAdd.accessibilityHint = NSLocalizedString(MADTextButtonAddHintGroups, MADTextButtonAddHintGroups);
             break;
             
         case MADIdentifierQueryViewSectionsPredicate:
@@ -57,8 +66,8 @@
             [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
             [view.labelTitle sizeToFit];
             view.buttonAdd.isAccessibilityElement = YES;
-            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a predicate to filter the query results.", @"Adds a predicate to filter the query results.");
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(MADTextButtonAdd, MADTextButtonAdd);
+            view.buttonAdd.accessibilityHint = NSLocalizedString(MADTextButtonAddHintPredicate, MADTextButtonAddHintPredicate);
             break;
             
         case MADIdentifierQueryViewSectionsNumberOfQueryResults:

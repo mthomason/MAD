@@ -11,11 +11,16 @@
 
 #import "RptqQuery.h"
 
-@class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
+@class RptqDocument;
+@class MTDatabase;
+@class RptqDocumentSection;
+@class RptqDatabaseSchemaTable;
 
 @interface RptqQuery (Extras)
 
     - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex;
+    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+                                          withNumberOfGroups:(NSUInteger)numberOfGroups;
     - (RptqQueryGroup *)firstQueryGroup;
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
     - (NSArray *)sortedQueryGroups;

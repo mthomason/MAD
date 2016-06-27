@@ -10,6 +10,10 @@
 
 @implementation MADDocumentObject
 
+    - (instancetype)initWithObject:(RptqDocumentObject *)object {
+        return self = [super init];
+    }
+
     - (instancetype)initWithType:(MTDocumentObjectType)type
                        andObject:(RptqDocumentObject *)documentObject {
         return self = [super init];

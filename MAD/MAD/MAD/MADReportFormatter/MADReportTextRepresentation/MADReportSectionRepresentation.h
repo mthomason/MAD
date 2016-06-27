@@ -20,7 +20,7 @@
 
     @property (readonly) NSUInteger numberOfRows;
     @property (nonatomic, assign, getter=isVisibile) BOOL visibility;
-    @property (nonatomic, assign) MNSDocumentSectionType type;
+    @property (nonatomic, assign) MADDocumentSectionType type;
 
     - (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
     - (void)addRow:(nonnull MADReportSectionRowsRepresentation *)row;

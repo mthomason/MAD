@@ -12,6 +12,8 @@
 
 #import "MADocument.h"
 
+#import "MADReportSections.h"
+
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -205,17 +207,19 @@ void madwarn(char *err,  const char*err2) { }
         MTCacheProtocol,
         MTDatabaseProtocol>
 
-    @property (nonatomic, strong, readwrite) NSManagedObjectModel *madManagedObjectModel;
-    @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
-    @property (nonatomic, strong, readwrite) NSDictionary *madPersistentStoreOptions;
+    @property (nonatomic, readwrite, strong) MADReportSections *reportSections;
 
-    @property (nonatomic, strong, readwrite) NSMutableDictionary *extraInformation;
+    @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
+    @property (nonatomic, readwrite, strong) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
+    @property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;
 
-    @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
-    @property (nonatomic, copy, readwrite) NSURL *urlGuts;
-    @property (nonatomic, copy, readwrite) NSURL *urlMetaPlaylist;
+    @property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
 
-    @property (nonatomic, assign) BOOL didRefresh;
+    @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
+    @property (nonatomic, readwrite, copy) NSURL *urlGuts;
+    @property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
+
+    @property (nonatomic, readwrite, assign) BOOL didRefresh;
 
 @end
 
@@ -303,6 +307,17 @@ void madwarn(char *err,  const char*err2) { }
         _didRefresh = NO;
     }
     return self;
+}
+
+#pragma mark -
+#pragma mark Lazy Load Document Model
+
+- (MADReportSections *)reportSections {
+    if (_reportSections == nil) {
+        id reportSections = [[MADReportSections alloc] init];
+        _reportSections = reportSections;
+    }
+    return _reportSections;
 }
 
 #pragma mark -
@@ -708,7 +723,7 @@ READFROMURL_END:;
         
         
         //Create group header (contains a retain cycle)
-        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupHeader
+        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
                                                                    forManagedObjectContext: private];
         RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
         headerSectionRow.inSection = headerSection;
@@ -719,7 +734,7 @@ READFROMURL_END:;
         [queryGroup addHasSectionObject:headerSection];
         
         //Create group footer (contains a retain cycle)
-        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupFooter
+        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter
                                                                    forManagedObjectContext: private];
         RptqDocumentSectionRows *footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: private];
         footerSectionRow.inSection = footerSection;
@@ -911,7 +926,7 @@ READFROMURL_END:;
 }
 
 - (void)resetSectionLayoutManagers:(RptqDocument *)document {
-    NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
+    NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
     RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         

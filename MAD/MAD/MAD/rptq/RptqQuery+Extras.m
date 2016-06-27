@@ -53,6 +53,21 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return selectedIndex < (numberOfGroups * 2) + 5;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
+    return selectedIndex - 2;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
+}
+
 @implementation RptqQuery (Extras)
 
 #pragma mark - Overrides
@@ -108,61 +123,55 @@
 
 #pragma mark - Actions
 
-
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
-    return selectedIndex < (numberOfGroups * 2) + 5;
-}
-
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex);
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
-    return selectedIndex - 2;
-}
-
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
-    return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
-}
-
 - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex {
     
-    NSUInteger numberOfGroups = self.hasQueryGroups.count;
+    RptqDocumentSection *resultSection = [self documentSectionForSelectedIndex: selectedIndex
+                                                            withNumberOfGroups: self.hasQueryGroups.count];
+    
+    
+    return resultSection;
+}
+
+- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+                                      withNumberOfGroups:(NSUInteger)numberOfGroups {
+    
     RptqDocumentSection *resultSection = nil;
     
     if (validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups)) {
         
         RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
         
-        switch ([RptqDocumentSection getSectionTypeforRow:selectedIndex withNumberOfGroups:numberOfGroups]) {
+        switch ([RptqDocumentSection getSectionTypeforRow: selectedIndex
+                                       withNumberOfGroups: numberOfGroups]) {
                 
-            case MNSDocumentSectionTypeReportHeader:
+            case MADDocumentSectionTypeReportHeader:
                 resultSection = document.hasReportHeaderSection;
                 break;
                 
-            case MNSDocumentSectionTypePageHeader:
+            case MADDocumentSectionTypePageHeader:
                 resultSection = document.hasPageHeaderSection;
                 break;
                 
-            case MNSDocumentSectionTypeBody:
+            case MADDocumentSectionTypeBody:
                 resultSection = document.hasDetailSection;
                 break;
                 
-            case MNSDocumentSectionTypePageFooter:
+            case MADDocumentSectionTypePageFooter:
                 resultSection = document.hasPageFooterSection;
                 break;
                 
-            case MNSDocumentSectionTypeReportFooter:
+            case MADDocumentSectionTypeReportFooter:
                 resultSection = document.hasReportFooterSection;
                 break;
                 
-            case MNSDocumentSectionTypeGroupHeader: {
+            case MADDocumentSectionTypeGroupHeader: {
                 RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
                 resultSection = [self headerSectionInSections:group.hasSection];
                 break;
             }
                 
-            case MNSDocumentSectionTypeGroupFooter: {
-                RptqQueryGroup *group = [self queryGroupForIndex:queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
+            case MADDocumentSectionTypeGroupFooter: {
+                RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
                 resultSection = [self footerSectionInSections:group.hasSection];
                 break;
             }
@@ -177,7 +186,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
+        if (section.type.integerValue == MADDocumentSectionTypeGroupFooter) {
             return section;
             break;
         }
@@ -187,7 +196,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
+        if (section.type.integerValue == MADDocumentSectionTypeGroupHeader) {
             return section;
             break;
         }

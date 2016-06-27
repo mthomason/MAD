@@ -25,7 +25,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
 @interface RptqDocumentSection (Extras)
 
-    + (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type
+    + (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
@@ -33,12 +33,12 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
     - (NSManagedObjectID *)copySectionKey;
 
-    + (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
+    + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
                                 withNumberOfGroups:(NSUInteger)numberOfGroups;
     + (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
     + (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
 
-    - (MNSDocumentSectionType)getDocumentSectionType;
+    - (MADDocumentSectionType)getDocumentSectionType;
 
     - (CGFloat)layoutHeightCalculated;
 

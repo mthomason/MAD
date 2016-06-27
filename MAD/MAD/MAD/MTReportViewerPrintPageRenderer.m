@@ -260,25 +260,25 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     [[UIColor whiteColor] setFill];
     
     switch ([documentSection getDocumentSectionType]) {
-        case MNSDocumentSectionTypeBody:
+        case MADDocumentSectionTypeBody:
             [[UIColor redColor] setFill];
             break;
-        case MNSDocumentSectionTypeGroupFooter:
+        case MADDocumentSectionTypeGroupFooter:
             [[UIColor purpleColor] setFill];
             break;
-        case MNSDocumentSectionTypeGroupHeader:
+        case MADDocumentSectionTypeGroupHeader:
             [[UIColor yellowColor] setFill];
             break;
-        case MNSDocumentSectionTypePageFooter:
+        case MADDocumentSectionTypePageFooter:
             [[UIColor grayColor] setFill];
             break;
-        case MNSDocumentSectionTypePageHeader:
+        case MADDocumentSectionTypePageHeader:
             [[UIColor greenColor] setFill];
             break;
-        case MNSDocumentSectionTypeReportFooter:
+        case MADDocumentSectionTypeReportFooter:
             [[UIColor brownColor] setFill];
             break;
-        case MNSDocumentSectionTypeReportHeader:
+        case MADDocumentSectionTypeReportHeader:
             [[UIColor blueColor] setFill];
             break;
         default:
@@ -361,7 +361,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         [self setBackgroundColorForDocumentSection: documentSection
                                             inRect: sectionRect];
         
-        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter &&
+        if (pageSection.sectionType == MADDocumentSectionTypeGroupFooter &&
             pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
             readGroupCounter++;
         }
@@ -378,7 +378,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         
         [pageRepresentation addSection:sectionRepresentation];
         
-        if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
+        if (pageSection.sectionType == MADDocumentSectionTypeBody) {
             rowIndex++;
         }
         
@@ -532,14 +532,14 @@ END_DrawSection:;
     
     switch (pageSection.sectionType) {
     
-        case MNSDocumentSectionTypePageFooter:
+        case MADDocumentSectionTypePageFooter:
             originY = pageIndex == numberOfPages - 1 ?  // last page?
                             pageRect.origin.y + pageRect.size.height - sizeHeight -
                                 [reportFormatter heightForSectionWithObjectID:document.hasReportFooterSection.objectID] :
                             pageRect.origin.y + pageRect.size.height - sizeHeight;
             break;
             
-        case MNSDocumentSectionTypeReportFooter:
+        case MADDocumentSectionTypeReportFooter:
             originY = pageRect.origin.y + pageRect.size.height -
                         [reportFormatter heightForSectionWithObjectID: documentSection.objectID];
             break;
@@ -735,7 +735,7 @@ END_DrawSection:;
                                 NSNumber *firstRowid = nil;
                                 for (NSDictionary *pageSection in reportFormatter.reportLayout[pageIndex]) {
                                     NSNumber *section = pageSection[MTReportSectionType];
-                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                    if (section.unsignedIntegerValue == MADDocumentSectionTypeBody) {
                                         firstRowid = pageSection[MTReportDetailRowId];
                                         break;
                                     }
@@ -748,7 +748,7 @@ END_DrawSection:;
                                 NSNumber *lastRowid = nil;
                                 for (NSDictionary *pageSection in [reportFormatter.reportLayout[pageIndex] reverseObjectEnumerator]) {
                                     NSNumber *section = pageSection[MTReportSectionType];
-                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                    if (section.unsignedIntegerValue == MADDocumentSectionTypeBody) {
                                         lastRowid = pageSection[MTReportDetailRowId];
                                         break;
                                     }
@@ -770,7 +770,7 @@ END_DrawSection:;
                                 NSNumber *firstRowid = nil;
                                 for (NSDictionary *pageSection in reportFormatter.reportLayout[0]) {
                                     NSNumber *section = pageSection[MTReportSectionType];
-                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                    if (section.unsignedIntegerValue == MADDocumentSectionTypeBody) {
                                         firstRowid = pageSection[MTReportDetailRowId];
                                         break;
                                     }
@@ -786,7 +786,7 @@ END_DrawSection:;
                                 NSEnumerator <__kindof MADSectionPlist *> *reverseObjectEnumerator = [sectionArray reverseObjectEnumerator];
                                 for (NSDictionary *pageSection in reverseObjectEnumerator) {
                                     NSNumber * __unsafe_unretained section = pageSection[MTReportSectionType];
-                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                    if (section.unsignedIntegerValue == MADDocumentSectionTypeBody) {
                                         lastRowid = pageSection[MTReportDetailRowId];
                                         break;
                                     }
@@ -974,7 +974,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
             self.backgroundColorForDocumentSection:documentSection inRect:sectionRect];
             
             NSArray *groupLevelKeys = [self newObjectArrayOfGroupLevelKeysForDetailRow:pageSection.detailRowId];
-            if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
+            if (pageSection.sectionType == MADDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
                 readGroupCounter++;
             }
             if (documentSection.visibility.boolValue) {
@@ -999,7 +999,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 
             }
             
-            if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
+            if (pageSection.sectionType == MADDocumentSectionTypeBody) {
                 rowIndex++;
             }
             originY += sectionRect.size.height;

@@ -6,8 +6,28 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADQueryViewDelegate_h
+#define MAD_Designer_MADQueryViewDelegate_h
 
-@interface MADQueryViewDelegate : NSObject
+#import <UIKit/UITableView.h>
+#import "MADIdentifierQueryViewSections.h"
+
+@class MADQueryViewSectionDelegate;
+
+@protocol MADQueryViewDelegateProtocol <NSObject>
+
+    - (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex;
+    - (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex;
+    - (CGFloat)headerHeight;
+    - (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index;
 
 @end
+
+@interface MADQueryViewDelegate : NSObject
+    <UITableViewDelegate>
+
+    @property (nonatomic, weak) id <MADQueryViewDelegateProtocol> delegate;
+
+@end
+
+#endif

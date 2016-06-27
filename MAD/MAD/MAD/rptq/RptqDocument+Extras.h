@@ -32,7 +32,7 @@
     + (void)removeDocumentObject:(RptqDocumentObject *)documentObject
         fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type
+    - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
                                            andLevel:(NSUInteger)level;
     - (void)storeDatabaseConnectionDefination:(MTDatabase *)database
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;

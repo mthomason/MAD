@@ -9,14 +9,83 @@
 #ifndef MADocumentSectionType_h
 #define MADocumentSectionType_h
 
-typedef NS_ENUM(short, MNSDocumentSectionType) {
-    MNSDocumentSectionTypeReportHeader = 1,
-    MNSDocumentSectionTypeReportFooter = 2,
-    MNSDocumentSectionTypePageHeader = 3,
-    MNSDocumentSectionTypePageFooter = 4,
-    MNSDocumentSectionTypeBody = 5,
-    MNSDocumentSectionTypeGroupHeader = 6,
-    MNSDocumentSectionTypeGroupFooter = 7,
+#import <Foundation/NSObjCRuntime.h>
+
+typedef NS_ENUM(short, MADDocumentSectionType) {
+    MADDocumentSectionTypeReportHeader = 1,
+    MADDocumentSectionTypeReportFooter = 2,
+    MADDocumentSectionTypePageHeader = 3,
+    MADDocumentSectionTypePageFooter = 4,
+    MADDocumentSectionTypeBody = 5,
+    MADDocumentSectionTypeGroupHeader = 6,
+    MADDocumentSectionTypeGroupFooter = 7,
 };
+
+extern const NSUInteger MADDocumentSectionIndexDocumentHeader;
+extern const NSUInteger MADDocumentSectionIndexPageHeader;
+extern const NSUInteger MADDocumentSectionIndexDetail;
+extern const NSUInteger MADDocumentSectionIndexPageFooter;
+extern const NSUInteger MADDocumentSectionIndexDocumentFooter;
+
+static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger numberOfGroups);
+static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger numberOfGroups) {
+    return MADDocumentSectionIndexDetail + numberOfGroups;
+}
+
+static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger numberOfGroups);
+static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger numberOfGroups) {
+    return MADDocumentSectionIndexPageFooter + (2 * numberOfGroups);
+}
+
+static inline NSUInteger documentSectionDynamicIndexDocumentFooter(NSUInteger numberOfGroups);
+static inline NSUInteger documentSectionDynamicIndexDocumentFooter(NSUInteger numberOfGroups) {
+    return MADDocumentSectionIndexDocumentFooter + (2 * numberOfGroups);
+}
+
+static inline BOOL isSectionDetail(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isSectionDetail(NSUInteger index, NSUInteger numberOfGroups) {
+    return index == documentSectionDynamicIndexDetail(numberOfGroups);
+}
+
+static inline BOOL isPageFooter(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isPageFooter(NSUInteger index, NSUInteger numberOfGroups) {
+    return index == documentSectionDynamicIndexPageFooter(numberOfGroups);
+}
+
+static inline BOOL isDocumentFooter(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isDocumentFooter(NSUInteger index, NSUInteger numberOfGroups) {
+    return index == documentSectionDynamicIndexDocumentFooter(numberOfGroups);
+}
+
+static inline BOOL isPageHeader(NSUInteger index);
+static inline BOOL isPageHeader(NSUInteger index) {
+    return index == MADDocumentSectionIndexPageHeader;
+}
+
+static inline BOOL isDocumentHeader(NSUInteger index);
+static inline BOOL isDocumentHeader(NSUInteger index) {
+    return index == MADDocumentSectionIndexDocumentHeader;
+}
+
+static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups) {
+    return ((index - MADDocumentSectionIndexPageHeader) <= numberOfGroups);
+}
+
+static inline MADDocumentSectionType documentSectionType(NSUInteger row, NSUInteger numberOfGroups);
+static inline MADDocumentSectionType documentSectionType(NSUInteger row, NSUInteger numberOfGroups) {
+    return isSectionDetail(row, numberOfGroups) ? MADDocumentSectionTypeBody :
+                (isPageHeader(row) ? MADDocumentSectionTypePageHeader :
+                    (isPageFooter(row, numberOfGroups) ? MADDocumentSectionTypePageFooter :
+                        (isDocumentHeader(row) ? MADDocumentSectionTypeReportHeader :
+                            (isDocumentFooter(row, numberOfGroups) ? MADDocumentSectionTypeReportFooter :
+                             (isGroupHeader(row, numberOfGroups) ?
+                                    MADDocumentSectionTypeGroupHeader :
+                                    MADDocumentSectionTypeGroupFooter)
+          )
+         )
+        )
+    );
+}
 
 #endif /* MADocumentSectionType_h */

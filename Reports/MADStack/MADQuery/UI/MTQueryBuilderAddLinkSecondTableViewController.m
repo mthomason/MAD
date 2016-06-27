@@ -21,9 +21,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-
-}
+- (IBAction)done:(id)sender { }
 
 #pragma mark -
 #pragma mark Table View Data Source Protocol
@@ -31,11 +29,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"UITableViewCellTableName";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
-    }
-    
+
     RptqQueryTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
     cell.textLabel.text = tablea.alias;
     

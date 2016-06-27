@@ -6,8 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADReportRow_h
+#define MAD_MADReportRow_h
+
+#import <Foundation/NSObject.h>
+
+@class MADDocumentObject;
 
 @interface MADReportRow : NSObject
 
+    @property (nonatomic, readonly, strong, getter=hasDocumentObjects) NSArray <MADDocumentObject *> *hasDocumentObjects;
+
 @end
+
+#endif

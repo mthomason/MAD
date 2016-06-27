@@ -20,6 +20,8 @@
 @protocol MADActivityProtocol;
 @protocol MADocumentDelegate;
 
+@class MADReportSections;
+
 @class NSManagedObjectID;
 @class UIImage;
 @class UIPrintPageRenderer;
@@ -54,9 +56,12 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
         MTCacheProtocol,
         MTReportFormatterDataSource>
     
-    @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
+    @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
+    @property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
 
-    @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
+    @property (nonatomic, readonly, strong)    MADReportSections *reportSections;
+
+    @property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
     @property (nonatomic, readwrite, strong)    MTDataTableFast *mainDataTable;
     @property (nonatomic, readwrite, strong)    MTDatabase *database;
@@ -66,8 +71,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
-
-    @property (nonatomic, copy)                 NSManagedObjectID *documentObjectID;
 
     @property (nonatomic, strong)               MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 

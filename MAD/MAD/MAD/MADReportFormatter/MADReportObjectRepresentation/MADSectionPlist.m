@@ -22,7 +22,7 @@ static NSString * const MADIdentifierReportObject       = @"o";
 
 @implementation NSDictionary (MADSectionPlist)
 
-+ (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
++ (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
                                            groupLevel:(NSUInteger)groupLevel
                                                   row:(NSNumber *)row {
     
@@ -37,7 +37,7 @@ static NSString * const MADIdentifierReportObject       = @"o";
     
 }
 
-+ (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
++ (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
                                                   row:(NSNumber *)row {
     NSNumber *section = [[NSNumber alloc] initWithShort:sectionType];
     NSNumber *rowID = row.copy;
@@ -51,7 +51,7 @@ static NSString * const MADIdentifierReportObject       = @"o";
     return ((NSNumber *)self[MTReportGroupLevel]).unsignedIntegerValue;
 }
 
-- (MNSDocumentSectionType)sectionType {
+- (MADDocumentSectionType)sectionType {
     return ((NSNumber *)self[MTReportSectionType]).shortValue;
 }
 

@@ -20,15 +20,15 @@ typedef NSDictionary  <NSString *, NSNumber *> MADSectionPlist;
 
 @interface  NSDictionary (MADSectionPlist)
 
-    + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
+    + (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
                                                groupLevel:(NSUInteger)groupLevel
                                                       row:(NSNumber *)row;
 
-    + (MADSectionPlist *)newSectionRepresentationWithType:(MNSDocumentSectionType)sectionType
+    + (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
                                                       row:(NSNumber *)row;
 
     - (NSUInteger)groupLevel;
-    - (MNSDocumentSectionType)sectionType;
+    - (MADDocumentSectionType)sectionType;
     - (NSNumber *)detailRowId;
 
 @end

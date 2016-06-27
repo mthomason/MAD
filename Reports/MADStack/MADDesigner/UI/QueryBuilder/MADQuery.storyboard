@@ -270,9 +270,6 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
-                        <connections>
-                            <outlet property="delegate" destination="joU-Nk-1nv" id="fOf-b7-B6e"/>
-                        </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>

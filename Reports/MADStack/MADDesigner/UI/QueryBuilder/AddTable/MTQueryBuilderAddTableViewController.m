@@ -11,9 +11,9 @@
 #endif
 
 #import "MTQueryBuilderAddTableViewController.h"
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <UIKit/UILabel.h>
 #import <CoreData/NSFetchedResultsController.h>
+#import <UIKit/UILabel.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
 
 @implementation MTQueryBuilderAddTableViewController
 
@@ -33,18 +33,10 @@
 #pragma mark Table View Data Source Protocol
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"UITableViewCellTableName";
+    static NSString *CellIdentifier = @"MADIdentifierTableViewCellAddTable";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
-    }
-    
-    RptqDatabaseSchemaTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
-
-    NSString *name = tablea.name.copy;
-    cell.textLabel.text = name;
-    
+    RptqDatabaseSchemaTable *table = [self.fetchedResultsController objectAtIndexPath: indexPath];
+    cell.textLabel.text = table.name.copy;
     return cell;
 }
 

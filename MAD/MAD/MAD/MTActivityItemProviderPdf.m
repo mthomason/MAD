@@ -89,8 +89,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 
 - (id)item {
     id item = nil;
+    UIActivityViewController *activityViewController = _activityViewController;
     if ([self.activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {    //Printer
-        if (self.activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        if (activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             [self.delegate showPrintDialog]; //Need some help getting out of this popover!!!
         }
         item = nil;
@@ -99,12 +100,12 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
         
-        [self writeToPdf:item withViewController:self.activityViewController];
+        [self writeToPdf:item withViewController:activityViewController];
     }
     return item;
 }
 
-- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
+- (void)writeToPdf:(NSURL *)fileURL withViewController:(UIViewController *)window {
 
     [self disableUserInteraction:window.view];
 
@@ -118,33 +119,35 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                                  withObject: activityView
                               waitUntilDone: YES];
     
-    self.document.statusLabel = activityView;
+    MADocument *document = _document;
+    document.statusLabel = activityView;
     
-    MADocument * __weak weakdoc = self.document;
+    MADocument * __weak weakdoc = document;
     
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
     dispatch_async(dipatchQueue, ^{
         
+        MADocument *sdocument = weakdoc;
         NSDictionary *options;
         options = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     @"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
         CGRect letterRect = [MTPaper rectLetter];
-        NSArray *sortDescriptors = weakdoc.sortDescriptors;
+        NSArray *sortDescriptors = sdocument.sortDescriptors;
         
-        [weakdoc.mainDataTable sortUsingDescriptors:sortDescriptors];
+        [sdocument.mainDataTable sortUsingDescriptors:sortDescriptors];
         MTReportFormatter *reportFormatter;
-        reportFormatter = [[MTReportFormatter alloc] initWithDocument: weakdoc
+        reportFormatter = [[MTReportFormatter alloc] initWithDocument: sdocument
                                                               options: MTReportFormatterOptionsMargin];
-        reportFormatter.cachedDelegate = weakdoc;
-        reportFormatter.dataDelegate = weakdoc;
-        reportFormatter.datasource = weakdoc;
+        reportFormatter.cachedDelegate = sdocument;
+        reportFormatter.dataDelegate = sdocument;
+        reportFormatter.datasource = sdocument;
         reportFormatter.overrideIdentifier = @"madpreview";
         reportFormatter.didRefresh = YES;
         reportFormatter.layoutSize = letterRect.size;
         
-        [[NSNotificationCenter defaultCenter] addObserver: weakdoc
+        [[NSNotificationCenter defaultCenter] addObserver: sdocument
                                                  selector: @selector(reportFormatterDidFormatPage:)
                                                      name: MADNotificationDidFormatPagesName
                                                    object: reportFormatter];
@@ -154,15 +157,16 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         [reportFormatter formatForSize:letterRect.size contentChanged:NO];
         
         
-        [[NSNotificationCenter defaultCenter] removeObserver: weakdoc
+        [[NSNotificationCenter defaultCenter] removeObserver: sdocument
                                                         name: MADNotificationDidFormatPagesName
                                                       object: reportFormatter];
         
         MTReportViewerPrintPageRenderer *printPageRenderer;
         printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                 dataTable: weakdoc.mainDataTable];
-
-        UIGraphicsBeginPDFContextToFile(filepath.path, letterRect, options);
+                                                                                 dataTable: sdocument.mainDataTable];
+        
+        NSString *filePath = fileURL.path.copy;
+        UIGraphicsBeginPDFContextToFile(filePath, letterRect, options);
         
         NSValue *trimBox = [NSValue valueWithCGRect:PdfTrimBox(letterRect)];
         NSDictionary *boxInfo = [[NSDictionary alloc] initWithObjectsAndKeys:

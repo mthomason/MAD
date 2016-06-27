@@ -206,36 +206,40 @@
 
 #pragma mark - Static
 
-+ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectId inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    return (RptqDocumentSection *)[managedObjectContext objectRegisteredForID:objectId];
++ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectID
+                    inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqDocumentSection *)[managedObjectContext objectRegisteredForID:objectID];
 }
 
-+ (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups {
-    const int8_t documentHeader    = 0;
-    const int8_t pageHeader        = 1;
++ (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
+                            withNumberOfGroups:(NSUInteger)numberOfGroups {
+    NSUInteger documentHeader    = 0;
+    NSUInteger pageHeader        = 1;
     NSUInteger body              = 2 + numberOfGroups;       //6
     NSUInteger pageFooter        = 3 + (2 * numberOfGroups); //11
     NSUInteger documentFooter    = 4 + (2 * numberOfGroups); //12
-    MNSDocumentSectionType result;
-    
-    if (row == documentHeader) {
-        result = MNSDocumentSectionTypeReportHeader;
-    } else if (row == pageHeader) {
-        result = MNSDocumentSectionTypePageHeader;
-    } else if (row == body) {
-        result = MNSDocumentSectionTypeBody;
+    MADDocumentSectionType result;
+
+    if (row == body) {
+        result = MADDocumentSectionTypeBody;
+        
+    } else  if (row == pageHeader) {
+        result = MADDocumentSectionTypePageHeader;
+        
     } else if (row == pageFooter) {
-        result = MNSDocumentSectionTypePageFooter;
+        result = MADDocumentSectionTypePageFooter;
+        
+    } else if (row == documentHeader) {
+        result = MADDocumentSectionTypeReportHeader;
+        
     } else if (row == documentFooter) {
-        result = MNSDocumentSectionTypeReportFooter;
+        result = MADDocumentSectionTypeReportFooter;
+        
     } else {
-        NSUInteger locationRelitaveToGroup = row - pageHeader;
-        BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
-        if (isGroupHeader) {
-            result = MNSDocumentSectionTypeGroupHeader;
-        } else {
-            result = MNSDocumentSectionTypeGroupFooter;
-        }
+    
+        result = ((row - pageHeader) <= numberOfGroups) ?
+                MADDocumentSectionTypeGroupHeader :
+                MADDocumentSectionTypeGroupFooter;
     }
     
     return result;
@@ -254,7 +258,7 @@
 + (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
+        if (section.type.integerValue == MADDocumentSectionTypeGroupFooter) {
             resultSection = section;
             break;
         }
@@ -265,7 +269,7 @@
 + (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
+        if (section.type.integerValue == MADDocumentSectionTypeGroupHeader) {
             resultSection = section;
             break;
         }
@@ -319,7 +323,7 @@
     return result;
 }
 
-- (MNSDocumentSectionType)getDocumentSectionType {
+- (MADDocumentSectionType)getDocumentSectionType {
     return self.type.shortValue;
 }
 
@@ -327,31 +331,31 @@
     NSString *result = nil;
     switch (self.type.shortValue) {
     
-        case MNSDocumentSectionTypeReportHeader:
+        case MADDocumentSectionTypeReportHeader:
             result = NSLocalizedString(@"Report Header", @"Report Header");
             break;
 
-        case MNSDocumentSectionTypePageHeader:
+        case MADDocumentSectionTypePageHeader:
             result = NSLocalizedString(@"Page Header", @"Page Header");
             break;
 
-        case MNSDocumentSectionTypeBody:
+        case MADDocumentSectionTypeBody:
             result = NSLocalizedString(@"Report Detail", @" Report Detail");
             break;
 
-        case MNSDocumentSectionTypePageFooter:
+        case MADDocumentSectionTypePageFooter:
             result = NSLocalizedString(@"Page Footer", @"Page Footer");
             break;
 
-        case MNSDocumentSectionTypeReportFooter:
+        case MADDocumentSectionTypeReportFooter:
             result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
 
-        case MNSDocumentSectionTypeGroupHeader:
+        case MADDocumentSectionTypeGroupHeader:
             result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [self.inGroup fieldNameQuery]];
             break;
 
-        case MNSDocumentSectionTypeGroupFooter:
+        case MADDocumentSectionTypeGroupFooter:
             result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [self.inGroup fieldNameQuery]];
             break;
 
@@ -362,7 +366,7 @@
     return result;
 }
 
-+ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type
++ (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
                  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSEntityDescription *entity;
