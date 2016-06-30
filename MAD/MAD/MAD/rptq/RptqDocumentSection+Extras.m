@@ -332,7 +332,8 @@
     switch (self.type.shortValue) {
     
         case MADDocumentSectionTypeReportHeader:
-            result = NSLocalizedString(@"Report Header", @"Report Header");
+            result = NSLocalizedString(@"Report Header",
+                                       @"Report Header");
             break;
 
         case MADDocumentSectionTypePageHeader:

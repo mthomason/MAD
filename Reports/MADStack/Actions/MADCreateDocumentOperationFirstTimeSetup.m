@@ -7,21 +7,13 @@
 //
 
 #import "MADCreateDocumentOperationFirstTimeSetup.h"
-//#import <Foundation/Foundation.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
-#import <MAD/MTDataTableFast.h>
-#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
-#import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+extras.h>
-#import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
-#import <MAD/RptqDocumentSectionEnumerator.h>
-#import <MAD/MADSectionLayoutManager.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
 @interface MADCreateDocumentOperationFirstTimeSetup ()
@@ -33,9 +25,7 @@
 
 @implementation MADCreateDocumentOperationFirstTimeSetup
 
-- (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
+- (void)dealloc { }
 
 - (instancetype)init {
     return [self initWithDatabaseConnection:nil];
@@ -72,7 +62,6 @@
 
         NSError *error = nil;
         [private save:&error];
-//        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
     }];
 
     [self finish];

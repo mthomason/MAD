@@ -7,7 +7,15 @@
 //
 
 #import "MADReportSectionPageHeader.h"
+#import <Foundation/NSBundle.h>
+
+static NSString * const Name = @"Page Header";
 
 @implementation MADReportSectionPageHeader
+
+- (NSString *)localizedDisplayName {
+    id name = NSLocalizedString(Name, Name);
+    return name;
+}
 
 @end

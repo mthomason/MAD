@@ -7,8 +7,8 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-#import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/MADReportSection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
@@ -27,10 +27,10 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 @implementation MADDesignerSectionLabel
 
-- (instancetype)initWithSection:(RptqDocumentSection *)section {
-    CGRect frame = CGRectZero;
-    self = [self initWithFrame:frame];
-    if (self) {
+- (instancetype)initWithSection:(MADReportSection *)section {
+
+    if (self = [self initWithFrame:CGRectZero]) {
+
         [self setSelected:NO];
         
         self.scale = 1.0000f;

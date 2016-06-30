@@ -19,17 +19,12 @@
 #import "MADocument.h"
 #import "MTQueryFull.h"
 
-#import "RptqDocumentSectionEnumerator.h"
-
-#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
 #import "RptqQueryGroup.h"
 
-#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
-#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
 #import "MTDatabaseField.h"

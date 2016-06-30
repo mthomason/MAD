@@ -11,9 +11,11 @@
 
 #import "MADTabBarController.h"
 
+@class NSString;
+
 @interface MADTabBarController (Shared)
 
-    + (instancetype)newTabBarControllerMain;
+    + (instancetype)newTabBarControllerMain:(NSString *)document;
 
 @end
 

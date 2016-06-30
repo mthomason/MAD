@@ -33,7 +33,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 @implementation MADSectionLayoutManager
 
-#pragma mark - Static Helpers
+#pragma mark -
+#pragma mark Static Helpers
 
 + (NSArray *)nonOverlappingDropPointsForItem:(MADSectionLayoutAttributes *)attr1
                              givenDropPoints:(NSArray *)dropPoints
@@ -168,7 +169,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     return d;
 }
 
-#pragma mark - Creation
+#pragma mark -
+#pragma mark Creation
 
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
 
@@ -202,7 +204,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     return self;
 }
 
-#pragma mark - Methods
+#pragma mark -
+#pragma mark Methods
 
 - (void)addItem:(MADSectionLayoutAttributes *)item {
     (self.items)[item.objectID] = item;

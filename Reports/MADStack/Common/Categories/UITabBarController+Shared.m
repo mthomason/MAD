@@ -8,14 +8,21 @@
 
 #import "UITabBarController+Shared.h"
 #import "MADStoryboard.h"
+#import "MADTabBarController.h"
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
 
 static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
 @implementation MADTabBarController (Shared)
 
-+ (instancetype)newTabBarControllerMain {
++ (instancetype)newTabBarControllerMain:(NSString *)title {
     UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
-    id viewController = [designer instantiateViewControllerWithIdentifier:TabBar];
+    MADTabBarController *viewController = [designer instantiateViewControllerWithIdentifier:TabBar];
+    viewController.navigationItem.prompt = title.copy;
+    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    viewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     return viewController;
 }
 

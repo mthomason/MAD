@@ -13,7 +13,8 @@
         #import <Foundation/NSException.h>
         #define MADAssert NSAssert(condition, desc, ...)
     #else
-        #define MADAssert
+        #import <Foundation/NSException.h>
+        #define MADAssert NSAssert(condition, desc, ...)
     #endif
 
 #endif /* MADAssert_h */

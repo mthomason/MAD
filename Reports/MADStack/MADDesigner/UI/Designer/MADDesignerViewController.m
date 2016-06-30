@@ -101,6 +101,9 @@
 
 #import "MADStoryboard.h"
 
+#import <MAD/MADReportSections.h>
+#import <MAD/MADReportSection.h>
+
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
     MTToolboxTypeSection = 3,
@@ -526,12 +529,57 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     _lastMenuItemSelectRequiresElementView = NO;
     _zoomScaleRestore = scroller.zoomScale;
     [scroller setZoomScale: 1.0000f animated: NO];
+
+    /*
+    MADReportSections *reportSections = self.document.reportSections;
+    for (MADReportSection *reportSection in reportSections) {
+            NSString *result = nil;
+            switch (reportSection.type) {
+                    
+                case MADDocumentSectionTypeReportHeader:
+                    result = NSLocalizedString(@"Report Header", @"Report Header");
+                    break;
+                    
+                case MADDocumentSectionTypePageHeader:
+                    result = NSLocalizedString(@"Page Header", @"Page Header");
+                    break;
+                    
+                case MADDocumentSectionTypeBody:
+                    result = NSLocalizedString(@"Report Detail", @" Report Detail");
+                    break;
+                    
+                case MADDocumentSectionTypePageFooter:
+                    result = NSLocalizedString(@"Page Footer", @"Page Footer");
+                    break;
+                    
+                case MADDocumentSectionTypeReportFooter:
+                    result = NSLocalizedString(@"Report Footer", @"Report Footer");
+                    break;
+                    
+                case MADDocumentSectionTypeGroupHeader:
+                    result = [NSString stringWithFormat:NSLocalizedString(@"Group Header ", @"\"Group Header 1\"")];
+                    break;
+                    
+                case MADDocumentSectionTypeGroupFooter:
+                    result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - ", @"\"Group Footer 1\"")];
+                    break;
+                    
+                default:
+                    result = [NSString stringWithFormat:@"Unknown %d", reportSection.type];
+                    break;
+                    
+            }
+        NSLog(@"%@-%@", result, reportSection);
+    }
+    */
     
-    RptqDocumentSectionEnumerator *sectionEnumerator;
-    sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+//    RptqDocumentSectionEnumerator *sectionEnumerator;
+//    sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
     
+    MADReportSections *reportSections = self.document.reportSections;
+
     NSInteger sectionCounter = 0;
-    NSUInteger numberOfSections = sectionEnumerator.count;
+    NSUInteger numberOfSections = reportSections.count;
     
     [scroller.container addSubview:self.ruler];
     
@@ -597,7 +645,107 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                        *constraintViewLeft,
                        *constraintViewRight;
     NSArray *collectionViewConstraints, *sectionViewLabelConstraints;
+    UIGestureRecognizer *strayTouchGesture = self.strayTouchGesture;
 
+    for (MADReportSection *reportSection in reportSections) {
+        NSManagedObjectID *reportSectionKey;
+        MADDesignerSectionView *sectionView;
+        MADDesignerSectionLabel *sectionViewLabel;
+        UIGestureRecognizer *tapGestureRecognizer;
+        
+        reportSectionKey = reportSection.objectID.copy;
+        
+        sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height);
+        
+        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection delegate: self];
+        sectionView.delegate = self;
+        sectionView.dataSource = self;
+        sectionView.layer.borderWidth = borderWidthThin;
+        sectionView.showsVerticalScrollIndicator = YES;
+        
+        ((MTReportDesignerSectionViewLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
+        
+        sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
+        
+        tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
+                                                                                                action:@selector(handleToggleSectionControlPanel:)
+                                                                                              delegate:self];
+        
+        [strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
+        [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
+        
+        sectionViewLabel.tag = sectionCounter;
+        
+        NSManagedObjectID *key;
+        UIView *constraintItem;
+        
+        key = reportSectionKeyTracker.lastObject;
+        constraintItem = sectionCounter == 0 ?
+        self.ruler : sectionViewsDictionary[key];
+        
+        
+        constraintViewTop = [NSLayoutConstraint newLayoutConstraintViewTop: constraintItem
+                                                                viewBottom: sectionView
+                                                                   padding: MTReportDesignerBufferPaddingVertical];
+        
+        constraintView = [NSLayoutConstraint newLayoutConstraintView: sectionView
+                                                              height: reportSection.height];
+        
+        constraintLabelRight = [NSLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel
+                                                                       container: sectionView
+                                                                         padding: MTReportDesignerSectionLabelPaddingRight];
+        
+        constraintLabelBottom = [NSLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel
+                                                                         container: sectionView
+                                                                           padding: MTReportDesignerBufferPaddingVertical];
+        constraintLabel = [NSLayoutConstraint newLayoutConstraintLabel: sectionViewLabel
+                                                              toHeight: MTReportDesignerSectionLabelHeight];
+        
+        constraintViewLeft = [NSLayoutConstraint newLayoutConstraintViewLeft:sectionView
+                                                                     content:scroller.container
+                                                                     padding:MTReportDesignerBorderPaddingSides];
+        
+        constraintViewRight = [NSLayoutConstraint newLayoutConstraintViewRight:sectionView
+                                                                       content:scroller.container
+                                                                       padding:MTReportDesignerBorderPaddingSides];
+        
+        collectionViewConstraints = [[NSArray alloc] initWithObjects: constraintViewLeft,
+                                     constraintViewRight, nil];
+        
+        sectionViewLabelConstraints = [[NSArray alloc] initWithObjects: constraintViewTop,
+                                       constraintView,
+                                       constraintLabelRight,
+                                       constraintLabelBottom,
+                                       constraintLabel, nil];
+        
+        [viewDidAppearDesignerContentViewConstraints addObjectsFromArray:sectionViewLabelConstraints];
+        
+        
+        [constraintsSectionsVerticalBuffer addObject: constraintViewTop];
+        [constraintSectionLabelHeightContainer addObject: constraintLabel];
+        
+        [constraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
+        
+        [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
+        
+        constraintsReportSectionHeight[sectionView.objectIdTag] = constraintView;
+        
+        sectionViewsDictionary[reportSectionKey] = sectionView;
+        sectionControlViewsDictionary[reportSectionKey] = sectionViewLabel;
+        
+        [reportSectionKeyTracker addObject:reportSectionKey];
+        [sectionViewsArray addObject:sectionView];
+        
+        sectionCounter++;
+        
+        [scroller.container addSubview:sectionView];
+        [scroller.container addSubview:sectionViewLabel];
+        
+        [passthroughContainers addObject:sectionView];
+        
+        sectionView.sectionLabel = sectionViewLabel;
+    }
+    /*
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         @autoreleasepool {
@@ -611,7 +759,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
             
-            sectionView = [MADDesignerViewController documentSectionView: reportSection
+            sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection
                                                                 delegate: self];
             sectionView.delegate = self;
             sectionView.dataSource = self;
@@ -701,7 +849,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             sectionView.sectionLabel = sectionViewLabel;
         }
     }
-    
+    */
     [reportSectionKeyTracker removeAllObjects];
     
     self.layoutConstraintsSectionsVerticalBuffer = constraintsSectionsVerticalBuffer;
@@ -3170,7 +3318,8 @@ END_deselectElementView:;
 
         NSInteger numberOfItemsInSection,
                   numberOfSections = documentSectionView.numberOfSections,
-                  section, item;
+                  section,
+                  item;
         
         for (section = 0; section < numberOfSections; section++) {
         
@@ -3528,16 +3677,6 @@ static const inline CGSize sizePopoverFonts() {
     return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
 }
 
-+ (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
-    MADDesignerSectionView *collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
-    ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
-    collectionView.objectIdTag = section.objectID;
-    collectionView.tag = section.identifier.integerValue;
-    collectionView.visible = section.visibility.boolValue;
-    collectionView.selected = NO;
-    return collectionView;
-}
-
 #pragma mark - Actions
 
 - (IBAction)actionDone:(id)sender {
@@ -3553,17 +3692,20 @@ static const inline CGSize sizePopoverFonts() {
 - (IBAction)actionAdd:(id)sender {
     
     UINavigationController *navigationController = [UINavigationController elementPicker];
-    MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
+    MADDesignerElementPickerViewController *pickerController;
+    pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;
     pickerController.document = self.document;
     
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     navigationController.preferredContentSize = sizePopoverDefault();
     
-    UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
+    UIPopoverPresentationController *popoverController;
+    popoverController = navigationController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.barButtonItem = sender;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
     [self presentViewController: navigationController animated: YES completion:^{
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, pickerController);
     }];

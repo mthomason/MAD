@@ -52,8 +52,13 @@
 #import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
 
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+#import "MADReportSections.h"
+
+//#import "MAD"
+
+/*static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
 static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
     return selectedIndex < (numberOfGroups * 2) + 5;
 }
@@ -66,7 +71,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger 
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
     return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
-}
+}*/
 
 @implementation RptqQuery (Extras)
 
@@ -136,51 +141,50 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
                                       withNumberOfGroups:(NSUInteger)numberOfGroups {
     
     RptqDocumentSection *resultSection = nil;
+    //NSAssert(validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups), @"");
     
-    if (validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups)) {
+    
+    RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
         
-        RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
-        
-        switch ([RptqDocumentSection getSectionTypeforRow: selectedIndex
-                                       withNumberOfGroups: numberOfGroups]) {
-                
-            case MADDocumentSectionTypeReportHeader:
-                resultSection = document.hasReportHeaderSection;
-                break;
-                
-            case MADDocumentSectionTypePageHeader:
-                resultSection = document.hasPageHeaderSection;
-                break;
-                
-            case MADDocumentSectionTypeBody:
-                resultSection = document.hasDetailSection;
-                break;
-                
-            case MADDocumentSectionTypePageFooter:
-                resultSection = document.hasPageFooterSection;
-                break;
-                
-            case MADDocumentSectionTypeReportFooter:
-                resultSection = document.hasReportFooterSection;
-                break;
-                
-            case MADDocumentSectionTypeGroupHeader: {
-                RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
-                resultSection = [self headerSectionInSections:group.hasSection];
-                break;
-            }
-                
-            case MADDocumentSectionTypeGroupFooter: {
-                RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
-                resultSection = [self footerSectionInSections:group.hasSection];
-                break;
-            }
-                
-            default:
-                break;
+    switch ([RptqDocumentSection getSectionTypeforRow: selectedIndex
+                                   withNumberOfGroups: numberOfGroups]) {
+            
+        case MADDocumentSectionTypeReportHeader:
+            resultSection = document.hasReportHeaderSection;
+            break;
+            
+        case MADDocumentSectionTypePageHeader:
+            resultSection = document.hasPageHeaderSection;
+            break;
+            
+        case MADDocumentSectionTypeBody:
+            resultSection = document.hasDetailSection;
+            break;
+            
+        case MADDocumentSectionTypePageFooter:
+            resultSection = document.hasPageFooterSection;
+            break;
+            
+        case MADDocumentSectionTypeReportFooter:
+            resultSection = document.hasReportFooterSection;
+            break;
+            
+        case MADDocumentSectionTypeGroupHeader: {
+            RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
+            resultSection = [self headerSectionInSections:group.hasSection];
+            break;
         }
-        
+            
+        case MADDocumentSectionTypeGroupFooter: {
+            RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
+            resultSection = [self footerSectionInSections:group.hasSection];
+            break;
+        }
+            
+        default:
+            break;
     }
+    
     return resultSection;
 }
 

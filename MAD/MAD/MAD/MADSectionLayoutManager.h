@@ -23,10 +23,11 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutAttributes *>
 
 @interface MADSectionLayoutManager : NSObject
 
+    - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
+
     @property (nonatomic, strong, readonly) MADSectionLayoutAttributesMutableMap *items;
     @property (readonly) CGSize size;
 
-    - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
     - (void)addItem:(MADSectionLayoutAttributes *)item;
     - (void)removeItemWithID:(NSManagedObjectID *)objectID;
     - (void)layout;

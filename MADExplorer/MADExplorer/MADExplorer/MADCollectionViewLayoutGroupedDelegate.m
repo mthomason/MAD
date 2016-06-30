@@ -367,7 +367,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
-    [delegate collectionView:collectionView didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
+    [delegate collectionView:collectionView
+                            didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
 }
 
 - (void)openURL:(NSURL *)url {

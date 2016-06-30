@@ -11,7 +11,10 @@
 
 #import "MADManagedObjectCollectionView.h"
 
+@protocol MTReportDesignerSectionViewLayoutLiquidDelegate;
+
 @class MADDesignerSectionLabel;
+@class MADReportSection;
 
 typedef NS_ENUM(NSUInteger, MADBorderState) {
     MADBorderStateNormal,
@@ -20,6 +23,9 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 };
 
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
+
+    + (instancetype)newDesignerSectionView:(MADReportSection *)section
+                                  delegate:(id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate;
 
     @property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 

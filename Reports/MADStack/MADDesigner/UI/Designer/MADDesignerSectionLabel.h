@@ -15,7 +15,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 
 @protocol MADDesignerSectionLabelDelegate;
 
-@class RptqDocumentSection;
+@class MADReportSection;
 @class UITapGestureRecognizer;
 
 @interface MADDesignerSectionLabel : UILabel
@@ -25,7 +25,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
     @property (nonatomic, assign) BOOL indicatorVisible;
     @property (nonatomic, assign) CGFloat scale;
 
-    - (instancetype)initWithSection:(RptqDocumentSection *)section;
+    - (instancetype)initWithSection:(MADReportSection *)section;
     - (void)dimView;
     - (void)normalView;
 

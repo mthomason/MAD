@@ -988,8 +988,9 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
+        SEL actionEdit = @selector(actionEdit:);
         _barButtonItemEditDone = [UIBarButtonItem newBarButtonItemEditDone: self
-                                                                    action: @selector(actionEdit:)];
+                                                                    action: actionEdit];
     }
     return _barButtonItemEditDone;
 }
@@ -1025,8 +1026,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 - (void)searchBar:(UISearchBar *)searchBar
     selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
-- (void)searchBar:(UISearchBar *)searchBar
-    textDidChange:(NSString *)searchText { }
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
 
@@ -1104,7 +1104,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
-        MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[(segue.destinationViewController) topViewController];
+        MADQueryViewController *queryBuilderViewController;
+        queryBuilderViewController = (MADQueryViewController *)[(segue.destinationViewController) topViewController];
         [queryBuilderViewController reloadMainDocumentAnimated:YES];
     }
 }
@@ -1162,6 +1163,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         MADActiveDocumentManager *fileManager = self.activeDocumentManager;
         //NSURL *gutsUrl = openDocument.urlGuts.copy;
+        
         void (^handleCloseCompletion)(BOOL, NSURL *);
         handleCloseCompletion = ^(BOOL success, NSURL *cleanupURL) {
             if (success) {
@@ -1244,10 +1246,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (void)openViewerWithDocument:(MADocument *)document {
 
-    MADTabBarController *tabBarController = [MADTabBarController newTabBarControllerMain];
-    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent.copy;
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    NSString *title = document.fileURL.lastPathComponent;
+    MADTabBarController *tabBarController = [MADTabBarController newTabBarControllerMain:title];
     tabBarController.viewControllerDelegate = self;
     
     NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],

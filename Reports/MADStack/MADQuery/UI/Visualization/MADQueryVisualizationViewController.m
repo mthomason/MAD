@@ -609,9 +609,11 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
-            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery withSchemaHints:schemaLocations animated:animated];
+            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery
+               withSchemaHints:schemaLocations animated:animated];
         } else {
-            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery animated:animated];
+            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery
+                      animated:animated];
         }
     }
 }

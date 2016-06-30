@@ -9,27 +9,45 @@
 #ifndef MAD_MADReportSections_h
 #define MAD_MADReportSections_h
 
-#import <Foundation/NSObject.h>
+#import <Foundation/NSEnumerator.h>
 
 @class MADReportSection;
+@class NSArray;
 @class RptqDocument;
 @class RptqQuery;
 
-@protocol MADReportSectionsDelegate;
-@protocol MADReportSectionsDelegate <NSObject>
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return selectedIndex < (numberOfGroups * 2) + 5;
+}
 
-    - (RptqDocument *)documentSchema;
-    - (RptqQuery *)mainQuery;
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
+    return selectedIndex - 2;
+}
 
-@end
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
+}
+
 
 @interface MADReportSections : NSObject
+    <NSFastEnumeration>
 
-    - (instancetype)initWithDelegate:(id <MADReportSectionsDelegate>) delegate;
+    - (instancetype)initWithDocument:(RptqDocument *)document NS_DESIGNATED_INITIALIZER;
+
+    @property (nonatomic, readonly, strong) MADReportSection *reportHeader;
+    @property (nonatomic, readonly, strong) MADReportSection *pageHeader;
+    @property (nonatomic, readonly, strong) NSArray <MADReportSection *> *groupHeaders;
+    @property (nonatomic, readonly, strong) MADReportSection *detail;
+    @property (nonatomic, readonly, strong) NSArray <MADReportSection *> *groupFooters;
+    @property (nonatomic, readonly, strong) MADReportSection *pageFooter;
+    @property (nonatomic, readonly, strong) MADReportSection *reportFooter;
+
+
+    - (NSUInteger)count;
     
-    @property (nonatomic, readonly, weak) id <MADReportSectionsDelegate> delegate;
-    @property (nonatomic, readonly, strong, getter=hasReportSections) NSArray <MADReportSection *> *reportSections;
-
 @end
 
 #endif

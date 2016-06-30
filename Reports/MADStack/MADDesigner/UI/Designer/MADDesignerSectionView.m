@@ -10,6 +10,8 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <CoreData/NSManagedObjectID.h>
+
 #import <UIKit/UIGraphics.h>
 
 #import <UIKit/UIAccessibilityCustomAction.h>
@@ -18,6 +20,8 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import <MAD/MADReportSection.h>
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
@@ -48,17 +52,19 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     }
 }
 
+static NSString * const MADTextAccessSectionElements = @"Access section elements.";
+
 @interface MADDesignerSectionView ()
 
-@property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
-@property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
-@property (nonatomic, assign) BOOL accessibile;
+    @property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
+    @property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
+    @property (nonatomic, assign) BOOL accessibile;
 
 @end
 
 @implementation MADDesignerSectionView
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
 
@@ -69,9 +75,10 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         
         self.accessibile = YES;
         
-        MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+        MTReportDesignerSectionBackgroundView *backgroundView;
+        backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:1];
-        backgroundView.backgroundColor = [UIColor clearColor];
+        backgroundView.backgroundColor = clearColor;
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
         NSString *documentElementReuseIdentifier = [MTCollectionViewCellElement reuseIdentifier];
@@ -91,14 +98,29 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         self.backgroundView = nil;
         self.backgroundColor = clearColor;
         
-        [self setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisVertical];
-        [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisVertical];
+        [self setContentHuggingPriority: UILayoutPriorityDefaultLow
+                                forAxis: UILayoutConstraintAxisVertical];
+        [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
+                                              forAxis: UILayoutConstraintAxisVertical];
         _selected = NO;
         _visible = NO;
     }
     
     return self;
     
+}
+
++ (instancetype)newDesignerSectionView:(MADReportSection *)section
+                              delegate:(id <MTReportDesignerSectionViewLayoutLiquidDelegate,
+                                                UICollectionViewDataSource>)layoutDelegate {
+    MADDesignerSectionView *collectionView;
+    collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
+    ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
+    collectionView.objectIdTag  = section.objectID.copy;
+    collectionView.tag          = section.identifier;
+    collectionView.visible      = section.isVisible;
+    collectionView.selected     = NO;
+    return collectionView;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -110,30 +132,60 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + MTDefaultFingerSizeHeight);
 }
 
-- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion {
-    [self performBatchUpdates:^{
+- (void)removeItemAtIndex: (NSIndexPath *)deletePath
+                   update: (void (^)())update
+        animationComplete: (void (^)())animationComplete
+               completion: (void (^)())completion {
+
+    void (^updates)(void);
+    void (^complets)(BOOL);
+
+    updates = ^{
+        
         if (update != nil) update();
-        NSArray *indexPaths = @[deletePath];
+        NSArray *indexPaths = [[NSArray alloc] initWithObjects:deletePath, nil];
         [self deleteItemsAtIndexPaths: indexPaths];
-    } completion:^(BOOL finished) {
+        
+    };
+
+    complets = ^(BOOL finished) {
+        
         if (finished) {
-            [UIView animateWithDuration:0.6666f animations:^{
+
+            void (^animate)(void);
+            void (^finish)(BOOL);
+
+            animate = ^{
                 [self invalidateIntrinsicContentSize];
-            } completion:^(BOOL animateFinished) {
+            };
+
+            finish = ^(BOOL animateFinished) {
                 if (animateFinished) {
                     if (animationComplete != nil) animationComplete(animateFinished);
                 }
-            }];
+            };
+
+            [UIView animateWithDuration: 0.6666f
+                             animations: animate
+                             completion: finish];
             if (completion != nil) { completion(); }
         }
-    }];
+    
+    };
+
+    [self performBatchUpdates:updates
+                   completion:complets];
 }
 
-- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion {
+- (void)insertItemAtIndex: (NSIndexPath *)path
+                   update: (void (^)())update
+        animationComplete: (void (^)())animationComplete
+               completion: (void (^)())completion {
+    
     [self performBatchUpdates:^(void) {
         
         if (update != nil) update();
-        NSArray *indexPathsInserted = @[path];
+        NSArray *indexPathsInserted = [[NSArray alloc] initWithObjects:path, nil];
         [self insertItemsAtIndexPaths: indexPathsInserted];
         
     } completion:^(BOOL finished) {
@@ -208,12 +260,16 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 #pragma mark - Accessibility
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
-    NSString *toggleAccessibilityName = NSLocalizedString(@"Access section elements.", @"Access section elements.");
+    NSString *toggleAccessibilityName = NSLocalizedString(MADTextAccessSectionElements,
+                                                          MADTextAccessSectionElements);
     UIAccessibilityCustomAction *toggleAccessibility;
+    SEL toggle = @selector(toggleAccessibility:);
     toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
                                                                      target: self
-                                                                   selector: @selector(toggleAccessibility:)];
-    return @[toggleAccessibility];
+                                                                   selector: toggle];
+    NSArray  <__kindof UIAccessibilityCustomAction *> *customActions;
+    customActions = [[NSArray alloc] initWithObjects:toggleAccessibility, nil];
+    return customActions;
 }
 
 - (BOOL)isAccessibilityElement {

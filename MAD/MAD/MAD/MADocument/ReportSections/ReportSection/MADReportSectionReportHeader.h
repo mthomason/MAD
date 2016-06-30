@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADReportSectionReportHeader_h
+#define MAD_MADReportSectionReportHeader_h
+
 #import <MAD/MADReportSection.h>
 
 @interface MADReportSectionReportHeader : MADReportSection
 
 @end
+
+#endif

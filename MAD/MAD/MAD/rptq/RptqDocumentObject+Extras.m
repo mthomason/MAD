@@ -74,6 +74,16 @@ static NSNumberFormatter *currencyNumberFormatter;
 //
 //
 
+static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight);
+static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight) {
+    return paddingTop.floatValue + paddingBottom.floatValue + sizeHeight.floatValue;
+}
+
+static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
+static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth) {
+    return paddingLeft.floatValue + paddingRight.floatValue + sizeWidth.floatValue;
+}
+
 @implementation RptqDocumentObject (Extras)
 
 #pragma mark - Static Helpers
@@ -100,7 +110,9 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromParentSection:(RptqDocumentSection *)section withLayoutManager:(MADSectionLayoutManager *)layoutManager {
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject
+           fromParentSection:(RptqDocumentSection *)section
+           withLayoutManager:(MADSectionLayoutManager *)layoutManager {
     
     RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
     
@@ -123,16 +135,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     section.height = (__bridge NSNumber *)(height);
     CFRelease(height);
     
-}
-
-static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight);
-static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight) {
-    return paddingTop.floatValue + paddingBottom.floatValue + sizeHeight.floatValue;
-}
-
-static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
-static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth) {
-    return paddingLeft.floatValue + paddingRight.floatValue + sizeWidth.floatValue;
 }
 
 #pragma mark - Overrides

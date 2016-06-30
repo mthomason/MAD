@@ -314,7 +314,7 @@ void madwarn(char *err,  const char*err2) { }
 
 - (MADReportSections *)reportSections {
     if (_reportSections == nil) {
-        id reportSections = [[MADReportSections alloc] init];
+        id reportSections = [[MADReportSections alloc] initWithDocument:[self activeDocumentModel]];
         _reportSections = reportSections;
     }
     return _reportSections;
@@ -330,17 +330,21 @@ void madwarn(char *err,  const char*err2) { }
 
     NSURL *fileURL = document.fileURL.copy;
     NSURL *gutsUrl = document.urlGuts.copy;
+
+    void (^closeCompletionHandler)(BOOL);
+    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
+    
+    void (^ saveCompletionHandler)(BOOL);
+    saveCompletionHandler = ^(BOOL success) {
+        
+        if (success && document != nil)
+            [document closeWithCompletionHandler:closeCompletionHandler];
+        
+    };
+    
     [document saveToURL: fileURL
        forSaveOperation: UIDocumentSaveForOverwriting
-      completionHandler: ^(BOOL success) {
-
-        if (success && document != nil) {
-            [document closeWithCompletionHandler:^(BOOL successClose) {
-                completion(successClose, gutsUrl);
-            }];
-        }
-
-    }];
+      completionHandler: saveCompletionHandler];
 }
 
 // Helpers
@@ -408,7 +412,8 @@ void madwarn(char *err,  const char*err2) { }
     BOOL success = [url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
     if (!success) goto READFROMURL_END;
 
-    archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:_urlGuts archiveURL:url];
+    archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
+                                                            archiveURL: url];
     success = [archiveManager unarchive];
 
 READFROMURL_END:;
@@ -927,8 +932,9 @@ READFROMURL_END:;
 
 - (void)resetSectionLayoutManagers:(RptqDocument *)document {
     NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-    RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
-    for (RptqDocumentSection *reportSection in sectionEnumerator) {
+    RptqDocumentSectionEnumerator *sections;
+    sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
+    for (RptqDocumentSection *reportSection in sections) {
         
         MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
         sectionLayoutManagers[reportSection.objectID] = layoutManager;
@@ -1195,7 +1201,20 @@ READFROMURL_END:;
 #pragma mark Helper
 
 - (NSString *)filename {
-    return self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+    NSString *filename = self.fileURL.lastPathComponent.stringByDeletingPathExtension.copy;
+    return filename;
+}
+
+#pragma mark -
+#pragma mark Debugging
+
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    [debug appendString:@"-------------------------------\n"];
+    [debug appendFormat:@"Filename:\t%@\n", [self filename]];
+    [debug appendFormat:@"Sections:\t%@\n", [self reportSections]];
+    [debug appendString:@"-------------------------------\n"];
+    return debug;
 }
 
 @end

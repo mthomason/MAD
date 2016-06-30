@@ -28,6 +28,9 @@
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
     - (NSUInteger)sectionCount;
 
+    - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
+    - (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
+
 @end
 
 #endif

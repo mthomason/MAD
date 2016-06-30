@@ -11,8 +11,32 @@
 #import <MADFileManager/MADAppStorageOption.h>
 
 #import <MADFoundation/MADAssert.h>
+#import <Foundation/NSURL.h>
 
 @implementation MADFileCoordinator
+
+@synthesize delegate = _delegate;
+@synthesize documentsDirectory = _documentsDirectory;
+
+- (void)setDelegate:(id<MADFileCoordinatorDelegate>)delegate {
+    if (_delegate != delegate) {
+        _delegate = delegate;
+    }
+}
+
+- (id <MADFileCoordinatorDelegate>)delegate {
+    return _delegate;
+}
+
+- (void)setDocumentsDirectory:(NSURL *)documentsDirectory {
+    if (_documentsDirectory != documentsDirectory) {
+        _documentsDirectory = documentsDirectory.copy;
+    }
+}
+
+- (NSURL *)documentsDirectory {
+    return _documentsDirectory;
+}
 
 + (instancetype)newFileCoordinatorWithPathExtension: (NSString *)pathExtension
                                       storageOption: (MADAppStorage)storageOption
@@ -47,28 +71,41 @@
 }
 
 - (void)startQuery {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (void)stopQuery {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (void)removeFileAtURL:(NSURL *)URL {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (void)duplicateFileAtURL:(NSURL *)URL {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
                extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    MADAssert(NO, @"Must subclass.");
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
                     fileGroup:(NSString *)fileGroup {
-    MADAssert(NO, @"Must subclass.");
-    return NO;
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 
 @end

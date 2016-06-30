@@ -26,6 +26,8 @@
 
     @property (readonly)RptqDatabase *defaultDatabase;
 
+    @property (readonly)RptqQuery *mainQuery;
+
     + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
     + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
@@ -34,6 +36,9 @@
 
     - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
                                            andLevel:(NSUInteger)level;
+    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+                                          withNumberOfGroups:(NSUInteger)numberOfGroups;
+                                          
     - (void)storeDatabaseConnectionDefination:(MTDatabase *)database
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables

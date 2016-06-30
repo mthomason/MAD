@@ -28,6 +28,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 
+#import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery+Extras.h"
 #import "RptqDocumentSection+Extras.h"
@@ -51,6 +52,8 @@
 
 #import "MADErrorContainer.h"
 #import "MTDatabaseTable.h"
+
+#import "MADReportSections.h"
 
 @implementation RptqDocument (Extras)
 
@@ -102,12 +105,67 @@
     }
 }
 
+- (RptqQuery *)mainQuery {
+    RptqDatabase *defaultDatabase = [self defaultDatabase];
+    RptqQuery *mainQuery = [defaultDatabase defaultQuery];
+    return mainQuery;
+}
+
 - (RptqDatabase *)defaultDatabase {
     return self.hasDatabaseSchemas.anyObject;
 }
 
 - (MTPaperType)paperType {
     return self.papersize.unsignedShortValue;
+}
+
+- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+                                      withNumberOfGroups:(NSUInteger)numberOfGroups {
+    
+    RptqDocumentSection *resultSection = nil;
+    
+    switch ([RptqDocumentSection getSectionTypeforRow: selectedIndex
+                                   withNumberOfGroups: numberOfGroups]) {
+            
+        case MADDocumentSectionTypeReportHeader:
+            resultSection = self.hasReportHeaderSection;
+            break;
+            
+        case MADDocumentSectionTypePageHeader:
+            resultSection = self.hasPageHeaderSection;
+            break;
+            
+        case MADDocumentSectionTypeBody:
+            resultSection = self.hasDetailSection;
+            break;
+            
+        case MADDocumentSectionTypePageFooter:
+            resultSection = self.hasPageFooterSection;
+            break;
+            
+        case MADDocumentSectionTypeReportFooter:
+            resultSection = self.hasReportFooterSection;
+            break;
+            
+        case MADDocumentSectionTypeGroupHeader: {
+            RptqQuery *query = self.mainQuery;
+            RptqQueryGroup *group = [query queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
+            resultSection = [query headerSectionInSections:group.hasSection];
+            break;
+        }
+            
+        case MADDocumentSectionTypeGroupFooter: {
+            RptqQuery *query = self.mainQuery;
+            RptqQueryGroup *group = [self.mainQuery queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
+            resultSection = [query footerSectionInSections:group.hasSection];
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+    return resultSection;
 }
 
 - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type andLevel:(NSUInteger)level {
@@ -146,7 +204,6 @@
             break;
     }
 }
-
 
 #pragma mark - Static
 

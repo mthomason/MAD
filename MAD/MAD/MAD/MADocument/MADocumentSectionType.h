@@ -72,14 +72,14 @@ static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups) {
     return ((index - MADDocumentSectionIndexPageHeader) <= numberOfGroups);
 }
 
-static inline MADDocumentSectionType documentSectionType(NSUInteger row, NSUInteger numberOfGroups);
-static inline MADDocumentSectionType documentSectionType(NSUInteger row, NSUInteger numberOfGroups) {
-    return isSectionDetail(row, numberOfGroups) ? MADDocumentSectionTypeBody :
-                (isPageHeader(row) ? MADDocumentSectionTypePageHeader :
-                    (isPageFooter(row, numberOfGroups) ? MADDocumentSectionTypePageFooter :
-                        (isDocumentHeader(row) ? MADDocumentSectionTypeReportHeader :
-                            (isDocumentFooter(row, numberOfGroups) ? MADDocumentSectionTypeReportFooter :
-                             (isGroupHeader(row, numberOfGroups) ?
+static inline MADDocumentSectionType documentSectionType(NSUInteger index, NSUInteger numberOfGroups);
+static inline MADDocumentSectionType documentSectionType(NSUInteger index, NSUInteger numberOfGroups) {
+    return isSectionDetail(index, numberOfGroups) ? MADDocumentSectionTypeBody :
+                (isPageHeader(index) ? MADDocumentSectionTypePageHeader :
+                    (isPageFooter(index, numberOfGroups) ? MADDocumentSectionTypePageFooter :
+                        (isDocumentHeader(index) ? MADDocumentSectionTypeReportHeader :
+                            (isDocumentFooter(index, numberOfGroups) ? MADDocumentSectionTypeReportFooter :
+                             (isGroupHeader(index, numberOfGroups) ?
                                     MADDocumentSectionTypeGroupHeader :
                                     MADDocumentSectionTypeGroupFooter)
           )

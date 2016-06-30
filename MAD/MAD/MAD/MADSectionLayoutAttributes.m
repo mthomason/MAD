@@ -12,26 +12,30 @@
 
 @implementation MADSectionLayoutAttributes
 
-- (id)copyWithZone:(nullable NSZone *)zone {
-    NSIndexPath *path = [self.indexPath copyWithZone:zone];
-    MADSectionLayoutAttributes *copy = [[self class] layoutAttributesForCellWithIndexPath:path];
-    copy.objectID = [self.objectID copyWithZone:zone];
-    copy.frame = self.frame;
-    return copy;
+#pragma mark -
+#pragma mark Static Functions
+
++ (NSArray <NSValue *> *)newArrayOfDropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
+    MTCorners corners = MTCornersMake(item.frame);
+    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
+    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
+    NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
+    return cornersArray;
 }
 
-+ (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                           objectID:(NSManagedObjectID *)objectID
-                                            andRect:(CGRect)rect {
-    MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
-    NSManagedObjectID *managedObjectID = objectID.copy;
-    instance.objectID = managedObjectID;
-    instance.frame = rect;
-    return instance;
-}
-
-- (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
-    return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
++ (NSArray <NSValue *> *)newArrayOfdropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
+    MTCorners corners = MTCornersMake(item.frame);
+    
+    NSValue *topLeft = [[NSValue alloc] initWithBytes: &corners.topLeft
+                                             objCType: @encode(CGPoint)],
+            *topRight = [[NSValue alloc] initWithBytes: &corners.topRight
+                                              objCType: @encode(CGPoint)],
+            *bottomLeft = [[NSValue alloc] initWithBytes: &corners.bottomLeft
+                                                objCType: @encode(CGPoint)],
+            *bottomRight = [[NSValue alloc] initWithBytes: &corners.bottomRight
+                                                 objCType: @encode(CGPoint)];
+    NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight, bottomLeft, bottomRight, nil];
+    return result;
 }
 
 + (BOOL)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
@@ -47,10 +51,6 @@
     return intersects;
 }
 
-- (BOOL)moveOnScreen {
-    return [MADSectionLayoutAttributes moveItemOnScreen:self];
-}
-
 + (BOOL)moveItemOnScreen:(MADSectionLayoutAttributes *)item {
     BOOL moved = NO;
     if (CGRectIsOffScreenWest(item.frame)) {
@@ -64,35 +64,79 @@
     return moved;
 }
 
++ (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem
+     intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
+    
+    CGPoint dropPoint = CGPointZero;
+    double distance = MADDistance(placedItem.frame.origin, dropPoint),
+           tmpDistance;
+    for (MADSectionLayoutAttributes *item in allItems) {
+        if (placedItem.objectID != item.objectID) {
+            
+            NSArray *array = [item copyDropPoints];
+            for (NSValue *v in array) {
+                tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue);
+                if (tmpDistance < distance) {
+                    dropPoint = v.CGPointValue;
+                    distance = tmpDistance;
+                }
+            
+            }
+        }
+    }
+    placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y,
+                                  placedItem.frame.size.width, placedItem.frame.size.height);
+}
+
+#pragma mark -
+#pragma mark NSCopying
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    NSIndexPath *path = [self.indexPath copyWithZone:zone];
+    MADSectionLayoutAttributes *copy = [[self class] layoutAttributesForCellWithIndexPath:path];
+    copy.objectID = [self.objectID copyWithZone:zone];
+    copy.frame = self.frame;
+    return copy;
+}
+
+#pragma mark -
+#pragma mark Convience Constructor
+
++ (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
+                                           objectID:(NSManagedObjectID *)objectID
+                                            andRect:(CGRect)rect {
+    MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
+    NSManagedObjectID *managedObjectID = objectID.copy;
+    instance.objectID = managedObjectID;
+    instance.frame = rect;
+    return instance;
+}
+
+- (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
+    return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
+}
+
+- (BOOL)moveOnScreen {
+    return [MADSectionLayoutAttributes moveItemOnScreen:self];
+}
+
 - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes {
     [MADSectionLayoutAttributes movePlacedItem:self intersectingItems:layoutAttributes];
 }
 
-+ (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
-    CGPoint dropPoint = CGPointZero;
-    double distance = MADDistance(placedItem.frame.origin, dropPoint), tmpDistance;
-    for (MADSectionLayoutAttributes *item in allItems) {
-        if (placedItem.objectID != item.objectID) {
-            NSArray *array = [item copyDropPoints];
-            for (NSValue *v in array) {
-                if ((tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue)) < distance) {
-                    dropPoint = v.CGPointValue;
-                    distance = tmpDistance;
-                }
-            }
-        }
-    }
-    placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
-}
-
-- (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+- (BOOL)validDropPoint:(CGPoint)dropPoint
+      givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
 
     BOOL valid = YES;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
-        if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
+        CGRect drop = CGRectMake(dropPoint.x, dropPoint.y,
+                              self.frame.size.width, self.frame.size.height);
+        
+        if (CGRectIntersectsRect(drop, placedItem.frame)) {
             valid = NO;
             break;
         }
+        
     }
     return valid;
 }
@@ -103,25 +147,6 @@
 
 - (NSArray <NSValue *> *)copyDropPointsHorizontal {
     return [MADSectionLayoutAttributes newArrayOfDropPointsHorizontalOnAttribute:self];
-}
-
-+ (NSArray <NSValue *> *)newArrayOfDropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
-    MTCorners corners = MTCornersMake(item.frame);
-    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
-    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
-    NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
-    return cornersArray;
-}
-
-+ (NSArray <NSValue *> *)newArrayOfdropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
-    MTCorners corners = MTCornersMake(item.frame);
-    
-    NSValue *topLeft = [[NSValue alloc] initWithBytes:&corners.topLeft objCType:@encode(CGPoint)];
-    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
-    NSValue *bottomLeft = [[NSValue alloc] initWithBytes:&corners.bottomLeft objCType:@encode(CGPoint)];
-    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
-    NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight, bottomLeft, bottomRight, nil];
-    return result;
 }
 
 - (id)debugQuickLookObject {

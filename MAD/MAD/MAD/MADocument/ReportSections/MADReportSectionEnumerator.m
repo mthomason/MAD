@@ -7,7 +7,12 @@
 //
 
 #import "MADReportSectionEnumerator.h"
+#import "MADocumentSectionType.h"
+#import "MADReportSection.h"
 #import "RptqQuery+Extras.h"
+#import "RptqDocumentSection.h"
+#import "RptqDatabase.h"
+#import "RptqDocument+Extras.h"
 
 const NSInteger MADIndexMutationPointer = 0;
 const NSInteger MADIndexGroupCounter    = 1;
@@ -16,11 +21,20 @@ const NSInteger MADIndexGroupCount      = 3;
 
 @interface MADReportSectionEnumerator ()
 
-    @property (nonatomic, readwrite, weak) RptqQuery *query;
+    @property (nonatomic, readwrite, strong) RptqQuery *query;
+    @property (nonatomic, readwrite, strong) NSMutableArray *buffer;
 
 @end
 
 @implementation MADReportSectionEnumerator
+
+- (void)dealloc {
+    [_buffer removeAllObjects];
+}
+
+- (instancetype)init {
+    return [self initWithQuery:nil];
+}
 
 - (instancetype)initWithQuery:(RptqQuery *)query {
     if (self = [super init]) {
@@ -39,17 +53,25 @@ const NSInteger MADIndexGroupCount      = 3;
     unsigned long countOfItemsAlreadyEnumerated = state->state;
     if(countOfItemsAlreadyEnumerated == 0) {
         state->mutationsPtr = &state->extra[MADIndexMutationPointer];
+        state->extra[MADIndexSectionCount] = query ? [query sectionCount] : 0;
         state->extra[MADIndexGroupCounter] = 0;
-        state->extra[MADIndexSectionCount] = [query sectionCount];
-        state->extra[MADIndexGroupCount]    = query.hasQueryGroups.count;
+        state->extra[MADIndexGroupCount]   = query ?  query.hasQueryGroups.count : 0;
+
+        id buffer = [[NSMutableArray alloc] initWithCapacity: MIN(stackbufLength, state->extra[MADIndexSectionCount])];
+        self.buffer = buffer;
     }
     
     if(countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) {
-        state->itemsPtr = stackbuf;
-        while((countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) && (count < stackbufLength)) {
+        RptqDocument *document = query.inDatabase.ownedByQueryAsStaticResource;
         
-            stackbuf[count] = [query documentSectionForSelectedIndex: countOfItemsAlreadyEnumerated
-                                                  withNumberOfGroups: state->extra[MADIndexGroupCount]];
+        state->itemsPtr = stackbuf;
+        id reportSectionSchema;
+        while((countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) && (count < stackbufLength)) {
+            reportSectionSchema = [document documentSectionForSelectedIndex: countOfItemsAlreadyEnumerated
+                                                         withNumberOfGroups: state->extra[MADIndexGroupCount]];
+            id reportSection = [[MADReportSection alloc] initWithReportSection:reportSectionSchema];
+            [_buffer addObject:reportSection];
+            stackbuf[count] = reportSection;
             countOfItemsAlreadyEnumerated++;
             count++;
         }
