@@ -123,6 +123,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     }
 }
 
++ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
+    return [key isEqualToString:NSStringFromSelector(@selector(hasQueryGroups))];
+}
 
 - (NSUInteger)sectionCount { return 5 + self.hasQueryGroups.count * 2; }
 

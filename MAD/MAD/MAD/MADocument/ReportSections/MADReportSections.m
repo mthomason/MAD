@@ -25,6 +25,8 @@
 
 @interface MADReportSections () {
   @private
+    NSUInteger _numberOfGroups;
+    
     MADReportSection *_reportHeader;
     MADReportSection *_pageHeader;
     NSMutableArray <MADReportSection *> *_groupHeaders;
@@ -45,18 +47,57 @@
 
 @implementation MADReportSections
 
+- (void)dealloc {
+    NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
+    [_document.mainQuery removeObserver: self
+                             forKeyPath: path];
+}
+
 - (instancetype)init {
     return [self initWithDocument:nil];
 }
 
 - (instancetype)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
+
+        NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
+
+        [document.mainQuery addObserver: self
+                             forKeyPath: path
+                                options: NSKeyValueObservingOptionNew
+                                context: NULL];
+        
+        _numberOfGroups = document.mainQuery.hasQueryGroups.count;
         _document = document;
     }
     return self;
 }
 
-- (MADReportSection *)sectionAtIndex:(NSUInteger)index numberOfGroups:(NSUInteger)numberOfGroups {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    
+    NSString *pathToObserve = NSStringFromSelector(@selector(hasQueryGroups));
+    if ([keyPath isEqualToString: pathToObserve]) {
+    
+        //reset the group count and read remove the group objects so they will be read again
+        //  next time around.
+        _numberOfGroups = ((RptqQuery *)object).hasQueryGroups.count;
+        
+        [_groupHeaders removeAllObjects];
+        _groupHeaders = nil;
+
+        [_groupFooters removeAllObjects];
+        _groupFooters = nil;
+        
+    }
+    
+}
+
+
+- (MADReportSection *)sectionAtIndex:(NSUInteger)index
+                      numberOfGroups:(NSUInteger)numberOfGroups {
 
     switch (documentSectionType(index, numberOfGroups)) {
         case MADDocumentSectionTypeReportHeader:
