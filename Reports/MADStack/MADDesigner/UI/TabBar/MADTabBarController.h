@@ -33,8 +33,6 @@ extern const int8_t MADIndexViewer;
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;
 
-    + (instancetype _Nonnull)TabBarControllerMain;
-
 @end
 
 #endif

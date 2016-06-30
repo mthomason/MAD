@@ -77,7 +77,10 @@ const int8_t MADIndexViewer = 2;
     [super viewWillLayoutSubviews];
 }
 
-- (id <UILayoutSupport>)topLayoutGuide { return self.navigationController.topLayoutGuide; }
+- (id <UILayoutSupport>)topLayoutGuide {
+    id <UILayoutSupport> topLayoutGuide = self.navigationController.topLayoutGuide;
+    return topLayoutGuide;
+}
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;
@@ -90,7 +93,8 @@ const int8_t MADIndexViewer = 2;
 
 #pragma mark - UITabBarControllerDelegate
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+- (void)tabBarController:(UITabBarController *)tabBarController
+ didSelectViewController:(UIViewController *)viewController {
     
     if (tabBarController.selectedIndex != self.lastSelectedIndex) {
         [self showTitleWithText: viewController.title];
@@ -126,7 +130,7 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (MADDesignerViewController *)designerViewController {
-    UINavigationController *navigationController = ((UINavigationController *)self.viewControllers[MADIndexDesigner]);
+    UINavigationController *navigationController = self.viewControllers[MADIndexDesigner];
     MADDesignerViewController *topViewController = (MADDesignerViewController *)navigationController.topViewController;
     return topViewController;
 }
@@ -149,12 +153,6 @@ const int8_t MADIndexViewer = 2;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
-}
-
-+ (instancetype)TabBarControllerMain {
-    UIStoryboard *designer = [MADStoryboard newStoryboardDesigner];
-    id controller = [designer instantiateViewControllerWithIdentifier:TabBar];
-    return controller;
 }
 
 @end

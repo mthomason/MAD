@@ -36,7 +36,6 @@
     MADReportSection *_reportFooter;
 }
 
-    @property (nonatomic, readwrite, strong)    NSArray <MADReportSection *> *reportSections;
     @property (nonatomic, readwrite, strong)    RptqDocument *document;
     @property (nonatomic, readwrite, strong)    RptqQuery *mainQuery;
 
@@ -47,11 +46,17 @@
 
 @implementation MADReportSections
 
+#pragma mark -
+#pragma mark NSObject
+
 - (void)dealloc {
     NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
     [_document.mainQuery removeObserver: self
                              forKeyPath: path];
 }
+
+#pragma mark -
+#pragma mark Constructors
 
 - (instancetype)init {
     return [self initWithDocument:nil];
@@ -72,6 +77,9 @@
     }
     return self;
 }
+
+#pragma mark -
+#pragma mark KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
@@ -95,44 +103,8 @@
     
 }
 
-
-- (MADReportSection *)sectionAtIndex:(NSUInteger)index
-                      numberOfGroups:(NSUInteger)numberOfGroups {
-
-    switch (documentSectionType(index, numberOfGroups)) {
-        case MADDocumentSectionTypeReportHeader:
-            return self.reportHeader;
-            break;
-            
-        case MADDocumentSectionTypePageHeader:
-            return self.pageHeader;
-            break;
-            
-        case MADDocumentSectionTypeBody:
-            return self.detail;
-            break;
-            
-        case MADDocumentSectionTypePageFooter:
-            return self.pageFooter;
-            break;
-            
-        case MADDocumentSectionTypeReportFooter:
-            return self.reportFooter;
-            break;
-            
-        case MADDocumentSectionTypeGroupHeader:
-            return self.groupHeaders[queryGroupIndexForSelectedIndexOfTypeHeader(index)];
-            break;
-            
-        case MADDocumentSectionTypeGroupFooter:
-            return self.groupFooters[queryGroupIndexForSelectedIndexOfTypeFooter(index, numberOfGroups)];
-            break;
-            
-        default:
-            return nil;
-            break;
-    }
-}
+#pragma mark -
+#pragma mark Properties (Report Sections)
 
 - (MADReportSection *)reportHeader {
     if (_reportHeader == nil) {
@@ -213,6 +185,47 @@
     return _pageFooter;
 }
 
+#pragma mark -
+#pragma mark Helper
+
+- (MADReportSection *)sectionAtIndex:(NSUInteger)index
+                      numberOfGroups:(NSUInteger)numberOfGroups {
+
+    switch (documentSectionType(index, numberOfGroups)) {
+        case MADDocumentSectionTypeReportHeader:
+            return self.reportHeader;
+            break;
+            
+        case MADDocumentSectionTypePageHeader:
+            return self.pageHeader;
+            break;
+            
+        case MADDocumentSectionTypeBody:
+            return self.detail;
+            break;
+            
+        case MADDocumentSectionTypePageFooter:
+            return self.pageFooter;
+            break;
+            
+        case MADDocumentSectionTypeReportFooter:
+            return self.reportFooter;
+            break;
+            
+        case MADDocumentSectionTypeGroupHeader:
+            return self.groupHeaders[queryGroupIndexForSelectedIndexOfTypeHeader(index)];
+            break;
+            
+        case MADDocumentSectionTypeGroupFooter:
+            return self.groupFooters[queryGroupIndexForSelectedIndexOfTypeFooter(index, numberOfGroups)];
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
 - (RptqQuery *)mainQuery {
     return _mainQuery ?: (_mainQuery = [_document mainQuery]);
 }
@@ -225,6 +238,9 @@
     }
     return _sectionEnumerator;
 }
+
+#pragma mark -
+#pragma mark NSFastEnumerator
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
                                   objects:(id __unsafe_unretained [])stackbuf
@@ -254,77 +270,9 @@
     return count;
 }
 
-- (NSArray <MADReportSection *> *)reportSections {
-    if (!_reportSections) {
-        MADReportSectionEnumerator *sectionEnumerator;
-        id query = self.mainQuery;
-        sectionEnumerator = [[MADReportSectionEnumerator alloc] initWithQuery:query];
-        NSMutableArray  <MADReportSection *> *reportSections;
-        reportSections = [[NSMutableArray alloc] initWithCapacity:[query sectionCount]];
-        for (MADReportSection *section in sectionEnumerator) {
-            [reportSections addObject:section];
-        }
-        _reportSections = reportSections;
-    }
-    return _reportSections;
-}
-
 - (NSUInteger)count {
     return [self.mainQuery sectionCount];
 }
-
-/*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
-                                      withNumberOfGroups:(NSUInteger)numberOfGroups {
-    
-    RptqDocumentSection *resultSection = nil;
-    
-    if (validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups)) {
-        
-        switch ([RptqDocumentSection getSectionTypeforRow: selectedIndex
-                                       withNumberOfGroups: numberOfGroups]) {
-                
-            case MADDocumentSectionTypeReportHeader:
-                resultSection = self.document.hasReportHeaderSection;
-                break;
-                
-            case MADDocumentSectionTypePageHeader:
-                resultSection = self.document.hasPageHeaderSection;
-                break;
-                
-            case MADDocumentSectionTypeBody:
-                resultSection = self.document.hasDetailSection;
-                break;
-                
-            case MADDocumentSectionTypePageFooter:
-                resultSection = self.document.hasPageFooterSection;
-                break;
-                
-            case MADDocumentSectionTypeReportFooter:
-                resultSection = self.document.hasReportFooterSection;
-                break;
-                
-            case MADDocumentSectionTypeGroupHeader: {
-                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex:
-                                         queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
-                resultSection = [self headerSectionInSections:group.hasSection];
-                break;
-            }
-                
-            case MADDocumentSectionTypeGroupFooter: {
-                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex:
-                                         queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex,
-                                                                                     numberOfGroups)];
-                resultSection = [self footerSectionInSections:group.hasSection];
-                break;
-            }
-                
-            default:
-                break;
-        }
-        
-    }
-    return resultSection;
-}*/
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {

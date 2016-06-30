@@ -41,7 +41,6 @@ static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     }
 }
 
-
 static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     if (selected) {
         return MADBorderStateSelected;
@@ -124,7 +123,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;//[gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
+    return YES;
+    //[gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
+    //      [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
 }
 
 - (CGSize)intrinsicContentSize {
@@ -281,7 +282,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 }
 
 - (NSInteger)indexOfAccessibilityElement:(id)element {
-    return [element isKindOfClass:[UICollectionViewCell class]] ? [self indexPathForCell:element].item + 1 : 0;
+    return [element isKindOfClass:[UICollectionViewCell class]] ?
+                [self indexPathForCell:element].item + 1 : 0;
 }
 
 - (id)accessibilityElementAtIndex:(NSInteger)index {
