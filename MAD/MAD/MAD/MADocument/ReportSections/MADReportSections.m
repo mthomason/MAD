@@ -132,7 +132,7 @@
         RptqDocumentSection *header;
         id reportSection;
         for (RptqQueryGroup *queryGroup in sortedQueryGroups) {
-            header = [mainQuery headerSectionInSections:queryGroup.hasSection];
+            header = [RptqDocumentSection headerSectionInSections:queryGroup.hasSection];
             reportSection = [[MADReportSection alloc] initWithReportSection:header];
             [headers addObject:reportSection];
         }
@@ -153,12 +153,11 @@
 - (NSArray <MADReportSection *> *)groupFooters {
     if (_groupFooters == nil) {
         NSMutableArray <MADReportSection *> *footers = [[NSMutableArray alloc] init];
-        RptqQuery *mainQuery = self.mainQuery;
         NSArray <RptqQueryGroup *> *sortedQueryGroups = [self.mainQuery sortedQueryGroups];
         RptqDocumentSection *footer;
         id reportSection;
         for (RptqQueryGroup *queryGroup in sortedQueryGroups) {
-            footer = [mainQuery footerSectionInSections:queryGroup.hasSection];
+            footer = [RptqDocumentSection footerSectionInSections:queryGroup.hasSection];
             reportSection = [[MADReportSection alloc] initWithReportSection:footer];
             [footers addObject:reportSection];
         }
@@ -183,6 +182,41 @@
         _pageFooter = section;
     }
     return _pageFooter;
+}
+
+#pragma mark -
+#pragma mark NSFastEnumerator
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained [])stackbuf
+                                    count:(NSUInteger)stackbufLength {
+    NSUInteger count = 0;
+    
+    unsigned long countOfItemsAlreadyEnumerated = state->state;
+    if(countOfItemsAlreadyEnumerated == 0) {
+        RptqQuery *query = self.mainQuery;
+        state->mutationsPtr = &state->extra[MADIndexMutationPointer];
+        state->extra[MADIndexSectionCount] = query ? [query sectionCount] : 0;
+        state->extra[MADIndexGroupCounter] = 0;
+        state->extra[MADIndexGroupCount]   = query ?  query.hasQueryGroups.count : 0;
+    }
+    
+    if(countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) {
+        state->itemsPtr = stackbuf;
+        while((countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) && (count < stackbufLength)) {
+            stackbuf[count] = [self sectionAtIndex:countOfItemsAlreadyEnumerated numberOfGroups:state->extra[MADIndexGroupCount]];
+            countOfItemsAlreadyEnumerated++;
+            count++;
+        }
+    } else {
+        count = 0;
+    }
+    state->state = countOfItemsAlreadyEnumerated;
+    return count;
+}
+
+- (NSUInteger)count {
+    return [self.mainQuery sectionCount];
 }
 
 #pragma mark -
@@ -237,61 +271,6 @@
         _sectionEnumerator = sectionEnumerator;
     }
     return _sectionEnumerator;
-}
-
-#pragma mark -
-#pragma mark NSFastEnumerator
-
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(id __unsafe_unretained [])stackbuf
-                                    count:(NSUInteger)stackbufLength {
-    NSUInteger count = 0;
-    
-    unsigned long countOfItemsAlreadyEnumerated = state->state;
-    if(countOfItemsAlreadyEnumerated == 0) {
-        RptqQuery *query = self.mainQuery;
-        state->mutationsPtr = &state->extra[MADIndexMutationPointer];
-        state->extra[MADIndexSectionCount] = query ? [query sectionCount] : 0;
-        state->extra[MADIndexGroupCounter] = 0;
-        state->extra[MADIndexGroupCount]   = query ?  query.hasQueryGroups.count : 0;
-    }
-    
-    if(countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) {
-        state->itemsPtr = stackbuf;
-        while((countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) && (count < stackbufLength)) {
-            stackbuf[count] = [self sectionAtIndex:countOfItemsAlreadyEnumerated numberOfGroups:state->extra[MADIndexGroupCount]];
-            countOfItemsAlreadyEnumerated++;
-            count++;
-        }
-    } else {
-        count = 0;
-    }
-    state->state = countOfItemsAlreadyEnumerated;
-    return count;
-}
-
-- (NSUInteger)count {
-    return [self.mainQuery sectionCount];
-}
-
-- (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
-    for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MADDocumentSectionTypeGroupFooter) {
-            return section;
-            break;
-        }
-    }
-    return nil;
-}
-
-- (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
-    for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MADDocumentSectionTypeGroupHeader) {
-            return section;
-            break;
-        }
-    }
-    return nil;
 }
 
 #pragma mark -

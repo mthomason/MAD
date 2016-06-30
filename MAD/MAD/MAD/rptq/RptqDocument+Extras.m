@@ -151,7 +151,7 @@
             RptqQuery *query = self.mainQuery;
             RptqQueryGroup *group = [query queryGroupForIndex:
                                      queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
-            resultSection = [query headerSectionInSections:group.hasSection];
+            resultSection = [RptqDocumentSection headerSectionInSections:group.hasSection];
             break;
         }
             
@@ -160,7 +160,7 @@
             RptqQueryGroup *group = [query queryGroupForIndex:
                                      queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex,
                                                                                  numberOfGroups)];
-            resultSection = [query footerSectionInSections:group.hasSection];
+            resultSection = [RptqDocumentSection footerSectionInSections:group.hasSection];
             break;
         }
             

@@ -18,7 +18,7 @@
     <UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout>
 
-    - (id)initWithNumberOfSections:(NSUInteger)numberOfSections;
+    - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
     
     @property (nonatomic, weak) NSObject <MADFileExplorerViewDelegateProtocol,
                                             UIGestureRecognizerDelegate> *delegate;

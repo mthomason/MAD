@@ -595,7 +595,8 @@ READFROMURL_END:;
            originalContentsURL: (NSURL *)absoluteOriginalContentsURL
                          error: (NSError * __autoreleasing *)error {
     
-    BOOL writeAdditionalContent = [super writeAdditionalContent: content toURL: absoluteURL
+    BOOL writeAdditionalContent = [super writeAdditionalContent: content
+                                                          toURL: absoluteURL
                                             originalContentsURL: absoluteOriginalContentsURL
                                                           error: error];
 
@@ -730,6 +731,7 @@ READFROMURL_END:;
         //Create group header (contains a retain cycle)
         RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
                                                                    forManagedObjectContext: private];
+                                                                   
         RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
         headerSectionRow.inSection = headerSection;
         

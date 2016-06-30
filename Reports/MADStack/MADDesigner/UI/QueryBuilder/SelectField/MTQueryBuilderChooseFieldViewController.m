@@ -263,7 +263,8 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo;
+    sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
     NSInteger row = indexPath.row;
     if (sectionInfo.table.hasQueryFields.count > (NSUInteger)row) {
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"

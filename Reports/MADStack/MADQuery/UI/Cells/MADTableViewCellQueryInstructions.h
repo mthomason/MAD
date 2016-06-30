@@ -21,8 +21,9 @@ extern const CGFloat MNSTableViewCellHeightDefault;
     @property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
     @property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
 
-    - (id)initWithCoder:(NSCoder *)aDecoder;
-    - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
+    - (instancetype)initWithStyle:(UITableViewCellStyle)style
+                  reuseIdentifier:(NSString *)reuseIdentifier;
     + (CGFloat)defaultHeight;
 
 @end

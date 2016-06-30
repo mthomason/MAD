@@ -92,7 +92,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(handleError:)

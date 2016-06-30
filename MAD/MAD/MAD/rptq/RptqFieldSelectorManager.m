@@ -16,33 +16,33 @@
 #import "RptqDatabaseSchemaTable.h"
 #import <Foundation/NSSortDescriptor.h>
 
+static NSString * const MADKeyDBSchemaFieldName = @"databaseSchemaField.name";
+
 @interface RptqDatabaseSchemaFieldSelectorManager ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+    @property (nonatomic, readwrite, strong) NSMutableArray *rowHeights;
 
 @end
 
 @implementation RptqDatabaseSchemaFieldSelectorManager
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-
-    }
+    if (self = [super init]) { }
     return self;
 }
 
 - (instancetype)initWithTable:(RptqQueryTable *)sectionTable {
-	self = [super init];
-	if (self) {
+	if (self = [super init]) {
 
         NSMutableArray *rh = [[NSMutableArray alloc] init];
 		self.rowHeights = rh;
         self.table = sectionTable;
 
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name"
-                                                                       ascending:YES];
-        NSArray *sortDescriptors = @[namesAccending];
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: MADKeyDBSchemaFieldName
+                                                                       ascending: YES];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: namesAccending, nil];
         NSArray *fieldsArray = [self.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
         self.fields = sectionFields;

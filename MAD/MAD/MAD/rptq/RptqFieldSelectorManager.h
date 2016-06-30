@@ -21,7 +21,6 @@
     @property (nonatomic, strong) RptqQueryTable *table;
     @property (nonatomic, strong) NSArray *fields;
     @property (nonatomic, strong) MADDatabaseTableSectionHeaderView *headerView;
-    @property (nonatomic, strong) NSMutableArray *rowHeights;
 
     - (instancetype)initWithTable:(RptqQueryTable *)sectionTable NS_DESIGNATED_INITIALIZER;
 

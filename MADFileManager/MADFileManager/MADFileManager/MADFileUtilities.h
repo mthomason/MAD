@@ -50,6 +50,8 @@
     + (BOOL)restoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
                      overwrite:(BOOL)overwrite;
 
+    + (NSArray <NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
+                                                              andExtention: (NSString *)extenstion;
 @end
 
 #endif

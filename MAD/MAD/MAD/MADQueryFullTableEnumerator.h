@@ -12,6 +12,6 @@
 
 @interface MADQueryFullTableEnumerator : NSEnumerator
 
-    - (id)initWithDocument:(RptqDocument *)document;
+    - (instancetype)initWithDocument:(RptqDocument *)document;
 
 @end

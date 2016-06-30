@@ -279,7 +279,9 @@ typedef struct _ColumnWidth {
     CGFloat x = [self originXColumn:column];
     CGFloat w = [self widthColumn:column];
     CGRect f = CGRectMake(x, self.heightRow * row, w, self.heightRow);
-    return [self layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:f];
+    return [self layoutAttributesForItemAtRow: (NSUInteger)row
+                                    andColumn: (NSUInteger)column
+                                    withFrame: f];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow: (NSUInteger)row

@@ -10,7 +10,6 @@
 #import "MADocumentSectionType.h"
 #import "MADReportSection.h"
 #import "RptqQuery+Extras.h"
-#import "RptqDocumentSection.h"
 #import "RptqDatabase.h"
 #import "RptqDocument+Extras.h"
 
@@ -57,7 +56,8 @@ const NSInteger MADIndexGroupCount      = 3;
         state->extra[MADIndexGroupCounter] = 0;
         state->extra[MADIndexGroupCount]   = query ?  query.hasQueryGroups.count : 0;
 
-        id buffer = [[NSMutableArray alloc] initWithCapacity: MIN(stackbufLength, state->extra[MADIndexSectionCount])];
+        id buffer = [[NSMutableArray alloc] initWithCapacity: MIN(stackbufLength,
+                                                                  state->extra[MADIndexSectionCount])];
         self.buffer = buffer;
     }
     

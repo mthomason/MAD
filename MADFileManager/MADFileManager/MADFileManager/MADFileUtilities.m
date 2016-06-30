@@ -493,8 +493,8 @@ static NSString * const MADPathComponentData       = @"Data";
     return queue;
 }
 
-+ (NSArray <__kindof NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
-                                                                   andExtention: (NSString *)extenstion {
++ (NSArray <NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
+                                                          andExtention: (NSString *)extenstion {
     NSURL *direcotry = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
     return [self contentsOfDirectory:direcotry withPathExtension:extenstion];
 }
@@ -544,9 +544,9 @@ static NSString * const MADPathComponentData       = @"Data";
     return result;
 }
 
-+ (NSArray <__kindof NSURL *> *)contentsOfDirectory:(NSURL *)directory
-                                  withPathExtension:(NSString *)extension {
-    NSMutableArray <__kindof NSURL *> *result = [[NSMutableArray alloc] init];
++ (NSArray <NSURL *> *)contentsOfDirectory:(NSURL *)directory
+                         withPathExtension:(NSString *)extension {
+    NSMutableArray <NSURL *> *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
     NSString *path = directory.path;
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path

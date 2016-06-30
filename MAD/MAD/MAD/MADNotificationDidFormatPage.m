@@ -46,7 +46,7 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     return [self sharedObject];
 }
 

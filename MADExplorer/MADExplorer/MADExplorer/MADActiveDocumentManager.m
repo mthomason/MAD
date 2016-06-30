@@ -44,7 +44,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
     }
 }
 
-- (id)openDocument {
+- (__kindof UIManagedDocument *)openDocument {
     return self.openFiles[self.openUrl.absoluteURL.absoluteString];
 }
 

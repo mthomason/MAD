@@ -76,12 +76,12 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 #pragma mark -
 #pragma mark Constructors
 
-- (id)init {
+- (instancetype)init {
     id delegate = [self initWithNumberOfSections:1];
     return delegate;
 }
 
-- (id)initWithNumberOfSections:(NSUInteger)numberOfSections {
+- (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
     if (self = [super init]) {
         
@@ -243,9 +243,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
-    
-    MADCollectionViewCellDocument *cell;
-    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+// FIXME: Do something here.
+    /*MADCollectionViewCellDocument *cell;
+    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];*/
     
 }
 

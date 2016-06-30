@@ -29,7 +29,7 @@
 
 @implementation RptqDocumentSectionEnumerator
 
-- (id)initWithDocument:(RptqDocument *)document {
+- (instancetype)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
         RptqQuery *query = document.mainQuery;
         _numberOfGroups = document.mainQuery.hasQueryGroups.count;

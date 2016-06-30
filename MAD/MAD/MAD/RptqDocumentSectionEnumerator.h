@@ -19,7 +19,7 @@
 
     @property (atomic, assign) NSUInteger current;
 
-    - (id)initWithDocument:(RptqDocument *)document;
+    - (instancetype)initWithDocument:(RptqDocument *)document;
     - (NSArray *)allObjects;
     - (id)nextObject;
     - (NSUInteger)count;

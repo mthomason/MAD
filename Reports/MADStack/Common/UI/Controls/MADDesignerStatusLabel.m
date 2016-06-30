@@ -27,7 +27,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 
 @implementation MADDesignerStatusLabel
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.layer.cornerRadius = MADViewDetailSmallCornerRadius;

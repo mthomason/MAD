@@ -20,7 +20,7 @@
 
 @implementation MADQueryFullTableEnumerator
 
-- (id)initWithDocument:(RptqDocument *)document {
+- (instancetype)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
         _documentObjectID = document.objectID.copy;
         self.managedObjectContext = document.managedObjectContext;

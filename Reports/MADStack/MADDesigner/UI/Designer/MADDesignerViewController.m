@@ -319,7 +319,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                                                   withSender: sender];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     
     if (self = [super initWithCoder:aDecoder]) {
         
@@ -2132,6 +2132,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
              *groupTypeNumber =     [[NSNumber alloc] initWithShort: groupType],
              *inputTypeNumber =     [[NSNumber alloc] initWithShort: inputType],
              *objectType =          [[NSNumber alloc] initWithShort: MTDocumentObjectTypeAggregate];
+    
     NSDictionary *documentObject =  [[NSDictionary alloc] initWithObjectsAndKeys:
         functionTypeNumber,    MTDocumentObjectDefinationAggregateType,
         groupNumber,           MTDocumentObjectDefinationAggregatePivotNumber,
@@ -3278,7 +3279,8 @@ END_deselectElementView:;
         //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
         if (quickHashWorks == NO) {     //Case when views are off screen.
             
-            RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+            RptqDocumentSectionEnumerator *sectionEnumerator;
+            sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView;

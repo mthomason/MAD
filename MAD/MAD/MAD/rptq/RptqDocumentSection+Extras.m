@@ -255,28 +255,6 @@
     return [RptqDocumentSection footerSectionInSections:group.hasSection];
 }
 
-+ (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
-    RptqDocumentSection *resultSection = nil;
-    for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MADDocumentSectionTypeGroupFooter) {
-            resultSection = section;
-            break;
-        }
-    }
-    return resultSection;
-}
-
-+ (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
-    RptqDocumentSection *resultSection = nil;
-    for (RptqDocumentSection *section in sections) {
-        if (section.type.integerValue == MADDocumentSectionTypeGroupHeader) {
-            resultSection = section;
-            break;
-        }
-    }
-    return resultSection;
-}
-
 // This is the layout height for page rendering... the designer section height is stored in the db
 - (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
@@ -454,6 +432,26 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
         }
     }
     return result;
+}
+
++ (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
+    for (RptqDocumentSection *section in sections) {
+        if (section.type.shortValue == MADDocumentSectionTypeGroupFooter) {
+            return section;
+            break;
+        }
+    }
+    return nil;
+}
+
++ (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
+    for (RptqDocumentSection *section in sections) {
+        if (section.type.shortValue == MADDocumentSectionTypeGroupHeader) {
+            return section;
+            break;
+        }
+    }
+    return nil;
 }
 
 - (id)debugQuickLookObject {

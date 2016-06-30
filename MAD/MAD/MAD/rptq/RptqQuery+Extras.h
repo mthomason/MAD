@@ -18,18 +18,12 @@
 
 @interface RptqQuery (Extras)
 
-    /*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex;
-    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
-                                          withNumberOfGroups:(NSUInteger)numberOfGroups;*/
     - (RptqQueryGroup *)firstQueryGroup;
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
     - (NSArray *)sortedQueryGroups;
     - (NSUInteger)numberOfTables;
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
     - (NSUInteger)sectionCount;
-
-    - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
-    - (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
 
 @end
 

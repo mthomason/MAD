@@ -9,6 +9,7 @@
 #import "MADInterfaceControllerDocumentsLocal.h"
 #import "MADRowTypeDocumentsLocal.h"
 #import <Foundation/NSFileManager.h>
+#import <MADFileManager/MADFileUtilities.h>
 
 @interface MADInterfaceControllerDocumentsLocal()
 
@@ -26,17 +27,17 @@
 
 @implementation MADInterfaceControllerDocumentsLocal
 
-- (id)init {
+- (instancetype)init {
     
     if (self = [super init]) {
 
         Class rowControllerClassDocumentsLocal = [MADRowTypeDocumentsLocal class];
         NSString *identifierRowTypeDocumentLocal = NSStringFromClass(rowControllerClassDocumentsLocal);
-        NSArray *rowTypes = @[identifierRowTypeDocumentLocal];
+        NSArray *rowTypes = [[NSArray alloc] initWithObjects: identifierRowTypeDocumentLocal, nil];
         [self.tableMain setRowTypes:rowTypes];
 
-        NSArray *files = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier: MADIdentifierGroup
-                                                                                            andExtention: MADFileExtentionMobleApplicationDocument];
+        NSArray *files = [MADFileUtilities contentsOfDocumentsDirectoryWithGroupIdentifier: MADIdentifierGroup
+                                                                              andExtention: MADFileExtentionMobleApplicationDocument];
         
         
         [self.tableMain setNumberOfRows: files.count
@@ -58,7 +59,7 @@
     
     NSString *filename;
     MADRowTypeDocumentsLocal *rowController;
-    for (NSInteger i=0; i<self.filesByURL.count; i++) {
+    for (NSUInteger i = 0; i < self.filesByURL.count; i++) {
         filename = ((NSURL *)self.filesByURL[i]).path.lastPathComponent;
         rowController = [self.tableMain rowControllerAtIndex:i];
         [rowController.label setText:filename];
@@ -68,17 +69,16 @@
 }
 
 - (void)willActivate {
-    // This method is called when watch view controller is about to be visible to user
     [super willActivate];
 }
 
 - (void)didDeactivate {
-    // This method is called when watch view controller is no longer visible
     [super didDeactivate];
 }
 
 - (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier
-                            inTable:(WKInterfaceTable *)table rowIndex:(NSInteger)rowIndex {
+                            inTable:(WKInterfaceTable *)table
+                           rowIndex:(NSInteger)rowIndex {
     return self.filesByURL.count > 0 ? self.filesByURL[rowIndex] : nil;
 }
 

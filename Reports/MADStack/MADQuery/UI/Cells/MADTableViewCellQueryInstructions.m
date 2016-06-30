@@ -12,7 +12,7 @@ const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
 
 @implementation MADTableViewCellQueryInstructions
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
     if (self = [super initWithCoder:aDecoder]) {
         
@@ -24,7 +24,8 @@ const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
 }
 
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier {
 
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         

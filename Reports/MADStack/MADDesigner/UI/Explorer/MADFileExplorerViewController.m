@@ -317,7 +317,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
     
         _shouldShowAddDocumentPopover = YES;
