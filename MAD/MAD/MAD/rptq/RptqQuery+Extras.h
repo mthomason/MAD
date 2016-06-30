@@ -18,9 +18,9 @@
 
 @interface RptqQuery (Extras)
 
-    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex;
+    /*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex;
     - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
-                                          withNumberOfGroups:(NSUInteger)numberOfGroups;
+                                          withNumberOfGroups:(NSUInteger)numberOfGroups;*/
     - (RptqQueryGroup *)firstQueryGroup;
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
     - (NSArray *)sortedQueryGroups;

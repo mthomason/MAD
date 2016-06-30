@@ -273,7 +273,7 @@
     return [self.mainQuery sectionCount];
 }
 
-- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+/*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
                                       withNumberOfGroups:(NSUInteger)numberOfGroups {
     
     RptqDocumentSection *resultSection = nil;
@@ -304,13 +304,16 @@
                 break;
                 
             case MADDocumentSectionTypeGroupHeader: {
-                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
+                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex:
+                                         queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
                 resultSection = [self headerSectionInSections:group.hasSection];
                 break;
             }
                 
             case MADDocumentSectionTypeGroupFooter: {
-                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
+                RptqQueryGroup *group = [self.mainQuery queryGroupForIndex:
+                                         queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex,
+                                                                                     numberOfGroups)];
                 resultSection = [self footerSectionInSections:group.hasSection];
                 break;
             }
@@ -321,7 +324,7 @@
         
     }
     return resultSection;
-}
+}*/
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {

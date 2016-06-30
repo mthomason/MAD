@@ -11,7 +11,7 @@
 #endif
 
 #import "RptqDocumentSectionEnumerator.h"
-#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryGroup.h"
@@ -21,8 +21,9 @@
 
 @interface RptqDocumentSectionEnumerator ()
 
-    @property (nonatomic, assign)   NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, copy)     NSManagedObjectID *queryObjectID;
+    @property (nonatomic, assign)   NSUInteger numberOfGroups;
+    @property (nonatomic, assign)   NSUInteger total;
+    @property (nonatomic, strong)   RptqDocument *document;
 
 @end
 
@@ -30,27 +31,26 @@
 
 - (id)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
-        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-        RptqQuery *query = database.hasQueries.anyObject;
-        _queryObjectID = query.objectID.copy;
-        self.managedObjectContext = document.managedObjectContext;
+        RptqQuery *query = document.mainQuery;
+        _numberOfGroups = document.mainQuery.hasQueryGroups.count;
+        _total = [query sectionCount];
+        _document = document;
         self.current = 0;
     }
     return self;
 }
 
 - (NSUInteger)count {
-    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
-    return [query sectionCount];
+    return _total;
 }
 
 - (NSArray *)allObjects {
-    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
-    NSUInteger total = [self count];
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - _current)];
-    for (; _current<total; _current++) {
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(_total - _current)];
+    for (; _current<_total; _current++) {
         @autoreleasepool {
-            RptqDocumentSection *section = [query documentSectionForSelectedIndex: _current];
+            RptqDocumentSection *section;
+            section = [_document documentSectionForSelectedIndex: _current
+                                              withNumberOfGroups: _numberOfGroups];
             [result addObject:section];
         }
     }
@@ -58,8 +58,8 @@
 }
 
 - (id)nextObject {
-    RptqQuery *query = [self.managedObjectContext objectWithID:_queryObjectID];
-    id result = [query documentSectionForSelectedIndex: _current];
+    id result = [_document documentSectionForSelectedIndex: _current
+                                        withNumberOfGroups: _numberOfGroups];
     _current++;
     return result;
 }

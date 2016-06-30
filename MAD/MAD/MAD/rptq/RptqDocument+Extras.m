@@ -149,14 +149,17 @@
             
         case MADDocumentSectionTypeGroupHeader: {
             RptqQuery *query = self.mainQuery;
-            RptqQueryGroup *group = [query queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
+            RptqQueryGroup *group = [query queryGroupForIndex:
+                                     queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
             resultSection = [query headerSectionInSections:group.hasSection];
             break;
         }
             
         case MADDocumentSectionTypeGroupFooter: {
             RptqQuery *query = self.mainQuery;
-            RptqQueryGroup *group = [self.mainQuery queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
+            RptqQueryGroup *group = [query queryGroupForIndex:
+                                     queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex,
+                                                                                 numberOfGroups)];
             resultSection = [query footerSectionInSections:group.hasSection];
             break;
         }
@@ -337,14 +340,16 @@
 
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
     section.layoutHeight = layoutHeight;
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     
     if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
         
@@ -379,27 +384,31 @@
 
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
     section.layoutHeight = layoutHeight;
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     NSNumber *visibility = [[NSNumber alloc] initWithBool:isVisible];
     section.visibility = visibility;
 }
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     [section setProducesFormFeed:newPageAfter];
 }
 
 - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
+    RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
+                                                      withNumberOfGroups: query.hasQueryGroups.count];
     return [section producesFormFeed];
 }
 

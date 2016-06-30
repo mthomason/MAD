@@ -1262,7 +1262,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
-        RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
+        RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber
+                                                              withNumberOfGroups: query.hasQueryGroups.count];
+        
         [section setProducesFormFeed: newPageAfter];
         
         NSError * __autoreleasing *error = NULL;
@@ -1284,8 +1286,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
-        
-        RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber];
+        RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber
+                                                              withNumberOfGroups: query.hasQueryGroups.count];
         NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible];
         section.visibility = visibility;
         
@@ -1304,22 +1306,24 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 //FIXME: Unused... used to allow user to change the height of the sections.
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-    
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDocument *document = self.document.activeDocumentModel;
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = [database.hasQueries anyObject];
-    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel];
-    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
+                                                          withNumberOfGroups: query.hasQueryGroups.count];
+
+    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: section];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
-    [documentSection setInterfaceHeight: collectionViewContentSize.height];
+    [section setInterfaceHeight: collectionViewContentSize.height];
  
-    [documentSection.managedObjectContext save:nil];
+    [section.managedObjectContext save:nil];
     
-    id key = [documentSection copySectionKey];
+    id key = [section copySectionKey];
     UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
-    [documentSection setInterfaceHeight: collectionViewContentSize.height];
-    [documentSection.managedObjectContext save:nil];
+    [section setInterfaceHeight: collectionViewContentSize.height];
+    [section.managedObjectContext save:nil];
     
     [self.view setNeedsUpdateConstraints];
     
@@ -1329,46 +1333,48 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
     MADocument *doc = self.document;
-    RptqDatabase *database = doc.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDocument *document = doc.activeDocumentModel;
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
+                                                          withNumberOfGroups: query.hasQueryGroups.count];
     
-    BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.unsignedIntegerValue;
-    BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.unsignedIntegerValue;
+    BOOL insertNewSection = numberOfRows > section.numberOfRows.unsignedIntegerValue;
+    BOOL deleteLastSection = numberOfRows < section.numberOfRows.unsignedIntegerValue;
     
-    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: section];
     
-    if (documentSection.numberOfRows.unsignedIntegerValue == numberOfRows) {
+    if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > documentSection.numberOfRows.unsignedIntegerValue) {
+    } else if (numberOfRows > section.numberOfRows.unsignedIntegerValue) {
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend;
         newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                        inManagedObjectContext: doc.managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
-        newRowToAppend.inSection = documentSection;
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:section.hasRows.array];
+        newRowToAppend.inSection = section;
         [hasRows addObject:newRowToAppend];
-        documentSection.hasRows = hasRows;
+        section.hasRows = hasRows;
         
-    } else if (numberOfRows < documentSection.numberOfRows.unsignedIntegerValue) {
+    } else if (numberOfRows < section.numberOfRows.unsignedIntegerValue) {
         
         //Remove row
-        RptqDocumentSectionRows *rowToDelete = documentSection.hasRows.lastObject;
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
+        RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:section.hasRows.array];
         [hasRows.lastObject setInSection:nil];
         [hasRows removeObjectAtIndex:hasRows.count - 1];
-        documentSection.hasRows = hasRows;
+        section.hasRows = hasRows;
         [rowToDelete setInSection:nil];
         
     }
     
     NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];
-    documentSection.numberOfRows = numberOfRowsObject;
+    section.numberOfRows = numberOfRowsObject;
     
-    id sectionKey = [documentSection copySectionKey];
+    id sectionKey = [section copySectionKey];
     UICollectionView *collectionView = self.sectionViewsDictionary[sectionKey];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
@@ -2385,17 +2391,20 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     
 }
 
-- (NSUInteger)numberOfItemsInSection: (NSUInteger)section ofCollectionView: (MADDesignerSectionView *)collectionView {
+- (NSUInteger)numberOfItemsInSection: (NSUInteger)section
+                    ofCollectionView: (MADDesignerSectionView *)collectionView {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
 }
 
-- (NSArray *)collectionView: (MADDesignerSectionView *)collectionView attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
+- (NSArray *)collectionView: (MADDesignerSectionView *)collectionView
+        attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.allValues;
 }
 
-- (CGSize)collectionView: (MADDesignerSectionView *)collectionView sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
+- (CGSize)collectionView: (MADDesignerSectionView *)collectionView
+           sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.size;
 }
@@ -2737,9 +2746,13 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
-    RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
+    RptqDocument *document = self.document.activeDocumentModel;
+    RptqQuery *query = document.defaultDatabase.defaultQuery;
     RptqDocumentSection *documentSection;
-    documentSection = [query documentSectionForSelectedIndex: (NSUInteger)reportDesigner.lastSelectedSectionControlPanel];
+    documentSection = [document documentSectionForSelectedIndex: (NSUInteger)reportDesigner.lastSelectedSectionControlPanel
+                                             withNumberOfGroups: query.hasQueryGroups.count];
+
+    
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
         [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
@@ -2802,10 +2815,12 @@ END_deselectElementView:;
 }
 
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDocument *document = self.document.activeDocumentModel;
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *section;
-    section = [query documentSectionForSelectedIndex:(NSUInteger)_lastSelectedSectionControlPanel];
+    section = [document documentSectionForSelectedIndex: (NSUInteger)_lastSelectedSectionControlPanel
+                                     withNumberOfGroups: query.hasQueryGroups.count];
     return section;
 }
 

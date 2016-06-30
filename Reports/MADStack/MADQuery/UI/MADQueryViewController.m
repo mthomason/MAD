@@ -592,8 +592,13 @@ BOOL storeEnabled() {
                     if (tvc) {
                         tvc.delegate = self;
                         MADocument *document = self.document;
-                        RptqQuery *query = document.activeDocumentModel.defaultDatabase.defaultQuery;
-                        RptqDocumentSection *section = [query documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedRowNumber];
+                        RptqDocument *activeDocument = document.activeDocumentModel;
+                        RptqQuery *query = activeDocument.defaultDatabase.defaultQuery;
+                        
+                        RptqDocumentSection *section = [activeDocument documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedRowNumber
+                                                                                    withNumberOfGroups: query.hasQueryGroups.count];
+
+                        
                         tvc.initalHeightValue = section.height.floatValue;
                         tvc.initalVisibility = section.visibility.boolValue;
                         tvc.initalNumberOfRows = section.numberOfRows.unsignedIntegerValue;

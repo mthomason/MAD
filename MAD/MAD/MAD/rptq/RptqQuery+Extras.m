@@ -131,16 +131,16 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 #pragma mark - Actions
 
-- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex {
+/*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex {
     
     RptqDocumentSection *resultSection = [self documentSectionForSelectedIndex: selectedIndex
                                                             withNumberOfGroups: self.hasQueryGroups.count];
     
     
     return resultSection;
-}
+}*/
 
-- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+/*- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
                                       withNumberOfGroups:(NSUInteger)numberOfGroups {
     
     RptqDocumentSection *resultSection = nil;
@@ -189,7 +189,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     }
     
     return resultSection;
-}
+}*/
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
