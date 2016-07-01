@@ -30,7 +30,10 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MysqlServer: %@:%d as user %@", _host, _port, _user];
+    NSString *description;
+    description = [[NSString alloc] initWithFormat: @"MysqlServer: %@:%d as user %@",
+                                                    _host, _port, _user];
+    return description;
 }
 
 @end

@@ -33,6 +33,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] alloc] initWithMetadataItem: _metadataItem];
+    return copy;
+}
+
 - (NSError *)ubiquitousItemUploadingError {
     return self.metadataItem ?
     [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey] :
@@ -83,11 +88,6 @@
 - (NSURL *)URL {
     NSURL *URL = [[_metadataItem valueForAttribute: NSMetadataItemURLKey] copyWithZone:nil];
     return URL;
-}
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] alloc] initWithMetadataItem: _metadataItem];
-    return copy;
 }
 
 - (BOOL)isSyncing {

@@ -12,7 +12,7 @@ static NSString * const NewDocument             = @"MADStoryboardNewDocument";
 
 @implementation UIStoryboard (Designer)
 
-+ (instancetype)NewDocument {
++ (instancetype)newStoryboardNewDocument {
     return [self storyboardWithName: NewDocument bundle:[NSBundle mainBundle]];
 }
 

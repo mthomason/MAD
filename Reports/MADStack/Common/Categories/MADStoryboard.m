@@ -27,13 +27,13 @@ static NSString * const ObjectSelector          = @"MADStoryboardObjectSelector"
     return storybard;
 }
 
-+ (instancetype)newToolbox {
++ (instancetype)newStoryboardToolbox {
     id bundle =         [NSBundle mainBundle];
     id storyboard =     [self storyboardWithName: Toolbox bundle: bundle];
     return storyboard;
 }
 
-+ (instancetype)newLicensing {
++ (instancetype)newStoryboardLicensing {
     id bundle =         [NSBundle mainBundle];
     id storyboard =     [self storyboardWithName: Licensing bundle:bundle];
     return storyboard;

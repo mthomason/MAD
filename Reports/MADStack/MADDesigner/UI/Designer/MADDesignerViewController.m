@@ -163,6 +163,15 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
             MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
 }
 
+static inline CGFloat DetailDisplayFrameOriginX(CGFloat width);
+static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) {
+    return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail;
+}
+
+static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop);
+static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
+    return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
+}
 
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
@@ -406,7 +415,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
 
     UINavigationController *navigationControllerToolbox;
-    navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
+    navigationControllerToolbox = [UINavigationController newNavigationControllerToolbox];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
@@ -1619,7 +1628,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         if (!strongself) return;
         
         UIView *viewToEdit = [strongself viewForObjectID: objectID];
-        UINavigationController *navigationController = [UINavigationController aggregateAdd];
+        UINavigationController *navigationController;
+        navigationController = [UINavigationController newNavigationControllerAggregateAdd];
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController;
         aggregateViewController = navigationController.viewControllers.firstObject;
@@ -3286,9 +3296,14 @@ END_deselectElementView:;
                 MADDesignerSectionView *documentSectionView;
                 documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
                 
-                for (NSInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                for (NSInteger section = 0;
+                     section < [documentSectionView numberOfSections];
+                     section++) {
                 
-                    for (NSInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                    for (NSInteger item = 0;
+                         item < [documentSectionView numberOfItemsInSection:section];
+                         item++) {
+                        
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
                                                                           inCollectionView:documentSectionView];
@@ -3317,7 +3332,8 @@ END_deselectElementView:;
     
     //Remove border from element views
     for (MADDesignerElementView *elementView in [self selectedElementViews]) {
-        [self deselectElementView:elementView animated:animated];
+        [self deselectElementView: elementView
+                         animated: animated];
     }
     
     [self.selectedObjectIds removeAllObjects];
@@ -3391,7 +3407,9 @@ END_deselectElementView:;
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
+
     id elementView;
+
     RptqDocumentObject *documentObject;
 
     elementView = [self viewForObjectID:managedObject.objectID];
@@ -3399,7 +3417,6 @@ END_deselectElementView:;
     
     documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
     if (!documentObject) goto ElementViewForManagedObjectShortCircut;
-
 
     elementView = [self viewForObjectID:documentObject.objectID];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
@@ -3433,16 +3450,6 @@ END_deselectElementView:;
 
 - (CGFloat)toolboxHeightCalculated {
     return ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame.size.height;
-}
-
-static inline CGFloat DetailDisplayFrameOriginX(CGFloat width);
-static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) {
-    return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail;
-}
-
-static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop);
-static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
-    return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
 }
 
 - (CGRect)detailDisplayFrame {
@@ -3501,31 +3508,38 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADocument *document = self.document;
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter addObserver: self selector: @selector(managedObjectContextDidChange:)
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidChange:)
                           name: NSManagedObjectContextObjectsDidChangeNotification
                         object: document.managedObjectContext];
     
-    [defaultCenter addObserver: self selector: @selector(managedObjectContextDidSave:)
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidSave:)
                           name: NSManagedObjectContextDidSaveNotification
                         object: document.managedObjectContext];
     
-    [defaultCenter addObserver: self selector: @selector(didHideMenuNotification:)
+    [defaultCenter addObserver: self
+                      selector: @selector(didHideMenuNotification:)
                           name: UIMenuControllerDidHideMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self selector: @selector(willHideMenuNotification:)
+    [defaultCenter addObserver: self
+                      selector: @selector(willHideMenuNotification:)
                           name: UIMenuControllerWillHideMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self selector: @selector(didShowMenuNotification:)
+    [defaultCenter addObserver: self
+                      selector: @selector(didShowMenuNotification:)
                           name: UIMenuControllerDidShowMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self selector: @selector(willShowMenuNotification:)
+    [defaultCenter addObserver: self
+                      selector: @selector(willShowMenuNotification:)
                           name: UIMenuControllerWillShowMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self selector: @selector(documentStateChanged)
+    [defaultCenter addObserver: self
+                      selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
                         object: document];
 }
@@ -3535,25 +3549,32 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADocument *document = self.document;
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter removeObserver: self name: NSManagedObjectContextObjectsDidChangeNotification
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
                            object: document.managedObjectContext];
     
-    [defaultCenter removeObserver: self name: NSManagedObjectContextDidSaveNotification
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
                            object: document.managedObjectContext];
     
-    [defaultCenter removeObserver: self name: UIMenuControllerDidHideMenuNotification
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidHideMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self name: UIMenuControllerDidShowMenuNotification
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidShowMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self name: UIMenuControllerWillHideMenuNotification
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillHideMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self name: UIMenuControllerWillShowMenuNotification
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillShowMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self name: UIDocumentStateChangedNotification
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
                            object: document];
 }
 
@@ -3581,7 +3602,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)actionAdd:(id)sender {
     
-    UINavigationController *navigationController = [UINavigationController elementPicker];
+    UINavigationController *navigationController;
+    navigationController = [UINavigationController newNavigationControllerElementPicker];
     MADDesignerElementPickerViewController *pickerController;
     pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;

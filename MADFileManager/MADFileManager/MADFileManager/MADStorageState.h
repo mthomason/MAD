@@ -18,9 +18,9 @@
     @property (nonatomic, assign) BOOL accountDidChange;
     @property (nonatomic, assign) BOOL cloudAvailable;
 
-    + (instancetype)newStorageStateWithStorageOption:(MADAppStorage)storageOption
-                          hasUbiquityIdentityChanged:(BOOL)hasUbiquityIdentityChanged
-                             isCloudReadilyAvailable:(BOOL)isCloudReadilyAvailable;
+    + (instancetype)newStorageStateWithStorageOption: (MADAppStorage)storageOption
+                          hasUbiquityIdentityChanged: (BOOL)hasUbiquityIdentityChanged
+                             isCloudReadilyAvailable: (BOOL)isCloudReadilyAvailable;
 
 
 @end

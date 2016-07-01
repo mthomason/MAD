@@ -12,8 +12,10 @@ static NSString * const InformationTable        = @"MADStoryboardInformationTabl
 
 @implementation UIStoryboard (InformationTable)
 
-+ (instancetype)InformationTable {
-    return [self storyboardWithName: InformationTable bundle:[NSBundle mainBundle]];
++ (instancetype)newStorybaordInformationTable {
+    UIStoryboard *storyboard = [self storyboardWithName: InformationTable
+                                                 bundle: [NSBundle mainBundle]];
+    return storyboard;
 }
 
 @end

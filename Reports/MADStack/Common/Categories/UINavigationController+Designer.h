@@ -13,13 +13,13 @@
 
 @interface UINavigationController (Designer)
 
-    + (instancetype)AppInformation;
-    + (instancetype)Licensing;
-    + (instancetype)NewDocument;
-    + (instancetype)navigationControllerToolbox;
-    + (instancetype)navigationControllerFontPicker;
-    + (instancetype)aggregateAdd;
-    + (instancetype)elementPicker;
+    + (instancetype)newNavigationControllerAppInformation;
+    + (instancetype)newNavigationControllerLicensing;
+    + (instancetype)newNavigationControllerNewDocument;
+    + (instancetype)newNavigationControllerToolbox;
+    + (instancetype)newNavigationControllerFontPicker;
+    + (instancetype)newNavigationControllerAggregateAdd;
+    + (instancetype)newNavigationControllerElementPicker;
 
 @end
 

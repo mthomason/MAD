@@ -13,7 +13,7 @@
 
 @interface UIStoryboard (NewDocument)
 
-    + (instancetype)NewDocument;
+    + (instancetype)newStoryboardNewDocument;
 
 @end
 

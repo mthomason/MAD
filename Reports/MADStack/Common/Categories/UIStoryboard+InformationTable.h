@@ -13,7 +13,7 @@
 
 @interface UIStoryboard (InformationTable)
 
-    + (instancetype)InformationTable;
+    + (instancetype)newStorybaordInformationTable;
 
 @end
 

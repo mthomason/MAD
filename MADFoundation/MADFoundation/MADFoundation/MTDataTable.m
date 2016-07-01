@@ -30,6 +30,46 @@ static NSString * const StringEmpty = @"";
 
 @implementation MTDataTable
 
+- (instancetype)init {
+    if (self = [super init]) {
+        [self setupWithObjectId:0 fromCache:NO];
+    }
+    return self;
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId {
+    return [self initWithId:objectId fromCache:YES];
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+    if (self = [super init]) {
+        [self setupWithObjectId:objectId fromCache:fromCache];
+    }
+    return self;
+}
+
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+    if (self = [super init]) {
+        
+        NSString *name = @"";
+        self.name = name;
+        
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
+        self.columnKeys = columnKeys;
+        
+        MADMutableMapDataColumns *columns;
+        columns = [[MADMutableMapDataColumns alloc] initWithCapacity:numberOfColumns];
+        self.columns = columns;
+        
+        self.rowCounter = 0;
+        
+        NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
+        self.sortDescriptors = sortDescriptors;
+        
+    }
+    return self;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
     
@@ -63,42 +103,6 @@ static NSString * const StringEmpty = @"";
     return self;
 }
 
-- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    if (self = [super init]) {
-        
-        NSString *name = @"";
-        self.name = name;
-        
-        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-        self.columnKeys = columnKeys;
-        
-        MADMutableMapDataColumns *columns;
-        columns = [[MADMutableMapDataColumns alloc] initWithCapacity:numberOfColumns];
-        self.columns = columns;
-        
-        self.rowCounter = 0;
-        
-        NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
-        self.sortDescriptors = sortDescriptors;
-
-    }
-    return self;
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        [self initializeWithObjectId:0 fromCache:NO];
-    }
-    return self;
-}
-
-- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    if (self = [super init]) {
-        [self initializeWithObjectId:objectId fromCache:fromCache];
-    }
-    return self;
-}
-
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
     id objid;
@@ -128,11 +132,7 @@ static NSString * const StringEmpty = @"";
     
 }
 
-- (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
-}
-
-- (void)initializeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+- (void)setupWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     
     NSString *name = StringEmpty;
     self.name = name;

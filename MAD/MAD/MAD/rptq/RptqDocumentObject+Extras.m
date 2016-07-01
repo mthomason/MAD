@@ -42,6 +42,8 @@
 #import "MADSectionLayoutManager.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 
+#import <math.h>
+
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
 
@@ -143,14 +145,19 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     [super awakeFromInsert];
     
     // MARK: Auto increment row counter
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    NSFetchRequest *request;
+    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSString *key = NSStringFromSelector(@selector(identifier));
+    
+    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
 
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: NSStringFromSelector(@selector(identifier))
-                                                                     ascending: NO];
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: NO];
     
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
+    
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger idNumber = 0;
@@ -176,7 +183,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     NSNumber *strike = @NO;
     self.strike = strike;
 
-    CGFloat fontPointSize = [MADFont defaultSize];
+    double fontPointSize = [MADFont defaultSize];
     CFNumberRef fontSize = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &fontPointSize);
     self.fontsize = (__bridge NSNumber *)(fontSize);
     CFRelease(fontSize);
@@ -417,16 +424,18 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (void)dropAtRect:(CGRect)rect {
-    NSNumber *sizeWidth = @(nearbyint(rect.size.width));
-    NSNumber *sizeHeight = @(nearbyint(rect.size.height));
-    self.sizewidth = sizeWidth;
-    self.sizeheight = sizeHeight;
+    id size = [[NSNumber alloc] initWithDouble: nearbyint(rect.size.width)];
+    self.sizewidth = size;
+
+    size = [[NSNumber alloc] initWithDouble: nearbyint(rect.size.height)];
+    self.sizeheight = size;
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     
     NSString *result;
     switch (dataType) {
+    
         case MADDataTypeYear:
             if ([value isKindOfClass:[NSString class]]) {
                 result = value;
@@ -436,18 +445,23 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                 result = [NSString stringWithFormat:@"%@", value];
             }
             break;
+            
         case MADDataTypeGeometry:
             result = [NSString stringWithFormat:@"%@", value];
             break;
+            
         case MADDataTypeImage:
             result = [NSString stringWithFormat:@"%@", value];
             break;
+            
         case MADDataTypeSet:
             result = [NSString stringWithFormat:@"%@", value];
             break;
+            
         case MADDataTypeUnknown:
             result = [NSString stringWithFormat:@"%@", value];
             break;
+            
         case MADDataTypeDate:
         case MADDataTypeDateTime:
         case MADDataTypeTime:
@@ -504,9 +518,11 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
   
             break;
         }
+        
         case MADDataTypeBlob:
             result = [NSString stringWithFormat:@"%@", value];
             break;
+            
         case MADDataTypeBit:
         case MADDataTypeFloat:
         case MADDataTypeInteger:
@@ -561,7 +577,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat: @"%@", [self copyDesignerRepresentationText]];
+    NSString *result = [self copyDesignerRepresentationText];
+    return result;
 }
 
 - (NSAttributedString *)toAttributedString {

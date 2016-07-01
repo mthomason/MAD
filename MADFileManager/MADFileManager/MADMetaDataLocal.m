@@ -40,6 +40,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] alloc] initWithURL: _origionalURL];
+    return copy;
+}
+
 - (NSURL *)URL {
     return _origionalURL;
 }
@@ -87,11 +92,6 @@
 - (NSString *)ubiquitousItemContainerDisplayName {
     NSString *path = _origionalURL.path.lastPathComponent.copy;
     return path;
-}
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] alloc] initWithURL: _origionalURL];
-    return copy;
 }
 
 - (NSData *)fileSystemFileCreationDate {

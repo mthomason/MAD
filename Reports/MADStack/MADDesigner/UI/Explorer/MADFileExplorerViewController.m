@@ -1366,7 +1366,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark Actions
 
 - (IBAction)actionAddDocument:(id)sender {
-    UINavigationController *navControl = [UINavigationController NewDocument];
+    UINavigationController *navControl = [UINavigationController newNavigationControllerNewDocument];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
@@ -1381,7 +1381,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 }
 
 - (IBAction)actionInformation:(id)sender {
-    UINavigationController *infoViewController = [UINavigationController AppInformation];
+    UINavigationController *infoViewController = [UINavigationController newNavigationControllerAppInformation];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
     ppc.backgroundColor = [UIColor clearColor];
@@ -1435,7 +1435,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (IBAction)actionStore:(id)sender {
     
-    UINavigationController *licensing = [UINavigationController Licensing];
+    UINavigationController *licensing = [UINavigationController newNavigationControllerLicensing];
     licensing.modalPresentationStyle = UIModalPresentationFormSheet;
     licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;

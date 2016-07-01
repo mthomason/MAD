@@ -17,48 +17,51 @@ static NSString * const FontPicker      = @"MADIdentifierStoryboardFontPicker";
 static NSString * const NewDocument     = @"MADIdentifierOpenDocumentStart";
 static NSString * const AppInformation  = @"MADIdentifierInformationNavigationController";
 static NSString * const Licensing       = @"MTNavigationControllerLicensing";
-static NSString * const AggregateAdd        = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
+static NSString * const AggregateAdd        = @"MADIdentifierDocumentObjectNewAggregateNavigationController";
 static NSString * const ElementPicker       = @"MADIdentifierNavigationControllerDocumentObjectSelector";
 
 @implementation UINavigationController (Designer)
 
-+ (instancetype)AppInformation {
-    UIStoryboard *storyboard = [UIStoryboard InformationTable];
-    UINavigationController * appInfo = [storyboard instantiateViewControllerWithIdentifier: AppInformation];
++ (instancetype)newNavigationControllerAppInformation {
+    UIStoryboard *storyboard = [UIStoryboard newStorybaordInformationTable];
+    UINavigationController *appInfo;
+    appInfo = [storyboard instantiateViewControllerWithIdentifier: AppInformation];
     appInfo.modalPresentationStyle = UIModalPresentationPopover;
     appInfo.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
     return appInfo;
 }
 
-+ (instancetype)Licensing {
-    UIStoryboard *storyboard = [MADStoryboard newLicensing];
++ (instancetype)newNavigationControllerLicensing {
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardLicensing];
     return [storyboard instantiateViewControllerWithIdentifier:Licensing];
 }
 
-+ (instancetype)NewDocument {
-    UIStoryboard *storyboard = [UIStoryboard NewDocument];
-    return [storyboard instantiateViewControllerWithIdentifier:NewDocument];
++ (instancetype)newNavigationControllerNewDocument {
+    UIStoryboard *storyboard = [UIStoryboard newStoryboardNewDocument];
+    UINavigationController *r = [storyboard instantiateViewControllerWithIdentifier:NewDocument];
+    return r;
 }
 
-+ (instancetype)navigationControllerToolbox {
-    UIStoryboard *storyboardToolbox = [MADStoryboard newToolbox];
++ (instancetype)newNavigationControllerToolbox {
+    UIStoryboard *storyboardToolbox = [MADStoryboard newStoryboardToolbox];
     UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
     return navigationControllerToolbox;
 }
 
-+ (instancetype)navigationControllerFontPicker {
-    UIStoryboard *storyboard = [MADStoryboard newToolbox];
++ (instancetype)newNavigationControllerFontPicker {
+    UIStoryboard *storyboard = [MADStoryboard newStoryboardToolbox];
     return [storyboard instantiateViewControllerWithIdentifier:FontPicker];
 }
 
-+ (instancetype)aggregateAdd {
++ (instancetype)newNavigationControllerAggregateAdd {
     UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
     return [storyboard instantiateViewControllerWithIdentifier:AggregateAdd];
 }
 
-+ (instancetype)elementPicker {
++ (instancetype)newNavigationControllerElementPicker {
     UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
-    return [storyboard instantiateViewControllerWithIdentifier:ElementPicker];
+    id navigationController = [storyboard instantiateViewControllerWithIdentifier:ElementPicker];
+    return navigationController;
 }
 
 @end

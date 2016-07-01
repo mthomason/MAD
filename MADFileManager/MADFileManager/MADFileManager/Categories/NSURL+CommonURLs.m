@@ -260,7 +260,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     return url;
 }
 
-+ (instancetype)newUrlForLocalTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
++ (instancetype)newURLForLocalTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
     SEL altSelector = @selector(newURLLocalTemporaryDirectory);
     NSURL *url = [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
                                                    pathComponent: MADPathComponentTemporary

@@ -15,8 +15,8 @@
 
     + (instancetype)newStoryboardDesigner;
     + (instancetype)newStoryboardQuery;
-    + (instancetype)newToolbox;
-    + (instancetype)newLicensing;
+    + (instancetype)newStoryboardToolbox;
+    + (instancetype)newStoryboardLicensing;
 
 @end
 
