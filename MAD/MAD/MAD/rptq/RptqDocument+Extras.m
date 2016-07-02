@@ -817,7 +817,8 @@
     return documentObject;
 }
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject
+    fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     switch (documentObject.type.shortValue) {
             

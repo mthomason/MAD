@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MAD_UIManagedDocument__Extras_h
-#define Reports_MAD_UIManagedDocument__Extras_h
+#ifndef Reports_MAD_MADDocumentCachedDataReference_h
+#define Reports_MAD_MADDocumentCachedDataReference_h
 
 #import <Foundation/NSObject.h>
 

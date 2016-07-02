@@ -10,4 +10,16 @@
 
 @implementation NSIndexPath (MADReportObjectIndex)
 
++ (instancetype)newIndexPathWithSection:(NSUInteger)section
+                                    row:(NSUInteger)row
+                                andItem:(NSUInteger)item {
+    
+    const NSUInteger numberOfIndexes = 3;
+    const NSUInteger indexes[3] = {section, row, item};
+    id result = [[NSIndexPath alloc] initWithIndexes: indexes
+                                              length: numberOfIndexes];
+    return result;
+
+}
+
 @end

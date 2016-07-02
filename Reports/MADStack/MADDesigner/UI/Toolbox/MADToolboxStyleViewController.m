@@ -438,10 +438,11 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         [self updateSegmentedControlVerticalAlignmentNotSelected];
         
-        self.buttonItalic.enabled = NO;
-        self.buttonBold.enabled = NO;
-        self.buttonStrike.enabled = NO;
-        self.buttonUnderline.enabled = NO;
+        self.buttonItalic.      enabled = NO;
+        self.buttonBold.        enabled = NO;
+        self.buttonStrike.      enabled = NO;
+        self.buttonUnderline.   enabled = NO;
+        
         self.controlStateBold = MTControlStateOff;
         self.controlStateItalic = MTControlStateOff;
         self.controlStateStrike = MTControlStateOff;
@@ -831,8 +832,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         documentObject = [doc.managedObjectContext objectRegisteredForID:objectId];
         documentObject.fontname = familyName;
     }
-    [doc saveContext];
-
+    [doc.managedObjectContext save:nil];
 }
 
 - (IBAction)toggleBold:(id)sender {
@@ -859,7 +859,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSNumber *boldWrapper = @(ControlStateIsOn(self.controlStateBold));
         documentObject.bold = boldWrapper;
     }
-    [doc saveContext];
+    [doc.managedObjectContext save:nil];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -885,7 +885,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSNumber *italic = @(ControlStateIsOn(self.controlStateItalic));
         documentObject.italic = italic;
     }
-    [doc saveContext];
+    [doc.managedObjectContext save:nil];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -911,7 +911,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSNumber *strike = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateStrike)];
         documentObject.strike = strike;
     }
-    [doc saveContext];
+    [doc.managedObjectContext save:nil];
 }
 
 
@@ -938,7 +938,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSNumber *underline = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateUnderline)];
         documentObject.underline = underline;
     }
-    [doc saveContext];
+    [doc.managedObjectContext save:nil];
 }
 
 - (void)emptySelector:(id)whofuckingCares { }

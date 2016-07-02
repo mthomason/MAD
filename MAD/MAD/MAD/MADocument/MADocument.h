@@ -20,30 +20,19 @@
 @protocol MADActivityProtocol;
 @protocol MADocumentDelegate;
 
-@class MADReportSections;
-
 @class NSManagedObjectID;
-@class UIImage;
-@class UIPrintPageRenderer;
 @class RptqDocument;
-@class RptqQueryGroup;
-@class RptqDatabaseSchemaTable;
-@class RptqDocumentSection;
-@class RptqDocumentObject;
-@class MADErrorContainer;
-@class MADCredential;
+
+@class MADActivityIndicator;
+
+@class MADReportSections;
 @class MADocumentState;
 @class MADSectionLayoutManager;
-@class MADActivityIndicator;
-@class MADocument;
-@class MTDatabaseConnection;
-@class MTReportFormatter;
-@class MTDataTableFast;
-@class MTQuery;
 @class MTQueryFull;
 @class MTDatabase;
+@class MTReportFormatter;
+@class MTDataTableFast;
 @class MTPaper;
-@class MTReportViewerPrintPageRenderer;
 
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
@@ -57,9 +46,12 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
         MTReportFormatterDataSource>
     
     @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
-    @property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
 
-    @property (nonatomic, readonly, strong)    MADReportSections *reportSections;
+    @property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
+    @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
+    @property (readonly)                        RptqDocument    *activeDocumentModel;
+
+    @property (nonatomic, readonly, strong)     MADReportSections *reportSections;
 
     @property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
@@ -67,24 +59,21 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (nonatomic, readwrite, strong)    MTDatabase *database;
 
     // Set and used by export operations
-    @property (nonatomic, weak)                 MADActivityIndicator *statusLabel;
-    @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
-
-    @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
+    @property (nonatomic, weak)                 MADActivityIndicator    *statusLabel;
+    @property (nonatomic, strong, readwrite)    MADocumentState         *documentStatus;
 
     @property (nonatomic, strong)               MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
-    @property (readonly)                        RptqDocument *activeDocumentModel;
-    @property (readonly)                        NSString *filename;
-    @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
+    @property (readonly)                        NSString        *filename;
+    @property (nonatomic, strong, readwrite)    MTQueryFull     *mainQuery;
 
-    @property (nonatomic, strong)               MTPaper *paper;
-    @property (nonatomic, readonly, copy)       NSURL *urlDataTableCache;
-    @property (nonatomic, assign)               BOOL limitResultsDesignMode;
-
-    + (instancetype)newManagedDocumentForURL:(NSURL *)url;
+    @property (nonatomic, strong)               MTPaper         *paper;
+    @property (nonatomic, readonly, copy)       NSURL           *urlDataTableCache;
+    @property (nonatomic, assign)               BOOL            limitResultsDesignMode;
 
     - (instancetype)initWithFileURL:(NSURL *)url;
+
+    + (instancetype)newManagedDocumentForURL:(NSURL *)url;
 
     - (void)saveContext;
 
@@ -113,7 +102,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (NSDictionary *)copyLayoutHeightsBySectionKey;
 
-    + (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *cleanupURL))completion;
+    + (void)close:(MADocument *)document
+       completion:(void (^)(BOOL success, NSURL *cleanupURL))completion;
 
     - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 

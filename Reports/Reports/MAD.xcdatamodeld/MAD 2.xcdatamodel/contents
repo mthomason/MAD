@@ -341,7 +341,7 @@
         <element name="RptqDatabase" positionX="-1395" positionY="-1041" width="198" height="150"/>
         <element name="RptqDatabaseSchemaField" positionX="-135" positionY="405" width="171" height="225"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="165"/>
-        <element name="RptqDocument" positionX="-1800" positionY="-765" width="182" height="285"/>
+        <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="285"/>
         <element name="RptqDocumentObject" positionX="-765" positionY="-1995" width="128" height="915"/>
         <element name="RptqDocumentObjectAggregate" positionX="-686" positionY="1566" width="209" height="150"/>
         <element name="RptqDocumentObjectBarcode" positionX="-1233" positionY="1068" width="207" height="435"/>
@@ -352,7 +352,7 @@
         <element name="RptqDocumentObjectLabel" positionX="-1154" positionY="657" width="128" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="-1161" positionY="756" width="128" height="135"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-1161" positionY="912" width="128" height="105"/>
-        <element name="RptqDocumentSection" positionX="-1395" positionY="-876" width="182" height="390"/>
+        <element name="RptqDocumentSection" positionX="-1451" positionY="-648" width="182" height="390"/>
         <element name="RptqDocumentSectionRows" positionX="-1143" positionY="-504" width="191" height="120"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="225"/>
         <element name="RptqQueryCache" positionX="387" positionY="1176" width="128" height="120"/>
@@ -362,6 +362,6 @@
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="150"/>
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="120"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="210"/>
-        <element name="RptqUserCredentals" positionX="-1107" positionY="-945" width="128" height="360"/>
+        <element name="RptqUserCredentals" positionX="-1125" positionY="-882" width="128" height="360"/>
     </elements>
 </model>

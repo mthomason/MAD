@@ -6,8 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MAD_MADDocumentCachedDataReference_h
+#define Reports_MAD_MADDocumentCachedDataReference_h
+
+#import <Foundation/NSIndexPath.h>
 
 @interface NSIndexPath (MADReportObjectIndex)
 
+    + (instancetype)newIndexPathWithSection:(NSUInteger)section
+                                        row:(NSUInteger)row
+                                    andItem:(NSUInteger)item;
+
 @end
+
+#endif

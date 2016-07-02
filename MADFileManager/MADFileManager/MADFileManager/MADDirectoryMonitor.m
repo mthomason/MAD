@@ -16,8 +16,8 @@
 
     @property (nonatomic, assign)   int fileDescriptor;
     @property (nonatomic, copy)     NSURL *URL;
-    @property (nonatomic, strong) dispatch_queue_t directoryMonitorQueue;
-    @property (nonatomic, strong) dispatch_source_t directoryMonitorSource;
+    @property (nonatomic, strong)   dispatch_queue_t directoryMonitorQueue;
+    @property (nonatomic, strong)   dispatch_source_t directoryMonitorSource;
 
 @end
 
@@ -54,7 +54,7 @@ static const int NotListening = -1;
         self.directoryMonitorQueue = directoryMonitorQueue;
         
         unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
-        DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
         
         id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
                                                            (uintptr_t)self.fileDescriptor,
