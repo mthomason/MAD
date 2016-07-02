@@ -2058,6 +2058,7 @@
 		4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationImportSchema.m; sourceTree = "<group>"; };
 		4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationUniqueUrlForFilename.h; sourceTree = "<group>"; };
 		4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
+		4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
 		4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerView.h; sourceTree = "<group>"; };
@@ -6697,7 +6698,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6748,7 +6749,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7042,7 +7043,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
@@ -7112,7 +7113,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
@@ -7819,6 +7820,7 @@
 		4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */,
 				4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */,
 				4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */,
 			);

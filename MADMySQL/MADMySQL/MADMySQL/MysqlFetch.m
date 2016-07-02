@@ -90,7 +90,8 @@
     return fieldName;
 }
 
-+ (MADDataColumn *)dataColumnForFieldName:(NSString *)fieldName mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
++ (MADDataColumn *)dataColumnForFieldName:(NSString *)fieldName
+                               mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
     
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     dataColumn.fieldName = fieldName;
@@ -130,9 +131,10 @@
             const char *err = mysql_stmt_error(myStatement);
             unsigned int code = mysql_stmt_errno(myStatement);
             NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.", code, err];
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
-                                        NSLocalizedFailureReasonErrorKey : @"Error"};
-            errorFetch = [NSError errorWithDomain:@"mad" code:code userInfo:errorInfo];
+            NSDictionary *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            errorString, NSLocalizedDescriptionKey,
+                                            @"Error", NSLocalizedFailureReasonErrorKey, nil];
+            errorFetch = [NSError errorWithDomain:@"mad" code:(NSInteger)code userInfo:errorInfo];
             if (error != NULL) *error = errorFetch;
             
         } else {
@@ -223,84 +225,111 @@ char *mySQLTypeForType(int type) {
         case MYSQL_TYPE_DECIMAL:
             return "MYSQL_TYPE_DECIMAL";
             break;
+
         case MYSQL_TYPE_TINY:
             return "MYSQL_TYPE_TINY";
             break;
+
         case MYSQL_TYPE_SHORT:
             return "MYSQL_TYPE_SHORT";
             break;
+
         case MYSQL_TYPE_LONG:
             return "MYSQL_TYPE_LONG";
             break;
+
         case MYSQL_TYPE_FLOAT:
             return "MYSQL_TYPE_FLOAT";
             break;
+
         case MYSQL_TYPE_DOUBLE:
             return "MYSQL_TYPE_DOUBLE";
             break;
+
         case MYSQL_TYPE_NULL:
             return "MYSQL_TYPE_NULL";
             break;
+
         case MYSQL_TYPE_TIMESTAMP:
             return "MYSQL_TYPE_TIMESTAMP";
             break;
+
         case MYSQL_TYPE_INT24:
             return "MYSQL_TYPE_INT24";
             break;
+
         case MYSQL_TYPE_DATE:
             return "MYSQL_TYPE_DATE";
             break;
+
         case MYSQL_TYPE_TIME:
             return "MYSQL_TYPE_TIME";
             break;
+
         case MYSQL_TYPE_DATETIME:
             return "MYSQL_TYPE_DATETIME";
             break;
+
         case MYSQL_TYPE_YEAR:
             return "MYSQL_TYPE_YEAR";
             break;
+
         case MYSQL_TYPE_VARCHAR:
             return "MYSQL_TYPE_VARCHAR";
             break;
+
         case MYSQL_TYPE_BIT:
             return "MYSQL_TYPE_BIT";
             break;
+
         case MYSQL_TYPE_TIMESTAMP2:
             return "MYSQL_TYPE_TIMESTAMP2";
             break;
+
         case MYSQL_TYPE_DATETIME2:
             return "MYSQL_TYPE_DATETIME2";
             break;
+
         case MYSQL_TYPE_NEWDECIMAL:
             return "MYSQL_TYPE_NEWDECIMAL";
             break;
+
         case MYSQL_TYPE_ENUM:
             return "MYSQL_TYPE_ENUM";
             break;
+
         case MYSQL_TYPE_SET:
             return "MYSQL_TYPE_SET";
             break;
+
         case MYSQL_TYPE_TINY_BLOB:
             return "MYSQL_TYPE_TINY_BLOB";
             break;
+
         case MYSQL_TYPE_MEDIUM_BLOB:
             return "MYSQL_TYPE_DECIMAL";
             break;
+
         case MYSQL_TYPE_LONG_BLOB:
             return "MYSQL_TYPE_DECIMAL";
             break;
+
         case MYSQL_TYPE_BLOB:
             return "MYSQL_TYPE_BLOB";
             break;
+
         case MYSQL_TYPE_VAR_STRING:
             return "MYSQL_TYPE_VAR_STRING";
             break;
+
         case MYSQL_TYPE_STRING:
             return "MYSQL_TYPE_STRING";
             break;
+
         case MYSQL_TYPE_GEOMETRY:
             return "MYSQL_TYPE_GEOMETRY";
             break;
+
         default:
             return "Unknown";
             break;
@@ -313,13 +342,16 @@ char *mySQLTypeForType(int type) {
 #endif
 }
 
-+ (NSData *)dataForColumnBindings:(MYSQL_BIND)bindings column:(int)x statement:(MYSQL_STMT *)statement fetchResults:(int)fetchResults NS_RETURNS_RETAINED {
++ (NSData *)dataForColumnBindings:(MYSQL_BIND)bindings
+                           column:(unsigned int)column
+                        statement:(MYSQL_STMT *)statement
+                     fetchResults:(int)fetchResults NS_RETURNS_RETAINED {
     void *previousBuffer=bindings.buffer;
     unsigned long previousBufferSize=bindings.buffer_length;
     bindings.buffer_length=*(bindings.length);
     bindings.buffer=malloc(bindings.buffer_length);
     
-    mysql_stmt_fetch_column(statement, (MYSQL_BIND *)&(bindings), x , 0);
+    mysql_stmt_fetch_column(statement, (MYSQL_BIND *)&(bindings), column , 0);
     
     NSData * result = [[NSData alloc] initWithBytes:bindings.buffer length:*(bindings.length)];
     
@@ -330,7 +362,9 @@ char *mySQLTypeForType(int type) {
     return result;
 }
 
-+ (NSData *)dataForColumnBindings:(MYSQL_BIND)binding column:(int)x statement:(MYSQL_STMT *)statement NS_RETURNS_RETAINED {
++ (NSData *)dataForColumnBindings:(MYSQL_BIND)binding
+                           column:(int)x
+                        statement:(MYSQL_STMT *)statement NS_RETURNS_RETAINED {
 
     id result = [[NSData alloc] initWithBytes:binding.buffer length:*(binding.length)];
     
@@ -361,16 +395,21 @@ char *mySQLTypeForType(int type) {
     return result;
 }
 
-- (void)fetchResultsFromConnection:(MysqlConnection *)connection intoDataTable:(MTDataTable **)dataTable withStatement:(MYSQL_STMT *)statement fetch:(MysqlFetch *)mf andBindings:(MYSQL_BIND *)bindings  {
+- (void)fetchResultsFromConnection: (MysqlConnection *)connection
+                     intoDataTable: (MTDataTable * __autoreleasing *)dataTable
+                     withStatement: (MYSQL_STMT *)statement
+                             fetch: (MysqlFetch *)mf
+                       andBindings: (MYSQL_BIND *)bindings  {
     [*dataTable beginBulkInsert];
     int fetchResults;
     NSUInteger rowCounter = 0;
     
+    id <MysqlFetchDelegate> delegate = _delegate;
     
     while ((fetchResults = [MysqlFetch fetchStatement:statement]) != MYSQL_NO_DATA) {
         
-        if (self.delegate != nil) {
-            [self.delegate didFetchRow:rowCounter];
+        if (delegate != nil) {
+            [delegate didFetchRow:rowCounter];
         }
         
         @autoreleasepool {
@@ -432,8 +471,9 @@ char *mySQLTypeForType(int type) {
                                                 
                                             } else {
                                             
-                                                NSData *theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
-                                                dict[key] = theData;
+                                                id data = [[NSData alloc] initWithBytes: bindings[x].buffer
+                                                                                 length: *(bindings[x].length)];
+                                                dict[key] = data;
                                                 
                                             }
                                         } else if ([theDataString isKindOfClass:[NSNumber class]]) {
@@ -538,13 +578,13 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_NEWDATE:
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
-                            NSDateComponents * __autoreleasing comps = [[NSDateComponents alloc] init];
-                            comps.year = aValue->year;
-                            comps.month = aValue->month;
-                            comps.day = aValue->day;
-                            comps.hour = aValue->hour;
-                            comps.minute = aValue->minute;
-                            comps.second = aValue->second;
+                            NSDateComponents *comps = [[NSDateComponents alloc] init];
+                            comps.year      = (NSInteger)aValue->year;
+                            comps.month     = (NSInteger)aValue->month;
+                            comps.day       = (NSInteger)aValue->day;
+                            comps.hour      = (NSInteger)aValue->hour;
+                            comps.minute    = (NSInteger)aValue->minute;
+                            comps.second    = (NSInteger)aValue->second;
                             NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:comps];
                             if (date) {
                                 dict[key] = date;
@@ -556,9 +596,9 @@ char *mySQLTypeForType(int type) {
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
                             NSDateComponents *comps=[[NSDateComponents alloc] init];
-                            comps.hour = aValue->hour;
-                            comps.minute = aValue->minute;
-                            comps.second = aValue->second;
+                            comps.hour =    (NSInteger)aValue->hour;
+                            comps.minute =  (NSInteger)aValue->minute;
+                            comps.second = (NSInteger)aValue->second;
                             NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:comps];
                             if (date) {
                                 dict[key] = date;
@@ -569,9 +609,9 @@ char *mySQLTypeForType(int type) {
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
                             NSDateComponents *comps=[[NSDateComponents alloc] init];
-                            comps.year = aValue->year;
-                            comps.month = aValue->month;
-                            comps.day = aValue->day;
+                            comps.year  = (NSInteger)aValue->year;
+                            comps.month = (NSInteger)aValue->month;
+                            comps.day   = (NSInteger)aValue->day;
                             dict[key] = comps;
                         } break;
                             
