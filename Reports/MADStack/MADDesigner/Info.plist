@@ -45,7 +45,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADBuildDate</key>
+<<<<<<< HEAD
 	<string>2016-07-07T04:41:06EDT</string>
+=======
+	<string>2016-07-02T05:05:46EDT</string>
+>>>>>>> origin/master
 	<key>MADRevision</key>
 	<string>3065</string>
 	<key>NSHumanReadableCopyright</key>
