@@ -13,6 +13,7 @@
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
+@class UINavigationController;
 @class MADQueryVisualizationViewController;
 @class MADQueryViewController;
 @class MADocument;

@@ -12,6 +12,13 @@
 
 #import "MTDatabaseDriverSelectorViewController.h"
 
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UIStoryboardSegue.h>
+
 #import <MAD/MTDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -21,9 +28,6 @@
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTConnectionViewController.h"
-
-#import <UIKit/UIImage.h>
-#import <UIKit/UIVisualEffectView.h>
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
@@ -57,8 +61,10 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt, MTDatabaseDriverSelectorViewControllerDefaultPrompt);
-    self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle, MTDatabaseDriverSelectorViewControllerDefaultTitle);
+    self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt,
+                                                   MTDatabaseDriverSelectorViewControllerDefaultPrompt);
+    self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle,
+                                                  MTDatabaseDriverSelectorViewControllerDefaultTitle);
     [self.navigationItem setLeftItemsSupplementBackButton: YES];
     
     self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
@@ -106,12 +112,14 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath { return 104.000f; }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
+                                         forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell.contentView setNeedsLayout];
     [cell.contentView layoutIfNeeded];
 }
 
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell
+                                              forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell.contentView setNeedsLayout];
     [cell.contentView layoutIfNeeded];
 }

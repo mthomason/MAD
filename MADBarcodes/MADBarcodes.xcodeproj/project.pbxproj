@@ -427,12 +427,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C130AF71BA808150022665F /* libpng.a in Frameworks */,
+				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
 				4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
-				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
 				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
-				4C130AF71BA808150022665F /* libpng.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1167,7 +1167,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libpng;
+				LIBRARY_SEARCH_PATHS = /Users/maddeveloper/Desktop/Reports/Compressor/library/libpng;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1190,7 +1190,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libpng;
+				LIBRARY_SEARCH_PATHS = /Users/maddeveloper/Desktop/Reports/Compressor/library/libpng;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

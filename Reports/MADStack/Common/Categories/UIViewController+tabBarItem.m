@@ -11,6 +11,10 @@
 #endif
 
 #import "UIViewController+tabBarItem.h"
+
+#import <UIKit/UITabBarItem.h>
+#import <UIKit/UIImage.h>
+
 #import "objcmad.h"
 
 #import "MADQueryBuilderSplitViewController.h"

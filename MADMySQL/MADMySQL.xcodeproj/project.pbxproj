@@ -1375,7 +1375,7 @@
 				INFOPLIST_FILE = MADMySQL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libmysqlclient;
+				LIBRARY_SEARCH_PATHS = /Users/maddeveloper/Desktop/Reports/Compressor/library/libmysqlclient;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADMySQL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1407,7 +1407,7 @@
 				INFOPLIST_FILE = MADMySQL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libmysqlclient;
+				LIBRARY_SEARCH_PATHS = /Users/maddeveloper/Desktop/Reports/Compressor/library/libmysqlclient;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADMySQL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

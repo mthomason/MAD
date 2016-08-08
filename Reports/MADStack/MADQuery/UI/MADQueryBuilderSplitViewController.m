@@ -14,6 +14,14 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UIPopoverController.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UIStoryboardPopoverSegue.h>
+#import <UIKit/UIImage.h>
+
 #import <MAD/MADocument.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>

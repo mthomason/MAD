@@ -8,9 +8,12 @@
 
 #import "UIViewController+Utilities.h"
 #import <UIKit/UISplitViewController.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIWindow.h>
 
 @implementation UIViewController (Utilities)
-
 
 + (instancetype)copyTopmostViewController:(UIViewController *)vc {
     
@@ -49,7 +52,7 @@
 }
 
 + (instancetype)copyTopmostViewController {
-    UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     return [UIViewController copyTopmostViewController:viewController];
     
 }

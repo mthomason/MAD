@@ -13,6 +13,19 @@
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
+#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIImagePickerController.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIVisualEffectView.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIMenuController.h>
+#import <UIKit/NSStringDrawing.h>
+
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectContext.h>
 

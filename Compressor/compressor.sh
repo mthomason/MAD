@@ -798,8 +798,8 @@ if [[ $build_glib == $true && $show_help == $false ]]; then
 
 #        path_autoconf="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
 #        path_automake="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
-#        path_autoconf="/Users/mthomason/Desktop/Reports/Compressor/library/autoconf/iPhoneOS7.1-i386.sdk/${archive_name_autoconf}"
-#        path_automake="/Users/mthomason/Desktop/Reports/Compressor/library/automake/iPhoneOS7.1-i386.sdk/${archive_name_automake}"
+#        path_autoconf="/Users/maddeveloper/Desktop/Reports/Compressor/library/autoconf/iPhoneOS7.1-i386.sdk/${archive_name_autoconf}"
+#        path_automake="/Users/maddeveloper/Desktop/Reports/Compressor/library/automake/iPhoneOS7.1-i386.sdk/${archive_name_automake}"
 
 #        path_autoconf_bin="${path_autoconf}/bin"
 #        path_autoconf_lib="${path_autoconf}/lib"

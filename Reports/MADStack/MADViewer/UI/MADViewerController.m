@@ -13,6 +13,19 @@
 #import "MADViewerController.h"
 #import <MAD/MADActivityItemProviderPdfDelegate.h>
 
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIPopoverController.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UIAccessibilityConstants.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIPrintInteractionController.h>
+#import <UIKit/UILocalNotification.h>
+#import <UIKit/UITabBarItem.h>
+#import <UIKit/UIPopoverPresentationController.h>
+
 #import <CoreData/CoreData.h>
 
 #import <MADDataStructures/MTPair.h>
@@ -84,7 +97,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
         MTTabBarImageProtocol,
-        MADActivityItemProviderDelegate>
+        MADActivityItemProviderDelegate> {
+            BOOL _isFirstAppearance;
+}
 
     @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 
@@ -259,7 +274,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)initialize {
-    
+    _isFirstAppearance = YES;
     self.activityExporting = NO;
     self.didRefreshBeforeReaload = NO;
     
@@ -379,6 +394,24 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [pageSlider setNeedsLayout];
 
     self.toolbarSlider = pageSlider;
+    
+    if (_isFirstAppearance) {
+        MADPageViewAttributes *pageAttributes;
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
+                                                               totalNumberOfPages: self.numberOfPages
+                                                                contentSizeInital: document.paper.paperSize];
+        CGRect bounds = self.view.bounds;
+        MADReportPageViewController *pageOne =
+        [MADReportPageViewController newReportPageViewControllerWithDocument: document
+                                                              pageAttributes: pageAttributes
+                                                                       frame: bounds
+                                                                 andDelegate: self];
+        
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
+        [self setViewControllers: viewControllers
+                       direction: UIPageViewControllerNavigationDirectionForward
+                        animated: NO completion: nil];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -444,7 +477,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    if (self.firstTimeViewWillLayoutSubviews) {
+    /*if (self.firstTimeViewWillLayoutSubviews) {
         
         MADocument *document = self.document;
         MADPageViewAttributes *pageAttributes;
@@ -462,7 +495,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion: nil];
-    }
+    }*/
 }
 
 #pragma mark - properties
@@ -603,7 +636,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)setTabBarItemsEnabled:(BOOL)enabled {
-    NSArray *tabBarItems = self.tabBarController.tabBar.items;
+    NSArray <UITabBarItem *> *tabBarItems = self.tabBarController.tabBar.items;
     [tabBarItems enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(UITabBarItem * _Nonnull tabBarItem, NSUInteger idx, BOOL * _Nonnull stop) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             tabBarItem.enabled = enabled;

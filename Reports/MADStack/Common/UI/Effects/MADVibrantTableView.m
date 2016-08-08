@@ -7,8 +7,11 @@
 //
 
 #import "MADVibrantTableView.h"
-#import "MADVibrantTableViewCell.h"
+
 #import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UINibLoading.h>
+
+#import "MADVibrantTableViewCell.h"
 
 @implementation MADVibrantTableView
 

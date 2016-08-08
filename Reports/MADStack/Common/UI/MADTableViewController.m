@@ -34,7 +34,6 @@
             [self.navigationItem.titleView sizeToFit];
         }];
     }
-    
 }
 
 @end

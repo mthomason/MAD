@@ -7,6 +7,11 @@
 //
 
 #import "MADTabBarController.h"
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UITabBarItem.h>
+
 #import "MADNavigationBarTitleView.h"
 
 #import "MADQueryBuilderSplitViewController.h"

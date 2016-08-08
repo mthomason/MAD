@@ -7,6 +7,16 @@
 //
 
 #import "MADToolboxPresentationController.h"
+
+#import <UIKit/UIGestureRecognizer.h>
+#import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/UISwipeGestureRecognizer.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UITabBarController.h>
+
+#import <Foundation/NSKeyValueObserving.h>
+
 #import "MADToolboxTransitioner.h"
 #import "MADDimmingView.h"
 #import "MADViewControllerProtocol.h"
@@ -110,7 +120,7 @@
 
 - (void)presentationTransitionWillBegin {
 
-    UINavigationController *navController = (UINavigationController *)self.presentingViewController;;
+    UINavigationController *navController = (UINavigationController *)self.presentingViewController;
     UITabBarController *tabBarController = navController.viewControllers.firstObject;
     UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     self.designerViewController = designer;

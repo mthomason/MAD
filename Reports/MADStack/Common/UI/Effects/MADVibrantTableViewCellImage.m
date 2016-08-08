@@ -7,8 +7,13 @@
 //
 
 #import "MADVibrantTableViewCellImage.h"
+
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UIImageView.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIButton.h>
 
 @interface MADVibrantTableViewCellImage ()
 

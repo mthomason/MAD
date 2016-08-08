@@ -7,6 +7,13 @@
 //
 
 #import "MADPageSlider.h"
+
+#import <UIKit/UILabel.h>
+#import <UIKit/NSShadow.h>
+#import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/NSStringDrawing.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import "MADSliderPageVertical.h"

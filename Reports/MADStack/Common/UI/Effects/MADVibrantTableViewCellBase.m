@@ -9,6 +9,8 @@
 #import "MADVibrantTableViewCellBase.h"
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UILabel.h>
 
 @interface MADVibrantTableViewCellBase ()
 

@@ -7,6 +7,11 @@
 //
 
 #import "MADToolboxTransitioner.h"
+
+#import <UIKit/UIViewController.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UINavigationController.h>
+
 #import "MADToolboxPresentationController.h"
 #import "MADViewControllerProtocol.h"
 
