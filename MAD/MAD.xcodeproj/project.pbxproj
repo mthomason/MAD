@@ -297,7 +297,6 @@
 		4C744F001CE9B69200243830 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EFF1CE9B69200243830 /* MADTdsClient.framework */; };
 		4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744F011CE9B69800243830 /* MADMySQL.framework */; };
 		4C7F44751CEF4C1D00A57655 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7F44581CEF4C1D00A57655 /* archive.h */; };
-		4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7F44741CEF4C1D00A57655 /* libarchive.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */; };
 		4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */; };
 		4C82C9861CF2077A00F244F6 /* madpath.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C9841CF2077A00F244F6 /* madpath.c */; };
@@ -490,6 +489,8 @@
 		4CC284A21BADE9FB00775B72 /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */; };
 		4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C11BADEB6100775B72 /* libsybdb.a */; };
 		4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C31BADEBA500775B72 /* CoreText.framework */; };
+		4CCB84601D882A56001F9F29 /* libarchive.15.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCB845F1D882A56001F9F29 /* libarchive.15.dylib */; };
+		4CCB84621D882B5D001F9F29 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB84611D882B5D001F9F29 /* archive.h */; };
 		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; };
 		4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD90DC31CE6C47A00B56B90 /* miniz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CEFDCF71CF5A8710092C148 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCF61CF5A8710092C148 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -517,7 +518,6 @@
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
-		4CFE08F71CEF7A90007871D4 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6B01661CEF691100D29F3A /* libarchive.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1023,6 +1023,8 @@
 		4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "MAD/rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
 		4CC284C11BADEB6100775B72 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CC284C31BADEBA500775B72 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4CCB845F1D882A56001F9F29 /* libarchive.15.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.15.dylib; path = "../Compressor/build/libarchive-3.2.1/libarchive/Release-iphoneos/libarchive.15.dylib"; sourceTree = "<group>"; };
+		4CCB84611D882B5D001F9F29 /* archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = archive.h; path = "../Compressor/source/libarchive-3.2.1/libarchive/archive.h"; sourceTree = "<group>"; };
 		4CD90DC21CE6C47A00B56B90 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniz.c; path = ../../Reports/MADStack/Packages/miniz.c; sourceTree = "<group>"; };
 		4CD90DC31CE6C47A00B56B90 /* miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniz.h; path = ../../Reports/MADStack/Packages/miniz.h; sourceTree = "<group>"; };
 		4CEFDCF61CF5A8710092C148 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryType.h; path = MAD/MADQuery/MADQueryType.h; sourceTree = "<group>"; };
@@ -1060,6 +1062,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CCB84601D882A56001F9F29 /* libarchive.15.dylib in Frameworks */,
 				4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */,
 				4C744F001CE9B69200243830 /* MADTdsClient.framework in Frameworks */,
 				4C744EFE1CE9B68C00243830 /* MADFoundation.framework in Frameworks */,
@@ -1067,8 +1070,6 @@
 				4C744EFA1CE9B67D00243830 /* MADSqlite3.framework in Frameworks */,
 				4C744EF81CE9B67400243830 /* MADDataStructures.framework in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
-				4C7F44911CEF4C1D00A57655 /* libarchive.a in Frameworks */,
-				4CFE08F71CEF7A90007871D4 /* libarchive.a in Frameworks */,
 				4C6652ED1CEF772D0058986B /* libbz2.1.0.dylib in Frameworks */,
 				4C6652EB1CEF77040058986B /* libz.1.dylib in Frameworks */,
 				4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */,
@@ -1810,6 +1811,15 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		4CCB845C1D882556001F9F29 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CCB84611D882B5D001F9F29 /* archive.h */,
+				4CCB845F1D882A56001F9F29 /* libarchive.15.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4CEFDD0F1CF5AEA80092C148 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -1896,6 +1906,7 @@
 				4CF781461BADE5EA0050A67D /* MAD */,
 				4CF781521BADE5EA0050A67D /* MADTests */,
 				4CF781451BADE5EA0050A67D /* Products */,
+				4CCB845C1D882556001F9F29 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1951,6 +1962,7 @@
 				4C82C9871CF2077A00F244F6 /* madpath.h in Headers */,
 				4C0590CF1C7B6F3C00A1EC4A /* MTReportFormatterState.h in Headers */,
 				4C6B014E1CEF625E00D29F3A /* archive_entry_locale.h in Headers */,
+				4CCB84621D882B5D001F9F29 /* archive.h in Headers */,
 				4C401E011BAE3CAD00BAE5FC /* MTReportFormatter.h in Headers */,
 				4C401DB51BAE3BD500BAE5FC /* MTQuery.h in Headers */,
 				4C401E391BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h in Headers */,

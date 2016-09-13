@@ -1047,6 +1047,7 @@
 		4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
+		4CCB845B1D8823C5001F9F29 /* libarchive.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCB845A1D8823C5001F9F29 /* libarchive.tbd */; };
 		4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
@@ -2452,6 +2453,7 @@
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageBolt20@2x.png"; path = "Reports/UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC909031D0FCA1E007A1C75 /* MADViewControllerBarcodeOptionsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeOptionsDelegate.h; sourceTree = "<group>"; };
 		4CC909041D0FCBCF007A1C75 /* MADViewControllerBarcodeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeDelegate.h; sourceTree = "<group>"; };
+		4CCB845A1D8823C5001F9F29 /* libarchive.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libarchive.tbd; path = usr/lib/libarchive.tbd; sourceTree = SDKROOT; };
 		4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
 		4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
@@ -2602,6 +2604,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CCB845B1D8823C5001F9F29 /* libarchive.tbd in Frameworks */,
 				4C744F2E1CE9C50900243830 /* MADDataStructures.framework in Frameworks */,
 				4C744F2D1CE9C4D500243830 /* MADBarcodes.framework in Frameworks */,
 				4C744F2C1CE9C4C600243830 /* MADFoundation.framework in Frameworks */,
@@ -4453,6 +4456,7 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CCB845A1D8823C5001F9F29 /* libarchive.tbd */,
 				4C744F281CE9C0B100243830 /* MAD.framework */,
 				4C744F251CE9C08400243830 /* MADFileManager.framework */,
 				4C744F201CE9C06700243830 /* MADExplorer.framework */,
@@ -5321,7 +5325,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0600;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
 					4C0E771F163B5AEC003B951E = {
@@ -6898,6 +6902,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -6905,9 +6910,11 @@
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -6952,6 +6959,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -6959,9 +6967,11 @@
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -7083,7 +7093,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (

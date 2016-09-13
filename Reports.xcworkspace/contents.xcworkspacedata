@@ -7,16 +7,6 @@
       <Group
          location = "container:"
          name = "Frameworks">
-         <Group
-            location = "container:"
-            name = "libarchive">
-            <FileRef
-               location = "group:/Users/mthomason/Desktop/Reports/Compressor/library/libarchivesimulator/libarchive-simulator.xcodeproj">
-            </FileRef>
-            <FileRef
-               location = "group:Compressor/library/libarchive/libarchive.xcodeproj">
-            </FileRef>
-         </Group>
          <FileRef
             location = "group:MADFeedback/MADFeedback.xcodeproj">
          </FileRef>

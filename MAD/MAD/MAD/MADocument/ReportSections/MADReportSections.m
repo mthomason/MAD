@@ -9,6 +9,7 @@
 #import "MADReportSections.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSString.h>
 
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"

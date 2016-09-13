@@ -9,7 +9,7 @@
 #ifndef madtar_h
 #define madtar_h
 
-#import "archive.h"
+#import <archive.h>
 
 int mad_copy_data(struct archive *ar, struct archive *aw);
 int mad_extract(const char *filename);

@@ -15,8 +15,10 @@
 #import <stdlib.h>
 #import <string.h>
 #import <copyfile.h>
-#import "archive.h"
-#import "archive_entry.h"
+#import <unistd.h>
+//#import <usr/lib/libarchive.h>
+#import <archive.h>
+//#import <archive_entry.h>
 #import "madpath.h"
 #import "madtar.h"
 #import <MADFileManager/MADFileUtilities.h>
