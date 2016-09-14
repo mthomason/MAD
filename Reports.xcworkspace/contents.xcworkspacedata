@@ -8,6 +8,9 @@
          location = "container:"
          name = "Frameworks">
          <FileRef
+            location = "group:bzip2/bzip2/bzip2.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:MADFeedback/MADFeedback.xcodeproj">
          </FileRef>
          <FileRef

@@ -8,7 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		4C15A0CC1D891CA000FC59CC /* bzip2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C15A0CB1D891CA000FC59CC /* bzip2.m */; };
-		4C15A0CD1D891CA000FC59CC /* bzip2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C15A0CA1D891CA000FC59CC /* bzip2.h */; };
+		4C9BBC511D89220800F6D084 /* blocksort.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC1E1D89220800F6D084 /* blocksort.c */; };
+		4C9BBC521D89220800F6D084 /* bzip2.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC1F1D89220800F6D084 /* bzip2.c */; };
+		4C9BBC531D89220800F6D084 /* bzip2recover.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC201D89220800F6D084 /* bzip2recover.c */; };
+		4C9BBC541D89220800F6D084 /* bzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC211D89220800F6D084 /* bzlib.c */; };
+		4C9BBC551D89220800F6D084 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC221D89220800F6D084 /* compress.c */; };
+		4C9BBC561D89220800F6D084 /* crctable.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC231D89220800F6D084 /* crctable.c */; };
+		4C9BBC571D89220800F6D084 /* decompress.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC241D89220800F6D084 /* decompress.c */; };
+		4C9BBC581D89220800F6D084 /* dlltest.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC251D89220800F6D084 /* dlltest.c */; };
+		4C9BBC591D89220800F6D084 /* huffman.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC261D89220800F6D084 /* huffman.c */; };
+		4C9BBC5A1D89220800F6D084 /* mk251.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC271D89220800F6D084 /* mk251.c */; };
+		4C9BBC5B1D89220800F6D084 /* randtable.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC281D89220800F6D084 /* randtable.c */; };
+		4C9BBC5C1D89220800F6D084 /* spewG.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC291D89220800F6D084 /* spewG.c */; };
+		4C9BBC5D1D89220800F6D084 /* unzcrash.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC2A1D89220800F6D084 /* unzcrash.c */; };
+		4C9BBC5E1D89220800F6D084 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC441D89220800F6D084 /* Makefile */; };
+		4C9BBC5F1D89221A00F6D084 /* bzlib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C9BBC1D1D89220800F6D084 /* bzlib.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +32,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				4C15A0CD1D891CA000FC59CC /* bzip2.h in CopyFiles */,
+				4C9BBC5F1D89221A00F6D084 /* bzlib.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -28,6 +42,62 @@
 		4C15A0C71D891CA000FC59CC /* libbzip2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libbzip2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C15A0CA1D891CA000FC59CC /* bzip2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bzip2.h; sourceTree = "<group>"; };
 		4C15A0CB1D891CA000FC59CC /* bzip2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bzip2.m; sourceTree = "<group>"; };
+		4C9BBC191D89220800F6D084 /* sample1.bz2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample1.bz2; path = "bzip2-1.0.6/sample1.bz2"; sourceTree = "<group>"; };
+		4C9BBC1A1D89220800F6D084 /* sample2.bz2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample2.bz2; path = "bzip2-1.0.6/sample2.bz2"; sourceTree = "<group>"; };
+		4C9BBC1B1D89220800F6D084 /* sample3.bz2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample3.bz2; path = "bzip2-1.0.6/sample3.bz2"; sourceTree = "<group>"; };
+		4C9BBC1C1D89220800F6D084 /* bzlib_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bzlib_private.h; path = "bzip2-1.0.6/bzlib_private.h"; sourceTree = "<group>"; };
+		4C9BBC1D1D89220800F6D084 /* bzlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bzlib.h; path = "bzip2-1.0.6/bzlib.h"; sourceTree = "<group>"; };
+		4C9BBC1E1D89220800F6D084 /* blocksort.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = blocksort.c; path = "bzip2-1.0.6/blocksort.c"; sourceTree = "<group>"; };
+		4C9BBC1F1D89220800F6D084 /* bzip2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bzip2.c; path = "bzip2-1.0.6/bzip2.c"; sourceTree = "<group>"; };
+		4C9BBC201D89220800F6D084 /* bzip2recover.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bzip2recover.c; path = "bzip2-1.0.6/bzip2recover.c"; sourceTree = "<group>"; };
+		4C9BBC211D89220800F6D084 /* bzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bzlib.c; path = "bzip2-1.0.6/bzlib.c"; sourceTree = "<group>"; };
+		4C9BBC221D89220800F6D084 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "bzip2-1.0.6/compress.c"; sourceTree = "<group>"; };
+		4C9BBC231D89220800F6D084 /* crctable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = crctable.c; path = "bzip2-1.0.6/crctable.c"; sourceTree = "<group>"; };
+		4C9BBC241D89220800F6D084 /* decompress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decompress.c; path = "bzip2-1.0.6/decompress.c"; sourceTree = "<group>"; };
+		4C9BBC251D89220800F6D084 /* dlltest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dlltest.c; path = "bzip2-1.0.6/dlltest.c"; sourceTree = "<group>"; };
+		4C9BBC261D89220800F6D084 /* huffman.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = huffman.c; path = "bzip2-1.0.6/huffman.c"; sourceTree = "<group>"; };
+		4C9BBC271D89220800F6D084 /* mk251.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mk251.c; path = "bzip2-1.0.6/mk251.c"; sourceTree = "<group>"; };
+		4C9BBC281D89220800F6D084 /* randtable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = randtable.c; path = "bzip2-1.0.6/randtable.c"; sourceTree = "<group>"; };
+		4C9BBC291D89220800F6D084 /* spewG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = spewG.c; path = "bzip2-1.0.6/spewG.c"; sourceTree = "<group>"; };
+		4C9BBC2A1D89220800F6D084 /* unzcrash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unzcrash.c; path = "bzip2-1.0.6/unzcrash.c"; sourceTree = "<group>"; };
+		4C9BBC2B1D89220800F6D084 /* bzip.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = bzip.css; path = "bzip2-1.0.6/bzip.css"; sourceTree = "<group>"; };
+		4C9BBC2C1D89220800F6D084 /* bzdiff.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = bzdiff.1; path = "bzip2-1.0.6/bzdiff.1"; sourceTree = "<group>"; };
+		4C9BBC2D1D89220800F6D084 /* bzgrep.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = bzgrep.1; path = "bzip2-1.0.6/bzgrep.1"; sourceTree = "<group>"; };
+		4C9BBC2E1D89220800F6D084 /* bzip2.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = bzip2.1; path = "bzip2-1.0.6/bzip2.1"; sourceTree = "<group>"; };
+		4C9BBC2F1D89220800F6D084 /* bzip2.1.preformatted */ = {isa = PBXFileReference; lastKnownFileType = file; name = bzip2.1.preformatted; path = "bzip2-1.0.6/bzip2.1.preformatted"; sourceTree = "<group>"; };
+		4C9BBC301D89220800F6D084 /* bzmore.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = bzmore.1; path = "bzip2-1.0.6/bzmore.1"; sourceTree = "<group>"; };
+		4C9BBC311D89220800F6D084 /* dlltest.dsp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlltest.dsp; path = "bzip2-1.0.6/dlltest.dsp"; sourceTree = "<group>"; };
+		4C9BBC321D89220800F6D084 /* libbz2.def */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = libbz2.def; path = "bzip2-1.0.6/libbz2.def"; sourceTree = "<group>"; };
+		4C9BBC331D89220800F6D084 /* libbz2.dsp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = libbz2.dsp; path = "bzip2-1.0.6/libbz2.dsp"; sourceTree = "<group>"; };
+		4C9BBC341D89220800F6D084 /* makefile.msc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = makefile.msc; path = "bzip2-1.0.6/makefile.msc"; sourceTree = "<group>"; };
+		4C9BBC351D89220800F6D084 /* README.XML.STUFF */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.XML.STUFF; path = "bzip2-1.0.6/README.XML.STUFF"; sourceTree = "<group>"; };
+		4C9BBC361D89220800F6D084 /* sample1.ref */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample1.ref; path = "bzip2-1.0.6/sample1.ref"; sourceTree = "<group>"; };
+		4C9BBC371D89220800F6D084 /* sample2.ref */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample2.ref; path = "bzip2-1.0.6/sample2.ref"; sourceTree = "<group>"; };
+		4C9BBC381D89220800F6D084 /* sample3.ref */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sample3.ref; path = "bzip2-1.0.6/sample3.ref"; sourceTree = "<group>"; };
+		4C9BBC391D89220800F6D084 /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = manual.html; path = "bzip2-1.0.6/manual.html"; sourceTree = "<group>"; };
+		4C9BBC3A1D89220800F6D084 /* format.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = format.pl; path = "bzip2-1.0.6/format.pl"; sourceTree = "<group>"; };
+		4C9BBC3B1D89220800F6D084 /* bzip2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bzip2.txt; path = "bzip2-1.0.6/bzip2.txt"; sourceTree = "<group>"; };
+		4C9BBC3C1D89220800F6D084 /* manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = manual.pdf; path = "bzip2-1.0.6/manual.pdf"; sourceTree = "<group>"; };
+		4C9BBC3D1D89220800F6D084 /* manual.ps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = manual.ps; path = "bzip2-1.0.6/manual.ps"; sourceTree = "<group>"; };
+		4C9BBC3E1D89220800F6D084 /* xmlproc.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = xmlproc.sh; path = "bzip2-1.0.6/xmlproc.sh"; sourceTree = "<group>"; };
+		4C9BBC3F1D89220800F6D084 /* bzdiff */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = bzdiff; path = "bzip2-1.0.6/bzdiff"; sourceTree = "<group>"; };
+		4C9BBC401D89220800F6D084 /* bzgrep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = bzgrep; path = "bzip2-1.0.6/bzgrep"; sourceTree = "<group>"; };
+		4C9BBC411D89220800F6D084 /* bzmore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = bzmore; path = "bzip2-1.0.6/bzmore"; sourceTree = "<group>"; };
+		4C9BBC421D89220800F6D084 /* CHANGES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGES; path = "bzip2-1.0.6/CHANGES"; sourceTree = "<group>"; };
+		4C9BBC431D89220800F6D084 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = "bzip2-1.0.6/LICENSE"; sourceTree = "<group>"; };
+		4C9BBC441D89220800F6D084 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = "bzip2-1.0.6/Makefile"; sourceTree = "<group>"; };
+		4C9BBC451D89220800F6D084 /* Makefile-libbz2_so */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Makefile-libbz2_so"; path = "bzip2-1.0.6/Makefile-libbz2_so"; sourceTree = "<group>"; };
+		4C9BBC461D89220800F6D084 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = "bzip2-1.0.6/README"; sourceTree = "<group>"; };
+		4C9BBC471D89220800F6D084 /* README.COMPILATION.PROBLEMS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.COMPILATION.PROBLEMS; path = "bzip2-1.0.6/README.COMPILATION.PROBLEMS"; sourceTree = "<group>"; };
+		4C9BBC481D89220800F6D084 /* words0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words0; path = "bzip2-1.0.6/words0"; sourceTree = "<group>"; };
+		4C9BBC491D89220800F6D084 /* words1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words1; path = "bzip2-1.0.6/words1"; sourceTree = "<group>"; };
+		4C9BBC4A1D89220800F6D084 /* words2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words2; path = "bzip2-1.0.6/words2"; sourceTree = "<group>"; };
+		4C9BBC4B1D89220800F6D084 /* words3 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words3; path = "bzip2-1.0.6/words3"; sourceTree = "<group>"; };
+		4C9BBC4C1D89220800F6D084 /* bz-common.xsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "bz-common.xsl"; path = "bzip2-1.0.6/bz-common.xsl"; sourceTree = "<group>"; };
+		4C9BBC4D1D89220800F6D084 /* bz-fo.xsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "bz-fo.xsl"; path = "bzip2-1.0.6/bz-fo.xsl"; sourceTree = "<group>"; };
+		4C9BBC4E1D89220800F6D084 /* bz-html.xsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "bz-html.xsl"; path = "bzip2-1.0.6/bz-html.xsl"; sourceTree = "<group>"; };
+		4C9BBC4F1D89220800F6D084 /* entities.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = entities.xml; path = "bzip2-1.0.6/entities.xml"; sourceTree = "<group>"; };
+		4C9BBC501D89220800F6D084 /* manual.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = manual.xml; path = "bzip2-1.0.6/manual.xml"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,10 +130,74 @@
 		4C15A0C91D891CA000FC59CC /* bzip2 */ = {
 			isa = PBXGroup;
 			children = (
+				4C9BBC181D8921FB00F6D084 /* bzip2-1.0.6 */,
 				4C15A0CA1D891CA000FC59CC /* bzip2.h */,
 				4C15A0CB1D891CA000FC59CC /* bzip2.m */,
 			);
 			path = bzip2;
+			sourceTree = "<group>";
+		};
+		4C9BBC181D8921FB00F6D084 /* bzip2-1.0.6 */ = {
+			isa = PBXGroup;
+			children = (
+				4C9BBC191D89220800F6D084 /* sample1.bz2 */,
+				4C9BBC1A1D89220800F6D084 /* sample2.bz2 */,
+				4C9BBC1B1D89220800F6D084 /* sample3.bz2 */,
+				4C9BBC1C1D89220800F6D084 /* bzlib_private.h */,
+				4C9BBC1D1D89220800F6D084 /* bzlib.h */,
+				4C9BBC1E1D89220800F6D084 /* blocksort.c */,
+				4C9BBC1F1D89220800F6D084 /* bzip2.c */,
+				4C9BBC201D89220800F6D084 /* bzip2recover.c */,
+				4C9BBC211D89220800F6D084 /* bzlib.c */,
+				4C9BBC221D89220800F6D084 /* compress.c */,
+				4C9BBC231D89220800F6D084 /* crctable.c */,
+				4C9BBC241D89220800F6D084 /* decompress.c */,
+				4C9BBC251D89220800F6D084 /* dlltest.c */,
+				4C9BBC261D89220800F6D084 /* huffman.c */,
+				4C9BBC271D89220800F6D084 /* mk251.c */,
+				4C9BBC281D89220800F6D084 /* randtable.c */,
+				4C9BBC291D89220800F6D084 /* spewG.c */,
+				4C9BBC2A1D89220800F6D084 /* unzcrash.c */,
+				4C9BBC2B1D89220800F6D084 /* bzip.css */,
+				4C9BBC2C1D89220800F6D084 /* bzdiff.1 */,
+				4C9BBC2D1D89220800F6D084 /* bzgrep.1 */,
+				4C9BBC2E1D89220800F6D084 /* bzip2.1 */,
+				4C9BBC2F1D89220800F6D084 /* bzip2.1.preformatted */,
+				4C9BBC301D89220800F6D084 /* bzmore.1 */,
+				4C9BBC311D89220800F6D084 /* dlltest.dsp */,
+				4C9BBC321D89220800F6D084 /* libbz2.def */,
+				4C9BBC331D89220800F6D084 /* libbz2.dsp */,
+				4C9BBC341D89220800F6D084 /* makefile.msc */,
+				4C9BBC351D89220800F6D084 /* README.XML.STUFF */,
+				4C9BBC361D89220800F6D084 /* sample1.ref */,
+				4C9BBC371D89220800F6D084 /* sample2.ref */,
+				4C9BBC381D89220800F6D084 /* sample3.ref */,
+				4C9BBC391D89220800F6D084 /* manual.html */,
+				4C9BBC3A1D89220800F6D084 /* format.pl */,
+				4C9BBC3B1D89220800F6D084 /* bzip2.txt */,
+				4C9BBC3C1D89220800F6D084 /* manual.pdf */,
+				4C9BBC3D1D89220800F6D084 /* manual.ps */,
+				4C9BBC3E1D89220800F6D084 /* xmlproc.sh */,
+				4C9BBC3F1D89220800F6D084 /* bzdiff */,
+				4C9BBC401D89220800F6D084 /* bzgrep */,
+				4C9BBC411D89220800F6D084 /* bzmore */,
+				4C9BBC421D89220800F6D084 /* CHANGES */,
+				4C9BBC431D89220800F6D084 /* LICENSE */,
+				4C9BBC441D89220800F6D084 /* Makefile */,
+				4C9BBC451D89220800F6D084 /* Makefile-libbz2_so */,
+				4C9BBC461D89220800F6D084 /* README */,
+				4C9BBC471D89220800F6D084 /* README.COMPILATION.PROBLEMS */,
+				4C9BBC481D89220800F6D084 /* words0 */,
+				4C9BBC491D89220800F6D084 /* words1 */,
+				4C9BBC4A1D89220800F6D084 /* words2 */,
+				4C9BBC4B1D89220800F6D084 /* words3 */,
+				4C9BBC4C1D89220800F6D084 /* bz-common.xsl */,
+				4C9BBC4D1D89220800F6D084 /* bz-fo.xsl */,
+				4C9BBC4E1D89220800F6D084 /* bz-html.xsl */,
+				4C9BBC4F1D89220800F6D084 /* entities.xml */,
+				4C9BBC501D89220800F6D084 /* manual.xml */,
+			);
+			name = "bzip2-1.0.6";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,7 +258,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C9BBC5E1D89220800F6D084 /* Makefile in Sources */,
+				4C9BBC531D89220800F6D084 /* bzip2recover.c in Sources */,
+				4C9BBC5D1D89220800F6D084 /* unzcrash.c in Sources */,
+				4C9BBC5A1D89220800F6D084 /* mk251.c in Sources */,
+				4C9BBC5C1D89220800F6D084 /* spewG.c in Sources */,
+				4C9BBC551D89220800F6D084 /* compress.c in Sources */,
+				4C9BBC571D89220800F6D084 /* decompress.c in Sources */,
+				4C9BBC561D89220800F6D084 /* crctable.c in Sources */,
+				4C9BBC521D89220800F6D084 /* bzip2.c in Sources */,
+				4C9BBC591D89220800F6D084 /* huffman.c in Sources */,
 				4C15A0CC1D891CA000FC59CC /* bzip2.m in Sources */,
+				4C9BBC541D89220800F6D084 /* bzlib.c in Sources */,
+				4C9BBC5B1D89220800F6D084 /* randtable.c in Sources */,
+				4C9BBC581D89220800F6D084 /* dlltest.c in Sources */,
+				4C9BBC511D89220800F6D084 /* blocksort.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,9 +371,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = D3C58YS54A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -233,9 +384,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = D3C58YS54A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -258,6 +412,7 @@
 				4C15A0D21D891CA000FC59CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

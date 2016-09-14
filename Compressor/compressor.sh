@@ -229,16 +229,17 @@ readonly path_xcode=$( xcode-select -print-path )
 readonly version_macosx=$( version_for_platform $platform_macosx )
 readonly version_ios=$( version_for_platform $platform_iphoneos )
 
-readonly version_ios_min="7.0"
+readonly version_ios_min="9.0"
 
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
-readonly archs="armv7 arm64 i386 x86_64"
+#readonly archs="armv7 arm64 i386 x86_64"
+readonly archs="armv7 arm64 x86_64"
 #readonly archs="armv7 armv7s arm64 i386 x86_64"
 #readonly archs="arm64"
 
-readonly archs_macosx="i386 x86_64"
+readonly archs_macosx="x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
 
@@ -1662,7 +1663,7 @@ if [[ $build_libarchive == $true  && $show_help == $false ]]; then
         platform_version_arch="${platform}${version_ios}-${arch}"
         path_build_bzip_arch="${path_build_bzip}/$platform_version_arch.sdk"
 
-        #printf "mkdir %s\n" "${path_build_bzip_arch}"
+        printf "mkdir %s\n" "${path_build_bzip_arch}"
 
         mkdir -p "${path_build_bzip_arch}"
         rm -rf -- "${path_build_bzip_arch}"
@@ -1683,6 +1684,9 @@ if [[ $build_libarchive == $true  && $show_help == $false ]]; then
         command_lipo_ct="${command_lipo_ct} ${path_build_bzip_arch}/lib/libct.a"
         additional_config="${additional_config_blank}"
         additional_work=""
+
+    printf "config_make_install %s\n\t\t%s\n\t\t%s\n\t\t%s" "${version_ios}" "${version_ios_min}" "${additional_config}" "${path_build_bzip_arch}"
+
 
         config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_bzip_arch $log_build_bzip $additional_work
 

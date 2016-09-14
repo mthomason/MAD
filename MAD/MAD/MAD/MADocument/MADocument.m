@@ -26,6 +26,7 @@
 #import <UIKit/UIPrintInteractionController.h>
 
 #import <setjmp.h>
+//#import <copyfile.h>
 
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSURL+CommonURLs.h>
@@ -1125,9 +1126,9 @@ READFROMURL_END:;
         size_t newImageSize = 0;
         
         const int kPngSignatureLength = 8;
-//BYTE_SIZE
+        int BYTE_SIZE = sizeof(float);
         
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * sizeof(float));
         [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
         if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
