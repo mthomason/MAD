@@ -7,8 +7,11 @@
 //
 
 #import "madtar.h"
-#import <fcntl.h>
+//#import <fcntl.h>
+#import "archive.h"
 #import "archive_entry.h"
+#import <unistd.h>
+#import <fcntl.h>
 
 int mad_copy_data(struct archive *ar, struct archive *aw) {
     
