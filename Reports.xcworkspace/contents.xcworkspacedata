@@ -8,6 +8,9 @@
          location = "container:"
          name = "Frameworks">
          <FileRef
+            location = "group:/Users/michael/Desktop/Reports/openssl/ssl.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:bsdcat/bsdcat.xcodeproj">
          </FileRef>
          <FileRef

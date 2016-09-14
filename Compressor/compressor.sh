@@ -1559,7 +1559,7 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
         #printf "Starting arch: %s\n" "${arch}"
         platform=$( platform_for_architecture arch )
 
-        printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
+        printf "\n\nBuilding libpng for %s %s." "${arch}" "${platform}"
 
         if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
         then
