@@ -1126,9 +1126,9 @@ READFROMURL_END:;
         size_t newImageSize = 0;
         
         const int kPngSignatureLength = 8;
-        int BYTE_SIZE = sizeof(float);
+        //int BYTE_SIZE = sizeof(float);
         
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * sizeof(float));
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
         [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
         if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;

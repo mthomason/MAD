@@ -8,6 +8,15 @@
          location = "container:"
          name = "Frameworks">
          <FileRef
+            location = "group:bsdcat/bsdcat.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:bsdtar/bsdtar.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:archive/archive.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:bzip2/bzip2/bzip2.xcodeproj">
          </FileRef>
          <FileRef

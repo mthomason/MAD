@@ -5,13 +5,11 @@
 //  Created by Michael Thomason on 5/19/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
-/*
 #import "madtar.h"
-//#import <fcntl.h>
+#import <fcntl.h>
+#import <unistd.h>
 #import "archive.h"
 #import "archive_entry.h"
-#import <unistd.h>
-#import <fcntl.h>
 
 int mad_copy_data(struct archive *ar, struct archive *aw) {
     
@@ -152,4 +150,4 @@ void mad_archive_write_file(struct archive *archive, const char *filename, const
     close(fd);
     archive_entry_free(entry);
 }
-*/
+
