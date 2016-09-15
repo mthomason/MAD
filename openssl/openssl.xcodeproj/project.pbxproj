@@ -612,6 +612,7 @@
 			buildPhases = (
 				4C1AE7101D89AB17004ECF25 /* ShellScript */,
 				4CA23FC91D8A2405002E91B5 /* CopyFiles */,
+				4CA240E31D8A2C6B002E91B5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -670,6 +671,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\nsh ${SRCROOT}/built_openssl.sh";
+		};
+		4CA240E31D8A2C6B002E91B5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -f ${PROJECT_DIR}/archive/openssl-1.1.0/iPhoneOS-${CURRENT_ARCH}/include/openssl/opensslconf.h ${BUILT_PRODUCTS_DIR}/.\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
