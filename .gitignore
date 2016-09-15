@@ -15,6 +15,12 @@
 #
 #########################
 
+###
+# Static library is recreated using shell scripts.
+openssl/source
+openssl/media
+openssl/archive
+
 3rdPartyProjects/BlurryModalSegue
 3rdPartyProjects/Color
 3rdPartyProjects/DejalActivityView

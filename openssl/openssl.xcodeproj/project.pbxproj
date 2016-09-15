@@ -1,0 +1,185 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXFileReference section */
+		4C1AE70E1D89A079004ECF25 /* built_openssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = built_openssl.sh; sourceTree = "<group>"; };
+		9069D28C0FCE659A0042E34C /* libcrypto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcrypto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		9069D12D0FCE340B0042E34C = {
+			isa = PBXGroup;
+			children = (
+				4C1AE70E1D89A079004ECF25 /* built_openssl.sh */,
+				9069D25C0FCE62420042E34C /* Products */,
+			);
+			sourceTree = "<group>";
+			usesTabs = 0;
+		};
+		9069D25C0FCE62420042E34C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9069D28C0FCE659A0042E34C /* libcrypto.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9069D28B0FCE659A0042E34C /* crypto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9069D2980FCE65C10042E34C /* Build configuration list for PBXNativeTarget "crypto" */;
+			buildPhases = (
+				4C1AE7101D89AB17004ECF25 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = crypto;
+			productName = crypto;
+			productReference = 9069D28C0FCE659A0042E34C /* libcrypto.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9069D12F0FCE340B0042E34C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = 9069D1320FCE340B0042E34C /* Build configuration list for PBXProject "openssl" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 9069D12D0FCE340B0042E34C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9069D28B0FCE659A0042E34C /* crypto */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C1AE7101D89AB17004ECF25 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nsh ${SRCROOT}/built_openssl.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		9069D1300FCE340B0042E34C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"ARCHS[sdk=iphoneos*]" = (
+					armv7,
+					armv7s,
+				);
+				"ARCHS[sdk=macosx*]" = (
+					x86_64,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "$(PLATFORM_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s";
+			};
+			name = Debug;
+		};
+		9069D1310FCE340B0042E34C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"ARCHS[sdk=iphoneos*]" = (
+					armv7,
+					armv7s,
+				);
+				"ARCHS[sdk=macosx*]" = (
+					x86_64,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				SDKROOT = "$(PLATFORM_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s";
+			};
+			name = Release;
+		};
+		9069D28D0FCE659B0042E34C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = crypto;
+			};
+			name = Debug;
+		};
+		9069D28E0FCE659B0042E34C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = crypto;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9069D1320FCE340B0042E34C /* Build configuration list for PBXProject "openssl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9069D1300FCE340B0042E34C /* Debug */,
+				9069D1310FCE340B0042E34C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9069D2980FCE65C10042E34C /* Build configuration list for PBXNativeTarget "crypto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9069D28D0FCE659B0042E34C /* Debug */,
+				9069D28E0FCE659B0042E34C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9069D12F0FCE340B0042E34C /* Project object */;
+}

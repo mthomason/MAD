@@ -786,7 +786,7 @@
 					"$(inherited)",
 					"HAVE_CONFIG_H=1",
 				);
-				HEADER_SEARCH_PATHS = "/Volumes/Thor/Applications/Xcode\\ 8.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = "/Volumes/Thor/Applications/Xcode-8.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2";
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
@@ -814,7 +814,7 @@
 					"$(inherited)",
 					"HAVE_CONFIG_H=1",
 				);
-				HEADER_SEARCH_PATHS = "/Volumes/Thor/Applications/Xcode\\ 8.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = "/Volumes/Thor/Applications/Xcode-8.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2";
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
