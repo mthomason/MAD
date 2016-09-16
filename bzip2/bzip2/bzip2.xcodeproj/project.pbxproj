@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4C02720F1D8959BE00A4E132 /* bzlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9BBC1D1D89220800F6D084 /* bzlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C54AFA21D8C453400FE8B73 /* libbzip2.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C15A0C71D891CA000FC59CC /* libbzip2.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4C54AFA41D8C455C00FE8B73 /* bzlib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C9BBC1D1D89220800F6D084 /* bzlib.h */; };
 		4C9BBC511D89220800F6D084 /* blocksort.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC1E1D89220800F6D084 /* blocksort.c */; };
 		4C9BBC521D89220800F6D084 /* bzip2.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC1F1D89220800F6D084 /* bzip2.c */; };
 		4C9BBC531D89220800F6D084 /* bzip2recover.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBC201D89220800F6D084 /* bzip2recover.c */; };
@@ -30,6 +32,26 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C54AFA11D8C421100FE8B73 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "${SRCROOT}/archive/${CONFIGURATION}-${PLATFORM_NAME}";
+			dstSubfolderSpec = 0;
+			files = (
+				4C54AFA21D8C453400FE8B73 /* libbzip2.a in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C54AFA31D8C454600FE8B73 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "${SRCROOT}/archive/${CONFIGURATION}-${PLATFORM_NAME}/include";
+			dstSubfolderSpec = 0;
+			files = (
+				4C54AFA41D8C455C00FE8B73 /* bzlib.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +243,8 @@
 				4C15A0C41D891CA000FC59CC /* Frameworks */,
 				4C15A0C51D891CA000FC59CC /* CopyFiles */,
 				4C02720E1D8959A800A4E132 /* Headers */,
+				4C54AFA11D8C421100FE8B73 /* CopyFiles */,
+				4C54AFA31D8C454600FE8B73 /* CopyFiles */,
 			);
 			buildRules = (
 			);
