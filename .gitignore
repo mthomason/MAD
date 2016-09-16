@@ -21,6 +21,11 @@ openssl/source
 openssl/media
 openssl/archive
 
+bzip2/bzip2/build/bzip2.build
+archive/build/archive.build 
+opt/bld/mysqlconnector/*\.build
+
+
 3rdPartyProjects/BlurryModalSegue
 3rdPartyProjects/Color
 3rdPartyProjects/DejalActivityView
