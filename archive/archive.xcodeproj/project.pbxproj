@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C0272081D894D5000A4E132 /* libbzip2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0272071D894D5000A4E132 /* libbzip2.a */; };
 		4C5259201D893FF500FEF1A1 /* archive_entry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C9BBD051D89363A00F6D084 /* archive_entry.h */; };
 		4C9BBD901D8936E400F6D084 /* archive_acl.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBD1C1D8936E300F6D084 /* archive_acl.c */; };
 		4C9BBD911D8936E400F6D084 /* archive_check_magic.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BBD1D1D8936E300F6D084 /* archive_check_magic.c */; };
@@ -143,7 +142,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C0272071D894D5000A4E132 /* libbzip2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbzip2.a; path = "../../../Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci/Build/Products/Debug-iphonesimulator/libbzip2.a"; sourceTree = "<group>"; };
 		4C0272091D894D7200A4E132 /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
 		4C5259111D893A1C00FEF1A1 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		4C5259261D8947A000FEF1A1 /* libbzip2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbzip2.a; path = "../bzip2/bzip2/build/Release-iphoneos/libbzip2.a"; sourceTree = "<group>"; };
@@ -299,7 +297,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C0272081D894D5000A4E132 /* libbzip2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				4C0272091D894D7200A4E132 /* libc.tbd */,
-				4C0272071D894D5000A4E132 /* libbzip2.a */,
 				4C5259261D8947A000FEF1A1 /* libbzip2.a */,
 			);
 			name = Frameworks;
