@@ -6,17 +6,10 @@
 #  Created by Michael on 9/14/16.
 #
 
-
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "ROOT DIR ${DIR}"
-
-usage ()
-{
-	echo "usage: $0 [minimum iOS SDK version (default 9.0)]"
-	exit 127
-}
 
 if [ $1 -e "-h" ]; then
 	usage
@@ -28,9 +21,16 @@ DEVELOPER=`xcode-select -print-path`
 
 echo "DEVELOPER Path: ${DEVELOPER}"
 
+mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/include
+
+usage ()
+{
+    echo "usage: $0 [minimum iOS SDK version (default 9.0)]"
+    exit 127
+}
+
 buildMac()
 {
-
 	ARCH=$1
 
     cd ${DIR}/build
@@ -50,15 +50,7 @@ buildMac()
 	fi
 	pushd . > /dev/null
 
-    mkdir -p ${DIR}/build/${OPENSSL_VERSION}
     mkdir -p ${DIR}/build/${OPENSSL_VERSION}/${ARCH}
-
-
-    mkdir -p ${DIR}/archive
-    mkdir -p ${DIR}/archive/${OPENSSL_VERSION}
-    mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/include/
-    mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/MacOS-${ARCH}
-    mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/MacOS-${ARCH}/include/
     mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/MacOS-${ARCH}/include/openssl
 
     rm -rf ${DIR}/build/${OPENSSL_VERSION}/${ARCH}/*
@@ -80,7 +72,7 @@ buildMac()
         --openssldir="/tmp/${OPENSSL_VERSION}-${ARCH}" &> "/tmp/${OPENSSL_VERSION}-${ARCH}.log"
 
     echo "MAKE"
-    make -j9 -l8 >> "/tmp/${OPENSSL_VERSION}-${ARCH}.log" 2>&1
+    make -j2 #>> "/tmp/${OPENSSL_VERSION}-${ARCH}.log" 2>&1
 
     cp *.dylib ${DIR}/archive/${OPENSSL_VERSION}/MacOS-${ARCH}/.
     cp *.a ${DIR}/archive/${OPENSSL_VERSION}/MacOS-${ARCH}/.
@@ -122,13 +114,8 @@ buildIOS()
         local sdk="iphoneos${version_sdk}"
     fi
 
-    mkdir -p ${DIR}/build/${OPENSSL_VERSION}
     mkdir -p ${DIR}/build/${OPENSSL_VERSION}/${ARCH}
-
-    mkdir -p ${DIR}/archive
-    mkdir -p ${DIR}/archive/${OPENSSL_VERSION}
     mkdir -p ${DIR}/archive/${OPENSSL_VERSION}/iPhoneOS-${ARCH}
-
     rm -rf ${DIR}/build/${OPENSSL_VERSION}/${ARCH}/*
 
     echo "CHANGE Directory ${OPENSSL_VERSION}/${ARCH}"
@@ -172,7 +159,7 @@ buildIOS()
 	fi
 
     echo "MAKE"
-    make -j9 -l8 >> "/tmp/${OPENSSL_VERSION}-iOS-${ARCH}.log" 2>&1
+    make -j2 >> "/tmp/${OPENSSL_VERSION}-iOS-${ARCH}.log" 2>&1
 
     cp *.dylib ${DIR}/archive/${OPENSSL_VERSION}/iPhoneOS-${ARCH}/.
     cp *.a ${DIR}/archive/${OPENSSL_VERSION}/iPhoneOS-${ARCH}/.
@@ -233,6 +220,7 @@ buildMac "i386"
 buildMac "x86_64"
 
 buildIOS "armv7"
+buildIOS "armv7s"
 buildIOS "arm64"
 buildIOS "x86_64"
 

@@ -8,6 +8,9 @@
          location = "container:"
          name = "Frameworks">
          <FileRef
+            location = "group:opt/bld/mysqlconnector/LibMySQL.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:openssl/openssl.xcodeproj">
          </FileRef>
          <FileRef

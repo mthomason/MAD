@@ -1320,7 +1320,6 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
    xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk macosx${version_macosx}  >> $log_build_mysql &
    spinner $!
 
-
    popd
 
     for platform in $platform_iphoneos $platform_simulator
@@ -1334,7 +1333,6 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
             sdk_build=${sdk_simulator}
             archs_to_build=$archs_macosx
         fi
-
 
         platform_version_arch="${platform}${version_ios}"
         path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
@@ -1364,7 +1362,6 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
             cmake -Wno-dev -GXcode >> $log_build_mysql &
             spinner $!
         fi
-
 
         sed -ie "s/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\$(EFFECTIVE_PLATFORM_NAME)\\\"'\"/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\\\"'\"/g" "LibMySQL.xcodeproj/project.pbxproj"
         sed -ie "s/\"-Wl,-search_paths_first\",//g" "LibMySQL.xcodeproj/project.pbxproj"
