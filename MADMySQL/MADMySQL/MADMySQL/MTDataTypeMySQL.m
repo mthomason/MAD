@@ -8,10 +8,11 @@
 
 #import "MTDataTypeMySQL.h"
 #import "mysql.h"
+#import <MADFoundation/MADFoundation.h>
 
 @implementation MADDataTypeMySQL
 
-+ (MADDataType)dataTypeForNativeType:(NSInteger)nativeType {
++ (short)dataTypeForNativeType:(NSInteger)nativeType {
     switch (nativeType) {
         case MYSQL_TYPE_BIT:
             return MADDataTypeBit;

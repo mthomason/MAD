@@ -10,11 +10,10 @@
 #define MADMySql_MADDataTypeMySQL_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/MADDataType.h>
 
 @interface MADDataTypeMySQL : NSObject
 
-    + (MADDataType)dataTypeForNativeType:(NSInteger)nativeType;
+    + (short)dataTypeForNativeType:(NSInteger)nativeType;
 
 @end
 

@@ -17,9 +17,6 @@
                location = "group:archive/archive.xcodeproj">
             </FileRef>
             <FileRef
-               location = "group:opt/bld/mysqlconnector/LibMySQL.xcodeproj">
-            </FileRef>
-            <FileRef
                location = "group:opt/bld/ssl/openssl.xcodeproj">
             </FileRef>
          </Group>

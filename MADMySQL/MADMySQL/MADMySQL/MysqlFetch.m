@@ -11,8 +11,6 @@
 #endif
 
 #import "MysqlFetch.h"
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSet.h>
@@ -23,9 +21,10 @@
 #import <Foundation/NSCalendar.h>
 #import <string.h>
 
-#import "mysql.h"
-
 #import "MysqlFetchField.h"
+
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MADDataColumn.h>
 
 #import "MysqlConnection.h"
 #import "MysqlException.h"
