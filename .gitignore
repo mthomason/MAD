@@ -26,6 +26,9 @@
 *.map
 *.sym
 
+*.d
+*.dia
+
 ###
 # Static library is recreated using shell scripts.
 openssl/source
