@@ -33,11 +33,13 @@
 		4C9374011BAD2A8300D6BD62 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */; };
 		4C9374021BAD2A8300D6BD62 /* MysqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */; };
 		4C9374031BAD2A8300D6BD62 /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */; };
-		4CDCEF241D8D84F900A5A32E /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF231D8D84F900A5A32E /* libmysqlclient.a */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CDCEF281D8D85C800A5A32E /* libstdc++.6.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */; };
 		4CDCEF5E1D8D874000A5A32E /* generate_prefix_files.pl in Resources */ = {isa = PBXBuildFile; fileRef = 4CDCEF381D8D874000A5A32E /* generate_prefix_files.pl */; };
 		4CDCEFAA1D8E1AA800A5A32E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFA61D8E181600A5A32E /* libcrypto.a */; };
+		4CDCEFAE1D8E456D00A5A32E /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFAC1D8E456D00A5A32E /* libclientlib.a */; };
+		4CDCEFAF1D8E456D00A5A32E /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFAD1D8E456D00A5A32E /* libmysqlclient.a */; };
+		4CDCEFB01D8E479200A5A32E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFA71D8E181600A5A32E /* libssl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,7 +209,6 @@
 		4CDCEEA61D8D7D9A00A5A32E /* typelib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typelib.h; sourceTree = "<group>"; };
 		4CDCEEA71D8D7D9A00A5A32E /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4CDCEEA81D8D7D9A00A5A32E /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
-		4CDCEF231D8D84F900A5A32E /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = "../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/libmysqlclient.a"; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.tbd"; path = "usr/lib/libstdc++.6.tbd"; sourceTree = SDKROOT; };
 		4CDCEF2A1D8D874000A5A32E /* buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = buffer.hpp; path = "../../../../../src/mysql-connector-c-6.1.6-src/extra/yassl/include/buffer.hpp"; sourceTree = "<group>"; };
@@ -248,9 +249,10 @@
 		4CDCEF4E1D8D874000A5A32E /* yassl_imp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = yassl_imp.hpp; path = "../../../../../src/mysql-connector-c-6.1.6-src/extra/yassl/include/yassl_imp.hpp"; sourceTree = "<group>"; };
 		4CDCEF4F1D8D874000A5A32E /* yassl_int.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = yassl_int.hpp; path = "../../../../../src/mysql-connector-c-6.1.6-src/extra/yassl/include/yassl_int.hpp"; sourceTree = "<group>"; };
 		4CDCEF501D8D874000A5A32E /* yassl_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = yassl_types.hpp; path = "../../../../../src/mysql-connector-c-6.1.6-src/extra/yassl/include/yassl_types.hpp"; sourceTree = "<group>"; };
-		4CDCEF841D8D976500A5A32E /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = "../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/libclientlib.a"; sourceTree = "<group>"; };
 		4CDCEFA61D8E181600A5A32E /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "../opt/lib/openssl-1.1/openssl-1.1.0/libcrypto.a"; sourceTree = "<group>"; };
 		4CDCEFA71D8E181600A5A32E /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "../opt/lib/openssl-1.1/openssl-1.1.0/libssl.a"; sourceTree = "<group>"; };
+		4CDCEFAC1D8E456D00A5A32E /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = ../opt/bld/mysqlconnector/libmysql/Release/libclientlib.a; sourceTree = "<group>"; };
+		4CDCEFAD1D8E456D00A5A32E /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = ../opt/bld/mysqlconnector/libmysql/Release/libmysqlclient.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,7 +260,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CDCEF241D8D84F900A5A32E /* libmysqlclient.a in Frameworks */,
+				4CDCEFAF1D8E456D00A5A32E /* libmysqlclient.a in Frameworks */,
+				4CDCEFAE1D8E456D00A5A32E /* libclientlib.a in Frameworks */,
+				4CDCEFB01D8E479200A5A32E /* libssl.a in Frameworks */,
 				4CDCEFAA1D8E1AA800A5A32E /* libcrypto.a in Frameworks */,
 				4CDCEF281D8D85C800A5A32E /* libstdc++.6.tbd in Frameworks */,
 				4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */,
@@ -280,6 +284,8 @@
 		4C54AFA51D8C4B3900FE8B73 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CDCEFAC1D8E456D00A5A32E /* libclientlib.a */,
+				4CDCEFAD1D8E456D00A5A32E /* libmysqlclient.a */,
 				4CDCEFA61D8E181600A5A32E /* libcrypto.a */,
 				4CDCEFA71D8E181600A5A32E /* libssl.a */,
 				4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */,
@@ -330,8 +336,6 @@
 		4C7014AE1BACDC7600301713 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4CDCEF841D8D976500A5A32E /* libclientlib.a */,
-				4CDCEF231D8D84F900A5A32E /* libmysqlclient.a */,
 				4CDCEE2D1D8D7D9A00A5A32E /* include */,
 				4C93743D1BAD2FFC00D6BD62 /* Frameworks */,
 			);
@@ -875,7 +879,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
+					"\"$(SRCROOT)/../opt/bld/mysqlconnector/libmysql/Release\"",
 					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -919,7 +923,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
+					"\"$(SRCROOT)/../opt/bld/mysqlconnector/libmysql/Release\"",
 					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
 				);
 				OTHER_LDFLAGS = (

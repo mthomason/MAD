@@ -16,7 +16,7 @@
 #########################
 
 #files being edited
-#*~
+*~
 
 # make and build files
 *.lst
@@ -25,6 +25,8 @@
 *.lss
 *.map
 *.sym
+
+*dgph
 
 *.d
 *.dia
