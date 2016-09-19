@@ -777,6 +777,7 @@
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
+		4CAB0FD61D90421700676BCE /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CAB0FD51D90421700676BCE /* libarchive.a */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
@@ -1068,7 +1069,6 @@
 		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
 		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
 		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
-		4CEDABF71D88EFCD00BDD561 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEDABF61D88EFCD00BDD561 /* libarchive.a */; };
 		4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */; };
 		4CF2BCB51CE9CAF400FB3FF3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744F201CE9C06700243830 /* MADExplorer.framework */; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
@@ -1968,8 +1968,6 @@
 		4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationImportSchema.m; sourceTree = "<group>"; };
 		4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationUniqueUrlForFilename.h; sourceTree = "<group>"; };
 		4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
-		4CA240E41D8A335D002E91B5 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "../../Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci/Build/Products/Debug-iphonesimulator/libcrypto.a"; sourceTree = "<group>"; };
-		4CA240E51D8A335D002E91B5 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "../../Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci/Build/Products/Debug-iphonesimulator/libssl.a"; sourceTree = "<group>"; };
 		4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
@@ -1979,6 +1977,8 @@
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
 		4CA54D3D18938801006B301A /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
+		4CAB0FD51D90421700676BCE /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = "archive/build/Release-iphoneos/libarchive.a"; sourceTree = "<group>"; };
+		4CAB0FD81D9042DB00676BCE /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = "../archive/build/Release-iphoneos/libarchive.a"; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -2400,7 +2400,6 @@
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocuments20@2x.png"; path = "Reports/UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentsAlt20.png; path = Reports/UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentsAlt20@2x.png"; path = "Reports/UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
-		4CEDABF61D88EFCD00BDD561 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = "Compressor/library/libarchive-3.2.1/libarchive.a"; sourceTree = "<group>"; };
 		4CEFDD181CF782C70092C148 /* NSUserDefaults+MADDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+MADDesigner.h"; sourceTree = "<group>"; };
 		4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+MADDesigner.m"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -2515,16 +2514,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CAB0FD61D90421700676BCE /* libarchive.a in Frameworks */,
 				4CDCEFB51D8E4FF100A5A32E /* libclientlib.a in Frameworks */,
 				4CDCEFB61D8E4FF100A5A32E /* libmysqlclient.a in Frameworks */,
 				4CDCEFB71D8E4FF100A5A32E /* libcrypto.a in Frameworks */,
 				4CDCEFB81D8E4FF100A5A32E /* libssl.a in Frameworks */,
-				4CEDABF71D88EFCD00BDD561 /* libarchive.a in Frameworks */,
+				4C744F291CE9C0B100243830 /* MAD.framework in Frameworks */,
 				4C744F2E1CE9C50900243830 /* MADDataStructures.framework in Frameworks */,
 				4C744F2D1CE9C4D500243830 /* MADBarcodes.framework in Frameworks */,
 				4C744F2B1CE9C46F00243830 /* MADCocoaExtensions.framework in Frameworks */,
 				4C744F261CE9C08400243830 /* MADFileManager.framework in Frameworks */,
-				4C744F291CE9C0B100243830 /* MAD.framework in Frameworks */,
 				4CF2BCB51CE9CAF400FB3FF3 /* MADExplorer.framework in Frameworks */,
 				4C744F2C1CE9C4C600243830 /* MADFoundation.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
@@ -3059,6 +3058,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4CAB0FD81D9042DB00676BCE /* libarchive.a */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
@@ -4258,13 +4258,11 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CAB0FD51D90421700676BCE /* libarchive.a */,
 				4CDCEFB11D8E4FF100A5A32E /* libclientlib.a */,
 				4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */,
 				4CDCEFB31D8E4FF100A5A32E /* libcrypto.a */,
 				4CDCEFB41D8E4FF100A5A32E /* libssl.a */,
-				4CA240E41D8A335D002E91B5 /* libcrypto.a */,
-				4CA240E51D8A335D002E91B5 /* libssl.a */,
-				4CEDABF61D88EFCD00BDD561 /* libarchive.a */,
 				4C744F281CE9C0B100243830 /* MAD.framework */,
 				4C744F251CE9C08400243830 /* MADFileManager.framework */,
 				4C744F201CE9C06700243830 /* MADExplorer.framework */,
