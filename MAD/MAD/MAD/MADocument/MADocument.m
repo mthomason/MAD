@@ -98,6 +98,8 @@
 
 #import "MADArchiveManager.h"
 
+#import <mach/machine/vm_param.h>
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 typedef struct _iodata_stream {
