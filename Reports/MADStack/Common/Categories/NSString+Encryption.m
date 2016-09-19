@@ -9,9 +9,8 @@
 #import "NSString+Encryption.h"
 #import <Foundation/NSData.h>
 #import <strings.h>
-#import "crypto.h"
-//#import "ssl.h"
-#include "aes.h"
+#import <openssl/crypto.h>
+#import <openssl/aes.h>
 
 @implementation MADStringEncryption
 

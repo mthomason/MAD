@@ -381,7 +381,6 @@
 		4C4020481BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF91BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m */; };
 		4C4020491BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFB1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m */; };
 		4C40204A1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFD1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m */; };
-		4C40204B1BAE92F200BAE5FC /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
 		4C40204C1BAE92F200BAE5FC /* UIButton+FollowTwitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020011BAE92F200BAE5FC /* UIButton+FollowTwitter.m */; };
 		4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */; };
 		4C40204E1BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020051BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m */; };
@@ -777,6 +776,7 @@
 		4CA4D6231D17C5F000A1240C /* MADFileExplorerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
+		4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
@@ -5148,6 +5148,7 @@
 					};
 					4C384E2314B29789007B4F48 = {
 						DevelopmentTeam = D3C58YS54A;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -6147,7 +6148,6 @@
 				4C26B9CB1BAF123A00456DC8 /* MADToolboxNavigationController.m in Sources */,
 				4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */,
 				4C3DCBCD1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m in Sources */,
-				4C40204B1BAE92F200BAE5FC /* NSString+Encryption.m in Sources */,
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C5B560A1C998B1D005C19D9 /* MADDatabaseOperationTestConnection.m in Sources */,
 				4C26B9CE1BAF123A00456DC8 /* MADToolboxStyleStyleViewController.m in Sources */,
@@ -6310,6 +6310,7 @@
 				4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */,
 				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
+				4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */,
 				4C401F271BAE703200BAE5FC /* MADTableViewCellQueryOverride.m in Sources */,
 				4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */,
 				4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */,
@@ -6511,7 +6512,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -6561,7 +6562,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -6616,7 +6617,8 @@
 				INFOPLIST_FILE = app.everydayapps.mad.designer.watchkit.info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -6675,7 +6677,7 @@
 				INFOPLIST_FILE = app.everydayapps.mad.designer.watchkit.info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -6828,8 +6830,9 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6851,18 +6854,18 @@
 				GCC_VERSION = "";
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
 					"$(PROJECT_DIR)/../Reports/Reports",
 					"$(PROJECT_DIR/libSqlite3/Sqlite3",
 					"$(PROJECT_DIR)/libCocoaExtentions",
@@ -6872,12 +6875,29 @@
 					"$(PROJECT_DIR)/../CloudManager/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/../MAD/MAD/build/Debug-iphoneos",
 				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
+					"$(PROJECT_DIR)/../Compressor/library",
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Reports/Reports",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneSimulator\"",
+					"$(PROJECT_DIR)/../Compressor/library",
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Reports/Reports",
+				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
 				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -6899,8 +6919,9 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6920,18 +6941,18 @@
 				GCC_VERSION = "";
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
 					"$(PROJECT_DIR)/../Reports/Reports",
 					"$(PROJECT_DIR/libSqlite3/Sqlite3",
 					"$(PROJECT_DIR)/libCocoaExtentions",
@@ -6941,11 +6962,31 @@
 					"$(PROJECT_DIR)/../CloudManager/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/../MAD/MAD/build/Debug-iphoneos",
 				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
+					"$(PROJECT_DIR)/../Compressor/library",
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Reports/Reports",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(SDKROOT)/usr/lib",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneSimulator\"",
+					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
+					"$(PROJECT_DIR)/../Compressor/library",
+					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/libpng",
+					"$(PROJECT_DIR)/../Reports/Reports",
+					"$(PROJECT_DIR/libSqlite3/Sqlite3",
+					"$(PROJECT_DIR)/../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
 				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -7079,7 +7120,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -7135,7 +7176,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -7193,7 +7234,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -7249,7 +7290,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -7307,7 +7348,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
@@ -7363,7 +7404,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
 					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",

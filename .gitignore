@@ -40,7 +40,7 @@ openssl/archive
 bzip2/bzip2/build/bzip2.build
 archive/build/archive.build 
 opt/bld/mysqlconnector/*\.build
-
+opt/bld/ssl/bld
 
 3rdPartyProjects/BlurryModalSegue
 3rdPartyProjects/Color

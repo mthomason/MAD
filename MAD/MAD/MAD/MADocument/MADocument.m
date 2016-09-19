@@ -80,12 +80,15 @@
 #import "RptqDocumentSectionRows.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
+
 #import "MADSectionLayoutManager.h"
+
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
 #import "MTDataTableFast.h"
 #import "MTDatabase.h"
+
 #import "MTReportViewerPrintPageRenderer.h"
 
 #import "NSString+RelativePath.h"

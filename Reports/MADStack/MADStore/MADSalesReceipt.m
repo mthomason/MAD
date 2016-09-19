@@ -7,6 +7,13 @@
 //
 
 #import "MADSalesReceipt.h"
+
+#include <openssl/pkcs7.h>
+#include <openssl/objects.h>
+#include <openssl/sha.h>
+#include <openssl/x509.h>
+#include <err.h>
+
 #import <Security/Security.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
@@ -15,12 +22,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSUUID.h>
 #import <Foundation/NSPathUtilities.h>
-
-#include "pkcs7.h"
-#include "objects.h"
-#include "sha.h"
-#include "x509.h"
-#include "err.h"
 
 #define VRCFRelease(object) if(object) CFRelease(object)
 
