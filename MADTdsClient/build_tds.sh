@@ -8,8 +8,8 @@
 
 set -e
 
-readonly version_freetds="0.91"
-readonly version_unixodbc="2.3.2"
+readonly version_freetds="1.00.15"
+readonly version_unixodbc="2.3.4"
 
 readonly version_ios_min="9.3"
 
@@ -166,10 +166,10 @@ download_archive() { # $1=archive name; $2=archive url
 extract_source() {
     local archive=$1
     local destination=$2
-    printf "EXTRACTING %s\n\t\tto %s.\n" "${archive}" "${destination}"
     rm -Rf -- "${destination}"
     mkdir -p "${destination}"
-    tar zxf ${archive} -C ${destination}
+    tar zxf ${archive} -C ${destination} &
+    wait $!
 }
 
 empty_directory() {
@@ -223,17 +223,7 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
       local architecture_target="${architecture_host_part}-apple-darwin"
    else
       local sdk="iphoneos${version_sdk}"
-
-      if [[ "${architecture}" == "armv7" ]];
-      then
-         local architecture_target="${architecture}-apple-darwin"
-      elif [[ "${architecture}" == "arm64" ]];
-      then
-         local architecture_target="arm-apple-darwin"
-      else
-         local architecture_target="${architecture}-apple-darwin"
-      fi
-
+      local architecture_target="arm-apple-darwin"
    fi
 
    developer_root=$( xcode-select -print-path )
@@ -258,16 +248,30 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     printf "CFLAGS               %s.\n" "${CFLAGS}"
     printf "CPPFLAGS             %s.\n" "${CPPFLAGS}"
 
+    config_prefix+="--prefix=${PROJECT_DIR}/../opt/lib/${name_freetds}-${version_freetds}"         # Install location
+    config_exec_prefix+="--exec-prefix=${PROJECT_DIR}/../opt/lib/${name_freetds}-${version_freetds}/${arch}"
+
    if [[ "${#additional_config}" > 0 ]];
    then
-        printf "Performing additional config\n"
+        printf "PERFORMING additional configuration\n"
         additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
         pwd
-        ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
+        ./configure --host=${architecture_target} \
+                    --build=${architecture_host} \
+                    --target=${architecture_target} \
+                    --enable-static \
+                    "${config_prefix}" \
+                    "${config_exec_prefix}" \
+                    ${additional_config} >> "${log}.error.log" &
         wait $!
    else
-        printf "Skipping additional config\n"
-      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
+        printf "SKIPPING additional configuration\n"
+      ./configure --host=${architecture_target} \
+                  --build=${architecture_host} \
+                  --target=${architecture_target} \
+                  --enable-static \
+                  "${config_prefix}" \
+                  "${config_exec_prefix}" >> "${log}.error.log" &
       wait $!
 
    fi
@@ -280,16 +284,16 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    fi
 
     printf "\nMAKE CLEAN"
-    make clean >> "${log}.error.log" &
+make clean #>> "${log}.error.log" &
     wait $!
 
     printf "\nMAKE"
-    make  >> "${log}.error.log"
+make  #>> "${log}.error.log"
     wait $!
 
     printf "\nMAKE INSTALL"
 
-    make install >> "${log}.error.log" &
+make install #>> "${log}.error.log" &
     wait $!
 
    printf "\n"
@@ -442,7 +446,14 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
         command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
         command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
-        additional_config=" -with-tdsver=${version_tds} "
+        additional_config=" --with-openssl=${PROJECT_DIR}/../opt/lib/openssl-1.1/openssl-1.1.0 "
+        additional_config+="--with-libiconv-prefix=${PLATFORM_DEVELOPER_USR_DIR} "
+        additional_config+="--with-sysroot=${PLATFORM_DEVELOPER_USR_DIR}/lib "
+        additional_config+="--disable-debug "
+        additional_config+="--enable-extra-checks "
+        additional_config+="--enable-msdblib " # Microsoft style... not Sybase
+        additional_config+="--disable-rpath "  # Do not hardcode runtime library paths
+        #additional_config+="--with-iodbc= "
         additional_work="addtional_work_libsybdb"
 
         printf "VERSION iOS:            %s\n" "${version_ios}"
