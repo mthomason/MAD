@@ -55,6 +55,7 @@
 		4C66C16F1BA8882300663575 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C66C17B1BA8882300663575 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../Compressor/library/libsybdb/libct.a; sourceTree = "<group>"; };
 		4C66C17C1BA8882300663575 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
+		4CAB0FD91D904E2D00676BCE /* build_tds.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_tds.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +118,7 @@
 		4C66C1611BA887EB00663575 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CAB0FD91D904E2D00676BCE /* build_tds.sh */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -180,6 +182,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C66C15B1BA887D500663575 /* Build configuration list for PBXNativeTarget "MADTdsClient" */;
 			buildPhases = (
+				4CAB0FDA1D90603500676BCE /* ShellScript */,
 				4C66C1421BA887D500663575 /* Sources */,
 				4C66C1431BA887D500663575 /* Frameworks */,
 				4C66C1441BA887D500663575 /* Headers */,
@@ -266,6 +269,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CAB0FDA1D90603500676BCE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${SRCROOT}/build_tds.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C66C1421BA887D500663575 /* Sources */ = {
