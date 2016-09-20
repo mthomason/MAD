@@ -260,9 +260,10 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
                     --build=${architecture_host} \
                     --target=${architecture_target} \
                     --enable-static \
+                    --disable-threads
                     "${config_prefix}" \
                     "${config_exec_prefix}" \
-                    ${additional_config} >> "${log}.error.log" &
+                    ${additional_config} #>> "${log}.error.log" &
         wait $!
    else
         printf "SKIPPING additional configuration\n"
@@ -270,8 +271,9 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
                   --build=${architecture_host} \
                   --target=${architecture_target} \
                   --enable-static \
+                  --disable-threads
                   "${config_prefix}" \
-                  "${config_exec_prefix}" >> "${log}.error.log" &
+                  "${config_exec_prefix}" #>> "${log}.error.log" &
       wait $!
 
    fi
@@ -283,26 +285,23 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
         ${additional_work} "${path_make}"
    fi
 
-    printf "\nMAKE CLEAN"
-make clean #>> "${log}.error.log" &
+    printf "\nMAKE TEST"
+    make test #>> "${log}.error.log" &
     wait $!
 
-    printf "\nMAKE"
-make  #>> "${log}.error.log"
-    wait $!
+#    printf "\nMAKE CLEAN"
+#    make clean #>> "${log}.error.log" &
+#    wait $!
 
-    printf "\nMAKE INSTALL"
+#    printf "\nMAKE"
+#    make  #>> "${log}.error.log"
+#    wait $!
 
-make install #>> "${log}.error.log" &
-    wait $!
+#    printf "\nMAKE INSTALL"
+#    make install #>> "${log}.error.log" &
+#    wait $!
 
    printf "\n"
-}
-
-addtional_work_libsybdb() {
-    local path_make=$1
-    printf "ADDITIONAL work for libsybdb. $path_make"
-    sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' include/config.h
 }
 
 #
@@ -454,7 +453,6 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
         additional_config+="--enable-msdblib " # Microsoft style... not Sybase
         additional_config+="--disable-rpath "  # Do not hardcode runtime library paths
         #additional_config+="--with-iodbc= "
-        additional_work="addtional_work_libsybdb"
 
         printf "VERSION iOS:            %s\n" "${version_ios}"
         printf "VERSION iOS Min:        %s\n" "${version_ios_min}"
