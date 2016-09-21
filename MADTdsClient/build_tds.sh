@@ -7,6 +7,8 @@
 #  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 
 set -e
+set -o xtrace
+#set -o verbose
 
 readonly true=0
 readonly false=1
@@ -14,8 +16,14 @@ readonly false=1
 build_unixodbc=$false
 build_tds=$true
 
+readonly DEVELOPER=`xcode-select -print-path`
+readonly ARCHS="i386 x86_64 armv7 armv7s arm64"
+readonly archs=$ARCHS
+BUILD="x86_64-apple-darwin11"
 
 readonly version_freetds="1.00.15"
+TDS_VER=7.4
+
 readonly version_unixodbc="2.3.4"
 
 readonly version_ios_min="9.3"
@@ -40,7 +48,6 @@ readonly path_base=$( pwd )
 
 show_help=$false
 
-DEVELOPER=`xcode-select -print-path`
 DIR_PROJ=${PROJECT_DIR}
 DIR_BLD="$(dirname ${DIR_PROJ})"
 DIR_ROOT="$(dirname ${DIR_BLD})"
@@ -82,9 +89,8 @@ readonly platform_macosx="macosx"
 
 readonly platforms="${platform_iphoneos} ${platform_simulator} ${platform_macosx}"
 
-readonly path_xcode=$( xcode-select -print-path )
-
-readonly archs="armv7 arm64 armv7s x86_64"
+#
+#"armv7s x86_64"
 readonly archs_macosx="x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
@@ -115,12 +121,27 @@ path_sdk_root_iPhoneOS=$( xcodebuild -version -sdk iphoneos Path 2>/dev/null )
 path_sdk_root_iPhoneSimulator=$( xcodebuild -version -sdk iphonesimulator Path 2>/dev/null )
 path_sdk_root_MacOSX=$( xcodebuild -version -sdk macosx Path 2>/dev/null )
 
+#OPENSSL PATHS
+
+readonly ROOT_REL_OPENSSL="${PROJECT_DIR}/../opt/lib/openssl-1.1/openssl-1.1.0"
+readonly ROOT_OPENSSL=$(cd "${PROJECT_DIR}/../opt/lib/openssl-1.1/openssl-1.1.0"; pwd)
+readonly PTH_OPENSSL="${ROOT_OPENSSL}"
+readonly LIB_OPENSSL="${ROOT_OPENSSL}"
+readonly INC_OPENSSL="${ROOT_OPENSSL}/include"
+
+#Install Path TDS
+ROOT_REL_FREETDS="${PROJECT_DIR}/../opt/lib/${name_freetds}-${version_freetds}"
+mkdir -p $ROOT_REL_FREETDS
+readonly ROOT_INSTALL_FREETDS=$(cd "${ROOT_REL_FREETDS}"; pwd)
+
+cd $path_base
+
 #
 # Commands list
 #
 
 ###
-# returns a strong to stdout...
+# returns a string to stdout.
 #   no debugging statements.
 version_for_platform() {
     local plat=$1
@@ -197,94 +218,85 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     local log=$6
     local additional_work=$7
 
-    printf "%s\t\t%s\n" "ARCHITECTURE     " $architecture
-    printf "%s\t\t%s\n" "ADDITIONAL_config" $additional_config
-    printf "%s\t\t%s\n" "PATH_make        " $path_make
-    printf "%s\t\t%s\n" "LOG              " $log
-    printf "%s\t\t%s\n" "ADDITIONAL_work  " $additional_work
-
-    if [[ "${#additional_config}" > 0 ]];
-    then
-        s="s/${additional_config_blank}//g"
-        additional_config=$(echo $additional_config | sed -e $s)
-        printf "ADDITIONAL config is blank (%s)\n" $additional_config
-    else
-        printf "PASS additional_config_blank for additional_config\n"
-        exit 1
-    fi
+#if [[ "${#additional_config}" > 0 ]];
+#then
+#    s="s/${additional_config_blank}//g"
+#    additional_config=$(echo $additional_config | sed -e $s)
+#    printf "ADDITIONAL config is blank (%s)\n" $additional_config
+#else
+#    printf "PASS additional_config_blank for additional_config\n"
+#    exit 1
+#fi
 
    local architecture_host_part=$( uname -p )
-   local architecture_host="${architecture_host_part}-apple-darwin"
-
+   local architecture_host="${architecture_host_part}-apple-darwin11"
+   local device_type="iphoneos"
    if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
    then
-      local sdk="iphonesimulator${version_sdk}"
+      local device_type="iphonesimulator"
       local architecture_target="${architecture_host_part}-apple-darwin"
    else
-      local sdk="iphoneos${version_sdk}"
       local architecture_target="arm-apple-darwin"
    fi
 
+    case "${architecture}" in
+        "i386"|"x86_64")
+            device_type="iphonesimulator"
+            PLATFORM="iPhoneSimulator"
+            architecture_target="${architecture}-apple-darwin11"
+            ;;
+        "arm64")
+            PLATFORM="iPhoneOS"
+            architecture_target="aarch64-apple-darwin11"
+            ;;
+        *)
+            PLATFORM="iPhoneOS"
+            architecture_target="${architecture}-apple-darwin11"
+            ;;
+    esac
+
+   local sdk="${device_type}${version_sdk}"
+
    developer_root=$( xcode-select -print-path )
-   platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
+   local platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
 
-   export DEVROOT="${platform_root}/Developer"
-   export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-   export CC=$( xcrun -find gcc )
-   export CFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
-   export CPPFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include ${CPPFLAGS} "
-   export LD=$( xcrun -find ld )
-   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min} "
+export CC="clang"
+export CFLAGS="-arch ${architecture} -isysroot ${sdk} -miphoneos-version-min=6.0"
+export CXXFLAGS="$CFLAGS"
+export LDFLAGS="$CFLAGS"
+export LD=$CC
 
-    printf "SDK version          %s.\n" "${version_sdk}"
-    printf "SDK min version      %s.\n" "${version_sdk_min}"
-    printf "ARCHITECTURE         %s.\n" "${architecture}"
-    printf "ARCHITECTURE host    %s.\n" "${architecture_host}"
-    printf "ARCHITECTURE target  %s.\n" "${architecture_target}"
-    printf "PREFIX               %s.\n" "${path_make}"
-    printf "LOG file             %s.\n" "${log}"
-    printf "ADDITIONAL config    %s.\n" "${additional_config}"
-    printf "CFLAGS               %s.\n" "${CFLAGS}"
-    printf "CPPFLAGS             %s.\n" "${CPPFLAGS}"
+#   export CC=$( xcrun -find gcc )
+#   export CPP=$( xcrun -find g++ )
+#   export CFLAGS="-isysroot ${SDKROOT} -I${SDKROOT}/usr/include -I${INC_OPENSSL} -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
+#   export CPPFLAGS="-isysroot ${SDKROOT} -I${SDKROOT}/usr/include -I${INC_OPENSSL} ${CPPFLAGS} "
 
-    config_prefix+="--prefix=${PROJECT_DIR}/../opt/lib/${name_freetds}-${version_freetds}"         # Install location
-    config_exec_prefix+="--exec-prefix=${PROJECT_DIR}/../opt/lib/${name_freetds}-${version_freetds}/${arch}"
+#   export LD=$( xcrun -find ld )
+#   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -DHAVE_OPENSSL -L${LIB_OPENSSL} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min} "
 
-   if [[ "${#additional_config}" > 0 ]];
+    config_prefix="--prefix=${ROOT_INSTALL_FREETDS}"         # Install location
+    config_exec_prefix="--exec-prefix=${ROOT_INSTALL_FREETDS}/${arch}"
+
+   if [[ ${#additional_config} > 0 ]];
    then
-        printf "PERFORMING additional configuration\n"
-        additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
-        pwd
-        ./configure --host=${architecture_target} \
-                    --build=${architecture_host} \
-                    --target=${architecture_target} \
-                    --enable-static \
-                    "${config_prefix}" \
-                    "${config_exec_prefix}" \
-                    ${additional_config} #>> "${log}.error.log" &
-        wait $!
+#additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
+      ./configure --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${arch} --host=${architecture_target}  --build="${architecture_host}"  --target="${architecture_target}" $additional_config #>> "${log}.error.log" &
+#wait $!
    else
-        printf "SKIPPING additional configuration\n"
-      ./configure --host=${architecture_target} \
-                  --build=${architecture_host} \
-                  --target=${architecture_target} \
-                  --enable-static \
-                  "${config_prefix}" \
-                  "${config_exec_prefix}" #>> "${log}.error.log" &
-      wait $!
+      ./configure --host=${architecture_target} --build="${architecture_host}" --target=${architecture_target} --enable-static $WITHOPENSSL "${config_prefix}" "${config_exec_prefix}" #>> "${log}.error.log" &
+#wait $!
 
    fi
 
    if [[ "${#additional_work}" > 0 ]];
    then
-        printf "DOING Extra Work\n"
-        printf "%s %s" ${additional_work} "${path_make}"
+
         ${additional_work} "${path_make}"
    fi
 
     printf "\nMAKE TEST"
     make test #>> "${log}.error.log" &
-    wait $!
+#wait $!
 
 #    printf "\nMAKE CLEAN"
 #    make clean #>> "${log}.error.log" &
@@ -390,9 +402,9 @@ if [[ $build_unixodbc == $true && $show_help == $false ]]; then
         additional_config+="--disable-ltdl-install "
         additional_config+="--disable-threads "
         additional_config+="--enable-gui=no "
-#additional_config+="--enable-drivers=yes "
-#additional_config+="--enable-drivers-conf=yes "
-#additional_config+="--enable-sysconfigdir=Documents/odbc "
+#       additional_config+="--enable-drivers=yes "
+#       additional_config+="--enable-drivers-conf=yes "
+#       additional_config+="--enable-sysconfigdir=Documents/odbc "
 
         printf "Build path %s.\n" "$path_build_unixodbc_arch"
 
@@ -445,27 +457,10 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
         command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
         command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
-        additional_config=" --with-openssl=${PROJECT_DIR}/../opt/lib/openssl-1.1/openssl-1.1.0 "
-        additional_config+="--with-libiconv-prefix=${PLATFORM_DEVELOPER_USR_DIR} "
-        additional_config+="--with-sysroot=${PLATFORM_DEVELOPER_USR_DIR}/lib "
-        additional_config+="--disable-debug "
-        additional_config+="--disable-threads "
-        additional_config+="--enable-extra-checks "
-        additional_config+="--enable-msdblib " # Microsoft style... not Sybase
-        additional_config+="--disable-rpath "  # Do not hardcode runtime library paths
-        #additional_config+="--with-iodbc= "
-
-        printf "VERSION iOS:            %s\n" "${version_ios}"
-        printf "VERSION iOS Min:        %s\n" "${version_ios_min}"
-        printf "ARCHITECTURE:           %s\n" "${arch}"
-        printf "ADDITIONAL Config:      %s\n" "${additional_config}"
-        printf "PATH build Tds Arch:    %s\n" "${path_build_tds_arch}"
-        printf "LOG path:               %s\n" "${log_build_tds}"
-        printf "ADDITIONAL work:        %s\n" "${additional_work}"
+        additional_config=" -with-tdsver=${TDS_VER}  --with-libiconv-prefix=${PLATFORM_DEVELOPER_USR_DIR}/lib --with-gnutls --with-sysroot=${PLATFORM_DEVELOPER_USR_DIR}/lib --disable-debug --disable-threads --disable-dynamic --enable-msdblib "  # Do not hardcode runtime library paths
 
         printf "CONFIG_make_install\n"
-        # config_make_install $version_ios $version_ios_min
-        #   $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
+         config_make_install $version_ios $version_ios_min $arch "$additional_config" $path_build_tds_arch $log_build_tds $additional_work
 
    done
 
