@@ -8,6 +8,13 @@
 
 set -e
 
+readonly true=0
+readonly false=1
+
+build_unixodbc=$false
+build_tds=$true
+
+
 readonly version_freetds="1.00.15"
 readonly version_unixodbc="2.3.4"
 
@@ -31,9 +38,6 @@ readonly archive_freetds="${archive_name_freetds}.tar.gz"
 
 readonly path_base=$( pwd )
 
-readonly true=0
-readonly false=1
-
 show_help=$false
 
 DEVELOPER=`xcode-select -print-path`
@@ -55,17 +59,11 @@ FSHORTCUT_TDS=${DIRLIB}/${name_freetds_stylized}-${ARCH}.short
 if [ -f $FSHORTCUT_ODBC ]; then
   printf "SKIPPING ODBC.\n"
   build_unixodbc=$false
-else
-  printf "REQUIRING ODBC.\n"
-  build_unixodbc=$true
 fi
 
 if [ -f $FSHORTCUT_TDS ]; then
   printf "SKIPPING TDS.\n"
   build_tds=$false
-else
-  printf "REQUIRING TDS.\n"
-  build_tds=$true
 fi
 
 counter_arch=0
@@ -168,8 +166,9 @@ extract_source() {
     local destination=$2
     rm -Rf -- "${destination}"
     mkdir -p "${destination}"
-    tar zxf ${archive} -C ${destination} &
-    wait $!
+    printf "TAR (%s)\n\t\t(%s}\n" "${archive}" "${destination}"
+    tar zxf "${archive}" -C "${destination}" #&
+                                             # wait $!
 }
 
 empty_directory() {
@@ -260,7 +259,6 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
                     --build=${architecture_host} \
                     --target=${architecture_target} \
                     --enable-static \
-                    --disable-threads
                     "${config_prefix}" \
                     "${config_exec_prefix}" \
                     ${additional_config} #>> "${log}.error.log" &
@@ -271,7 +269,6 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
                   --build=${architecture_host} \
                   --target=${architecture_target} \
                   --enable-static \
-                  --disable-threads
                   "${config_prefix}" \
                   "${config_exec_prefix}" #>> "${log}.error.log" &
       wait $!
@@ -388,11 +385,14 @@ if [[ $build_unixodbc == $true && $show_help == $false ]]; then
         additional_config+="--includedir=${SDKROOT}/usr/include "
         additional_config+="--oldincludedir=${SDKROOT}/usr/include "
         additional_config+="--disable-libtool-lock "
+        additional_config+="--with-libiconv-prefix=${PLATFORM_DEVELOPER_USR_DIR} "
+        additional_config+="--with-sysroot=${PLATFORM_DEVELOPER_USR_DIR}/lib "
         additional_config+="--disable-ltdl-install "
+        additional_config+="--disable-threads "
         additional_config+="--enable-gui=no "
-        additional_config+="--enable-drivers=yes "
-        additional_config+="--enable-drivers-conf=yes "
-        additional_config+="--enable-sysconfigdir=Documents/odbc "
+#additional_config+="--enable-drivers=yes "
+#additional_config+="--enable-drivers-conf=yes "
+#additional_config+="--enable-sysconfigdir=Documents/odbc "
 
         printf "Build path %s.\n" "$path_build_unixodbc_arch"
 
@@ -449,6 +449,7 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
         additional_config+="--with-libiconv-prefix=${PLATFORM_DEVELOPER_USR_DIR} "
         additional_config+="--with-sysroot=${PLATFORM_DEVELOPER_USR_DIR}/lib "
         additional_config+="--disable-debug "
+        additional_config+="--disable-threads "
         additional_config+="--enable-extra-checks "
         additional_config+="--enable-msdblib " # Microsoft style... not Sybase
         additional_config+="--disable-rpath "  # Do not hardcode runtime library paths
