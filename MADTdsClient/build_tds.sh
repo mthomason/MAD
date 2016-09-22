@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -o xtrace
+#set -o xtrace
 
 platform="iphoneos"
 ARCHS="i386 x86_64 armv7 armv7s arm64"
@@ -28,8 +28,8 @@ readonly path_media_archive="${path_media}/${archive_name_extension}"
 readonly path_source_root="${path_source}/${archive_name}"
 
 #OPENSSL PATHS
-readonly ROOT_REL_OPENSSL="${path_build_root}/openssl-1.0/openssl-1.0.2h"
-readonly ROOT_OPENSSL=$(cd "${path_build_root}/openssl-1.0/openssl-1.0.2h"; pwd)
+readonly ROOT_REL_OPENSSL="${path_build_root}/openssl-1.0/openssl-1.0.2h/lib"
+readonly ROOT_OPENSSL=$(cd "${path_build_root}/openssl-1.0/openssl-1.0.2h/lib"; pwd)
 readonly PTH_OPENSSL="${ROOT_OPENSSL}"
 readonly LIB_OPENSSL="${ROOT_OPENSSL}"
 readonly INC_OPENSSL="${ROOT_OPENSSL}/include"
@@ -75,9 +75,9 @@ do
     SDK="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer/SDKs/${PLATFORM}${SDKVERSION}.sdk"
 export CC="gcc"
 COMMONFLAGS="-arch ${ARCH} -isysroot ${SDK} -miphoneos-version-min=9.3"
-    export CFLAGS="$COMMONFLAGS -I${SDK}/usr/include -I/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h/include"
-    export CXXFLAGS="$COMMONFLAGS -L{SDK}/usr/lib -L/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h"
-    export LDFLAGS="$CFLAGS"
+    export CFLAGS="$COMMONFLAGS -I${SDK}/usr/include -I/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h/lib/include "
+    export CXXFLAGS="$COMMONFLAGS "
+    export LDFLAGS="$CFLAGS -DHAVE_OPENSSL -L${SDK}/usr/lib -L/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h/lib"
     export LD=$CC
     # export CFLAGS="-arch ${ARCH} -miphoneos-version-min=${TARGETSDKVERSION} -isysroot ${SDK}"
     
@@ -94,7 +94,7 @@ make clean
 #--with-gnutls
 #--with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h
 #--with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-1.1/openssl-1.1.0
-    ./configure  --with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h  --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
+    ./configure  --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
 
 echo "******************"
     make
@@ -103,7 +103,7 @@ echo "******************"
 echo "******************"
 
     echo "======== CHECK ARCH ========"
-    xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/lib/libsybdb.a
+    xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libsybdb.a
     echo "======== CHECK DONE ========"
 
 
@@ -115,10 +115,11 @@ cp -r ${CURRENTPATH}/build/${LIB}/i386/ ${CURRENTPATH}/build/${LIB}/Fat
 rm -rf ${CURRENTPATH}/build/${LIB}/Fat/lib/*
 
 echo "Build library - libsybdb.a"
-lipo -create ${CURRENTPATH}/build/${LIB}/i386/lib/libsybdb.a  ${CURRENTPATH}/build/${LIB}/armv7/lib/libsybdb.a  ${CURRENTPATH}/build/${LIB}/armv7s/lib/libsybdb.a  ${CURRENTPATH}/build/${LIB}/arm64/lib/libsybdb.a  ${CURRENTPATH}/build/${LIB}/x86_64/lib/libsybdb.a  -output ${CURRENTPATH}/build/${LIB}/Fat/lib/libsybdb.a
+mkdir -p ${ROOT_INSTALL_FREETDS}/Fat/lib
+lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libsybdb.a  -output ${ROOT_INSTALL_FREETDS}/Fat/lib/libsybdb.a
 
 echo "======== CHECK FAT ARCH ========"
-xcrun -sdk iphoneos lipo -info ${CURRENTPATH}/build/${LIB}/Fat/lib/libsybdb.a
+xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/Fat/lib/libsybdb.a
 echo "======== CHECK DONE ========"
 
 echo "== Done =="
