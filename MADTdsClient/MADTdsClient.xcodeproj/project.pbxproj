@@ -282,7 +282,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "sh ${SRCROOT}/build_tds.sh";
+			shellScript = "#...doesn't work from here.\n#sh ${SRCROOT}/build_tds.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -406,7 +406,8 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -417,6 +418,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -435,7 +437,8 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -446,6 +449,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
