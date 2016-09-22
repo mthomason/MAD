@@ -7,6 +7,14 @@ ARCHS="i386 x86_64 armv7 armv7s arm64"
 VERSION_DARWIN="15.6.0"
 BUILD="x86_64-apple-darwin${VERSION_DARWIN}"
 
+PARALLE=1
+
+# Determine number of cores for (parallel) build
+BUILD_THREADS=1
+if [ "${PARALLEL}" != "false" ]; then
+  BUILD_THREADS=$(sysctl hw.ncpu | awk '{print $2}')
+fi
+
 readonly name_freetds="freetds"
 readonly name_freetds_stylized="freetds"
 readonly version_freetds="1.00.15"
@@ -94,32 +102,42 @@ make clean
 #--with-gnutls
 #--with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-1.0/openssl-1.0.2h
 #--with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-1.1/openssl-1.1.0
-    ./configure  --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
+    ./configure --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
 
-echo "******************"
-    make
-echo "******************"
+SPACER="\n******************\n\n"
+
+    printf SPACER
+
+make -j "${BUILD_THREADS}"
+
+printf SPACER
+
     make install
-echo "******************"
 
-    echo "======== CHECK ARCH ========"
+printf SPACER
+
+    printf "\n======== CHECK ARCH ========\n\n"
     xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libsybdb.a
-    echo "======== CHECK DONE ========"
+    echo "\n======== CHECK DONE ========\n\n"
 
 
 done
 
 echo "== We just need static library == "
 echo "== Copy headers to fat folder from i386 folder AND clean files in lib =="
-cp -r ${CURRENTPATH}/build/${LIB}/i386/ ${CURRENTPATH}/build/${LIB}/Fat
-rm -rf ${CURRENTPATH}/build/${LIB}/Fat/lib/*
+cp -r ${CURRENTPATH}/build/${LIB}/i386/Include ${CURRENTPATH}/build/${LIB}/Include
+#rm -rf ${CURRENTPATH}/build/${LIB}*
 
 echo "Build library - libsybdb.a"
+libct.a
 mkdir -p ${ROOT_INSTALL_FREETDS}/Fat/lib
-lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libsybdb.a  -output ${ROOT_INSTALL_FREETDS}/Fat/lib/libsybdb.a
+lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libsybdb.a  -output ${ROOT_INSTALL_FREETDS}/libsybdb.a
+lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libct.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libct.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libct.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libct.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libct.a  -output ${ROOT_INSTALL_FREETDS}/libct.a
 
-echo "======== CHECK FAT ARCH ========"
-xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/Fat/lib/libsybdb.a
-echo "======== CHECK DONE ========"
+printf "\n======== CHECK FAT ARCH ========\n\n"
+
+xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/libsybdb.a
+
+printf "\n======== CHECK DONE ========\n\n"
 
 echo "== Done =="
