@@ -141,10 +141,6 @@ if [ ${#LIBSSL_IOS} -gt 0 ]; then
   lipo -create ${LIBCRYPTO_IOS[@]} -output "${ROOT_INSTALL_FREETDS}/libct.a"
 fi
 
-mkdir -p ${ROOT_INSTALL_FREETDS}/Fat/lib
-lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libsybdb.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libsybdb.a  -output ${ROOT_INSTALL_FREETDS}/libsybdb.a
-lipo -create ${ROOT_INSTALL_FREETDS}/i386/lib/libct.a  ${ROOT_INSTALL_FREETDS}/armv7/lib/libct.a  ${ROOT_INSTALL_FREETDS}/armv7s/lib/libct.a  ${ROOT_INSTALL_FREETDS}/arm64/lib/libct.a  ${ROOT_INSTALL_FREETDS}/x86_64/lib/libct.a  -output ${ROOT_INSTALL_FREETDS}/libct.a
-
 printf "\n======== CHECK FAT ARCH ========\n\n"
 
 xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/libsybdb.a
