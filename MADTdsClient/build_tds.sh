@@ -115,7 +115,6 @@ do
   xcrun -sdk iphoneos lipo -info ${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libsybdb.a
   echo "\n======== CHECK DONE ========\n\n"
 
-
 done
 
 echo "== We just need static library == "
