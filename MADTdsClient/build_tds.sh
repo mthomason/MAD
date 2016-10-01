@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#set -o xtrace
+set -o xtrace
 
 platform="iphoneos"
 ARCHS="i386 x86_64 armv7 armv7s arm64"
@@ -90,6 +90,7 @@ do
   export CXXFLAGS="$COMMONFLAGS "
   export LDFLAGS="$CFLAGS -DHAVE_OPENSSL -L${SDK}/usr/lib -L/Users/michael/Desktop/Reports/opt/lib/openssl-${VERSION_OPENSSL_MAJOR}/openssl-${VERSION_OPENSSL}/lib"
   export LD=$CC
+export OPENSSL_LIBS=$LIB_OPENSSL
   # export CFLAGS="-arch ${ARCH} -miphoneos-version-min=${TARGETSDKVERSION} -isysroot ${SDK}"
     
   PREFIX="${CURRENTPATH}/build/${LIB}/${ARCH}"
@@ -102,11 +103,13 @@ do
   echo "******************"
 
   make clean
-  ./configure  --prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --exec-prefix=${ROOT_INSTALL_FREETDS} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
+  ./configure  --prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --exec-prefix=${ROOT_INSTALL_FREETDS} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static --with-openssl=${LIB_OPENSSL}  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
 
-  make -j "${BUILD_THREADS}"
+exit 1
 
-  make install PREFIX="${PREFIX}"
+  make --dry-run -j "${BUILD_THREADS}"
+
+  make install --dry-run PREFIX="${PREFIX}"
 
   LIBSYBDB+=("${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libsybdb.a")
   LIBCT+=("${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libct.a")
