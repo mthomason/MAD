@@ -1,23 +1,21 @@
 #!/bin/sh
 
+export PATH="./../../../usr/local/share:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
 #set -o xtrace
 #set -e
-
-readonly true=0
-readonly false=1
 
 readonly prod_name="bzip2"
 readonly prod_name_stylized="bzip2"
 readonly prod_name_compiled_root="bz2"
 readonly prod_name_compiled_prefix="lib"
 
-readonly archs="i386 x86_64 armv7 armv7s arm64"
-
 readonly prod_default_version_major="1.0"
 readonly prod_default_version_minor="6"
-
 readonly prod_default_version="${prod_default_version_major}.${prod_default_version_minor}" # Default version in
 readonly prod_version=$prod_default_version
+
+readonly archs="i386 x86_64 armv7 armv7s arm64"
 
 VERSION_DARWIN="15.6.0"
 BUILD="x86_64-apple-darwin${VERSION_DARWIN}"
@@ -33,6 +31,9 @@ if [ "${PARALLEL}" != "false" ]; then
   BUILD_THREADS=$(sysctl hw.ncpu | awk '{print $2}')
 fi
 
+readonly true=0
+readonly false=1
+
 readonly prod_storage_protocol="http" #, https, or ftp
 readonly prod_storage_prefix="www" #, https, or ftp
 readonly archive_base_url="${prod_storage_protocol}://${prod_storage_prefix}.${prod_name}.org/${prod_version}/"
@@ -41,8 +42,8 @@ readonly archive_name_extension="${archive_name}-${prod_version}.tar.gz"
 
 readonly path_base=$( pwd )
 
-path_opt_prj="$(dirname "$path_base")"
-path_opt="$(dirname "$path_opt_prj")"
+readonly path_opt_prj="$(dirname "$path_base")"
+readonly path_opt="$(dirname "$path_opt_prj")"
 
 readonly path_media="${path_opt}/src"
 readonly path_source="${path_opt}/src"
@@ -70,6 +71,7 @@ cd "${path_source_root}"
 
 for ARCH in ${archs}
 do
+
   case "${ARCH}" in
     "i386"|"x86_64")
       PLATFORM="iPhoneSimulator"
@@ -97,7 +99,7 @@ do
 
   export PREFIX="${ROOT_INSTALL_ABSOLUTE}/${ARCH}"
   export BIGFILES=-D_FILE_OFFSET_BITS=64
-  export LDFLAGS="-Os -arch ${ARCH} -Wl,-dead_strip -miphoneos-version-min=2.2 -L${ROOTDIR}/lib"
+  export LDFLAGS="-Os -arch ${ARCH} -Wl,-dead_strip -miphoneos-version-min=9.3 -L${ROOTDIR}/lib"
   export CFLAGS="-Os -arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDK} -miphoneos-version-min=9.3 -I${SDK}/include -g ${BIGFILES}"
   export CPPFLAGS="${CFLAGS}"
   export CXXFLAGS="${CFLAGS}"

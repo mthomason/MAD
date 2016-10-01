@@ -102,21 +102,11 @@ do
   echo "******************"
 
   make clean
-  #--with-gnutls
-  #--with-openssl=/Users/michael/Desktop/Reports/opt/lib/openssl-${VERSION_OPENSSL_MAJOR}/openssl-${VERSION_OPENSSL}
-  ./configure --prefix=${ROOT_INSTALL_FREETDS} --exec-prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
-
-  SPACER="\n******************\n\n"
-
-  printf SPACER
+  ./configure  --prefix=${ROOT_INSTALL_FREETDS}/${ARCH} --exec-prefix=${ROOT_INSTALL_FREETDS} --host=${HOST} --build=${BUILD} --enable-msdblib --enable-static  --with-tdsver=${TDS_VER} --with-libiconv-prefix=${SDK}/lib CFLAGS="${CFLAGS}"
 
   make -j "${BUILD_THREADS}"
 
-  printf SPACER
-
-  make install
-
-  printf SPACER
+  make install PREFIX="${PREFIX}"
 
   LIBSYBDB+=("${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libsybdb.a")
   LIBCT+=("${ROOT_INSTALL_FREETDS}/${ARCH}/lib/libct.a")
