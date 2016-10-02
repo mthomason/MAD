@@ -72,7 +72,7 @@ do
   lib_mysqlclient+=("${build_path}/libmysqlclient.a")
   lib_clientlib+=("${build_path}/libclientlib.a")
 
-cd $path_project_directory
+  cd $path_project_directory
 
   xcodebuild clean VALID_ARCHS="${archs}" -arch $arch -sdk $path_sdk -configuration $build_type -project $path_project -target mysqlclient
   xcodebuild build VALID_ARCHS="${archs}" -arch $arch -sdk $path_sdk -configuration $build_type -project $path_project -target taocrypt
