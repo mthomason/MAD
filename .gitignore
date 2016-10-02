@@ -15,6 +15,10 @@
 #
 #########################
 
+#These files can be recreated
+opt/src/
+opt/bin/
+
 #files being edited
 *~
 
@@ -309,4 +313,5 @@ opt/bld/mysqlconnector/zlib/Release-iphoneos/libzlib.a
 opt/bld/mysqlconnector/zlib/Release-iphonesimulator/libzlib.a
 opt/bld/mysqlconnector/zlib/Release/iphonesimulator/libzlib.a
 opt/bld/mysqlconnector/zlib/Release/libzlib.a
+
 
