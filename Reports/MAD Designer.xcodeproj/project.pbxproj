@@ -777,7 +777,6 @@
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
-		4CAB0FD61D90421700676BCE /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CAB0FD51D90421700676BCE /* libarchive.a */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
@@ -1032,6 +1031,11 @@
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */; };
+		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
+		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
+		4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186A1DA14AC70093B166 /* libclientlib.a */; };
+		4CCE186F1DA14AD90093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186D1DA14AD90093B166 /* libssl.a */; };
+		4CCE18701DA14AD90093B166 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186E1DA14AD90093B166 /* libcrypto.a */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
@@ -1040,10 +1044,6 @@
 		4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DB91CE6B76600B56B90 /* rwpng.c */; };
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
-		4CDCEFB51D8E4FF100A5A32E /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFB11D8E4FF100A5A32E /* libclientlib.a */; };
-		4CDCEFB61D8E4FF100A5A32E /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */; };
-		4CDCEFB71D8E4FF100A5A32E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFB31D8E4FF100A5A32E /* libcrypto.a */; };
-		4CDCEFB81D8E4FF100A5A32E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFB41D8E4FF100A5A32E /* libssl.a */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
@@ -1977,8 +1977,6 @@
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
 		4CA54D3D18938801006B301A /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
-		4CAB0FD51D90421700676BCE /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = "archive/build/Release-iphoneos/libarchive.a"; sourceTree = "<group>"; };
-		4CAB0FD81D9042DB00676BCE /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = "../archive/build/Release-iphoneos/libarchive.a"; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -2367,6 +2365,11 @@
 		4CC909041D0FCBCF007A1C75 /* MADViewControllerBarcodeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeDelegate.h; sourceTree = "<group>"; };
 		4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
 		4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
+		4CCE18661DA14A5C0093B166 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = ../opt/lib/archive/libarchive.a; sourceTree = "<group>"; };
+		4CCE18691DA14AC70093B166 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = opt/lib/mysqlclient/libmysqlclient.a; sourceTree = "<group>"; };
+		4CCE186A1DA14AC70093B166 /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = opt/lib/mysqlclient/libclientlib.a; sourceTree = "<group>"; };
+		4CCE186D1DA14AD90093B166 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = opt/lib/openssl/libssl.a; sourceTree = "<group>"; };
+		4CCE186E1DA14AD90093B166 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = opt/lib/openssl/libcrypto.a; sourceTree = "<group>"; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
@@ -2514,11 +2517,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CAB0FD61D90421700676BCE /* libarchive.a in Frameworks */,
-				4CDCEFB51D8E4FF100A5A32E /* libclientlib.a in Frameworks */,
-				4CDCEFB61D8E4FF100A5A32E /* libmysqlclient.a in Frameworks */,
-				4CDCEFB71D8E4FF100A5A32E /* libcrypto.a in Frameworks */,
-				4CDCEFB81D8E4FF100A5A32E /* libssl.a in Frameworks */,
+				4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */,
+				4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */,
+				4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */,
+				4CCE186F1DA14AD90093B166 /* libssl.a in Frameworks */,
+				4CCE18701DA14AD90093B166 /* libcrypto.a in Frameworks */,
 				4C744F291CE9C0B100243830 /* MAD.framework in Frameworks */,
 				4C744F2E1CE9C50900243830 /* MADDataStructures.framework in Frameworks */,
 				4C744F2D1CE9C4D500243830 /* MADBarcodes.framework in Frameworks */,
@@ -3058,7 +3061,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4CAB0FD81D9042DB00676BCE /* libarchive.a */,
+				4CCE18661DA14A5C0093B166 /* libarchive.a */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
@@ -4258,7 +4261,10 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CAB0FD51D90421700676BCE /* libarchive.a */,
+				4CCE186D1DA14AD90093B166 /* libssl.a */,
+				4CCE186E1DA14AD90093B166 /* libcrypto.a */,
+				4CCE18691DA14AC70093B166 /* libmysqlclient.a */,
+				4CCE186A1DA14AC70093B166 /* libclientlib.a */,
 				4CDCEFB11D8E4FF100A5A32E /* libclientlib.a */,
 				4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */,
 				4CDCEFB31D8E4FF100A5A32E /* libcrypto.a */,

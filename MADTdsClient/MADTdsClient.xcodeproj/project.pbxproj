@@ -21,8 +21,8 @@
 		4C66C1851BA8882300663575 /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16D1BA8882300663575 /* syberror.h */; };
 		4C66C1861BA8882300663575 /* sybfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16E1BA8882300663575 /* sybfront.h */; };
 		4C66C1871BA8882300663575 /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16F1BA8882300663575 /* tds_sysdep_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C66C1B21BA8AE6000663575 /* libct.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C66C17B1BA8882300663575 /* libct.a */; };
-		4C66C1B31BA8AE6000663575 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C66C17C1BA8882300663575 /* libsybdb.a */; };
+		4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE187F1DA14BE10093B166 /* libsybdb.a */; };
+		4CCE18821DA14BE10093B166 /* libct.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE18801DA14BE10093B166 /* libct.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +55,8 @@
 		4C66C16F1BA8882300663575 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C66C17B1BA8882300663575 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../Compressor/library/libsybdb/libct.a; sourceTree = "<group>"; };
 		4C66C17C1BA8882300663575 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
-		4CAB0FD91D904E2D00676BCE /* build_tds.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_tds.sh; sourceTree = "<group>"; };
+		4CCE187F1DA14BE10093B166 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../opt/lib/freetds/libsybdb.a; sourceTree = "<group>"; };
+		4CCE18801DA14BE10093B166 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../opt/lib/freetds/libct.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +119,8 @@
 		4C66C1611BA887EB00663575 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4CAB0FD91D904E2D00676BCE /* build_tds.sh */,
+				4CCE187F1DA14BE10093B166 /* libsybdb.a */,
+				4CCE18801DA14BE10093B166 /* libct.a */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -182,7 +184,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C66C15B1BA887D500663575 /* Build configuration list for PBXNativeTarget "MADTdsClient" */;
 			buildPhases = (
-				4CAB0FDA1D90603500676BCE /* ShellScript */,
 				4C66C1421BA887D500663575 /* Sources */,
 				4C66C1431BA887D500663575 /* Frameworks */,
 				4C66C1441BA887D500663575 /* Headers */,
@@ -256,8 +257,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C66C1B21BA8AE6000663575 /* libct.a in Resources */,
-				4C66C1B31BA8AE6000663575 /* libsybdb.a in Resources */,
+				4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */,
+				4CCE18821DA14BE10093B166 /* libct.a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,22 +270,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4CAB0FDA1D90603500676BCE /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#...doesn't work from here.\n#sh ${SRCROOT}/build_tds.sh";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C66C1421BA887D500663575 /* Sources */ = {
