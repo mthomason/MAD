@@ -1047,7 +1047,6 @@
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
-		4CE233AE1D8F74A400949451 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
@@ -2365,7 +2364,7 @@
 		4CC909041D0FCBCF007A1C75 /* MADViewControllerBarcodeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeDelegate.h; sourceTree = "<group>"; };
 		4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
 		4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
-		4CCE18661DA14A5C0093B166 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = ../opt/lib/archive/libarchive.a; sourceTree = "<group>"; };
+		4CCE18661DA14A5C0093B166 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = opt/lib/archive/libarchive.a; sourceTree = "<group>"; };
 		4CCE18691DA14AC70093B166 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = opt/lib/mysqlclient/libmysqlclient.a; sourceTree = "<group>"; };
 		4CCE186A1DA14AC70093B166 /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = opt/lib/mysqlclient/libclientlib.a; sourceTree = "<group>"; };
 		4CCE186D1DA14AD90093B166 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = opt/lib/openssl/libssl.a; sourceTree = "<group>"; };
@@ -2378,10 +2377,6 @@
 		4CD90DB91CE6B76600B56B90 /* rwpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rwpng.c; sourceTree = "<group>"; };
 		4CD90DBA1CE6B76600B56B90 /* rwpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwpng.h; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		4CDCEFB11D8E4FF100A5A32E /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = opt/bld/mysqlconnector/libmysql/Release/libclientlib.a; sourceTree = "<group>"; };
-		4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = opt/bld/mysqlconnector/libmysql/Release/libmysqlclient.a; sourceTree = "<group>"; };
-		4CDCEFB31D8E4FF100A5A32E /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "opt/lib/openssl-1.1/openssl-1.1.0/libcrypto.a"; sourceTree = "<group>"; };
-		4CDCEFB41D8E4FF100A5A32E /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "opt/lib/openssl-1.1/openssl-1.1.0/libssl.a"; sourceTree = "<group>"; };
 		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
 		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
 		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
@@ -2473,7 +2468,6 @@
 				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */,
 				4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */,
-				4CE233AE1D8F74A400949451 /* libmysqlclient.a in Frameworks */,
 				4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */,
 				4C0E77A2163B5AEC003B951E /* Security.framework in Frameworks */,
 				4C0E77A3163B5AEC003B951E /* SystemConfiguration.framework in Frameworks */,
@@ -3061,7 +3055,6 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4CCE18661DA14A5C0093B166 /* libarchive.a */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
@@ -4063,20 +4056,6 @@
 			name = "Misc Tool Images";
 			sourceTree = "<group>";
 		};
-		4C744EE61CE9B19100243830 /* Release */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Release;
-			sourceTree = "<group>";
-		};
-		4C744EE71CE9B19A00243830 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Debug;
-			sourceTree = "<group>";
-		};
 		4C8BE8521BAD457700F6E3F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -4261,14 +4240,11 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CCE18661DA14A5C0093B166 /* libarchive.a */,
 				4CCE186D1DA14AD90093B166 /* libssl.a */,
 				4CCE186E1DA14AD90093B166 /* libcrypto.a */,
 				4CCE18691DA14AC70093B166 /* libmysqlclient.a */,
 				4CCE186A1DA14AC70093B166 /* libclientlib.a */,
-				4CDCEFB11D8E4FF100A5A32E /* libclientlib.a */,
-				4CDCEFB21D8E4FF100A5A32E /* libmysqlclient.a */,
-				4CDCEFB31D8E4FF100A5A32E /* libcrypto.a */,
-				4CDCEFB41D8E4FF100A5A32E /* libssl.a */,
 				4C744F281CE9C0B100243830 /* MAD.framework */,
 				4C744F251CE9C08400243830 /* MADFileManager.framework */,
 				4C744F201CE9C06700243830 /* MADExplorer.framework */,
@@ -4279,8 +4255,6 @@
 				4C744F091CE9BD2400243830 /* MADDataStructures.framework */,
 				4C744F061CE9BD0000243830 /* MADCocoaExtensions.framework */,
 				4C744F031CE9BCDA00243830 /* MADFoundation.framework */,
-				4C744EE71CE9B19A00243830 /* Debug */,
-				4C744EE61CE9B19100243830 /* Release */,
 			);
 			name = Frameworks;
 			path = ..;
@@ -6858,44 +6832,18 @@
 				GCC_VERSION = "";
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
-					"$(PROJECT_DIR/libSqlite3/Sqlite3",
-					"$(PROJECT_DIR)/libCocoaExtentions",
-					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",
-					"$(PROJECT_DIR)/libCloudManager/CloudManager",
-					"$(PROJECT_DIR)/../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/../CloudManager/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/../MAD/MAD/build/Debug-iphoneos",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneSimulator\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
+					"\"$(SRCROOT)/../opt/lib/freetds\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
+					"\"$(SRCROOT)/../opt/lib/openssl\"",
+					"\"$(SRCROOT)/../opt/lib/png\"",
+					"\"$(SRCROOT)/../opt/lib/archive\"",
+					"\"$(SRCROOT)/../opt/lib/bzip2\"",
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6945,47 +6893,18 @@
 				GCC_VERSION = "";
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
-					"$(PROJECT_DIR/libSqlite3/Sqlite3",
-					"$(PROJECT_DIR)/libCocoaExtentions",
-					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",
-					"$(PROJECT_DIR)/libCloudManager/CloudManager",
-					"$(PROJECT_DIR)/../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/../CloudManager/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/../MAD/MAD/build/Debug-iphoneos",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(SDKROOT)/usr/lib",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneSimulator\"",
-					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Reports/Reports",
-					"$(PROJECT_DIR/libSqlite3/Sqlite3",
-					"$(PROJECT_DIR)/../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+					"\"$(SRCROOT)/../opt/lib/freetds\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
+					"\"$(SRCROOT)/../opt/lib/openssl\"",
+					"\"$(SRCROOT)/../opt/lib/png\"",
+					"\"$(SRCROOT)/../opt/lib/archive\"",
+					"\"$(SRCROOT)/../opt/lib/bzip2\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
