@@ -44,7 +44,7 @@
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseTable.h"
 
-#import "mysql.h"
+#import <mysql.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
