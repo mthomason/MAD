@@ -26,7 +26,6 @@
 		4C130A491BA8075B0022665F /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309921BA8075B0022665F /* common.h */; };
 		4C130A4A1BA8075B0022665F /* composite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309931BA8075B0022665F /* composite.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C130A4B1BA8075B0022665F /* composite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309941BA8075B0022665F /* composite.h */; };
-		4C130A4C1BA8075B0022665F /* DEVELOPER in Resources */ = {isa = PBXBuildFile; fileRef = 4C1309951BA8075B0022665F /* DEVELOPER */; };
 		4C130A4D1BA8075B0022665F /* dllversion.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309961BA8075B0022665F /* dllversion.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C130A4E1BA8075B0022665F /* dmatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309971BA8075B0022665F /* dmatrix.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309981BA8075B0022665F /* dmatrix.h */; };
@@ -192,7 +191,6 @@
 		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF41BA807FE0022665F /* MobileCoreServices.framework */; };
-		4C130AF71BA808150022665F /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF61BA808150022665F /* libpng.a */; };
 		4C130B001BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF81BA8085D0022665F /* png.h */; };
 		4C130B011BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF91BA8085D0022665F /* pngconf.h */; };
 		4C130B021BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFA1BA8085D0022665F /* pnglibconf.h */; };
@@ -201,8 +199,11 @@
 		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
-		4C66C1381BA814A400663575 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1371BA814A400663575 /* libpng16.a */; };
 		4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */; };
+		4C865D891DA525610057678C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C865D881DA525610057678C /* libpng.a */; };
+		4C865D961DA525890057678C /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D901DA525890057678C /* png.h */; };
+		4C865D971DA525890057678C /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D911DA525890057678C /* pngconf.h */; };
+		4C865D981DA525890057678C /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D921DA525890057678C /* pnglibconf.h */; };
 		4CC909011D0FC4FC007A1C75 /* MADBarcodeSizingMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD51CF3184600D93406 /* MADBarcodeBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -406,7 +407,6 @@
 		4C130A381BA8075B0022665F /* upcean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upcean.c; path = MADBarcodes/upcean.c; sourceTree = "<group>"; };
 		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = MADBarcodes/zint.h; sourceTree = "<group>"; };
 		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		4C130AF61BA808150022665F /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../Compressor/library/libpng/libpng.a; sourceTree = "<group>"; };
 		4C130AF81BA8085D0022665F /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4C130AF91BA8085D0022665F /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4C130AFA1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
@@ -415,8 +415,11 @@
 		4C130AFE1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		4C66C1371BA814A400663575 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
 		4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C865D881DA525610057678C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../opt/lib/png/libpng.a; sourceTree = "<group>"; };
+		4C865D901DA525890057678C /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C865D911DA525890057678C /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C865D921DA525890057678C /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeSizingMode.h; path = MADBarcodes/MADBarcodeSizingMode.h; sourceTree = "<group>"; };
 		4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodeDataInputType.h; sourceTree = "<group>"; };
 		4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeBorderStyle.h; path = MADBarcodes/MADBarcodeBorderStyle.h; sourceTree = "<group>"; };
@@ -427,8 +430,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C130AF71BA808150022665F /* libpng.a in Frameworks */,
-				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
+				4C865D891DA525610057678C /* libpng.a in Frameworks */,
 				4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
@@ -454,6 +456,7 @@
 				4C13096C1BA8068B0022665F /* MADBarcodes */,
 				4C1309781BA8068B0022665F /* MADBarcodesTests */,
 				4C13096B1BA8068B0022665F /* Products */,
+				4C865D871DA525610057678C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -727,8 +730,6 @@
 			isa = PBXGroup;
 			children = (
 				4C130AFF1BA8085D0022665F /* include */,
-				4C130AF61BA808150022665F /* libpng.a */,
-				4C66C1371BA814A400663575 /* libpng16.a */,
 			);
 			name = libpng;
 			sourceTree = "<group>";
@@ -742,6 +743,34 @@
 				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C865D871DA525610057678C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C865D8A1DA525780057678C /* png */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C865D8A1DA525780057678C /* png */ = {
+			isa = PBXGroup;
+			children = (
+				4C865D8B1DA525890057678C /* include */,
+				4C865D881DA525610057678C /* libpng.a */,
+			);
+			name = png;
+			sourceTree = "<group>";
+		};
+		4C865D8B1DA525890057678C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C865D901DA525890057678C /* png.h */,
+				4C865D911DA525890057678C /* pngconf.h */,
+				4C865D921DA525890057678C /* pnglibconf.h */,
+			);
+			name = include;
+			path = ../opt/lib/png/include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -782,6 +811,7 @@
 				4C130AB21BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h in Headers */,
 				4C130A881BA8075B0022665F /* MTBarcodeCode93.h in Headers */,
 				4C130ACF1BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h in Headers */,
+				4C865D961DA525890057678C /* png.h in Headers */,
 				4C130AB41BA8075B0022665F /* MTBarcodeLogmars.h in Headers */,
 				4C130AD71BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h in Headers */,
 				4C130A901BA8075B0022665F /* MTBarcodeDatabarExpanded.h in Headers */,
@@ -790,6 +820,7 @@
 				4C130AD51BA8075B0022665F /* MTBarcodeUkPlessey.h in Headers */,
 				4C130AEB1BA8075B0022665F /* rss.h in Headers */,
 				4C130A3F1BA8075B0022665F /* aztec.h in Headers */,
+				4C865D971DA525890057678C /* pngconf.h in Headers */,
 				4C130B051BA8085D0022665F /* pnglibconf.h in Headers */,
 				4C130AD91BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h in Headers */,
 				4C130A501BA8075B0022665F /* font.h in Headers */,
@@ -805,6 +836,7 @@
 				4C130AA61BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h in Headers */,
 				4C130A491BA8075B0022665F /* common.h in Headers */,
 				4C130A781BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h in Headers */,
+				4C865D981DA525890057678C /* pnglibconf.h in Headers */,
 				4C130A431BA8075B0022665F /* code1.h in Headers */,
 				4C130A551BA8075B0022665F /* gs1.h in Headers */,
 				4C130A8A1BA8075B0022665F /* MTBarcodeCode128Iso15417.h in Headers */,
@@ -929,7 +961,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C130A4C1BA8075B0022665F /* DEVELOPER in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

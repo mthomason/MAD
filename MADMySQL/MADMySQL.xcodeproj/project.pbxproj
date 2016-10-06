@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C0CC9221DA6130F00B5A190 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18771DA14B830093B166 /* libmysqlclient.a */; };
+		4C33DF141DA58207005A73CD /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187C1DA14B8C0093B166 /* libcrypto.a */; };
 		4C54AFA91D8C4BD200FE8B73 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7014941BACDC6800301713 /* MADMySQL.framework */; };
@@ -33,10 +35,7 @@
 		4C9374011BAD2A8300D6BD62 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */; };
 		4C9374021BAD2A8300D6BD62 /* MysqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */; };
 		4C9374031BAD2A8300D6BD62 /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */; };
-		4CCE18791DA14B830093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18771DA14B830093B166 /* libmysqlclient.a */; };
-		4CCE187A1DA14B830093B166 /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18781DA14B830093B166 /* libclientlib.a */; };
 		4CCE187D1DA14B8C0093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187B1DA14B8C0093B166 /* libssl.a */; };
-		4CCE187E1DA14B8C0093B166 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187C1DA14B8C0093B166 /* libcrypto.a */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CDCEF281D8D85C800A5A32E /* libstdc++.6.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */; };
 /* End PBXBuildFile section */
@@ -102,10 +101,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CCE18791DA14B830093B166 /* libmysqlclient.a in Frameworks */,
-				4CCE187A1DA14B830093B166 /* libclientlib.a in Frameworks */,
 				4CCE187D1DA14B8C0093B166 /* libssl.a in Frameworks */,
-				4CCE187E1DA14B8C0093B166 /* libcrypto.a in Frameworks */,
+				4C33DF141DA58207005A73CD /* libcrypto.a in Frameworks */,
+				4C0CC9221DA6130F00B5A190 /* libmysqlclient.a in Frameworks */,
 				4CDCEF281D8D85C800A5A32E /* libstdc++.6.tbd in Frameworks */,
 				4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */,
 				4C54AFA91D8C4BD200FE8B73 /* MADFoundation.framework in Frameworks */,
@@ -123,13 +121,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C54AFA51D8C4B3900FE8B73 /* Frameworks */ = {
+		4C33DDBF1DA56EE5005A73CD /* openssl */ = {
 			isa = PBXGroup;
 			children = (
 				4CCE187B1DA14B8C0093B166 /* libssl.a */,
 				4CCE187C1DA14B8C0093B166 /* libcrypto.a */,
-				4CCE18771DA14B830093B166 /* libmysqlclient.a */,
-				4CCE18781DA14B830093B166 /* libclientlib.a */,
+			);
+			name = openssl;
+			sourceTree = "<group>";
+		};
+		4C54AFA51D8C4B3900FE8B73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C33DDBF1DA56EE5005A73CD /* openssl */,
+				4C865F431DA5276B0057678C /* mysqlclient */,
 				4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */,
 				4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */,
 				4CDCEF251D8D859A00A5A32E /* libc++.tbd */,
@@ -210,6 +215,15 @@
 				4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */,
 			);
 			name = MADMySQL;
+			sourceTree = "<group>";
+		};
+		4C865F431DA5276B0057678C /* mysqlclient */ = {
+			isa = PBXGroup;
+			children = (
+				4CCE18771DA14B830093B166 /* libmysqlclient.a */,
+				4CCE18781DA14B830093B166 /* libclientlib.a */,
+			);
+			name = mysqlclient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -493,14 +507,24 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/mysqlclient/include\"",
-					"\"$(SRCROOT)/../opt/lib/openssl/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysys_ssl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysys\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/libmysql\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/taocrypt/mySTL\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/taocrypt/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/zlib\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysql\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/include/openssl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/atomic\"",
 				);
 				INFOPLIST_FILE = MADMySQL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/Debug\"",
 					"\"$(SRCROOT)/../opt/lib/openssl\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -540,7 +564,17 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/mysqlclient/include\"",
-					"\"$(SRCROOT)/../opt/lib/openssl/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysys_ssl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysys\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/libmysql\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/taocrypt/mySTL\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/taocrypt/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/include\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/zlib\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/mysql\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/extra/yassl/include/openssl\"",
+					"\"$(SRCROOT)/../opt/lib/mysqlclient/include/atomic\"",
 				);
 				INFOPLIST_FILE = MADMySQL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

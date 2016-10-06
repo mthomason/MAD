@@ -76,7 +76,7 @@ readonly path_media_png="$path_media/$archive_name_extension"
 
 download-archive "${archive_url}" "${path_media}"
 
-readonly path_library_png="${path_library}/libpng"
+readonly path_library_png="${path_library}/png"
 readonly path_build="${path_build_root}/libpng"
 readonly path_source_png="$path_source/libpng"
 
@@ -151,7 +151,7 @@ do
   mkdir -p "${path_source_product}"
   tar zxf "${path_media}/${archive_name_extension}" -C "${path_source_product}" --strip-components 1
 
-  export PATH="${path_inital}:${path_base}:${path_base}/libpng:${path_base}/libpng/scripts"
+  export PATH="${path_inital}"
 
   platform=$( platform_for_architecture arch )
   additional_config=$( opt_config_enable_arm arch )

@@ -53,8 +53,6 @@
 		4C66C16D1BA8882300663575 /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
 		4C66C16E1BA8882300663575 /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
 		4C66C16F1BA8882300663575 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
-		4C66C17B1BA8882300663575 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../Compressor/library/libsybdb/libct.a; sourceTree = "<group>"; };
-		4C66C17C1BA8882300663575 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CCE187F1DA14BE10093B166 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../opt/lib/freetds/libsybdb.a; sourceTree = "<group>"; };
 		4CCE18801DA14BE10093B166 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../opt/lib/freetds/libct.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,8 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				4C66C1641BA8882300663575 /* include */,
-				4C66C17B1BA8882300663575 /* libct.a */,
-				4C66C17C1BA8882300663575 /* libsybdb.a */,
 			);
 			name = freetds;
 			path = ..;

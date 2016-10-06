@@ -12,6 +12,9 @@
 #import <Foundation/NSObject.h>
 #import "mysql.h"
 
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MADDataColumn.h>
+
 @class MysqlConnection, MTDataTable, MTQuery;
 
 @protocol MysqlFetchDelegate
