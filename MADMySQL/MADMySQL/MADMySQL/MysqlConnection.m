@@ -16,7 +16,7 @@
 #import "MysqlCommitException.h"
 #import "MysqlRollbackException.h"
 
-#import "mysql.h"
+#import <mysql.h>
 
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSArray.h>

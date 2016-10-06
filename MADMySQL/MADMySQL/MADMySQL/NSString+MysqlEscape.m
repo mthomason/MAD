@@ -13,7 +13,7 @@
 #import "NSString+MysqlEscape.h"
 #import "MysqlConnection.h"
 #import <string.h>
-#import "mysql.h"
+#import <mysql.h>
 
 @implementation NSString(MysqlEscape)
 

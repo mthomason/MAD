@@ -8,7 +8,7 @@
 
 #import "MysqlException.h"
 #import "MysqlConnection.h"
-#import "mysql.h"
+#import <mysql.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSDictionary.h>
 

@@ -13,7 +13,7 @@
 #import "MysqlDelete.h"
 #import "MysqlConnection.h"
 #import "MysqlException.h"
-#import "mysql.h"
+#import <mysql.h>
 
 @implementation MysqlDelete
 

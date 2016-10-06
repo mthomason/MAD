@@ -10,7 +10,7 @@
 #define MAD_MysqlFetchField_h
 
 #import <Foundation/NSObject.h>
-#import "mysql.h"
+#import <mysql.h>
 
 @interface MysqlFetchField : NSObject
 

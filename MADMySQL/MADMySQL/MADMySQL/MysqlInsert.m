@@ -15,7 +15,7 @@
 #import "NSString+MysqlEscape.h"
 #import "MysqlException.h"
 
-#import "mysql.h"
+#import <mysql.h>
 #import "mysqld_error.h"
 
 #import <Foundation/NSDictionary.h>

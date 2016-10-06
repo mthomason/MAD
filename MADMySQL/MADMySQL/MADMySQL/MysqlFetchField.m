@@ -11,7 +11,7 @@
 #endif
 
 #import "MysqlFetchField.h"
-#import "mysql.h"
+#import <mysql.h>
 #import <Foundation/NSString.h>
 
 @implementation MysqlFetchField
