@@ -188,14 +188,19 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
     typeof(_delegate) wdelegate = _delegate;
-    [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
     
+    void (^handleUrlCreated)(NSError *);
+    handleUrlCreated = ^(NSError *error) {
+        
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
+            
             NSURL *errorUrl = documentURL.copy;
             [delegate fileCoordinatorDidFailCreatingFileAtURL: errorUrl
                                                     withError: error];
+            
         } else {
+            
             NSURL *insertedURL = documentURL.copy;
             NSArray *inserted = [[NSArray alloc] initWithObjects:insertedURL, nil];
             NSArray *removed = [[NSArray alloc] init];
@@ -205,38 +210,41 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                            updatedURLs: removed];
             
         }
-    }];
+    };
+    [MADFileUtilities createFile:list atURL:documentURL completion:handleUrlCreated];
 }
 
 - (void)removeFileAtURL:(NSURL *)URL {
 
     typeof(_delegate) wdelegate = _delegate;
-    [MADFileUtilities removeFileAtURL:URL completion:^(NSError *error) {
+    void (^handleUrlRemoved)(NSError *error);
+    handleUrlRemoved = ^(NSError *error) {
+        
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
             [delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
-        }
-        else {
+        } else {
+            NSArray *inserted = [[NSArray alloc] init];
             NSURL *removedURL = URL.copy;
             NSArray *removedURLs = [[NSArray alloc] initWithObjects:removedURL, nil];
-            NSArray *inserted = [[NSArray alloc] init];
             NSArray *updated = [[NSArray alloc] init];
             [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserted
                                                            removedURLs: removedURLs
                                                            updatedURLs: updated];
         }
-    }];
+    };
+    [MADFileUtilities removeFileAtURL:URL completion:handleUrlRemoved];
 }
 
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
-    [MADFileUtilities duplicateFileAtURL:URL completion:^(NSURL *newURL,
-                                                                     NSError *error) {
+    void (^handleFileDuplicated)(NSURL *result, NSError *error);
+    handleFileDuplicated = ^(NSURL *newURL, NSError *error) {
         if (error) {
             [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
         } else {
-
+            
             NSArray *inserted = [[NSArray alloc] initWithObjects:newURL, nil];
             NSArray *removed = [[NSArray alloc] init];
             NSArray *updated = [[NSArray alloc] init];
@@ -244,15 +252,16 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                            removedURLs: removed
                                                            updatedURLs: updated];
         }
-    }];
+    };
+    [MADFileUtilities duplicateFileAtURL:URL completion:handleFileDuplicated];
 }
 
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
     id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
-    [MADFileUtilities renameFileAtURL:URL toName:name completion:^(NSURL *sourceURL,
-                                                                              NSURL *newURL,
-                                                                              NSError *error) {
+    void (^handleRenameCompletion)(NSURL *sourceURL, NSURL *newURL, NSError *error);
+    handleRenameCompletion = ^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
+        
         if (error) {
             [delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
         } else {
@@ -263,7 +272,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                            removedURLs: removed
                                                            updatedURLs: updated];
         }
-    }];
+        
+    };
+    [MADFileUtilities renameFileAtURL:URL toName:name completion:handleRenameCompletion];
 }
 
 #pragma mark - NSMetadataQuery Notifications
@@ -317,13 +328,14 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
             *updated  = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
 
     NSMetadataQuery __weak *metadataQuery = self.metadataQuery;
+    void (^handleContentUpdated)(BOOL success, NSError *error);
+    handleContentUpdated = ^(BOOL success, NSError *error) {
+        [metadataQuery enableUpdates];
+    };
     [self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                         removedMetaDatum: removed
                                                         updatedMetaDatum: updated
-                                                              completion: ^(BOOL success,
-                                                                            NSError *error) {
-        [metadataQuery enableUpdates];
-    }];
+                                                              completion: handleContentUpdated];
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
@@ -362,7 +374,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSMutableArray *URLs = [NSMutableArray arrayWithCapacity:metadataItems.count];
     for (NSMetadataItem *metadataItem in metadataItems) {
         NSURL *URL = [metadataItem valueForAttribute:NSMetadataItemURLKey];
-        
         [URLs addObject:URL];
     }
     

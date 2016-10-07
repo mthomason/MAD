@@ -360,10 +360,9 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     
     NSLog(@"(NSURL) File Coordinator Did Update Contents With \n"
           @"\t%@\n" @"\t%@\n" @"\t%@", insertedURLs, removedURLs, updatedURLs);
-
-    NSMutableArray *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count],
-                   *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count],
-                   *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
+    MADMutableMetaDatum *insertedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:insertedURLs.count],
+                        *removedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:removedURLs.count],
+                        *updatedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:updatedURLs.count];
 
     NSURL *URL;
     MADMetaData *metadata;

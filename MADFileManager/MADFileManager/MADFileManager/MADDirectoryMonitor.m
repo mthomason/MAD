@@ -12,9 +12,10 @@
 #import <sys/unistd.h>
 #import <sys/fcntl.h>
 
-@interface MADDirectoryMonitor ()
+@interface MADDirectoryMonitor () {
+    int _fileDescriptor;
+}
 
-    @property (nonatomic, assign)   int fileDescriptor;
     @property (nonatomic, copy)     NSURL *URL;
     @property (nonatomic, strong)   dispatch_queue_t directoryMonitorQueue;
     @property (nonatomic, strong)   dispatch_source_t directoryMonitorSource;
@@ -42,23 +43,25 @@ static const int NotListening = -1;
 
 - (void)startMonitoring {
 
-    if (self.directoryMonitorSource == nil && self.fileDescriptor == NotListening) {
+    if (self.directoryMonitorSource == nil && _fileDescriptor == NotListening) {
     
         const char *path = [self.URL.path cStringUsingEncoding:NSUTF8StringEncoding];
-        self.fileDescriptor = open(path, O_EVTONLY);
+        _fileDescriptor = open(path, O_EVTONLY);
 
-        if (self.fileDescriptor < 0) return;
+        if (_fileDescriptor < 0) return;
         
         id directoryMonitorQueue = dispatch_queue_create(MADQueueFileSystemWatcher,
                                                          DISPATCH_QUEUE_CONCURRENT);
         self.directoryMonitorQueue = directoryMonitorQueue;
         
         unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
-                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB |
+                DISPATCH_VNODE_WRITE;
         
         id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
-                                                           (uintptr_t)self.fileDescriptor,
-                                                           mask, self.directoryMonitorQueue);
+                                                           (uintptr_t)_fileDescriptor,
+                                                           mask,
+                                                           self.directoryMonitorQueue);
         self.directoryMonitorSource = directoryMonitorSource;
         
         MADDirectoryMonitor __weak *weakself = self;
@@ -70,8 +73,8 @@ static const int NotListening = -1;
         
         dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
             MADDirectoryMonitor *sself = weakself;
-            close(sself.fileDescriptor);
-            sself.fileDescriptor = NotListening;
+            close(sself->_fileDescriptor);
+            sself->_fileDescriptor = NotListening;
             sself.directoryMonitorSource = nil;
         });
         dispatch_resume(self.directoryMonitorSource);

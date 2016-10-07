@@ -9,4 +9,5 @@
 #include "MADManagedObjectCollectionView.h"
 
 @implementation MADManagedObjectCollectionView
+    
 @end

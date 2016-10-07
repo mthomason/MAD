@@ -110,7 +110,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         self.currentlyEditingPart = MNSPredicateRight;
         
         Class tableTypeChooes = [MTQueryBuilderChooseFieldViewController class];
-        Class tableTypeField = [MTViewControllerValueBasedOnField class];
+        Class tableTypeField = [MADViewControllerValueBasedOnField class];
         if ([segue.destinationViewController isKindOfClass: tableTypeChooes]) {
             
             NSArray *excludedTables = [[NSArray alloc] init];
@@ -122,7 +122,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         
         } else if ([segue.destinationViewController isKindOfClass: tableTypeField]) {
 
-            MTViewControllerValueBasedOnField __unsafe_unretained *destinationViewController;
+            MADViewControllerValueBasedOnField __unsafe_unretained *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.enterStringDelegate = self;
             destinationViewController.document = document;
@@ -163,7 +163,7 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         }
     }
     
-    [self.queryPredicateDelegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+    [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }
 

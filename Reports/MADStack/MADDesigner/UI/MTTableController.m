@@ -237,12 +237,12 @@
     for (NSUInteger i=0; i<self.columnCount; i++) {
 
         NSString *reuseId = [self reuseIdForColumn:(NSInteger)i];
-        [self.collectionView registerClass: [MTTableCell class]
+        [self.collectionView registerClass: [MADTableCell class]
                 forCellWithReuseIdentifier: reuseId];
         
         NSString *reuseIdHeader = [self newReuseIdSupplementForColumn:(NSInteger)i];
-        [self.collectionView registerClass: [MTTableCellHeader class]
-                forSupplementaryViewOfKind: @"MTTableCellHeader"
+        [self.collectionView registerClass: [MADTableCellHeader class]
+                forSupplementaryViewOfKind: @"MADTableCellHeader"
                        withReuseIdentifier: reuseIdHeader];
 
     }
@@ -309,7 +309,7 @@
     NSUInteger row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
-    MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
+    MADTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
     
     NSDictionary *rowData = [self.datatable objectAtRow:row];
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
@@ -329,7 +329,7 @@
     NSArray <NSString *>  *components = [fieldKey componentsSeparatedByString:@"."];
     NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\"" withString:@""];
     
-    MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
+    MADTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MADTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
     view.label.text = fieldName;
     return view;
 }

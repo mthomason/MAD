@@ -16,13 +16,13 @@
 
 #import <MAD/MADAggregateFunctionGroupByType.h>
 
-extern NSString * const MTGroupByViewControllerIdentifier;
+extern NSString * const MADGroupByViewControllerIdentifier;
 
 @protocol MADGroupByViewControllerDelegate;
 
 @class MADocument;
 
-@interface MTGroupByViewController : MADTableViewController
+@interface MADGroupByViewController : MADTableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
     @property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;

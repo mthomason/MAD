@@ -37,7 +37,7 @@
 
 #import "MTCellEnterText.h"
 
-@interface MTViewControllerValueBasedOnField ()
+@interface MADViewControllerValueBasedOnField ()
     <UITextFieldDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
@@ -49,7 +49,7 @@
     @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
     @property (nonatomic, strong) UITextField *textField;
-    @property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
+    @property (nonatomic, strong) MADCellEnterText *tableViewCellEnterText;
     @property (nonatomic, strong) NSArray *pickerData;
     @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
@@ -58,7 +58,7 @@
 
 @end
 
-@implementation MTViewControllerValueBasedOnField
+@implementation MADViewControllerValueBasedOnField
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -124,7 +124,7 @@
         CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
         CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
         CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
-        MTViewControllerValueBasedOnField * __weak weakself = self;
+        MADViewControllerValueBasedOnField * __weak weakself = self;
         UIViewAnimationOptions options;
         switch (keyboardAnimationCurveUserInfoKey.integerValue) {
             case UIViewAnimationCurveEaseInOut:
@@ -164,17 +164,17 @@
 
     self.querySampleDataField = querySampleDataField;
     
-    MTViewControllerValueBasedOnField * __weak weakself2 = self;
+    MADViewControllerValueBasedOnField * __weak weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        __strong MTViewControllerValueBasedOnField *strongself2 = weakself2;
+        __strong MADViewControllerValueBasedOnField *strongself2 = weakself2;
         
         NSError * __autoreleasing error = NULL;
         BOOL success = [querySampleDataField performQueryWithError:&error];
         
         if (success) {
-            MTViewControllerValueBasedOnField * __weak weakself3 = strongself2;
+            MADViewControllerValueBasedOnField * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
-                MTViewControllerValueBasedOnField *strongself5 = weakself3;
+                MADViewControllerValueBasedOnField *strongself5 = weakself3;
                 MTDataTable * __autoreleasing dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
                 strongself5.dataTable = dt;
                 
@@ -292,7 +292,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
     
-    MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+    MADCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
     (result.textField).returnKeyType = UIReturnKeyDone;
     result.textField.delegate = self;

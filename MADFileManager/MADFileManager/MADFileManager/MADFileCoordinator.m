@@ -71,40 +71,47 @@
 }
 
 - (void)startQuery {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (void)stopQuery {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (void)removeFileAtURL:(NSURL *)URL {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (void)duplicateFileAtURL:(NSURL *)URL {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
                extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
                     fileGroup:(NSString *)fileGroup {
+    NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)]
+                                   reason: reason
                                  userInfo: nil];
 }
 

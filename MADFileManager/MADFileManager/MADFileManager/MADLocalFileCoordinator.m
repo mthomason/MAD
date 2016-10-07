@@ -22,18 +22,14 @@
 #import "MADFileUtilities.h"
 #import "NSURL+ConvenienceConstructors.h"
 
-NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
-NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";
-NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathComponent = %@)";
-
 @interface MADLocalFileCoordinator ()
             <MADDirectoryMonitorDelegate>
 
     @property (nonatomic, copy)     NSArray *currentLocalContents;
-    @property (nonatomic, copy)   NSPredicate *predicate;
+    @property (nonatomic, copy)     NSPredicate *predicate;
     @property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
     @property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
-    @property (nonatomic, copy)   NSString *fileGroup;
+    @property (nonatomic, copy)     NSString *fileGroup;
 
 @end
 
@@ -44,8 +40,9 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)fileGroup
-          firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPredicate: (NSPredicate *)predicate
+                       identifier: (NSString *)fileGroup
+          firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
 
     if (self = [super init]) {
 
@@ -68,31 +65,39 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     return self;
 }
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
-              firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPathExtension: (NSString *)pathExtension
+                           identifier: (NSString *)fileGroup
+              firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
 
+    NSString * const MADPredicateFormatComparsonPathExtension = @"(pathExtension = %@)";
     NSPredicate *predicate;
     predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension,
                                                  pathExtension];
     
-    if (self = [self initWithPredicate:predicate identifier:fileGroup
-               firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+    if (self = [self initWithPredicate: predicate
+                            identifier: fileGroup
+               firstQueryUpdateHandler: firstQueryUpdateHandler]) {
+        
         self.fileGroup = fileGroup;
+        
     }
     
     return self;
 }
 
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent
-                               identifier:(NSString *)fileGroup
-                  firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
+                               identifier: (NSString *)fileGroup
+                  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
     
+    NSString *MADPredicateFormatComparsonLastPathComponent = @"(lastPathComponent = %@)";
     NSPredicate *predicate;
     predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent,
                                                  lastPathComponent];
     
-    if (self = [self initWithPredicate:predicate identifier:fileGroup
-               firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+    if (self = [self initWithPredicate: predicate
+                            identifier: fileGroup
+               firstQueryUpdateHandler: firstQueryUpdateHandler]) {
+        
         self.fileGroup = fileGroup;
     }
     
@@ -227,31 +232,38 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     NSString *fileGroup = self.fileGroup.copy;
     NSPredicate *predicate = self.predicate.copy;
 
-    id __weak wself = self;
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-    dispatch_async(defaultQueue, ^{
-    
+
+    id __weak wself = self;
+
+    void (^updateContent)();
+    updateContent = ^{
+        
         MADLocalFileCoordinator *sself = wself;
         if (sself == nil) return;
         
         NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
         
-        NSArray *URLs;
-        URLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
+        NSArray <NSURL *> *urls;
+        urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
                                              includingPropertiesForKeys: nil
                                                                 options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                   error: nil];
         
-        NSArray *localListURLs = [URLs filteredArrayUsingPredicate:predicate];
+        NSArray <NSURL *> *localListURLs = [urls filteredArrayUsingPredicate:predicate];
         
         if (localListURLs.count > 0) {
-            NSPredicate *containPredicate, *doesntContainPredicate;
-            NSArray *insertedURLs, *removedURLs, *emptyArray;
-
-            containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject,
-                                                                sself.currentLocalContents];
-            doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
+            NSString *MADPredicateFormatSelfInObject = @"self in %@";
+            NSPredicate *containPredicate, *doesntContainPredicate;
+            
+            NSArray <NSURL *> *insertedURLs;
+            NSArray <NSURL *> *removedURLs;
+            NSArray <NSURL *> *emptyArray;
+            
+            containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject,
+                                sself.currentLocalContents];
+            doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
             
             containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
@@ -271,7 +283,8 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
             sself.firstQueryUpdateHandler();
             sself.firstQueryUpdateHandler = nil;
         }
-    });
+    };
+    dispatch_async(defaultQueue, updateContent);
 }
 
 @end

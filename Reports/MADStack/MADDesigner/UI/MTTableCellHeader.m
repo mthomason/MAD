@@ -15,13 +15,13 @@
 #import <UIKit/UILabel.h>
 #import <QuartzCore/CALayer.h>
 
-@interface MTTableCellHeader ()
+@interface MADTableCellHeader ()
 
 @property (nonatomic, strong, readwrite) UILabel *label;
 
 @end
 
-@implementation MTTableCellHeader
+@implementation MADTableCellHeader
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];

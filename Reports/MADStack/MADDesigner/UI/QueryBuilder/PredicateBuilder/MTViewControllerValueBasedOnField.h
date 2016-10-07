@@ -16,7 +16,7 @@
 @class NSManagedObjectID;
 @class MADocument;
 
-@interface MTViewControllerValueBasedOnField : UIViewController
+@interface MADViewControllerValueBasedOnField : UIViewController
 
     @property (nonatomic, weak) id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
     @property (nonatomic, weak) MADocument *document;

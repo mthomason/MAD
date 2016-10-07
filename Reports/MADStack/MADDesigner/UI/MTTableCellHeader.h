@@ -13,7 +13,7 @@
 
 @class UILabel;
 
-@interface MTTableCellHeader : UICollectionReusableView
+@interface MADTableCellHeader : UICollectionReusableView
 
     @property (nonatomic, strong, readonly) UILabel *label;
 

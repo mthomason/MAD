@@ -51,7 +51,7 @@
     [self.delegate viewControllerDidCancel:sender];
 }
 
-- (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
+- (void)tableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
     [self.delegate addQueryPredicate: predicate];
 }
 

@@ -13,7 +13,7 @@
 
 @class UILabel;
 
-@interface MTTableCell : UICollectionViewCell
+@interface MADTableCell : UICollectionViewCell
 
     @property (nonatomic, weak, readonly) UILabel *label;
 

@@ -209,6 +209,7 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (void)createFile:(MADFile *)list atURL:(NSURL *)url
                               completion:(void (^)(NSError *))completion {
+    
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     NSFileAccessIntent *writing;

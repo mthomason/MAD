@@ -73,7 +73,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - MTGroupByViewControllerDelegate
+#pragma mark - MADGroupByViewControllerDelegate
 
 - (void)didSelectGroupByPage {
     NSString *detail = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
@@ -158,7 +158,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         
     } else if ([action.identifier isEqualToString:MTSegueAggregateGroupTypeSave]) {
         
-        MTGroupByViewController *groupByViewController = action.sourceViewController;
+        MADGroupByViewController *groupByViewController = action.sourceViewController;
         self.aggregateGroupByType = groupByViewController.aggregateGroupType;
         self.groupTypeSectionNumber = groupByViewController.aggregateGroupNumber;
         
@@ -311,7 +311,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
     } else if ([segue.identifier isEqualToString:@"MTSegueGroupByPush"]) {
     
-        MTGroupByViewController __unsafe_unretained *destinationViewController;
+        MADGroupByViewController __unsafe_unretained *destinationViewController;
         destinationViewController = segue.destinationViewController;
         destinationViewController.delegate = self;
         destinationViewController.document = document;

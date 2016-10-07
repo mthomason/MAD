@@ -19,7 +19,8 @@
     @property (readonly) BOOL completedSuccessfully;
     @property (nonatomic, readonly, weak) MADocument *document;
 
-    - (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController
+    - (instancetype)initWithDocument: (MADocument *)document
+                      viewController: (UIViewController *)viewController
                   databaseConnection: (MTDatabaseConnection *)databaseConnection;
 
 @end

@@ -8,6 +8,6 @@
 
 #import "MTCellEnterText.h"
 
-@implementation MTCellEnterText
+@implementation MADCellEnterText
 
 @end

@@ -28,15 +28,15 @@
 
 #import "MADNavigationBarTitleView.h"
 
-NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
+NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";
 
-@interface MTGroupByViewController ()
+@interface MADGroupByViewController ()
 
     @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
 
 @end
 
-@implementation MTGroupByViewController
+@implementation MADGroupByViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

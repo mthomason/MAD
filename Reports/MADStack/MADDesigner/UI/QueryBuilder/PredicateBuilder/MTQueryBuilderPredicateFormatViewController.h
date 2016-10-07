@@ -21,7 +21,7 @@
 
 @interface MTQueryBuilderPredicateFormatViewController : UITableViewController
     <MTViewControllerProtocol,
-        MTQueryBuilderAddPredicateDelegate>
+        MADQueryAddPredicateDelegate>
 
 @property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;

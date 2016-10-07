@@ -14,13 +14,13 @@
 #import <UIKit/UILabel.h>
 #import <QuartzCore/CALayer.h>
 
-@interface MTTableCell ()
+@interface MADTableCell ()
 
     @property (nonatomic, weak, readwrite) UILabel *label;
 
 @end
 
-@implementation MTTableCell
+@implementation MADTableCell
 
 - (void)dealloc { [_label removeFromSuperview]; }
 
