@@ -287,4 +287,14 @@
     dispatch_async(defaultQueue, updateContent);
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"File group:\t%@\n", self.fileGroup];
+    [debug appendFormat:@"Current contents:\t%@", self.currentLocalContents];
+    return debug;
+}
+
 @end

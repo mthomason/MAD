@@ -55,8 +55,7 @@ static const int NotListening = -1;
         self.directoryMonitorQueue = directoryMonitorQueue;
         
         unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
-                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB |
-                DISPATCH_VNODE_WRITE;
+                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
         
         id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
                                                            (uintptr_t)_fileDescriptor,
@@ -85,6 +84,17 @@ static const int NotListening = -1;
     if (self.directoryMonitorSource != nil) {
         dispatch_source_cancel(self.directoryMonitorSource);
     }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    NSString *url = _URL.absoluteString;
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"\tDirectory to monitor: %@\n", url];
+    [debug appendFormat:@"\File descriptor: %d\n", _fileDescriptor];
+    return debug;
 }
 
 @end

@@ -158,4 +158,14 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
     return self.fileSystemName.hash;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    NSString *url = _URL.absoluteString;
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"\tMetadata item: %@\n", self.metadataItem];
+    return debug;
+}
+
 @end

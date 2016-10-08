@@ -177,4 +177,14 @@
                                                                                         YES : NO;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    NSString *url = _origionalURL.absoluteString;
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"\tOrigional URL: %@\n", url];
+    return debug;
+}
+
 @end
