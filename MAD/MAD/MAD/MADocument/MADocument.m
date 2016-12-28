@@ -344,20 +344,19 @@ void madwarn(char *err,  const char*err2) { }
 
 
     
-    __weak MADocument *weakdoc = document;
+    //__weak MADocument *weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);
     saveCompletionHandler = ^(BOOL success) {
         
-        if (weakdoc != nil) {
-            MADocument *strongdoc = weakdoc;
+        if (document != nil) {
             if (success) {
                 void (^closeCompletionHandler)(BOOL);
-                NSURL *fileURL = strongdoc.fileURL.copy;
-                NSURL *gutsUrl = strongdoc.urlGuts.copy;
+                NSURL *fileURL = document.fileURL.copy;
+                NSURL *gutsUrl = document.urlGuts.copy;
                 closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
-                [strongdoc closeWithCompletionHandler:closeCompletionHandler];
+                [document closeWithCompletionHandler:closeCompletionHandler];
             }
-            strongdoc.thumbnail = nil;
+            document.thumbnail = nil;
         }
         
     };
