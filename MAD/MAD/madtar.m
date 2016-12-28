@@ -7,8 +7,11 @@
 //
 #import "madtar.h"
 #import <fcntl.h>
+#import <string.h>
 #import <limits.h>
 #import <unistd.h>
+#import <stdlib.h>
+#import <dirent.h>
 #import "archive.h"
 #import "archive_entry.h"
 
@@ -35,22 +38,29 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
     }
 }
 
+
 int mad_extract(const char *source, const char *dest, const char *filename) {
     
     struct archive *a, *ext;
     struct archive_entry *entry;
     int flags, r, ar;
-    int mkdirstatus;
+    int mkdirstatus = 0;
     struct stat st;
     
     //unsigned int cdsuccess = chdir(dest);
     
     //mkdirstatus = mkdir(dest, S_IRWXU);
     
-    flags = ARCHIVE_EXTRACT_TIME;
-    flags |= ARCHIVE_EXTRACT_PERM;
-    flags |= ARCHIVE_EXTRACT_ACL;
-    flags |= ARCHIVE_EXTRACT_FFLAGS;
+    // Does dest exist?
+    
+    if (access( dest, F_OK) == -1) {
+        mkdirstatus = mkdir(dest, S_IRWXU);
+    }
+    
+    flags = ARCHIVE_EXTRACT_TIME |
+        ARCHIVE_EXTRACT_PERM |
+        ARCHIVE_EXTRACT_ACL |
+        ARCHIVE_EXTRACT_FFLAGS;
     
     a = archive_read_new();
     ar = archive_read_support_format_all(a);
@@ -63,9 +73,19 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     if ((r = archive_read_open_filename(a, source, 10240)))
         goto EXTRACT_MAD_FAIL;
     
+    char *dest_root;
+    dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1) * sizeof(char));
+    strcpy(dest_root, dest);
+    strcat(dest_root, "/");
+    strcat(dest_root, filename);
+    
+    if (access(dest_root, F_OK) == -1) {
+        mkdirstatus = mkdir(dest_root, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    }
+    
     while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&
            r != ARCHIVE_EOF) {
-        /*
+        
         const char *entry_pathname, *entry_sourcepath, *entry_uname, *entry_hardlink, *entry_symlink;
         //archive_entry_copy_stat(entry, &st);
         entry_pathname = archive_entry_pathname(entry);
@@ -75,8 +95,54 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         //archive_entry_copy_pathname(entry, &pathname);
         entry_hardlink = archive_entry_hardlink(entry);
         entry_symlink = archive_entry_symlink(entry);
-        */
+        
+        char *location;
+        location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
+        strcpy(location, filename);
+        strcat(location, "/");
+        strcat(location, entry_pathname);
+        
+        size_t newpathlen = strlen(dest) + strlen(location) + 1;
+        char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char));
+        strcpy(path, dest);
+        
+        if (access(path, F_OK) == -1) {
+            mkdirstatus = mkdir(path, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+        }
+        strcat(path, "/");
+        strcat(path, location);
+
+        //archive_set
+
+        mode_t file_mode = archive_entry_filetype(entry);
+        if (S_ISDIR(file_mode)) {
+            DIR *dir = opendir(path);
+            if (dir) {
+                closedir(dir);
+            } else {
+                int path_len = strlen(path);
+                if (strcmp(&path[path_len - 1], "/") == 0) {
+                    path[path_len - 1] = 0;
+                }
+                mkdirstatus = mkdir(path, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+            }
+            
+            
+        } else {
+            int fd, len;
+            fd = open(filename, O_RDONLY);
+            close(fd);
+        }
+        
+        archive_entry_set_pathname(entry, location);
+        const char *entry_pathname_confirm = archive_entry_pathname(entry);
+        
         r = archive_write_header(ext, entry);
+        
+        if (access(path, F_OK) == -1) {
+            //exit(2);
+        }
+
         
         if (r >= ARCHIVE_OK && archive_entry_size(entry) > 0) {
             
@@ -87,7 +153,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
             
         } else {
             const char *error = archive_error_string(ext);
-            
+            printf("%s", error);
         }
         
         r = archive_write_finish_entry(ext);
