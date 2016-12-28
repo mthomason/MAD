@@ -45,7 +45,8 @@
 
         id <NSCoding> obj = self.object;
         NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj];
-        success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
+        //success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
+        success = [d writeToURL:self.url atomically:NO];
         obj = nil;
         d = nil;
         self.object = nil;
