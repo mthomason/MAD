@@ -22,7 +22,10 @@
 
 @implementation MADTableCell
 
-- (void)dealloc { [_label removeFromSuperview]; }
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
+    [self.label removeFromSuperview];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -38,9 +41,9 @@
                                 UIViewAutoresizingFlexibleBottomMargin |
                                 UIViewAutoresizingFlexibleRightMargin |
                                 UIViewAutoresizingFlexibleLeftMargin;
-        self.label = lbl;
         self.contentView.layer.borderWidth = 1.0000f;
         self.contentView.layer.borderColor = color.CGColor;
+        self.label = lbl;
     }
     return self;
 }

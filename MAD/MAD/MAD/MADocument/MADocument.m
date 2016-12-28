@@ -340,9 +340,13 @@ void madwarn(char *err,  const char*err2) { }
     [document regenThumbnail];
     [document removeObservers];
 
+    void (^closeCompletionHandler)(BOOL);
+    //void (^origionalCompletionHandler)(BOOL, NSURL *);
+    //origionalCompletionHandler = completion;
+    
     NSURL *fileURL = document.fileURL.copy;
-
-
+    NSURL *gutsUrl = document.urlGuts.copy;
+    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
     
     //__weak MADocument *weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);
@@ -350,10 +354,6 @@ void madwarn(char *err,  const char*err2) { }
         
         if (document != nil) {
             if (success) {
-                void (^closeCompletionHandler)(BOOL);
-                NSURL *fileURL = document.fileURL.copy;
-                NSURL *gutsUrl = document.urlGuts.copy;
-                closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
                 [document closeWithCompletionHandler:closeCompletionHandler];
             }
             document.thumbnail = nil;
