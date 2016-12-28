@@ -31,15 +31,19 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 @implementation UIImage (MADDocument)
 
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
-    return [self newImageThumbnailWithReportFormatter:document.reportFormatter
-                                         andDataTable:document.mainDataTable];
+    MTReportFormatter *reportFormatter = document.reportFormatter;
+    MTDataTableFast *mainDataTable = document.mainDataTable;
+    return [self newImageThumbnailWithReportFormatter: reportFormatter
+                                         andDataTable: mainDataTable];
 }
 
 + (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
-                                        andDataTable:(MTDataTableFast *)dataTable {
+                                        andDataTable:(MTDataTableFast *)mainDataTable {
     
+    MTReportFormatter *formatter = reportFormatter;
+    MTDataTableFast *dataTable = mainDataTable;
     MTReportViewerPrintPageRenderer *printPageRenderer =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: formatter
                                                            dataTable: dataTable];
     
     UIImage *thumbnail;

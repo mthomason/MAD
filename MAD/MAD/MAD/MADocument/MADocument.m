@@ -229,13 +229,17 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, assign) BOOL didRefresh;
 
+    @property (nonatomic, readwrite, strong) UIImage *thumbnail;
+
 @end
 
 @implementation MADocument
 
 #pragma mark - NSObject
 
-- (void)dealloc { }
+- (void)dealloc {
+    _thumbnail = nil;
+}
 
 - (void)removeObservers {
     
@@ -337,22 +341,33 @@ void madwarn(char *err,  const char*err2) { }
     [document removeObservers];
 
     NSURL *fileURL = document.fileURL.copy;
-    NSURL *gutsUrl = document.urlGuts.copy;
 
-    void (^closeCompletionHandler)(BOOL);
-    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
+
     
+    __weak MADocument *weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);
     saveCompletionHandler = ^(BOOL success) {
         
-        if (success && document != nil)
-            [document closeWithCompletionHandler:closeCompletionHandler];
+        if (weakdoc != nil) {
+            MADocument *strongdoc = weakdoc;
+            if (success) {
+                void (^closeCompletionHandler)(BOOL);
+                NSURL *fileURL = strongdoc.fileURL.copy;
+                NSURL *gutsUrl = strongdoc.urlGuts.copy;
+                closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
+                [strongdoc closeWithCompletionHandler:closeCompletionHandler];
+            }
+            strongdoc.thumbnail = nil;
+        }
         
     };
+    UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:document];
+    document.thumbnail = thumbnail;
     
     [document saveToURL: fileURL
        forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: saveCompletionHandler];
+    
 }
 
 // Helpers
@@ -471,7 +486,7 @@ READFROMURL_END:;
                             forSaveOperation: (UIDocumentSaveOperation)saveOperation
                                        error: (NSError * __autoreleasing *)outError {
     
-    UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:self];
+    UIImage *thumbnail = self.thumbnail.copy;
     NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 thumbnail, NSThumbnail1024x1024SizeKey, nil];
     
