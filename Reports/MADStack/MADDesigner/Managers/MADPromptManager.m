@@ -12,8 +12,8 @@
 
 @interface MADPromptManager ()
 
-@property (nonatomic, strong, readwrite) NSMutableArray *promptItems;
-@property (nonatomic, strong, readwrite) NSString *defaultPrompt;
+  @property (nonatomic, strong, readwrite) NSMutableArray *promptItems;
+  @property (nonatomic, strong, readwrite) NSString *defaultPrompt;
 
 @end
 
@@ -67,6 +67,16 @@
     } else {
         self.prompt = self.defaultPrompt;
     }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"Default prompt:       %@", self.prompt];
+    [debug appendFormat:@"Prompt items:         %@", self.promptItems];
+    return debug;
 }
 
 @end

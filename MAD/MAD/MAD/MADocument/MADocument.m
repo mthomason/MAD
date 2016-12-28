@@ -103,6 +103,8 @@
 
 #import <mach/machine/vm_param.h>
 
+#import <MAD/MADNotificationFileUpdate.h>
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 typedef struct _iodata_stream {
@@ -1112,6 +1114,11 @@ READFROMURL_END:;
 - (void)prepareForQuery {
     NSArray *sortDescriptors = [self readCurrentSortDescriptors];
     [self.mainDataTable sortUsingDescriptors:sortDescriptors];
+}
+
+- (void)notifyThumbnailUpdated {
+    MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] init];
+    [fileUpdate notify];
 }
 
 - (void)regenThumbnail {

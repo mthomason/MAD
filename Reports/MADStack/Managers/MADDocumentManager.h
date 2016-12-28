@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UICollectionView.h>
+#import <MADFileManager/MADFileLocationManagerDelegate.h>
 
 @protocol MADDocumentManagerProtocol;
 
@@ -18,11 +19,11 @@
 @class MADCollectionViewCellDocument;
 
 @interface MADDocumentManager : NSObject
-    <UICollectionViewDataSource>
+    <UICollectionViewDataSource, MADFileLocationManagerDelegate>
 
     - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration;
-                                        
-    @property (nonatomic, weak) NSObject <MADDocumentManagerProtocol> * delegate;
+
+    @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
 
     - (MADMetaData *)metadataAtIndex:(NSUInteger)index;
     - (NSUInteger)count;

@@ -14,6 +14,7 @@ FOUNDATION_EXPORT double MADFoundationVersionNumber;
 //! Project version string for MADFoundation.
 FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
+
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
@@ -32,4 +33,3 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSURL+CommonURLs.h>
 #import <MADFoundation/MADFilename.h>
-

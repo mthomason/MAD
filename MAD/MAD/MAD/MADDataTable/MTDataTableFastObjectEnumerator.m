@@ -20,13 +20,13 @@
 
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADCocoaExtensions/MTLog.h>
-
 #import <MADSqlite3/sqlite3.h>
 
 #import "MTQuery.h"
 
 #import "MTDatabaseSqlite3.h"
+
+#import <MADFoundation/MADLog.h>
 
 @interface MTDataTableFastObjectEnumerator () {
     sqlite3_stmt *_statement;
@@ -45,7 +45,7 @@
 
 void sqliteCallback(void *foo, const char* statement);
 void sqliteCallback(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
+    MADLogDebug(@"=> %s", statement);
 }
 
 - (void)dealloc {

@@ -41,7 +41,7 @@
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADActiveDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
-#import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
+#import <MADExplorer/MADFileExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
 
 #import <MADFileManager/MADFilesController.h>
@@ -128,6 +128,8 @@ static NSString * const MADHintBarButtonItemDuplicate = @"Duplicates the selecte
 static NSString * const MADHintBarButtonItemDetails = @"Displays selected document details.";
 static NSString * const MADHintBarButtonItemInformation = @"Displays selected document details.";
 static NSString * const MADHintBarButtonItemAbout = @"Displays selected document details.";
+
+static NSString * const MADTextOpenWithViewer = @"The attached document can be opened with MAD Viewer.";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 //NSString * const MADUtiPublicData                               = @"public.data";
@@ -1162,21 +1164,16 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
         MADActiveDocumentManager *fileManager = self.activeDocumentManager;
-        //NSURL *gutsUrl = openDocument.urlGuts.copy;
-        
         void (^handleCloseCompletion)(BOOL, NSURL *);
+        
         handleCloseCompletion = ^(BOOL success, NSURL *cleanupURL) {
             if (success) {
                 [fileManager unload];
                 [MADFileUtilities removeFileAndArchiveAtURL:cleanupURL];
-
-          //      [MADFileUtilities removeFileAndArchiveAtURL:gutsUrl];
-
             }
         };
         [MADocument close:openDocument completion:handleCloseCompletion];
     }
-
 }
 
 - (void)viewControllerDidCancel:(id)sender {
@@ -1761,8 +1758,6 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
 }
 
-static NSString * const MADTextOpenWithViewer = @"The attached document can be opened with MAD Viewer.";
-
 - (IBAction)actionEmail:(MADCollectionViewCellDocument *)cell {
     
     NSIndexPath *indexPath;
@@ -1932,6 +1927,25 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         default:
             break;
     }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"Collection view delegate:          %@\n", self.collectionViewDelegate];
+    [debug appendFormat:@"Active document manager:           %@\n", self.activeDocumentManager];
+    [debug appendFormat:@"Document manager:                  %@\n", self.documentManager];
+    [debug appendFormat:@"File explorer view:                %@\n", self.fileExplorerView];
+    [debug appendFormat:@"Cloud activity running:            %@\n", self.cloudActivityRunning ? @"Yes" : @"No"];
+    [debug appendFormat:@"Cloud activity running display:    %@\n", self.cloudActivityRunningDisplay ? @"Yes" : @"No"];
+    [debug appendFormat:@"Shoulld show add document popover: %@\n", self.shouldShowAddDocumentPopover ? @"Yes" : @"No"];
+    [debug appendFormat:@"About view controller on screen:   %@\n", self.aboutViewControllerOnScreen ? @"Yes" : @"No"];
+    [debug appendFormat:@"Activity indicator right visible:  %@\n", self.activityIndicatorRightVisible ? @"Yes" : @"No"];
+    [debug appendFormat:@"Updating enabled:                  %@\n", self.updatingEnabled ? @"Yes" : @"No"];
+    [debug appendFormat:@"Get user cloud prefs first call:   %@\n", self.getUserCloudPrefsFirstCall ? @"Yes" : @"No"];
+    return debug;
 }
 
 @end

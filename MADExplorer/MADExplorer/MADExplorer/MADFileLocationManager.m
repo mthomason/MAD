@@ -153,12 +153,8 @@ static NSString * const MADFirstLaunch                                     = @"M
                                                                delay: ^ {
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSLog(@"%s", __PRETTY_FUNCTION__);
-
             UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
-            if (delegate) {
-                [delegate startLongRunningActivity];
-            }
+            [delegate startLongRunningActivity];
         }];
         
     } completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
@@ -180,7 +176,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 - (void)setupFileStorageLocationsForLocal {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    UIViewController <MADFileLocationManagerDelegate> *safedelegate;
+    id <MADFileLocationManagerDelegate> safedelegate;
     safedelegate = _delegate;
     
     NSString *groupIdentifier = [safedelegate groupIdentifier].copy;
@@ -192,22 +188,20 @@ static NSString * const MADFirstLaunch                                     = @"M
     
     typeof(self) __weak weakself = self;
 
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    void (^operationSetupFileStorageLocal)(void);
+    operationSetupFileStorageLocal = ^ {
         NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    
+        
         UIViewController <MADFileLocationManagerDelegate> *delegate;
         delegate = wdelegate;
-
+        
         MADFileLocationManager *strongself;
         strongself = weakself;
         
         if (delegate == nil || strongself == nil) return;
-
         
         MADFileLocationManager __weak *wself = strongself;
-
+        
         UIAlertController *prompt = [UIAlertController newAlertControllerPromptStorageOptionLocal:^ {
             
             MADFileLocationManager *sself = wself;
@@ -219,22 +213,24 @@ static NSString * const MADFirstLaunch                                     = @"M
         } cloud: ^{
             
             MADFileLocationManager *sself = wself;
-            if (sself) {
-                sself.storageOption = MADAppStorageCloud;
-                
-                [sself configureFilesController: NO storageOptionChangeHandler:^{
-                    
-                    [MADFileUtilities migrateLocalFiles: groupIdentifier
-                                                toCloud: ubiquityIdentifier
-                                              extension: fileExtention];
-                    
-                }];
-                
-            }
+            if (!sself) return;
+            
+            sself.storageOption = MADAppStorageCloud;
+            
+            void (^handleStorageOptionChanged)(void);
+            handleStorageOptionChanged = ^{
+                [MADFileUtilities migrateLocalFiles: groupIdentifier
+                                            toCloud: ubiquityIdentifier
+                                          extension: fileExtention];
+            };
+            
+            [sself configureFilesController: NO
+                 storageOptionChangeHandler: handleStorageOptionChanged];
         }];
-
-        [delegate presentViewController:prompt animated:YES completion:nil];
-    }];
+        
+        [self.delegate.presentingController presentViewController:prompt animated:YES completion:nil];
+    };
+    [[NSOperationQueue mainQueue] addOperationWithBlock:operationSetupFileStorageLocal];
 }
 
 - (void)getUserCloudPrefs {
@@ -376,6 +372,18 @@ static NSString * const MADFirstLaunch                                     = @"M
     groupIdentifer = [self storageOption] != MADAppStorageCloud ? [delegate groupIdentifier] :
                                                                   [delegate ubiquityIdentifier];
     return groupIdentifer.copy;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"Is first launch:       %@", self.isFirstLaunch ? @"Yes" : @"No"];
+    [debug appendFormat:@"Get user cloud prefs:  %@", self.getUserCloudPrefsFirstCall ? @"Yes" : @"No"];
+    [debug appendFormat:@"\tDelegate:            %@\n", self.delegate];
+    [debug appendFormat:@"\tFiles controller:    %@\n", self.filesController];
+    return debug;
 }
 
 @end

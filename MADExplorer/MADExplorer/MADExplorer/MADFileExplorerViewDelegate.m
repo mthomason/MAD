@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCollectionViewLayoutGroupedDelegate.h"
+#import "MADFileExplorerViewDelegate.h"
 #import "MADCollectionViewLayoutGroupedDelegateProtocol.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"

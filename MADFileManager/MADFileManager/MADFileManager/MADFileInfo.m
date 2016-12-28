@@ -73,4 +73,15 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    NSString *url = _URL.absoluteString;
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    [debug appendFormat:@"\tName: %@\n", self.name];
+    [debug appendFormat:@"\tUrl:  %@\n", self.URL.absoluteString];
+    return debug;
+}
+
 @end

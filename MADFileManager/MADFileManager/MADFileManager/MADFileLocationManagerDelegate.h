@@ -12,6 +12,8 @@
 @class UIAlertController;
 @class UIAlertAction;
 @class NSString;
+@class UIViewController;
+
 @class MADFilesController;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
@@ -23,6 +25,8 @@
         - (NSString *)groupIdentifier;
         - (NSString *)ubiquityIdentifier;
         - (NSString *)fileExtention;
+
+        @property (nonatomic, weak, readonly) UIViewController *presentingController;
 
     @optional
         - (void)startLongRunningActivity;

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8278B61DB73D4B005313F5 /* MADLog.m */; };
+		4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278B81DB73D61005313F5 /* MADLog.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C93729D1BACFC9200D6BD62 /* MADFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372A51BACFC9200D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */; };
 		4C9372AA1BACFC9200D6BD62 /* MADFoundationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372A91BACFC9200D6BD62 /* MADFoundationTests.m */; };
@@ -51,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAssert.h; sourceTree = "<group>"; };
+		4C8278B61DB73D4B005313F5 /* MADLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLog.m; sourceTree = "<group>"; };
+		4C8278B81DB73D61005313F5 /* MADLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADLog.h; sourceTree = "<group>"; };
 		4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C93729D1BACFC9200D6BD62 /* MADFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFoundation.h; sourceTree = "<group>"; };
 		4C93729F1BACFC9200D6BD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -158,6 +162,8 @@
 				4C9372E01BAD0E3500D6BD62 /* Types */,
 				4CDA62D01D08021A00E95859 /* MADConstantsDocumentExtentions.h */,
 				4CDA62D11D08021A00E95859 /* MADConstantsDocumentExtentions.m */,
+				4C8278B81DB73D61005313F5 /* MADLog.h */,
+				4C8278B61DB73D4B005313F5 /* MADLog.m */,
 			);
 			path = MADFoundation;
 			sourceTree = "<group>";
@@ -231,6 +237,7 @@
 				4C9372BB1BACFDB200D6BD62 /* MTDataTable.h in Headers */,
 				4CDA62DB1D0803ED00E95859 /* NSURL+CommonURLs.h in Headers */,
 				4CF09A491BB2791D007BCF7A /* UIApplication+MADAppDelegate.h in Headers */,
+				4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */,
 				4CDA62D21D08021A00E95859 /* MADConstantsDocumentExtentions.h in Headers */,
 				4CDA62D71D08032B00E95859 /* MADFilename.h in Headers */,
 				4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */,
@@ -351,6 +358,7 @@
 				4C9372F51BAD215B00D6BD62 /* NSURL+Document.m in Sources */,
 				4CDA62DA1D0803ED00E95859 /* NSURL+CommonURLs.m in Sources */,
 				4CDA62CF1D08009300E95859 /* UIScreen+Properties.m in Sources */,
+				4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */,
 				4C9372BC1BACFDB200D6BD62 /* MTDataTable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

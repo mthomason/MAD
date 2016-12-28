@@ -55,7 +55,7 @@ static const int NotListening = -1;
         self.directoryMonitorQueue = directoryMonitorQueue;
         
         unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
-                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+                             DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_WRITE;
         
         id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
                                                            (uintptr_t)_fileDescriptor,
@@ -66,8 +66,31 @@ static const int NotListening = -1;
         MADDirectoryMonitor __weak *weakself = self;
 
         dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
+            
             MADDirectoryMonitor *sself = weakself;
+            dispatch_source_proc_flags_t flags = dispatch_source_get_data(sself.directoryMonitorSource);
+            switch (flags) {
+                case DISPATCH_VNODE_DELETE:
+                    NSLog(@"Delete event.");
+                    break;
+                case DISPATCH_VNODE_RENAME:
+                    NSLog(@"Rename event.");
+                    break;
+                case DISPATCH_VNODE_EXTEND:
+                    NSLog(@"Extend event.");
+                    break;
+                case DISPATCH_VNODE_ATTRIB:
+                    NSLog(@"Attribute update event.");
+                    break;
+                case DISPATCH_VNODE_WRITE:
+                    NSLog(@"Write event.");
+                    break;
+                default:
+                    NSLog(@"Untracked event.");
+                    break;
+            }
             [sself.delegate directoryMonitorDidObserveChange:sself];
+            
         });
         
         dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{

@@ -47,7 +47,6 @@
 		4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205CA1BA7E2A2000E6A59 /* UIDevice+Hack.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205A01BA7E2A2000E6A59 /* MTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205A11BA7E2A2000E6A59 /* MTMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205A21BA7E2A2000E6A59 /* MTMath.m */; };
 		4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D01BA7E308000E6A59 /* CFNetwork.framework */; };
@@ -111,7 +110,6 @@
 		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "MADCocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
 		4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "MADCocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
 		4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hack.h"; path = "MADCocoaExtensions/UIDevice+Hack.h"; sourceTree = "<group>"; };
-		4C5205A01BA7E2A2000E6A59 /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLog.h; path = MADCocoaExtensions/MTLog.h; sourceTree = "<group>"; };
 		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = MADCocoaExtensions/MTMath.h; sourceTree = "<group>"; };
 		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTMath.m; path = MADCocoaExtensions/MTMath.m; sourceTree = "<group>"; };
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -183,7 +181,6 @@
 			isa = PBXGroup;
 			children = (
 				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
-				4C5205A01BA7E2A2000E6A59 /* MTLog.h */,
 				4C3622B41CF343D9002B8649 /* MADCompassDirection.h */,
 				4CB9AAE51C8C244B00420CFF /* MADThread.h */,
 				4CB9AAE61C8C244B00420CFF /* MADThread.m */,
@@ -264,7 +261,6 @@
 				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
-				4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */,
 				4C3622B91CF34AB8002B8649 /* MADAspectRatio.h in Headers */,
 				4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */,
 				4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */,

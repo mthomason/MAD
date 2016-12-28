@@ -60,4 +60,12 @@
     [self.queueForCachingData addOperation:operation];
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *debug = [[NSMutableString alloc] init];
+    NSString *classname = NSStringFromClass([self class]);
+    id uppercaseClassname = [classname uppercaseString];
+    [debug appendFormat:@"--%@--\n", uppercaseClassname];
+    return debug;
+}
+
 @end

@@ -13,7 +13,6 @@
 
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileLocationManagerDelegate.h>
 
 #import <MAD/MADConstants.h>
 #import "Constants.h"
@@ -21,8 +20,7 @@
 #import "MADDocumentManagerProtocol.h"
 
 @interface MADDocumentManager ()
-    <MADFilesControllerDelegate,
-        MADFileLocationManagerDelegate>
+    <MADFilesControllerDelegate>
 
     @property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *batchInserts;
@@ -63,6 +61,10 @@
     this.batchInserts = inserts,
     this.batchRemoves = removes,
     this.batchUpdates = updates;
+}
+
+- (UIViewController *)presentingController {
+    return _delegate;
 }
 
 #pragma mark -
