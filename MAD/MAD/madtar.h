@@ -12,7 +12,7 @@
 #import "archive.h"
 
 int mad_copy_data(struct archive *ar, struct archive *aw);
-int mad_extract(const char *filename);
+int mad_extract(const char *source, const char *dest, const char *filename);
 void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st);
 void mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath);
 

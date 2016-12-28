@@ -7,6 +7,7 @@
 //
 #import "madtar.h"
 #import <fcntl.h>
+#import <limits.h>
 #import <unistd.h>
 #import "archive.h"
 #import "archive_entry.h"
@@ -34,11 +35,17 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
     }
 }
 
-int mad_extract(const char *filename) {
+int mad_extract(const char *source, const char *dest, const char *filename) {
     
     struct archive *a, *ext;
     struct archive_entry *entry;
     int flags, r, ar;
+    int mkdirstatus;
+    struct stat st;
+    
+    //unsigned int cdsuccess = chdir(dest);
+    
+    //mkdirstatus = mkdir(dest, S_IRWXU);
     
     flags = ARCHIVE_EXTRACT_TIME;
     flags |= ARCHIVE_EXTRACT_PERM;
@@ -53,12 +60,22 @@ int mad_extract(const char *filename) {
     ar = archive_write_disk_set_options(ext, flags);
     ar = archive_write_disk_set_standard_lookup(ext);
     
-    if ((r = archive_read_open_filename(a, filename, 10240)))
+    if ((r = archive_read_open_filename(a, source, 10240)))
         goto EXTRACT_MAD_FAIL;
     
     while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&
            r != ARCHIVE_EOF) {
-        
+        /*
+        const char *entry_pathname, *entry_sourcepath, *entry_uname, *entry_hardlink, *entry_symlink;
+        //archive_entry_copy_stat(entry, &st);
+        entry_pathname = archive_entry_pathname(entry);
+        entry_sourcepath = archive_entry_sourcepath(entry);
+        la_int64_t entry_size = archive_entry_size(entry);
+        entry_uname = archive_entry_uname(entry);
+        //archive_entry_copy_pathname(entry, &pathname);
+        entry_hardlink = archive_entry_hardlink(entry);
+        entry_symlink = archive_entry_symlink(entry);
+        */
         r = archive_write_header(ext, entry);
         
         if (r >= ARCHIVE_OK && archive_entry_size(entry) > 0) {
@@ -67,6 +84,9 @@ int mad_extract(const char *filename) {
             
             if (r < ARCHIVE_WARN)
                 goto EXTRACT_MAD_FAIL;
+            
+        } else {
+            const char *error = archive_error_string(ext);
             
         }
         

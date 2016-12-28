@@ -133,6 +133,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 - (BOOL)unarchive {
     BOOL success = NO, isDirectory;
     int r;
+    NSString *d = NSTemporaryDirectory();
     //NSURL *urlGuts = _filewrapper.copy;
     NSString *fileWrapperPath = _filewrapper.path;
     NSError * __autoreleasing *errorCreate = nil;
@@ -143,7 +144,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     success = [[NSFileManager defaultManager] fileExistsAtPath: fileWrapperPath
                                                    isDirectory: &isDirectory];
     
-    if (!success || !isDirectory) {
+    //if (!success || !isDirectory) {
         BOOL successCreate;
         successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: fileWrapperPath
                                                   withIntermediateDirectories: YES
@@ -155,16 +156,17 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                                                            isDirectory: &isDirectory];
         
         if (!sucessExist) goto READ_FAIL;
-    }
+    //}
 
     
     const char *fileWrapperDirectoryCString = _filewrapper.fileSystemRepresentation;
+    const char *fileWrapperDirectoryNameCString = _filewrapper.lastPathComponent.fileSystemRepresentation;
     r = chdir(fileWrapperDirectoryCString);
     if (r != 0) goto READ_FAIL;
     
     const char *madArchivePathCString = _archive.fileSystemRepresentation;
-    
-    success = mad_extract(madArchivePathCString) == 0;
+    //fileWrapperDirectoryCString = d.fileSystemRepresentation;
+    success = mad_extract(madArchivePathCString, fileWrapperDirectoryCString, fileWrapperDirectoryNameCString) == 0;
     if (!success) goto READ_FAIL;
     
     goto READ_END;
