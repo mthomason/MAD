@@ -1303,7 +1303,11 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 
     MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
-    [allocatedDocument openWithCompletionHandler:^(BOOL success) { }];
+    [allocatedDocument openWithCompletionHandler:^(BOOL success) {
+        if (!success) {
+            NSLog(@"Failed to open file");
+        }
+    }];
 
 }
 
