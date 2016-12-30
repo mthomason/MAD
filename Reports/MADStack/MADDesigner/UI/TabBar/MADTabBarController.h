@@ -10,7 +10,7 @@
 #define Reports_MADTabBarController_h
 
 #import <UIKit/UITabBarController.h>
-#import "MADocumentProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
 extern const int8_t MADIndexQuery;
@@ -23,12 +23,16 @@ extern const int8_t MADIndexViewer;
 @class MADViewerController;
 
 @interface MADTabBarController : UITabBarController
-    <MADViewControllerDocumentProtocol, MTViewControllerProtocol>
+    <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
+
+    + (nullable instancetype)newTabBarController:(nullable MADocument __weak *)document
+                                          prompt:(nullable NSString *)prompt;
+
+    @property (nullable, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
     @property (nullable, readonly) MADQueryBuilderSplitViewController * querySplitViewController;
     @property (nullable, readonly) MADDesignerViewController * designerViewController;
     @property (nullable, readonly) MADViewerController * viewerViewController;
-    @property (nullable, nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;

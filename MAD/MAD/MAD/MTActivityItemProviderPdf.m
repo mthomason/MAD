@@ -11,14 +11,7 @@
 #endif
 
 #import "MTActivityItemProviderPdf.h"
-#import "MADActivityItemProviderPdfDelegate.h"
-#import "MADocument.h"
-#import "MTReportFormatter.h"
-#import "MTReportViewerPrintPageRenderer.h"
-#import "MADActivityIndicator.h"
-#import "MTPaper.h"
-#import "MTDataTableFast.h"
-#import "MADNotificationDidFormatPage.h"
+#import "MADActivityItemProviderDelegate.h"
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIActivity.h>
@@ -28,6 +21,15 @@
 #import <UIKit/UIImageView.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import "MADocument.h"
+#import "MTReportFormatter.h"
+#import "MTReportViewerPrintPageRenderer.h"
+
+#import "MADActivityIndicator.h"
+#import "MTPaper.h"
+#import "MTDataTableFast.h"
+#import "MADNotificationDidFormatPage.h"
 
 static inline CGFloat halfinch();
 static inline CGFloat halfinch() {

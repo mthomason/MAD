@@ -16,7 +16,7 @@
 
 @interface MTLicensingViewController : UITableViewController
 
-    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
 
 @end
 

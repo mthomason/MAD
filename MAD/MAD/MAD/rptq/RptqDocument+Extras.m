@@ -502,7 +502,7 @@
         NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
         NSMutableArray *tables                 = [NSMutableArray array];
         BOOL gotit                             = YES;
-        NSError *gotitError                    = nil;
+        //NSError *gotitError                    = nil;
         
         
         NSError *error = NULL;
@@ -529,7 +529,7 @@
             counter++;
         }
         
-        gotitError = error;
+        //gotitError = error;
         
         MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:managedObjectContext];
         [errorContainer addErrorsFromContainer:additionalErrors];

@@ -32,8 +32,13 @@
 }
 
 - (void)setText:(NSString *)text {
-    MADLogoString *attributedText = [NSAttributedString newLogoStringForTitle:text];
-    super.text = text;
+    MADLogoString *attributedText;
+    NSString *safetext;
+    
+    safetext = text.copy;
+    attributedText = [NSAttributedString newLogoStringForTitle:safetext];
+    
+    super.text = safetext;
     self.attributedText = attributedText;
     [self sizeToFit];
 }

@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderAdvancedSchemaViewController_h
 
 #import <UIKit/UIViewController.h>
-#import "MADocumentProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 
 @class UITableView;
 

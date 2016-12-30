@@ -24,7 +24,8 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 @implementation MADActiveDocumentManager
 
 - (void)dealloc {
-    [self.openFiles removeAllObjects];
+    [_openFiles removeAllObjects];
+    _openFiles = nil;
 }
 
 - (instancetype)init {
@@ -45,16 +46,21 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 }
 
 - (__kindof UIManagedDocument *)openDocument {
-    return self.openFiles[self.openUrl.absoluteURL.absoluteString];
+    NSURL *absoluteURL = self.openUrl.absoluteURL;
+    NSString *absoluteString = absoluteURL.absoluteString;
+    return absoluteString != nil ? self.openFiles[absoluteString] : nil;
 }
 
 - (void)unload {
-    [self removeDocumentWithUrl: self.openUrl];
+    NSURL *openURL = self.openUrl.copy;
+    [self removeDocumentWithUrl: openURL];
 }
 
 - (void)removeDocumentWithUrl:(NSURL *)url {
-    NSString *path = url.absoluteURL.absoluteString;
-    [self.openFiles removeObjectForKey:path];
+    NSURL *absoluteURL = self.openUrl.absoluteURL;
+    NSString *absoluteString = absoluteURL.absoluteString;
+    [self.openFiles removeObjectForKey:absoluteString];
+    
     if ([url isEqual:self.openUrl]) {
         self.openUrl = nil;
     }

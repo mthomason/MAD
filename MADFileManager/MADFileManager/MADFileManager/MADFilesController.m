@@ -196,7 +196,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         NSMutableArray *fileMetaData = [[NSMutableArray alloc] init];
         self.fileMetaDatum = fileMetaData;
         
-        self.fileCoordinator.delegate = self;
+        _fileCoordinator.delegate = self;
     }
     
     return self;
@@ -394,7 +394,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     [self processContentChangesWithInsertedMetaDatum: insertedMetaDatum
                                     removedMetaDatum: removedMetaDatum
                                     updatedMetaDatum: updatedMetaDatum
-                                          completion: handleProcessCompletion];
+                                          completion: ^(BOOL success, NSError *error) { }];
 }
 
 - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
@@ -410,20 +410,22 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     NSArray *removes = [NSArray arrayWithArray: removedMetaDatum];
     NSArray *updates = [NSArray arrayWithArray: updatedMetaDatum];
     
-    void (^handleProcessCompletion)(BOOL success, NSError *error);
-    handleProcessCompletion = ^(BOOL success, NSError *error) {
-        completion(success, error);
-    };
+    //void (^handleProcessCompletion)(BOOL success, NSError *error);
+    //handleProcessCompletion = ^(BOOL success, NSError *error) {
+    //    completion(success, error);
+    //};
 
     [self processContentChangesWithInsertedMetaDatum: inserts
                                     removedMetaDatum: removes
                                     updatedMetaDatum: updates
-                                          completion: handleProcessCompletion];
+                                          completion: ^(BOOL success, NSError *error) {
+                                              completion(success, error);
+                                          }];
 }
 
 - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     typeof(self) __weak weakSelf = self;
-    void (^handleFailure)(void);
+    /*void (^handleFailure)(void);
     handleFailure = ^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -433,15 +435,22 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
             [delegate filesController:sself didFailCreatingFileInfo:fileInfo withError:error];
         }
         
-    };
-    [self.delegateQueue addOperationWithBlock:handleFailure];
+    };*/
+    [self.delegateQueue addOperationWithBlock:^{
+        MADFilesController *sself = weakSelf;
+        id <MADFilesControllerDelegate> delegate = sself.delegate;
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailCreatingFile = @selector(filesController:didFailCreatingFileInfo:withError:);
+        if ([delegate respondsToSelector:didFailCreatingFile]) {
+            [delegate filesController:sself didFailCreatingFileInfo:fileInfo withError:error];
+        }
+    }];
 }
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     NSLog(@"File Coordinator did fail duplicating URL: %@", URL);
     typeof(self) __weak weakSelf = self;
-    void (^handleFailure)(void);
-    handleFailure = ^{
+    [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
         MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
@@ -449,15 +458,13 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         if ([delegate respondsToSelector:didFailDuplicating]) {
             [delegate filesController:sself didFailDuplicatingFileInfo:fileInfo withError:error];
         }
-    };
-    [self.delegateQueue addOperationWithBlock:handleFailure];
+    }];
 }
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     NSLog(@"File Coordinator did fail renaming URL: %@", URL);
     typeof(self) __weak weakSelf = self;
-    void (^handleFailure)(void);
-    handleFailure = ^{
+    [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
         MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
@@ -465,8 +472,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         if ([delegate respondsToSelector:didFailRemovingFile]) {
             [delegate filesController:sself didFailRenamingFileInfo:fileInfo withError:error];
         }
-    };
-    [self.delegateQueue addOperationWithBlock:handleFailure];
+    }];
 }
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
@@ -474,7 +480,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
     typeof(self) __weak weakSelf = self;
     void (^handleFailure)(void);
-    handleFailure = ^{
+    /*handleFailure = ^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
         
@@ -483,8 +489,17 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         if ([delegate respondsToSelector:didFailRemovingFile]) {
             [delegate filesController:sself didFailRemovingFileInfo:fileInfo withError:error];
         }
-    };
-    [self.delegateQueue addOperationWithBlock:handleFailure];
+    };*/
+    [self.delegateQueue addOperationWithBlock:^{
+        MADFilesController *sself = weakSelf;
+        id <MADFilesControllerDelegate> delegate = sself.delegate;
+        
+        MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
+        SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
+        if ([delegate respondsToSelector:didFailRemovingFile]) {
+            [delegate filesController:sself didFailRemovingFileInfo:fileInfo withError:error];
+        }
+    }];
 }
 
 #pragma mark - Change Processing
@@ -511,8 +526,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     
     MADFilesController * __weak weakSelf = self;
     
-    void (^processChanges)(void);
-    processChanges = ^{
+    [self.delegateQueue addOperationWithBlock:^{
         
         NSLog(@"%s", __PRETTY_FUNCTION__);
         
@@ -536,8 +550,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         });
         
         if (untrackedInsertedFileInfos.count == 0 &&
-                trackedRemovedFileInfos.count == 0 &&
-                updatedMetaDatum.count == 0) {
+            trackedRemovedFileInfos.count == 0 &&
+            updatedMetaDatum.count == 0) {
             return;
         }
         
@@ -556,7 +570,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                 
                 MADFilesController *sself2 = wself;
                 trackedRemovedFileInfoIndex =
-                    [sself2.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
+                [sself2.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
                 [sself2.fileMetaDatum removeObjectAtIndex: trackedRemovedFileInfoIndex];
                 
             });
@@ -589,7 +603,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
             MADFilesController *__weak wself = sself;
             dispatch_block_t findInsertedIndexes = ^{
                 untrackedInsertedFileInfoIndex =
-                    [wself.fileMetaDatum indexOfObject:untrackedInsertedFileInfo];
+                [wself.fileMetaDatum indexOfObject:untrackedInsertedFileInfo];
             };
             dispatch_sync(fileMetaDataQueue, findInsertedIndexes);
             
@@ -643,8 +657,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         } else {
             completion(YES, nil);
         }
-    };
-    [weakSelf.delegateQueue addOperationWithBlock:processChanges];
+    }];
 }
 
 #pragma mark - Convenience

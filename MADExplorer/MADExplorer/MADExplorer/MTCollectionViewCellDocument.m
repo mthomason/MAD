@@ -108,6 +108,7 @@ float wobbleFactor() {
     [super prepareForReuse];
     [self stopWobble];
     [self.imagePreview prepareForReuse];
+    self.gestureRecognizers = nil;
 }
 
 - (void)awakeFromNib {
@@ -312,23 +313,7 @@ float wobbleFactor() {
     return UIAccessibilityTraitButton;
 }
 
-- (void)setUploadingActive:(BOOL)active
-                   percent:(double)percent {
-    [self updateProgressView: _progressViewUpload
-                      active: active
-                     percent: percent];
-
-}
-
-- (void)setDownloadingActive:(BOOL)active
-                     percent:(double)percent {
-    [self updateProgressView: _progressViewDownload
-                      active: active
-                     percent: percent];
-    
-}
-
-- (void)updateProgressView:(UIProgressView *)progressView
++ (void)updateProgressView:(UIProgressView *)progressView
                     active:(BOOL)active
                    percent:(double)percent {
     
@@ -345,47 +330,103 @@ float wobbleFactor() {
     }
 }
 
+- (void)setUploadingActive:(BOOL)active
+                   percent:(double)percent {
+    UIProgressView *progressView = _progressViewUpload;
+    [[self class] updateProgressView: progressView
+                              active: active
+                             percent: percent];
+}
+
+- (void)setDownloadingActive:(BOOL)active
+                     percent:(double)percent {
+    UIProgressView *progressView = _progressViewDownload;
+    [[self class] updateProgressView: progressView
+                              active: active
+                             percent: percent];
+    
+}
+
 - (void)updateDisplayForMetaData:(MADMetaData *)metadata editing:(BOOL)editing {
     
-    _editing = editing;
+    BOOL notDownloaded, isDownloading, isUploading, isUbiquitous;
+    double percentage;
     
-    MADLabelFileExplorerDocumentCellTitle *labelTitle = _labelTitle;
-    MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub = _labelTitleSub;
-    labelTitle.text = metadata.name.copy;
-    BOOL notDownloaded  = [metadata.ubiquitousItemDownloadingStatus isEqualToString:
-                           NSMetadataUbiquitousItemDownloadingStatusNotDownloaded],
-    downloading    = metadata.ubiquitousItemIsDownloading,
-    uploading      = metadata.ubiquitousItemIsUploading;
+    NSURL *metadataURL, *thumbnailUrl;
+    MADLabelFileExplorerDocumentCellTitle *labelTitle;
+    MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
     
-    id cellText;
-    if (downloading) {
-        cellText = NSLocalizedString(Downloading, Downloading);
-        labelTitleSub.text = cellText;
-    } else if (uploading) {
-        cellText = NSLocalizedString(Syncing, Syncing);
-        labelTitleSub.text = cellText;
-    } else {
-        NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
-                                                fileSize:metadata.fileSystemFileSize];
-        labelTitleSub.text = subtitle;
-    }
-    [self setUploadingActive:uploading percent:metadata.ubiquitousItemPercentUploaded];
-    [self setDownloadingActive:downloading percent:metadata.ubiquitousItemPercentDownloaded];
-    
-    self.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
-                                        [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
-    
-    [labelTitle layoutIfNeeded];
-    [labelTitleSub layoutIfNeeded];
+    UIActivityIndicatorView *activityIndicator;
+    UIImageView *cloudIndicatorImageView;
+    MADThumbnailView *imagePreview;
+    UIImage *cloudIndicatorImage;
 
-    UIActivityIndicatorView *activityIndicator = _activityIndicator;
-    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading)
-        [activityIndicator startAnimating];
-    else
-        [activityIndicator stopAnimating];
+    _editing = editing;
+    NSString *name, *cellText, *subtitle, *ubiquitousItemDownloadingStatus;
     
-    NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadata.URL];
-    self.imagePreview.thumbnailURL = thumbnailUrl;
+    cloudIndicatorImageView = self.imageCloudIndicator;
+    
+    labelTitle = self.labelTitle;
+    labelTitleSub = self.labelTitleSub;
+    
+    name = metadata.name;
+    labelTitle.text = name.copy;
+    
+    
+    ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+    notDownloaded = isStatusNotDownloading(ubiquitousItemDownloadingStatus);
+    isDownloading = metadata.ubiquitousItemIsDownloading;
+    isUploading = metadata.ubiquitousItemIsUploading;
+    isUbiquitous = metadata.isUbiquitous;
+    
+    if (isDownloading) {
+
+        subtitle = NSLocalizedString(Downloading, Downloading);
+    
+    } else if (isUploading) {
+    
+        subtitle = NSLocalizedString(Syncing, Syncing);
+    
+    } else {
+        
+        unsigned long long fileSize = metadata.fileSystemFileSize;
+        subtitle = [self copySubtitleForStatus: ubiquitousItemDownloadingStatus
+                                      fileSize: fileSize];
+        
+    }
+    
+    labelTitleSub.text = subtitle.copy;
+    
+    percentage = metadata.ubiquitousItemPercentUploaded;
+    [self setUploadingActive: isUploading percent: percentage];
+    
+    percentage = metadata.ubiquitousItemPercentDownloaded;
+    [self setDownloadingActive:isDownloading percent: percentage];
+    
+    cloudIndicatorImage = notDownloaded && isUbiquitous ?
+                                [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+    
+    [cloudIndicatorImageView setImage: cloudIndicatorImage];
+    
+    //[labelTitle layoutIfNeeded];
+    //[labelTitleSub layoutIfNeeded];
+    [labelTitle setNeedsLayout];
+    [labelTitleSub setNeedsLayout];
+    [labelTitle setNeedsDisplay];
+    [labelTitleSub setNeedsDisplay];
+    
+    activityIndicator = self.activityIndicator;
+    SEL animateSwitch = isDownloading || isUploading ? @selector(startAnimating) :
+                                                       @selector(stopAnimating);
+    [activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
+    
+    
+    imagePreview = self.imagePreview;
+    
+    metadataURL = metadata.URL.copy;
+    thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadataURL];
+    imagePreview.thumbnailURL = thumbnailUrl;
+    
 /*    dispatch_block_t read_iamge = ^{
         @autoreleasepool {
             //MADMetaData *thumbnailMetadata = [[MADMetaData alloc] initWithURL:fileURL];
@@ -414,11 +455,20 @@ float wobbleFactor() {
     }
 }
 
+static inline BOOL isStatusNotDownloading(NSString *status);
+static inline BOOL isStatusNotDownloading(NSString *status) {
+    BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    return result;
+}
+
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
     NSString *result;
-    result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
-    NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :
-    [MADStandard newStringForFileSize:fileSize];
+    if (isStatusNotDownloading(status)) {
+        NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
+        result = [[NSString alloc] initWithString:textNotDownloaded];
+    } else {
+        result = [MADStandard newStringForFileSize:fileSize];
+    }
     return result;
 }
 

@@ -14,9 +14,9 @@
 #import <UIKit/UICollectionViewFlowLayout.h>
 
 @interface MADStoreViewController : MADCollectionViewController
-    <MTViewControllerProtocol, UICollectionViewDelegateFlowLayout>
+    <MADViewControllerStandardProtocol, UICollectionViewDelegateFlowLayout>
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
 
 @end
 

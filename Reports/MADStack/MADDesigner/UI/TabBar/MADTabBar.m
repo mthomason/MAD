@@ -15,21 +15,16 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
+        self.tintColor = [MADColorEverydayApps newColorRed];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setup];
+    if (self = [super initWithFrame:frame]) {
+        self.tintColor = [MADColorEverydayApps newColorRed];
     }
     return self;
-}
-
-- (void)setup {
-    self.tintColor = [MADColorEverydayApps newColorRed];
 }
 
 @end

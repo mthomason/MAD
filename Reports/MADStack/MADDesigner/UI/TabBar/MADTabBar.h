@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADTabBar_h
-#define Reports_MADTabBar_h
+#ifndef MAD_MADTabBar_h
+#define MAD_MADTabBar_h
 
 #import <UIKit/UITabBar.h>
 

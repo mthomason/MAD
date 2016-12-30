@@ -16,23 +16,32 @@
 
 @implementation NSAttributedString (Logo)
 
-+ (MADLogoString *)newLogoStringForTitle:(NSString *)title {
++ (MADLogoString *)newLogoStringForTitle:(NSString *)prompt {
     
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle newParagraphStyleTitleBar];
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSRange range, firstRange, secondRange;
+    NSString *title, *component;
+    NSParagraphStyle *paragraphStyle;
+    NSMutableAttributedString *attributedStringMadDesigner;
+    NSArray <NSString *> *components;
     
-    NSRange range = NSMakeRange(0, attributedStringMadDesigner.string.length);
-    NSArray <NSString *> *components = [title componentsSeparatedByString:@" "];
-    NSRange firstRange;
-    NSRange secondRange;
+    title = prompt.copy;
+    paragraphStyle = [NSParagraphStyle newParagraphStyleTitleBar];
+    attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    
+    range = NSMakeRange(0, attributedStringMadDesigner.string.length);
+    components = [title componentsSeparatedByString:@" "];
     
     if (components.count == 2) {
-        NSString *component = components[0];
+        
+        component = components[0];
         firstRange = [title rangeOfString:component];
+        
         component = components[1];
         secondRange = [title rangeOfString:component];
+        
     } else {
-        firstRange = range; secondRange = range;
+        firstRange = range;
+        secondRange = range;
     }
     
     UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];

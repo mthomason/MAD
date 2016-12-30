@@ -38,7 +38,7 @@ NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
 @interface MTDatabaseDriverSelectorViewController ()
-    <MTViewControllerProtocol,
+    <MADViewControllerStandardProtocol,
         UITableViewDelegate>
 
     @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;

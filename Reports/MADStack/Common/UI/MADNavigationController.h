@@ -11,7 +11,7 @@
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
-#import "MADocumentProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 
 @interface MADNavigationController : UINavigationController
     <MADViewControllerDocumentProtocol,

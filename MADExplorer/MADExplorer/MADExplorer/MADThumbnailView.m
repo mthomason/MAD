@@ -86,9 +86,13 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)setThumbnailPath:(NSString *)path {
+    
     if (_thumbnailAbsolutePath == nil || ![_thumbnailAbsolutePath isEqualToString: path]) {
+
         _thumbnailAbsolutePath = path.copy;
-        [self setImageFromPath: path];
+
+        [self setImageFromPath: _thumbnailAbsolutePath];
+        
         /*
         int fdes = open(path.UTF8String, O_RDONLY);
         if (_source) dispatch_source_cancel(_source);
@@ -133,9 +137,10 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)setThumbnailURL:(NSURL *)URL {
-    NSString *path = URL.path;
-    if (!path) [self setThumbnailToDefault];
-    else [self setThumbnailPath:path];
+    NSString *path = URL.path.copy;
+    [self setThumbnailPath: path];
+    //if (!path) [self setThumbnailToDefault];
+    //else [self setThumbnailPath:path];
     
 }
 

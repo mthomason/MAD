@@ -11,7 +11,7 @@
 
 #import <UIKit/UIViewController.h>
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 
 @class MADocument;
 @class MTQuery;
@@ -19,7 +19,7 @@
 
 @interface MADViewControllerSQL : UIViewController
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, weak) IBOutlet UITextView *textView;
 

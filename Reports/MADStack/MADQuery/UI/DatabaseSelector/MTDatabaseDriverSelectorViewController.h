@@ -17,12 +17,12 @@ extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
 extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 
 @interface MTDatabaseDriverSelectorViewController : MADTableViewController
     <MADSaveFileProtocol>
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
 @end

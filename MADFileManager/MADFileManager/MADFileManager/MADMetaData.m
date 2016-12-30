@@ -56,8 +56,11 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone { @throw exceptionNotImplemented(_cmd); }
+
 - (NSData *)fileSystemFileCreationDate { @throw exceptionNotImplemented(_cmd); }
+
 - (NSData *)fileSystemContentChangeDate { @throw exceptionNotImplemented(_cmd); }
+
 - (BOOL)isUbiquitous { @throw exceptionNotImplemented(_cmd); }
 
 - (NSError *)ubiquitousItemUploadingError { @throw exceptionNotImplemented(_cmd); }
@@ -161,10 +164,8 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     NSString *classname = NSStringFromClass([self class]);
-    NSString *url = _URL.absoluteString;
     id uppercaseClassname = [classname uppercaseString];
     [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    [debug appendFormat:@"\tMetadata item: %@\n", self.metadataItem];
     return debug;
 }
 

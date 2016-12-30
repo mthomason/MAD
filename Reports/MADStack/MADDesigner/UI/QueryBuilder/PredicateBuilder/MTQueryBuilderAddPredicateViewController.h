@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @class MADocument;
 
 typedef id <MADQueryAddPredicateDelegate,
-                MTViewControllerProtocol> MADQueryBuilderPredicateDelegate;
+                MADViewControllerStandardProtocol> MADQueryBuilderPredicateDelegate;
 
 @interface MTQueryBuilderAddPredicateViewController : UITableViewController
     <UITableViewDelegate,

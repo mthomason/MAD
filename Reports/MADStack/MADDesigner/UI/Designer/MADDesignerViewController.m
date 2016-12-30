@@ -192,7 +192,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MTCollectionViewCellElementDelegate,
     MTReportDesignerSectionViewLayoutLiquidDelegate,
     MADDesignerElementPickerDelegate,
-    MTViewControllerProtocol,
+    MADViewControllerStandardProtocol,
     MTReportDesignerSectionLayoutSettingsDelegate,
     MTQueryBuilderChooseFieldDelegate,
     MTTabBarImageProtocol,
@@ -292,9 +292,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)dealloc { }
 
-+ (instancetype)newDesignerViewController {
++ (instancetype)newDesignerViewController:(MADocument *)document {
     UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
+     [((typeof(self))controller) setDocument: document];
     return controller;
 }
 

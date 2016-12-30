@@ -295,15 +295,17 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSMetadataQuery __weak *wmetadataQuery = _metadataQuery;
     
     void (^ __weak weakQueryUpdateHandler)(void) = _firstQueryUpdateHandler;
+    
     void (^handleDidUpdateCompletion)(BOOL, NSError *);
     handleDidUpdateCompletion = ^(BOOL success, NSError *error) {
         [wmetadataQuery enableUpdates];
         void (^firstQueryUpdateHandler)(void) = weakQueryUpdateHandler;
         if (firstQueryUpdateHandler) {
             firstQueryUpdateHandler();
-            firstQueryUpdateHandler = nil;
+            //firstQueryUpdateHandler = nil;
         }
     };
+    
     [_delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                     removedMetaDatum: removed
                                                     updatedMetaDatum: updated

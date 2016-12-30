@@ -16,15 +16,19 @@
 
 @interface MADTableCell ()
 
-    @property (nonatomic, weak, readwrite) UILabel *label;
+    @property (nonatomic, strong, readwrite) UILabel *label;
 
 @end
 
 @implementation MADTableCell
 
+- (void)dealloc {
+    _label = nil;
+}
+
 - (void)removeFromSuperview {
-    [super removeFromSuperview];
     [self.label removeFromSuperview];
+    [super removeFromSuperview];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

@@ -107,5 +107,5 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqUserCredentals.h>
 #import <MAD/RptqUserCredentals+Extras.h>
 
-#import <MAD/MADActivityItemProviderPdfDelegate.h>
+#import <MAD/MADActivityItemProviderDelegate.h>
 

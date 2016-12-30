@@ -15,8 +15,7 @@
 
 @required
 
-- (void)setSelectedDocumentObjects:(NSSet *)objectIds;
-- (void)setDocument:(MADocument *)document;
+    - (void)setSelectedDocumentObjects:(NSSet *)objectIds;
 
 @end
 

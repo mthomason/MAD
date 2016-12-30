@@ -181,7 +181,6 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 
     if (!path_exist(dest_root)) {
         mkdirstatus = mad_mkdir(dest_root);
-        assert(mkdirstatus);
     }
     
     while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&

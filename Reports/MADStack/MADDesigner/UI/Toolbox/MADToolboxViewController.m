@@ -22,7 +22,7 @@
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADStoryboard.h"
 #import "UINavigationController+Designer.h"
-
+#import "MADViewControllerDocumentProtocol.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
@@ -31,11 +31,14 @@ NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardS
 const CGFloat MADNavigationBarSizeHeightNormal = 44.0000f;
 const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
+typedef UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanel;
+typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanelTable;
+
 
 @interface MADToolboxViewController ()
 
-    @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
-    @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format;
+    @property (nonatomic, strong) MADToolboxPanel *layout;
+    @property (nonatomic, strong) MADToolboxPanel *format;
     @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
     @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
@@ -86,11 +89,10 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
         
         UIStoryboard *storyboard = [MADStoryboard newStoryboardToolbox];
         
-        UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
+        MADToolboxPanel *layout, *format;
         layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         self.layout = layout;
         
-        UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format;
         format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
         self.format = format;
         
@@ -136,7 +138,8 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     [self.styleNavigationController popToRootViewControllerAnimated:animated];
 
     self.clearsBackground = self.clearsBackground;
-    UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    MADToolboxPanelTable *style;
+    style = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
 
@@ -154,8 +157,8 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToShow = self.styleNavigationController;
     self.currentViewController = viewControllerToShow;
 
-    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;    
-    viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    MADToolboxPanelTable *viewControllerToUpdate = nil;
+    viewControllerToUpdate = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
     
     [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToUpdate.document = self.document;
@@ -192,7 +195,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     
     if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {
     
-        id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
+        id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setDocument:self.document];
 
     } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
@@ -203,19 +206,19 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     }
 }
 
-- (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)delegateForController:(UIViewController *)controller {
-    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *delegate;
+- (MADToolboxPanel *)delegateForController:(UIViewController *)controller {
+    MADToolboxPanel *delegate;
     if ([controller isKindOfClass:[UINavigationController class]]) {
-        delegate = (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)((UINavigationController *)controller).viewControllers.firstObject;
+        delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
     } else {
-        delegate = (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)controller;
+        delegate = (MADToolboxPanel *)controller;
     }
     return delegate;
 }
 
 - (void)showStyle {
     
-    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    MADToolboxPanel *viewControllerToUpdate = (MADToolboxPanel *)self.styleNavigationController.viewControllers.firstObject;
 
     UIViewController *viewControllerToShow = self.styleNavigationController;
     self.currentViewController = viewControllerToShow;
@@ -254,7 +257,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 - (IBAction)valueChanged:(id)sender {
 
     UIViewController *viewControllerToShow = nil;
-    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
+    MADToolboxPanel *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
 
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
@@ -340,7 +343,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
     return image;
 }
 
-- (void)setOptionsForViewController:(UIViewController <MTToolboxViewControllerProtocol> *)viewController {
+- (void)setOptionsForViewController:(MADToolboxPanel *)viewController {
     [viewController setSelectedDocumentObjects: self.selectedObjectIds];
     viewController.document = self.document;
 }

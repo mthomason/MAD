@@ -234,7 +234,8 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[(NSUInteger)indexPath.row];
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
-    result.detailLabel.text = field.databaseSchemaField.name.copy;
+    NSString *name = field.databaseSchemaField.name.copy;
+    result.detailLabel.text = name;
     result.detailLabel.font = self.detailFont.copy;
     return result;
 }

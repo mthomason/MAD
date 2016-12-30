@@ -8,7 +8,9 @@
 
 @dynamic tabBarController;
 
-- (void)dealloc { }
+- (void)dealloc {
+
+}
 
 - (instancetype)init {
     if (self = [super init]) {

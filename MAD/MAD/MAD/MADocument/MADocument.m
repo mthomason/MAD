@@ -335,7 +335,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *cleanupURL))completion  {
++ (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion  {
     
     [document regenThumbnail];
     [document removeObservers];
@@ -346,7 +346,7 @@ void madwarn(char *err,  const char*err2) { }
     
     NSURL *fileURL = document.fileURL.copy;
     NSURL *gutsUrl = document.urlGuts.copy;
-    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, gutsUrl); };
+    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, fileURL, gutsUrl); };
     
     //__weak MADocument *weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);

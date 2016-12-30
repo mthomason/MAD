@@ -223,8 +223,10 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout*)collectionViewLayout
-                                            sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     return CGSizeMake(150.0000f, 100.0000f);
+
 }
 
 #pragma mark - Actions

@@ -27,7 +27,7 @@ extern const NSInteger MTViewTagFieldOrFormulaSelector;
 @class RptqQueryField;
 
 @protocol MADDesignerElementPickerDelegate
-    <MTViewControllerProtocol>
+    <MADViewControllerStandardProtocol>
 
     - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
     - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
@@ -36,7 +36,7 @@ extern const NSInteger MTViewTagFieldOrFormulaSelector;
                                                  inputObject:(NSManagedObjectID *)inputObject
                                                    groupType:(MTAggregateGroupByType)groupType
                                                  groupNumber:(NSNumber *)groupNumber;
-    - (void)viewControllerDidFinish:(id)sender;
+    //- (void)viewControllerDidFinish:(id)sender;
 
 @end
 

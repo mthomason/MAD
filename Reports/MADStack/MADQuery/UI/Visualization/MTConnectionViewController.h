@@ -12,7 +12,7 @@
 #import "MADTableViewController.h"
 #import <UIKit/UIViewControllerTransitioning.h>
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 @protocol MADSaveFileProtocol;
 
 @interface MADConnectionViewController : MADTableViewController
@@ -22,7 +22,7 @@
         UITextFieldDelegate>
 
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
     @property (nonatomic, copy) NSString *databaseType;

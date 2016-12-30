@@ -27,12 +27,24 @@
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
     
     if (self.isViewLoaded) {
+
+        UITableView *tableView;
+        UINavigationItem *navigationItem;
+        UIView __weak *backgroundView, __weak *titleView;
+        
+        
+        tableView = self.tableView;
+        navigationItem = self.navigationItem;
+        backgroundView = tableView.backgroundView;
+        titleView = navigationItem.titleView;
+        
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [self.tableView.backgroundView setNeedsDisplay];
-            [self.navigationItem.titleView sizeToFit];
+            [backgroundView setNeedsDisplay];
+            [titleView sizeToFit];
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [self.navigationItem.titleView sizeToFit];
+            [titleView sizeToFit];
         }];
+
     }
 }
 

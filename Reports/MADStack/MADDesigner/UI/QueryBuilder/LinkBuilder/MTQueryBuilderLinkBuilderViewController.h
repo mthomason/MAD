@@ -28,7 +28,7 @@
         MADQueryBuilderAddLinkJoinTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-    @property (nonatomic, weak) id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> queryLinkDelegate;
+    @property (nonatomic, weak) id <MTQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;

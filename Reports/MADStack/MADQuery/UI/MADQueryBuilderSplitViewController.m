@@ -39,7 +39,10 @@
 #import "MADQueryVisualizationViewController+Designer.h"
 #import "MADStoryboard.h"
 
+static NSString * const TextTitleFormat = @"MAD %@";
+static NSString * const TextTitleQuery = @"Query";
 static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
+static NSString * const TextRedraw = @"Redraw";
 
 @interface MADQueryBuilderSplitViewController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
@@ -47,130 +50,267 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
 
-    @property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
-    @property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemRevealQuery;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
 
     @property (nonatomic, strong) UIPopoverController *popover;
+
     @property (nonatomic, assign) BOOL localEditing;
+    @property (nonatomic, assign) BOOL setupDetail;
+    @property (nonatomic, assign) BOOL setupInitalLayout;
+
+    @property (readonly) MADTabBarController *tabBarController;
+
 
 @end
 
 @implementation MADQueryBuilderSplitViewController
 
 @synthesize document = _document;
+@synthesize title = _title;
 
 + (void)initialize {
+    
     if (self == [MADQueryBuilderSplitViewController self]) {
+        
         @autoreleasepool {
-            Class thisClass = [MADQueryBuilderSplitViewController class];
-            UIBarButtonItem *appearance = [UIBarButtonItem appearanceWhenContainedIn:thisClass, nil];
+            UIBarButtonItem *appearance;
+            appearance = [UIBarButtonItem appearanceWhenContainedIn:[self class], nil];
+            
             UIColor *white =  [MADColorEverydayApps newColorWhite];
             appearance.tintColor = white;
         }
     }
+    
 }
 
-- (void)dealloc { }
+- (void)dealloc {
 
-+ (instancetype)newQueryBuilderSplitViewController {
+}
+
++ (instancetype)newQueryBuilderSplitViewController:(MADocument *)document {
     UIStoryboard *storyboardQuery = [MADStoryboard newStoryboardQuery];
     id controller =  [storyboardQuery instantiateViewControllerWithIdentifier:SplitViewController];
+    [((typeof(self))controller) setDocument: document];
     return controller;
 }
 
 - (NSString *)title {
-    return [MADQueryBuilderSplitViewController MADQuery];
-}
-
-+ (NSString *)MADQuery {
-    NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
-    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+    if (_title == nil) {
+        NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
+        id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
+        _title = title;
+    }
+    return _title;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     
     if (self = [super initWithCoder:aDecoder]) {
-        id redraw = NSLocalizedString(@"Redraw", @"Redraw");
-        id whiteColor = [UIColor whiteColor];
-        id traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
+        
 
+        _setupDetail = NO;
+        _setupInitalLayout = NO;
+        _localEditing = NO;
+        
+        id redraw = NSLocalizedString(TextRedraw, TextRedraw);
+        
         id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                              target: self
                                                                              action: @selector(done:)];
+        self.barButtonItemDone = barButtonItemDone;
+        
         id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
                                                                        style: UIBarButtonItemStylePlain
                                                                       target: self
                                                                       action: @selector(redrawQueryVisualization:)];
-
-        [self setOverrideTraitCollection:traitCollection forChildViewController:self.detailNavigationController];
-
-        self.navigationController.navigationBar.tintColor = whiteColor;
-        self.navigationController.navigationItem.titleView.tintColor = whiteColor;
-        
-        self.navigationItem.leftBarButtonItem = barButtonItemDone;
-        self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
-        self.editButtonItem.target = self;
-        self.editButtonItem.action = @selector(edit:);
-
-        self.localEditing = NO;
-
-        self.barButtonItemDone = barButtonItemDone;
         self.barButtonItemRevealQuery = barButtonItemRevealQuery;
+
+        
+        //self.delegate = self;
         
     }
     return self;
 }
 
+/*- (UINavigationController *)navigationController {
+    UINavigationController *navigationController;
+    navigationController = [super navigationController];
+    if (navigationController != nil) {
+        
+    }
+    return navigationController;
+}*/
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     self.delegate = self;
 
-    MADocument *doc = self.document;
-    NSAssert(doc != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = self.title.copy;
-    self.navigationItem.titleView = titleView;
+    /*UITabBarController *tabBarController = self.tabBarController;
+    UINavigationItem *navigationItem = tabBarController.navigationItem;
+
+    NSURL *fileURL = _document.fileURL;
+    NSString *lastPathComponent = fileURL.lastPathComponent;
+    navigationItem.prompt = lastPathComponent.copy;*/
+
+
+    //self.queryBuilderControllerAdvanced.document = document;
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
     
-    NSString *lastPathComponent = doc.fileURL.lastPathComponent.copy;
-    self.tabBarController.navigationItem.prompt = lastPathComponent;
+    if (!_setupInitalLayout) {
 
-    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+        UIColor *whiteColor;
+        UINavigationController *navigationController;
+        UIBarButtonItem *buttonSQL;
 
-    self.detailNavigationController.navigationBarHidden = NO;
-    self.barButtonItemSQL.tintColor = [UIColor whiteColor];
+        whiteColor = [UIColor whiteColor];
+        navigationController = self.navigationController;
+        buttonSQL = _barButtonItemSQL;
 
-    self.queryBuilderControllerAdvanced.document = doc;
+        buttonSQL.tintColor = whiteColor.copy;
+        
+        navigationController.navigationBar.tintColor = whiteColor.copy;
+        navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
+
+        [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+            if (isLicensedUser == NO) {
+                NSNumber *animateObject;
+                animateObject = [[NSNumber alloc] initWithBool: NO];
+                [[NSOperationQueue mainQueue] performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
+                                                               withObject: animateObject
+                                                            waitUntilDone: NO];
+            }
+        }];
+
+        _setupInitalLayout = YES;
+    }
+}
+
+- (void)viewDidLayoutSubviews {
+
+    UIView *titleView = self.navigationItem.titleView;
+    [titleView sizeToFit];
+    
+    [super viewDidLayoutSubviews];
+}
+
+- (UINavigationItem *)navigationItem {
+    UINavigationItem *navigationItem = [super navigationItem];
+    if (navigationItem && navigationItem.titleView == nil) {
+        
+        MADNavigationBarTitleView *titleView;
+        UIBarButtonItem *editButton, *doneButton;
+        NSString *title;
+
+        title = self.title;
+        titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+        titleView.text = title.copy;
+        
+        navigationItem.leftItemsSupplementBackButton = YES;
+        navigationItem.hidesBackButton = NO;
+
+        navigationItem.titleView = titleView;
+
+        doneButton = _barButtonItemDone;
+        navigationItem.leftBarButtonItem = doneButton;
+        
+        editButton = self.editButtonItem;
+        editButton.target = self;
+        editButton.action = @selector(edit:);
+        navigationItem.rightBarButtonItem = editButton;
+        
+
+    }
+    return navigationItem;
 }
 
 - (UINavigationController *)detailNavigationController {
-    return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
+    UINavigationController *detailController = nil;
+    if (self.viewControllers.count > 0) {
+        detailController = self.viewControllers[0];
+        if (!_setupDetail) {
+            id traits = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
+            [self setOverrideTraitCollection:traits forChildViewController: detailController];
+            detailController.navigationBarHidden = NO;
+            _setupDetail = YES;
+            if ([detailController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+                ((id <MADViewControllerDocumentProtocol>) detailController).document = _document;
+            }
+                
+        }
+    };
+    return detailController;
 }
 
 - (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
-    return self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
+    MADQueryVisualizationViewController *queryVisulization = nil;
+    if (self.viewControllers.count > 1) {
+        queryVisulization = self.viewControllers[1];
+        MADocument *document = _document;
+        MADocument *documentQuery = queryVisulization.document;
+        if (documentQuery != nil && documentQuery != document) {
+            queryVisulization.document = document;
+        }
+    }
+    return queryVisulization;
 }
 
 - (MADQueryViewController *)queryBuilderController {
-    return (MADQueryViewController *)self.detailNavigationController.topViewController;
+    UINavigationController *detailNavigationController = self.detailNavigationController;
+    MADQueryViewController *queryViewController = (MADQueryViewController *)detailNavigationController.topViewController;
+    if (queryViewController && queryViewController.document == nil) {
+        queryViewController.document = _document;
+    }
+    return queryViewController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.queryBuilderController reloadMainDocumentAnimated: YES];
+    MADQueryViewController *queryBuilderController;
     
-    MADQueryBuilderSplitViewController * __unsafe_unretained weakself = self;
+    queryBuilderController = self.queryBuilderController;
+    [queryBuilderController reloadMainDocumentAnimated: YES];
+    
+    NSNumber *animateObject = [[NSNumber alloc] initWithBool:animated];
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
-            NSArray *items = weakself.toolbarItems;
-            NSMutableArray *mutableItems = [items mutableCopy];
-            [mutableItems removeObject:weakself.barButtonItemRevealQuery];
-            weakself.toolbarItems = mutableItems;
+            [[NSOperationQueue mainQueue] performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
+                                                           withObject: animateObject
+                                                        waitUntilDone: NO];
         }
     }];
+}
+
+- (void)layoutForUnlicensedUser:(NSNumber *)animated {
+
+    BOOL animate;
+    NSMutableArray<__kindof UIBarButtonItem *> *toolbarItemsLimited;
+    NSArray<__kindof UIBarButtonItem *> *toolbarItemsFull, *toolbarItemsPremium;
+    UIBarButtonItem *barButtonItemRevealQuery;
+    
+    animate = animated.boolValue;
+    
+    barButtonItemRevealQuery = self.barButtonItemRevealQuery;
+    
+    toolbarItemsFull = self.toolbarItems;
+    toolbarItemsLimited = toolbarItemsFull.mutableCopy;
+    toolbarItemsFull = nil;
+    
+    
+    toolbarItemsPremium = [[NSArray alloc] initWithObjects: barButtonItemRevealQuery, nil];
+    [toolbarItemsLimited removeObjectsInArray:toolbarItemsPremium];
+    toolbarItemsPremium = nil;
+    
+    barButtonItemRevealQuery = nil;
+    
+    [self setToolbarItems: toolbarItemsLimited animated: animate];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -205,18 +345,12 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
                 [self.popover dismissPopoverAnimated:YES];
             }
         }
-        Class popoverSegueClass = [UIStoryboardPopoverSegue class];
-        if ([segue isKindOfClass:popoverSegueClass]) {
+        if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             ((UIStoryboardPopoverSegue *)segue).popoverController.delegate = self;
             self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
             [self.tabBarController disableTabBarItems];
         }
     }
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
@@ -243,14 +377,32 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    MADQueryBuilderSplitViewController * __weak weakSelf = self;
-    BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
+    __block id <MADViewControllerStandardProtocol> viewControllerDelegate = _viewControllerDelegate;
+    BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue] != NO;
     [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {
-            MADQueryBuilderSplitViewController *sself = weakSelf;
-            [sself.viewControllerDelegate viewControllerDidFinish:sself];
+            [viewControllerDelegate viewControllerDidFinish:nil];
         }
+        viewControllerDelegate = nil;
     }];
+    _viewControllerDelegate = nil;
+}
+
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
+    if (!self.isViewLoaded) return;
+        
+    UIView *titleView = self.navigationItem.titleView;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [titleView sizeToFit];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [titleView sizeToFit];
+    }];
+    
 }
 
 #pragma mark - MTTabBarImageProtocol
@@ -260,13 +412,22 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+
+    typeof(__kindof UITabBarController) *tabBarController;
+    tabBarController = self.tabBarController;
+    
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+    
         BOOL animate = previousTraitCollection != nil;
+        NSString *prompt = _document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:animate];
-        self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+        tabBarController.navigationItem.prompt = prompt.copy;
         [UIView setAnimationsEnabled:YES];
+    
     } else {
-        self.tabBarController.navigationItem.prompt = nil;
+        
+        tabBarController.navigationItem.prompt = nil;
+        
     }
 }
 
@@ -299,8 +460,24 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 
 }
 
-- (BOOL)splitViewController: (UISplitViewController *)splitViewController showViewController: (UIViewController *)vc sender: (id)sender {
+- (void)showViewController:(UIViewController *)vc sender:(id)sender {
+    Protocol *documentProtocol = @protocol(MADViewControllerDocumentProtocol);
+    if ([vc conformsToProtocol: documentProtocol]) {
+        [(id <MADViewControllerDocumentProtocol>)vc setDocument:_document];
+    }
+    [super showViewController:vc sender:sender];
+}
+
+- (BOOL)splitViewController: (UISplitViewController *)splitViewController
+         showViewController: (UIViewController *)vc
+                     sender: (id)sender {
+    
+    Protocol *viewControllerDocumentProtocol = @protocol(MADViewControllerDocumentProtocol);
+    if ([vc conformsToProtocol: viewControllerDocumentProtocol]) {
+        [(id <MADViewControllerDocumentProtocol>)vc setDocument:_document];
+    }
     [self.navigationController pushViewController:vc animated:YES];
+
     return YES;
 }
 
@@ -350,11 +527,11 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 - (void)setDocument:(MADocument *)document {
     if (document != _document) {
         _document = document;
-        for (UIViewController *viewController in self.viewControllers) {
-            if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-                ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
-            }
-        }
+        //for (UIViewController *viewController in self.viewControllers) {
+        //    if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+        //        ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
+        //    }
+        //}
     }
 }
 

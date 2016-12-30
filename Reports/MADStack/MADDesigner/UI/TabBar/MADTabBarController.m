@@ -7,6 +7,7 @@
 //
 
 #import "MADTabBarController.h"
+
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -20,6 +21,9 @@
 #import "MADViewerController.h"
 #import "MADStoryboard.h"
 
+#import "MADStoryboard.h"
+#import "MADTabBarController.h"
+
 static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
 const int8_t MADIndexQuery = 0;
@@ -29,7 +33,10 @@ const int8_t MADIndexViewer = 2;
 @interface MADTabBarController ()
     <UITabBarControllerDelegate>
 
-@property (nonatomic, assign) NSUInteger lastSelectedIndex;
+    @property (nonatomic, assign) NSUInteger lastSelectedIndex;
+    @property (nonatomic, copy) NSString *promptNavigationItem;
+
+    @property (nonatomic, assign, getter=isNavigationItemInitalized) BOOL navigationItemInitalized;
 
 @end
 
@@ -37,45 +44,107 @@ const int8_t MADIndexViewer = 2;
 
 @synthesize document = _document;
 
-- (void)dealloc { }
+- (void)dealloc {
+    _promptNavigationItem = nil;
+}
+
++ (nullable instancetype)newTabBarController:(MADocument __weak *)document prompt:(NSString *)prompt {
+    UIStoryboard *designer;
+    id tabBarController;
+    
+    designer = [MADStoryboard newStoryboardDesigner];
+    tabBarController = [designer instantiateViewControllerWithIdentifier:TabBar];
+    
+    if (tabBarController) {
+        ((MADTabBarController *) tabBarController).document = document;
+        ((MADTabBarController *) tabBarController).promptNavigationItem = prompt ?
+                                                                            prompt.copy : @"";
+    }
+    
+    return tabBarController;
+}
+
+- (UINavigationItem *)navigationItem {
+    UINavigationItem *navigationItem;
+    if ((navigationItem = [super navigationItem]) != nil) {
+        if (!_navigationItemInitalized) {
+            id newPrompt = _promptNavigationItem.copy;
+            navigationItem.prompt = newPrompt;
+        }
+    }
+    return navigationItem;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { }
+    if (self = [super initWithCoder:aDecoder]) {
+        _navigationItemInitalized = NO;
+        _lastSelectedIndex = NSNotFound;
+    }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-    self.lastSelectedIndex = NSNotFound;
-    self.delegate = self;
-    for (UIViewController *viewController in self.viewControllers) {
-        if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-            ((id <MADViewControllerDocumentProtocol>)viewController).document = document;
-        }
-    }
+    //self.lastSelectedIndex = NSNotFound;
+    //for (UIViewController *viewController in self.viewControllers) {
+    //    if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+    //        ((id <MADViewControllerDocumentProtocol>)viewController).document = document;
+    //    }
+    //}
     self.view.backgroundColor = [UIColor purpleColor];
-
-    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                             target: self
-                                                                             action: @selector(viewControllerDidFinish:)];
-    [self.navigationItem setLeftBarButtonItem:dismiss animated:NO];
+    //self.delegate = self;
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.viewControllers.count > 0) {
+    self.delegate = self;
+    
+    UIBarButtonItem *buttonDismiss;
+    buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                 target: self
+                                                                 action: @selector(viewControllerDidFinish:)];
+
+    [self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
+
+    
+    /*if (self.viewControllers.count > 0) {
         UIViewController *vc = self.viewControllers.firstObject;
         NSString *title = vc.title.copy;
         [self showTitleWithText: title];
-    }
+    }*/
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    UINavigationItem *navigationItem = self.navigationItem;
+    MADQueryBuilderSplitViewController *querySplitViewController;
+    UINavigationController *detailNavigationController;
+
+    if (navigationItem.leftBarButtonItem)
+        [navigationItem setLeftBarButtonItem: nil animated: animated];
+
+    if (navigationItem.rightBarButtonItem)
+        [navigationItem setRightBarButtonItem: nil animated: animated];
+    
+    querySplitViewController = self.querySplitViewController;
+    detailNavigationController = querySplitViewController.detailNavigationController;
+    [detailNavigationController popToRootViewControllerAnimated:animated];
+
+    detailNavigationController = nil, querySplitViewController = nil;
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    self.delegate = nil;
+    [super viewDidDisappear:animated];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -92,18 +161,36 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
-    [self.viewControllerDelegate viewControllerDidFinish:nil];
+    
+    id <MADViewControllerStandardProtocol> viewControllerDelegate;
+    viewControllerDelegate = _viewControllerDelegate;
+    [viewControllerDelegate viewControllerDidFinish:nil];
+    
 }
 
 #pragma mark - UITabBarControllerDelegate
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController
+    shouldSelectViewController:(UIViewController *)viewController {
+    
+    if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+        id document = ((id <MADViewControllerDocumentProtocol>)tabBarController).document;
+        if (document && [tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+            ((id <MADViewControllerDocumentProtocol>)viewController).document = document;
+        }
+    }
+    
+    return YES;
+}
 
 - (void)tabBarController:(UITabBarController *)tabBarController
  didSelectViewController:(UIViewController *)viewController {
     
     if (tabBarController.selectedIndex != self.lastSelectedIndex) {
-        [self showTitleWithText: viewController.title];
+        NSString *title = viewController.title.copy;
+        [self showTitleWithText: title];
     }
+    
     self.lastSelectedIndex = tabBarController.selectedIndex;
     switch (tabBarController.selectedIndex) {
         case MADIndexQuery:
@@ -125,7 +212,8 @@ const int8_t MADIndexViewer = 2;
 
 - (void)showTitleWithText:(NSString *)text {
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = text;
+    NSString *title = text.copy;
+    titleView.text = title;
     self.navigationItem.titleView = titleView;
 }
 

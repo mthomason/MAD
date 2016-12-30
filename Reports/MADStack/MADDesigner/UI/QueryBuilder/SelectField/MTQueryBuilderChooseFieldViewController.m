@@ -41,7 +41,8 @@
 
 #import "MADDatabaseTableSectionHeaderView.h"
 
-typedef NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoArray;
+typedef NSArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoArray;
+typedef NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoMutableArray;
 
 static inline double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
 static inline  double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
@@ -59,19 +60,17 @@ PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
                                 0 : sectionInfo.table.hasQueryFields.count);
 }
 
-static inline CGSize
-PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                              RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
-static inline CGSize
-PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                              RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
+static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
+                                                   RptqDatabaseSchemaFieldSelectorManager *sectionInfo);
+static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
+                                                   RptqDatabaseSchemaFieldSelectorManager *sectionInfo) {
     return CGSizeMake(MADFloat_320,
                       (CGFloat)PreferredContentHeightForUpdate(sectionInfoArray, sectionInfo));
 }
 
 @interface MTQueryBuilderChooseFieldViewController ()
 
-    @property (nonatomic, strong) MADSectionInfoArray *sectionInfoArray;
+    @property (nonatomic, strong) MADSectionInfoMutableArray *sectionInfoArray;
     @property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
     @property (nonatomic, strong) NSArray *dataTables;
 
@@ -135,9 +134,6 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-    self.navigationItem.hidesBackButton = NO;
-    
     self.tableView.sectionHeaderHeight = MADFloatHeaderHeight;
 
     self.openSectionIndex = NSNotFound;
@@ -154,18 +150,31 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Select Field",
-                                       @"Title of form that allows you to choose "
-                                       @"the name of a database field.");
-    self.navigationItem.titleView = titleView;
     self.tableView.isAccessibilityElement = NO;
+}
+
+- (UINavigationItem *)navigationItem {
+    UINavigationItem *navigationItem = [super navigationItem];
+    if (navigationItem && navigationItem.titleView == nil) {
+        MADNavigationBarTitleView *titleView;
+        NSString *title;
+        navigationItem.leftItemsSupplementBackButton = YES;
+        navigationItem.hidesBackButton = NO;
+        title = NSLocalizedString(@"Select Field",
+                                  @"Title of form that allows you to choose "
+                                  @"the name of a database field.");
+        titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+        titleView.text = title.copy;
+        navigationItem.titleView = titleView;
+    }
+    return navigationItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated]; 
 	
-	if (self.sectionInfoArray == nil || self.sectionInfoArray.count <= 0) {
+    MADSectionInfoArray *sectionInfoArray = self.sectionInfoArray.copy;
+	if (sectionInfoArray == nil || sectionInfoArray.count <= 0) {
 		
         NSArray *dataTables = self.dataTables;
 		NSMutableArray *infoArray = [[NSMutableArray alloc] initWithCapacity:dataTables.count];
@@ -186,16 +195,30 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 		self.sectionInfoArray = infoArray;
 	}
     
-   
     [self updateSize];
 	
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    UINavigationItem *navigationItem = self.navigationItem;
+    if (navigationItem.titleView != nil) {
+        [navigationItem setTitleView: nil];
+    }
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark Table view data source and delegate
 
 - (NSInteger)numberOfRowsInSection:(NSInteger)section {
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = _sectionInfoArray[(NSUInteger)section];
-    return sectionInfo.open ? (NSInteger)sectionInfo.table.hasQueryFields.count : 0;
+    NSInteger numberOfRowsInSection = 0;
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo;
+    sectionInfo = _sectionInfoArray[(NSUInteger)section];
+    if (sectionInfo.open) {
+        RptqQueryTable *table = sectionInfo.table;
+        NSSet *hasQueryFields = table.hasQueryFields;
+        numberOfRowsInSection = (NSInteger)hasQueryFields.count;
+    }
+    return numberOfRowsInSection;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
@@ -210,20 +233,25 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
 
 - (UITableViewCell *)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     
-    static NSString *CellIdentifier = @"UITableViewCellFieldWithType";
-    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *identifier = @"UITableViewCellFieldWithType";
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
+    
     cell.isAccessibilityElement = YES;
     cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton;
-    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = self.sectionInfoArray[(NSUInteger)indexPath.section];
-    NSArray *fieldsArray = [fieldSelectorManager.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
-
-    RptqQueryField *field = fieldsArray[(NSUInteger)indexPath.row];
-    RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
-    if (field) {
-        cell.textLabel.text = schemaField.name;
-        cell.detailTextLabel.text = schemaField.fieldTypeDisplay.lowercaseString;
-        cell.accessibilityLabel = cell.textLabel.text;
-        cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
+    
+    
+    if (self.sectionInfoArray.count >= (NSUInteger)indexPath.section) {
+        RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = self.sectionInfoArray[(NSUInteger)indexPath.section];
+        NSArray *fieldsArray = [fieldSelectorManager.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
+        
+        RptqQueryField *field = fieldsArray[(NSUInteger)indexPath.row];
+        RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
+        if (field) {
+            cell.textLabel.text = schemaField.name;
+            cell.detailTextLabel.text = schemaField.fieldTypeDisplay.lowercaseString;
+            cell.accessibilityLabel = cell.textLabel.text;
+            cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
+        }
     }
 
     return cell;
@@ -335,10 +363,12 @@ PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
     }
     
     // Apply the updates.
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
-    [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
-    [self.tableView endUpdates];
+    UITableView *tableView = self.tableView;
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
+    [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
+    [tableView endUpdates];
+    
     self.openSectionIndex = sectionOpened;
     [self updateSize];
 }

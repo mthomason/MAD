@@ -12,10 +12,11 @@
 
 #import "UIViewController+tabBarItem.h"
 
+#import "objcmad.h"
+
+#import <UIKit/UITabBarController.h>
 #import <UIKit/UITabBarItem.h>
 #import <UIKit/UIImage.h>
-
-#import "objcmad.h"
 
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryViewController.h"
@@ -36,10 +37,14 @@
     if (tabBarItem && tabBarItem.image == nil) {
         UIImage *tabBarImage = [self.class newTabBarImage];
         if (tabBarImage) {
+            
             UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             tabBarItem.image = tabBarImageOg;
             tabBarItem.selectedImage = tabBarImage;
-            tabBarItem.title = self.title;
+            
+            NSString *tabBarTitle = self.title.copy;
+            tabBarItem.title = tabBarTitle;
+            
         }
     }
     return tabBarItem;

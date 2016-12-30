@@ -65,11 +65,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     @property (nonatomic, strong) MADMutableMapGesturesLongPress *longPressGestures;
 
+    @property (nonatomic, copy) NSPredicate *predicateKindOfLongPressGestureRecognizer;
+
 @end
 
 @implementation MADFileExplorerViewDelegate
 
 - (void)dealloc {
+    _predicateKindOfLongPressGestureRecognizer = nil;
     [_longPressGestures removeAllObjects];
 }
 
@@ -82,7 +85,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
     if (self = [super init]) {
         
         id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
@@ -133,7 +136,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)setEditing:(BOOL)editing {
-    NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
+    //NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
     if (_editing != editing) {
         _editing = editing;
     }
@@ -159,6 +162,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     cell.labelTitle.handleTap = ^(id sender) {
         [self actionRename:sender];
     };
+    
+    /*MADLabelFileExplorerDocumentCellTitle *labelTitle = cell.labelTitle;
+    labelTitle.handleTap = ^(id sender) {
+        [self actionRename:sender];
+    };*/
 
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
@@ -169,15 +177,36 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 }
 
+- (NSPredicate *)predicateKindOfLongPressGestureRecognizer {
+    
+    if (_predicateKindOfLongPressGestureRecognizer == nil) {
+        
+        NSString *format = @"NOT (self isKindOfClass: %@)";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat: format, [UILongPressGestureRecognizer class]];
+        _predicateKindOfLongPressGestureRecognizer = predicate.copy;
+        
+    }
+    return _predicateKindOfLongPressGestureRecognizer;
+
+}
+
 - (void)collectionView:(UICollectionView *)collectionView
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    //id predicate = self.predicateKindOfLongPressGestureRecognizer;
+    
+    //NSArray<__kindof UIGestureRecognizer *> *gestures, *gesturesFiltered;
+    //gestures = cell.gestureRecognizers.copy;
+    //gesturesFiltered = [gestures filteredArrayUsingPredicate:predicate];
+    //[cell setGestureRecognizers:gesturesFiltered];
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     id gestureToRemove = _longPressGestures[hash];
     [cell removeGestureRecognizer: gestureToRemove];
     [cell prepareForReuse];
-    [_longPressGestures removeObjectForKey:hash];
+    [_longPressGestures removeObjectForKey: hash];
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
 }
@@ -323,8 +352,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
-    NSString *filename = [self titleForItemAtIndexPath:indexPath].copy;
-    NSString *size = [self subtitleForItemAtIndexPath:indexPath].copy;
+    NSString *filename = [self copyTitleForItemAtIndexPath:indexPath];
+    NSString *size = [self copySubtitleForItemAtIndexPath:indexPath];
     
     NSAttributedString *attributedString = [NSAttributedString newAttributedStringCaptionWithText:filename];
     NSAttributedString *attributedStringSub;
@@ -344,11 +373,20 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                       (CGFloat)(128.0 + ceil(sizeLabelHeight) + ceil(sizeLabelSubHeight) + 20.0));
 }
 
+/*- (UILabel *)testLabel {
+    if (_testLabel == nil) {
+        id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
+                                               width: fLabelWidth];
+        _testLabel = label;
+    }
+    return _testLabel;
+}*/
+
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
                   contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    UILabel * __unsafe_unretained lbl = _testLabel;
+    UILabel __unsafe_unretained *lbl = _testLabel;
     lbl.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     lbl.lineBreakMode = NSLineBreakByWordWrapping;
     lbl.contentScaleFactor = contentScaleFactor;
@@ -356,7 +394,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     lbl.attributedText = attributedString;
     [lbl sizeToFit];
 
-    CGFloat height = self.testLabel.frame.size.height;
+    CGFloat height = lbl.frame.size.height;
 
     lbl.font = nil;
     lbl.attributedText = nil;
@@ -365,32 +403,41 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
+    
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
-    [delegate collectionView:collectionView
-                            didChangeNumberOfItemsSelected:self.numberOfItemsSelected];
+    NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
+    [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
+
 }
 
 - (void)openURL:(NSURL *)url {
-    id open = [[NSInvocationOperation alloc] initWithTarget:self.delegate
-                                                   selector:@selector(openDocumentAtURL:)
-                                                     object:url];
+    MADFileExplorerDelegate delegate = self.delegate;
+    NSURL *urlToOpen = url.copy;
+    id open = [[NSInvocationOperation alloc] initWithTarget: delegate
+                                                   selector: @selector(openDocumentAtURL:)
+                                                     object: urlToOpen];
     [[NSOperationQueue mainQueue] addOperation:open];
 }
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
+    
     if (metadata.isUbiquitous && metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
         
         NSURL *url = metadata.URL.copy;
+        
         void (^startDownload)(void);
         startDownload = ^{
             NSError *error = nil;
-            [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:url
-                                                                          error:&error];
+            NSURL *ubiquitousItemURL = url.copy;
+            [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: ubiquitousItemURL
+                                                                          error: &error];
         };
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
         
     }
+    
 }
 
 
@@ -402,18 +449,36 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     return result;
 }
 
-- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (NSString *)copyTitleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata;
-    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-    NSString *title = metadata.URL.lastPathComponent.stringByDeletingPathExtension;
-    return title;
+    NSURL *url;
+    NSString *lastPathComponent, *title, *result;
+    
+    metadata = [self.delegate metadataForItemAtIndexPath:indexPath];
+    url = metadata.URL.copy;
+    
+    lastPathComponent = url.lastPathComponent;
+    title = lastPathComponent.stringByDeletingPathExtension;
+    
+    result = [[NSString alloc] initWithString: title];
+    return result;
 }
 
-- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (NSString *)copySubtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *subtitle;
+    unsigned long long fileSize;
     MADMetaData *metadata;
-    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-    NSString *subtitle = [self copySubtitleForStatus:metadata.ubiquitousItemDownloadingStatus
-                                            fileSize:metadata.fileSystemFileSize];
+    NSString *ubiquitousItemDownloadingStatus;
+    
+    @autoreleasepool {
+        metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+        fileSize = metadata.fileSystemFileSize;
+        ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+        metadata = nil;
+        subtitle = [self copySubtitleForStatus:ubiquitousItemDownloadingStatus
+                                      fileSize:fileSize];
+    }
+    
     return subtitle;
 }
 

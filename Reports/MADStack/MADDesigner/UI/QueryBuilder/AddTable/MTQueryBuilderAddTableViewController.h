@@ -23,7 +23,7 @@
 @interface MTQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, copy) NSArray *excludeResults;
 
     - (IBAction)done:(id)sender;

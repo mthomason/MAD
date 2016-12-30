@@ -10,12 +10,12 @@
 #define Reports_MTReportDesignerDocumentObjectFormat_h
 
 #import <UIKit/UITableViewController.h>
-#import "MADToolboxDisplayProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 
 @class MADocument;
 
 @interface MADToolboxFormatViewController : UITableViewController
-    <MADToolboxDisplayProtocol>
+    <MADViewControllerDocumentProtocol>
 
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, assign) BOOL clearsBackground;

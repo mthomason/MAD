@@ -11,25 +11,14 @@
 
 @implementation MADFileExplorerView
 
-- (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
-    if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
-        [self setup];
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (self.backgroundView == nil) {
+        id watermarkView = [[MADWatermarkView alloc] initWithFrame: self.bounds];
+        self.backgroundView = watermarkView;
+        self.backgroundColor = [UIColor lightGrayColor];
     }
-    return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup {
-    id watermarkView = [[MADWatermarkView alloc] initWithFrame: self.bounds];
-    self.backgroundView = watermarkView;
-    self.backgroundColor = [UIColor lightGrayColor];
-
-}
 
 @end

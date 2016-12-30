@@ -31,23 +31,34 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-        ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    UIColor *white, *blue;
+    white = [MADColorEverydayApps newColorWhite];
+    blue = [MADColorEverydayApps newColorBlue];
+    self.toolbar.tintColor = white;
+    self.toolbar.barTintColor = blue;
+    self.toolbar.barStyle = UIBarStyleBlack;
+    self.toolbar.translucent = YES;
+    self.navigationBar.translucent = YES;
+
+    NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    
+}
+
+- (void)showViewController:(UIViewController *)vc sender:(id)sender {
+    if ([vc conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+        ((id <MADViewControllerDocumentProtocol>)vc).document = _document;
     }
-    //[self setNeedsStatusBarAppearanceUpdate];
+    [super showViewController:vc sender:sender];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
-    self.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-    self.toolbar.barStyle = UIBarStyleBlack;
-    self.toolbar.translucent = YES;
-    self.navigationBar.translucent = YES;
-    
-    NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -59,7 +70,10 @@
 }
 
 - (UITabBarItem *)tabBarItem {
-    return ((UITabBarController *)self.topViewController).tabBarItem;
+    UITabBarItem *tabBarItems;
+    UITabBarController *tabBarController = (UITabBarController *)self.topViewController;
+    tabBarItems = tabBarController.tabBarItem;
+    return tabBarItems;
 }
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
@@ -117,11 +131,6 @@
 - (void)setDocument:(MADocument *)document {
     if (_document != document) {
         _document = document;
-        for (UIViewController *viewController in self.viewControllers) {
-            if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-                ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
-            }
-        }
     }
 }
 

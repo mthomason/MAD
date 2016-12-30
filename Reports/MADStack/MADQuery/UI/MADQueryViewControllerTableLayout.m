@@ -21,6 +21,10 @@
 
 @implementation MADQueryViewControllerTableLayout
 
+- (void)dealloc {
+    _datamodel = nil;
+}
+
 - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
                       reportingEnabled:(BOOL)enabled {
     self = [super init];

@@ -17,9 +17,7 @@
     - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
     - (BOOL)isFileViewEditing;
     - (void)openDocumentAtURL:(NSURL *)url;
-    - (void)collectionView:(UICollectionView *)collectionView
-                didChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected;
-
+    - (void)fileExplorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected;
     - (void)actionEmail:(id)sender;
     - (void)actionRename:(id)sender;
     - (void)actionDuplicate:(id)sender;

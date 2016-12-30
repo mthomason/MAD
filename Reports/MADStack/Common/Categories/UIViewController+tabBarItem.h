@@ -11,6 +11,9 @@
 
 #import <UIKit/UIViewController.h>
 
+@class NSObject;
+@class UIImage;
+
 @protocol MTTabBarImageProtocol <NSObject>
 
     + (UIImage *)newTabBarImage;

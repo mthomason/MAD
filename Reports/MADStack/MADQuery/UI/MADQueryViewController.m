@@ -110,15 +110,16 @@ static NSString * const ViewControllerTitle = @"MAD Query";
 #pragma mark - Private Category
 
 @interface MADQueryViewController()
+
     <NSFetchedResultsControllerDelegate,
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
         MTQueryBuilderAddTableDelegate,
         MADQueryBuilderAddGroupDelegate,
-        MTViewControllerProtocol,
+        MADViewControllerStandardProtocol,
         MTQueryBuilderLinkBuilderDelegate,
-        MTViewControllerProtocol,
+        MADViewControllerStandardProtocol,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate,
         MTTabBarImageProtocol,
@@ -222,11 +223,9 @@ BOOL storeEnabled() {
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    
     [MADQueryViewController deleteCoreDataCache];
-    
     if (self = [super initWithCoder:aDecoder]) {
-        [self setToolbarIconShown:NO];
+        _toolbarIconShown = NO;
     }
     return self;
 }
@@ -276,8 +275,6 @@ BOOL storeEnabled() {
             }
         }
     }
-    
-    
 }
 
 - (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
@@ -357,9 +354,10 @@ BOOL storeEnabled() {
 }
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
+    
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-    [super viewDidLoad];
 
     
     MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
@@ -454,9 +452,10 @@ BOOL storeEnabled() {
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
-    typeof(self.document) document = self.document;
+    UIManagedDocument *document = _document;
     if (document) {
-        [self ingnoreManagedObjectContextChanges:document.managedObjectContext];
+        NSManagedObjectContext __weak *context = document.managedObjectContext;
+        [self ingnoreManagedObjectContextChanges: context];
         
         [[NSNotificationCenter defaultCenter] removeObserver: self
                                                         name: UIDocumentStateChangedNotification
@@ -1028,12 +1027,12 @@ BOOL storeEnabled() {
     self.tableView.editing = editing;
 }
 
-- (IBAction)done:(id)sender {
+/*- (IBAction)done:(id)sender {
     [self.delegate viewControllerDidFinish:self];
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
-}
+}*/
 
 - (void)addConnection:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers
@@ -1555,9 +1554,9 @@ BOOL storeEnabled() {
 
 #pragma mark - UIAccessibility
 
-- (BOOL)accessibilityPerformEscape {
+/*- (BOOL)accessibilityPerformEscape {
     [self.delegate viewControllerDidFinish:nil];
     return YES;
-}
+}*/
 
 @end

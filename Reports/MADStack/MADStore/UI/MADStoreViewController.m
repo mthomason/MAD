@@ -26,7 +26,7 @@ static NSString * const MADTextFreeGift     = @"Access to this feature is a free
 static NSString * const MADTextAlready      = @"You already got this feature. Make sure to collect them all.";
 
 @interface MADStoreViewController ()
-    <MTViewControllerProtocol>
+    <MADViewControllerStandardProtocol>
 
     @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
     @property (nonatomic, assign) BOOL charterMember;

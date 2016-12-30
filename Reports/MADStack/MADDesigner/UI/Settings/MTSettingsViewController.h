@@ -15,7 +15,7 @@
 @interface MTSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellPrint;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellExport;

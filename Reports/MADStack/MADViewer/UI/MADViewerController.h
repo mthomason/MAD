@@ -10,22 +10,19 @@
 #define Reports_MTReportViewerController_h
 
 #import "MADPageViewController.h"
-#import <UIKit/UIDocumentInteractionController.h>
-#import <MAD/MADActivityProtocol.h>
-#import "MADocumentProtocol.h"
 
-@protocol MTViewControllerProtocol;
+#import "MADViewControllerDocumentProtocol.h"
+#import <MAD/MADActivityProtocol.h>
+
+@protocol MADViewControllerStandardProtocol;
 
 @interface MADViewerController : MADPageViewController
     <MADViewControllerDocumentProtocol,
-        MADActivityProtocol,
-        UIPageViewControllerDelegate,
-        UIPageViewControllerDataSource,
-        UIDocumentInteractionControllerDelegate>
+        MADActivityProtocol>
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-    + (instancetype)newViewerController;
+    + (instancetype)newViewerController:(MADocument *)document;
 
     - (IBAction)refresh:(id)sender;
     - (IBAction)zoomToActualSize:(id)sender;

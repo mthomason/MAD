@@ -89,6 +89,8 @@
 
 #import "MADCacheManager.h"
 
+#import "UIStoryboard+QueryVisualization.h"
+
 typedef void(^MTBlockResultVoid)(void);
 
 static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
@@ -96,13 +98,15 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
 }
 
+static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStoryboardIDQueryVisulization";
+
 @interface MADQueryVisualizationViewController ()
     <UIGestureRecognizerDelegate,
         UIScrollViewDelegate,
         UIPopoverControllerDelegate,
         MADQueryVisualizationSchemaPresentationDelegate,
         MADQueryVisualizationSchemaDelegate,
-        MTViewControllerProtocol>
+        MADViewControllerStandardProtocol>
 
     @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID;
     @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID;
@@ -120,7 +124,16 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 @synthesize document = _document;
 
-- (void)dealloc { }
++ (instancetype)newQueryVisualizationViewController:(MADocument *)document {
+    UIStoryboard *storyboard = [UIStoryboard QueryVisualization];
+    id controller = [storyboard instantiateViewControllerWithIdentifier:MADQueryVisualizationViewControllerIdentifer];
+    [((typeof(self))controller) setDocument: document];
+    return controller;
+}
+
+- (void)dealloc {
+    NSLog(@"Dealloc %@", NSStringFromClass([self class]));
+}
 
 #pragma mark - UIContainerViewControllerCallbacks
 
@@ -183,26 +196,22 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self commonInit];
+
+        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
+        _controllersByObjectID = controllersByObjectID;
+        
+        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
+        _connectionViewsByObjectID = connectionViewsByObjectID;
+        
+        NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
+        _rootTables = rootTables;
+        
     }
     return self;
 }
 
-- (void)commonInit {
-    
-    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
-    self.controllersByObjectID = controllersByObjectID;
-
-    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
-    self.connectionViewsByObjectID = connectionViewsByObjectID;
-    
-    NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
-    self.rootTables = rootTables;
-
-}
-
 - (void)setDocument:(MADocument *)document {
-    if (_document != document) {
+    if (document != nil && _document != document) {
         _document = document;
     }
 }
@@ -212,7 +221,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    //NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
     self.definesPresentationContext = NO;
     
@@ -263,18 +272,19 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    MADocument *doc = self.document;
-    [self reloadDocument:doc animated:YES];
+    [self reloadDocument:YES];
     
+    NSManagedObject *reportSchema = self.document.activeDocumentModel;
+    NSManagedObjectContext *managedObjectContext = reportSchema.managedObjectContext;
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextWillSave:)
                                                  name: NSManagedObjectContextWillSaveNotification
-                                               object: doc.activeDocumentModel.managedObjectContext];
+                                               object: managedObjectContext];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextDidSave:)
                                                  name: NSManagedObjectContextDidSaveNotification
-                                               object: doc.activeDocumentModel.managedObjectContext];
+                                               object: managedObjectContext];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -286,8 +296,9 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     [self archiveCache];
     [self clearScreen];
     
-    MADocument *doc = self.document;
-    id managedObjectContext = doc.activeDocumentModel.managedObjectContext;
+    MADocument *document = self.document;
+    NSManagedObject *reportSchema = document.activeDocumentModel;
+    id managedObjectContext = reportSchema.managedObjectContext;
     
     NSString * __unsafe_unretained willSave = NSManagedObjectContextWillSaveNotification;
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -405,7 +416,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                                              center: PointInsertTable(&height, &rootTableCount)
                                                root: YES
                                            animated: YES];
-            [self.view layoutIfNeeded];
+            [self.view setNeedsLayout];
         }
     }
     
@@ -442,7 +453,6 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                                 [connectorView removeFromSuperview];
                                 
                                 [self.view setNeedsLayout];
-                                [self.view layoutIfNeeded];
                             }
                         }
                         needsLayout = YES;
@@ -458,16 +468,17 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     for (id deletedObject in deletedObjects) {
         if ([deletedObject isKindOfClass:[RptqQueryTable class]]) {
             [self deleteQueryTable:deletedObject];
+            [self.view setNeedsLayout];
         } else if ([deletedObject isKindOfClass:[RptqQueryLinks class]]) {
             [self deleteQueryLink:deletedObject];
+            [self.view setNeedsLayout];
         }
     }
 
-    [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
 }
 
-#pragma mark - MTViewControllerProtocol
+#pragma mark - MADViewControllerStandardProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{ }];
@@ -596,17 +607,19 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 #pragma mark Reload document view controllers
 
 - (void)redraw {
-    [self reloadDocument:self.document animated:NO];
+    [self reloadDocument: NO];
 }
 
-- (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated {
+- (void)reloadDocument:(BOOL)animated {
+    MADocument *documentReport = self.document;
     if (documentReport) {
         [self clearScreen];
         [self.rootTables removeAllObjects];
         [self.controllersByObjectID removeAllObjects];
         [self.connectionViewsByObjectID removeAllObjects];
         
-        if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
+        NSString *path = self.localCacheFileUrl.path.copy;
+        if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
             [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery
@@ -743,6 +756,10 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     [self.view layoutIfNeeded];
     
     [self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
+}
+
+- (void)removeFromParentViewController {
+    [super removeFromParentViewController];
 }
 
 #pragma mark - View Controller Container Data

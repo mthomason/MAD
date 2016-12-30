@@ -11,11 +11,11 @@
 
 #import <UIKit/UITableViewController.h>
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 
 @interface MADAboutTableViewController : UITableViewController
 
-    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol, UITableViewDelegate> delegate;
 
     - (IBAction)cancel:(id)sender;
     - (IBAction)done:(id)sender;

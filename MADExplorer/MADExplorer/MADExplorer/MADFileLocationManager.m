@@ -154,7 +154,9 @@ static NSString * const MADFirstLaunch                                     = @"M
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
-            [delegate startLongRunningActivity];
+            if (delegate) {
+                [delegate startLongRunningActivity];
+            }
         }];
         
     } completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
@@ -188,8 +190,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     
     typeof(self) __weak weakself = self;
 
-    void (^operationSetupFileStorageLocal)(void);
-    operationSetupFileStorageLocal = ^ {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         NSLog(@"%s", __PRETTY_FUNCTION__);
         
         UIViewController <MADFileLocationManagerDelegate> *delegate;
@@ -228,9 +229,10 @@ static NSString * const MADFirstLaunch                                     = @"M
                  storageOptionChangeHandler: handleStorageOptionChanged];
         }];
         
-        [self.delegate.presentingController presentViewController:prompt animated:YES completion:nil];
-    };
-    [[NSOperationQueue mainQueue] addOperationWithBlock:operationSetupFileStorageLocal];
+        UIViewController *presentingController = delegate.presentingController;
+        [presentingController presentViewController:prompt animated:YES completion:nil];
+        
+    }];
 }
 
 - (void)getUserCloudPrefs {
@@ -241,9 +243,13 @@ static NSString * const MADFirstLaunch                                     = @"M
         self.getUserCloudPrefsFirstCall = NO;
 
         MADStorageState *storageState;
-        storageState = [MADStorageState newStorageStateWithStorageOption: [self storageOption]
-                                              hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
-                                                 isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
+        MADAppStorage storageOption = [self storageOption];
+        BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
+        BOOL isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
+        
+        storageState = [MADStorageState newStorageStateWithStorageOption: storageOption
+                                              hasUbiquityIdentityChanged: hasUbiquityIdentityChanged
+                                                 isCloudReadilyAvailable: isCloudReadilyAvailable];
         if (storageState.cloudAvailable) {
             
             if (storageState.storageOption == MADAppStorageCloud) {
@@ -374,6 +380,7 @@ static NSString * const MADFirstLaunch                                     = @"M
     return groupIdentifer.copy;
 }
 
+/*
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     NSString *classname = NSStringFromClass([self class]);
@@ -385,5 +392,6 @@ static NSString * const MADFirstLaunch                                     = @"M
     [debug appendFormat:@"\tFiles controller:    %@\n", self.filesController];
     return debug;
 }
+*/
 
 @end

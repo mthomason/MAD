@@ -14,14 +14,16 @@
 @protocol MADFileExplorerViewDelegateProtocol;
 @protocol UIGestureRecognizerDelegate;
 
+typedef id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> MADFileExplorerDelegate;
+
 @interface MADFileExplorerViewDelegate : NSObject
     <UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout>
 
     - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
     
-    @property (nonatomic, weak) NSObject <MADFileExplorerViewDelegateProtocol,
-                                            UIGestureRecognizerDelegate> *delegate;
+    @property (nonatomic, weak) MADFileExplorerDelegate delegate;
+
     @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;

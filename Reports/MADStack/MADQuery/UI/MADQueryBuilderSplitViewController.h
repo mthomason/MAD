@@ -9,8 +9,8 @@
 #ifndef Reports_MTQueryBuilderContainerController_h
 #define Reports_MTQueryBuilderContainerController_h
 
-#import "MADSplitViewController.h"
-#import "MADocumentProtocol.h"
+#import <UIKit/UISplitViewController.h>
+#import "MADViewControllerDocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
 @class UINavigationController;
@@ -18,13 +18,13 @@
 @class MADQueryViewController;
 @class MADocument;
 
-@interface MADQueryBuilderSplitViewController : MADSplitViewController
-    <MTViewControllerProtocol,
+@interface MADQueryBuilderSplitViewController : UISplitViewController
+    <MADViewControllerStandardProtocol,
         MADViewControllerDocumentProtocol>
 
-    + (instancetype)newQueryBuilderSplitViewController;
+    + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document;
 
-    @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
     @property (readonly) UINavigationController *detailNavigationController;
     @property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;

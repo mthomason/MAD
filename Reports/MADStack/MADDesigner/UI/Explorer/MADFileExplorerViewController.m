@@ -47,7 +47,6 @@
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADFilesController.h>
 
 #import <MAD/MADConstants.h>
 #import <MAD/MADAppLaunchContext.h>
@@ -60,7 +59,6 @@
 #import "MADProgressView.h"
 
 #import "MUIViewControllerDelegate.h"
-#import "MADQueryBuilderSplitViewController.h"
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
@@ -88,7 +86,6 @@
 #import "UINavigationController+MADQuery.h"
 #import "UINavigationController+Designer.h"
 
-#import "UITabBarController+Shared.h"
 #import "UITableViewController+Designer.h"
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
@@ -156,7 +153,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         UIPopoverPresentationControllerDelegate,
         MADDocumentManagerProtocol,
         MADocumentDelegate,
-        MTViewControllerProtocol,
+        MADViewControllerStandardProtocol,
         MADOperationObserver,
         MADSaveFileProtocol,
         MADFileExplorerViewDelegateProtocol>
@@ -339,9 +336,23 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     handleCellConfiguration = ^(MADCollectionViewCellDocument *cell) {
         if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
     };
+ /*
+    id <UIGestureRecognizerDelegate> __weak gestureDelegate = self;
+    void (^handleCellConfiguration)(MADCollectionViewCellDocument *cell);
+    handleCellConfiguration = ^(MADCollectionViewCellDocument *cell) {
+        
+        id <UIGestureRecognizerDelegate> cellDelegate, delegate;
+        cellDelegate = cell.delegate;
+        delegate = gestureDelegate;
+        if (cellDelegate == nil || ![cellDelegate isEqual:delegate])
+            [cell setDelegate: delegate];
+        
+    };
+*/
     MADDocumentManager *documentManager;
     documentManager = [[MADDocumentManager alloc] initWithCellConfiguration:handleCellConfiguration];
     documentManager.delegate = self;
+    
     self.collectionView.dataSource = documentManager;
     self.documentManager = documentManager;
     
@@ -428,6 +439,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [operationQueueBackground addOperation:resetReceipt];
     
     SEL cloudPrefs = @selector(updateCloudPreferences);
+    //id targetDocumentManager = _documentManager;
     getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: _documentManager
                                                                    selector: cloudPrefs
                                                                      object: NULL];
@@ -1013,11 +1025,6 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     return [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
 }
 
-- (MADMetaData *)metaDataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
-    return metadata;
-}
-
 #pragma mark -
 #pragma mark UISearchBarDelegate
 
@@ -1149,29 +1156,37 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 }
 
 #pragma mark - 
-#pragma mark MTViewControllerProtocol
+#pragma mark MADViewControllerStandardProtocol
+
+// This is where we are unloading the view controller, in a sane, and stable way.
 
 - (void)viewControllerDidFinish:(id)sender {
     _shouldShowAddDocumentPopover = YES;
-    MADTabBarController *tabController = self.tabController;
-    [tabController setViewControllers:nil animated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{ }];
 
-    _shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
-        MADActiveDocumentManager *fileManager = self.activeDocumentManager;
-        void (^handleCloseCompletion)(BOOL, NSURL *);
         
-        handleCloseCompletion = ^(BOOL success, NSURL *cleanupURL) {
+        void (^handleCloseCompletion)(BOOL, NSURL *, NSURL *);
+        handleCloseCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+            
             if (success) {
-                [fileManager unload];
-                [MADFileUtilities removeFileAndArchiveAtURL:cleanupURL];
+                
+                NSURL *documentURL = fileURL.copy;
+                NSURL *dataURL = cleanupURL.copy;
+                MADActiveDocumentManager *fileManager = self.activeDocumentManager;
+                [fileManager removeDocumentWithUrl:documentURL];
+                [MADFileUtilities removeFileAndArchiveAtURL:dataURL];
+                
             }
+            
+            MADTabBarController *tabController = self.tabController;
+            [tabController setViewControllers:nil animated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{ }];
         };
+        
         [MADocument close:openDocument completion:handleCloseCompletion];
     }
 }
@@ -1187,13 +1202,17 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark MADFileExplorerViewControllerDelegate
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
-    if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
 
-        MADocument * __unsafe_unretained document = notification.object;
-        switch (document.documentState) {
+    if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
+        
+        NSNotification *changeNotification = notification.copy;
+        MADocument * __unsafe_unretained document = changeNotification.object;
+        UIDocumentState documentState = document.documentState;
+        
+        switch (documentState) {
 
             case UIDocumentStateClosed:
-                [self handleDocumentStateChangedNotificationClosed:notification];
+                [self handleDocumentStateChangedNotificationClosed:changeNotification];
                 break;
 
             case UIDocumentStateEditingDisabled:
@@ -1205,7 +1224,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
                 break;
                 
             case UIDocumentStateNormal:
-                [self handleDocumentStateChangedNotificationNormal:notification];
+                [self handleDocumentStateChangedNotificationNormal:changeNotification];
                 break;
 
             case UIDocumentStateSavingError:
@@ -1221,7 +1240,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (void)handleDocumentStateChangedNotificationClosed:(NSNotification *)notification {
 
-    MADocument * __unsafe_unretained document = notification.object;
+    MADocument *document = notification.object;
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
                                                   object: document];
@@ -1233,45 +1252,64 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-    MADocument * __unsafe_unretained document = notification.object;
-    SEL open = @selector(openViewerWithDocument:);
-    id o = [[NSInvocationOperation alloc] initWithTarget: self
-                                                selector: open
-                                                  object: document];
-    [[NSOperationQueue mainQueue] addOperation:o];
+
+    NSNotification *changeNotification;
+    MADocument *document;
+    SEL open;
+    id operation;
+
+    changeNotification = notification.copy;
+    document = changeNotification.object;
+    
+    open = @selector(openViewerWithDocument:);
+    
+    id fileController = self;
+    operation = [[NSInvocationOperation alloc] initWithTarget: fileController
+                                                     selector: open
+                                                       object: document];
+    
+    [[NSOperationQueue mainQueue] addOperation:operation];
 }
 
 - (void)openViewerWithDocument:(MADocument *)document {
-
-    NSString *title = document.fileURL.lastPathComponent;
-    MADTabBarController *tabBarController = [MADTabBarController newTabBarControllerMain:title];
-    tabBarController.viewControllerDelegate = self;
+    NSURL *fileURL = document.fileURL.copy;
+    NSString *title = fileURL.lastPathComponent.copy;
+    
+    MADTabBarController *tabBarController = [MADTabBarController newTabBarController:document
+                                                                              prompt:title];
+    tabBarController.document = document;
     
     NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
              @"Controller to conform to MADocumentProtocol.");
     
     ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
     
-    MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController];
+    MADQueryBuilderSplitViewController *splitViewController;
+    splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
     splitViewController.viewControllerDelegate = self;
     
-    MADDesignerViewController *designerViewController = [MADDesignerViewController newDesignerViewController];
+    MADDesignerViewController *designerViewController;
+    designerViewController = [MADDesignerViewController newDesignerViewController:document];
     designerViewController.delegate = self;
     
-    MADViewerController *viewerViewController = [MADViewerController newViewerController];
+    MADViewerController *viewerViewController;
+    viewerViewController = [MADViewerController newViewerController: document];
     viewerViewController.viewControllerDelegate = self ;
     
     MADNavigationController *navControllerViewer;
-    navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
+    navControllerViewer = [[MADNavigationController alloc] init];
     navControllerViewer.document = document;
     [navControllerViewer setNavigationBarHidden:YES animated:NO];
     [navControllerViewer setToolbarHidden:NO animated:NO];
+    [navControllerViewer pushViewController:viewerViewController animated:NO];
     
     NSArray <__kindof UIViewController *> *tabBarViewControllers =
                     [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
                                                                     navControllerViewer, nil];
-    
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
+
+    tabBarController.viewControllerDelegate = self;
+
     self.tabController = tabBarController;
     
     MADNavigationController *navigationController;
@@ -1730,10 +1768,10 @@ BOOL fileFound(NSURL *URL, NSString *name) {
             
             MADDocumentManager *documentManager = self.documentManager;
             
-            void (^closeCompletion)(BOOL, NSURL *);
+            void (^closeCompletion)(BOOL, NSURL *, NSURL *);
             void (^openCompletion)(BOOL);
             
-            closeCompletion = ^(BOOL successClose, NSURL *cleanupURL) {
+            closeCompletion = ^(BOOL successClose, NSURL *fileURL, NSURL *cleanupURL) {
                 if (successClose)
                     [documentManager rename:text
                                 itemAtIndex:(NSUInteger)indexPath.item];
@@ -1780,8 +1818,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
     if (documentReport.documentState != UIDocumentStateClosed) {
         
-        void (^handleCloseDocumentCompletion)(BOOL, NSURL *);
-        handleCloseDocumentCompletion = ^(BOOL success, NSURL *cleanupURL) {
+        void (^handleCloseDocumentCompletion)(BOOL, NSURL *, NSURL *);
+        handleCloseDocumentCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
             if (success) { [self actionEmail:cell]; }
         };
         [MADocument close: documentReport completion:handleCloseDocumentCompletion];
@@ -1862,8 +1900,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark -
 #pragma mark Update UI
 
-- (void)collectionView:(UICollectionView *)collectionView
-                    didChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
+- (void)fileExplorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
 
     switch (numberOfItemsSelected) {
             

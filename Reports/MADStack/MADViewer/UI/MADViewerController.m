@@ -11,7 +11,8 @@
 #endif
 
 #import "MADViewerController.h"
-#import <MAD/MADActivityItemProviderPdfDelegate.h>
+
+#import <MAD/MADActivityItemProviderDelegate.h>
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIPopoverController.h>
@@ -25,6 +26,7 @@
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UITabBarItem.h>
 #import <UIKit/UIPopoverPresentationController.h>
+#import <UIKit/UIDocumentInteractionController.h>
 
 #import <CoreData/CoreData.h>
 
@@ -92,6 +94,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @interface MADViewerController ()
     <UIPopoverControllerDelegate,
         UIStateRestoring,
+        UIPageViewControllerDelegate,
+        UIPageViewControllerDataSource,
+        UIDocumentInteractionControllerDelegate,
         MADOperationObserver,
         MADPageSliderProtocol,
         MTPrintingProtocol,
@@ -150,9 +155,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @synthesize document = _document;
 
-+ (instancetype)newViewerController {
++ (instancetype)newViewerController:(MADocument *)document {
     UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
     id viewerViewController = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
+    [((typeof(self))viewerViewController) setDocument: document];
     return viewerViewController;
 }
 
@@ -651,7 +657,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MADocument *document = self.document;
     [document.managedObjectContext save:&error];
     if (error != nil) { [document.managedObjectContext save:&error]; }
-    [self.viewControllerDelegate viewControllerDidFinish: self];
+    
+    id <MADViewControllerStandardProtocol> viewControllerDelegate;
+    viewControllerDelegate = self.viewControllerDelegate;
+    [viewControllerDelegate viewControllerDidFinish: self];
+    viewControllerDelegate = nil;
 }
 
 - (IBAction)activity:(id)sender {

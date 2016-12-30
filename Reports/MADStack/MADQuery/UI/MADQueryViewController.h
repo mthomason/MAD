@@ -10,22 +10,21 @@
 #define Reports_MADQueryViewController_h
 
 #import "MADTableViewController.h"
-#import "MADocumentProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const MADSegueShowSql;
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 
 @class MADocument;
 
 @interface MADQueryViewController : MADTableViewController
     <MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-
     + (void)deleteCoreDataCache;
+
     - (void)reloadMainDocumentAnimated:(BOOL)animated;
     - (IBAction)edit:(id)sender;
 

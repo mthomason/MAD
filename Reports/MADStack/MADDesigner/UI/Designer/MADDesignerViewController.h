@@ -10,17 +10,17 @@
 #define Reports_MTReportDesignerViewController_h
 
 #import "MADViewController.h"
-#import "MADocumentProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 #import "MADViewControllerProtocol.h"
 
-@protocol MTViewControllerProtocol;
+@protocol MADViewControllerStandardProtocol;
 
 @interface MADDesignerViewController : MADViewController
     <MADViewControllerDocumentProtocol, MADViewControllerProtocol>
 
-    + (instancetype)newDesignerViewController;
+    + (instancetype)newDesignerViewController:(MADocument *)document;
     
-    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
 
     @property (nonatomic, assign) BOOL hidesStatusBar;
 
