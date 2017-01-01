@@ -25,6 +25,8 @@
         MADSectionHeaderViewDelegate,
         MTUnwindProtocol>
 
+    + (instancetype)newQueryBuilderChooseFieldViewController;
+
     @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 

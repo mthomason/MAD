@@ -6,18 +6,22 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADParameters_QueryCacheAggregate_h
-#define MADParameters_QueryCacheAggregate_h
+#ifndef MAD_MADParameters
+#define MAD_MADParameters
 
-#import <Foundation/NSDictionary.h>
+#import <Foundation/NSObject.h>
 #import "MADAggregateFunctionGroupByType.h"
 #import "MADAggregateFunctionType.h"
 
-typedef NSDictionary MADParameters;
-
 @class MTDataTableFast;
 
-@interface NSDictionary (QueryCacheAggregate)
+typedef NS_ENUM(short, MADParametersType) {
+    MADParametersTypeAggregateByPage,
+    MADParamatersTypeAggregateByGroup,
+    MADParametersTypeAggregateByReport,
+};
+
+@interface MADParameters : NSObject
 
     + (instancetype)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
                                                    andRowIds:(NSArray *)rowids

@@ -63,7 +63,68 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 @implementation MADPageSlider
 
++ (CGSize)BoundsForAttributedString:(NSAttributedString *)string {
+    CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
+                                         options: (NSStringDrawingOptions)
+                     (NSStringDrawingUsesLineFragmentOrigin |
+                      NSStringDrawingUsesFontLeading)
+                                         context: nil];
+    return CGSizeMake(bounds.size.width, bounds.size.height);
+}
+
 - (void)dealloc { }
+
+- (instancetype)initWithEffect:(UIBlurEffect *)effect {
+    if (self = [super initWithEffect:effect]) {
+        
+        self.contentView.tintColor = [UIColor blueColor];
+        
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        vibrancyView.frame = self.frame;
+        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
+        vibrancyView.contentView.tintColor = [UIColor redColor];
+        [self.contentView addSubview:vibrancyView];
+        self.vibrancyView = vibrancyView;
+        
+        MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
+        [slider addTarget: self action: @selector(handleSliderChangedPage:)
+         forControlEvents: UIControlEventValueChanged];
+        
+        [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
+         forControlEvents: UIControlEventTouchUpInside];
+        
+        UITapGestureRecognizer *tapGestureRecognizer;
+        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                       action: @selector(handleGestureTapSlider:)];
+        [slider addGestureRecognizer:tapGestureRecognizer];
+        
+        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
+        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
+        [self.contentView addSubview:slider];
+        
+        UIColor *lightBlue = [MADColorEverydayApps newColorBlueLight];
+        self.backgroundColor = [lightBlue colorWithAlphaComponent:0.3333f];
+        
+        self.slider = slider;
+        
+        UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
+        NSNumber *strokeWidth = @-1.0000f;
+        NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    font, NSFontAttributeName,
+                                    strokeWidth, NSStrokeWidthAttributeName, nil];
+        
+        NSAttributedString *testString = [[NSAttributedString alloc] initWithString: ConstTestStringValue
+                                                                         attributes: attributes];
+        
+        CGSize bounds = [MADPageSlider BoundsForAttributedString:testString];
+        self.stringHeight = bounds.height;
+        
+        self.labels = nil;
+        
+    }
+    return self;
+}
 
 - (void)removeFromSuperview {
     [super removeFromSuperview];
@@ -87,55 +148,6 @@ static inline CGFloat MaxDimension(CGSize size) {
     return _shadow;
 }
 
-- (instancetype)initWithEffect:(UIBlurEffect *)effect {
-    if (self = [super initWithEffect:effect]) {
-    
-        self.contentView.tintColor = [UIColor blueColor];
-        
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
-        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-        vibrancyView.frame = self.frame;
-        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
-        vibrancyView.contentView.tintColor = [UIColor redColor];
-        [self.contentView addSubview:vibrancyView];
-        _vibrancyView = vibrancyView;
-        
-        MADSliderPageVertical *vertSlider = [[MADSliderPageVertical alloc] init];
-        [vertSlider addTarget: self action: @selector(handleSliderChangedPage:)
-             forControlEvents: UIControlEventValueChanged];
-        
-        [vertSlider addTarget: self action: @selector(handleSliderDidFinishDrag:)
-             forControlEvents: UIControlEventTouchUpInside];
-        
-        UITapGestureRecognizer *tapGestureRecognizer;
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                       action: @selector(handleGestureTapSlider:)];
-        [vertSlider addGestureRecognizer:tapGestureRecognizer];
-        
-        vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
-        self.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-        [self.contentView addSubview:vertSlider];
-        
-        UIColor *lightBlue = [MADColorEverydayApps newColorBlueLight];
-        self.backgroundColor = [lightBlue colorWithAlphaComponent:0.3333f];
-        self.slider = vertSlider;
-        
-        UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
-        NSNumber *strokeWidth = @-1.0000f;
-        NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        font, NSFontAttributeName,
-                                        strokeWidth, NSStrokeWidthAttributeName, nil];
-
-        NSAttributedString *testString = [[NSAttributedString alloc] initWithString: ConstTestStringValue
-                                                                         attributes: attributes];
-
-        self.stringHeight = [MADPageSlider boundsForAttributedString:testString].height;
-        self.labels = nil;
-
-    }
-    return self;
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -144,7 +156,7 @@ static inline CGFloat MaxDimension(CGSize size) {
                             MADSliderPaginationWidth,
                             self.superview.frame.size.height);
     
-    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+    self.slider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                        MADSliderPaginationWidth, self.superview.frame.size.height);
 
     if (self.labels == nil) {
@@ -197,7 +209,7 @@ static inline CGFloat MaxDimension(CGSize size) {
                 label.textColor = textColor;
                 label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 label.translatesAutoresizingMaskIntoConstraints = YES;
-                UIColor *drawingColor = [self copyDrawingColor];
+                UIColor *drawingColor = self.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
                 label.tintColor = drawingColor;
                 
                 label.transform = CGAffineTransformTranslate(label.transform,
@@ -226,13 +238,6 @@ static inline CGFloat MaxDimension(CGSize size) {
     }
 }
 
-
-
-- (UIColor *)copyDrawingColor {
-    return self.enabledColor ? [MADColorEverydayApps newColorRed] :
-                               [UIColor lightGrayColor];
-}
-
 - (void)setDisplayEnabled {
     self.enabledColor = YES;
 }
@@ -240,8 +245,6 @@ static inline CGFloat MaxDimension(CGSize size) {
 - (void)setDisplayDisabled {
     self.enabledColor = NO;
 }
-
-- (MADSliderPageVertical *)pageSlider { return self.slider; }
 
 - (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {
     UISlider *slider = (UISlider *)tap.view;
@@ -264,36 +267,27 @@ static inline CGFloat MaxDimension(CGSize size) {
     sender.value = lroundf(sender.value);               // Sets your slider to this value
 }
 
-+ (CGSize)boundsForAttributedString:(NSAttributedString *)string {
-    CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
-                                         options: (NSStringDrawingOptions)
-                                                    (NSStringDrawingUsesLineFragmentOrigin |
-                                                        NSStringDrawingUsesFontLeading)
-                                               context: nil];
-    return CGSizeMake(bounds.size.width, bounds.size.height);
-}
-
 - (float)value {
-    return self.pageSlider.value;
+    return self.slider.value;
 }
 
 - (void)setValue:(float)value {
-    self.pageSlider.value = value;
+    self.slider.value = value;
 }
 
 - (float)minimumValue {
-    return self.pageSlider.minimumValue;
+    return self.slider.minimumValue;
 }
 
 - (void)setMinimumValue:(float)minimumValue {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.pageSlider.minimumValue = minimumValue;
+        self.slider.minimumValue = minimumValue;
         [self setNeedsLayout];
     }];
 }
 
 - (float)maximumValue {
-    return self.pageSlider.maximumValue;
+    return self.slider.maximumValue;
 }
 
 - (NSUInteger)maximumNumberOfLabels {
@@ -309,29 +303,24 @@ static inline CGFloat MaxDimension(CGSize size) {
         _labels = labels;
     }
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.pageSlider.maximumValue = maximumValue;
+        self.slider.maximumValue = maximumValue;
         [self setNeedsLayout];
     }];
 }
 
 
 - (void)setEnabled:(BOOL)enabled {
-    (self.pageSlider).enabled = enabled;
     
-    UIColor *tintColor = nil;
-    UIImage *thumbImage = nil;
-    if (enabled) {
-        tintColor = [MADColorEverydayApps newColorRed];
-        thumbImage = [MADSliderPageVertical sliderImageEnabled];
+    if (self.slider.enabled) {
+        self.tintColor = [MADColorEverydayApps newColorRed];
         [self setDisplayEnabled];
+        
     } else {
-        tintColor = [UIColor lightGrayColor];
-        thumbImage = [MADSliderPageVertical sliderImageDisabled];
+        self.tintColor = [UIColor lightGrayColor];
         [self setDisplayDisabled];
+        
     }
-    self.tintColor = tintColor;
-    [self.pageSlider setThumbImage: thumbImage
-                          forState: UIControlStateNormal];
+    
 }
 
 - (BOOL)isEnabled {
@@ -340,12 +329,16 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
            inContext:(CGContextRef)context {
+    
+    CGSize boundingSize;
     CGContextSaveGState(context);
-    CGSize boundingSize = [MADPageSlider boundsForAttributedString:string];
+    boundingSize = [MADPageSlider BoundsForAttributedString:string];
     [self rotateBoundingSize:boundingSize inContext:context];
     [string drawAtPoint:point];
     CGContextRestoreGState(context);
+    
     return CGRectMake(point.x, point.y, boundingSize.width, boundingSize.height);
+    
 }
 
 - (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {

@@ -20,7 +20,8 @@
 @interface MADPageSlider : UIVisualEffectView
 
     @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
-    @property (readonly) MADSliderPageVertical *pageSlider;
+
+    @property (readonly, weak, getter=pageSlider) MADSliderPageVertical *slider;
 
     @property (nonatomic, getter=isEnabled) BOOL enabled;
 

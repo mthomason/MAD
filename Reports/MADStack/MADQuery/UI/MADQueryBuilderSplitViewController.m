@@ -14,6 +14,7 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarButtonItem.h>
@@ -36,12 +37,13 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 #import "MADQueryVisualizationViewController.h"
-#import "MADQueryVisualizationViewController+Designer.h"
-#import "MADStoryboard.h"
 
 static NSString * const TextTitleFormat = @"MAD %@";
 static NSString * const TextTitleQuery = @"Query";
+
 static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
+
+static NSString * const MADStoryboardQuery = @"MADQuery";
 static NSString * const TextRedraw = @"Redraw";
 
 @interface MADQueryBuilderSplitViewController ()
@@ -61,7 +63,6 @@ static NSString * const TextRedraw = @"Redraw";
 
     @property (readonly) MADTabBarController *tabBarController;
 
-
 @end
 
 @implementation MADQueryBuilderSplitViewController
@@ -70,18 +71,17 @@ static NSString * const TextRedraw = @"Redraw";
 @synthesize title = _title;
 
 + (void)initialize {
+    [super initialize];
     
-    if (self == [MADQueryBuilderSplitViewController self]) {
+    if (self != [MADQueryBuilderSplitViewController self]) return;
         
-        @autoreleasepool {
-            UIBarButtonItem *appearance;
-            appearance = [UIBarButtonItem appearanceWhenContainedIn:[self class], nil];
-            
-            UIColor *white =  [MADColorEverydayApps newColorWhite];
-            appearance.tintColor = white;
-        }
+    @autoreleasepool {
+        UIBarButtonItem *appearance;
+        appearance = [UIBarButtonItem appearanceWhenContainedIn:[self class], nil];
+        
+        UIColor *white =  [MADColorEverydayApps newColorWhite];
+        appearance.tintColor = white;
     }
-    
 }
 
 - (void)dealloc {
@@ -89,8 +89,9 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document {
-    UIStoryboard *storyboardQuery = [MADStoryboard newStoryboardQuery];
-    id controller =  [storyboardQuery instantiateViewControllerWithIdentifier:SplitViewController];
+    id bundle = [NSBundle mainBundle];
+    id storybard = [UIStoryboard storyboardWithName: MADStoryboardQuery bundle: bundle];
+    id controller = [storybard instantiateViewControllerWithIdentifier:SplitViewController];
     [((typeof(self))controller) setDocument: document];
     return controller;
 }
@@ -113,22 +114,6 @@ static NSString * const TextRedraw = @"Redraw";
         _setupInitalLayout = NO;
         _localEditing = NO;
         
-        id redraw = NSLocalizedString(TextRedraw, TextRedraw);
-        
-        id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                             target: self
-                                                                             action: @selector(done:)];
-        self.barButtonItemDone = barButtonItemDone;
-        
-        id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
-                                                                       style: UIBarButtonItemStylePlain
-                                                                      target: self
-                                                                      action: @selector(redrawQueryVisualization:)];
-        self.barButtonItemRevealQuery = barButtonItemRevealQuery;
-
-        
-        //self.delegate = self;
-        
     }
     return self;
 }
@@ -144,9 +129,22 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    id redraw = NSLocalizedString(TextRedraw, TextRedraw);
+    
+    id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                         target: self
+                                                                         action: @selector(done:)];
+    self.barButtonItemDone = barButtonItemDone;
+    
+    id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
+                                                                   style: UIBarButtonItemStylePlain
+                                                                  target: self
+                                                                  action: @selector(redrawQueryVisualization:)];
+    self.barButtonItemRevealQuery = barButtonItemRevealQuery;
+
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     self.delegate = self;
-
     
     /*UITabBarController *tabBarController = self.tabBarController;
     UINavigationItem *navigationItem = tabBarController.navigationItem;

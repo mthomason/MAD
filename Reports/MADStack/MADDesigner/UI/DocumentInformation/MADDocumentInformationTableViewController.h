@@ -13,6 +13,8 @@
 
 @interface MADDocumentInformationTableViewController : UITableViewController
 
+    + (instancetype)newDocumentInformationTableViewController;
+
     @property (nonatomic, strong) NSArray *metadataItems;
 
 @end

@@ -245,14 +245,16 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-                                                didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 
-    id <MADFileExplorerViewDelegateProtocol> delegate = _delegate;
-    MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
+    MADMetaData *metadata;
+    NSURL *url;
+    
+    metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    url = metadata.URL.copy;
     
     if (self.isEditing) {
         [self downloadIfNotYetDownloaded:metadata];
@@ -428,10 +430,13 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         
         void (^startDownload)(void);
         startDownload = ^{
-            NSError *error = nil;
-            NSURL *ubiquitousItemURL = url.copy;
-            [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: ubiquitousItemURL
-                                                                          error: &error];
+
+            if (url != nil) {
+                NSError *error = nil;
+                [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: url
+                                                                              error: &error];
+            }
+
         };
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:startDownload];
@@ -445,7 +450,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSString *result;
     result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
                         NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :
-                        [MADStandard newStringForFileSize:fileSize];
+                        [MADStandard newStandardStringForFileSize:fileSize];
     return result;
 }
 
@@ -475,8 +480,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         fileSize = metadata.fileSystemFileSize;
         ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
         metadata = nil;
-        subtitle = [self copySubtitleForStatus:ubiquitousItemDownloadingStatus
-                                      fileSize:fileSize];
+        subtitle = [MADStringFormatted newStringFormattedSubtitle:ubiquitousItemDownloadingStatus
+                                                         fileSize:fileSize];
     }
     
     return subtitle;

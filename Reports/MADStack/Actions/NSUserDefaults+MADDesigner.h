@@ -11,9 +11,9 @@
 
 #import <Foundation/NSUserDefaults.h>
 
-@interface NSUserDefaults (MADDesigner)
+@interface MADUserDefaults : NSUserDefaults
 
-+ (instancetype)newUserDefaultsMADDesigner;
++ (instancetype)newUserDefaults;
 
 @end
 

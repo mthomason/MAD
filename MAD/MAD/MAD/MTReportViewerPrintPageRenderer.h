@@ -22,7 +22,7 @@
     - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
                                   dataTable:(MTDataTableFast *)dataTable;
 
-    + (instancetype)newReportViewerPrintPageRenderWithDocument:(MADocument *)document;
+    + (instancetype)newReportViewerPrintPageRenderer:(MADocument *)document;
 
     @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 

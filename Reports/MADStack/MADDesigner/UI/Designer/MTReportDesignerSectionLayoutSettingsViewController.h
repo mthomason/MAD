@@ -28,7 +28,7 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 @interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
-    + (instancetype)toolboxSettings;
+    + (instancetype)newReportDesignerSectionLayoutSettingsViewController;
 
     @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 

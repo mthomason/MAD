@@ -6,12 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADDocumentObjectTypeDescriptor_h
+#define MAD_MADDocumentObjectTypeDescriptor_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADStandard : NSObject
 
-+ (NSString *)newStringForDouble:(double)d;
-+ (NSString *)newStringForUnsignedLong:(unsigned long)ul;
-+ (NSString *)newStringForFileSize:(unsigned long long)filesize;
+    + (instancetype)newStandardStringForDouble:(double)d;
+    + (instancetype)newStandardStringForUnsignedLong:(unsigned long)ul;
+    + (instancetype)newStandardStringForFileSize:(unsigned long long)filesize;
 
 @end
+
+#endif

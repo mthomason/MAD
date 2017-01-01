@@ -87,14 +87,15 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @interface MTReportViewerPrintPageRenderer ()
 
-    @property (nonatomic, weak) MTReportFormatter *reportFormatter;
-    @property (nonatomic, weak) MADDataTableAggregate *dataTable;
-
     @property (nonatomic, assign) BOOL showWaterMark;
     @property (nonatomic, assign) BOOL accessibilityCacheNeedsUpdate;
 
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
     @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
+
+    @property (nonatomic, weak) MTReportFormatter *reportFormatter;
+    @property (nonatomic, weak) MADDataTableAggregate *dataTable;
+
     @property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
     @property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
@@ -105,31 +106,28 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @implementation MTReportViewerPrintPageRenderer
 
-#pragma -
-#pragma Constructors
-
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
-                              dataTable:(MTDataTableFast *)dataTable {
-    if (self = [super init]) {
-        [self setupCommon];
-        self.dataTable = (MADDataTableAggregate *)dataTable;
-        self.reportFormatter = reportFormatter;
++ (void)initialize {
+    [super initialize];
+    
+    if (self == [MTReportViewerPrintPageRenderer self]) {
+        
+        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+        if ([standardUserDefaults valueForKey:MTCachedSizeHorizontal] == nil) {
+            
+            [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
+                                     forKey: MTCachedSizeHorizontal];
+            
+            [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
+                                     forKey: MTCachedSizeVertical];
+            
+            [standardUserDefaults synchronize];
+            
+        }
     }
-    return self;
 }
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
-                              dataTable:(MTDataTableFast *)dataTable
-                   andPrintableAreaSize:(CGSize)printableAreaSize {
-    if (self = [super init]) {
-        [self setupCommon];
-        self.dataTable = (MADDataTableAggregate *)dataTable;
-        self.reportFormatter = reportFormatter;
-    }
-    return self;
-}
-
-+ (MTReportViewerPrintPageRenderer *)newReportViewerPrintPageRenderWithDocument:(MADocument *)document {
++ (MTReportViewerPrintPageRenderer *)newReportViewerPrintPageRenderer:(MADocument *)document {
+    
     MTReportFormatter *reportFormatter;
     reportFormatter = [MTReportFormatter newReportFormatterWithLayout: document
                                                               options: MTReportFormatterOptionsMargin];
@@ -138,37 +136,43 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     reportFormatter.datasource = document;
     reportFormatter.cachedDelegate = document;
     
+    MTDataTableFast *mainDataTable;
     id printPageRenderer;
+    
+    mainDataTable = document.mainDataTable;
     printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                               dataTable: document.mainDataTable];
+                                                                               dataTable: mainDataTable];
     document.printingReportFormatter = reportFormatter;
     return printPageRenderer;
     
 }
 
+- (void)dealloc {
+    _reportFormatter = nil;
+    _dataTable = nil;
+}
+
 #pragma -
-#pragma Helpers Common
+#pragma Constructors
 
-- (void)setupCommon {
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
+                              dataTable:(MTDataTableFast *)dataTable {
 
-    dispatch_queue_t queue = dispatch_queue_create(MADQueueTextRepresentation,
-                                                   DISPATCH_QUEUE_SERIAL);
-    self.textRepresentationQueue =  queue;
-    
-    self.showWaterMark = NO;
-    self.accessibilityCacheNeedsUpdate = NO;
-    
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if (self = [super init]) {
+        
+        dispatch_queue_t queue = dispatch_queue_create(MADQueueTextRepresentation,
+                                                       DISPATCH_QUEUE_SERIAL);
+        self.textRepresentationQueue =  queue;
+        
+        self.showWaterMark = NO;
+        self.accessibilityCacheNeedsUpdate = NO;
 
-    if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
-
-        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-                                 forKey: MTCachedSizeHorizontal];
-        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-                                 forKey: MTCachedSizeVertical];
-        [standardUserDefaults synchronize];
+        self.dataTable = (MADDataTableAggregate *)dataTable;
+        self.reportFormatter = reportFormatter;
         
     }
+
+    return self;
 }
 
 #pragma -
@@ -263,24 +267,31 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         case MADDocumentSectionTypeBody:
             [[UIColor redColor] setFill];
             break;
+            
         case MADDocumentSectionTypeGroupFooter:
             [[UIColor purpleColor] setFill];
             break;
+            
         case MADDocumentSectionTypeGroupHeader:
             [[UIColor yellowColor] setFill];
             break;
+            
         case MADDocumentSectionTypePageFooter:
             [[UIColor grayColor] setFill];
             break;
+            
         case MADDocumentSectionTypePageHeader:
             [[UIColor greenColor] setFill];
             break;
+            
         case MADDocumentSectionTypeReportFooter:
             [[UIColor brownColor] setFill];
             break;
+            
         case MADDocumentSectionTypeReportHeader:
             [[UIColor blueColor] setFill];
             break;
+            
         default:
             [[UIColor magentaColor] setFill];
             break;

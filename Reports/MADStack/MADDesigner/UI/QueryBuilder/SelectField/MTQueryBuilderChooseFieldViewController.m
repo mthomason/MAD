@@ -17,6 +17,7 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UITableView.h>
+#import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
@@ -84,6 +85,16 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 @implementation MTQueryBuilderChooseFieldViewController
 
 @synthesize unwindViewController;
+
++ (instancetype)newQueryBuilderChooseFieldViewController {
+    static NSString * const ObjectSelector = @"MADStoryboardObjectSelector";
+    static NSString * const MainIdentifier = @"UITableViewControllerChooseFieldDataObject";
+    id bundle, viewController, storyboard;
+    bundle = [NSBundle mainBundle];
+    storyboard = [UIStoryboard storyboardWithName: ObjectSelector bundle: bundle];
+    viewController = [storyboard instantiateViewControllerWithIdentifier: MainIdentifier];
+    return viewController;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

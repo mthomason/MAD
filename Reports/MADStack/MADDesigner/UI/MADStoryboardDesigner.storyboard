@@ -74,7 +74,7 @@
         <!--MAD Viewer-->
         <scene sceneID="6KI-hh-jgt">
             <objects>
-                <tabBarController restorationIdentifier="MADIdentifierRestorationMainTabBarController" storyboardIdentifier="MADIdentifierStoryboardMainTabBarController" definesPresentationContext="YES" modalPresentationStyle="overFullScreen" id="NEH-Kw-MQz" customClass="MADTabBarController" sceneMemberID="viewController">
+                <tabBarController restorationIdentifier="MADIdentifierTabBarController" storyboardIdentifier="MADIdentifierTabBarController" definesPresentationContext="YES" modalPresentationStyle="overFullScreen" id="NEH-Kw-MQz" customClass="MADTabBarController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="MAD Viewer" id="p0v-xc-SR5">
                         <barButtonItem key="backBarButtonItem" title="Documents" id="HkT-re-FTY"/>
                     </navigationItem>
@@ -196,7 +196,7 @@
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
             <objects>
-                <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="CoD-Op-4qC" customClass="MADQueryVisualizationSchemaViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MADIdentifierViewControllerQueryVisualizationSchema" id="CoD-Op-4qC" customClass="MADQueryVisualizationSchemaViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>

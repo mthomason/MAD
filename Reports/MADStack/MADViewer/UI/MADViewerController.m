@@ -14,6 +14,7 @@
 
 #import <MAD/MADActivityItemProviderDelegate.h>
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIPopoverController.h>
@@ -84,7 +85,7 @@
 
 #import "MADOperationObserver.h"
 
-#import "MADStoryboard.h"
+#import "MADIdentifiersStoryboards.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
@@ -159,10 +160,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @synthesize document = _document;
 
 + (instancetype)newViewerController:(MADocument *)document {
-    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
-    id viewerViewController = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
-    [((typeof(self))viewerViewController) setDocument: document];
-    return viewerViewController;
+    UIStoryboard *storyboard;
+    id bundle, controller;
+    
+    bundle = [NSBundle mainBundle];
+    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: bundle];
+    controller = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
+    [((typeof(self))controller) setDocument: document];
+    return controller;
 }
 
 #pragma mark - MADOperationObserver
@@ -356,9 +361,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super viewWillAppear:animated];
     
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    
     MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
     pageSlider.sliderDelegate = self;
     [self.view addSubview:pageSlider];
+    
     [self.view bringSubviewToFront:pageSlider];
 
     [self updateNavigationPrompt:animated];
@@ -412,9 +419,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         CGRect bounds = self.view.bounds;
         MADReportPageViewController *pageOne =
         [MADReportPageViewController newReportPageViewControllerWithDocument: document
-                                                              pageAttributes: pageAttributes
-                                                                       frame: bounds
-                                                                 andDelegate: self];
+                                                              pageAttributes: pageAttributes];
+        pageOne.view.frame = bounds;
+        pageOne.delegate = self;
         
         NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
         [self setViewControllers: viewControllers
@@ -511,7 +518,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTTabBarImageProtocol
 
-+ (UIImage *)newTabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
++ (UIImage *)newTabBarImage {
+    return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
+}
 
 - (nullable MADReportPageViewController *)visiblePageViewController { return self.viewControllers.count > 0 ? self.viewControllers[0] : nil; }
 
@@ -704,10 +713,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
                     if (sharedController) {
                         
+                        id document = sself.document;
                         MTReportViewerPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: sself.document];
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderer: document];
+                        
                         sharedController.printPageRenderer = printPageRenderer;
-                        sharedController.delegate = _document;
+                        sharedController.delegate = document;
                         
                         
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
@@ -889,10 +900,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             if (sself2) {
                 MADReportPageViewController *pageOne =
                 [MADReportPageViewController newReportPageViewControllerWithDocument: document
-                                                                      pageAttributes: pageAttributes
-                                                                               frame: sself2.view.bounds
-                                                                         andDelegate: sself2];
-                
+                                                                      pageAttributes: pageAttributes];
+                pageOne.view.frame = sself2.view.bounds;
+                pageOne.delegate = sself2;
+
                 NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
                 
                 [sself2 setViewControllers: viewControllers
@@ -1158,7 +1169,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         document.activityDelegate = sself;
                         
                         UIPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderWithDocument: document];
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderer: document];
                         sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = document;
                         

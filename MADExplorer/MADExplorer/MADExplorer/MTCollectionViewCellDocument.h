@@ -23,6 +23,10 @@ extern NSString * const MADTextNotDownloaded;
 @class UIActivityIndicatorView;
 @class UIProgressView;
 
+@interface MADStringFormatted : NSObject
+    + (NSString *)newStringFormattedSubtitle:(NSString *)status fileSize:(unsigned long long)fileSize;
+@end
+
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
     @property (nonatomic, assign, getter=isEditing) BOOL editing;

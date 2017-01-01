@@ -13,13 +13,9 @@
 #import "MADFileExplorerViewController.h"
 #import "MADFileExplorerViewControllerProtocol.h"
 
-#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
-
 #import <QuickLook/QLPreviewController.h>
 
-#import "MADDocumentManager.h"
-
-#import "MADFileExplorerView.h"
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -54,6 +50,11 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
 
+#import "MADAboutTableViewController.h"
+#import "MADDocumentInformationTableViewController.h"
+#import "MADDocumentManager.h"
+#import "MADFileExplorerView.h"
+
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
@@ -82,13 +83,8 @@
 #import "MTVerificationController.h"
 
 #import "NSUserDefaults+MADDesigner.h"
-#import "UIStoryboard+Query.h"
-#import "UINavigationController+MADQuery.h"
-#import "UINavigationController+Designer.h"
 
-#import "UITableViewController+Designer.h"
 #import "MTStoreKitController+Features.h"
-#import "MADDocumentInformationTableViewController+Designer.h"
 
 #import "MADDocumentManagerProtocol.h"
 
@@ -215,6 +211,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
     @property (nonatomic, strong) UIProgressView *progressViewFileManager;
 
+    @property (nonatomic, strong) NSArray *defaultPassthroughViews;
+
 @end
 
 @implementation MADFileExplorerViewController
@@ -222,7 +220,80 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark -
 #pragma mark NSObject
 
++ (void)initialize {
+    [super initialize];
+    
+    if (self != [MADFileExplorerViewController self]) return;
+        
+    NSUserDefaults *defaults;
+    NSDictionary *defaultsToRegister;
+    
+    defaults = [MADUserDefaults newUserDefaults];
+    defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                          @NO, MADUpgradeInstalledChinook,
+                          @NO, MADUpgradeInstalledSamples,
+                          @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+    
+    [defaults registerDefaults:defaultsToRegister];
+    
+    
+    UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
+    UIColor *redColor = [MADColorEverydayApps newColorRed];
+    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
+    
+    UITabBarItem *tabBarItemAppearance;
+    tabBarItemAppearance = [UITabBarItem appearance];
+    
+    UIBarButtonItem *barButtonItem;
+    barButtonItem = [UIBarButtonItem appearance];
+    barButtonItem.tintColor = whiteColor.copy;
+    
+    UINavigationBar *navigationBar;
+    Class controlClass;
+    controlClass = [QLPreviewController class];
+    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+    navigationBar.barTintColor  = madColor4.copy;
+    navigationBar.tintColor     = redColor.copy;
+    
+    controlClass = [UIViewController class];
+    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+    navigationBar.tintColor     = whiteColor.copy;
+    
+    controlClass = [UINavigationController class];
+    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+    navigationBar.tintColor     = whiteColor.copy;
+    
+    controlClass = [UIToolbar class];
+    barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
+    barButtonItem.tintColor = whiteColor.copy;
+    
+    id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              whiteColor, NSForegroundColorAttributeName, nil];
+    [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
+                                        forState: UIControlStateNormal];
+    
+    UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
+    navigationBarAppearance.titleTextAttributes = titleTextAttributes;
+    
+    UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
+    
+    UILabel *labelInTableCell;
+    controlClass = [UITableViewCell class];
+    labelInTableCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+    labelInTableCell.highlightedTextColor = orangeColor.copy;
+    
+    UILabel *labelInCollectionCell;
+    labelInCollectionCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+    labelInCollectionCell.highlightedTextColor = orangeColor.copy;
+    
+    UIImageView *imageInCollectionViewCell;
+    imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:controlClass, nil];
+    imageInCollectionViewCell.tintColor = orangeColor.copy;
+
+}
+
 - (void)dealloc {
+    
     _barButtonItemAction = nil;
     _subtitleNumberFormatter = nil;
     
@@ -244,79 +315,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 }
 
-+ (void)initialize {
-    [super initialize];
-    if (self == [MADFileExplorerViewController self]) {
-    
-        NSUserDefaults *defaults;
-        NSDictionary *defaultsToRegister;
-        
-        defaults = [NSUserDefaults newUserDefaultsMADDesigner];
-        defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @NO, MADUpgradeInstalledChinook,
-                              @NO, MADUpgradeInstalledSamples,
-                              @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
-        
-        [defaults registerDefaults:defaultsToRegister];
-
-        
-        UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
-        UIColor *redColor = [MADColorEverydayApps newColorRed];
-        UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-        
-        UITabBarItem *tabBarItemAppearance;
-        tabBarItemAppearance = [UITabBarItem appearance];
-        
-        UIBarButtonItem *barButtonItem;
-        barButtonItem = [UIBarButtonItem appearance];
-        barButtonItem.tintColor = whiteColor.copy;
-        
-        UINavigationBar *navigationBar;
-        Class controlClass;
-        controlClass = [QLPreviewController class];
-        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-        navigationBar.barTintColor  = madColor4.copy;
-        navigationBar.tintColor     = redColor.copy;
-
-        controlClass = [UIViewController class];
-        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-        navigationBar.tintColor     = whiteColor.copy;
-
-        controlClass = [UINavigationController class];
-        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-        navigationBar.tintColor     = whiteColor.copy;
-
-        controlClass = [UIToolbar class];
-        barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
-        barButtonItem.tintColor = whiteColor.copy;
-        
-        id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                  whiteColor, NSForegroundColorAttributeName, nil];
-        [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
-                                            forState: UIControlStateNormal];
-
-        UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
-        navigationBarAppearance.titleTextAttributes = titleTextAttributes;
-        
-        UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-
-        UILabel *labelInTableCell;
-        controlClass = [UITableViewCell class];
-        labelInTableCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
-        labelInTableCell.highlightedTextColor = orangeColor.copy;
-        
-        UILabel *labelInCollectionCell;
-        labelInCollectionCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
-        labelInCollectionCell.highlightedTextColor = orangeColor.copy;
-        
-        UIImageView *imageInCollectionViewCell;
-        imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:controlClass, nil];
-        imageInCollectionViewCell.tintColor = orangeColor.copy;
-        
-    }
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    
     if (self = [super initWithCoder:aDecoder]) {
     
         _shouldShowAddDocumentPopover = YES;
@@ -324,6 +324,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
     }
     return self;
+    
 }
 
 #pragma mark -
@@ -584,6 +585,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    self.defaultPassthroughViews = nil;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -921,19 +923,27 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark Convenience
 
 - (NSArray *)defaultPassthroughViews {
+    
+    if (_defaultPassthroughViews == nil) {
 
-    id view;
+        NSMutableArray *defaultPassthroughViews;
+        UINavigationController *controller;
+        id view;
+        
+        defaultPassthroughViews = [[NSMutableArray alloc] initWithCapacity: 2];
 
-    NSMutableArray *defaultPassthroughViews;
-    defaultPassthroughViews = [[NSMutableArray alloc] initWithCapacity: 2];
+        controller = self.navigationController;
+        view = controller.toolbar;
+        if (view) [defaultPassthroughViews addObject: view];
+        
+        view = controller.navigationBar;
+        if (view) [defaultPassthroughViews addObject: view];
+        
+        _defaultPassthroughViews = [[NSArray alloc] initWithArray: defaultPassthroughViews];
+        
+    }
     
-    view = self.navigationController.toolbar;
-    if (view) [defaultPassthroughViews addObject: view];
-    
-    view = self.navigationController.navigationBar;
-    if (view) [defaultPassthroughViews addObject: view];
-    
-    return defaultPassthroughViews;
+    return _defaultPassthroughViews;
 }
 
 - (NSURL *)copyMetaDataUrlForIndexPath:(NSIndexPath *)indexPath {
@@ -1405,76 +1415,118 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark Actions
 
 - (IBAction)actionAddDocument:(id)sender {
-    UINavigationController *navControl = [UINavigationController newNavigationControllerNewDocument];
-    navControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
-    MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
-    vc.delegate = self;
-    vc.saveFileDelegate = self;
+    UINavigationController *navigationControl;
+    navigationControl = [MADNavigationController newNavigationController: MADNavigationControllerTypeNewDocument];
+    navigationControl.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    MTDatabaseDriverSelectorViewController *databaseDriverSelector;
+    databaseDriverSelector = (MTDatabaseDriverSelectorViewController *)navigationControl.topViewController;
+    databaseDriverSelector.delegate = self;
+    databaseDriverSelector.saveFileDelegate = self;
+    
     self.definesPresentationContext = YES;
     self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     
-    UIPresentationController *pc = navControl.presentationController;
+    UIPresentationController *pc = navigationControl.presentationController;
     pc.presentedView.backgroundColor = [UIColor whiteColor];
-    [self showViewController:navControl sender:self];
+    [self showViewController:navigationControl sender:self];
 }
 
 - (IBAction)actionInformation:(id)sender {
-    UINavigationController *infoViewController = [UINavigationController newNavigationControllerAppInformation];
+    
+    UINavigationController *infoViewController;
+    infoViewController = [MADNavigationController newNavigationController:MADNavigationControllerTypeInformation];
+    infoViewController.modalPresentationStyle = UIModalPresentationPopover;
+    infoViewController.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
+    
+    NSArray *passthoughViews = [self defaultPassthroughViews];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
+    
     self.infoPopoverPresentationController = ppc;
+    
     [self showViewController:infoViewController sender:self];
 }
 
 - (IBAction)actionAbout:(id)sender {
+    
     if (_aboutViewControllerOnScreen) {
         _aboutViewControllerOnScreen = NO;
         [self dismissViewControllerAnimated:YES completion:^{ }];
+        
     } else {
+        
         _aboutViewControllerOnScreen = YES;
         
-        UITableViewController *aboutViewController = [UITableViewController About];
-        UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
+        UITableViewController *aboutViewController;
+        UIPopoverPresentationController *ppc;
+        NSArray *passthoughViews;
+        
+        passthoughViews = [self defaultPassthroughViews];
+
+        aboutViewController = [MADAboutTableViewController newAboutTableViewController];
+        aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+        
+        ppc = aboutViewController.popoverPresentationController;
+        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
         ppc.backgroundColor = [UIColor clearColor];
         ppc.delegate = self;
         ppc.barButtonItem = sender;
+        
         self.aboutPopoverPresentationController = ppc;
+        
         [self showViewController:aboutViewController sender:self];
     }
 }
 
 - (IBAction)actionDocumentInformation:(id)sender {
+    
     MADMetaData *metadata = nil;
-    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+    NSArray *selectedItems, *passthoughViews;
     NSIndexPath *indexPath;
-    NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
+    NSMutableArray *metadataItems;
+    UIPopoverPresentationController *ppc;
+    MADDocumentManager *documentManager;
+    MADDocumentInformationTableViewController *documentInformation;
+    
+    selectedItems = [self.collectionView indexPathsForSelectedItems];
+    metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
+    
+    documentManager = self.documentManager;
     for (indexPath in selectedItems) {
-        metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
+        metadata = [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
         [metadataItems addObject:metadata];
     }
     
-    MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
+    documentInformation = [MADDocumentInformationTableViewController newDocumentInformationTableViewController];
     documentInformation.modalPresentationStyle = UIModalPresentationPopover;
-    UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
+    
+    passthoughViews = [self defaultPassthroughViews];
+    
+    ppc = documentInformation.popoverPresentationController;
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:passthoughViews];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
+    
     self.documentInformationPopoverPresentationController = ppc;
     
     documentInformation.metadataItems = metadataItems;
+    
     [self showViewController:documentInformation sender:self];
+    
     [self actionDone:sender];
+    
 }
 
 - (IBAction)actionStore:(id)sender {
     
-    UINavigationController *licensing = [UINavigationController newNavigationControllerLicensing];
+    MADNavigationController *licensing;
+    licensing = [MADNavigationController newNavigationController: MADNavigationControllerTypeLicensing];
     licensing.modalPresentationStyle = UIModalPresentationFormSheet;
     licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
@@ -1875,25 +1927,33 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:
                         (UIPresentationController *)controller {
+
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController] ||
+    if ([controller isEqual:self.aboutPopoverPresentationController] ||
+        [controller isEqual:self.infoPopoverPresentationController] ||
         [controller isEqual:self.documentInformationPopoverPresentationController]) {
         style = UIModalPresentationNone;
+        
     }
+    
     return style;
 }
 
 #pragma mark - 
 #pragma mark UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation:
-                        (UIPopoverPresentationController *)popoverPresentationController { }
+- (void)prepareForPopoverPresentation: (UIPopoverPresentationController *)controller { }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover:
-                        (UIPopoverPresentationController *)popoverPresentationController { return YES; }
+- (BOOL)popoverPresentationControllerShouldDismissPopover: (UIPopoverPresentationController *)controller {
+    return YES;
+}
 
-- (void)popoverPresentationControllerDidDismissPopover:
-                        (UIPopoverPresentationController *)popoverPresentationController {
+- (void)popoverPresentationControllerDidDismissPopover: (UIPopoverPresentationController *)controller {
+    
+    controller.passthroughViews = nil;
+    controller.barButtonItem = nil;
+    controller.delegate = nil;
+    
     _aboutViewControllerOnScreen = NO;
 }
 

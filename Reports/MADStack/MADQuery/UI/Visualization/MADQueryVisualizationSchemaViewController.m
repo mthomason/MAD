@@ -12,6 +12,7 @@
 
 #import "MADQueryVisualizationSchemaViewController.h"
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIManagedDocument.h>
 #import <UIKit/UITableView.h>
 #import <UIKit/UIToolbar.h>
@@ -46,6 +47,8 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
+#import "MADIdentifiersStoryboards.h"
+
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource,
         UITableViewDelegate,
@@ -62,6 +65,8 @@
 
 @end
 
+static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"MADIdentifierViewControllerQueryVisualizationSchema";
+
 const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
 const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
@@ -69,6 +74,14 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @synthesize document = _document;
 @dynamic view;
+
++ (instancetype)newQueryVisualizationSchemaViewController {
+    UIStoryboard *storyboard;
+    id controller;
+    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
+    controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierViewControllerQueryVisualizationSchema];
+    return controller;
+}
 
 - (void)dealloc { }
 

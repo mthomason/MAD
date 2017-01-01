@@ -35,6 +35,8 @@
 		4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B741BA92A8700C9CC5E /* MTVertex.m */; };
 		4C3080F91D05C3B700A7D597 /* MADVectorBool.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080F71D05C3B700A7D597 /* MADVectorBool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3080FA1D05C3B700A7D597 /* MADVectorBool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */; };
+		4CB8EDFD1E1938EC00193295 /* MADMapStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB8EDFE1E1938EC00193295 /* MADMapStrings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */; };
 		4CBC23E01C9559C40006C0A6 /* MADSortProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */; };
 		4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */; };
 		4CBC23E21C9559C40006C0A6 /* MADDfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */; };
@@ -87,6 +89,8 @@
 		4C2C7B741BA92A8700C9CC5E /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVertex.m; path = MADDataStructures/MTVertex.m; sourceTree = "<group>"; };
 		4C3080F71D05C3B700A7D597 /* MADVectorBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVectorBool.h; path = MADDataStructures/MADVectorBool.h; sourceTree = "<group>"; };
 		4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVectorBool.mm; path = MADDataStructures/MADVectorBool.mm; sourceTree = "<group>"; };
+		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMapStrings.h; path = MADDataStructures/MADMapStrings.h; sourceTree = "<group>"; };
+		4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADMapStrings.mm; path = MADDataStructures/MADMapStrings.mm; sourceTree = "<group>"; };
 		4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSortProperties.m; path = MADDataStructures/MADSortProperties.m; sourceTree = "<group>"; };
 		4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortProperties.h; path = MADDataStructures/MADSortProperties.h; sourceTree = "<group>"; };
 		4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDfsProperties.h; path = MADDataStructures/MADDfsProperties.h; sourceTree = "<group>"; };
@@ -182,6 +186,8 @@
 				4C2C7B741BA92A8700C9CC5E /* MTVertex.m */,
 				4C3080F71D05C3B700A7D597 /* MADVectorBool.h */,
 				4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */,
+				4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */,
+				4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */,
 			);
 			name = MADDataStructures;
 			sourceTree = "<group>";
@@ -223,6 +229,7 @@
 				4C2C7B8C1BA92A8700C9CC5E /* MTVertex.h in Headers */,
 				4C2C7B791BA92A8700C9CC5E /* MTGraph.h in Headers */,
 				4C2C7B7F1BA92A8700C9CC5E /* MTPair.h in Headers */,
+				4CB8EDFD1E1938EC00193295 /* MADMapStrings.h in Headers */,
 				4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */,
 				4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */,
 				4C2C7B841BA92A8700C9CC5E /* MTQueue.h in Headers */,
@@ -331,6 +338,7 @@
 				4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */,
 				4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */,
 				4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */,
+				4CB8EDFE1E1938EC00193295 /* MADMapStrings.mm in Sources */,
 				4C3080FA1D05C3B700A7D597 /* MADVectorBool.mm in Sources */,
 				4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */,
 				4CBC23E31C9559C40006C0A6 /* MADDfsProperties.m in Sources */,

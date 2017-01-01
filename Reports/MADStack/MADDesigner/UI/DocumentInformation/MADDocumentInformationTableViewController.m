@@ -7,23 +7,38 @@
 //
 
 #import "MADDocumentInformationTableViewController.h"
-#import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
-#import <MADFileManager/MADMetaData.h>
-#import "MADVibrantTableView.h"
-#import "MADVibrantTableViewCell.h"
 
 #import <UIKit/UILabel.h>
 #import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UIStoryboard.h>
+
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+#import <MADFileManager/MADMetaData.h>
+
+#import "MADVibrantTableView.h"
+#import "MADVibrantTableViewCell.h"
+
+static NSString * const MADStoryboardDocumentInformation = @"MADStoryboardDocumentInformation";
+static NSString * const MADIdentifierDocumentInformationTableViewController = @"MADIdentifierDocumentInformationTableViewController";
 
 @interface MADDocumentInformationTableViewController ()
     <MADVibrantTableViewCellDelegate>
 
-@property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+    @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 
 @end
 
 @implementation MADDocumentInformationTableViewController
+
++ (instancetype)newDocumentInformationTableViewController {
+    UIStoryboard *storyboard;
+    id controller;
+    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDocumentInformation
+                                           bundle: [NSBundle mainBundle]];;
+    controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierDocumentInformationTableViewController];
+    return controller;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

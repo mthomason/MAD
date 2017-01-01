@@ -6,17 +6,3 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_UIStoryboard_ObjectSelector_h
-#define Reports_UIStoryboard_ObjectSelector_h
-
-#import <UIKit/UIStoryboard.h>
-
-@class MADNavigationController;
-
-@interface UIStoryboard (ObjectSelector)
-
-    + (instancetype)ObjectSelector;
-
-@end
-
-#endif

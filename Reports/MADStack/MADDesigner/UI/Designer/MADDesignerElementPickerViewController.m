@@ -57,13 +57,13 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
         UICollectionViewDataSource,
         UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-@property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
-@property (nonatomic, strong) NSArray *dataSource;
+    @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+    @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
+    @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
+    @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
+    @property (nonatomic, strong) NSArray *dataSource;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 
@@ -185,8 +185,11 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     MADDocumentObjectCollectionViewCell *result;
     result = [collectionView dequeueReusableCellWithReuseIdentifier: MADIdentiferDocumentObjectCell
                                                        forIndexPath: indexPath];
-    NSNumber * __unsafe_unretained madob = self.dataSource[(NSUInteger)indexPath.row];
-    result.type = madob.shortValue;
+    NSNumber * __weak  madob = self.dataSource[(NSUInteger)indexPath.row];
+    short madobValue = madob.shortValue;
+    
+    result.type = madobValue;
+    result.contentView.tag = madobValue;
     
     if (result.selectedBackgroundView == nil) {
     
@@ -196,7 +199,6 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
         result.selectedBackgroundView = selectedBackgroundView;
         
     }
-    result.contentView.tag = madob.shortValue;
     return result;
 }
 
@@ -315,11 +317,8 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
     if (_aggregateViewController) {
         
-        UITableViewCell * __unsafe_unretained cell;
-        UILabel * __unsafe_unretained detailTextLabel;
-        
+        UITableViewCell *cell;
         cell = _aggregateViewController.tableViewCellAggregateGroupBy;
-        detailTextLabel = cell.detailTextLabel;
         
         switch (_aggregateGroupByType) {
         
@@ -328,7 +327,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
                 NSUInteger group = self.aggregateGroupBySectionNumber;
                 NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [[NSString alloc] initWithFormat:format, group];
-                detailTextLabel.text = detail;
+                cell.detailTextLabel.text = detail;
                 break;
                 
             }
@@ -336,19 +335,19 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             case MTAggregateGroupByTypeReport: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-                detailTextLabel.text = detailText;
+                cell.detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-                detailTextLabel.text = detailText;
+                cell.detailTextLabel.text = detailText;
                 break;
                 
             }
             default:
-                detailTextLabel.text = @"";
+                cell.detailTextLabel.text = @"";
                 break;
         }
     }
@@ -398,8 +397,10 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             }
             
             break;
+            
         case MTViewTagAggregateFunctions:
             break;
+            
         case MTViewTagDocumentObjectNewAggregate: {
             
             switch (indexPath.row) {
@@ -431,12 +432,16 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
             break;
         }
+            
         case MTViewTagDocumentObjectNewLabelStatic:
             break;
+            
         case MTViewTagGroupByOptions:
             break;
+            
         default:
             break;
+            
     }
 }
 

@@ -13,8 +13,9 @@
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
-#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIImagePickerController.h>
 #import <UIKit/UIBarButtonItem.h>
@@ -106,16 +107,16 @@
 
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
-#import "UINavigationController+Designer.h"
-#import "MTViewControllerBarcode+Designer.h"
-#import "MTQueryBuilderChooseFieldViewController+Designer.h"
+#import "MADNavigationController.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
 
-#import "MADStoryboard.h"
-
 #import <MAD/MADReportSections.h>
 #import <MAD/MADReportSection.h>
+
+#import "MTViewControllerBarcode.h"
+
+#import "MADIdentifiersStoryboards.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
@@ -153,7 +154,6 @@ static NSString * const MTSegueChooseImageSaveIdentifer                     = @"
 static NSString * const MTIdentifierSegueEditFieldExit                      = @"MTIdentifierSegueEditFieldExit";
 static NSString * const MTSegueNewDocumentObjectAggregateLabelSaveIdentifer = @"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer";
 static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer        = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
-static NSString * const MADDesignerStoryboardID                             = @"MADIdentifierStoryboardDesignerViewController";
 
 static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
 static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
@@ -281,23 +281,33 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 @synthesize document = _document;
 
-#pragma mark - Static Helpers
+#pragma mark -
+#pragma mark Static Helpers
 
 + (NSString *)MADDesigner {
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
 
+#pragma mark MTTabBarImageProtocol
+
++ (UIImage *)newTabBarImage {
+    return [UIImage imageNamed:MADImageBarButtonItemMadDesigner8];
+}
+
++ (instancetype)newDesignerViewController:(MADocument *)document {
+    static NSString * MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
+    id bundle = [NSBundle mainBundle];
+    UIStoryboard *storyboard;
+    storyboard = [UIStoryboard storyboardWithName:MADStoryboardDesigner bundle:bundle];
+    id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
+    [((typeof(self))controller) setDocument: document];
+    return controller;
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc { }
-
-+ (instancetype)newDesignerViewController:(MADocument *)document {
-    UIStoryboard *storyboard = [MADStoryboard newStoryboardDesigner];
-    id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
-     [((typeof(self))controller) setDocument: document];
-    return controller;
-}
 
 #pragma mark - Unwind Segue
 
@@ -429,7 +439,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
 
     UINavigationController *navigationControllerToolbox;
-    navigationControllerToolbox = [UINavigationController newNavigationControllerToolbox];
+    navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
@@ -503,12 +513,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     self.layoutConstraintContainerWidth = constraintWidth;
     
-    
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
-    viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
-    viewControllerSectionLayoutSettings.delegate = self;
-    
-    self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerLayoutSettings;
+    viewControllerLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
+    viewControllerLayoutSettings.delegate = self;
+    self.viewControllerSectionLayoutSettings = viewControllerLayoutSettings;
     
     UINavigationController *navigationController;
     navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
@@ -1659,7 +1667,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         
         UIView *viewToEdit = [strongself viewForObjectID: objectID];
         UINavigationController *navigationController;
-        navigationController = [UINavigationController newNavigationControllerAggregateAdd];
+        navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController;
         aggregateViewController = navigationController.viewControllers.firstObject;
@@ -1709,7 +1717,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         
         UIView *viewToEdit = [strongself viewForObjectID:objectID];
 
-        MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
+        MTViewControllerBarcode *barcodeViewController;
+        barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
         barcodeViewController.document = strongself.document;
         barcodeViewController.delegate = strongself;
         barcodeViewController.preferredContentSize = sizePopoverFonts();
@@ -1733,7 +1742,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
+    MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
     
@@ -1762,7 +1771,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
     MTQueryBuilderChooseFieldViewController *chooseFieldViewController;
-    chooseFieldViewController = [MTQueryBuilderChooseFieldViewController main];
+    chooseFieldViewController = [MTQueryBuilderChooseFieldViewController newQueryBuilderChooseFieldViewController];
     chooseFieldViewController.document = self.document;
     chooseFieldViewController.delegate = self;
     
@@ -2459,6 +2468,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                 UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
                 _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
                 _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+                
                 [self showSectionSettingsFromLabel:label];
                 
             }
@@ -3633,8 +3643,11 @@ static const inline CGSize sizePopoverFonts() {
 - (IBAction)actionAdd:(id)sender {
     
     UINavigationController *navigationController;
-    navigationController = [UINavigationController newNavigationControllerElementPicker];
     MADDesignerElementPickerViewController *pickerController;
+    UIPopoverPresentationController *popoverController;
+
+    navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeElementPicker];
+    
     pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;
     pickerController.document = self.document;
@@ -3642,7 +3655,6 @@ static const inline CGSize sizePopoverFonts() {
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     navigationController.preferredContentSize = sizePopoverDefault();
     
-    UIPopoverPresentationController *popoverController;
     popoverController = navigationController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.barButtonItem = sender;
@@ -3736,12 +3748,6 @@ static const inline CGSize sizePopoverFonts() {
     NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsDictionary.allValues];
     NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
     return passthroughViews;
-}
-
-#pragma mark MTTabBarImageProtocol
-
-+ (UIImage *)newTabBarImage {
-    return [UIImage imageNamed:MADImageBarButtonItemMadDesigner8];
 }
 
 @end

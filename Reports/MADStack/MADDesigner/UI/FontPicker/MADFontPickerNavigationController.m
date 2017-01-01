@@ -26,16 +26,5 @@
     [super viewDidAppear:animated];
     [self.visibleViewController.view setNeedsLayout];
 }
-/*
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [super pushViewController:viewController animated:animated];
-    self.preferredContentSize = viewController.preferredContentSize;
-}
 
-- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
-    UIViewController *result = [super popViewControllerAnimated:animated];
-    self.preferredContentSize = result.preferredContentSize;
-    return result;
-}
-*/
 @end

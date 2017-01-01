@@ -13,9 +13,10 @@
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 
-@implementation NSDictionary (QueryCacheAggregate)
+@implementation MADParameters
 
 + (instancetype)newParamatersAggregateWithFieldKey:(NSString *)fieldKey
                                    andFunctionType:(MTAggregateFunctionType)functionType
@@ -23,9 +24,15 @@
                                        groupByType:(MTAggregateGroupByType)groupByType
                                             rowIDs:(NSArray *)rowIDs
                                 predicateParamters:(NSArray *)predicateParamters {
+
+    //Group by type page must have rowIDs.
+    NSAssert(!(groupByType == MTAggregateGroupByTypePage && rowIDs == nil), @"Logic error.");
     
-    id keyTableName, keyFieldKey, keyFunctionType, keyFieldDescriptors,
-       keyGroupByType, keyRowIDs, keyPredicate;
+    //Group by type page must have rowIDs.
+    NSAssert(!(groupByType == MTAggregateGroupByTypeSection && predicateParamters == nil), @"Logic error.");
+
+    
+    id keyTableName, keyFieldKey, keyFunctionType, keyFieldDescriptors, keyGroupByType, keyRowIDs, keyPredicate;
 
     // Parameter keys
     keyTableName =          [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateTableName];
@@ -38,22 +45,20 @@
     
     // Values
     NSNumber *objFunctionType =         [[NSNumber alloc] initWithShort: functionType];
+    
     NSString *tableName =               [dataTable tableName].copy,
              *fieldKeyCopy =            fieldKey.copy;
+    
     MADMutableMapDataColumns *columns = dataTable.columns;
-    NSNumber *groupType =               [[NSNumber alloc] initWithShort:groupByType];
+    
+    NSNumber *groupType = [[NSNumber alloc] initWithShort:groupByType];
 
-    //Group by type page must have rowIDs.
-    NSAssert(!(groupByType == MTAggregateGroupByTypePage && rowIDs == nil),
-             @"Logic error.");
+
     if (rowIDs == nil) rowIDs = [[NSArray alloc] init];
     
-    //Group by type page must have rowIDs.
-    NSAssert(!(groupByType == MTAggregateGroupByTypeSection && predicateParamters == nil),
-             @"Logic error.");
     if (predicateParamters == nil) predicateParamters = [[NSArray alloc] init];
 
-    NSDictionary *paramaters;
+    id paramaters;
     paramaters = [[NSDictionary alloc] initWithObjectsAndKeys:
                                         predicateParamters, keyPredicate,
                                         rowIDs,             keyRowIDs,

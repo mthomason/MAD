@@ -1,9 +1,9 @@
 //
-//  MTTableViewControllerAbout.m
+//  MADAboutTableViewController.m
 //  MAD
 //
 //  Created by Michael Thomason on 8/20/13.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -11,14 +11,14 @@
 #endif
 
 #import "MADAboutTableViewController.h"
-
-#import <MessageUI/MFMailComposeViewController.h>
-
 #import "MUIViewControllerDelegate.h"
+
+#import <CoreText/CTStringAttributes.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 #import <MAD/MADConstants.h>
 
-#import <CoreText/CTStringAttributes.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
@@ -35,7 +35,8 @@
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
 
-#import <MADFoundation/MADApplicationProtocol.h>
+static NSString * const MADStoryboardAbout = @"MADStoryboardAbout";
+static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -59,6 +60,15 @@
         navigationBarMailAppearance.tintColor = color;
 
     }
+}
+
++ (instancetype)newAboutTableViewController {
+    UIStoryboard *storyboard;
+    id bundle, controller;
+    bundle = [NSBundle mainBundle];
+    storyboard = [UIStoryboard storyboardWithName:MADStoryboardAbout bundle:bundle];
+    controller = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierAboutViewController];
+    return controller;
 }
 
 #pragma mark - Exit

@@ -8,6 +8,7 @@
 
 #import "MADTabBarController.h"
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -19,12 +20,10 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADDesignerViewController.h"
 #import "MADViewerController.h"
-#import "MADStoryboard.h"
 
-#import "MADStoryboard.h"
-#import "MADTabBarController.h"
+#import "MADIdentifiersStoryboards.h"
 
-static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
+static NSString * const MADIdentifierTabBarController = @"MADIdentifierTabBarController";
 
 const int8_t MADIndexQuery = 0;
 const int8_t MADIndexDesigner = 1;
@@ -49,11 +48,12 @@ const int8_t MADIndexViewer = 2;
 }
 
 + (nullable instancetype)newTabBarController:(MADocument __weak *)document prompt:(NSString *)prompt {
-    UIStoryboard *designer;
-    id tabBarController;
-    
-    designer = [MADStoryboard newStoryboardDesigner];
-    tabBarController = [designer instantiateViewControllerWithIdentifier:TabBar];
+    UIStoryboard *storyboard;
+    id bundle, tabBarController;
+
+    bundle = [NSBundle mainBundle];
+    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: bundle];
+    tabBarController = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierTabBarController];
     
     if (tabBarController) {
         ((MADTabBarController *) tabBarController).document = document;
@@ -82,6 +82,8 @@ const int8_t MADIndexViewer = 2;
     }
     return self;
 }
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

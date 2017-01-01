@@ -12,6 +12,9 @@
 
 @interface MADSliderPageVertical ()
 
+@property (nonatomic, strong) UIImage *imageEnabled;
+@property (nonatomic, strong) UIImage *imageDisabled;
+
 @end
 
 @implementation MADSliderPageVertical
@@ -20,30 +23,43 @@
     
     if (self = [super initWithFrame:frame]) {
         
-        UIImage *thumbImage = [MADSliderPageVertical sliderImageEnabled];
-        UIImage *blank = [UIImage new];
-        [self setThumbImage:thumbImage forState:UIControlStateNormal];
-        [self setMinimumTrackImage:blank forState:UIControlStateNormal];
-        [self setMaximumTrackImage:blank forState:UIControlStateNormal];
+        UIImage *imageBlank;
+
+        imageBlank = [UIImage new];
+        [self setMinimumTrackImage:imageBlank forState: UIControlStateNormal];
+        
+        imageBlank = [UIImage new];
+        [self setMaximumTrackImage:imageBlank forState: UIControlStateNormal];
         
         self.maximumValue = 0.0000f;
         self.minimumValue = 0.0000f;
+        self.value = 0.0000f;
         self.continuous = YES;
         self.tintColor = [MADColorEverydayApps newColorRed];
-        self.value = 0.0000f;
         self.backgroundColor = [UIColor clearColor];
-        
         
     }
     return self;
 }
 
-+ (UIImage *)sliderImageEnabled {
-    return [UIImage imageNamed:@"MTSliderThumbRotate"];
+- (UIImage *)imageEnabled {
+    if (_imageEnabled == nil) {
+        _imageEnabled = [UIImage imageNamed:@"MTSliderThumbRotate"];
+    }
+    return _imageEnabled;
 }
 
-+ (UIImage *)sliderImageDisabled {
-    return [UIImage imageNamed:@"MTSliderThumbRotateDisabled"];
+- (UIImage *)imageDisabled {
+    if (_imageEnabled == nil) {
+        _imageEnabled = [UIImage imageNamed:@"MTSliderThumbRotateDisabled"];
+    }
+    return _imageEnabled;
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    [super setEnabled:enabled];
+    UIImage *image = enabled ? self.imageEnabled : self.imageDisabled;
+    [self setThumbImage: image forState: UIControlStateNormal];
 }
 
 @end

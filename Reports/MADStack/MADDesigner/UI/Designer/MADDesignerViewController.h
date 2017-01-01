@@ -16,7 +16,8 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADDesignerViewController : UIViewController
-    <MADViewControllerDocumentProtocol, MADViewControllerProtocol>
+    <MADViewControllerDocumentProtocol,
+    MADViewControllerProtocol>
 
     + (instancetype)newDesignerViewController:(MADocument *)document;
     

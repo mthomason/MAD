@@ -11,9 +11,9 @@
 static NSString * const MADAppConfigurationApplicationGroupsPrimary
                                                         = @"group.everydayapps.mad.primary";
 
-@implementation NSUserDefaults (MADDesigner)
+@implementation MADUserDefaults
 
-+ (instancetype)newUserDefaultsMADDesigner {
++ (instancetype)newUserDefaults {
     NSUserDefaults *prefs;
     prefs = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     return prefs;

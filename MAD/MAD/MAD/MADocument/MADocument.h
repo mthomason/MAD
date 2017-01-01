@@ -11,6 +11,7 @@
 #ifndef Reports_MADocument_h
 #define Reports_MADocument_h
 
+#import <UIKit/UIPrintInteractionController.h>
 #import <UIKit/UIManagedDocument.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import "MADReportFormatterDataSourceProtocol.h"
@@ -41,7 +42,8 @@ extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
 @interface MADocument : UIManagedDocument
-    <MADDataProtocol,
+    <UIPrintInteractionControllerDelegate,
+        MADDataProtocol,
         MTCacheProtocol,
         MTReportFormatterDataSource>
     
@@ -71,9 +73,9 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (nonatomic, readonly, copy)       NSURL           *urlDataTableCache;
     @property (nonatomic, assign)               BOOL            limitResultsDesignMode;
 
-    - (instancetype)initWithFileURL:(NSURL *)url;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
+    - (instancetype)initWithFileURL:(NSURL *)url;
 
     - (void)saveContext;
 

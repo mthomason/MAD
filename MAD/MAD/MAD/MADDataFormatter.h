@@ -17,6 +17,8 @@
 
 @interface MADDataFormatter : NSObject
 
+    + (instancetype)newDataFormatter:(MTQuery *)query;
+
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, assign) BOOL didRefresh;
     @property (nonatomic, assign, readonly) BOOL needsFormat;

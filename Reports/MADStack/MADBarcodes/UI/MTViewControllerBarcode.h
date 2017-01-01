@@ -25,6 +25,8 @@
     <MTViewControllerBarcodeOptionsDelegate,
         MTUnwindProtocol>
 
+    + (instancetype)newViewControllerBarcode;
+
     @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 

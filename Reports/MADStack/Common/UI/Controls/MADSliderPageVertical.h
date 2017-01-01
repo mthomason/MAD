@@ -13,9 +13,6 @@
 
 @interface MADSliderPageVertical : UISlider
 
-    + (UIImage *)sliderImageEnabled;
-    + (UIImage *)sliderImageDisabled;
-
 @end
 
 #endif

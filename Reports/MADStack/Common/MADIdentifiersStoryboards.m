@@ -8,6 +8,4 @@
 
 #import "MADIdentifiersStoryboards.h"
 
-@implementation MADIdentifiersStoryboards
-
-@end
+NSString * const MADStoryboardDesigner = @"MADStoryboardDesigner";

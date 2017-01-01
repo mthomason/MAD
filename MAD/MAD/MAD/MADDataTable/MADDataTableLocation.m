@@ -24,6 +24,24 @@
 
 @implementation MADDataTableLocation
 
+static NSString *_keyRow;
+static NSString *_keyColumn;
+
++ (NSString *)keyRow {
+    if (_keyRow == nil) _keyRow = NSStringFromSelector(@selector(row));
+    return _keyRow;
+}
+
++ (NSString *)keyColumn {
+    if (_keyColumn == nil) _keyColumn = NSStringFromSelector(@selector(column));
+    return _keyColumn;
+}
+
++ (instancetype)newDataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
+    id result = [[self alloc] initWithRow:row inColumn:column];
+    return result;
+}
+
 - (instancetype)init {
     if (self = [super init]) {
         self.row = 0;
@@ -32,20 +50,10 @@
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)encoder {
-    
-    NSNumber *row = @(self.row);
-    NSNumber *column = @(self.column);
-    
-    [encoder encodeObject: row forKey: [MADDataTableLocation keyRow]];
-    [encoder encodeObject: column forKey: [MADDataTableLocation keyColumn]];
-    
-}
-
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        NSNumber *row = [decoder decodeObjectForKey: [MADDataTableLocation keyRow]];
-        NSNumber *column = [decoder decodeObjectForKey: [MADDataTableLocation keyColumn]];
+        NSNumber *row = [decoder decodeObjectForKey: [self.class keyRow]];
+        NSNumber *column = [decoder decodeObjectForKey: [self.class keyColumn]];
         self.row = row.unsignedIntegerValue;
         self.column = column.unsignedIntegerValue;
     }
@@ -62,17 +70,14 @@
     return self;
 }
 
-+ (instancetype)newDataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
-    id result = [[MADDataTableLocation alloc] initWithRow:row inColumn:column];
-    return result;
-}
-
-+ (NSString *)keyRow {
-    return NSStringFromSelector(@selector(row));
-}
-
-+ (NSString *)keyColumn {
-    return NSStringFromSelector(@selector(column));
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    
+    NSNumber *row = [[NSNumber alloc] initWithUnsignedInteger: self.row];
+    NSNumber *column = [[NSNumber alloc] initWithUnsignedInteger: self.column];
+    
+    [encoder encodeObject: row forKey: [self.class keyRow]];
+    [encoder encodeObject: column forKey: [self.class keyColumn]];
+    
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "MTViewControllerBarcode.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarButtonItem.h>
@@ -90,6 +91,15 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 @implementation MTViewControllerBarcode
 
 @synthesize unwindViewController;
+
++ (instancetype)newViewControllerBarcode {
+    static NSString * const ObjectSelector = @"MADStoryboardObjectSelector";
+    static NSString * const MainIdentifier = @"MADIdentifierBarcodeViewController";
+    id bundle = [NSBundle mainBundle];
+    id storyboard = [UIStoryboard storyboardWithName: ObjectSelector bundle: bundle];
+    id result = [storyboard instantiateViewControllerWithIdentifier: MainIdentifier];
+    return result;
+}
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController

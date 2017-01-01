@@ -21,24 +21,6 @@ struct MADVectorBoolImpl;
 
 @end
 
-/*
- // Example cpp class include
- namespace MADContainers {
-    class VectorBool {
-        
-    public:
-        std::vector<bool> container;
-
-        void push_true() { this->container.push_back(true); };
-        void push_false() { this->container.push_back(false); };
-        void clear() { this->container.clear(); }
-        unsigned long count() { return this->container.size(); }
-
-    };
-};
-
- */
-
 struct MADVectorBoolImpl {
     std::vector<bool> _container;
 };

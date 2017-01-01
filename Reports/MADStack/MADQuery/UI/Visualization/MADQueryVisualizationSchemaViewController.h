@@ -26,6 +26,8 @@ extern const CGFloat MADSchemaViewDefaultHeight;
 @interface MADQueryVisualizationSchemaViewController : UIViewController
     <MADViewControllerDocumentProtocol>
 
+    + (instancetype)newQueryVisualizationSchemaViewController;
+
     @property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
     @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
@@ -34,13 +36,17 @@ extern const CGFloat MADSchemaViewDefaultHeight;
     - (void)setCenter:(CGPoint)center;
     - (void)setBounds:(CGRect)bounds;
     - (void)setTransform:(CGAffineTransform)transform;
+
     - (CGPoint)center;
     - (CGRect)bounds;
     - (CGAffineTransform)transform;
 
     - (NSManagedObjectID *)tableObjectId;
+
     - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
+
     - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+
     - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
     - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
 

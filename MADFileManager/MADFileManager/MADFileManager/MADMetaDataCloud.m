@@ -69,25 +69,36 @@
 }
 
 - (unsigned long long)fileSystemFileSize {
+    unsigned long long size;
     NSNumber *fileSize;
+    
     fileSize = [self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey];
-    return fileSize.unsignedLongLongValue;
+    size = fileSize.unsignedLongLongValue;
+    
+    return size;
 }
 
 - (NSString *)contentType {
-    id key = [[self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey] copyWithZone:nil];
-    return key;
+    id value, result;
+    
+    value = [self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey];
+    result = [value copyWithZone:nil];
+    
+    return result;
 }
 
 - (NSString *)ubiquitousItemContainerDisplayName {
-    NSString *name;
-    name = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
+    NSString *value, *name;
+    value = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
+    name = [value copyWithZone:nil];
     return name;
 }
 
 - (NSURL *)URL {
-    NSURL *URL = [[_metadataItem valueForAttribute: NSMetadataItemURLKey] copyWithZone:nil];
-    return URL;
+    NSURL *value, *result;
+    value = [_metadataItem valueForAttribute: NSMetadataItemURLKey];
+    result = value.copy;
+    return result;
 }
 
 - (BOOL)isSyncing {
@@ -96,31 +107,36 @@
 }
 
 - (BOOL)isUbiquitous {
-    NSNumber *isUbiquitous;
-    isUbiquitous = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
-    return isUbiquitous.boolValue;
+    BOOL isUbiquitous = NO;
+    NSNumber *wrapper;
+    wrapper = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
+    isUbiquitous = wrapper.boolValue;
+    return wrapper;
 }
 
 - (NSData *)fileSystemFileCreationDate {
-    id date = [[_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] copyWithZone:nil];
+    id value = [_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey];
+    id date = [value copyWithZone:nil];
     return date;
 }
 
 - (NSData *)fileSystemContentChangeDate {
-    id date = [[_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey]
-                        copyWithZone:nil];
+    id value = [_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey];
+    id date = [value copyWithZone:nil];
     return date;
 }
 
 - (NSURL *)ubiquitousItemURLInLocalContainer {
-    id url = [[_metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey]
-                copyWithZone:nil];
+    id value = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey];
+    id url = [value copyWithZone:nil];
     return url;
 }
 
 - (BOOL)ubiquitousItemDownloadRequested {
-    NSNumber *result = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
-    return result.boolValue;
+    BOOL result = NO;
+    NSNumber *valuse = [_metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
+    result = valuse.boolValue;
+    return result;
 }
 
 - (BOOL)ubiquitousItemIsDownloading {
@@ -148,33 +164,39 @@
 }
 
 - (double)ubiquitousItemPercentDownloaded {
-    NSNumber *result;
-    result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
-    return result.doubleValue;
+    double result;
+    NSNumber *status = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
+    result = status.doubleValue;
+    return result;
 }
 
 - (BOOL)ubiquitousItemIsExternalDocument {
-    NSNumber *result;
-    result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
-    return result.boolValue;
+    BOOL result;
+    NSNumber *status;
+    status = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
+    result = status.boolValue;
+    return result;
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded {
-    NSString *status = self.ubiquitousItemDownloadingStatus;
-    return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
-                                                                                        YES : NO;
+    BOOL result;
+    NSString *status = [self ubiquitousItemDownloadingStatus];
+    result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ? YES : NO;
+    return result;
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusDownloaded {
-        NSString *status = self.ubiquitousItemDownloadingStatus;
-        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ?
-                                                                                        YES : NO;
+    BOOL result;
+    NSString *status = [self ubiquitousItemDownloadingStatus ];
+    result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ? YES : NO;
+    return result;
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusCurrent {
-        NSString *status = self.ubiquitousItemDownloadingStatus;
-        return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ?
-                                                                                        YES : NO;
+    BOOL result;
+    NSString *status = [self ubiquitousItemDownloadingStatus];
+    result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ? YES : NO;
+    return result;
 }
 
 - (id)debugQuickLookObject {

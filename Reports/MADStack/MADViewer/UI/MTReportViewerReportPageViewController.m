@@ -126,15 +126,11 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark - Static Constructors
 
 + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
-                                         pageAttributes:(MADPageViewAttributes *)pageAttributes
-                                                  frame:(CGRect)frame
-                                            andDelegate:(id <MTPrintingProtocol>)delegate {
+                                         pageAttributes:(MADPageViewAttributes *)pageAttributes {
     
-    MADReportPageViewController *pageViewController;
+    id pageViewController;
     pageViewController = [[self alloc] initWithDocument: document
                                      andPageAttributtes: pageAttributes];
-    pageViewController.view.frame = frame;
-    pageViewController.delegate = delegate;
     return pageViewController;
 
 }

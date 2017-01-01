@@ -12,6 +12,7 @@
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UISwitch.h>
 #import <UIKit/UIStepper.h>
@@ -21,12 +22,14 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
-#import "UIViewController+Designer.h"
+#import "MADIdentifiersStoryboards.h"
 
 static NSString * const MADTextVisible         = @"Visible";
 static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
 static NSString * const MADTextFormFeed        = @"Form Feed";
 static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
+
+static NSString * const MADIdentifierLayoutSettingsViewController = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
@@ -41,11 +44,18 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
-+ (instancetype)toolboxSettings {
-    return (MTReportDesignerSectionLayoutSettingsViewController *)[UIViewController layoutSettingsViewController];
++ (instancetype)newReportDesignerSectionLayoutSettingsViewController {
+    id storyboard, controller;
+    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
+    controller = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierLayoutSettingsViewController];
+    return controller;
 }
 
 #pragma mark - View lifecycle
+
+- (void)dealloc {
+    _delegate = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -68,9 +78,11 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorBlue];
+    
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
                                                             self.tableView.scrollIndicatorInsets.left,
                                                             CGSizeZero.height,

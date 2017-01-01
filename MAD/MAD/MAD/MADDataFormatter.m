@@ -18,8 +18,8 @@
 
 @implementation MADDataFormatter
 
-+ (instancetype)newReportFormatterWithQuery:(MTQuery *)query {
-    MADDataFormatter *result = [[MADDataFormatter alloc] initWithQuery:query];
++ (instancetype)newDataFormatter:(MTQuery *)query {
+    id result = [[self alloc] initWithQuery:query];
     return result;
 }
 

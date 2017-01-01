@@ -9,9 +9,9 @@
 #ifndef MAD_Designer_MADFontPickerNavigationController_h
 #define MAD_Designer_MADFontPickerNavigationController_h
 
-#import <UIKit/UINavigationController.h>
+#import "MADNavigationController.h"
 
-@interface MADFontPickerNavigationController : UINavigationController
+@interface MADFontPickerNavigationController : MADNavigationController
 
 @end
 

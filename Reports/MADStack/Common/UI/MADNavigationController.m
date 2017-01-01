@@ -7,26 +7,121 @@
 //
 
 #import "MADNavigationController.h"
-#import "MADTransparentPresentationController.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <UIKit/UINavigationController.h>
+
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UIViewController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UIToolbar.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIViewController.h>
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import "MADTransparentPresentationController.h"
+
+static NSString * const MADStoryboardInformationTable   = @"MADStoryboardInformationTable";
+static NSString * const MADStoryboardLicensing          = @"MADStoryboardLicensing";
+static NSString * const MADStoryboardNewDocument        = @"MADStoryboardNewDocument";
+static NSString * const MADStoryboardToolbox            = @"MADStoryboardToolbox";
+static NSString * const MADStoryboardObjectSelector     = @"MADStoryboardObjectSelector";
+
+static NSString * const MADIdentifierNavigationControllerInformation                = @"MADIdentifierNavigationControllerInformation";
+static NSString * const MADIdentifierNavigationControllerLicensing                  = @"MADIdentifierNavigationControllerLicensing";
+static NSString * const MADIdentifierNavigationControllerDocumentNew                = @"MADIdentifierNavigationControllerDocumentNew";
+static NSString * const MADIdentifierNavigationControllerFontPicker                 = @"MADIdentifierNavigationControllerFontPicker";
+static NSString * const MADIdentifierNavigationControllerDocumentObjectNewAggregate = @"MADIdentifierNavigationControllerDocumentObjectNewAggregate";
+static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector     = @"MADIdentifierNavigationControllerDocumentObjectSelector";
+
+@interface MADNavigationController ()
+
+    @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
+
+@end
+
 @implementation MADNavigationController
 
 @synthesize document = _document;
 
 + (void)initialize {
-    if (self == [MADNavigationController self]) {
-        Class thisClas = [MADTransparentPresentationController class];
-        UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
-        UIColor *clearColor = [UIColor clearColor];
-        appearanceProxy.barTintColor = clearColor;
+    if (self != [MADNavigationController self]) return;
+        
+    NSArray<Class <UIAppearanceContainer>> * classes;
+    UINavigationBar *appearanceProxy;
+    
+    classes = [[NSArray alloc] initWithObjects: self, nil];
+    appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+    appearanceProxy.barTintColor = [UIColor clearColor];
+    
+}
+
++ (instancetype)newNavigationController:(MADNavigationControllerType)type {
+
+    id controller = nil, controllerID = nil, storyboardID = nil, bundle, storyboard;
+    
+    switch (type) {
+
+        case MADNavigationControllerTypeInformation:
+            storyboardID = MADStoryboardInformationTable;
+            controllerID = MADIdentifierNavigationControllerInformation;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        case MADNavigationControllerTypeLicensing:
+            storyboardID = MADStoryboardLicensing;
+            controllerID = MADIdentifierNavigationControllerLicensing;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        case MADNavigationControllerTypeNewDocument:
+            storyboardID = MADStoryboardNewDocument;
+            controllerID = MADIdentifierNavigationControllerDocumentNew;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        case MADNavigationControllerTypeToolbox:
+            storyboardID = MADStoryboardToolbox;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        case MADNavigationControllerTypeFontPicker:
+            storyboardID = MADStoryboardToolbox;
+            controllerID = MADIdentifierNavigationControllerFontPicker;
+            bundle = [NSBundle mainBundle];
+            break;
+
+        case MADNavigationControllerTypeAggregateAdd:
+            storyboardID = MADStoryboardObjectSelector;
+            controllerID = MADIdentifierNavigationControllerDocumentObjectNewAggregate;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        case MADNavigationControllerTypeElementPicker:
+            storyboardID = MADStoryboardObjectSelector;
+            controllerID = MADIdentifierNavigationControllerDocumentObjectSelector;
+            bundle = [NSBundle mainBundle];
+            break;
+            
+        default:
+            break;
+            
     }
+    
+    if (storyboard != nil) {
+        storyboard = [UIStoryboard storyboardWithName: storyboardID bundle: bundle];
+        controller = controllerID != nil ?
+            [storyboard instantiateViewControllerWithIdentifier: controllerID] :
+            [storyboard instantiateInitialViewController];
+        
+    } else {
+        controller = [[self alloc] initWithNavigationBarClass: nil
+                                                 toolbarClass: nil];
+
+    }
+
+    [controller setControllerType: type];
+    
+    return controller;
 }
 
 - (void)viewDidLoad {

@@ -8,6 +8,8 @@
 
 #import "MADToolboxViewController.h"
 
+#import <UIKit/UIAppearance.h>
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIPresentationController.h>
 #import <UIKit/UINavigationController.h>
@@ -20,8 +22,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MTToolboxViewControllerProtocol.h"
-#import "MADStoryboard.h"
-#import "UINavigationController+Designer.h"
+#import "MADNavigationController.h"
 #import "MADViewControllerDocumentProtocol.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
@@ -54,12 +55,16 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
 + (void)initialize {
     [super initialize];
-    if (self == [MADToolboxViewController class]) {
-        UISegmentedControl *segmentedControl;
-        id controlClass = [UINavigationBar class];
-        segmentedControl = [UISegmentedControl appearanceWhenContainedIn:controlClass, nil];
-        segmentedControl.tintColor = [UIColor whiteColor];
-    }
+    
+    if (self != [MADToolboxViewController class]) return;
+
+    UISegmentedControl *controlAppearance;
+    id classes;
+    id controlClass = [UINavigationBar class];
+    classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+    controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: classes];
+    controlAppearance.tintColor = [UIColor whiteColor];
+    
 }
 
 - (void)dealloc {
@@ -87,7 +92,11 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [MADStoryboard newStoryboardToolbox];
+        UIStoryboard *storyboard;
+        NSString *keyPaths;
+
+        storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardToolbox"
+                                               bundle: [NSBundle mainBundle]];
         
         MADToolboxPanel *layout, *format;
         layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
@@ -96,20 +105,23 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
         format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
         self.format = format;
         
-        UINavigationController *styleNavigationController;
-        styleNavigationController = [UINavigationController newNavigationControllerFontPicker];
+        UINavigationController *navigationController;
+        navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeFontPicker];
         
         
-        self.styleNavigationController = styleNavigationController;
+        self.styleNavigationController = navigationController;
         self.currentViewController = self.styleNavigationController;
 
         self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
         
+        
+        keyPaths = [MADToolboxViewController keyPathSelectedObjectIds];
         [self addObserver: self
                forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
                   options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
         
+        keyPaths = [MADToolboxViewController keyPathDocument];
         [self addObserver: self
                forKeyPath: [MADToolboxViewController keyPathDocument]
                   options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
@@ -243,12 +255,13 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
                               duration: 0.23232323f
                                options: options
                             animations:^{ } completion:^(BOOL finished) {
-                                if (finished) {
-                                    [viewControllerToHide removeFromParentViewController];
-                                    [viewControllerToShow didMoveToParentViewController:self];
-                                    [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
+                                
+                                if (!finished) return;
+                                
+                                [viewControllerToHide removeFromParentViewController];
+                                [viewControllerToShow didMoveToParentViewController:self];
+                                [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
 
-                                }
                                 
                             }];
 

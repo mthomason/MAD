@@ -53,18 +53,41 @@ static NSString * const MADImageToolbarCloudDownload    = @"MADImageToolbarCloud
 static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
 
-float wobbleFactor(void);
-float wobbleFactor() {
+static inline float wobbleFactor(void);
+static inline BOOL isStatusNotDownloading(NSString *status);
+
+@interface MADCollectionViewCellDocument () {
+    
+        bool _wobbling;
+      @protected
+        UIView * _selectedBackgroundView;
+    }
+
+    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
+
+@end
+
+static inline BOOL isStatusNotDownloading(NSString *status) {
+    BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    return result;
+}
+
+static inline float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
-@interface MADCollectionViewCellDocument () {
-    bool _wobbling;
-  @protected
-    UIView * _selectedBackgroundView;
-}
+@implementation MADStringFormatted
 
-    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
++ (NSString *)newStringFormattedSubtitle:(NSString *)status fileSize:(unsigned long long)fileSize {
+    NSString *result;
+    if (isStatusNotDownloading(status)) {
+        NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
+        result = [[NSString alloc] initWithString:textNotDownloaded];
+    } else {
+        result = [MADStandard newStandardStringForFileSize:fileSize];
+    }
+    return result;
+}
 
 @end
 
@@ -390,8 +413,8 @@ float wobbleFactor() {
     } else {
         
         unsigned long long fileSize = metadata.fileSystemFileSize;
-        subtitle = [self copySubtitleForStatus: ubiquitousItemDownloadingStatus
-                                      fileSize: fileSize];
+        subtitle = [MADStringFormatted newStringFormattedSubtitle: ubiquitousItemDownloadingStatus
+                                                         fileSize: fileSize];
         
     }
     
@@ -455,19 +478,13 @@ float wobbleFactor() {
     }
 }
 
-static inline BOOL isStatusNotDownloading(NSString *status);
-static inline BOOL isStatusNotDownloading(NSString *status) {
-    BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    return result;
-}
-
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
     NSString *result;
     if (isStatusNotDownloading(status)) {
         NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
         result = [[NSString alloc] initWithString:textNotDownloaded];
     } else {
-        result = [MADStandard newStringForFileSize:fileSize];
+        result = [MADStandard newStandardStringForFileSize:fileSize];
     }
     return result;
 }

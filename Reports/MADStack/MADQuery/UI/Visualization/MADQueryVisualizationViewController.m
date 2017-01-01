@@ -17,6 +17,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIPopoverController.h>
 #import <UIKit/UIPanGestureRecognizer.h>
 #import <UIKit/UITableView.h>
@@ -64,11 +65,9 @@
 #import "MADConnectorView.h"
 
 #import "MADQueryVisualizationSchemaViewController.h"
-#import "MADQueryVisualizationSchemaViewController+Designer.h"
 
 #import "CGAffineTransform+Common.h"
 
-#import "UIViewController+Designer.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADQueryVisualizationTableDefination.h"
 
@@ -89,15 +88,10 @@
 
 #import "MADCacheManager.h"
 
-#import "UIStoryboard+QueryVisualization.h"
-
 typedef void(^MTBlockResultVoid)(void);
 
-static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
-static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount) {
-    return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
-}
-
+static NSString * const QueryVisualization = @"MADQueryVisualization";
+static NSString * const StoryboardDesigner = @"MADDesigner";
 static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStoryboardIDQueryVisulization";
 
 @interface MADQueryVisualizationViewController ()
@@ -118,14 +112,21 @@ static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStor
     @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
+    static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
+
 @end
 
 @implementation MADQueryVisualizationViewController
 
 @synthesize document = _document;
 
+static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount) {
+    return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
+}
+
+
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
-    UIStoryboard *storyboard = [UIStoryboard QueryVisualization];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: QueryVisualization bundle: [NSBundle mainBundle]];
     id controller = [storyboard instantiateViewControllerWithIdentifier:MADQueryVisualizationViewControllerIdentifer];
     [((typeof(self))controller) setDocument: document];
     return controller;
@@ -776,7 +777,8 @@ static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStor
 - (void)addSchemaViewControllerForTableID:(NSManagedObjectID *)tableID center:(CGPoint)center
                                      root:(BOOL)root animated:(BOOL)animated {
     
-    MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
+    MADQueryVisualizationSchemaViewController *viewController;
+    viewController = [MADQueryVisualizationSchemaViewController newQueryVisualizationSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     NSManagedObjectID *tableIDCopy = tableID.copy;
