@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseDriverSelectorViewController_h
 #define Reports_MTDatabaseDriverSelectorViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import <MADExplorer/MADSaveFileProtocol.h>
 
 extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
@@ -19,7 +19,7 @@ extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 
 @protocol MADViewControllerStandardProtocol;
 
-@interface MTDatabaseDriverSelectorViewController : MADTableViewController
+@interface MTDatabaseDriverSelectorViewController : UITableViewController
     <MADSaveFileProtocol>
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;

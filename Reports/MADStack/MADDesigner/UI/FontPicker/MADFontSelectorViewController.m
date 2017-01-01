@@ -35,6 +35,8 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 
 @interface MADFontSelectorViewController()
 
+    @property (nonatomic, assign) BOOL firstTimeViewWillLayoutSubviews;
+
     @property (nonatomic, strong) NSString *familyName;
     @property (nonatomic, strong) MADFonts *madFonts;
 
@@ -110,6 +112,7 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
     self.tableView.scrollIndicatorInsets = contentInset(self.topLayoutGuide.length, self.bottomLayoutGuide.length);
     if (self.firstTimeViewWillLayoutSubviews) {
         self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
+        self.firstTimeViewWillLayoutSubviews = NO;
     }
 
 }

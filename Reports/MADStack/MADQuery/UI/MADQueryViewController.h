@@ -9,18 +9,16 @@
 #ifndef Reports_MADQueryViewController_h
 #define Reports_MADQueryViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const MADSegueShowSql;
 
-@protocol MADViewControllerStandardProtocol;
+//@protocol MADViewControllerStandardProtocol;
 
-@class MADocument;
-
-@interface MADQueryViewController : MADTableViewController
+@interface MADQueryViewController : UITableViewController
     <MADViewControllerDocumentProtocol>
 
     + (void)deleteCoreDataCache;

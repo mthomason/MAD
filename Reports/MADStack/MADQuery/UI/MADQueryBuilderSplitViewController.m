@@ -396,7 +396,7 @@ static NSString * const TextRedraw = @"Redraw";
     
     if (!self.isViewLoaded) return;
         
-    UIView *titleView = self.navigationItem.titleView;
+    UIView __weak *titleView = self.navigationItem.titleView;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {

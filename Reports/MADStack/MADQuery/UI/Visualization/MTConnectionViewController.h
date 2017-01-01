@@ -9,13 +9,13 @@
 #ifndef MADDesigner_MADConnectionViewController_h
 #define MADDesigner_MADConnectionViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 
 @protocol MADViewControllerStandardProtocol;
 @protocol MADSaveFileProtocol;
 
-@interface MADConnectionViewController : MADTableViewController
+@interface MADConnectionViewController : UITableViewController
     <UITableViewDelegate,
         UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,

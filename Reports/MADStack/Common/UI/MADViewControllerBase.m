@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-@dynamic tabBarController;
-
 - (void)dealloc {
 
 }

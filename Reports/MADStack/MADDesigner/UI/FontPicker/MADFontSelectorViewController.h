@@ -9,7 +9,7 @@
 #ifndef Reports_MTReportDesignerFontSelectorViewController_h
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import "MADToolboxDisplayProtocol.h"
 
 @class MADocument;
@@ -18,7 +18,7 @@
 
 @protocol MADReportDesignerFontSelectorDelegate;
 
-@interface MADFontSelectorViewController : MADTableViewController
+@interface MADFontSelectorViewController : UITableViewController
     <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>
 
     @property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> delegate;

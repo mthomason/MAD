@@ -206,12 +206,19 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     
+    //short circuit
+    if (!self.isViewLoaded) return;
+    
+    UINavigationItem *navigationItem;
+    UIView __weak *titleView;
+
+    navigationItem = self.navigationItem;
+    titleView = navigationItem.titleView;
+    
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        //[self.containerView setNeedsDisplay];
-        [self.navigationItem.titleView sizeToFit];
-        [self.navigationItem.titleView setNeedsLayout];
+        [titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self.navigationItem.titleView sizeToFit];
+        [titleView sizeToFit];
     }];
     
 }

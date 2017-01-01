@@ -14,6 +14,7 @@
 
 #import <MAD/MADActivityItemProviderDelegate.h>
 
+#import <UIKit/UIViewController.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIPopoverController.h>
 #import <UIKit/UINavigationController.h>
@@ -148,6 +149,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
     @property (nonatomic, strong) MADOperationQueue *refreshQueue;
+
+    @property (readonly) MADTabBarController *tabBarController;
 
 @end
 

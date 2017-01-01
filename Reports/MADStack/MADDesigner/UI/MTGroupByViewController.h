@@ -9,7 +9,7 @@
 #ifndef Reports_MTGroupByViewController_h
 #define Reports_MTGroupByViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import <UIKit/UITableView.h>
 
 #import <CoreData/NSFetchedResultsController.h>
@@ -22,7 +22,7 @@ extern NSString * const MADGroupByViewControllerIdentifier;
 
 @class MADocument;
 
-@interface MADGroupByViewController : MADTableViewController
+@interface MADGroupByViewController : UITableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
     @property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;

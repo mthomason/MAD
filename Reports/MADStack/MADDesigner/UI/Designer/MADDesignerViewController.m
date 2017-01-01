@@ -960,6 +960,22 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 }
 
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
+    
+    if (self.isViewLoaded) {
+        UIView __weak *titleView = self.navigationItem.titleView;
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [titleView sizeToFit];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [titleView sizeToFit];
+        }];
+    }
+    
+}
+
 #pragma mark - UIAccessibility
 
 - (BOOL)accessibilityPerformEscape {

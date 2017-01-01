@@ -9,14 +9,14 @@
 #ifndef Reports_MTDocumentObjectNewStaticLabelViewController_h
 #define Reports_MTDocumentObjectNewStaticLabelViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import "MTUnwindProtocol.h"
 #import <UIKit/UITableView.h>
 #import <UIKit/UITextField.h>
 
 extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 
-@interface MTDocumentObjectNewStaticLabelViewController : MADTableViewController
+@interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate,
         MTUnwindProtocol>

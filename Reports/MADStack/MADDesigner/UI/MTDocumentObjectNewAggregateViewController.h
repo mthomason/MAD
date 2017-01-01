@@ -9,7 +9,7 @@
 #ifndef Reports_MTDocumentObjectNewAggregateViewController_h
 #define Reports_MTDocumentObjectNewAggregateViewController_h
 
-#import "MADTableViewController.h"
+#import <UIKit/UITableViewController.h>
 #import "MTUnwindProtocol.h"
 #import <UIKit/UITableView.h>
 
@@ -35,7 +35,7 @@
 
 @end
 
-@interface MTDocumentObjectNewAggregateViewController : MADTableViewController
+@interface MTDocumentObjectNewAggregateViewController : UITableViewController
     <MTUnwindProtocol, UITableViewDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;

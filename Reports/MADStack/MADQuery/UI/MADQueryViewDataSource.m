@@ -36,6 +36,9 @@
 #import <UIKit/UITableView.h>
 #import <UIKit/UILabel.h>
 
+static NSString * const TextFormatConnection = @"You are connecting to %1$@"
+                                               @" datasource named %2$@.";
+
 @interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>
 
@@ -43,17 +46,23 @@
 
     @property (nonatomic, readwrite, assign) short count;
     @property (nonatomic, readwrite, assign) NSUInteger numberOfTables;
+
     @property (nonatomic, readwrite, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
-    @property (nonatomic, copy) MADQueryViewConfigureCell handleConfigureCell;
+    @property (nonatomic, readwrite, copy) MADQueryViewCellConfigureHandler handleConfigureCell;
 
 @end
 
 @implementation MADQueryViewDataSource
 
+- (void)dealloc {
+    _handleConfigureCell = nil;
+    _datasoruce = nil;
+}
+
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                       reportingEnabled:(BOOL)reportingEnabled
-                   handleConfigureCell:(MADQueryViewConfigureCell)handleConfigureCell {
+                   handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
 
     if (self = [super init]) {
         
@@ -79,7 +88,8 @@
 }
 
 - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index {
-    MADQueryViewSectionDelegate *layout = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables:_numberOfTables position:index];
+    MADQueryViewSectionDelegate *layout;
+    layout = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables:_numberOfTables position:index];
     return layout.querySection;
 }
 
@@ -281,6 +291,25 @@
             
             static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
+            
+            NSManagedObjectContext *managedObjectContext;
+            managedObjectContext = self.queryTablesController.managedObjectContext;
+            RptqDocument *document;
+            document = [RptqDocument newDocumentForManagedObjectContext: managedObjectContext];
+            RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+            if (database.ownedByUser) {
+                
+                id databaseType = database.ownedByUser.database_driver_type.copy;
+                id schemaName = [database.ownedByUser copyDatabaseSchemaName];
+                id localizedMessage = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                id message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                        databaseType: databaseType
+                                                                                          schemaName: schemaName];
+                UILabel __weak *textLabel = cell.textLabel;
+                textLabel.attributedText = message;
+                textLabel.text = localizedMessage;
+            }
+            
             break;
         }
             
@@ -295,6 +324,7 @@
             cell.textLabel.text = tablea.alias.copy;
 
             break;
+
         }
             
             // MARK: Display the table links or joins that are used in the query.
@@ -325,6 +355,7 @@
             
             // MARK: Display the groupings used in the query.
         case MADIdentifierQueryViewSectionsGroups: {
+            
             static NSString *MADIDCellInstruction = @"UITableViewCellQueryGroup";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
             

@@ -16,13 +16,14 @@
 @class NSSet <__covariant ObjectType>;
 @class NSNumber;
 @class NSFetchedResultsController;
-@class UITableView;
 @class NSIndexPath;
 @class NSIndexSet;
-@class MADQueryViewSectionDelegate;
 @class UITableViewCell;
+@class MADQueryViewSectionDelegate;
 
-typedef void (^MADQueryViewConfigureCell)(UITableViewCell *, MADIdentifierQueryViewSections, NSInteger /* row */);
+typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
+                                                 MADIdentifierQueryViewSections,
+                                                 NSInteger /* row */);
 
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
@@ -40,7 +41,7 @@ typedef void (^MADQueryViewConfigureCell)(UITableViewCell *, MADIdentifierQueryV
     
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                           reportingEnabled:(BOOL)reportingEnabled
-                       handleConfigureCell:(MADQueryViewConfigureCell)handleConfigureCell;
+                       handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 

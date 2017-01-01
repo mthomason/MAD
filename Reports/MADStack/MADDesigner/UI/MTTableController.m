@@ -70,8 +70,11 @@
     if (self = [super initWithCollectionViewLayout:tableLayout]) {
         _firstTimeViewDidAppear = YES;
         query.database.delegate = self;
-        MTDataTable *datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
+        
+        MTDataTable *datatable;
+        datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
+        
         tableLayout.delegate = self;
         MADDataFormatter *tableFormatter = [[MADDataFormatter alloc] initWithQuery:query];
         self.tableFormatter = tableFormatter;
@@ -307,6 +310,7 @@
     
     NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
     NSUInteger row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
+    
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
     MADTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];

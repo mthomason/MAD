@@ -39,8 +39,11 @@
     attributedText = [NSAttributedString newLogoStringForTitle:safetext];
     
     super.text = safetext;
+    
     self.attributedText = attributedText;
+    
     [self sizeToFit];
+    
 }
 
 @end

@@ -101,8 +101,6 @@ static NSString * const NSFetchedResultsCacheLinks                  = @"NSFetche
 static NSString * const NSFetchedResultsCacheGroups                 = @"NSFetchedResultsCacheGroups";
 static NSString * const NSFetchedResultsCachePredicates             = @"NSFetchedResultsCachePredicates";
 
-static NSString * const TextFormatConnection =  @"You are connecting to %1$@ datasource named %2$@.";
-
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
 static NSString * const ViewControllerTitle = @"MAD Query";
@@ -125,22 +123,26 @@ static NSString * const ViewControllerTitle = @"MAD Query";
         MTTabBarImageProtocol,
         MADQueryViewControllerDatasourceProtocol>
 
-    @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
-    @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
-
-    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
-
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
-
-    @property (nonatomic, assign) BOOL beganUpdates;
-    @property (nonatomic, assign) BOOL toolbarIconShown;
+    @property (nonatomic, assign) BOOL firstTimeViewWillLayoutSubviews;
 
     @property (nonatomic, assign) NSInteger lastSelectedRowNumber;
 
     @property (nonatomic, assign) CGFloat headerSectionHeight;
 
-    @property (nonatomic, copy) MADQueryViewConfigureCell handleConfigureCell;
+    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+    @property (nonatomic, assign) BOOL beganUpdates;
+    @property (nonatomic, assign) BOOL toolbarIconShown;
+
+
+    @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
+    @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
+
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
+
+    @property (nonatomic, copy) MADQueryViewCellConfigureHandler handleConfigureCell;
+
+    @property (readonly) MADTabBarController *tabBarController;
 
 @end
 
@@ -152,6 +154,61 @@ BOOL storeEnabled() {
 @implementation MADQueryViewController
 
 @synthesize document = _document;
+@synthesize title = _title;
+
+#pragma mark -
+#pragma mark Static
+
++ (CGFloat)SizeCategoryHeight:(NSString *)category {
+    
+    if ([category isEqualToString: UIContentSizeCategoryExtraSmall]) {
+        return 24.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategorySmall]) {
+        return 26.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryMedium]) {
+        return 29.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryLarge]) {
+        return 32.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryExtraLarge]) {
+        return 34.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraLarge]) {
+        return 36.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraExtraLarge]) {
+        return 38.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityMedium]) {
+        return 40.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityLarge]) {
+        return 42.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraLarge]) {
+        return 44.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
+        return 46.0000f;
+        
+    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
+        return 48.0000f;
+        
+    } else {
+        return 29.0000f;
+    }
+}
+
++ (void)deleteCoreDataCache {
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+}
 
 #pragma mark - Exit
 
@@ -166,67 +223,65 @@ BOOL storeEnabled() {
 - (UIViewController *)viewControllerForUnwindSegueAction: (SEL)action
                                       fromViewController: (UIViewController *)fromViewController
                                               withSender: (id)sender {
-    
-    return action == @selector(unwindToQueryBuilder:) ?
-                        self :
-                        [super viewControllerForUnwindSegueAction: action
-                                               fromViewController: fromViewController
-                                                       withSender: sender];
-}
-
-#pragma mark -
-#pragma mark MADQueryViewDelegateProtocol
-
-- (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex {
-    return [_queryViewDataSource sectionAtIndex:displayIndex];
-}
-
-- (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex {
-    return [_queryViewDataSource layoutAtIndex:displayIndex];
-}
-
-- (CGFloat)headerHeight {
-    return _headerSectionHeight;
-}
-
-- (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
-    NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
-    RptqQueryTable *table = [_queryViewDataSource.queryTablesController objectAtIndexPath: indexPathUpdate];
-    MADTableController *tableController = [self tableControllerForTable:table];
-    [self.navigationController pushViewController: tableController animated: YES];
-    
-}
-
-#pragma mark -
-#pragma mark Static
-
-+ (void)deleteCoreDataCache {
-    //@autoreleasepool {
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-    //}
+    id result;
+    result = action == @selector(unwindToQueryBuilder:) ?
+            self : [super viewControllerForUnwindSegueAction: action
+                                          fromViewController: fromViewController
+                                                  withSender: sender];
+    return result;
 }
 
 #pragma mark -
 #pragma mark NSObject
 
 - (void)dealloc {
+    
+    _queryViewDelegate.delegate = nil;
+    _queryViewDataSource.datasoruce = nil;
+
+    [MADQueryViewController deleteCoreDataCache];
+
     [[NSNotificationCenter defaultCenter] removeObserver: self];
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        //@autoreleasepool {
-            [MADQueryViewController deleteCoreDataCache];
-        //}
-    //});
+    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    
     [MADQueryViewController deleteCoreDataCache];
-    if (self = [super initWithCoder:aDecoder]) {
-        _toolbarIconShown = NO;
-    }
+    
+    self = [super initWithCoder:aDecoder];
+    if (!self) return nil;
+
+    _toolbarIconShown = NO;
+    _firstTimeViewWillLayoutSubviews = NO;
+
+    UIBarButtonItem *barButtonItemEdit, *barButtonItemDone;
+    barButtonItemEdit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                      target: self
+                                                                      action: @selector(edit:)];
+    self.barButtonItemEdit = barButtonItemEdit;
+    
+    barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                      target: self
+                                                                      action: @selector(edit:)];
+    self.barButtonItemDone = barButtonItemDone;
+    
+    MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
+    queryViewDelegate.delegate = self;
+    self.queryViewDelegate = queryViewDelegate;
+    
+    MADQueryViewCellConfigureHandler handleConfigureCell;
+    handleConfigureCell = ^(UITableViewCell *cell,
+                            MADIdentifierQueryViewSections forSection,
+                            NSInteger row) {
+        
+        [MADQueryViewController ConfigureCell: cell
+                                   forSection: forSection
+                                       andRow: row];
+        
+    };
+    self.handleConfigureCell = handleConfigureCell;
+    
     return self;
 }
 
@@ -234,243 +289,170 @@ BOOL storeEnabled() {
 #pragma mark Property Overrides
 
 - (void)setDocument:(MADocument *)document {
-    if (_document == nil) {
-        [self observeManagedObjectContextChanges:document.managedObjectContext];
+    if (_document != document) {
+        _document = document;
     }
-    _document = document;
-}
-
-#pragma mark -
-#pragma mark CoreData
-
-#pragma mark NSManagedObjectContext Notifications
-
-- (void)managedObjectContextDidChange:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-    NSLog(@"Updated objects: %@", updatedObjects.debugDescription);
-
-    for (id updatedObject in updatedObjects) {
-        
-        // Update the query view controller data model when number of tables change.
-        if ([updatedObject isKindOfClass:[RptqQuery class]]) {
-            RptqQuery *query = updatedObject;
-
-            
-            NSDictionary <NSString *, id> *changes = [query changedValues];
-            
-            NSLog(@"Changed values: %@", changes.debugDescription);
-            
-            for (id change in changes) {
-                if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
-                    
-                    MADQueryViewDataSource *dataSource;
-                    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: query.numberOfTables
-                                                                       reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-                                                                    handleConfigureCell: _handleConfigureCell];
-                    dataSource.datasoruce = self;
-                    self.tableView.dataSource = dataSource;
-                    self.queryViewDataSource = dataSource;
-                }
-            }
-        }
-    }
-}
-
-- (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: managedObjectContext];
-}
-
-- (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(managedObjectContextDidChange:)
-                                                 name: NSManagedObjectContextObjectsDidChangeNotification
-                                               object: managedObjectContext];
 }
 
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
     NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
-    [self updateInterfaceForPerferedContentSizeCategory:contentSize];
+    [self updateInupdateInterfaceForPerferedContentSizeCategory:contentSize];
     [self.view setNeedsLayout];
 }
 
-- (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)category {
-    
-    if ([category isEqualToString: UIContentSizeCategoryExtraSmall]) {
-        _headerSectionHeight = 24.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategorySmall]) {
-        _headerSectionHeight = 26.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryMedium]) {
-        _headerSectionHeight = 29.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryLarge]) {
-        _headerSectionHeight = 32.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryExtraLarge]) {
-        _headerSectionHeight = 34.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraLarge]) {
-        _headerSectionHeight = 36.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraExtraLarge]) {
-        _headerSectionHeight = 38.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityMedium]) {
-        _headerSectionHeight = 40.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityLarge]) {
-        _headerSectionHeight = 42.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraLarge]) {
-        _headerSectionHeight = 44.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
-        _headerSectionHeight = 46.0000f;
-        
-    } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
-        _headerSectionHeight = 48.0000f;
-        
-    } else {
-        _headerSectionHeight = 29.0000f;
-    }
+- (void)updateInupdateInterfaceForPerferedContentSizeCategory:(NSString *)category {
+    _headerSectionHeight = [self.class SizeCategoryHeight:category];
 }
 
 #pragma mark - UIViewController
 
 - (NSString *)title {
-    return NSLocalizedString(ViewControllerTitle, ViewControllerTitle);
+    if (_title == nil) {
+        NSString *title = NSLocalizedString(ViewControllerTitle, ViewControllerTitle);
+        _title = title.copy;
+    }
+    return _title;
+}
+
+- (MADQueryViewDataSource *)queryViewDataSource {
+
+    if (_queryViewDataSource == nil) {
+        NSManagedObjectContext *managedObjectContext;
+        NSSet *hasDatabaseSchemas, *hasQueries, *hasQueryTables;
+        RptqDocument *rptqDocument;
+        RptqDatabase *rptqDatabase;
+        RptqQuery *rptqQuery;
+        
+        managedObjectContext = _document.managedObjectContext;
+        rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: managedObjectContext];
+        hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
+        rptqDatabase = hasDatabaseSchemas.anyObject;
+        hasQueries = rptqDatabase.hasQueries;
+        rptqQuery = hasQueries.anyObject;
+        hasQueryTables = rptqQuery.hasQueryTables;
+        
+        MADQueryViewDataSource *dataSource;
+        dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: hasQueryTables.count
+                                                           reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                        handleConfigureCell: _handleConfigureCell];
+        
+        dataSource.datasoruce = self;
+        
+        _queryViewDataSource = dataSource;
+    }
+    return _queryViewDataSource;
 }
 
 - (void)handleApplicationDidBecomeActive:(id)sender {
-    @autoreleasepool {
-        [MADQueryViewController deleteCoreDataCache];
-    }
+    [MADQueryViewController deleteCoreDataCache];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     MADocument *document = self.document;
-    NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    //NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    if (document == nil) {
+        return;
+    }
+    
 
-    
-    MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
-    queryViewDelegate.delegate = self;
 
-    self.tableView.delegate = queryViewDelegate;
-    self.queryViewDelegate = queryViewDelegate;
-    
-    
-    RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.managedObjectContext];
-    RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-    RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
-    
-    MADQueryViewDataSource *dataSource;
-    MADQueryViewConfigureCell handleConfigureCell;
-    handleConfigureCell = ^(UITableViewCell *cell,
-                            MADIdentifierQueryViewSections forSection,
-                            NSInteger row) {
-        [self configureCell:cell forSection:forSection andRow:row];
-    };
-    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: rptqQuery.numberOfTables
-                                                       reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-                                                    handleConfigureCell: handleConfigureCell];
-    dataSource.datasoruce = self;
-    self.handleConfigureCell = handleConfigureCell;
-    
-    self.tableView.dataSource = dataSource;
-    self.queryViewDataSource = dataSource;
+    UITableView *tableView = self.tableView;
+    tableView.delegate = _queryViewDelegate;
+    tableView.dataSource = self.queryViewDataSource;
     
     MADWatermarkView *watermarkView;
-    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
-    self.tableView.backgroundView = watermarkView;
+    CGRect bounds = tableView.bounds;
+    watermarkView = [[MADWatermarkView alloc] initWithFrame: bounds];
+    tableView.backgroundView = watermarkView;
     
     NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory.copy;
-    [self updateInterfaceForPerferedContentSizeCategory: sizeCategory];
+    [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
-    SEL handleContentSizeCategoryDidChange =
-                                        @selector(handleContentSizeCategoryDidChangeNotification:);
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: handleContentSizeCategoryDidChange
-                                                 name: UIContentSizeCategoryDidChangeNotification
-                                               object: nil];
-    
-    [self.tableView registerClass: [MADTableViewCellQueryTableName class]
-           forCellReuseIdentifier: @"UITableViewCellTableName"];
+    static NSString *MADIdentifierTableViewCellTableName = @"UITableViewCellTableName";
+    [self.tableView registerClass: [MADTableViewCellQueryTableName class] forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.navigationItem.prompt = nil;
+
+
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear: animated];
     
-    UIBarButtonItem *barButtonItem;
-    barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                  target: self
-                                                                  action: @selector(edit:)];
+    UIManagedDocument *document;
+    NSManagedObjectContext *managedObjectContext;
     
-    self.barButtonItemEdit = barButtonItem;
+    document = _document;
+    managedObjectContext = document.managedObjectContext;
+    
+    //self.navigationController.hidesBarsWhenVerticallyCompact = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(documentStateChanged)
+                                                 name: UIDocumentStateChangedNotification
+                                               object: document];
+    
+    SEL handleContentSizeCategoryDidChange = @selector(handleContentSizeCategoryDidChangeNotification:);
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: handleContentSizeCategoryDidChange
+                                                 name: UIContentSizeCategoryDidChangeNotification
+                                               object: nil];
     
     SEL resultHandler = @selector(handleApplicationDidBecomeActive:);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: resultHandler
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
+    
+    [self observeManagedObjectContextChanges: managedObjectContext];
+    
+    
+    [self.tabBarController enableTabBarItems];
+    
+    id barButtonItem = self.barButtonItemEdit;
+    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
+                                                  animated: NO];
+    
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear: animated];
-
-    MADocument *document = self.document;
-    self.navigationController.hidesBarsWhenVerticallyCompact = NO;
-
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    if (document) {
-        [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: @selector(documentStateChanged)
-                                                     name: UIDocumentStateChangedNotification
-                                                   object: document];
-        [self observeManagedObjectContextChanges:document.managedObjectContext];
-    }
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
     
-    typeof(self.tabBarController) tabBarController = self.tabBarController;
-    if (tabBarController) {
-        [tabBarController enableTabBarItems];
-        [tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit
-                                                      animated:NO];
-    }
+    UIManagedDocument *document;
+    NSManagedObjectContext *managedObjectContext;
+
+    document = _document;
+    managedObjectContext = document.managedObjectContext;
+    
+    [self ingnoreManagedObjectContextChanges: managedObjectContext];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIDocumentStateChangedNotification
+                                                  object: document];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIApplicationDidBecomeActiveNotification
+                                                  object: nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:YES];
-    UIManagedDocument *document = _document;
-    if (document) {
-        NSManagedObjectContext __weak *context = document.managedObjectContext;
-        [self ingnoreManagedObjectContextChanges: context];
-        
-        [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                        name: UIDocumentStateChangedNotification
-                                                      object: document];
-    }
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.tabBarController.navigationItem setRightBarButtonItem:nil animated:animated];;
-}
-
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
-              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -484,13 +466,14 @@ BOOL storeEnabled() {
                                                    self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.firstTimeViewWillLayoutSubviews) {
         CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y,
                               self.tableView.frame.size.width, 1.0000f);
         [self.tableView scrollRectToVisible: r animated: NO];
-        
+        self.firstTimeViewWillLayoutSubviews = NO;
     }
 }
 
@@ -611,18 +594,47 @@ BOOL storeEnabled() {
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
+
+    //short circuit
+    if (!self.isViewLoaded) return;
+    
+    UITableView *tableView;
+    UINavigationItem *navigationItem;
+    UIView __weak *backgroundView, __weak *titleView;
+    
+    tableView = self.tableView;
+    navigationItem = self.navigationItem;
+    backgroundView = tableView.backgroundView;
+    titleView = navigationItem.titleView;
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [backgroundView setNeedsDisplay];
+        [titleView sizeToFit];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [titleView sizeToFit];
+    }];
+    
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        UIView *backgroundView = self.tableView.backgroundView;
-        void (^ handleAnimate)(id <UIViewControllerTransitionCoordinatorContext>context);
-        handleAnimate = ^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            [backgroundView setNeedsDisplay];
-        };
-        [coordinator animateAlongsideTransition: handleAnimate completion: nil];
-    }
+    
+    if (CGSizeEqualToSize(size, self.view.bounds.size)) return;
+    
+    UIView __weak *backgroundView;
+    backgroundView = self.tableView.backgroundView;
+    
+    void (^ handleAnimate)(id <UIViewControllerTransitionCoordinatorContext>context);
+    handleAnimate = ^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [backgroundView setNeedsDisplay];
+    };
+    [coordinator animateAlongsideTransition: handleAnimate completion: nil];
     
 }
 
@@ -731,7 +743,7 @@ BOOL storeEnabled() {
                                   andSortOrder: sortOrder];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
 
-    [_queryViewDataSource performFetchGroups];
+    [self.queryViewDataSource performFetchGroups];
 }
 
 #pragma mark - MTQueryBuilderAddTableDelegate
@@ -746,35 +758,22 @@ BOOL storeEnabled() {
     [self.document addQuerySelectTableForSchemeTableWithObjectID:       objectID];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
 
-    [_queryViewDataSource performFetchTables];
+    [self.queryViewDataSource performFetchTables];
 }
 
 #pragma mark -
 #pragma mark Helper
 
-- (void)configureCell:(UITableViewCell *)cell forSection:(MADIdentifierQueryViewSections)section
-               andRow:(NSInteger)row {
++ (void)ConfigureCell: (UITableViewCell *)cell
+           forSection: (MADIdentifierQueryViewSections)section
+               andRow: (NSInteger)row {
     
     switch (section) {
             
             // MARK: Display and identify the data source and data sources
         case MADIdentifierQueryViewSectionsDatasource: {
-            
-            RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
-            if (database.ownedByUser) {
-                
-                id databaseType = database.ownedByUser.database_driver_type.copy;
-                id schemaName = [database.ownedByUser copyDatabaseSchemaName];
-                id localizedMessage = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-                id message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                        databaseType: databaseType
-                                                                                          schemaName: schemaName];
-                
-                cell.textLabel.attributedText = message;
-                cell.detailTextLabel.text = @"";
-                cell.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
-                
-            }
+            cell.detailTextLabel.text = @"";
+            cell.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
             cell.textLabel.numberOfLines = 0;
             break;
         }
@@ -1017,14 +1016,16 @@ BOOL storeEnabled() {
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = !self.tableView.isEditing;
-    NSInteger systemType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
-    id barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: systemType
-                                                                     target: self
-                                                                     action: @selector(edit:)];
+    BOOL editing;
+    id barButtonItem;
+    
+    editing = !self.tableView.isEditing;
+    
+    barButtonItem = !editing ? self.barButtonItemEdit : self.barButtonItemDone;
     [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-    self.barButtonItemEdit = barButtonItem;
+
     self.tableView.editing = editing;
+
 }
 
 /*- (IBAction)done:(id)sender {
@@ -1123,19 +1124,22 @@ BOOL storeEnabled() {
             return frc;
         };
         
+        MADQueryViewDataSource *queryViewDataSource = self.queryViewDataSource;
+        
         {
             RptqDatabase *database = reportDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
             RptqQuery *query = database.hasQueries.anyObject;
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
+            
             id predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"alias"
                                                                            ascending: YES];
             NSFetchedResultsController *frc;
             frc = newFetchedResultsController(entityName, predicate, sortDescriptor, self);
             
-            self.queryViewDataSource.queryTablesController = frc;
-            [_queryViewDataSource performFetchTables];
+            queryViewDataSource.queryTablesController = frc;
+            [queryViewDataSource performFetchTables];
             frc = nil;
         }
         
@@ -1146,8 +1150,8 @@ BOOL storeEnabled() {
 
             NSFetchedResultsController *frc;
             frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
-            self.queryViewDataSource.queryLinksController = frc;
-            [_queryViewDataSource performFetchLinks];
+            queryViewDataSource.queryLinksController = frc;
+            [queryViewDataSource performFetchLinks];
             frc = nil;
         }
         
@@ -1158,8 +1162,8 @@ BOOL storeEnabled() {
 
             NSFetchedResultsController *frc;
             frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
-            self.queryViewDataSource.queryGroupsController = frc;
-            [_queryViewDataSource performFetchGroups];
+            queryViewDataSource.queryGroupsController = frc;
+            [queryViewDataSource performFetchGroups];
             frc = nil;
             
         }
@@ -1170,26 +1174,12 @@ BOOL storeEnabled() {
                                                                            ascending: YES];
             NSFetchedResultsController *frc;
             frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
-            self.queryViewDataSource.queryPredicatesController = frc;
-            [_queryViewDataSource performFetchPredicate];
+            queryViewDataSource.queryPredicatesController = frc;
+            [queryViewDataSource performFetchPredicate];
             frc = nil;
         }
         [self.tableView reloadData];
     }
-}
-
-- (MADTableController *)tableControllerForTable:(RptqQueryTable *)table {
-    RptqDatabaseSchemaTable *schemaTable = table.databaseSchemaTable;
-    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
-    MADTableController *tableController = [[MADTableController alloc] initWithQuery:rquery];
-    
-    MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-
-    sampleDataTitleView.text = schemaTable.name;
-    
-    tableController.navigationItem.title = schemaTable.name;
-    tableController.navigationItem.titleView = sampleDataTitleView;
-    return tableController;
 }
 
 - (NSArray <NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
@@ -1550,6 +1540,116 @@ BOOL storeEnabled() {
         [private save:error];
     };
     [private performBlockAndWait:deleteGroup];
+}
+
+#pragma mark -
+#pragma mark MADQueryViewDelegateProtocol
+
+- (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex {
+    MADIdentifierQueryViewSections sectionIdentifier;
+    sectionIdentifier = [self.queryViewDataSource sectionAtIndex:displayIndex];
+    return sectionIdentifier;
+}
+
+- (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex {
+    id queryViewSectionDelegate = [self.queryViewDataSource layoutAtIndex:displayIndex];
+    return queryViewSectionDelegate;
+}
+
+- (CGFloat)headerHeight {
+    return _headerSectionHeight;
+}
+
+- (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
+    
+    NSIndexPath *indexPathUpdate;
+    MADTableController *tableController;
+    MADNavigationBarTitleView *titleView;
+    RptqQueryTable *table, *tableWrapped;
+    MTQuery *rquery;
+    RptqDatabaseSchemaTable *schemaTable;
+    NSString *name;
+    NSFetchedResultsController *queryTablesResultsController;
+    MADQueryViewDataSource *queryViewDataSource;
+    
+    indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
+    queryViewDataSource = self.queryViewDataSource;
+    queryTablesResultsController = queryViewDataSource.queryTablesController;
+    
+    tableWrapped = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
+    
+    table = tableWrapped.copy;
+    schemaTable = table.databaseSchemaTable.copy;
+    
+    rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
+    tableController = [[MADTableController alloc] initWithQuery:rquery];
+    
+    titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    
+    name = schemaTable.name;
+    titleView.text = name.copy;
+    
+    tableController.navigationItem.title = name.copy;
+    tableController.navigationItem.titleView = titleView;
+    
+    [self.navigationController pushViewController: tableController animated: YES];
+    
+}
+
+
+#pragma mark -
+#pragma mark CoreData
+
+#pragma mark NSManagedObjectContext Notifications
+
+- (void)managedObjectContextDidChange:(NSNotification *)notification {
+
+    NSDictionary *userInfo = notification.userInfo;
+    NSSet *updatedObjects = userInfo[NSUpdatedObjectsKey];
+    
+    for (id updatedObject in updatedObjects) {
+        
+        // Update the query view controller data model when number of tables change.
+        if ([updatedObject isKindOfClass:[RptqQuery class]]) {
+            
+            RptqQuery *query;
+            NSDictionary <NSString *, id> *changes;
+
+            query = updatedObject;
+            changes = [query changedValues];
+            
+            NSString *selectorHasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
+            BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+            NSUInteger numberOfTables = query.numberOfTables;
+            for (id change in changes) {
+                if ([change isEqualToString: selectorHasQueryTables]) {
+                    
+                    MADQueryViewDataSource *dataSource;
+                    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
+                                                                       reportingEnabled: reportingEnabled
+                                                                    handleConfigureCell: _handleConfigureCell];
+                    dataSource.datasoruce = self;
+                    self.tableView.dataSource = dataSource;
+                    self.queryViewDataSource.datasoruce = nil;
+                    self.queryViewDataSource = dataSource;
+                    
+                }
+            }
+        }
+    }
+}
+
+- (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+                                                  object: managedObjectContext];
+}
+
+- (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(managedObjectContextDidChange:)
+                                                 name: NSManagedObjectContextObjectsDidChangeNotification
+                                               object: managedObjectContext];
 }
 
 #pragma mark - UIAccessibility

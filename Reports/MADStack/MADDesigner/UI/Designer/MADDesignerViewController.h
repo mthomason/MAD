@@ -9,13 +9,13 @@
 #ifndef Reports_MTReportDesignerViewController_h
 #define Reports_MTReportDesignerViewController_h
 
-#import "MADViewController.h"
+#import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADViewControllerProtocol.h"
 
 @protocol MADViewControllerStandardProtocol;
 
-@interface MADDesignerViewController : MADViewController
+@interface MADDesignerViewController : UIViewController
     <MADViewControllerDocumentProtocol, MADViewControllerProtocol>
 
     + (instancetype)newDesignerViewController:(MADocument *)document;
