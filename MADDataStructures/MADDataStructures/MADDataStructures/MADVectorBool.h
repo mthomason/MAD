@@ -6,13 +6,19 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_DataStructures_MADVectorBool_h
+#define MAD_DataStructures_MADVectorBool_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADVectorBool : NSObject
 
+    - (void)push:(BOOL)value;
     - (void)addTrue;
     - (void)addFalse;
     - (unsigned long)count;
     - (void)enumerateBools:(void (^)(NSUInteger idx, BOOL valid, BOOL *stop))valueHandler;
 
 @end
+
+#endif
