@@ -12,7 +12,7 @@
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADURL.h>
 
 @interface MADInstallOperationSampleDocument ()
 
@@ -52,8 +52,7 @@
         
     
         NSURL *localDocumentsDirectory;
-        localDocumentsDirectory =
-            [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
+        localDocumentsDirectory = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
         NSURL *destination = [localDocumentsDirectory URLByAppendingPathComponent: _filename
                                                                       isDirectory: NO];
         

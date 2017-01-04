@@ -14,33 +14,33 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [MADLabelFileExplorerDocumentCellTitle commonInitalization:self];
+        [self commonInitalization];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [MADLabelFileExplorerDocumentCellTitle commonInitalization:self];
+        [self commonInitalization];
     }
     return self;
 }
 
-+ (void)commonInitalization:(MADLabelFileExplorerDocumentCellTitle *)this {
-    this.userInteractionEnabled = YES;
-    this.textColor = [MADColorEverydayApps newColorBlue];
-    this.clipsToBounds = NO;
-    this.numberOfLines = 0;
-    this.backgroundColor = [UIColor clearColor];
-    this.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+- (void)commonInitalization {
+    self.userInteractionEnabled = YES;
+    self.textColor = [MADColorEverydayApps newColorBlue];
+    self.clipsToBounds = NO;
+    self.numberOfLines = 0;
+    self.backgroundColor = [UIColor clearColor];
+    self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     
     SEL handleTap = @selector(handleTapGestureRecognizer:);
     UITapGestureRecognizer *tapGesture;
-    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: this
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                          action: handleTap];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
-    [this addGestureRecognizer:tapGesture];
+    [self addGestureRecognizer:tapGesture];
 }
 
 - (UIColor *)highlightedTextColor {

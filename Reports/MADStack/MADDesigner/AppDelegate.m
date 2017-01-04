@@ -27,7 +27,6 @@
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
 static NSString * const MADIdentifierFileMusic                             = @"Music";
-static NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 static NSString * const MADIDUser                                          = @"MADIDUser";
 
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
@@ -46,7 +45,20 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 @interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate>
+    <UIDocumentInteractionControllerDelegate> {
+        NSString *_ubiquityIdentifier;
+        NSString *_groupIdentifier;
+        NSString *_name;
+        NSString *_localizedName;
+        NSString *_trademark;
+        NSString *_applicationNameSufixPart;
+        NSString *_applicationIdentifier;
+        NSString *_applicationBundleIdentifier;
+        NSString *_localizedApplicationNameSufixPart;
+        NSString *_versionNumber;
+        NSString *_revisionNumber;
+        NSString *_bundleDisplayName;
+}
 
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 
@@ -57,72 +69,90 @@ static inline UIUserNotificationType MADUserNotificationType() {
 #pragma mark - MADApplicationProtocol
 
 - (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
+    if (!_ubiquityIdentifier) {
+        _ubiquityIdentifier = @"iCloud.com.everydayapps.mad.designer";
+    }
+    return _ubiquityIdentifier;
 }
 
 - (NSString *)groupIdentifier {
-    return MADIdentifierGroup;
+    if (!_groupIdentifier) {
+        _groupIdentifier = @"group.everydayapps.mad";
+    }
+    return _groupIdentifier;
 }
 
 - (NSString *)name {
-    NSString *trademark = [self trademark];
-    NSString *appName = [self applicationNameSufixPart];
-    NSString *name = [[NSString alloc] initWithFormat:@"%@ %@", trademark, appName];
-    return name;
+    if (!_name) {
+        id tm = self.trademark, sx = self.applicationNameSufixPart;
+        _name = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
+    }
+    return _name;
 }
 
 - (NSString *)localizedName {
-    NSString *trademark = [self trademark];
-    NSString *appName = [self localizedApplicationNameSufixPart];
-    NSString *name = [[NSString alloc] initWithFormat:@"%@ %@", trademark, appName];
-    return name;
+    if (!_localizedName) {
+        id tm = self.trademark, sx = self.localizedApplicationNameSufixPart;
+        _localizedName = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
+    }
+    return _localizedName;
 }
 
 - (NSString *)applicationIdentifier {
-    return @"666001433";
+    if (!_applicationIdentifier) _applicationIdentifier = @"666001433";
+    return _applicationIdentifier;
 }
 
 - (NSString *)applicationBundleIdentifier {
-    return @"com.everydayapps.mad.designer";
-}
-
-+ (NSString *)Trademark {
-    return @"MAD";
+    if (!_applicationBundleIdentifier) _applicationBundleIdentifier = @"com.everydayapps.mad.designer";
+    return _applicationBundleIdentifier;
 }
 
 - (NSString *)trademark {
-    return [AppDelegate Trademark];
-}
-
-+ (NSString *)ApplicationNameSufixPart {
-    return @"Designer";
+    if (!_trademark) _trademark = @"MAD";
+    return _trademark;
 }
 
 - (NSString *)applicationNameSufixPart {
-    return [AppDelegate ApplicationNameSufixPart];
+    if (!_applicationNameSufixPart)  _applicationNameSufixPart = @"Designer";
+    return _applicationNameSufixPart;
 }
 
 - (NSString *)localizedApplicationNameSufixPart {
-    return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
+    if (!_localizedApplicationNameSufixPart) {
+        _localizedApplicationNameSufixPart = NSLocalizedString([self applicationNameSufixPart],
+                                                               [self applicationNameSufixPart]);
+    }
+    return _localizedApplicationNameSufixPart;
 }
 
 - (NSString *)versionNumber {
-    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
-                                                             kCFBundleVersionKey);
-    return version;
+    if (!_versionNumber) {
+        CFStringRef cversion;
+        cversion = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                                                        kCFBundleVersionKey);
+        _versionNumber = (__bridge NSString *)cversion;
+
+    }
+    return _versionNumber;
 }
 
 - (NSString *)revisionNumber {
-    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
-                                                             MADKeyRevision);
-    return version;
+    if (!_revisionNumber) {
+        CFStringRef version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                                                                   MADKeyRevision);
+        _revisionNumber = (__bridge NSString *)version;
+    }
+    return _revisionNumber;
 }
 
 - (dispatch_queue_t)appDelegateQueueSerial {
-    return !_appDelegateQueueSerial ?
-        (_appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate,
-                                                         DISPATCH_QUEUE_SERIAL)) :
-        _appDelegateQueueSerial;
+    if (!_appDelegateQueueSerial) {
+        dispatch_queue_t queue;
+        queue = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+        _appDelegateQueueSerial = queue;
+    }
+    return _appDelegateQueueSerial;
 }
 
 #pragma mark - Initialization
@@ -218,14 +248,17 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 */
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        
         id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
                                                             categories: nil];
         [application registerUserNotificationSettings:notification];
+        
     }
     
    
     return YES;
 }
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
@@ -250,6 +283,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application
   supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
         UIInterfaceOrientationMaskAllButUpsideDown :
         UIInterfaceOrientationMaskAll;
@@ -281,7 +315,11 @@ static inline UIUserNotificationType MADUserNotificationType() {
 #pragma mark - Convenience
 
 - (NSString *)bundleDisplayName {
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];
+    if (!_bundleDisplayName) {
+        NSString *result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+        _bundleDisplayName = result.copy;
+    }
+    return _bundleDisplayName;
 }
 
 - (id)debugQuickLookObject {

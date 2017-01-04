@@ -15,21 +15,20 @@
 
 #import <Foundation/NSString.h>
 
-#import "MADNavigationController.h"
+#import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import "MADNavigationController.h"
 #import "Constants.h"
 
 #import "MTVerificationController.h"
 #import "MADQueryViewController.h"
 
 #import "MADFileExplorerViewController.h"
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @class MADTransparentPresentationController;
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
-NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
-
 NSString * const MADIDUser                                          = @"MADIDUser";
 
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
@@ -70,15 +69,15 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 - (NSString *)groupIdentifier { return MADIdentifierGroup; }
 
 - (NSString *)name {
-    NSString *trademark = [self trademark];
-    NSString *appName = [self applicationNameSufixPart];
+    NSString *trademark = self.trademark;
+    NSString *appName = self.applicationNameSufixPart;
     NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
     return name;
 }
 
 - (NSString *)localizedName {
-    NSString *trademark = [self trademark];
-    NSString *appName = [self localizedApplicationNameSufixPart];
+    NSString *trademark = self.trademark;
+    NSString *appName = self.localizedApplicationNameSufixPart;
     NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
     return name;
 }
@@ -236,7 +235,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     if (success) {
         
-        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [UIAlertController newAlertControllerError:error];
+        UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [MADAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];

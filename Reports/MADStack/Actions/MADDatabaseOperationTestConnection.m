@@ -7,17 +7,20 @@
 //
 
 #import "MADDatabaseOperationTestConnection.h"
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+
 #import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MTDatabaseConnection.h>
-#import <MAD/MTDataTable+Factory.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADErrorUserInfo.h>
+#import <MAD/MTDataTable.h>
+
 #import "MADKeyChainOperationGet.h"
-#import <Foundation/NSString.h>
-#import <Foundation/NSBundle.h>
 
 @interface MADDatabaseOperationTestConnection ()
     <MTDatabaseProtocol>

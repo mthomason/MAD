@@ -10,17 +10,17 @@
 #import "MADFileCoordinatorProtocol.h"
 #import "MADFileCoordinatorDelegate.h"
 
+#import <dispatch/queue.h>
+
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
 
-#import <dispatch/queue.h>
+#import <MADFoundation/MADURL.h>
 
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
-#import "NSURL+ConvenienceConstructors.h"
 
 @interface MADLocalFileCoordinator ()
             <MADDirectoryMonitorDelegate>
@@ -51,7 +51,7 @@
         
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
+        NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
         
         MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
         self.directoryMonitor = directoryMonitor;
@@ -179,8 +179,8 @@
 - (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention
                fileGroup:(NSString *)fileGroup {
 
-    NSURL *documentURL = [NSURL newURLLocalDocumentWithName:name extention:extention
-                                                  fileGroup:fileGroup];
+    NSURL *documentURL = [MADURL newURLLocalDocumentWithName:name extention:extention
+                                                   fileGroup:fileGroup];
     
     id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
     [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
@@ -195,8 +195,8 @@
                     *updates = [[NSArray alloc] init];
             id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
-                                                                removedURLs: removes
-                                                                updatedURLs: updates];
+                                                           removedURLs: removes
+                                                           updatedURLs: updates];
         }
     }];
 }
@@ -206,8 +206,9 @@
     if (name.length <= 0) {
         return NO;
     }
-    NSURL *documentURL = [NSURL newURLLocalDocumentWithName:name extention:extention
-                                                  fileGroup:fileGroup];
+    NSURL *documentURL = [MADURL newURLLocalDocumentWithName: name
+                                                   extention: extention
+                                                   fileGroup: fileGroup];
     NSString *path = documentURL.path;
     if (path == nil) return NO;
     return ![[NSFileManager defaultManager] fileExistsAtPath:path];
@@ -221,7 +222,7 @@
 }
 
 - (NSURL *)documentsDirectory {
-    NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+    NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
     return url;
 }
 
@@ -242,7 +243,7 @@
         MADLocalFileCoordinator *sself = wself;
         if (sself == nil) return;
         
-        NSURL *url = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
+        NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
         
         NSArray <NSURL *> *urls;
         urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url

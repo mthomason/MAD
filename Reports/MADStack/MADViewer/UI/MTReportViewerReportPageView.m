@@ -32,13 +32,16 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 @interface MADReportPageView ()
 
-    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
-    @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
-    @property (nonatomic, strong) UIView *timeSinceRefreshView;
-    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
     @property (nonatomic, assign) BOOL firstTime;
     @property (nonatomic, assign) BOOL displaysPageCounter;
     @property (nonatomic, assign) BOOL displaysCacheTimer;
+
+    @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
+
+    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
+
+    @property (nonatomic, strong) UIView *timeSinceRefreshView;
+    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
 @end
 

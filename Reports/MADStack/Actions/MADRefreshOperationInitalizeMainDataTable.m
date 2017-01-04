@@ -9,7 +9,7 @@
 #import "MADRefreshOperationInitalizeMainDataTable.h"
 #import <MAD/MADocument.h>
 #import <MAD/MTDataTableFast.h>
-#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataTable.h>
 
 @interface MADRefreshOperationInitalizeMainDataTable ()
 

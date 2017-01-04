@@ -1,5 +1,5 @@
 //
-//  DataColumn.h
+//  MADDataColumn.h
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 4/6/14.
@@ -12,10 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
-@class MADDataColumn;
 @class NSMutableDictionary;
-
-typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
 
 @interface MADDataColumn : NSObject
     <NSCoding>

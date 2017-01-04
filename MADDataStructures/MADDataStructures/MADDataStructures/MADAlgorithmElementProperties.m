@@ -10,4 +10,21 @@
 
 @implementation MADAlgorithmElementProperties
 
+- (instancetype)init {
+    id elementProperties = [[self.class alloc] initWithColor: MTColorWhite];
+    return elementProperties;
+}
+
+- (instancetype)initWithColor:(MADAlgorithmColor)algorithmColor {
+    if (self = [super init]) {
+        _algorithmColor = algorithmColor;
+    }
+    return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    typeof(self.class) copy = [[self.class allocWithZone:zone] initWithColor: self.algorithmColor];
+    return copy;
+}
+
 @end

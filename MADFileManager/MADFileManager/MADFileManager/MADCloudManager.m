@@ -111,14 +111,15 @@ static const char * MADQueueCloudSerial
 
 - (void)startCloud {
     NSAssert(_ubiquityIdentifier != nil && _groupIdentifier != nil, @"Call initalize function.");
-
-     if ([self stepOneCheckUbiquityIdentifierAndRegisterForNotifcations]) {
-         [self stepTwoGetStorageInformationCloudAvailable:^(BOOL success) {
-             
-         }];
-     } else {
-         
-     }
+    
+    if ([self stepOneCheckUbiquityIdentifierAndRegisterForNotifcations]) {
+        [self stepTwoGetStorageInformationCloudAvailable:^(BOOL success) {
+            
+        }];
+    } else {
+        
+    }
+    
 }
 
 

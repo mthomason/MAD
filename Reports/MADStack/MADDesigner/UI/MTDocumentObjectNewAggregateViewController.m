@@ -362,7 +362,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Aggregate Function", @"Title of form to create a non changing text label document object.");
     self.navigationItem.titleView = titleView;
 

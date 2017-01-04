@@ -13,18 +13,7 @@
 
 @interface NSURL (Document)
 
-    + (instancetype)newURLCacheFilesDirectoryForFilename:(NSString *)filename;
-    + (instancetype)newURLDocumentArchiveForFileURL:(NSURL *)madUrl
-                                          extension:(NSString *)extension;
-
-    + (instancetype)newThumbnailUrlForMadUrl:(NSURL *)madUrl;
-
-    + (instancetype)newUrlThumbnailForHandle:(NSString *)handle
-                            andRetinaDisplay:(BOOL)retinaDisplay;
-
-    - (NSURL *)uniqueUrl;
     - (NSString *)key;
-    + (NSString *)newStringFileNameFilter:(NSString *)desiredName;
 
 @end
 

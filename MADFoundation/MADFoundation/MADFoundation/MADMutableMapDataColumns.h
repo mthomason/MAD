@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADMutableMapDataColumns_h
-#define MADMutableMapDataColumns_h
+#ifndef MADFoundation_MADMutableMapDataColumns_h
+#define MADFoundation_MADMutableMapDataColumns_h
 
 @class NSMutableDictionary<KeyType, ObjectType>;
 @class NSString;

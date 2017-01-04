@@ -17,7 +17,11 @@
 
 #import <MADCocoaExtensions/BDHost.h>
 
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+
+#import <MADFoundation/MADURL.h>
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MADConstants.h"
@@ -151,10 +155,13 @@ NSString * const MADStringEmpty = @"";
         //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
         
         NSURL *appSupportDirectory;
-        appSupportDirectory = [NSURL newURLLocalApplicationSupportDirectoryForGroupID:MADIdentifierGroup];
+        MADAppDelegate appDelegate = [MADApplication AppDelegate];
+        NSArray *groupIdentifier = [appDelegate groupIdentifier].copy;
+        appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
+        
         NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
                                                             isDirectory: NO];
-        NSString *path = dbUrl.path;
+        NSString *path = dbUrl.path.copy;
         NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
         resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:databaseUrl];
         

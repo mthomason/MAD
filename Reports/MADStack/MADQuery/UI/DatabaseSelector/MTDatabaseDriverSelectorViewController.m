@@ -77,7 +77,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = @"New Report";
     self.navigationItem.titleView = titleView;
     

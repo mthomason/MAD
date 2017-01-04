@@ -11,14 +11,35 @@
 
 @implementation MADProgressView
 
-- (instancetype)initWithProgressViewStyle:(UIProgressViewStyle)style {
-    if (self = [super initWithProgressViewStyle:style]) {
-        UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-        progressView.trackTintColor = [MADColorEverydayApps newColorRed];
-        progressView.tintColor = [MADColorEverydayApps newColorBlue];
-        progressView.progress = 0.0000f;
++ (instancetype)newProgressView:(MADProgressViewType)type {
+    id progressView;
+    
+    switch (type) {
+
+        case MADProgressViewTypeFileExplorer:
+            progressView = [[self.class alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+            ((__kindof UIProgressView *) progressView).trackTintColor = [MADColorEverydayApps newColorRed];
+            ((__kindof UIProgressView *) progressView).tintColor = [MADColorEverydayApps newColorBlue];
+            ((__kindof UIProgressView *) progressView).progress = 0.0000f;
+            
+            break;
+
+        case MADProgressViewTypeConnection:
+            progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+            ((__kindof UIProgressView *) progressView).autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            ((__kindof UIProgressView *) progressView).progressTintColor = [MADColorEverydayApps newColorAnalogous4];
+            ((__kindof UIProgressView *) progressView).trackTintColor = [UIColor grayColor];
+            break;
+
+        case MADProgressViewTypeDefault:
+        default:
+            progressView = [[self.class alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+            ((__kindof UIProgressView *) progressView).trackTintColor = [MADColorEverydayApps newColorRed];
+            ((__kindof UIProgressView *) progressView).tintColor = [MADColorEverydayApps newColorBlue];
+            ((__kindof UIProgressView *) progressView).progress = 0.0000f;
+            break;
     }
-    return self;
+    return progressView;
 }
 
 @end

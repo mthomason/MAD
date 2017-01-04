@@ -7,8 +7,11 @@
 //
 
 #import "MADRefreshOperationInitalize.h"
-#import <MADFoundation/MTDataTable.h>
+
+#import <MAD/MTDataTable.h>
+
 #import <MAD/MTDataTableFast.h>
+
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 

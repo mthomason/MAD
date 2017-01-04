@@ -12,8 +12,8 @@
 		4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */; };
 		4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */; };
 		4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */; };
-		4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */; };
-		4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */; };
+		4C401F461BAE780300BAE5FC /* MADAlertControllerFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F3B1BAE780300BAE5FC /* MADAlertControllerFeedback.h */; };
+		4C401F471BAE780300BAE5FC /* MADAlertControllerFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* MADAlertControllerFeedback.m */; };
 		4C401F491BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F3F1BAE780300BAE5FC /* Info.plist */; };
 		4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */; };
 		4C744EEC1CE9B36E00243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EEB1CE9B36E00243830 /* MADCocoaExtensions.framework */; };
@@ -39,8 +39,8 @@
 		4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackFrustration.m; sourceTree = "<group>"; };
 		4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackUncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackUncaughtExceptionHandler.m; sourceTree = "<group>"; };
-		4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Feedback.h"; sourceTree = "<group>"; };
-		4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
+		4C401F3B1BAE780300BAE5FC /* MADAlertControllerFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlertControllerFeedback.h; sourceTree = "<group>"; };
+		4C401F3C1BAE780300BAE5FC /* MADAlertControllerFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAlertControllerFeedback.m; sourceTree = "<group>"; };
 		4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackTests.m; sourceTree = "<group>"; };
 		4C401F3F1BAE780300BAE5FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C744EEB1CE9B36E00243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,8 +81,8 @@
 				4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */,
 				4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */,
 				4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */,
-				4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */,
-				4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */,
+				4C401F3B1BAE780300BAE5FC /* MADAlertControllerFeedback.h */,
+				4C401F3C1BAE780300BAE5FC /* MADAlertControllerFeedback.m */,
 			);
 			path = MADFeedback;
 			sourceTree = "<group>";
@@ -134,7 +134,7 @@
 			files = (
 				4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */,
 				4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */,
-				4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */,
+				4C401F461BAE780300BAE5FC /* MADAlertControllerFeedback.h in Headers */,
 				4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,7 +239,7 @@
 			files = (
 				4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */,
 				4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */,
-				4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */,
+				4C401F471BAE780300BAE5FC /* MADAlertControllerFeedback.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

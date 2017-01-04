@@ -1,5 +1,5 @@
 //
-//  UIApplication+MADApplicationProtocol.h
+//  MADAppDelegate.h
 //  MADFoundation
 //
 //  Created by Michael Thomason on 9/23/15.
@@ -9,10 +9,11 @@
 #ifndef MAD_MADFoundation_MADAppDelegate_h
 #define MAD_MADFoundation_MADAppDelegate_h
 
-@class UIApplication;
-@protocol UIApplicationDelegate;
-@protocol MADApplicationProtocol;
+  @class UIApplication;
 
-typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;
+  @protocol UIApplicationDelegate;
+  @protocol MADApplicationProtocol;
+
+  typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;
 
 #endif

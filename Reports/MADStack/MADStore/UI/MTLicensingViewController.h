@@ -12,7 +12,6 @@
 #import <UIKit/UITableViewController.h>
 #import "MUIViewControllerDelegate.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIDevice+Hack.h>
 
 @interface MTLicensingViewController : UITableViewController
 

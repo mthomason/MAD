@@ -13,7 +13,8 @@
 #import "MADViewControllerSQL.h"
 
 #import <UIKit/UITextView.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+
+#import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
@@ -48,7 +49,7 @@
 
         self.textView.text = @"";
         
-        UIAlertController *alertController = [UIAlertController newAlertControllerErrorEmptyQuery];
+        UIAlertController *alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
         [self presentViewController: alertController
                            animated: YES
                          completion: nil];

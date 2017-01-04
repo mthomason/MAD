@@ -7,12 +7,12 @@
 //
 
 #import "NSAttributedString+Common.h"
-#import <MADCocoaExtensions/UIColor+Social.h>
-
 #import <UIKit/UIFont.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/UIColor.h>
+
+#import <MADCocoaExtensions/MADColorSocial.h>
 
 @implementation NSAttributedString (Common)
 

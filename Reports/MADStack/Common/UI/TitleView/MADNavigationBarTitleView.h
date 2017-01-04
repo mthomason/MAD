@@ -10,8 +10,17 @@
 #define MAD_Designer_MADNavigationBarTitleView_h
 
 #import <UIKit/UILabel.h>
+#import <UIKit/UINavigationBar.h>
 
-@interface MADNavigationBarTitleView : UILabel
+@interface MADNavigationItemTitle : UINavigationItem
+
+@end
+
+@interface MADNavigationBarHeader : UINavigationBar
+    - (void)setTitle:(NSString *)title;
+@end
+
+@interface MADLabelTitle : UILabel
 
 @end
 

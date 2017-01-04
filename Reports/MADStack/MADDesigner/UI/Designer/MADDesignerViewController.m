@@ -30,15 +30,17 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectContext.h>
 
-#import <math.h>
-
 #import <MADCocoaExtensions/MADCompassDirection.h>
 #import <MADCocoaExtensions/MADResizeAspect.h>
 
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MADAlertController.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
+
+#import <MAD/MADReportSections.h>
+#import <MAD/MADReportSection.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
@@ -62,6 +64,8 @@
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
+
+#import <math.h>
 
 #import "MADTabBarController.h"
 #import "MADManagedObjectView.h"
@@ -101,7 +105,7 @@
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
 
-#import "MADToolboxNavigationController.h"
+#import "MADNavigationControllerToolbox.h"
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 
@@ -110,9 +114,6 @@
 #import "MADNavigationController.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
-
-#import <MAD/MADReportSections.h>
-#import <MAD/MADReportSection.h>
 
 #import "MTViewControllerBarcode.h"
 
@@ -554,8 +555,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     [self addObservers];
     
-    MADBackgroundScrollView __unsafe_unretained *scroller = _scroller;
-    MADTabBarController * __unsafe_unretained tabBarController = self.tabBarController;
+    MADBackgroundScrollView *scroller = _scroller;
+    //MADTabBarController *tabBarController = self.tabBarController;
 
     _lastMenuItemSelectRequiresElementView = NO;
     _zoomScaleRestore = scroller.zoomScale;
@@ -761,7 +762,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     [scrollerLayoutConstraints addObject:constraintToScollerBottom];
     
-    [tabBarController enableTabBarItems];
+    //[tabBarController enableTabBarItems];
     
     [self.scroller addConstraints: scrollerLayoutConstraints];
     [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
@@ -770,7 +771,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                      target:self
                                                                      action:@selector(actionAdd:)];
-    [tabBarController.navigationItem setRightBarButtonItem:barButtonItemAdd animated:NO];
+    //[tabBarController.navigationItem setRightBarButtonItem:barButtonItemAdd animated:NO];
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
@@ -1792,32 +1793,32 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
     
     UIAlertController *alert;
+    NSString *newText;
+    RptqDocumentObjectLabel *isLabel;
     
-    void (^configureLabel)(UITextField *);
-    void (^completion)(UIAlertAction *action, NSString *text);
-    
-    NSString *newText = object.isLabel.text.copy;
-    
-    configureLabel = ^(UITextField *textField) {
-        
-        textField.text = newText;
-        textField.clearButtonMode = UITextFieldViewModeAlways;
-        
-    };
+    isLabel = object.isLabel;
+    newText = isLabel.text.copy;
     
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
     RptqDocumentObject *documentObject;
     documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
 
+    void (^configureLabel)(UITextField *);
+    configureLabel = ^(UITextField *textField) {
+        textField.text = newText;
+        textField.clearButtonMode = UITextFieldViewModeAlways;
+    };
+
+    void (^completion)(UIAlertAction *action, NSString *text);
     completion = ^(UIAlertAction *action, NSString *text) {
-        
-        documentObject.isLabel.text = text;
+        RptqDocumentObjectLabel *textLabel;
+        textLabel = documentObject.isLabel;
+        textLabel.text = text.copy;
         [documentObject.managedObjectContext save:nil];
-        
     };
     
-    alert = [UIAlertController newAlertControllerEditLabel:configureLabel
-                                                completion:completion];
+    alert = [MADAlertController newAlertControllerEditLabel: configureLabel
+                                                 completion: completion];
     
     [self presentViewController:alert animated:YES completion:nil];
     
@@ -3188,17 +3189,17 @@ END_deselectElementView:;
     self.sectionSettingsVisible = NO;
     self.toolboxVisible = NO;
     
-    MADTabBarController *tabBarController = self.tabBarController;
+/*    MADTabBarController *tabBarController = self.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    [tabBarController enableTabBarItems];
+    [tabBarController enableTabBarItems];*/
 }
 
 - (void)setDisplayInactive {
-    MADTabBarController *tabBarController = self.tabBarController;
+/*    MADTabBarController *tabBarController = self.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
-    [tabBarController disableTabBarItems];
+    [tabBarController disableTabBarItems];*/
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
@@ -3386,7 +3387,7 @@ END_deselectElementView:;
 }
 
 - (void)displayPrompt {
-    MADTabBarController * __unsafe_unretained tabBarController = self.tabBarController;
+    UITabBarController *tabBarController = self.tabBarController;
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         tabBarController.navigationItem.prompt = self.promptManager.prompt.copy;
     } else {

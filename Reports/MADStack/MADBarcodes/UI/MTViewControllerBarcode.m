@@ -13,17 +13,30 @@
 #import "MTViewControllerBarcode.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
+#import <CoreData/NSManagedObjectID.h>
+
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import "MADNavigationBarTitleView.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 
-#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataTable.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MTDatabaseConnection.h>
+
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+
+#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -41,21 +54,7 @@
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 
-#import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseProtocol.h>
-#import <MAD/MTDatabaseConnection.h>
-
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
-
-#import <MAD/RptqDocumentObjectBarcode.h>
-#import <MAD/RptqDocumentObjectBarcode+Extras.h>
-
-#import <CoreData/NSManagedObjectID.h>
-
+#import "MADNavigationBarTitleView.h"
 #import "MTViewControllerBarcodePreviewDelegate.h"
 
 static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
@@ -147,7 +146,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"MAD Barcodes", @"Title of the barcode creator.");
     self.navigationItem.titleView = titleView;
 
@@ -185,21 +184,31 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             NSError * __autoreleasing error = NULL;
             BOOL success = [self.query performQueryWithError:&error];
             if (success) {
+                
                 NSArray *allObjects = [self.dataTableSampleData allObjects];
                 (self.optionsViewController).sampleBarcodeData = allObjects;
                 [self.optionsViewController.tableView reloadData];
+                
             } else {
+                
                 MTViewControllerBarcode * __weak weakself2 = self;
+                
                 [NSError presentError: error
                      onViewController: weakself2
-                           completion:^(BOOL presentErrorSuccess) {
-                               NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                           completion: ^(BOOL presentErrorSuccess) {
                                
-                               UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                               UIAlertController *alertController;
+                               NSString *key;
+                               
+                               key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                               
+                               alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
                                    [MTKeyChain deleteKey:key];
                                } cancel:nil];
-                               [weakself2 presentViewController:alertController animated:YES
-                                                     completion:nil];
+                               
+                               [weakself2 presentViewController: alertController
+                                                       animated: YES
+                                                     completion: nil];
                                
                            }];
                 
@@ -228,7 +237,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                MTViewControllerBarcode *strongself2 = weakself;
 
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                               UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                               UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
                                    [MTKeyChain deleteKey:key];
                                } cancel:nil];
                                [strongself2 presentViewController:alertController animated:YES

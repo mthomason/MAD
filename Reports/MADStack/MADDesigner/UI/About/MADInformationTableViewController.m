@@ -8,13 +8,12 @@
 
 #import "MADInformationTableViewController.h"
 
-#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
+#import <MessageUI/MFMailComposeViewController.h>
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 
-#import <MessageUI/MFMailComposeViewController.h>
+#import <MADCocoaExtensions/MADMailComposeViewController.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 
 #import "MADTableViewCellAuto.h"
 #import "ACAccountStore+Social.h"
@@ -111,9 +110,11 @@
 
 - (void)actionEmailUs {
     MFMailComposeViewController *controller;
-    controller = [MFMailComposeViewController newMailComposeViewControllerWithTitle: @""
-                                                                               body: @""
-                                                                 userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+    UITraitCollection *traitCollection = self.traitCollection;
+    UIUserInterfaceIdiom userInterfaceIdiom = traitCollection.userInterfaceIdiom;
+    controller = [MADMailComposeViewController newMailComposeViewControllerWithTitle: @""
+                                                                                body: @""
+                                                                  userInterfaceIdiom: userInterfaceIdiom];
     controller.toRecipients = @[@"admin@everydayapps.com"];
     controller.subject = @"MAD Designer";
     if (self.popoverPresentationController != nil) {
@@ -186,15 +187,15 @@
     [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController newAlertControllerError:error];
+            alert = [MADAlertController newAlertControllerError:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                            message: message
-                                                                      andCompletion: ^(UIAlertAction *action) { }];
+            alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                             message: message
+                                                                       andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

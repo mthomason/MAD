@@ -20,7 +20,8 @@ typedef NS_ENUM(short, MADNavigationControllerType) {
     MADNavigationControllerTypeToolbox,
     MADNavigationControllerTypeFontPicker,
     MADNavigationControllerTypeAggregateAdd,
-    MADNavigationControllerTypeElementPicker
+    MADNavigationControllerTypeElementPicker,
+    MADNavigationControllerTypeViewer,
 };
 
 @interface MADNavigationController : UINavigationController

@@ -7,7 +7,7 @@
 //
 
 #import "MADFileUtilities.h"
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADURL.h>
 #import <MADFoundation/NSURL+Document.h>
 
 #import <Foundation/NSFileManager.h>
@@ -118,8 +118,8 @@ static NSString * const MADPathComponentData       = @"Data";
         // Note the call to -URLForUbiquityContainerIdentifier: should be on a background queue.
         NSURL *documentsDirectoryURL, *documentsDirectoryLocal;
         NSArray <NSURL *> *localDocumentURLs;
-        documentsDirectoryURL = [NSURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID],
-        documentsDirectoryLocal = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
+        documentsDirectoryURL = [MADURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID],
+        documentsDirectoryLocal = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
         
         localDocumentURLs = [fileManager contentsOfDirectoryAtURL: documentsDirectoryLocal
                                        includingPropertiesForKeys: nil
@@ -147,7 +147,7 @@ static NSString * const MADPathComponentData       = @"Data";
     if ([fileManager isUbiquitousItemAtURL:destinationURL] ||
         (path != nil && [fileManager fileExistsAtPath:path])) {
 
-        destinationURL = [NSURL newURLUniqueURLForURL:destinationURL];
+        destinationURL = [MADURL newURLUniqueURLForURL:destinationURL];
         
     }
     
@@ -254,7 +254,7 @@ static NSString * const MADPathComponentData       = @"Data";
     NSString *filename = [name stringByAppendingPathExtension: pathExtension];
     NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent: filename
                                                                             isDirectory: NO];
-    NSURL *destination = [NSURL newURLUniqueURLForURL:desired];
+    NSURL *destination = [MADURL newURLUniqueURLForURL:desired];
 
     NSString *status;
     NSError *errorGettingAttributes = nil;
@@ -319,9 +319,9 @@ static NSString * const MADPathComponentData       = @"Data";
                 completion:(void (^)(NSURL *result, NSError *error))completion {
     
     NSURL *uniqueUrl;
-    uniqueUrl = [NSURL newURLUniqueUrlInDirectory: url.URLByDeletingLastPathComponent
-                                withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
-                                     andExtension: url.lastPathComponent.pathExtension];
+    uniqueUrl = [MADURL newURLUniqueUrlInDirectory: url.URLByDeletingLastPathComponent
+                                 withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
+                                      andExtension: url.lastPathComponent.pathExtension];
 
     // `url` may be a security scoped resource.
     BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
@@ -425,7 +425,7 @@ static NSString * const MADPathComponentData       = @"Data";
 #pragma mark - Convenience
 
 + (void)copyURLToDocumentsDirectory:(NSURL *)url groupId:(NSString *)groupId {
-    NSURL *localDocumentsDirectory = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupId];
+    NSURL *localDocumentsDirectory = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupId];
     NSString *lastPathComponent = url.lastPathComponent;
     NSURL *toURL = [localDocumentsDirectory URLByAppendingPathComponent:lastPathComponent];
     
@@ -496,7 +496,7 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (NSArray <NSURL *> *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
                                                           andExtention: (NSString *)extenstion {
-    NSURL *direcotry = [NSURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
+    NSURL *direcotry = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
     return [self contentsOfDirectory:direcotry withPathExtension:extenstion];
 }
 
@@ -586,7 +586,7 @@ static NSString * const MADPathComponentData       = @"Data";
 
    NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [NSURL newURLForLocalCachedDirectoryForFileUrl: documentUrl];
+    NSURL *cachedDirectory = [MADURL newURLForLocalCachedDirectoryForFileUrl: documentUrl];
     NSArray <NSURL *> *cachedFiles;
     cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
                                                 includingPropertiesForKeys: nil
@@ -603,8 +603,8 @@ static NSString * const MADPathComponentData       = @"Data";
                        groupIdentifier:(NSString *)groupIdentifier {
     NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
 
-    NSURL *cachedDirectory = [NSURL newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier
-                                                                           fileURL: documentUrl];
+    NSURL *cachedDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier
+                                                                            fileURL: documentUrl];
     return [MADFileUtilities removeContentsOfDirectory:cachedDirectory];
 }
 
@@ -641,7 +641,7 @@ static NSString * const MADPathComponentData       = @"Data";
                                options: NSDataWritingAtomic
                                  error: &errorWriting];
         } else {
-            resultUrl = [archiveURL uniqueUrl];
+            resultUrl = [MADURL newURLWithUniqueFilenameForURL:archiveURL];
             NSData *data = fileWrapper.serializedRepresentation;
             success = [data writeToURL:resultUrl atomically:YES];
         }

@@ -9,19 +9,26 @@
 #import "MTDatabaseMySql.h"
 #import "MADDatabaseProtocol.h"
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
+
 #import "MADErrorUserInfo.h"
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MADDataColumn.h>
+#import "MTDataTable.h"
+
 #import "MADCredential.h"
 
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 
+#import <MADFoundation/MADDataColumn.h>
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
 #import <MADMySQL/MysqlFetch.h>
 #import <MADMySQL/MysqlFetchField.h>
 #import <MADMySQL/MTDataTypeMySQL.h>
+
+#import "MysqlFetch+DataTable.h"
 
 #import "MTQuery.h"
 
@@ -41,13 +48,10 @@
 
 #import "MTKeyChain.h"
 
-#import "MTDataTable+Factory.h"
+#import "MTDataTable.h"
 #import "MTDatabaseTable.h"
 
 #import <mysql.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSError.h>
 
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>

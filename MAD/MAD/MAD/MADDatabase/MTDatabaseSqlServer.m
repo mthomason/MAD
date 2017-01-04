@@ -30,7 +30,7 @@
 #import <dispatch/queue.h>
 #import <dispatch/semaphore.h>
 
-#import <MADFoundation/MTDataTable.h>
+#import "MTDataTable.h"
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADTdsClient/sybdb.h>

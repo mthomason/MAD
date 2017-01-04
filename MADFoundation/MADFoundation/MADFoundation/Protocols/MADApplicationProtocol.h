@@ -11,16 +11,13 @@
 
 #include <objc/NSObject.h>
 
-@class NSUserDefaults;
-
 @protocol MADApplicationProtocol <NSObject>
 
-    + (NSString *)ApplicationNameSufixPart;
-    + (NSString *)Trademark;
-    - (NSString *)applicationIdentifier;
-    - (NSString *)applicationBundleIdentifier;
     - (NSString *)ubiquityIdentifier;
     - (NSString *)groupIdentifier;
+
+    - (NSString *)applicationIdentifier;
+    - (NSString *)applicationBundleIdentifier;
     - (NSString *)name;
     - (NSString *)trademark;
     - (NSString *)applicationNameSufixPart;

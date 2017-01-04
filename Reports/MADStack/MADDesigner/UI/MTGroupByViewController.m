@@ -44,7 +44,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
     self.navigationItem.titleView = titleView;
 

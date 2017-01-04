@@ -25,14 +25,14 @@ extern const int8_t MADIndexViewer;
 @interface MADTabBarController : UITabBarController
     <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
 
-    + (nullable instancetype)newTabBarController:(nullable MADocument __weak *)document
-                                          prompt:(nullable NSString *)prompt;
+    + (instancetype)newTabBarController:(MADocument *)document
+                                 prompt:(NSString *)prompt;
 
-    @property (nullable, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-    @property (nullable, readonly) MADQueryBuilderSplitViewController * querySplitViewController;
-    @property (nullable, readonly) MADDesignerViewController * designerViewController;
-    @property (nullable, readonly) MADViewerController * viewerViewController;
+    @property (nonatomic, strong, readonly) MADQueryBuilderSplitViewController *querySplitViewController;
+    @property (nonatomic, strong, readonly) MADDesignerViewController *designerViewController;
+    @property (nonatomic, strong, readonly) MADViewerController *viewerViewController;
 
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;

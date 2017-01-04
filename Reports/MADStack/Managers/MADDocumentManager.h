@@ -21,7 +21,7 @@
 @interface MADDocumentManager : NSObject
     <UICollectionViewDataSource, MADFileLocationManagerDelegate>
 
-    - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration;
+    - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
 

@@ -11,41 +11,38 @@
 #endif
 
 #import "MTConnectionViewController.h"
-#import <MAD/MADDocumentProtocol.h>
-#import <MAD/MADDatabaseProtocol.h>
-
 #import "MUIViewControllerDelegate.h"
-#import <MADExplorer/MADSaveFileProtocol.h>
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
-
+#import <UIKit/UIAlertController.h>
 #import <UIKit/UIActivityIndicatorView.h>
-#import <UIKit/UIProgressView.h>
 #import <UIKit/UILocalNotification.h>
 
-#import <MAD/MADConstants.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
+#import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MADExplorer/MADSaveFileProtocol.h>
+
+#import <MAD/MADDocumentProtocol.h>
+#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
-
-#import "MADOperationObserver.h"
-#import "MADOperationQueue.h"
-
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataTable.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
-
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
 
 #import <MADFileManager/MADFileUtilities.h>
+
+#import "MADOperationObserver.h"
+#import "MADOperationQueue.h"
 
 #import "MADNavigationBarTitleView.h"
 #import "MADKeyChainOperationGet.h"
@@ -55,13 +52,17 @@
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
 
-#import "UIApplication+Extras.h"
-
+#import "MADProgressView.h"
 #import "MADGetCredentialsOperation.h"
 
 #import "MADDatabaseOperationTestConnection.h"
 
 #import "MADCreateDocumentOperation.h"
+
+#import "UIApplication+Extras.h"
+
+typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
+typedef void (^MADBlockCompletionStatus)(BOOL);
 
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -86,6 +87,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
     @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
+    @property (nonatomic, assign) BOOL viewDidLayoutSubviews;
+
 @end
 
 @implementation MADConnectionViewController
@@ -96,13 +99,32 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 #pragma mark - View lifecycle
 
+- (void)loadView {
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
     self.credentialQueue = credentialQueue;
     
-    UIProgressView *progressView = [MADConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
+    CGRect frameProgress, frameTable;
+    
+    UIProgressView *progressView;
+    progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
+    progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
+    progressView.trackTintColor = [UIColor grayColor];
+    self.progressView = progressView;
+    
+    frameProgress = progressView.frame;
+    frameTable = self.tableView.frame;;
+    
+    progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y, frameTable.size.width, frameProgress.size.height);
+
+    
+    //= [MADConnectionViewController progressViewWithWidth:slef.tableView.frame.size.width];
+    
     [self.tableView addSubview:progressView];
     self.progressView = progressView;
     
@@ -120,9 +142,14 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
     self.navigationItem.titleView = titleView;
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
 }
 
 #pragma mark - Post Report Notifications
@@ -143,10 +170,20 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark - Progress Notifications
 
 - (void)objectDidUpdateProgress:(NSNotification *)sender {
-    MADProgress *progress = sender.userInfo[MADNotificationProgressKey];
+    MADProgress *progressView;
+    UINavigationItem *navigationItem;
+    NSString *message;
+    float progress;
+    
+    progressView = sender.userInfo[MADNotificationProgressKey];
+    message = progressView.message.copy;
+    progress = progressView.progress;
+    
+    navigationItem = self.navigationItem;
+    progressView = self.progressView;
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        self.progressView.progress = progress.progress;
-        NSString *message = progress.message.copy;
+        self.progressView.progress = progress;
         self.navigationItem.prompt = message;
     }];
 }
@@ -312,7 +349,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 }
 
-- (void)displayErrors:(NSArray *)errors forConnectionString:(NSString *)connectionString {
+- (void)displayErrors:(NSArray <__kindof NSError *> *)errors forConnectionString:(NSString *)connectionString {
     [MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
         [MTKeyChain deleteKey:connectionString];
     }];
@@ -326,26 +363,41 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
-+ (void)viewController:(id)viewController displayErrors:(NSArray *)errors completion:(void (^)(BOOL))completion {
-    
-    NSError *error = errors.lastObject;
++ (void)viewController:(id)viewController
+         displayErrors:(NSArray <__kindof NSError *> *)errors completion:(void (^)(BOOL))completion {
 
-    [UIAlertController alertControllerWithTitle: error.localizedDescription message: error.localizedFailureReason
-                                 preferredStyle: UIAlertControllerStyleAlert];
+    MADBlockAlertDidFinish handleAlertDidFinish;
+    UIAlertController *alert;
+    NSRange range;
+    NSError *error;
+    NSString *localizedDescription, *localizedFailureReason;
+    NSArray <__kindof NSError *> *remaningErrors;
     
-    NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
-    NSArray *remaningErrors = [errors subarrayWithRange:range];
+    error = errors.lastObject;
     
-    UIAlertController *alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle:error.localizedDescription message:error.localizedFailureReason
-                                                               andCompletion:^(UIAlertAction *action) {
+    range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
+    remaningErrors = [errors subarrayWithRange:range];
+
+    handleAlertDidFinish = ^(UIAlertAction *action) {
+
         if (remaningErrors.count > 0) {
-            [MADConnectionViewController viewController:viewController displayErrors:remaningErrors completion:^(BOOL success) {
-                completion(YES);
-            }];
+            
+            MADBlockCompletionStatus alertCompleted = ^(BOOL success) { completion(YES); };
+            [MADConnectionViewController viewController:viewController
+                                          displayErrors:remaningErrors
+                                             completion:alertCompleted];
         } else {
             completion(YES);
         }
-    }];
+        
+    };
+    
+    localizedDescription = error.localizedDescription.copy;
+    localizedFailureReason = error.localizedFailureReason.copy;
+
+    alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: localizedDescription
+                                                                     message: localizedFailureReason
+                                                               andCompletion: handleAlertDidFinish];
 
     [viewController presentViewController:alert animated:YES completion:nil];
 

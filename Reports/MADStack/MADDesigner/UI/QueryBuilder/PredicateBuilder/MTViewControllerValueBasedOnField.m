@@ -20,7 +20,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MTQuery.h>
 #import <MAD/MTKeyChain.h>
@@ -33,7 +33,7 @@
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADDatabaseProtocol.h>
 
-#import <MADFoundation/MTDataTable.h>
+#import <MAD/MTDataTable.h>
 
 #import "MTCellEnterText.h"
 
@@ -198,7 +198,7 @@
                 UIViewController * __weak weak1 = strongself2;
                 
                 [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
-                       UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                       UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
                                    [MTKeyChain deleteKey:key];
                        } cancel:nil];
                        [weak1 presentViewController:alertController animated:YES
@@ -217,7 +217,7 @@
                          onViewController: weak1
                                completion:^(BOOL presentErrorSuccess) {
                                
-                                   UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+                                   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
                                        [MTKeyChain deleteKey:key];
                                    } cancel:nil];
                                    [weak1 presentViewController:alertController animated:YES

@@ -45,12 +45,14 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 @implementation MADOpenFileSectionHeaderView
 
 + (void)initialize {
-    if (self == [MADOpenFileSectionHeaderView self]) {
-        UIActivityIndicatorView *appearance;
-        appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[self class], nil];
-        appearance.tintColor = [UIColor whiteColor];
-        appearance.color     = [UIColor whiteColor];
-    }
+    [super initialize];
+    if (self != [MADOpenFileSectionHeaderView self]) return;
+
+    UIActivityIndicatorView *appearance;
+    appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[self class], nil];
+    appearance.tintColor = [UIColor whiteColor];
+    appearance.color     = [UIColor whiteColor];
+
 }
 
 - (void)awakeFromNib {

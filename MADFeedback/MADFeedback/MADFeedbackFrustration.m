@@ -7,11 +7,15 @@
 //
 
 #import "MADFeedbackFrustration.h"
-#import "UIAlertController+Feedback.h"
-#import <Foundation/Foundation.h>
+
 #import <MessageUI/MessageUI.h>
+
+#import <Foundation/Foundation.h>
+
 #import <MADCocoaExtensions/UIViewController+Utilities.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MADAlertController.h>
+
+#import "MADAlertControllerFeedback.h"
 
 @interface MADFeedbackFrustration()
     <MFMailComposeViewControllerDelegate>
@@ -40,7 +44,7 @@
     if (event.subtype == UIEventSubtypeMotionShake) {
 
         UIViewController *topMostController = [UIViewController copyTopmostViewController];
-        UIAlertController *alertController = [UIAlertController solicateFeedbackWithHandler:^(UIAlertAction *action) {
+        UIAlertController *alertController = [MADAlertControllerFeedback newAlertControllerFeedbackWithHandler:^(UIAlertAction *action) {
             
             
             MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
@@ -64,7 +68,7 @@
 
     UIViewController *topMostController = [UIViewController copyTopmostViewController];
     if (error) {
-        UIAlertController *alertController = [UIAlertController newAlertControllerError:error];
+        UIAlertController *alertController = [MADAlertController newAlertControllerError:error];
         [topMostController showViewController:alertController sender:self];
     } else {
         [topMostController dismissViewControllerAnimated:YES completion:^{ }];

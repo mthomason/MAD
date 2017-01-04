@@ -101,7 +101,6 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
     MTDocumentObjectBuilderValue
 };
 
-extern NSString * const MADUbiquityIdentifier;
 //extern NSString * const MADFileExtentionMobleApplicationDocumentArchive;
 //extern NSString * const MADFileExtentionMobleApplicationDocument;
 //extern NSString * const MADTrademark;

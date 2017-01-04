@@ -23,12 +23,13 @@
 @implementation MADSearchBar
 
 + (void)initialize {
-    if (self == [MADSearchBar self]) {
-        Class searchBar = [UISearchBar class];
-        UIButton *button = [UIButton appearanceWhenContainedIn: searchBar, nil];
-        UIColor *white = [UIColor whiteColor];
-        button.tintColor = white;
-    }
+    [super initialize];
+    if (self != [MADSearchBar self]) return;
+    
+    Class searchBar = [UISearchBar class];
+    UIButton *button = [UIButton appearanceWhenContainedIn: searchBar, nil];
+    UIColor *white = [UIColor whiteColor];
+    button.tintColor = white;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

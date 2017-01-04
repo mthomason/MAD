@@ -47,6 +47,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 #pragma mark - Operation
 
 - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
+
     if (self = [super init]) {
         self.viewController = viewController;
         self.key = key.copy;
@@ -62,6 +63,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         
     }
     return self;
+
 }
 
 - (BOOL)isAsynchronous { return YES; }

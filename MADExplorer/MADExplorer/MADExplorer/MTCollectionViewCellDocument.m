@@ -11,7 +11,7 @@
 #endif
 
 #import "MTCollectionViewCellDocument.h"
-#import "NSAttributedString+FileExplorer.h"
+#import "MADAttributedStringFileExplorer.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
@@ -30,7 +30,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADFileManager/MADMetaData.h>
-#import <MADFoundation/NSURL+Document.h>
+#import <MADFoundation/MADURL.h>
 
 #import "MADBackgroundViewSelected.h"
 #import "MADStandard.h"
@@ -180,12 +180,10 @@ static inline float wobbleFactor() {
 
 - (void)setText:(NSString *)text {
 
-    NSString *string = text.copy;
-    id attributedString = [NSAttributedString newAttributedStringCaptionWithText:string];
-
+    id attributedString = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption:text];
     UILabel *labelTitle = _labelTitle;
     labelTitle.attributedText = attributedString;
-    labelTitle.text = string;
+    labelTitle.text = text.copy;
 }
 
 - (void)updateFont {
@@ -447,13 +445,13 @@ static inline float wobbleFactor() {
     imagePreview = self.imagePreview;
     
     metadataURL = metadata.URL.copy;
-    thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:metadataURL];
+    thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
     imagePreview.thumbnailURL = thumbnailUrl;
     
 /*    dispatch_block_t read_iamge = ^{
         @autoreleasepool {
             //MADMetaData *thumbnailMetadata = [[MADMetaData alloc] initWithURL:fileURL];
-            NSURL *thumbnailUrl = [NSURL newThumbnailUrlForMadUrl:fileURL];
+            NSURL *thumbnailUrl = [NSURL newURLThumbnailForURL:fileURL];
             NSString *path = thumbnailUrl.path;
             NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
             UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];

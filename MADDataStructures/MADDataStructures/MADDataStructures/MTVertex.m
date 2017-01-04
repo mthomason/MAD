@@ -25,17 +25,21 @@
 
 @implementation MTVertex
 
-/*- (id)copyWithZone:(nullable NSZone *)zone {
-    MTVertex *copy = [[[self class] alloc] initWithID:self.uniqueIdForStructure andObject:self.object];
+- (id)copyWithZone:(nullable NSZone *)zone {
+    MTVertex *copy = [[[self class] allocWithZone: zone] initWithID:self.uniqueIdForStructure
+                                                          andObject:self.object];
+    copy.edges = [self.edges copyWithZone:zone];
+
     NSArray *edges = self.edges;
     for (MTEdge *edge in edges) {
         MTEdge *edgeCopy = [edge copyWithZone:zone];
         [copy.edges addObject:edgeCopy];
     }
+    
     id properties = [self.properties copyWithZone:zone];
     copy.properties = properties;
     return copy;
-}*/
+}
 
 - (instancetype)init {
     return [self initWithID:0];
@@ -45,10 +49,10 @@
     return [self initWithID:idnumber andObject:nil];
 }
 
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
     if (self = [super initWithObject:object]) {
         
-        self.uniqueIdForStructure = idnumber;
+        _uniqueIdForStructure = idnumber;
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
         self.edges = array;

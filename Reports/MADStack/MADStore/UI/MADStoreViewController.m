@@ -7,6 +7,10 @@
 //
 
 #import "MADStoreViewController.h"
+
+#import <MADCocoaExtensions/MADBarButtonItem.h>
+#import <MADCocoaExtensions/MADAlertController.h>
+
 #import "MTStoreKitController.h"
 #import "MTVerificationController.h"
 #import "MADCollectionViewCellProductFeature.h"
@@ -16,8 +20,6 @@
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "MADSalesReceipt.h"
-#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 static NSString * const MADTextYouGotIt     = @"You Got It";
 static NSString * const MADTextYouItsYours  = @"It's Yours";
@@ -51,34 +53,36 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self commonInit];
+
+        NSNumberFormatter *priceFormatter;
+        MADLabelTitle *titleView;
+
+        priceFormatter = [[NSNumberFormatter alloc] init];
+        priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+        self.priceFormatter = priceFormatter;
+        
+        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+        titleView.text = @"MAD Features";
+        self.navigationItem.titleView = titleView;
+        
+        self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
+
     }
     return self;
 }
 
-- (void)commonInit {
-    NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
-    priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
-    self.priceFormatter = priceFormatter;
-    
-    MADNavigationBarTitleView *titleView;
-    titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = @"MAD Features";
-    self.navigationItem.titleView = titleView;
-    
-    self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     MADWatermarkView *watermarkView;
+
     watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
-    
     self.collectionView.scrollEnabled = YES;
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
+    
     ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset =
                                         UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
 }
@@ -90,13 +94,13 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
         MADFeatures *features = [[MADFeatures alloc] init];
         NSArray *products = [features availableFeaturesProductIDs];
         
-        UIBarButtonItem *barButtonItem = [UIBarButtonItem newBarButtonItemActivityIndicator];
+        UIBarButtonItem *barButtonItem = [MADBarButtonItem newBarButtonItemActivityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 
         MTBlockCompletion handleStoreCompletion;
         handleStoreCompletion = ^(BOOL success, NSError *error) {
             if (!success && error) {
-                UIAlertController *alert = [UIAlertController newAlertControllerError:error];
+                id alert = [MADAlertController newAlertControllerError:error];
                 [self presentViewController:alert animated:YES completion:NULL];
             }
             [self.navigationItem setLeftBarButtonItem:nil animated:YES];
@@ -171,9 +175,9 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
         NSString *title = NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt);
         NSString *message = NSLocalizedString(MADTextFreeGift, MADTextFreeGift);
         UIAlertController *alert;
-        alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                        message: message
-                                                                  andCompletion: nil];
+        alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                         message: message
+                                                                   andCompletion: nil];
         [self presentViewController:alert animated:YES completion:NULL];
     } else {
         BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
@@ -181,15 +185,15 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
             NSString *title = NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours);
             NSString *message = NSLocalizedString(MADTextAlready, MADTextAlready);
             UIAlertController *alert;
-            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                            message: message
-                                                                      andCompletion: nil];
+            alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                             message: message
+                                                                       andCompletion: nil];
             [self presentViewController:alert animated:YES completion:NULL];
         } else {
             MTBlockCompletion handleStoreCompletion;
             handleStoreCompletion = ^(BOOL success, NSError *error) {
-                UIAlertController *alert = success ? [UIAlertController newAlertControllerNofityTransactionComplete] :
-                [UIAlertController newAlertControllerError:error];
+                UIAlertController *alert = success ? [MADAlertController newAlertControllerNofityTransactionComplete] :
+                                                     [MADAlertController newAlertControllerError:error];
                 [self presentViewController: alert animated: YES completion: nil];
                 [self.collectionView reloadData];
             };

@@ -70,8 +70,8 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
 
-    MADNavigationBarTitleView *titleView;
-    titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView;
+    titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Aggregate Functions",
                                        @"Title of form that allows you to choose a type of "
                                        @"aggregate function (count, first, last, max, min, "

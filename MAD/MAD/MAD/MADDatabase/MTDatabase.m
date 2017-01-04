@@ -15,6 +15,8 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 
+#import "MTDataTable.h"
+
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseSqlServer.h"
@@ -110,7 +112,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [MTDatabase newSafeQueryField:fieldName andTable:tableName];
+    id safeField = [MTDatabase newSafeQueryField:fieldName andTable:tableName];
+    return safeField;
 }
 
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {

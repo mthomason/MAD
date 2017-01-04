@@ -11,7 +11,15 @@
 
 #import <UIKit/UIProgressView.h>
 
+typedef NS_ENUM(short, MADProgressViewType) {
+    MADProgressViewTypeDefault,
+    MADProgressViewTypeFileExplorer,
+    MADProgressViewTypeConnection,
+};
+
 @interface MADProgressView : UIProgressView
+
+    + (instancetype)newProgressView:(MADProgressViewType)type;
 
 @end
 

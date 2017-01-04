@@ -8,7 +8,9 @@
 
 #import "MADUpgradeManager.h"
 #import "MADInstallOperationSampleDatabase.h"
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADFoundation/MADApplication.h>
+//#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
 
 #import <Foundation/NSURL.h>
 #import <Foundation/NSValue.h>

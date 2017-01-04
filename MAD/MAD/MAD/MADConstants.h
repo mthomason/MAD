@@ -14,6 +14,5 @@
 extern NSString * const MADFileExtentionMobleApplicationDocumentArchive;
 extern NSString * const MADFileExtentionMobleApplicationDocument;
 extern NSString * const MADTrademark;
-extern NSString * const MADIdentifierGroup;
 
 #endif

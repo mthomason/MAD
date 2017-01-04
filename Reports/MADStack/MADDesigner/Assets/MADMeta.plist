@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MADGroupIdentifier</key>
+	<string>group.everydayapps.mad</string>
+	<key>MADUbiquityIdentifier</key>
+	<string>iCloud.com.everydayapps.mad.designer</string>
+	<key>MADApplicationNamePrefix</key>
+	<string>MAD</string>
+	<key>MADApplicationNameSuffix</key>
+	<string>Designer</string>
+	<key>MADTrademark</key>
+	<string>MAD</string>
+	<key>MADBuildDate</key>
+	<string>2017-01-02T19:11:55EST</string>
+	<key>MADRevision</key>
+	<string>3160</string>
+</dict>
+</plist>

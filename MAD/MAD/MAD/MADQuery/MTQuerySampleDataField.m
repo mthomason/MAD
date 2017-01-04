@@ -18,8 +18,9 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
-#import "MTDataTable+Factory.h"
+#import "MTDataTable.h"
 #import "MTDatabaseConnection.h"
+#import "MADDatabaseProtocol.h"
 
 @interface MTQuerySampleDataField ()
     <MTDatabaseProtocol>

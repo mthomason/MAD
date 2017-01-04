@@ -11,18 +11,20 @@
 #endif
 
 #import "MysqlInsert.h"
-#import "MysqlConnection.h"
-#import "NSString+MysqlEscape.h"
-#import "MysqlException.h"
-
-#import <mysql.h>
-#import "mysqld_error.h"
 
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSNull.h>
+
 #import <string.h>
+#import <mysql.h>
+
+#import "mysqld_error.h"
+#import "MysqlConnection.h"
+#import "NSString+MysqlEscape.h"
+#import "MysqlException.h"
+
 
 @implementation MysqlInsert
 
@@ -57,12 +59,14 @@
         NSMutableString *cmd = [NSMutableString new];
         [cmd appendFormat:@"INSERT INTO %@ ( ",table];
         BOOL firstAdd=YES;
-        for (NSString *columnName in keys) {
+        NSString *columnName, *columnNameEscaped;
+        for (columnName in keys) {
+            columnNameEscaped = [columnName mysqlEscapeInConnection:connection];
             if (firstAdd) {
-                [cmd appendFormat:@" %@ ",[columnName mysqlEscapeInConnection:connection]];
+                [cmd appendFormat:@" %@ ", columnNameEscaped];
                 firstAdd=NO;
             } else {
-                [cmd appendFormat:@", %@ ",[columnName mysqlEscapeInConnection:connection]];
+                [cmd appendFormat:@", %@ ", columnNameEscaped];
             }
         }
         

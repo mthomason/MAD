@@ -76,10 +76,16 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [(segue.destinationViewController) setDocument: self.document];
+        
+        MADocument *document = _document;
+        [segue.destinationViewController setDocument: document];
+        
     }
-    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, segue.destinationViewController.accessibilityElements.firstObject);
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                                    segue.destinationViewController.accessibilityElements.firstObject);
+    
 }
 
 - (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -93,7 +99,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
     titleView.accessibilityLabel = NSLocalizedString(@"Object Selector", @"Object Selector");
     
@@ -238,7 +244,6 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType {
     [self displaySelectedFunction:functionType];
-    
     [self.navigationBar popNavigationItemAnimated:YES];
 }
 
@@ -250,11 +255,17 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     }
 }
 
-
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [viewController.navigationController.navigationBar setHidden:YES];
 }
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    
+}
+
 
 #pragma mark
 #pragma mark - UITableViewControllerChooseFieldDelegate

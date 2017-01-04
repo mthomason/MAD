@@ -98,11 +98,15 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        NSSortDescriptor *namesAccending =
-                            [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
-                                                        ascending: YES];
-        NSArray *descriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
-        self.sortDescriptors = descriptors;
+
+        NSSortDescriptor *namesAccending;
+        NSArray *sortDescriptors;
+        
+        namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
+                                                     ascending: YES];
+        sortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
+        self.sortDescriptors = sortDescriptors;
+        
     }
     return self;
 }
@@ -167,14 +171,14 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 - (UINavigationItem *)navigationItem {
     UINavigationItem *navigationItem = [super navigationItem];
     if (navigationItem && navigationItem.titleView == nil) {
-        MADNavigationBarTitleView *titleView;
+        MADLabelTitle *titleView;
         NSString *title;
         navigationItem.leftItemsSupplementBackButton = YES;
         navigationItem.hidesBackButton = NO;
         title = NSLocalizedString(@"Select Field",
                                   @"Title of form that allows you to choose "
                                   @"the name of a database field.");
-        titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+        titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
         titleView.text = title.copy;
         navigationItem.titleView = titleView;
     }
@@ -429,10 +433,12 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 
 - (NSArray *)accessibilityElements {
     NSMutableArray *accessibilityElements;
+    
     accessibilityElements = [[NSMutableArray alloc] initWithCapacity:self.sectionInfoArray.count];
     for (RptqDatabaseSchemaFieldSelectorManager *sectionInfo in self.sectionInfoArray) {
         [accessibilityElements addObject: sectionInfo.headerView];
     }
+    
     return accessibilityElements;
 }
 

@@ -15,24 +15,22 @@ FOUNDATION_EXPORT double MADCocoaExtensionsVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADCocoaExtensions/PublicHeader.h>
-#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+#import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIDevice+Hack.h>
 
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MADCocoaExtensions/MAD2dDirection.h>
 #import <MADCocoaExtensions/MADAspectRatio.h>
 #import <MADCocoaExtensions/MADResizeAspect.h>
 
-#import <MADCocoaExtensions/UIColor+Social.h>
-#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
-#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
+#import <MADCocoaExtensions/MADColorSocial.h>
+#import <MADCocoaExtensions/MADBarButtonItem.h>
+#import <MADCocoaExtensions/MADMailComposeViewController.h>

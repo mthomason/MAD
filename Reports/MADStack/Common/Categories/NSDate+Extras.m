@@ -224,10 +224,12 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
         includedComponetsCounter++;
     }
     
-    [text appendString: NSLocalizedString(TextAgo, TextAgo)];
+    NSString *textAgo = NSLocalizedString(TextAgo, TextAgo);
+    [text appendString: textAgo];
     
     NSNumber *resultType = [[NSNumber alloc] initWithShort: resultResolution];
     NSString *resultText = text.copy;
+    
     return [MTPair newPairWithFormer: resultText
                            andLatter: resultType];
 }

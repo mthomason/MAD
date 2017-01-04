@@ -7,6 +7,13 @@
 //
 
 #import "MADReceiptViewController.h"
+
+#import <MADCocoaExtensions/MADAlertController.h>
+
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
+
 #import "MADTableViewCellReceiptInAppPurchase.h"
 #import "MADTableViewCellReceiptApplication.h"
 #import "MADTableViewCellReceiptCharterMember.h"
@@ -16,10 +23,6 @@
 #import "MADFeature.h"
 #import "NSDateFormatter+RFC_3339.h"
 #import "UIColor+PaperPatterns.h"
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MADReceiptViewController ()
 
@@ -137,7 +140,7 @@
     [[MTVerificationController sharedInstance] refreshReceipt:^(BOOL success, NSError *error) {
         MADReceiptViewController *strongself = weakself;
         if (error != nil) {
-            UIAlertController *alert = [UIAlertController newAlertControllerError:error];
+            UIAlertController *alert = [MADAlertController newAlertControllerError:error];
             [strongself presentViewController:alert animated:YES completion:^{
                 
             }];

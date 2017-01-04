@@ -14,6 +14,10 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
@@ -34,7 +38,7 @@
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADURL.h>
 
 #import <MAD/MADConstants.h>
 
@@ -557,10 +561,12 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 }
 
 - (NSURL *)localCacheFileUrl {
-    NSString *groupIdentifier = MADIdentifierGroup;
+    
+    MADAppDelegate delegate = [MADApplication AppDelegate];
+    NSString *groupIdentifier = [delegate groupIdentifier].copy;
     
     NSURL *cachedFilesDirectories;
-    cachedFilesDirectories = [NSURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+    cachedFilesDirectories = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
     NSString *cacheFileName = [self cacheFileName];
     return [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
 }

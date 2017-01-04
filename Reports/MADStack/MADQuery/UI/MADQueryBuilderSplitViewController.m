@@ -27,8 +27,6 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import "MADTabBarController.h"
-
 #import "MADNavigationBarTitleView.h"
 
 #import "MADQueryViewController.h"
@@ -61,7 +59,7 @@ static NSString * const TextRedraw = @"Redraw";
     @property (nonatomic, assign) BOOL setupDetail;
     @property (nonatomic, assign) BOOL setupInitalLayout;
 
-    @property (readonly) MADTabBarController *tabBarController;
+    //@property (readonly) MADTabBarController *tabBarController;
 
 @end
 
@@ -201,12 +199,12 @@ static NSString * const TextRedraw = @"Redraw";
     UINavigationItem *navigationItem = [super navigationItem];
     if (navigationItem && navigationItem.titleView == nil) {
         
-        MADNavigationBarTitleView *titleView;
+        MADLabelTitle *titleView;
         UIBarButtonItem *editButton, *doneButton;
         NSString *title;
 
         title = self.title;
-        titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+        titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
         titleView.text = title.copy;
         
         navigationItem.leftItemsSupplementBackButton = YES;
@@ -346,7 +344,7 @@ static NSString * const TextRedraw = @"Redraw";
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             ((UIStoryboardPopoverSegue *)segue).popoverController.delegate = self;
             self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
-            [self.tabBarController disableTabBarItems];
+            //[self.tabBarController disableTabBarItems];
         }
     }
 }
@@ -386,6 +384,7 @@ static NSString * const TextRedraw = @"Redraw";
     _viewControllerDelegate = nil;
 }
 
+/*
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -394,14 +393,14 @@ static NSString * const TextRedraw = @"Redraw";
     
     if (!self.isViewLoaded) return;
         
-    UIView __weak *titleView = self.navigationItem.titleView;
+    UIView *titleView = self.navigationItem.titleView;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [titleView sizeToFit];
     }];
     
-}
+}*/
 
 #pragma mark - MTTabBarImageProtocol
 
@@ -410,7 +409,9 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    /*
     typeof(__kindof UITabBarController) *tabBarController;
     tabBarController = self.tabBarController;
     
@@ -425,8 +426,7 @@ static NSString * const TextRedraw = @"Redraw";
     } else {
         
         tabBarController.navigationItem.prompt = nil;
-        
-    }
+    }*/
 }
 
 #pragma mark - UISplitViewControllerDelegate
@@ -517,7 +517,7 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self.tabBarController enableTabBarItems];
+    //[self.tabBarController enableTabBarItems];
 }
 
 #pragma mark - Override

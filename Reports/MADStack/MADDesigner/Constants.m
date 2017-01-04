@@ -15,13 +15,7 @@
 NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
 NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADTrademark                                       = @"MAD";
-NSString * const MADIdentifierGroup                                 = @"group.everydayapps.mad";
-
-#if MAD_DESIGNER || MADWATCHKIT
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
-#elif MAD_VIEWER
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
-#endif
+//NSString * const MADIdentifierGroup                                 = @"group.everydayapps.mad";
 
 #pragma mark - Constants
 

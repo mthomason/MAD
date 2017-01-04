@@ -37,6 +37,7 @@
 		4C3080FA1D05C3B700A7D597 /* MADVectorBool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */; };
 		4CB8EDFD1E1938EC00193295 /* MADMapStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB8EDFE1E1938EC00193295 /* MADMapStrings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */; };
+		4CB8EE071E1A93D300193295 /* MADAlgorithmColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CBC23E01C9559C40006C0A6 /* MADSortProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */; };
 		4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */; };
 		4CBC23E21C9559C40006C0A6 /* MADDfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */; };
@@ -91,6 +92,7 @@
 		4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVectorBool.mm; path = MADDataStructures/MADVectorBool.mm; sourceTree = "<group>"; };
 		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMapStrings.h; path = MADDataStructures/MADMapStrings.h; sourceTree = "<group>"; };
 		4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADMapStrings.mm; path = MADDataStructures/MADMapStrings.mm; sourceTree = "<group>"; };
+		4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmColor.h; path = MADDataStructures/MADAlgorithmColor.h; sourceTree = "<group>"; };
 		4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSortProperties.m; path = MADDataStructures/MADSortProperties.m; sourceTree = "<group>"; };
 		4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortProperties.h; path = MADDataStructures/MADSortProperties.h; sourceTree = "<group>"; };
 		4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDfsProperties.h; path = MADDataStructures/MADDfsProperties.h; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		4CBC23E81C9559E60006C0A6 /* AlgorithmProperties */ = {
 			isa = PBXGroup;
 			children = (
+				4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */,
 				4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */,
 				4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */,
 				4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */,
@@ -215,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */,
+				4CB8EE071E1A93D300193295 /* MADAlgorithmColor.h in Headers */,
 				4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */,
 				4C2C7B831BA92A8700C9CC5E /* MTProtocolLog.h in Headers */,
 				4C2C7B7D1BA92A8700C9CC5E /* MTObject.h in Headers */,

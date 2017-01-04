@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADLog_h
-#define MADLog_h
+#ifndef MADFoundation_MADLog_h
+#define MADFoundation_MADLog_h
 
 #import <objc/NSObjCRuntime.h>
 #import <Foundation/Foundation.h>

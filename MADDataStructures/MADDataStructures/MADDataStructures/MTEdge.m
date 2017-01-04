@@ -30,9 +30,11 @@
 @implementation MTEdge
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    id copy = [[[self class] alloc] initWithUniqueID:self.uniqueIdForStructure
-                                              origin:self.origin destination:self.destination
-                                              object:self.object andWeight:self.weight];
+    id copy = [[[self class] allocWithZone:zone] initWithUniqueID: self.uniqueIdForStructure
+                                                           origin: self.origin
+                                                      destination: self.destination
+                                                           object: self.object
+                                                        andWeight: self.weight];
     return copy;
 }
 

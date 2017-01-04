@@ -29,6 +29,7 @@
 
 - (instancetype)init {
     if (self = [super init]){
+
         // We need to know when the application moves to/from the background.
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(didEnterBackground:)

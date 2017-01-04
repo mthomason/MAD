@@ -18,6 +18,8 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import "MADViewerController.h"
+
 #import "MADTransparentPresentationController.h"
 
 static NSString * const MADStoryboardInformationTable   = @"MADStoryboardInformationTable";
@@ -34,9 +36,15 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectNewAggreg
 static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector     = @"MADIdentifierNavigationControllerDocumentObjectSelector";
 
 @interface MADNavigationController ()
-
     @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
+@end
 
+@interface MADNavigationControllerViewer : MADNavigationController
+
+@end
+
+@interface MADNavigationControllerViewer ()
+    @property (nonatomic, strong) MADViewerController *viewerController;
 @end
 
 @implementation MADNavigationController
@@ -44,6 +52,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 @synthesize document = _document;
 
 + (void)initialize {
+    [super initialize];
     if (self != [MADNavigationController self]) return;
         
     NSArray<Class <UIAppearanceContainer>> * classes;
@@ -57,7 +66,8 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
 + (instancetype)newNavigationController:(MADNavigationControllerType)type {
 
-    id controller = nil, controllerID = nil, storyboardID = nil, bundle, storyboard;
+    id controller = nil, controllerID = nil,
+        storyboardID = nil, bundle = nil, storyboard = nil;
     
     switch (type) {
 
@@ -102,30 +112,32 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
             bundle = [NSBundle mainBundle];
             break;
             
+        case MADNavigationControllerTypeViewer:
+            controller = [[MADNavigationControllerViewer alloc] init];
+            break;
+            
         default:
             break;
             
     }
     
-    if (storyboard != nil) {
-        storyboard = [UIStoryboard storyboardWithName: storyboardID bundle: bundle];
-        controller = controllerID != nil ?
-            [storyboard instantiateViewControllerWithIdentifier: controllerID] :
-            [storyboard instantiateInitialViewController];
-        
-    } else {
-        controller = [[self alloc] initWithNavigationBarClass: nil
-                                                 toolbarClass: nil];
-
+    if (controller == nil) {
+        if (storyboardID != nil) {
+            
+            storyboard = [UIStoryboard storyboardWithName: storyboardID bundle: bundle];
+            controller = controllerID != nil ?
+                [storyboard instantiateViewControllerWithIdentifier: controllerID] :
+                [storyboard instantiateInitialViewController];
+            
+        } else {
+            controller = [[self alloc] initWithNavigationBarClass: nil
+                                                     toolbarClass: nil];
+        }
     }
 
     [controller setControllerType: type];
     
     return controller;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -145,15 +157,15 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {
     if ([vc conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
         ((id <MADViewControllerDocumentProtocol>)vc).document = _document;
     }
     [super showViewController:vc sender:sender];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -227,6 +239,24 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     if (_document != document) {
         _document = document;
     }
+}
+
+@end
+
+@implementation MADNavigationControllerViewer : MADNavigationController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    id rootViewController = [MADViewerController newViewerController: self.document];
+    self.viewerController = rootViewController;
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self pushViewController:self.viewerController animated:animated];
+    
 }
 
 @end

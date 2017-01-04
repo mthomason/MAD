@@ -10,16 +10,13 @@
 #define MAD_DataStructures_MADAlgorithmElementProperties_h
 
 #import <Foundation/NSObject.h>
-
-typedef NS_ENUM(short, MTAlgorithmColor) {
-    MTColorBlack,
-    MTColorWhite,
-    MTColorGray
-};
+#import <MADDataStructures/MADAlgorithmColor.h>
 
 @interface MADAlgorithmElementProperties : NSObject
+    <NSCopying>
 
-    @property (atomic, assign) MTAlgorithmColor vertexColor;
+    - (instancetype)initWithColor:(MADAlgorithmColor)algorithmColor NS_DESIGNATED_INITIALIZER;
+    @property (atomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

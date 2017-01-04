@@ -13,24 +13,29 @@
 #import "MADFileExplorerViewController.h"
 #import "MADFileExplorerViewControllerProtocol.h"
 
+#import "AppDelegate.h"
+
 #import <QuickLook/QLPreviewController.h>
+
+#import <MessageUI/MFMailComposeViewController.h>
 
 #import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
+#import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
-#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
-#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
+#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/MADMailComposeViewController.h>
 #import <MADCocoaExtensions/MTMath.h>
 
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
+#import <MADFoundation/MADURL.h>
 #import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADDocumentState.h>
@@ -69,7 +74,6 @@
 #import "MADNavigationBarTitleView.h"
 #import "MADNavigationController.h"
 
-#import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
 
 #import "MADTabBarController.h"
@@ -181,8 +185,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemCloudDown;
     @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemLicensing;
 
-    @property (nonatomic, weak)     MADQueryBuilderSplitViewController *splitViewController;
-    @property (nonatomic, weak)     MADTabBarController *tabController;
+    @property (nonatomic, strong)     MADTabBarController *tabController;
 
     @property (nonatomic, strong)   UIPopoverController *openDocumentPopoverController;
     @property (nonatomic, strong)   UIPopoverController *licensingPopoverController;
@@ -362,16 +365,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     self.activeDocumentManager = openFiles;
     
     MADProgressView *progressView;
-    progressView= [[MADProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleBar];
+    progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
     self.progressViewFileManager = progressView;
-        
-    // set delegates
-    MADFileExplorerViewDelegate *layoutGroupedDelegate;
-    layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
-    layoutGroupedDelegate.delegate = self;
-    
-    self.collectionView.delegate = layoutGroupedDelegate;
-    self.collectionViewDelegate = layoutGroupedDelegate;
     
 #pragma mark Start observing
     
@@ -414,7 +409,9 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     operation = [[MADInstallOperationSampleDatabase alloc] init];
     [operationQueueBackground addOperation:operation];
     
-    NSString *groupID = [self.documentManager groupIdentifier].copy;
+    MADAppDelegate delegate = [MADApplication AppDelegate];
+    NSString *groupID = [delegate groupIdentifier].copy;
+    
     operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
                                                               fileExtension: MADFileExtentionMobleApplicationDocument
                                                             groupIdentifier: groupID
@@ -459,12 +456,10 @@ BOOL fileFound(NSURL *URL, NSString *name) {
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
 
     // setup ui - navigaion item
-    MADNavigationBarTitleView *titleView;
-    titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    MADLabelTitle *titleView;
+    titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
     
-    MADAppDelegate delegate = [MADApplication AppDelegate];
-    NSString *name = [delegate name];
-    titleView.text = name.copy;
+    titleView.text = [delegate name].copy;;
     titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     
@@ -474,7 +469,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     // setup ui - search bar
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-    _searchBar = searchBar;
+    self.searchBar = searchBar;
     
     // setup ui - bar button items
     
@@ -482,8 +477,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
     UIBarButtonItem *barButtonItemDuplicate;
     SEL handleDuplicate = @selector(actionDuplicate:);
-    barButtonItemDuplicate = [UIBarButtonItem newBarButtonItemDuplicate: self
-                                                                 action: handleDuplicate];
+    barButtonItemDuplicate = [MADBarButtonItem newBarButtonItemDuplicate: self
+                                                                  action: handleDuplicate];
     
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:_barButtonItemAction];
@@ -492,8 +487,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [self setToolbarItems:toolbarButtons animated:NO];
     _barButtonItemDuplicate = barButtonItemDuplicate;
     
-    UIBarButtonItem *editButton = [UIBarButtonItem newBarButtonItemEdit: self
-                                                                 action: @selector(actionEdit:)];
+    UIBarButtonItem *editButton = [MADBarButtonItem newBarButtonItemEdit: self
+                                                                  action: @selector(actionEdit:)];
     _barButtonItemEdit = editButton;
     
     hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
@@ -564,6 +559,14 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         [self setToolbarItems:toolbarButtons animated:animated];
     }
 
+    // set delegates
+    MADFileExplorerViewDelegate *layoutGroupedDelegate;
+    layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
+    layoutGroupedDelegate.delegate = self;
+
+    self.collectionView.delegate = layoutGroupedDelegate;
+    self.collectionViewDelegate = layoutGroupedDelegate;
+    
     //[self.collectionView.backgroundView setNeedsDisplay];
 }
 
@@ -621,7 +624,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         if (!sself) return;
         
         UIAlertController *alert;
-        alert = [UIAlertController newAlertControlerNotifyCloudSignOut:actionConfirm];
+        alert = [MADAlertController newAlertControllerNotifyCloudSignOut:actionConfirm];
         [sself presentViewController:alert animated:YES completion:nil];
         
     };
@@ -978,7 +981,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         
         UIAlertController *signedOutController;
         
-        signedOutController = [UIAlertController newAlertControlerNotifyCloudSignOut:handleSignout];
+        signedOutController = [MADAlertController newAlertControllerNotifyCloudSignOut:handleSignout];
         
         [self presentViewController:signedOutController animated:YES completion:nil];
     };
@@ -991,9 +994,10 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark Add controls
 
 - (void)addProgressViewToView {
-    self.progressViewFileManager.progress = 0.0000f;
-    [self.view addSubview:self.progressViewFileManager];
-    [self.view bringSubviewToFront:self.progressViewFileManager];
+    UIProgressView *progressView = self.progressViewFileManager;
+    progressView.progress = 0.0000f;
+    [self.view addSubview: progressView];
+    [self.view bringSubviewToFront: progressView];
 }
 
 - (void)removeProgressViewFromView {
@@ -1005,7 +1009,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (NSNumberFormatter *)subtitleNumberFormatter {
     if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+        _subtitleNumberFormatter = [MADNumberFormatter newNumberFormatterTwoDecimalPlaces];
     }
     return _subtitleNumberFormatter;
 }
@@ -1013,8 +1017,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
         SEL actionEdit = @selector(actionEdit:);
-        _barButtonItemEditDone = [UIBarButtonItem newBarButtonItemEditDone: self
-                                                                    action: actionEdit];
+        _barButtonItemEditDone = [MADBarButtonItem newBarButtonItemEditDone: self
+                                                                     action: actionEdit];
     }
     return _barButtonItemEditDone;
 }
@@ -1055,8 +1059,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark UINibLoading
 
 - (void)awakeFromNib {
-    [self.barButtonItemAddNewDocument setEnabled:YES];
     [super awakeFromNib];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -1115,12 +1119,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         
         MADTabBarController *tabBarController = (MADTabBarController *)segue.destinationViewController;
         tabBarController.view.tintColor = [MADColorEverydayApps newColorRed];
-        tabBarController.querySplitViewController.viewControllerDelegate = self;
-        tabBarController.designerViewController.delegate = self;
-        tabBarController.viewerViewController.viewControllerDelegate = self;
         self.tabController = tabBarController;
-        
-    } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController;
@@ -1285,51 +1284,21 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     NSURL *fileURL = document.fileURL.copy;
     NSString *title = fileURL.lastPathComponent.copy;
     
-    MADTabBarController *tabBarController = [MADTabBarController newTabBarController:document
-                                                                              prompt:title];
-    tabBarController.document = document;
-    
-    NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)],
-             @"Controller to conform to MADocumentProtocol.");
-    
-    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = document;
-    
-    MADQueryBuilderSplitViewController *splitViewController;
-    splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-    splitViewController.viewControllerDelegate = self;
-    
-    MADDesignerViewController *designerViewController;
-    designerViewController = [MADDesignerViewController newDesignerViewController:document];
-    designerViewController.delegate = self;
-    
-    MADViewerController *viewerViewController;
-    viewerViewController = [MADViewerController newViewerController: document];
-    viewerViewController.viewControllerDelegate = self ;
-    
-    MADNavigationController *navControllerViewer;
-    navControllerViewer = [[MADNavigationController alloc] init];
-    navControllerViewer.document = document;
-    [navControllerViewer setNavigationBarHidden:YES animated:NO];
-    [navControllerViewer setToolbarHidden:NO animated:NO];
-    [navControllerViewer pushViewController:viewerViewController animated:NO];
-    
-    NSArray <__kindof UIViewController *> *tabBarViewControllers =
-                    [[NSArray alloc] initWithObjects:splitViewController, designerViewController,
-                                                                    navControllerViewer, nil];
-    [tabBarController setViewControllers:tabBarViewControllers animated:NO];
-
-    tabBarController.viewControllerDelegate = self;
-
-    self.tabController = tabBarController;
+    MADTabBarController *tabBarController;
+    tabBarController = [MADTabBarController newTabBarController:document prompt:title];
     
     MADNavigationController *navigationController;
     navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
     
-    UIColor *color = [MADColorEverydayApps newColorBlue];
-    navigationController.navigationBar.barTintColor = color;
+    tabBarController.document = document;
+    tabBarController.viewControllerDelegate = self;
+    self.tabController = tabBarController;
+
+    //UIColor *color = [MADColorEverydayApps newColorBlue];
+    //navigationController.navigationBar.barTintColor = color;
     
-    color = [MADColorEverydayApps newColorWhite];
-    navigationController.navigationBar.tintColor = color;
+    //color = [MADColorEverydayApps newColorWhite];
+    //navigationController.navigationBar.tintColor = color;
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -1669,7 +1638,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 - (IBAction)actionPaste:(id)sender {
     id url = [UIPasteboard generalPasteboard].URL;
     id data = [[NSData alloc] initWithContentsOfURL:url];
-    id destinationUrl = [url uniqueUrl];
+    id destinationUrl = [MADURL newURLWithUniqueFilenameForURL: url];
 
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     
@@ -1731,6 +1700,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         if (self.popoverControllerActivity == nil || self.popoverControllerActivity.isPopoverVisible == NO) {
+
             UIPopoverController *popoverController;
             popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             popoverController.delegate = self;
@@ -1738,6 +1708,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
                                       permittedArrowDirections: UIPopoverArrowDirectionAny
                                                       animated: YES];
             self.popoverControllerActivity = popoverController;
+            
         }
     } else {
         [self presentViewController:activityViewController animated:YES completion:^{ }];
@@ -1747,9 +1718,10 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 - (IBAction)actionDelete:(id)sender {
 
     NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
-    UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count
+    UIAlertController *alertController;
+    alertController = [MADAlertController newAlertControllerDeleteItems:selectedItems.count
                                                                 confirm:^(UIAlertAction *action) {
-    
+                                                                    
         for (NSIndexPath *selectedItem in selectedItems) {
             [self.documentManager removeItemAtIndex:(NSUInteger)selectedItem.item];
         }
@@ -1768,13 +1740,32 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 }
 
-- (IBAction)actionRename:(id)sender {
++ (NSString *)safeFilenameWithDesiredFilename:(NSString *)desiredName {
+    
+    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+    
+    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = [NSCharacterSet whitespaceCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = characterSet.invertedSet;
+    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
+    NSString *result = [components componentsJoinedByString:@""];
+    return result.copy;
+    
+}
+
+- (void)actionRename:(id)sender {
     
     MADCollectionViewCellDocument *cellDocument;
+    
     if ([sender isKindOfClass:[MADCollectionViewCellDocument class]]) {
         cellDocument = sender;
+        
     } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
-        UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
+                UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
         cellDocument = (MADCollectionViewCellDocument *)contentView.superview;
     }
     
@@ -1797,20 +1788,20 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     void (^handleConfermation)(UIAlertAction *action, NSString *text);
     handleConfermation = ^(UIAlertAction *action, NSString *text) {
         
-        NSString *name = [NSURL newStringFileNameFilter:text];
+        NSString *name = [self.class safeFilenameWithDesiredFilename:text];
         BOOL shortcircut = NO;
         
         //Test for input
         UIAlertController *alert;
         if (name.length <= 0) {
-            alert = [UIAlertController newAlertControllerErrorValidationFilename];
+            alert = [MADAlertController newAlertControllerErrorValidationFilename];
             [self showViewController:alert sender:self];
             shortcircut = YES;
         }
         
         //Check if file exist
         if (!shortcircut && (fileFound(metaData.URL, name))) {
-            alert = [UIAlertController newAlertControllerErrorFileExist];
+            alert = [MADAlertController newAlertControllerErrorFileExist];
             [self showViewController:alert sender:self];
             shortcircut = YES;
         }
@@ -1840,11 +1831,9 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         } else {
             [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
         }
-
-        
     };
 
-    UIAlertController *alert = [UIAlertController renameDocument: handleRename
+    UIAlertController *alert = [MADAlertController newAlertControllerRenameDocument: handleRename
                                                          confirm: handleConfermation
                                                           cancel: nil];
     
@@ -1859,7 +1848,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     MADocument *documentReport;
     
     if ([MFMailComposeViewController canSendMail] == NO) {
-        UIAlertController *alert = [UIAlertController newAlertControllerNotConfiguredForEmail];
+        id alert;
+        alert = [MADAlertController newAlertControllerNotConfiguredForEmail];
         [self showViewController:alert sender:self];
         return;
     }
@@ -1882,11 +1872,12 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         NSString *messageStringStart = NSLocalizedString(MADTextOpenWithViewer, MADTextOpenWithViewer);
         NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
         [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
+        
         MFMailComposeViewController	*mailComposer;
-        mailComposer = [MFMailComposeViewController newMailComposeViewControllerWithBody: messageBody
-                                                                              attachment: metadata.URL
-                                                                                mimeType: mimeType
-                                                                      userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+        mailComposer = [MADMailComposeViewController newMailComposeViewControllerWithBody: messageBody
+                                                                               attachment: metadata.URL
+                                                                                 mimeType: mimeType
+                                                                       userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
         mailComposer.mailComposeDelegate = self;
         [self showViewController:mailComposer sender:self];
     }

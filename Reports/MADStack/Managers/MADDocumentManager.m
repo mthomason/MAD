@@ -7,6 +7,11 @@
 //
 
 #import "MADDocumentManager.h"
+
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+
 #import <MADFileManager/MADFilesControllerDelegate.h>
 #import <UIKit/UICollectionViewController.h>
 #import <MADFileManager/MADFileInfo.h>
@@ -19,6 +24,10 @@
 
 #import "MADDocumentManagerProtocol.h"
 
+//#import "AppDelegate.h"
+
+typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
+
 @interface MADDocumentManager ()
     <MADFilesControllerDelegate>
 
@@ -27,40 +36,34 @@
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *batchRemoves;
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *batchUpdates;
 
-    @property (nonatomic, copy) void (^handleCellConfiguration)(MADCollectionViewCellDocument *);
+    @property (nonatomic, copy) MADBlockConfigureDocumentCell handleCellConfiguration;
 
 @end
 
 @implementation MADDocumentManager
 
-- (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration {
-    if (self = [super init]) {
-        _handleCellConfiguration = cellCondiguration;
-        [MADDocumentManager commonInitalization:self];
-    }
-    return self;
-}
-
 - (instancetype)init {
-    if (self = [super init]) {
-        [MADDocumentManager commonInitalization:self];
-    }
-    return self;
+    return [self initWithCellConfiguration:nil];
 }
 
-+ (void)commonInitalization:(MADDocumentManager *)this {
-    MADFileLocationManager *fileLocationManager;
-    fileLocationManager = [[MADFileLocationManager alloc] init];
-    fileLocationManager.delegate = this;
-    fileLocationManager.filesController.delegate = this;
-    this.fileLocationManager = fileLocationManager;
-    
-    NSMutableIndexSet *inserts = [[NSMutableIndexSet alloc] init],
-    *removes = [[NSMutableIndexSet alloc] init],
-    *updates = [[NSMutableIndexSet alloc] init];
-    this.batchInserts = inserts,
-    this.batchRemoves = removes,
-    this.batchUpdates = updates;
+- (instancetype)initWithCellConfiguration:(MADBlockConfigureDocumentCell)cellCondiguration {
+    if (self = [super init]) {
+
+        MADFileLocationManager *fileLocationManager;
+        fileLocationManager = [[MADFileLocationManager alloc] init];
+        fileLocationManager.delegate = self;
+        fileLocationManager.filesController.delegate = self;
+        self.fileLocationManager = fileLocationManager;
+        
+        NSMutableIndexSet *inserts = [[NSMutableIndexSet alloc] init],
+                          *removes = [[NSMutableIndexSet alloc] init],
+                          *updates = [[NSMutableIndexSet alloc] init];
+
+        self.batchInserts = inserts,
+        self.batchRemoves = removes,
+        self.batchUpdates = updates;
+    }
+    return self;
 }
 
 - (UIViewController *)presentingController {
@@ -101,9 +104,17 @@
 #pragma mark -
 #pragma mark MADFileLocationManagerDelegate
 
-- (NSString *)groupIdentifier { return MADIdentifierGroup; }
+- (NSString *)groupIdentifier {
+    MADAppDelegate appDelegate = [MADApplication AppDelegate];
+    NSString *groupIdentifier = appDelegate.groupIdentifier.copy;
+    return  groupIdentifier;
+}
 
-- (NSString *)ubiquityIdentifier { return MADUbiquityIdentifier; }
+- (NSString *)ubiquityIdentifier {
+    MADAppDelegate appDelegate = [MADApplication AppDelegate];
+    NSString *ubiquityIdentifier = appDelegate.ubiquityIdentifier.copy;
+    return  ubiquityIdentifier;
+}
 
 - (NSString *)fileExtention { return MADFileExtentionMobleApplicationDocument; }
 
@@ -235,13 +246,14 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
+    
     id cell;
     cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
                                                      forIndexPath: indexPath];
-    
-    _handleCellConfiguration(cell);
+
+    if (_handleCellConfiguration)
+        _handleCellConfiguration(cell);
     
     return cell;
 }

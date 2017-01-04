@@ -11,14 +11,13 @@
 #endif
 
 #import "MTViewControllerBarcodeOptions.h"
+#import "MADViewControllerBarcodeOptionsDelegate.h"
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIStepper.h>
 #import <UIKit/UILabel.h>
-
-#import "MADViewControllerBarcodeOptionsDelegate.h"
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -36,14 +35,13 @@
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 #import <MAD/MADDatabaseProtocol.h>
-
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
-
 #import <MAD/RptqQueryField+Extras.h>
+
+#import <MADCocoaExtensions/MADAlertController.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 
@@ -837,6 +835,8 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     BOOL success = [querySampleDataField performQueryWithError:&error];
 
     
+    MTDatabase *database;
+    database = querySampleDataField.database;
     
     if (success) {
         MTDataTable * __weak dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
@@ -854,17 +854,23 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
         
     } else {
         MTViewControllerBarcodeOptions * __weak weakself = self;
+        
+        __kindof MTDatabaseConnection *connection = database.databaseConnection;
+        NSString *connectionString = connection.connectionString.copy;
+        
         [NSError presentError: error
              onViewController: self
                    completion:^(BOOL presentErrorSuccess) {
                    
-                   
-                       MTViewControllerBarcodeOptions *strongself = weakself;
-                       NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                   
-                       UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
-                                   [MTKeyChain deleteKey:key];
+                       MTViewControllerBarcodeOptions *strongself;
+                       UIAlertController *alertController;
+                       
+                       strongself = weakself;
+                       
+                       alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+                           [MTKeyChain deleteKey:connectionString];
                        } cancel:nil];
+                       
                        [strongself presentViewController:alertController animated:YES
                                               completion:nil];
                        

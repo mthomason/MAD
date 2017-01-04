@@ -13,7 +13,7 @@
 #import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+#import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADFileManager/MADMetaData.h>
 
 #import "MADVibrantTableView.h"
@@ -42,7 +42,7 @@ static NSString * const MADIdentifierDocumentInformationTableViewController = @"
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        NSNumberFormatter *numberFormatter = [NSNumberFormatter newNumberFormatterTwoDecimalPlaces];
+        NSNumberFormatter *numberFormatter = [MADNumberFormatter newNumberFormatterTwoDecimalPlaces];
         self.numberFormatter = numberFormatter;
     }
     return self;

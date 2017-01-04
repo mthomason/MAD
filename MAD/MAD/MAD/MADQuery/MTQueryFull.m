@@ -31,6 +31,7 @@
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTEdge.h>
 #import <MADDataStructures/MADAlgorithmElementProperties.h>
+#import <MADDataStructures/MADAlgorithmColor.h>
 
 #import <MADFoundation/MADDataProtocol.h>
 
@@ -239,10 +240,11 @@ static inline BOOL isKindOfRptqQuery(id obj) {
             for (MTPair *pair in topologicalSortArray) {
                 MTVertex *vertexTable = pair.former;
                 if (vertexTable) {
-                    vertexTable.properties.vertexColor = MTColorWhite;
+                    vertexTable.properties.algorithmColor = MTColorWhite;
                     [vertexArray addObject:vertexTable];
                 }
             }
+            
             NSString *tableReference = [self sqlTableReferenceWithTables: vertexArray
                                                                linkDepth: &linkDepth
                                                  forManagedObjectContext: managedObjectContext];
@@ -291,8 +293,8 @@ static inline BOOL isKindOfRptqQuery(id obj) {
             RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID
                                                       managedObjectContext:managedObjectContext];
             
-            if (vertexTable.properties.vertexColor == MTColorWhite ||
-                vertexTable.properties.vertexColor == MTColorGray) {
+            if (vertexTable.properties.algorithmColor == MTColorWhite ||
+                vertexTable.properties.algorithmColor == MTColorGray) {
                 
                 NSArray <MTEdge *> *incidentEdges = vertexTable.incidentEdges;
                 
@@ -303,7 +305,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                     [result appendString:@"\n\t"];
                 }
                 
-                if (vertexTable.properties.vertexColor == MTColorWhite) {
+                if (vertexTable.properties.algorithmColor == MTColorWhite) {
                     
                     if (result.length <= 0) {
                         [result appendString:@"\t"];
@@ -321,15 +323,15 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                     [result appendString:safeTableName];
                 }
                 
-                vertexTable.properties.vertexColor = MTColorBlack;
+                vertexTable.properties.algorithmColor = MTColorBlack;
                 
                 for (MTEdge *edge in incidentEdges) {
                     MTVertex *vertexTableDestination = edge.destination;
                     if (vertexTableDestination &&
-                        vertexTableDestination.properties.vertexColor == MTColorWhite) {
+                        vertexTableDestination.properties.algorithmColor == MTColorWhite) {
 
                         
-                        vertexTableDestination.properties.vertexColor = MTColorGray;
+                        vertexTableDestination.properties.algorithmColor = MTColorGray;
                         
                         NSManagedObjectID *queryLinkID = edge.object;
                         RptqQueryLinks *queryLink = [managedObjectContext objectWithID:queryLinkID];

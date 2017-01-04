@@ -9,7 +9,7 @@
 # Tag major versions like "v3.0"
 
 echo "Updating version/build number from git..."
-plist=${PROJECT_DIR}/${INFOPLIST_FILE}
+plist=${PROJECT_DIR}/Assets/MADMeta.plist
 plistwatchkitext=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ Extension/Info.plist
 plistwatchkitapp=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ App/Info.plist
 

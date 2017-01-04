@@ -27,13 +27,20 @@
 
 #import <dispatch/dispatch.h>
 
+#import <MADSqlite3/sqlite3.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADURL.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
-
-#import <MADQueryCacheSelectLimitOffsetParamaters.h>
-
 #import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MADDataColumn.h>
+
+#import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MADConstants.h"
 
@@ -58,13 +65,11 @@
 
 #import "MADQueryCacheIndexCreateParameters.h"
 
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
-
-#import <MADSqlite3/sqlite3.h>
 #import <stdio.h>
 
 #import "madlib.h"
+
+typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
@@ -248,10 +253,17 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSURL *)urlFastCache {
     NSString *filename = [self filenameCacheMadDB];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                                [NSURL newURLForLocalCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
-                                [self.cacheDelegate cachedFilesDirectory];
-    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    NSURL *cacheDirectory, *urlFastCache;
+
+    if (self.cacheDelegate == nil) {
+        MADAppDelegate appDelegate = [MADApplication AppDelegate];
+        id groupIdentifier = [appDelegate groupIdentifier].copy;
+        cacheDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+    } else {
+        cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
+    }
+    urlFastCache = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    return urlFastCache;
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {

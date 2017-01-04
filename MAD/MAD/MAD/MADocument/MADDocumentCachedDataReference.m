@@ -42,10 +42,29 @@
 
 - (instancetype)initWithDatabase:(MTDatabase *)database
             referencesQueryField:(RptqDocumentObject *)documentObject {
+
     if (self = [super init]) {
-        NSString *tableName = [documentObject.isLabelDataField.referencesQueryField.inQueryTable copyQueryAlias];
-        MADSafeQueryField *fieldName = [database newSafeQueryField: documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.name
-                                                           andTable: tableName];
+        
+        NSString *tableName;
+        MADSafeQueryField *fieldName;
+        RptqDocumentObjectLabelDataField *isLabelDataField;
+        RptqQueryField *referencesQueryField;
+        RptqDatabaseSchemaField *databaseSchemaField;
+        RptqQueryTable *inQueryTable;
+        
+        isLabelDataField = documentObject.isLabelDataField;
+        referencesQueryField = isLabelDataField.referencesQueryField;
+        databaseSchemaField = referencesQueryField.databaseSchemaField;
+        
+        
+        inQueryTable = databaseSchemaField.inQueryField;
+        
+        tableName = [inQueryTable copyQueryAlias];
+        
+        NSString *fieldNameRaw;
+        fieldName = [database newSafeQueryField: documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.name
+                                       andTable: tableName];
+        
         self.tableName = tableName;
         self.fieldName = fieldName;
         _dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.shortValue;

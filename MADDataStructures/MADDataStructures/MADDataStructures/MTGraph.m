@@ -68,7 +68,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 // MARK: Add new vertex to adjacency list.
 - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object {
-    //id obj = [object copyWithZone:NULL];
+    id obj = [object copyWithZone:NULL];
     MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject:object];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
@@ -182,14 +182,14 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     for (MTVertex *vertex in self.vertices) {
         @autoreleasepool {
             MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
-            bfsp.vertexColor = MTColorWhite;
+            bfsp.algorithmColor = MTColorWhite;
             vertex.properties = bfsp;
         }
     }
     
     MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
     bfsp.bfsDistance = @(0);
-    bfsp.vertexColor = MTColorGray;
+    bfsp.algorithmColor = MTColorGray;
     bfsp.bfsPredecessor = nil;
     root.properties = bfsp;
     
@@ -202,16 +202,16 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         for (MTEdge *edge in incidentEdges) {
             MTVertex *vertex = edge.destination;
             do {
-                if (vertex.properties.vertexColor == MTColorWhite) {
-                    vertex.properties.vertexColor = MTColorGray;
+                if (vertex.properties.algorithmColor == MTColorWhite) {
+                    vertex.properties.algorithmColor = MTColorGray;
                     vertex.bfsProperties.bfsPredecessor = u;
                     distance = [[NSNumber alloc] initWithInteger:u.bfsProperties.bfsDistance.integerValue + 1];
                     vertex.bfsProperties.bfsDistance = distance;
                     [greyVertices enqueue: vertex];
                 }
-            } while (vertex.properties.vertexColor == MTColorWhite);
+            } while (vertex.properties.algorithmColor == MTColorWhite);
         }
-        u.properties.vertexColor = MTColorBlack;
+        u.properties.algorithmColor = MTColorBlack;
         [resultList addObject:u];
     } while (greyVertices.count > 0);
     
@@ -224,7 +224,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     for (MTVertex *vertex in self.vertices) {
         MADDfsProperties *bfsp = [[MADDfsProperties alloc] init];
-        bfsp.vertexColor = MTColorWhite;
+        bfsp.algorithmColor = MTColorWhite;
         vertex.properties = bfsp;
     }
     
@@ -234,7 +234,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter
                                      listOfEdges:&resultEdges listOfVertices:&resultVertices];
     for (MTVertex *vertex in self.vertices) {
-        if (vertex.properties.vertexColor == MTColorWhite) {
+        if (vertex.properties.algorithmColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
                                              listOfEdges:&resultEdges
                                           listOfVertices:&resultVertices];
@@ -252,7 +252,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     for (MTVertex *vertex in vertices) {
         @autoreleasepool {
             MADDfsProperties *properties = [[MADDfsProperties alloc] init];
-            properties.vertexColor = MTColorWhite;
+            properties.algorithmColor = MTColorWhite;
             vertex.properties = properties;
         }
     }
@@ -264,7 +264,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
                                   listOfVertices:&resultVertices];
     
     for (MTVertex *vertex in self.vertices) {
-        if (vertex.properties.vertexColor == MTColorWhite) {
+        if (vertex.properties.algorithmColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
                                              listOfEdges:&resultEdges
                                           listOfVertices:&resultVertices];
@@ -299,7 +299,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
                                    listOfEdges:(MTLinkedList * __autoreleasing *)listOfEdges
                                 listOfVertices:(MTLinkedList * __autoreleasing *)listOfVertices {
     
-    vertex.properties.vertexColor = MTColorGray;
+    vertex.properties.algorithmColor = MTColorGray;
     
     NSNumber *count = [[NSNumber alloc] initWithInteger:(*counter).integerValue + 1];
     *counter = count;
@@ -313,9 +313,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         MTVertex *neighborVertex = incidentEdge.destination;
         
         MTEdgeType edgeType = MTEdgeTypeCrossEdge;
-        if (neighborVertex.properties.vertexColor == MTColorWhite) {
+        if (neighborVertex.properties.algorithmColor == MTColorWhite) {
             edgeType = MTEdgeTypeTreeEdge;
-        } else if (neighborVertex.properties.vertexColor == MTColorGray) {
+        } else if (neighborVertex.properties.algorithmColor == MTColorGray) {
             edgeType = MTEdgeTypeBackEdge;
         } else {
             if (vertex.dfsProperties.dfsDistance < neighborVertex.dfsProperties.dfsDistance) {
@@ -327,14 +327,14 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
         [*listOfEdges add:pairEdge];
         
-        if (neighborVertex.properties.vertexColor == MTColorWhite) {
+        if (neighborVertex.properties.algorithmColor == MTColorWhite) {
             neighborVertex.dfsProperties.dfsPredecessor = vertex;
             [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter
                                              listOfEdges:listOfEdges listOfVertices:listOfVertices];
         }
     }
     
-    vertex.properties.vertexColor = MTColorBlack;
+    vertex.properties.algorithmColor = MTColorBlack;
     NSNumber *c2 = [[NSNumber alloc] initWithInteger:(*counter).integerValue + 1];
     *counter = c2;
     vertex.dfsProperties.dfsTimestampFinished = *counter;

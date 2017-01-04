@@ -29,16 +29,14 @@
     - (NSString *)valueForKey:(NSString *)key;
 
     @property (nonatomic, readonly, assign) BOOL alertDisplayed;
-
-    @property (nonatomic, readonly, copy) NSString *password;
     @property (nonatomic, readonly, assign) BOOL gotPassword;
+    @property (nonatomic, readonly, assign) BOOL bypass;
+    @property (nonatomic, readonly, assign) BOOL userContinue;
+    @property (nonatomic, assign) BOOL result;
 
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
-    @property (nonatomic, readonly, assign) BOOL bypass;
-    @property (nonatomic, readonly, assign) BOOL userContinue;
-
-    @property (nonatomic, assign) BOOL result;
+    @property (nonatomic, readonly, copy) NSString *password;
 
 @end
 

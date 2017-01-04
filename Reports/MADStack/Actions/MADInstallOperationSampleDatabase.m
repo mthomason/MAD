@@ -7,30 +7,34 @@
 //
 
 #import "MADInstallOperationSampleDatabase.h"
-#import <MAD/MADConstants.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
+
+#import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSUserDefaults.h>
+
+#import <MAD/MADConstants.h>
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADURL.h>
 
 NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
 
-NSString * const MTSampleDatabaseChinook            = @"chinook";
-NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
+static NSString * const MTSampleDatabaseChinook            = @"chinook";
+static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 @implementation MADInstallOperationSampleDatabase
 
-- (void)dealloc {
-    NSLog(@"dealloc MADInstallOperationSampleDatabase");
-}
+- (void)dealloc { }
+
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
 
     NSURL *fileURL, *databaseURL;
+    NSError *error = nil;
 
     if (self.cancelled) goto FINISH;
 
@@ -43,27 +47,22 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     
     if (databaseURL == nil) goto FINISH;
     
-    [MADInstallOperationSampleDatabase copyItemAtURL:fileURL toURL:databaseURL];
+    installed = [[NSFileManager defaultManager] copyItemAtURL: fileURL
+                                                        toURL: databaseURL
+                                                        error: &error];
+    
+    if (installed) {
+        NSString *filepath = databaseURL.path;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
+            [[NSUserDefaults standardUserDefaults] setBool: YES
+                                                    forKey: MADUpgradeInstalledChinook];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
 
     FINISH:;
     [self finish];
 
-}
-
-+ (BOOL)copyItemAtURL:(NSURL *)fromURL toURL:(NSURL *)toURL {
-    BOOL installed;
-    NSError *error = nil;
-    [[NSFileManager defaultManager] copyItemAtURL: fromURL
-                                            toURL: toURL
-                                            error: &error];
-    NSString *path = toURL.path;
-    installed = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    if (installed) {
-        [[NSUserDefaults standardUserDefaults] setBool: YES
-                                                forKey: MADUpgradeInstalledChinook];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    return installed;
 }
 
 + (NSURL *)newApplicationBundleSampleDatabaseChinook {
@@ -72,12 +71,9 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory =
-        [NSURL newURLLocalApplicationSupportDirectoryForGroupID: MADIdentifierGroup];
-    NSString *filename = [[NSString alloc] initWithFormat: @"%@.%@",
-                                                MTSampleDatabaseChinook,
-                                                MTDocumentExtentionSqlite3];
-    return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    id appSupportDirectory = [MADURL newURLApplicationSupportFile: MTSampleDatabaseChinook
+                                                        extension: MTDocumentExtentionSqlite3];
+    return appSupportDirectory;
 }
 
 @end

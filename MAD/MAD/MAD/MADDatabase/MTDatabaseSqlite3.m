@@ -19,26 +19,32 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSCalendar.h>
 #import <Foundation/NSBundle.h>
+
 #import <dispatch/time.h>
 #import <dispatch/semaphore.h>
+
 #import <string.h>
 #import <stdlib.h>
+
+#import <MADSqlite3/sqlite3.h>
+
+#import <MADFoundation/MADDataColumn.h>
+
+#import "MTDataTable.h"
 
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MADErrorUserInfo.h"
 #import "MTQuery.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MADDataColumn.h>
+#import "MTDataTable.h"
+
 #import "MTDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"
 #import "MTQueryCacheBeginTransaction.h"
 #import "MTQueryCacheEndTransaction.h"
 #import "MTQueryCacheSyncDefault.h"
-
-#import <MADSqlite3/sqlite3.h>
 
 #import "MADDatabaseProtocol.h"
 

@@ -29,35 +29,38 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     }
 
     UIViewController *displayController;
-    if (viewController == nil) {
-        displayController = [MADStackViewController topViewController];
-    } else {
-        displayController = viewController;
-    }
+    UIAlertController *alert;
+    UIAlertAction *ok;
+    NSString *dismissButtonTitle, *localizedDescription, *localizedFailureReason;
+    NSError *underlyingError;
     
-    NSString *dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
-    NSString *localizedDescription = error.localizedDescription;
-    NSString *localizedFailureReason = error.localizedFailureReason;
+    displayController = viewController ?:  [MADStackViewController topViewController];
+    displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
-    NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
+    dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
+    localizedDescription = error.localizedDescription.copy;
+    localizedFailureReason = error.localizedFailureReason.copy;
+    
+    underlyingError = error.userInfo[NSUnderlyingErrorKey];
     
     if (underlyingError.localizedDescription != nil) {
         localizedDescription = underlyingError.localizedDescription;
         localizedFailureReason = underlyingError.localizedFailureReason;
     }
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
-                                                                   message: localizedDescription
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
+                                                message: localizedDescription
+                                         preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *ok = [UIAlertAction actionWithTitle: dismissButtonTitle style: UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction *action) {
-                                                   if (completion) {
-                                                       completion(YES);
-                                                   }
-                                               }];
+    ok = [UIAlertAction actionWithTitle: dismissButtonTitle
+                                  style: UIAlertActionStyleDefault
+                                handler: ^(UIAlertAction *action) {
+
+                                    if (completion) completion(YES);
+
+                                }];
     [alert addAction:ok];
-    displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    
     [displayController presentViewController:alert animated:YES completion:NULL];
     
 }

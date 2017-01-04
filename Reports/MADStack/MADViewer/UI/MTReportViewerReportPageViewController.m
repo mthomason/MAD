@@ -80,10 +80,11 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
         UIScrollViewDelegate,
         MADReportPageViewProtocol>
 
-    @property (nonatomic, weak, readwrite) UIView *documentView;
-
     @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, copy, readwrite) MADPageViewAttributes *pageViewAttributes;
+
+    @property (readwrite, nonatomic, weak) UIView *documentView;
+
+    @property (readwrite, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
     @property (nonatomic, assign) BOOL initalLayout;
 
 @end
@@ -141,7 +142,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     [_documentView removeFromSuperview];
 }
 
-- (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
+- (instancetype)initWithDocument:(MADocument *)document
+              andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
     if (self = [super init]) {
         _document = document;
         _initalLayout = YES;

@@ -15,20 +15,19 @@
 
 @interface MTObject ()
 
+@property (readwrite, atomic, strong) id object;
+
 @end
 
 @implementation MTObject
 
-- (id)copyWithZone:(nullable NSZone *)zone {
-    id object = [self.object copyWithZone:zone];
-    id copy = [[[self class] alloc] initWithObject:object];
-    return copy;
++ (instancetype)newObject:(id <NSCopying>)object {
+    return [[self alloc] initWithObject:object];
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.object = nil;
+    if (self = [super init]) {
+        _object = nil;
     }
     return self;
 }
@@ -40,8 +39,10 @@
     return self;
 }
 
-+ (instancetype)objectWithObject:(id <NSCopying>)object {
-    return [[self alloc] initWithObject:object];
+- (id)copyWithZone:(nullable NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] init];
+    ((typeof(self)) copy).object = [self.object copyWithZone:zone];
+    return copy;
 }
 
 #pragma mark - MTProtocolCompare

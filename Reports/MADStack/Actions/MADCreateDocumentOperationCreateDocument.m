@@ -30,7 +30,7 @@
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    if (self.credentials == nil) {
+    if (self.credentials) {
 
         NSArray<NSOperation *> *dependencies = self.dependencies;
         for (NSOperation *dependency in dependencies) {
@@ -57,13 +57,14 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    if (_url == nil) {
+    if (!_url) {
+        
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {
                 _url = ((NSObject <MADOperationUniqueUrlForFilenameProtocol> *)dependency).uniqueUrl.copy;
             }
         }
+        
     }
     
     //Create MADocument File and Remove Cache

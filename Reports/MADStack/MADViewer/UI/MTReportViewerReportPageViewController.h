@@ -27,8 +27,8 @@
     @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
     @property (readonly) UIScrollView *documentScroller;
-    @property (nonatomic, weak, readonly) UIView *documentView;
-    @property (nonatomic, copy, readonly) MADPageViewAttributes *pageViewAttributes;
+    @property (readonly, nonatomic, weak) UIView *documentView;
+    @property (readonly, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
 
 @end
 

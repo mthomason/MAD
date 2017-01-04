@@ -20,12 +20,15 @@
 @implementation MADNavigationControllerFileExplorer
 
 + (void)initialize {
-    if (self == [MADNavigationControllerFileExplorer self]) {
-        Class thisClas = [MADTransparentPresentationController class];
-        UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
-        UIColor *clearColor = [UIColor clearColor];
-        appearanceProxy.barTintColor = clearColor;
-    }
+    [super initialize];
+    
+    if (self != [MADNavigationControllerFileExplorer self]) return;
+    
+    Class thisClas = [MADTransparentPresentationController class];
+    UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
+    UIColor *clearColor = [UIColor clearColor];
+    appearanceProxy.barTintColor = clearColor;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {

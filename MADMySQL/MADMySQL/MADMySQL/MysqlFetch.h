@@ -12,10 +12,7 @@
 #import <Foundation/NSObject.h>
 #import "mysql.h"
 
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MADDataColumn.h>
-
-@class MysqlConnection, MTDataTable, MTQuery;
+@class MysqlConnection, MTQuery, MTDataTable;
 
 @protocol MysqlFetchDelegate
 @optional
@@ -30,17 +27,9 @@
     @property(strong, readwrite) NSArray *fieldNames;
     @property(strong, readwrite) NSArray *fields;
 
-    - (MTDataTable *)fetchWithCommand: (NSString *)s
-                            dataTable: (MTDataTable * __autoreleasing *)dataTable
-                         onConnection: (MysqlConnection *)connection
-                                error: (NSError * __autoreleasing *)error;
+    + (int)fetchStatement:(MYSQL_STMT *)statement;
 
-    + (MYSQL_BIND)bindDataForStatement: (MYSQL_STMT *)myStatement andField:(NSUInteger)x;
-    - (MTDataTable *)fetchWithCommand: (NSString *)command
-                            dataTable: (MTDataTable **)dataTable
-                         onConnection: (MysqlConnection *)connection
-                        extendedNames: (BOOL)useExtendedNames
-                                error: (NSError * __autoreleasing *)error;
+    char *mySQLTypeForType(int type);
 
 @end
 

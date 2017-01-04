@@ -13,7 +13,7 @@
 
 @interface UIScreen (Properties)
 
-- (BOOL)isRetnaDisplay;
+    - (BOOL)isRetnaDisplay;
 
 @end
 

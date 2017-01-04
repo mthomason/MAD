@@ -18,13 +18,12 @@
 
 #import <MAD/MADConstants.h>
 
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIAlertController+Constructors.h>
-
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 
 #import "MADTableViewCellBase.h"
 
@@ -48,18 +47,17 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 @implementation MADAboutTableViewController
 
 + (void)initialize {
-    if (self == [MADAboutTableViewController self]) {
+    [super initialize];
     
-        UINavigationBar *navigationBarMailAppearance;
-        navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
-        
-        UIColor *color = [MADColorEverydayApps newColorAnalogous4];
-        navigationBarMailAppearance.barTintColor = color;
-        
-        color = [MADColorEverydayApps newColorRed];
-        navigationBarMailAppearance.tintColor = color;
-
-    }
+    if (self != [MADAboutTableViewController self]) return;
+    
+    UINavigationBar *navigationBarMailAppearance;
+    navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
+    
+    UIColor *color = [MADColorEverydayApps newColorAnalogous4];
+    navigationBarMailAppearance.barTintColor = [MADColorEverydayApps newColorAnalogous4];
+    navigationBarMailAppearance.tintColor = [MADColorEverydayApps newColorRed];
+    
 }
 
 + (instancetype)newAboutTableViewController {
@@ -268,15 +266,15 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController newAlertControllerError:error];
+            alert = [MADAlertController newAlertControllerError:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                            message: message
-                                                                      andCompletion: ^(UIAlertAction *action) { }];
+            alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
+                                                                             message: message
+                                                                       andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

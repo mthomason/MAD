@@ -29,7 +29,7 @@
 //#import <copyfile.h>
 
 #import <MADFoundation/UIScreen+Properties.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADFilename.h>
 
 #import <MADFileManager/MADFileUtilities.h>
@@ -58,7 +58,7 @@
 #import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 
-#import "MTDataTable+Factory.h"
+#import "MTDataTable.h"
 
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
@@ -272,8 +272,8 @@ void madwarn(char *err,  const char*err2) { }
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
         
-        _urlGuts = [NSURL newURLDocumentArchiveForFileURL: url
-                                                extension: MADFileExtentionMobleApplicationDocumentArchive];
+        _urlGuts = [MADURL newURLDocumentArchiveForFileURL: url
+                                                 extension: MADFileExtentionMobleApplicationDocumentArchive];
         _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
         
         //Initalize the main data table.
@@ -373,8 +373,8 @@ void madwarn(char *err,  const char*err2) { }
 
 - (NSURL *)copyThumbnailURL {
     NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
-    NSURL *url = [NSURL newUrlThumbnailForHandle: name
-                                andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
+    NSURL *url = [MADURL newURLThumbnailForHandle: name
+                                 andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
     return url;
 }
 
@@ -394,7 +394,7 @@ void madwarn(char *err,  const char*err2) { }
 
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = self.filename;
-    NSURL *result = [NSURL newURLCacheFilesDirectoryForFilename:filename];
+    NSURL *result = [MADURL newURLCacheFilesDirectoryForFilename:filename];
     return result;
 }
 

@@ -18,8 +18,7 @@
 #import "MADPreference.h"
 
 static const char *     MADIDQueueUserPreferences = "preferences.everydayapps.mad.ubiquitout";
-static NSString * const MADAppConfigurationApplicationGroupsPrimary =
-                                                                @"group.everydayapps.mad.primary";
+static NSString * const MADAppConfigurationApplicationGroupsPrimary = @"group.everydayapps.mad.primary";
 static NSString * const MADIDUser                                   = @"MADIDUser";
 
 @interface MADUser () {

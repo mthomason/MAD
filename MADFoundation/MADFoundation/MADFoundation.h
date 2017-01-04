@@ -17,19 +17,14 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
-#import <MADFoundation/MADDataType.h>
-#import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MTCacheProtocol.h>
-
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
-
 #import <MADFoundation/MADAssert.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/NSData+Comparson.h>
 #import <MADFoundation/UIScreen+Properties.h>
-#import <MADFoundation/NSURL+CommonURLs.h>
+#import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADFilename.h>

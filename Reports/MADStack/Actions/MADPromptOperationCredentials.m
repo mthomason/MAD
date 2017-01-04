@@ -11,7 +11,7 @@
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
-#import "MADTextField.h"
+#import <MADCocoaExtensions/MADTextField.h>
 #import "MADKeyChainOperationGet.h"
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
@@ -26,6 +26,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
+
     @property (nonatomic, copy) NSString *usernameKey;
     @property (nonatomic, copy) NSString *passwordKey;
 
@@ -99,17 +100,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    void (^ __nullable actionTextFieldWithConfigurationUsername)(UITextField *textField) = ^(UITextField *textField) {
-        [MADTextField configureTextFieldForUsername:&textField];
-        textField.delegate = self;
-    };
-    
-    void (^ __nullable actionTextFieldWithConfigurationPassword)(UITextField *textField) = ^(UITextField *textField) {
-        [MADTextField configureTextFieldForPassword:&textField];
-        textField.delegate = self;
-    };
+    void (^ __nullable actionTextFieldWithConfigurationUsername)(UITextField *textField);
+    void (^ __nullable actionTextFieldWithConfigurationPassword)(UITextField *textField);
     
     MADPromptOperationCredentials * __weak weakself = self;
+    
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
         MADPromptOperationCredentials *strongself = weakself;
         username = ((UITextField *)alertController.textFields.firstObject).text;
@@ -122,23 +117,49 @@ static NSString * const MADButtonCancel                = @"Cancel";
             strongself.source = credential_prompt;
         }
         [strongself finish:YES credentials:credentials];
+        strongself.alertDisplayed = YES;
+        strongself.userContinue = success;
+        strongself.credentials = credentials.copy;
+        strongself.result = YES;
+        [strongself performSelectorInBackground:@selector(finish) withObject:nil];
     }];
     
-    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel handler: ^(UIAlertAction *action) {
+    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
+                                                                style: UIAlertActionStyleCancel
+                                                              handler: ^(UIAlertAction *action) {
+        MADPromptOperationCredentials *strongself = weakself;
         password = nil; username = nil;
         success = NO;
-        [weakself userCancel];
+        strongself.alertDisplayed = YES;
+        strongself.userContinue = NO;
+        strongself.credentials = nil;
+        strongself.result = NO;
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        [strongself performSelectorInBackground:@selector(finishWithError:) withObject:error];
+
     }];
+    
+    actionTextFieldWithConfigurationUsername = ^(UITextField *textField) {
+        MADTextField *textFieldFormatter = [[MADTextField alloc] init];
+        textFieldFormatter.handleConfigureUsername(textField);
+        textField.delegate = self;
+    };
+    
+    actionTextFieldWithConfigurationPassword = ^(UITextField *textField) {
+        MADTextField *textFieldFormatter = [[MADTextField alloc] init];
+        textFieldFormatter.handleConfigurePassword(textField);
+        textField.delegate = self;
+    };
+
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationPassword];
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *viewController = self.viewController;
-        viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [viewController  presentViewController: alertController animated: YES completion:^{ }];
-    }];
+    UIViewController *viewController = self.viewController;
+    viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [viewController  presentViewController: alertController animated: YES completion:NULL];
+
 }
 
 - (void)finish:(BOOL)success credentials:(MADCredential *)credentials {

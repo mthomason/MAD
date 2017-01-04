@@ -20,7 +20,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataTable.h>
 
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>

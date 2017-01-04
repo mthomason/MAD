@@ -25,10 +25,10 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataTable.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
-#import <MADFoundation/MTDataTable.h>
+#import <MAD/MTDataTable.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
 #import <MAD/MTQuery.h>
