@@ -6,13 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSError+Document.h"
+#import "MADErrorDocument.h"
 #import "MADErrorUserInfo.h"
 #import <Foundation/NSBundle.h>
 
 static NSString * const MADDocumentErrorDomain = @"MADocument";
 
-@implementation NSError (Document)
+@implementation MADErrorDocument
 
 + (instancetype)newErrorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem",
@@ -21,7 +21,8 @@ static NSString * const MADDocumentErrorDomain = @"MADocument";
                                           @"Could not connect to database.");
     MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
                                                                    andMessage:message];
-    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 36732];
+    id error = [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 36732];
+    return error;
 }
 
 + (instancetype)newErrorFailedToOpenDocument {
@@ -31,7 +32,8 @@ static NSString * const MADDocumentErrorDomain = @"MADocument";
                                           @"Document may be incomplete, missing, or corrupt.");
     MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
                                                                    andMessage:message];
-    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 260];
+    id error = [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 260];
+    return error;
 }
 
 @end

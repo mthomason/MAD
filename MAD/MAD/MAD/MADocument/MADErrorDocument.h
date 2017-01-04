@@ -11,7 +11,7 @@
 
 #import <Foundation/NSError.h>
 
-@interface NSError (Document)
+@interface MADErrorDocument : NSError
 
     + (instancetype)newErrorConnectionProblem;
     + (instancetype)newErrorFailedToOpenDocument;
