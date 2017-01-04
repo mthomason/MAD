@@ -10,7 +10,9 @@
 #define Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
+
 #import "MADQueryType.h"
+
 #import <MADFoundation/MADDataType.h>
 
 #pragma mark Types of specific paramamters accepted for each query

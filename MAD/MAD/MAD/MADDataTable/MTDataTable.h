@@ -18,9 +18,9 @@ typedef NS_ENUM(short, MTDataTableType) {
 
 @interface MTDataTable : MTDataTablePlist
 
-+ (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
-+ (instancetype)newDataTableForIdentifier:(NSString *)identifier;
-+ (instancetype)newDataTableOfType:(MTDataTableType)type withObjectID:(NSUInteger)objectID;
+    + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
+    + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
+    + (instancetype)newDataTableOfType:(MTDataTableType)type withObjectID:(NSUInteger)objectID;
 
 @end
 

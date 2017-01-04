@@ -41,7 +41,7 @@
 
 + (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
                                                  columnKeys:(NSArray *)columnKeys
-                                                    columns:(MADMutableMapDataColumns *)columns
+                                                    columns:(NSMutableDictionary <NSString *, MADDataColumn *> *)columns
                                             sortDescriptors:(NSArray *)sortDescriptors {
     id keyColumnKeys = @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys);
     id keyTableNames = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);

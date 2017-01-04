@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDataTable_h
-#define Reports_MTDataTable_h
+#ifndef MAD_MTDataTablePlist_h
+#define MAD_MTDataTablePlist_h
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSEnumerator.h>
-#import <MADFoundation/MADMutableMapDataColumns.h>
 
 @class MADDataColumn;
-@class NSMutableArray;
-@class NSDictionary;
-@class NSMutableDictionary;
+@class NSMutableArray<ObjectType>;
+@class NSDictionary<__covariant KeyType, __covariant ObjectType>;
+@class NSMutableDictionary<KeyType, ObjectType>;
+@class NSEnumerator;
 
 typedef NS_ENUM(short, MTDataTableParameters) {
     MTDataTableTypeOfTable,
@@ -34,7 +34,7 @@ typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
     @property (nonatomic, readwrite, copy)   NSString *name;
     @property (nonatomic, readwrite, strong) NSMutableArray *columnKeys;
     @property (nonatomic, readwrite, strong) NSMutableArray *sortDescriptors;
-    @property (nonatomic, readwrite, strong) MADMutableMapDataColumns *columns;
+    @property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *, MADDataColumn *> *columns;
     @property (nonatomic, readwrite, assign) NSUInteger rowCounter;
     @property (nonatomic, readwrite, assign) NSUInteger tag;
 

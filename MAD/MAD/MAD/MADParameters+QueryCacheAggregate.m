@@ -49,7 +49,7 @@
     NSString *tableName =               [dataTable tableName].copy,
              *fieldKeyCopy =            fieldKey.copy;
     
-    MADMutableMapDataColumns *columns = dataTable.columns;
+    NSMutableDictionary <NSString *, MADDataColumn *> *columns = dataTable.columns;
     
     NSNumber *groupType = [[NSNumber alloc] initWithShort:groupByType];
 

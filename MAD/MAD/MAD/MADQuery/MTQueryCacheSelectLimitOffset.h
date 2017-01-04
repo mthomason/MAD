@@ -10,7 +10,8 @@
 #define Reports_MTQueryCacheSelectLimitOffset_h
 
 #import "MTQuery.h"
-#import <MADFoundation/MADMutableMapDataColumns.h>
+
+@class MADDataColumn;
 
 @interface MTQueryCacheSelectLimitOffset : MTQuery
 
@@ -20,7 +21,7 @@
 
     + (instancetype)newQueryCacheSelectLimitOffsetWithTableName:(NSString *)tableName
                                                      columnKeys:(NSArray *)columnKeys
-                                                        columns:(MADMutableMapDataColumns *)columns
+                                                        columns:(NSMutableDictionary <NSString *, MADDataColumn *> *)columns
                                                 sortDescriptors:(NSArray *)sortDescriptors;
 
 @end
