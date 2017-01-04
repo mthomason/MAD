@@ -13,7 +13,7 @@
 
 @class RptqDocumentObject;
 
-@interface UIFontDescriptor (DocumentObject)
+@interface MADFontDescriptor : UIFontDescriptor
 
     + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)documentObject;
 

@@ -42,6 +42,8 @@
 
     - (void)startIdle;
 
+    - (NSString *)mysqlEscapeString:(NSString *)string;
+
 @end
 
 #endif

@@ -9,7 +9,7 @@
 #import "UIFontDescriptor+DocumentObject.h"
 #import "RptqDocumentObject.h"
 
-@implementation UIFontDescriptor (DocumentObject)
+@implementation MADFontDescriptor
 
 + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)object {
 
@@ -18,6 +18,7 @@
     if (object.bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
     
     NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
+    
     NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     traitsWrapper, UIFontSymbolicTrait, nil];
     

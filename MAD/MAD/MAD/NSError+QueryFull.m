@@ -22,9 +22,9 @@
     errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                                                 message, NSLocalizedDescriptionKey, nil];
     
-    NSError *error =  [[NSError alloc] initWithDomain: @"MADQuery"
-                                                 code: 5774
-                                             userInfo: errorInfo];
+    NSError *error =  [[self alloc] initWithDomain: @"MADQuery"
+                                              code: 5774
+                                          userInfo: errorInfo];
     return error;
 }
 

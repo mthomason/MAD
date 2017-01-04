@@ -33,13 +33,14 @@
     if (self = [super initWithObject:object]) {
     
         if (fontDescriptor == nil)
-            fontDescriptor = [UIFontDescriptor newFontDescriptorForDocumentObject:object];
+            fontDescriptor = [MADFontDescriptor newFontDescriptorForDocumentObject:object];
     
-        _fontDescriptor = fontDescriptor.copy;
         
-        UIFont *customFont = [UIFont fontWithDescriptor: _fontDescriptor
+        UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
                                                    size: 0.0];
-        
+
+        _fontDescriptor = fontDescriptor.copy;
+
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
         paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;

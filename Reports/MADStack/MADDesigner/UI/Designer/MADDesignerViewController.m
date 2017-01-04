@@ -576,11 +576,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     rulerConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
                                                      designer: scroller.container
                                                     marginTop: MTReportDesignerBorderPaddingVertical
-                                                        heigh: MTReportDesignerRulerHeight];
+                                                        heigh: MTReportDesignerRulerHeight].copy;
     
     rulerSideConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
                                                          designer: scroller.container
-                                                       sideMargin: MTReportDesignerBorderPaddingSides];
+                                                       sideMargin: MTReportDesignerBorderPaddingSides].copy;
     
     MADMutableManagedObjectIDs *reportSectionKeyTracker;
     

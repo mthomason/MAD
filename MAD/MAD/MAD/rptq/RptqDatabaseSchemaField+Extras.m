@@ -69,8 +69,8 @@
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
 
-    RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
-                                                          insertIntoManagedObjectContext: objectContext];
+    RptqDatabaseSchemaField *rptqField = [[self alloc] initWithEntity: fieldEntity
+                                       insertIntoManagedObjectContext: objectContext];
     NSString *label = [[NSString alloc] initWithString: field.name];
     rptqField.label = label;
     

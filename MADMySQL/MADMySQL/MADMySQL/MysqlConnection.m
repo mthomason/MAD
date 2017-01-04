@@ -18,6 +18,7 @@
 
 #import <mysql.h>
 
+#import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
@@ -37,6 +38,15 @@
 @implementation MysqlConnection
 
 @synthesize transactionsEnabled, server;
+
+- (NSString *)mysqlEscapeString:(NSString *)string {
+    const char *ch = string.UTF8String;
+    char *buf=malloc(strlen(ch)*2+1);
+    mysql_real_escape_string(self.connection, buf, ch, strlen(ch));
+    NSString *retval=@(buf);
+    free(buf);
+    return retval;
+}
 
 - (unsigned int)errorNumber {
     return mysql_errno(self.connection);

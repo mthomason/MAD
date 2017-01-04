@@ -29,20 +29,27 @@
     
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDatabase class])];
+    
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
                                                                    ascending: NO];
+    
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
+    
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest: request
                                                                      error: &error];
+    
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDatabase *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
+    
     id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
     self.identifier = identifierObj;
 }
@@ -85,14 +92,13 @@
 }
 
 - (MADDatabaseType)databaseType {
-    NSNumber __unsafe_unretained *type = self.databaseDriverTypeEnum;
-    return type.shortValue;
+    return self.databaseDriverTypeEnum.shortValue;
 }
 
 #pragma mark - Static
 
 + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
-                         andConnecitonId:(NSNumber *)connectionId {
+                      andConnecitonId:(NSNumber *)connectionId {
     
     RptqDatabase *currentDatabase = nil;
     for (RptqDatabase *db in document.hasDatabaseSchemas) {

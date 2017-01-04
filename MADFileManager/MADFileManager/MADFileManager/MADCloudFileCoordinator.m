@@ -280,7 +280,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - NSMetadataQuery Notifications
 
 - (void)metadataQueryDidFinishGathering:(NSNotification *)notification {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [_metadataQuery disableUpdates];
 
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
@@ -313,7 +312,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [self.metadataQuery disableUpdates];
     
     NSArray *insertedMetadataItemsOrNil, *removedMetadataItemsOrNil, *updatedMetadataItemsOrNil;
@@ -329,7 +327,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
             *removed  = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata],
             *updated  = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
 
-    NSMetadataQuery __weak *metadataQuery = self.metadataQuery;
+    NSMetadataQuery * __weak metadataQuery = self.metadataQuery;
     void (^handleContentUpdated)(BOOL success, NSError *error);
     handleContentUpdated = ^(BOOL success, NSError *error) {
         [metadataQuery enableUpdates];
@@ -341,16 +339,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
                                                         object: nil];
 }
 
-- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-
-}
+- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification { }
 
 #pragma mark - Convenience
 

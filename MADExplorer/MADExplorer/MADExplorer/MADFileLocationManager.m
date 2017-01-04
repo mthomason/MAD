@@ -443,7 +443,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
     id <MADFileLocationManagerDelegate> delegate = _delegate;
 
     NSString *groupIdentifer;
-    groupIdentifer = [self.class storageOption] != MADAppStorageCloud ? [delegate groupIdentifier] :
+    groupIdentifer = [self.class StorageOption] != MADAppStorageCloud ? [delegate groupIdentifier] :
                                                                         [delegate ubiquityIdentifier];
     return groupIdentifer.copy;
 }

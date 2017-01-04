@@ -15,7 +15,7 @@
 @class MTReportFormatter;
 @class MTDataTableFast;
 
-@interface UIImage (MADDocument)
+@interface MADImageThumbnail : UIImage
 
     + (instancetype)newImageThumbnailWithDocument:(MADocument *)document;
 

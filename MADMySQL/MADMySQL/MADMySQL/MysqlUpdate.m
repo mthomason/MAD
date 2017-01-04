@@ -104,23 +104,32 @@
     [cmd appendString:columnPairs];
     [cmd appendString:@" WHERE "];
     
-    NSMutableString *qualifierString=[NSMutableString string];
+    NSMutableString *qualifierString = [[NSMutableString alloc] init];
     
-    for (NSString *key in _qualifier.allKeys) {
+    NSString *key;
+    
+    NSArray *allKeys = _qualifier.allKeys;
+    for (key in allKeys) {
         NSObject *value = _qualifier[key];
-        NSString *escapeKey= [key mysqlEscapeInConnection:connection];
+        NSString *escapeKey = [connection mysqlEscapeString: key];
+        
         if ([value isKindOfClass:[NSString class]]) {
-            [qualifierString appendFormat:@"AND %@='%@' ",escapeKey,[(NSString *)value mysqlEscapeInConnection:connection]];
+            NSString *mysqlEscapeString = [connection mysqlEscapeString:value];
+            [qualifierString appendFormat:@"AND %@='%@' ", escapeKey, mysqlEscapeString];
+            
         } else if ([value isKindOfClass:[NSNull class]]) {
-            [qualifierString appendFormat:@"AND %@ is null ",escapeKey];
+            [qualifierString appendFormat:@"AND %@ is null ", escapeKey];
+            
         } else if ([value isKindOfClass:[NSNumber class]]) {
-            [qualifierString appendFormat:@"AND %@=%@ ",escapeKey,value];
+            [qualifierString appendFormat:@"AND %@=%@ ", escapeKey, value];
+            
         } else {
-            [qualifierString appendFormat:@"AND %@='%@' ",escapeKey,[value.description mysqlEscapeInConnection:connection]];
+            NSString *mysqlEscapeString = [connection mysqlEscapeString:value.description];
+            [qualifierString appendFormat:@"AND %@='%@' ", escapeKey, mysqlEscapeString];
         }
     }
     
-    [qualifierString deleteCharactersInRange:NSMakeRange(0,4)];
+    [qualifierString deleteCharactersInRange: NSMakeRange(0,4)];
     [cmd appendString:qualifierString];
     
     //-----------------------
@@ -152,9 +161,12 @@
             [MysqlException raiseConnection:connection withFormat:@" mysql_stmt_close failed %s", mysql_stmt_error(myStatement)];
         }
     }
+    
+    NSString *keyPointer;
+    NSObject *object;
     for (NSUInteger x=0; x < keys.count; x++) {
-        NSString *key = keys[x];
-        NSObject *object = _rowData[key];
+        keyPointer = keys[x];
+        object = _rowData[keyPointer];
 
         if ([object isKindOfClass:[NSNull class]]) {
             free(binding[x].is_null);

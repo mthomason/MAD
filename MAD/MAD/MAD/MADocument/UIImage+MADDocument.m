@@ -28,13 +28,14 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     return sc == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f;
 }
 
-@implementation UIImage (MADDocument)
+@implementation MADImageThumbnail
 
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
     MTReportFormatter *reportFormatter = document.reportFormatter;
     MTDataTableFast *mainDataTable = document.mainDataTable;
-    return [self newImageThumbnailWithReportFormatter: reportFormatter
-                                         andDataTable: mainDataTable];
+    id thumbnail = [self newImageThumbnailWithReportFormatter: reportFormatter
+                                                 andDataTable: mainDataTable];
+    return thumbnail;
 }
 
 + (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
@@ -80,6 +81,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                                cornerSize: (CGFloat)cornerSize
                                     scale: (CGFloat)scale
                     andPrintPageRenderer: (MTReportViewerPrintPageRenderer *)printPageRenderer {
+    
     size = size * scale;
     cornerSize = cornerSize * scale;
     CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;

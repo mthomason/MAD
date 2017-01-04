@@ -94,7 +94,7 @@
 #import "NSString+RelativePath.h"
 
 #import "UIImage+MADDocument.h"
-#import "NSError+Document.h"
+#import "MADErrorDocument.h"
 #import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
@@ -348,7 +348,7 @@ void madwarn(char *err,  const char*err2) { }
     NSURL *gutsUrl = document.urlGuts.copy;
     closeCompletionHandler = ^(BOOL successClose) { completion(successClose, fileURL, gutsUrl); };
     
-    //__weak MADocument *weakdoc = document;
+    //MADocument * __weak weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);
     saveCompletionHandler = ^(BOOL success) {
         
@@ -360,7 +360,7 @@ void madwarn(char *err,  const char*err2) { }
         }
         
     };
-    UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:document];
+    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:document];
     document.thumbnail = thumbnail;
     
     [document saveToURL: fileURL
@@ -466,7 +466,7 @@ READFROMURL_END:;
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
     //if (userInteractionPermitted) {
         if (error.code == 260) {
-            NSError *err = [NSError newErrorFailedToOpenDocument];
+            NSError *err = [MADErrorDocument newErrorFailedToOpenDocument];
             //NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
             //[NSError presentError: err
             //NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
@@ -1147,7 +1147,7 @@ READFROMURL_END:;
     }
     contentChanged = YES;
     if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {
-        UIImage *thumbnail = [UIImage newImageThumbnailWithDocument:self];
+        UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:self];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         size_t newImageSize = 0;
         

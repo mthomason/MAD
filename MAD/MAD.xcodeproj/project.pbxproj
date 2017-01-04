@@ -251,8 +251,8 @@
 		4C47544D1CF3672500BC9E02 /* MADAggregateFunctionInputType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C47544F1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C4F12521D0917B20002294E /* NSError+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12501D0917B20002294E /* NSError+Document.h */; };
-		4C4F12531D0917B20002294E /* NSError+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12511D0917B20002294E /* NSError+Document.m */; };
+		4C4F12521D0917B20002294E /* MADErrorDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12501D0917B20002294E /* MADErrorDocument.h */; };
+		4C4F12531D0917B20002294E /* MADErrorDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12511D0917B20002294E /* MADErrorDocument.m */; };
 		4C4F12561D091D4D0002294E /* UIManagedDocument+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */; };
 		4C4F12571D091D4D0002294E /* UIManagedDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */; };
 		4C4F125B1D0A0DA80002294E /* MADQueryActiveQueryFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12591D0A0DA80002294E /* MADQueryActiveQueryFields.h */; };
@@ -267,8 +267,6 @@
 		4C4F127D1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */; };
 		4C4F12801D0A95810002294E /* MADQuerySelectExpressionActiveFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */; };
 		4C4F12811D0A95810002294E /* MADQuerySelectExpressionActiveFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */; };
-		4C4F12841D0B928B0002294E /* NSError+QueryFull.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12821D0B928B0002294E /* NSError+QueryFull.h */; };
-		4C4F12851D0B928B0002294E /* NSError+QueryFull.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12831D0B928B0002294E /* NSError+QueryFull.m */; };
 		4C4F12881D0B948D0002294E /* MADQueryFullTableEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12861D0B948D0002294E /* MADQueryFullTableEnumerator.h */; };
 		4C4F12891D0B948D0002294E /* MADQueryFullTableEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12871D0B948D0002294E /* MADQueryFullTableEnumerator.m */; };
 		4C5259331D894AA200FEF1A1 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5259321D894AA200FEF1A1 /* libxml2.tbd */; };
@@ -777,8 +775,8 @@
 		4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionInputType.h; path = MAD/MADAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateFunctionGroupByType.h; path = MAD/MADAggregateFunctionGroupByType.h; sourceTree = "<group>"; };
 		4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentProtocol.h; path = MAD/MADocument/MADDocumentProtocol.h; sourceTree = "<group>"; };
-		4C4F12501D0917B20002294E /* NSError+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Document.h"; path = "MAD/MADocument/NSError+Document.h"; sourceTree = "<group>"; };
-		4C4F12511D0917B20002294E /* NSError+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Document.m"; path = "MAD/MADocument/NSError+Document.m"; sourceTree = "<group>"; };
+		4C4F12501D0917B20002294E /* MADErrorDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorDocument.h; path = MAD/MADocument/MADErrorDocument.h; sourceTree = "<group>"; };
+		4C4F12511D0917B20002294E /* MADErrorDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorDocument.m; path = MAD/MADocument/MADErrorDocument.m; sourceTree = "<group>"; };
 		4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIManagedDocument+Extras.h"; path = "MAD/MADocument/UIManagedDocument+Extras.h"; sourceTree = "<group>"; };
 		4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIManagedDocument+Extras.m"; path = "MAD/MADocument/UIManagedDocument+Extras.m"; sourceTree = "<group>"; };
 		4C4F12591D0A0DA80002294E /* MADQueryActiveQueryFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryActiveQueryFields.h; path = MAD/MADQueryActiveQueryFields.h; sourceTree = "<group>"; };
@@ -1385,8 +1383,8 @@
 				4C235CD41D1F81A600D3D77C /* ReportSections */,
 				4C3639F61D03B84E0077A506 /* UIImage+MADDocument.h */,
 				4C3639F71D03B84E0077A506 /* UIImage+MADDocument.m */,
-				4C4F12501D0917B20002294E /* NSError+Document.h */,
-				4C4F12511D0917B20002294E /* NSError+Document.m */,
+				4C4F12501D0917B20002294E /* MADErrorDocument.h */,
+				4C4F12511D0917B20002294E /* MADErrorDocument.m */,
 				4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */,
 				4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */,
 				4CF304041D1D219600466560 /* MADArchiveManager.h */,
@@ -1984,7 +1982,6 @@
 				4CC2846E1BADE99500775B72 /* RptqDatabaseSchemaField+Extras.h in Headers */,
 				4CC2849F1BADE9F400775B72 /* RptqRelationship+Extras.h in Headers */,
 				4C3622BD1CF34FB6002B8649 /* MADocumentSectionType.h in Headers */,
-				4C4F12841D0B928B0002294E /* NSError+QueryFull.h in Headers */,
 				4CC284701BADE99800775B72 /* RptqDatabaseSchemaTable+Extras.h in Headers */,
 				4C8278BC1DB76BFD005313F5 /* MADNotificationFileUpdate.h in Headers */,
 				4CC284811BADE9B800775B72 /* RptqDocumentObjectImage+Extras.h in Headers */,
@@ -2149,7 +2146,7 @@
 				4C994F2F1BDD9A7E0058627A /* MADSectionPlist.h in Headers */,
 				4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */,
 				4CEFDD041CF5AC7C0092C148 /* MADQueryCacheAddColumnParameters.h in Headers */,
-				4C4F12521D0917B20002294E /* NSError+Document.h in Headers */,
+				4C4F12521D0917B20002294E /* MADErrorDocument.h in Headers */,
 				4C401DC91BAE3BD600BAE5FC /* MTQueryCacheIndexDrop.h in Headers */,
 				4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */,
 				4C401D601BAE3AF800BAE5FC /* MTPaperC7.h in Headers */,
@@ -2382,7 +2379,7 @@
 				4CC284321BADE97000775B72 /* RptqUserCredentals.m in Sources */,
 				4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */,
 				4C401DF21BAE3BD900BAE5FC /* MTQuerySampleDataField.m in Sources */,
-				4C4F12531D0917B20002294E /* NSError+Document.m in Sources */,
+				4C4F12531D0917B20002294E /* MADErrorDocument.m in Sources */,
 				4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */,
 				4C401E6D1BAE4F4000BAE5FC /* NSData+Comparson.m in Sources */,
 				4C4F12891D0B948D0002294E /* MADQueryFullTableEnumerator.m in Sources */,
@@ -2392,7 +2389,6 @@
 				4C401D571BAE3AF800BAE5FC /* MTPaperC2.m in Sources */,
 				4C401E381BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m in Sources */,
 				4C4F12711D0A634D0002294E /* MADQueryPredicate.m in Sources */,
-				4C4F12851D0B928B0002294E /* NSError+QueryFull.m in Sources */,
 				4C1492A01D065E8900B8E9EA /* MADDocumentObjectCachedDataReferenceItem.m in Sources */,
 				4C401DF01BAE3BD900BAE5FC /* MTQueryMaxFieldLength.m in Sources */,
 				4CA354A61D228E370072BD38 /* MADReportSectionGroupFooter.m in Sources */,
