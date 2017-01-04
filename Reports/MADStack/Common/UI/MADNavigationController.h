@@ -12,22 +12,12 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 #import "MADViewControllerDocumentProtocol.h"
-
-typedef NS_ENUM(short, MADNavigationControllerType) {
-    MADNavigationControllerTypeInformation,
-    MADNavigationControllerTypeLicensing,
-    MADNavigationControllerTypeNewDocument,
-    MADNavigationControllerTypeToolbox,
-    MADNavigationControllerTypeFontPicker,
-    MADNavigationControllerTypeAggregateAdd,
-    MADNavigationControllerTypeElementPicker,
-    MADNavigationControllerTypeViewer,
-};
+#import "MADNavigationControllerIdentity.h"
 
 @interface MADNavigationController : UINavigationController
     <UINavigationControllerDelegate,
         UIViewControllerTransitioningDelegate,
-        MADViewControllerDocumentProtocol>
+        MADViewControllerDocumentProtocol, MADNavigationControllerIdentify>
 
     + (instancetype)newNavigationController:(MADNavigationControllerType)type;
 

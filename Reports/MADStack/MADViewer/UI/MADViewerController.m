@@ -103,7 +103,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADPageSliderProtocol,
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
-        MTTabBarImageProtocol,
         MADActivityItemProviderDelegate> {
             BOOL _isFirstAppearance;
 }
@@ -158,6 +157,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @implementation MADViewerController
 
 @synthesize document = _document;
+@synthesize title = _title;
 
 + (instancetype)newViewerController:(MADocument *)document {
     UIStoryboard *storyboard;
@@ -287,8 +287,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return _dateTimeFormatter;
 }
 
-- (NSString *)title {
++ (NSString *)Title {
     return [MADViewerController MADViewer];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        NSString *title = [MADViewerController MADViewer];
+        _title = title.copy;
+    }
+    return _title;
 }
 
 #pragma mark -

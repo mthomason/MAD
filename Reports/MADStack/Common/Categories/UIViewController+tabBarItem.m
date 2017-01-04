@@ -23,6 +23,8 @@
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 
+#import "MADTabBarItemProtocol.h"
+
 @implementation UIViewController (tabBarItem)
 
 + (void)load {
@@ -35,17 +37,15 @@
 - (UITabBarItem *)mad_tabBarItem {
     UITabBarItem *tabBarItem = [self mad_tabBarItem];
     if (tabBarItem && tabBarItem.image == nil) {
-        UIImage *tabBarImage = [self.class newTabBarImage];
+        UIImage *tabBarImage = [self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)] ?
+                                [self.class newTabBarImage] : nil;
         if (tabBarImage) {
-            
             UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             tabBarItem.image = tabBarImageOg;
             tabBarItem.selectedImage = tabBarImage;
-            
-            NSString *tabBarTitle = self.title.copy;
-            tabBarItem.title = tabBarTitle;
-            
         }
+        NSString *tabBarTitle = self.title.copy;
+        tabBarItem.title = tabBarTitle;
     }
     return tabBarItem;
 }

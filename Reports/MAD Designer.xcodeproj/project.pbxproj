@@ -690,6 +690,8 @@
 		4C67FFCE1BA133AB001C9D5A /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C67FFDB1BA133AB001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
+		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
+		4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -1721,8 +1723,6 @@
 		4C4020151BAE92F200BAE5FC /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		4C4020161BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMotionEffectGroup+HoverEffects.h"; sourceTree = "<group>"; };
 		4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
-		4C4020221BAE92F200BAE5FC /* UITabBarController+Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Shared.h"; sourceTree = "<group>"; };
-		4C4020231BAE92F200BAE5FC /* UITabBarController+Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Shared.m"; sourceTree = "<group>"; };
 		4C4020261BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+Designer.h"; sourceTree = "<group>"; };
 		4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITapGestureRecognizer+Designer.m"; sourceTree = "<group>"; };
 		4C4020281BAE92F200BAE5FC /* UIView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extras.h"; sourceTree = "<group>"; };
@@ -1843,6 +1843,12 @@
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C67FC1F1BA1043B001C9D5A /* MAD Query.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Query.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C67FE6C1BA1183D001C9D5A /* MAD Explorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Explorer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerViewer.h; path = UI/MADNavigationControllerViewer.h; sourceTree = "<group>"; };
+		4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerViewer.m; path = UI/MADNavigationControllerViewer.m; sourceTree = "<group>"; };
+		4C692B381E1D1E1700DC2CB0 /* MADTabBarNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTabBarNavigationController.h; path = Containers/MADTabBarNavigationController.h; sourceTree = "<group>"; };
+		4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTabBarNavigationController.m; path = Containers/MADTabBarNavigationController.m; sourceTree = "<group>"; };
+		4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerIdentity.h; path = UI/MADNavigationControllerIdentity.h; sourceTree = "<group>"; };
+		4C692B3C1E1D2C6800DC2CB0 /* MADTabBarItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBarItemProtocol.h; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -3302,6 +3308,7 @@
 		4C401EFE1BAE64AF00BAE5FC /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4C692B3C1E1D2C6800DC2CB0 /* MADTabBarItemProtocol.h */,
 				4CB8EDFF1E19F4AB00193295 /* NavigationControllers */,
 				4CB8EDF41E18D0E300193295 /* MADIdentifiersStoryboards.h */,
 				4CB8EDF51E18D0E300193295 /* MADIdentifiersStoryboards.m */,
@@ -3387,8 +3394,6 @@
 				4C4020151BAE92F200BAE5FC /* UIImage+RoundedCorner.m */,
 				4C4020161BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.h */,
 				4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */,
-				4C4020221BAE92F200BAE5FC /* UITabBarController+Shared.h */,
-				4C4020231BAE92F200BAE5FC /* UITabBarController+Shared.m */,
 				4C4020261BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.h */,
 				4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */,
 				4C4020281BAE92F200BAE5FC /* UIView+Extras.h */,
@@ -4334,6 +4339,7 @@
 		4CB8EDFF1E19F4AB00193295 /* NavigationControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */,
 				4C26B9B21BAF123A00456DC8 /* MADNavigationControllerToolbox.h */,
 				4C26B9B31BAF123A00456DC8 /* MADNavigationControllerToolbox.m */,
 				4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */,
@@ -4352,6 +4358,10 @@
 				4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
 				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
+				4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */,
+				4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */,
+				4C692B381E1D1E1700DC2CB0 /* MADTabBarNavigationController.h */,
+				4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */,
 			);
 			name = NavigationControllers;
 			sourceTree = "<group>";
@@ -6106,8 +6116,10 @@
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */,
+				4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */,
 				4C59BDC11C9AA7C10031BC6C /* MADGroupOperation.m in Sources */,
 				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
+				4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */,
 				4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */,
 				4CE7EC381D128B300072DF34 /* MADDocumentManager.m in Sources */,

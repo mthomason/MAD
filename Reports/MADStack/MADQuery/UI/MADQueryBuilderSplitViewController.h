@@ -12,6 +12,7 @@
 #import <UIKit/UISplitViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
+#import "MADTabBarItemProtocol.h"
 
 @class UINavigationController;
 @class MADQueryVisualizationViewController;
@@ -20,7 +21,8 @@
 
 @interface MADQueryBuilderSplitViewController : UISplitViewController
     <MADViewControllerStandardProtocol,
-        MADViewControllerDocumentProtocol>
+        MADViewControllerDocumentProtocol,
+        MADTabBarImageProtocol>
 
     + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document;
 

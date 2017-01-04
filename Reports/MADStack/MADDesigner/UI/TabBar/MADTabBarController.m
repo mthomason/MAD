@@ -69,6 +69,7 @@ const int8_t MADIndexViewer = 2;
 
 - (void)dealloc {
     _promptNavigationItem = nil;
+    _viewControllerDelegate = nil;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -77,34 +78,9 @@ const int8_t MADIndexViewer = 2;
         _navigationItemInitalized = NO;
         _lastSelectedIndex = NSNotFound;
         
-        MADocument *document = self.document;
-        //NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-        
-        MADQueryBuilderSplitViewController *splitViewController;
-        splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-        [self.tabBarViewControllers addObject: splitViewController];
-        self.querySplitViewController = splitViewController;
-        
-        MADDesignerViewController *designerViewController;
-        designerViewController = [MADDesignerViewController newDesignerViewController:document];
-        [self.tabBarViewControllers addObject: designerViewController];
-        self.designerViewController = designerViewController;
-        
-        MADNavigationController *navControllerViewer;
-        navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
-        navControllerViewer.document = document;
-        [self.tabBarViewControllers addObject: navControllerViewer];
-        self.navControllerViewer = navControllerViewer;
-        
-        @try {
-            NSArray *controllers = self.tabBarViewControllers.copy;
-            
-            [self setViewControllers: controllers animated: NO];
-        } @catch (NSException *exception) {
-            NSLog(@"Exception: %@", exception.description);
-        } @finally {
-            NSLog(@"%@", self.tabBarViewControllers);
-        }
+        NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
+        tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
+        self.tabBarViewControllers = tabBarViewControllers;
         
     }
     return self;
@@ -134,34 +110,46 @@ const int8_t MADIndexViewer = 2;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.delegate = self;
 
     self.view.backgroundColor = [UIColor purpleColor];
     self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.delegate = self;
 
+    MADocument *document = self.document;
+    
+    MADQueryBuilderSplitViewController *splitViewController;
+    splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
+    [self.tabBarViewControllers addObject: splitViewController];
+    self.querySplitViewController = splitViewController;
+    
+    MADDesignerViewController *designerViewController;
+    designerViewController = [MADDesignerViewController newDesignerViewController:document];
+    [self.tabBarViewControllers addObject: designerViewController];
+    self.designerViewController = designerViewController;
+    
+    MADNavigationController *navControllerViewer;
+    navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
+    navControllerViewer.document = document;
+    [self.tabBarViewControllers addObject: navControllerViewer];
+    self.navControllerViewer = navControllerViewer;
+ 
     id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
     self.querySplitViewController.viewControllerDelegate = delegate;
     self.designerViewController.delegate = delegate;
 
+    [self setViewControllers: self.tabBarViewControllers animated: animated];
     
-    MADNavigationController *navigationController;
-    navigationController = self.navControllerViewer;
-    [navigationController setNavigationBarHidden:YES animated:NO];
-    [navigationController setToolbarHidden:NO animated:NO];
-
     UIBarButtonItem *buttonDismiss;
     buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                  target: self
                                                                  action: @selector(viewControllerDidFinish:)];
-
+    
     [self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
     
     /*if (self.viewControllers.count > 0) {
@@ -185,17 +173,19 @@ const int8_t MADIndexViewer = 2;
     
     detailNavigationController = self.querySplitViewController.detailNavigationController;
     [detailNavigationController popToRootViewControllerAnimated:animated];
+
+    self.querySplitViewController.viewControllerDelegate = nil;
+    self.designerViewController.delegate = nil;
+
+    id emptyArray = [[NSArray alloc] init];
+    [self setViewControllers: emptyArray animated: animated];
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    
-    id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
-    self.querySplitViewController.viewControllerDelegate = delegate;
-    self.designerViewController.delegate = delegate;
-    self.delegate = nil;
-    
     [super viewDidDisappear:animated];
+    [self.tabBarViewControllers removeAllObjects];
+    self.delegate = nil;
 }
 
 - (void)viewWillLayoutSubviews {

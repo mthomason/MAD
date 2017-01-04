@@ -84,6 +84,7 @@
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
 
 #import "MADQueryViewDelegate.h"
+#import "MADTabBarItemProtocol.h"
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
@@ -120,7 +121,6 @@ static NSString * const ViewControllerTitle = @"MAD Query";
         MADViewControllerStandardProtocol,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate,
-        MTTabBarImageProtocol,
         MADQueryViewControllerDatasourceProtocol>
 
     @property (nonatomic, assign) BOOL firstTimeViewWillLayoutSubviews;

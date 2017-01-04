@@ -56,6 +56,7 @@ typedef NSMutableArray <MADMetaData *> MADMutableMetaDatum;
     // there is a local version of this item and it is the most up-to-date version known to this device.
     @property (getter=isUbiquitousItemDownloadingStatusCurrent, readonly) BOOL ubiquitousItemDownloadingStatusCurrent;
 
+    @property (readonly, getter=isDownloaded) BOOL downloaded;
     @property (readonly) BOOL ubiquitousItemIsDownloading;
     @property (readonly) BOOL ubiquitousItemIsUploaded;
     @property (readonly) BOOL ubiquitousItemIsUploading;

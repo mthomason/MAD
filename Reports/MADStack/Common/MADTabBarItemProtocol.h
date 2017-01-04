@@ -9,5 +9,13 @@
 #ifndef MADTabBarItemProtocol_h
 #define MADTabBarItemProtocol_h
 
+@protocol MADTabBarImageProtocol <NSObject>
+
+  @required
+    + (UIImage *)newTabBarImage;
+  @optional
+    + (NSString *)Title;
+
+@end
 
 #endif /* MADTabBarItemProtocol_h */

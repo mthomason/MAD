@@ -136,9 +136,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     return controller;
 }
 
-- (void)dealloc {
-    NSLog(@"Dealloc %@", NSStringFromClass([self class]));
-}
+- (void)dealloc { }
 
 #pragma mark - UIContainerViewControllerCallbacks
 

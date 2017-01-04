@@ -10,8 +10,10 @@
 #define Reports_MADToolboxNavigationController_h
 
 #import <UIKit/UINavigationController.h>
+#import "MADNavigationControllerIdentity.h"
 
 @interface MADNavigationControllerToolbox : UINavigationController
+    <MADNavigationControllerIdentify>
 
 @end
 

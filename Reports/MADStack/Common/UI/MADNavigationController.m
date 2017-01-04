@@ -18,7 +18,8 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import "MADViewerController.h"
+//#import "MADViewerController.h"
+#import "MADNavigationControllerViewer.h"
 
 #import "MADTransparentPresentationController.h"
 
@@ -37,14 +38,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
 @interface MADNavigationController ()
     @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
-@end
-
-@interface MADNavigationControllerViewer : MADNavigationController
-
-@end
-
-@interface MADNavigationControllerViewer ()
-    @property (nonatomic, strong) MADViewerController *viewerController;
+    @property (readwrite, nonatomic, assign) BOOL _completedFirstLayout;
 @end
 
 @implementation MADNavigationController
@@ -53,15 +47,18 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
 + (void)initialize {
     [super initialize];
-    if (self != [MADNavigationController self]) return;
-        
-    NSArray<Class <UIAppearanceContainer>> * classes;
-    UINavigationBar *appearanceProxy;
-    
-    classes = [[NSArray alloc] initWithObjects: self, nil];
-    appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-    appearanceProxy.barTintColor = [UIColor clearColor];
-    
+
+    if (self == [MADNavigationController self]) {
+        @autoreleasepool {
+            NSArray<Class <UIAppearanceContainer>> * classes;
+            UINavigationBar *appearanceProxy;
+            
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.barTintColor = [UIColor clearColor];
+        }
+    }
+
 }
 
 + (instancetype)newNavigationController:(MADNavigationControllerType)type {
@@ -135,26 +132,36 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
         }
     }
 
-    [controller setControllerType: type];
+    if ([controller respondsToSelector:@selector(setControllerType:)]) {
+        [controller setControllerType: type];
+    }
     
     return controller;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        __completedFirstLayout = NO;
+    }
+    return self;
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    
-    UIColor *white, *blue;
-    white = [MADColorEverydayApps newColorWhite];
-    blue = [MADColorEverydayApps newColorBlue];
-    self.toolbar.tintColor = white;
-    self.toolbar.barTintColor = blue;
-    self.toolbar.barStyle = UIBarStyleBlack;
-    self.toolbar.translucent = YES;
-    self.navigationBar.translucent = YES;
-
-    NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    
+    if (!__completedFirstLayout) {
+        UIColor *white, *blue;
+        white = [MADColorEverydayApps newColorWhite];
+        blue = [MADColorEverydayApps newColorBlue];
+        self.toolbar.tintColor = white;
+        self.toolbar.barTintColor = blue;
+        self.toolbar.barStyle = UIBarStyleBlack;
+        self.toolbar.translucent = YES;
+        self.navigationBar.translucent = YES;
+        
+        NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+        titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+        __completedFirstLayout = YES;
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -176,12 +183,13 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     }
 }
 
-- (UITabBarItem *)tabBarItem {
-    UITabBarItem *tabBarItems;
-    UITabBarController *tabBarController = (UITabBarController *)self.topViewController;
-    tabBarItems = tabBarController.tabBarItem;
-    return tabBarItems;
-}
+//- (UITabBarItem *)tabBarItem {
+//    [super tabBarItem];
+//    UITabBarItem *tabBarItems;
+//    UITabBarController *tabBarController = (UITabBarController *)self.topViewController;
+//    tabBarItems = tabBarController.tabBarItem;
+//    return tabBarItems;
+//}
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
@@ -239,24 +247,6 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     if (_document != document) {
         _document = document;
     }
-}
-
-@end
-
-@implementation MADNavigationControllerViewer : MADNavigationController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    id rootViewController = [MADViewerController newViewerController: self.document];
-    self.viewerController = rootViewController;
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self pushViewController:self.viewerController animated:animated];
-    
 }
 
 @end

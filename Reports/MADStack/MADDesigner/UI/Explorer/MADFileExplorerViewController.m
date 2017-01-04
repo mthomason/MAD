@@ -73,6 +73,7 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "MADNavigationController.h"
+#import "MADTabBarNavigationController.h"
 
 #import "MADQueryVisualizationViewController.h"
 
@@ -1192,7 +1193,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
             }
             
             MADTabBarController *tabController = self.tabController;
-            [tabController setViewControllers:nil animated:YES];
+            NSArray *viewControllers = [[NSArray alloc] init];
+            [tabController setViewControllers:viewControllers animated:YES];
             [self dismissViewControllerAnimated:YES completion:^{ }];
         };
         
@@ -1261,7 +1263,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-
+/*
     NSNotification *changeNotification;
     MADocument *document;
     SEL open;
@@ -1271,16 +1273,38 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     document = changeNotification.object;
     
     open = @selector(openViewerWithDocument:);
-    
+
     id fileController = self;
     operation = [[NSInvocationOperation alloc] initWithTarget: fileController
                                                      selector: open
                                                        object: document];
     
     [[NSOperationQueue mainQueue] addOperation:operation];
+    */
 }
 
+- (void)openViewer {
+    MADocument *document = self.activeDocumentManager.openDocument;
+    
+    NSURL *fileURL = document.fileURL.copy;
+    NSString *title = fileURL.lastPathComponent.copy;
+    
+    MADTabBarController *tabBarController;
+    tabBarController = [MADTabBarController newTabBarController:document prompt:title];
+    
+    MADTabBarNavigationController *navigationController;
+    navigationController = [[MADTabBarNavigationController alloc] initWithRootViewController:tabBarController];
+    
+    tabBarController.document = document;
+    tabBarController.viewControllerDelegate = self;
+    self.tabController = tabBarController;
+    
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+
 - (void)openViewerWithDocument:(MADocument *)document {
+    
     NSURL *fileURL = document.fileURL.copy;
     NSString *title = fileURL.lastPathComponent.copy;
     
@@ -1299,7 +1323,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
     //color = [MADColorEverydayApps newColorWhite];
     //navigationController.navigationBar.tintColor = color;
-    [self presentViewController:navigationController animated:YES completion:nil];
+    [self presentViewController:navigationController animated:YES completion:^{
+    }];
 }
 
 - (void)openDocumentAtURL:(NSURL *)url {
@@ -1320,9 +1345,12 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 
     MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
+    typeof(self) __weak wself = self;
     [allocatedDocument openWithCompletionHandler:^(BOOL success) {
         if (!success) {
             NSLog(@"Failed to open file");
+        } else {
+            [wself openViewer];
         }
     }];
 

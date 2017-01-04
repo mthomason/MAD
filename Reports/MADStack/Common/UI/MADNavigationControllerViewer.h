@@ -7,7 +7,9 @@
 //
 
 #import "MADNavigationController.h"
+#import "MADTabBarItemProtocol.h"
 
 @interface MADNavigationControllerViewer : MADNavigationController
+    <MADTabBarImageProtocol>
 
 @end

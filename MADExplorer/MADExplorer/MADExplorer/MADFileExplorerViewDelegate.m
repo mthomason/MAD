@@ -250,9 +250,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     url = metadata.URL.copy;
     
     if (self.isEditing) {
-        [self downloadIfNotYetDownloaded:metadata];
+        [self downloadIfNotYetDownloaded: metadata];
     } else {
-        [self openURL:metadata.URL];
+        [self openURL: url];
     }
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
@@ -400,7 +400,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)openURL:(NSURL *)url {
     MADFileExplorerDelegate delegate = self.delegate;
     NSURL *urlToOpen = url.copy;
-    id open = [[NSInvocationOperation alloc] initWithTarget: delegate
+    id open = [[NSInvocationOperation alloc] initWithTarget: self.delegate
                                                    selector: @selector(openDocumentAtURL:)
                                                      object: urlToOpen];
     [[NSOperationQueue mainQueue] addOperation:open];
@@ -408,7 +408,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
     
-    if (metadata.isUbiquitous && metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
+    if (metadata.isDownloaded) {
         
         NSURL *url = metadata.URL.copy;
         

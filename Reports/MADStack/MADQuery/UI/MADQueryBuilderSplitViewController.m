@@ -173,15 +173,15 @@ static NSString * const TextRedraw = @"Redraw";
         navigationController.navigationBar.tintColor = whiteColor.copy;
         navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
 
-        [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        /*[[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser == NO) {
                 NSNumber *animateObject;
                 animateObject = [[NSNumber alloc] initWithBool: NO];
-                [[NSOperationQueue mainQueue] performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
-                                                               withObject: animateObject
-                                                            waitUntilDone: NO];
+                [self performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
+                                       withObject: animateObject
+                                    waitUntilDone: NO];
             }
-        }];
+        }];*/
 
         _setupInitalLayout = YES;
     }
@@ -276,9 +276,11 @@ static NSString * const TextRedraw = @"Redraw";
     NSNumber *animateObject = [[NSNumber alloc] initWithBool:animated];
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
-            [[NSOperationQueue mainQueue] performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
-                                                           withObject: animateObject
-                                                        waitUntilDone: NO];
+            NSInvocationOperation *operation;
+            operation = [[NSInvocationOperation alloc] initWithTarget:self
+                                                             selector:@selector(layoutForUnlicensedUser:)
+                                                               object:animateObject];
+            [[NSOperationQueue mainQueue] addOperation:operation];
         }
     }];
 }

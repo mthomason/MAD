@@ -89,34 +89,34 @@ bool mad_mkdir(const char *path) {
     if (!success) {
         switch (errno) {
             case EACCES:
-                printf("Access denied.");
+                printf("Access denied. %s", path);
                 break;
             case EEXIST:
-                printf("Directory exist.");
+                printf("Directory exist. %s", path);
                 break;
             case ELOOP:
-                printf("Symbolic link loop found.");
+                printf("Symbolic link loop found. %s", path);
                 break;
             case EMLINK:
-                printf("Too many links.");
+                printf("Too many links. %s", path);
                 break;
             case ENAMETOOLONG:
-                printf("Path name is too long.");
+                printf("Path name is too long. %s", path);
                 break;
             case ENOENT:
-                printf("Path name missing or bad.");
+                printf("Path name missing or bad. %s", path);
                 break;
             case ENOSPC:
-                printf("System does not have enough space for this file.");
+                printf("System does not have enough space for this file. %s", path);
                 break;
             case ENOTDIR:
-                printf("A component of the path prefix is not a directory.");
+                printf("A component of the path prefix is not a directory. %s", path);
                 break;
             case EROFS:
-                printf("The parent directory resides on a read-only file system.");
+                printf("The parent directory resides on a read-only file system. %s", path);
                 break;
             default:
-                printf("Unknown error creating file.");
+                printf("Unknown error creating file. %s", path);
                 break;
         }
     }

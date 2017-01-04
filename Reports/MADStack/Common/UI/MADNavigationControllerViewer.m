@@ -7,21 +7,47 @@
 //
 
 #import "MADNavigationControllerViewer.h"
+#import "MADViewerController.h"
+#import <UIKit/UINavigationController.h>
 
 @interface MADNavigationControllerViewer ()
-
+    @property (nonatomic, strong) MADViewerController *viewerController;
 @end
 
 @implementation MADNavigationControllerViewer
 
+@synthesize title = _title;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    id rootViewController = [MADViewerController newViewerController: self.document];
+    self.viewerController = rootViewController;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self pushViewController:self.viewerController animated:animated];
+    [self setNavigationBarHidden:YES animated:NO];
+    [self setToolbarHidden:NO animated:NO];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    NSArray *emptyArray = [[NSArray alloc] init];
+    [self setViewControllers: emptyArray animated:animated];
+    //[self popViewControllerAnimated: NO];
+}
+
++ (UIImage *)newTabBarImage {
+    return [MADViewerController newTabBarImage];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        _title = self.viewerController == nil ?
+                    [MADViewerController Title] : self.viewerController.title.copy;
+    }
+    return _title;
 }
 
 /*

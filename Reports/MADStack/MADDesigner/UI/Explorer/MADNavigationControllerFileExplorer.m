@@ -67,4 +67,8 @@
     return result;
 }
 
+- (MADNavigationControllerType)controllerType {
+    return MADNavigationControllerTypeFileExplorer;
+}
+
 @end

@@ -101,6 +101,8 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 
 - (BOOL)isUbiquitousItemDownloadingStatusCurrent { @throw exceptionNotImplemented(_cmd); }
 
+- (BOOL)downloaded { @throw exceptionNotImplemented(_cmd); }
+
 - (BOOL)isSyncing {
     return self.ubiquitous &&
             (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);

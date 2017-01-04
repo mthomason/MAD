@@ -12,12 +12,14 @@
 #import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADViewControllerProtocol.h"
+#import "MADTabBarItemProtocol.h"
 
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADDesignerViewController : UIViewController
     <MADViewControllerDocumentProtocol,
-    MADViewControllerProtocol>
+        MADViewControllerProtocol,
+        MADTabBarImageProtocol>
 
     + (instancetype)newDesignerViewController:(MADocument *)document;
     

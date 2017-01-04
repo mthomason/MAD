@@ -109,6 +109,8 @@
     return url;
 }
 
+- (BOOL)downloaded { return YES; }
+
 - (BOOL)isSyncing { return NO; }
 - (BOOL)isUbiquitous { return NO; }
 - (BOOL)ubiquitousItemDownloadRequested { return NO; }

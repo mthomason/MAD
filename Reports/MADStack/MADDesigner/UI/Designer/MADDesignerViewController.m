@@ -196,7 +196,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADViewControllerStandardProtocol,
     MTReportDesignerSectionLayoutSettingsDelegate,
     MTQueryBuilderChooseFieldDelegate,
-    MTTabBarImageProtocol,
     UIPopoverPresentationControllerDelegate,
     UICollectionViewDataSource,
     UICollectionViewDelegate,
@@ -281,6 +280,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 @implementation MADDesignerViewController
 
 @synthesize document = _document;
+@synthesize title = _title;
 
 #pragma mark -
 #pragma mark Static Helpers
@@ -408,7 +408,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 #pragma mark - UIViewController
 
-- (NSString *)title { return [MADDesignerViewController MADDesigner]; }
+- (NSString *)title {
+    if (_title == nil) {
+        _title = [MADDesignerViewController MADDesigner];
+    }
+    return _title;
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

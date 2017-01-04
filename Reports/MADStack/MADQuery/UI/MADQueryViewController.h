@@ -11,15 +11,15 @@
 
 #import <UIKit/UITableViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
+#import "MADTabBarItemProtocol.h"
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const MADSegueShowSql;
 
-//@protocol MADViewControllerStandardProtocol;
-
 @interface MADQueryViewController : UITableViewController
-    <MADViewControllerDocumentProtocol>
+    <MADViewControllerDocumentProtocol,
+        MADTabBarImageProtocol>
 
     + (void)deleteCoreDataCache;
 

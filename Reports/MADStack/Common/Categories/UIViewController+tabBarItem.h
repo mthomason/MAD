@@ -14,13 +14,7 @@
 @class NSObject;
 @class UIImage;
 
-@protocol MTTabBarImageProtocol <NSObject>
-
-    + (UIImage *)newTabBarImage;
-
-@end
-
-@interface UIViewController (tabBarItem) <MTTabBarImageProtocol>
+@interface UIViewController (tabBarItem)
 
 @end
 

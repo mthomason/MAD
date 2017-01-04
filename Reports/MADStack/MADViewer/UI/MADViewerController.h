@@ -13,12 +13,14 @@
 
 #import <MAD/MADActivityProtocol.h>
 #import "MADViewControllerDocumentProtocol.h"
+#import "MADTabBarItemProtocol.h"
 
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADViewerController : UIPageViewController
     <MADViewControllerDocumentProtocol,
-        MADActivityProtocol>
+        MADActivityProtocol,
+        MADTabBarImageProtocol>
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 

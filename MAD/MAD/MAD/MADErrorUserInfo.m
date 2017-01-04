@@ -17,9 +17,7 @@
 
 @implementation MADErrorUserInfo
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {
     if (self = [super init]) {

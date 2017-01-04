@@ -109,7 +109,7 @@
 - (BOOL)isUbiquitous {
     BOOL isUbiquitous = NO;
     NSNumber *wrapper;
-    wrapper = [self.metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
+    wrapper = [_metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
     isUbiquitous = wrapper.boolValue;
     return wrapper;
 }
@@ -197,6 +197,10 @@
     NSString *status = [self ubiquitousItemDownloadingStatus];
     result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ? YES : NO;
     return result;
+}
+
+- (BOOL)downloaded {
+    return [self isUbiquitous] && [self isUbiquitousItemDownloadingStatusNotDownloaded];
 }
 
 - (id)debugQuickLookObject {

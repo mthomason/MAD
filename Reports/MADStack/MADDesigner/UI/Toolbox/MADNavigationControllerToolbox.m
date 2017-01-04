@@ -26,4 +26,8 @@
     return YES;
 }
 
+- (MADNavigationControllerType)controllerType {
+    return MADNavigationControllerTypeToolbox;
+}
+
 @end
