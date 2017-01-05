@@ -384,10 +384,19 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (NSString *)accessibilityLabel {
-    NSString *pageNumber = [NSNumberFormatter localizedStringFromNumber: @([self.delegatePage pageNumber])
+    NSUInteger pageNumberValue;
+    NSNumber *pageNumberWrapper;
+    NSString *pageNumberString, *formatString, *pageNumberStringCaps, *result;
+    
+    pageNumberValue = [self.delegatePage pageNumber];
+    pageNumberWrapper = [[NSNumber alloc] initWithUnsignedInteger:pageNumberValue];
+    
+    pageNumberString = [NSNumberFormatter localizedStringFromNumber: pageNumberWrapper
                                                             numberStyle: NSNumberFormatterSpellOutStyle];
-    NSString *formatString = NSLocalizedString(PageNumber, PageNumber);
-    return [NSString stringWithFormat:formatString, pageNumber.capitalizedString];
+    formatString = NSLocalizedString(pageNumberString, pageNumberString);
+    pageNumberStringCaps = pageNumberString.capitalizedString;
+    result = [[NSString alloc] initWithFormat:formatString, pageNumberStringCaps];
+    return result;
 }
 
 @end

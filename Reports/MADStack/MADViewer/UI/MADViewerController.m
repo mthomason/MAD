@@ -114,6 +114,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     @property (nonatomic, assign) NSUInteger numberOfPages;
     @property (nonatomic, assign) NSUInteger currentPageIndex;
+
     @property (nonatomic, assign, readwrite) CGFloat zoomScale;
 
     @property (nonatomic, strong) NSDate *lastCacheDate;
@@ -127,6 +128,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, weak) MADPageSlider *pageSlider;
     @property (nonatomic, weak) MADLabelStatus *labelStatus;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
+    @property (nonatomic, weak) UIBarButtonItem *barButtonLabelStatus;
+
+    @property (nonatomic, strong) NSMutableArray *toolbarItemsActive;
 
     @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
     @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
@@ -159,6 +163,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @synthesize document = _document;
 @synthesize title = _title;
 
+#pragma mark - Static helpers
+
++ (void)setNavigationBarAppearanceTinted {
+    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
+    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorWhite];
+}
+
++ (void)setNavigationBarAppearanceHighlighted {
+    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
+    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorRed];
+}
+
 + (instancetype)newViewerController:(MADocument *)document {
     UIStoryboard *storyboard;
     id bundle, controller;
@@ -173,6 +189,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if (_timerLabelTimeSinceRefreh.valid) {
@@ -181,6 +198,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         _timerLabelTimeSinceRefreh = nil;
     }
+    [_toolbarItemsActive removeAllObjects];
+    _pageSlider.sliderDelegate = nil;
 }
 
 - (void)timerDealloc {
@@ -194,6 +213,45 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         timer = nil;
         self.timerLabelTimeSinceRefreh = nil;
     }
+}
+
+
+#pragma mark - Initalize
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        _isFirstAppearance = YES;
+        _activityExporting = NO;
+        _didRefreshBeforeReaload = NO;
+        _refreshing = NO;
+        _activityExporting = NO;
+        _startedRefresh = NO;
+        _pageIsAnimating = NO;
+        _updatingOfTimerIsPaused = NO;
+        
+        MADOperationQueue *refreshQueue = [[MADOperationQueue alloc] init];
+        self.refreshQueue = refreshQueue;
+        
+        CGRect boundsStatusLabel = CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f);
+        
+        MADLabelStatus *labelStatus;
+        labelStatus = [[MADLabelStatus alloc] initWithFrame: boundsStatusLabel];
+
+        UIBarButtonItem *barButtonLabelStatus;
+        barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+        
+        NSMutableArray *toolbarItems;
+        NSArray *emptyArray = [[NSArray alloc] init];
+        toolbarItems = self.toolbarItems.mutableCopy;
+        [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
+        [self setToolbarItems: emptyArray animated: NO];
+
+        self.toolbarItemsActive = toolbarItems;
+        self.barButtonLabelStatus = barButtonLabelStatus;
+        self.labelStatus = labelStatus;
+
+    }
+    return self;
 }
 
 #pragma mark - MADOperationObserver
@@ -219,7 +277,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 
                 [self timerDealloc];
                 
-                [self uiUpdateTimeSinceLastRefresh: NULL];
+                [self updateTimeSinceLastRefresh: NULL];
                 
                 [self removeObserverDidReadRowsFromDatabase:document.database];
                 
@@ -258,17 +316,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super applicationFinishedRestoringState];
 }
 
-#pragma mark - Initalize
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        _isFirstAppearance = YES;
-        _activityExporting = NO;
-        _didRefreshBeforeReaload = NO;
-    }
-    return self;
-}
-
 #pragma mark -
 #pragma mark MADPageSliderDelegate
 
@@ -305,20 +352,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    CGRect frame;
     id blankPage;
     NSArray *pages;
-    NSMutableArray *toolbarItems;
-    MADLabelStatus *labelStatus;
-    UIBarButtonItem *barButtonLabelStatus;
-
-    frame = CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f);
-    labelStatus = [[MADLabelStatus alloc] initWithFrame: frame];
     
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
-    
-    MADOperationQueue *refreshQueue = [[MADOperationQueue alloc] init];
-    self.refreshQueue = refreshQueue;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
@@ -331,12 +368,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    self.refreshing = NO;
-    self.updatingOfTimerIsPaused = NO;
-    self.pageIsAnimating = NO;
-    self.startedRefresh = NO;
-    self.timerLabelTimeSinceRefreh = nil;
-    self.lastCacheDate = nil;
     
     self.dataSource = self;
     self.delegate = self;
@@ -344,7 +375,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.currentPageIndex = 0;
     
     blankPage = [[UIViewController alloc] init];
-    pages = @[blankPage];
+    pages = [[NSArray alloc] initWithObjects:blankPage, nil];
     
     [self setViewControllers: pages
                    direction: UIPageViewControllerNavigationDirectionForward
@@ -353,17 +384,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                   
     }];
     
-    toolbarItems = self.toolbarItems.mutableCopy;
-    
-    barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
-    [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
-    
-    [self setToolbarItems: toolbarItems animated: NO];
-
-    [labelStatus updatePageStatus: self.numberOfPages
-                 currentPageIndex: self.currentPageIndex];
-
-    self.labelStatus = labelStatus;
+    [self.labelStatus updatePageStatus: self.numberOfPages
+                      currentPageIndex: self.currentPageIndex];
     
 }
 
@@ -373,8 +395,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
     pageSlider.sliderDelegate = self;
-    [self.view addSubview:pageSlider];
     
+    [self setToolbarItems: self.toolbarItemsActive animated: animated];
+    
+    [self.view addSubview:pageSlider];
     [self.view bringSubviewToFront:pageSlider];
 
     [self updateNavigationPrompt:animated];
@@ -397,13 +421,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRenderer;
         
-    [self uiUpdateNumberOfPages];
+    [self updateNumberOfPages];
     
     
     self.refreshing = NO;
     self.startedRefresh = NO;
     
-    [self uiUpdateRecordsRead];
+    [self updateRecordsRead];
     
     document.reportFormatter.didRefresh = NO;
     
@@ -435,18 +459,22 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion: nil];
+                        animated: animated completion:^(BOOL finished) {
+                            
+                        }];
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self uiUpdateTimeSinceLastRefresh:self];
+    [self updateTimeSinceLastRefresh:self];
     [self.pageSlider setNeedsLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    NSArray *emptyArray = [[NSArray alloc] init];
+    [self setToolbarItems: emptyArray animated: animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -531,7 +559,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
 
-- (nullable MADReportPageViewController *)visiblePageViewController { return self.viewControllers.count > 0 ? self.viewControllers[0] : nil; }
+- (nullable MADReportPageViewController *)visiblePageViewController {
+    return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
+}
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
     BOOL result = NO;
@@ -578,7 +608,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (MADReportPageViewController *)currentPageviewController {
-    return [self pageViewControllerAtIndex: self.currentPageIndex];
+    MADReportPageViewController *currentPageviewController;
+    currentPageviewController = [self pageViewControllerAtIndex: self.currentPageIndex];
+    return currentPageviewController;
 }
 
 - (MADReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
@@ -701,9 +733,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     printPreview.delegate = self;
     
-    NSArray *applicationActivities = @[printPreview];
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
-                                                                                         applicationActivities:applicationActivities];
+    NSArray *applicationActivities = [[NSArray alloc] initWithObjects: printPreview, nil];
+    
+    UIActivityViewController *activityViewController;
+    activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+                                                               applicationActivities:applicationActivities];
     
     MADViewerController * __weak weakself = self;
     UIActivityViewControllerCompletionWithItemsHandler activityCompletionHandler =
@@ -778,16 +812,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self.tabBarController disableTabBarItems];
 }
 
-+ (void)setNavigationBarAppearanceTinted {
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorWhite];
-}
-
-+ (void)setNavigationBarAppearanceHighlighted {
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorRed];
-}
-
 - (IBAction)refresh:(id)sender {
     
     self.didRefreshBeforeReaload = YES;
@@ -802,11 +826,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         [self addObserverDidReadRowsToDatabase:document.database];
         
-        MADRefreshReloadOperation *refreshReloadOperation =
-            [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self
-                                             databaseConnection:document.database.databaseConnection];
-        [refreshReloadOperation addObserver:self];
-        [self.refreshQueue addOperation:refreshReloadOperation];
+        MADRefreshReloadOperation *refreshOperation;
+        refreshOperation = [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self
+                                                            databaseConnection:document.database.databaseConnection];
+        [refreshOperation addObserver:self];
+        [self.refreshQueue addOperation:refreshOperation];
         
     }
 }
@@ -895,7 +919,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [sself ignoreFormatter: document.reportFormatter];
         
         
-        [sself uiUpdateNumberOfPages];
+        [sself updateNumberOfPages];
         
         MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
         pageAttributes.pageNumber = sself.currentPageNumber;
@@ -930,7 +954,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         sself.refreshing = NO;
         sself.startedRefresh = NO;
         
-        [sself uiUpdateRecordsRead];
+        [sself updateRecordsRead];
         
         document.reportFormatter.didRefresh = NO;
         
@@ -1077,20 +1101,22 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 }
 
-- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
+                   spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
 
     pageViewController.pageIsAnimating = NO;
     return UIPageViewControllerSpineLocationMin;
 
 }
 
-- (void)pageViewController:(MADViewerController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+- (void)pageViewController:(MADViewerController *)pageViewController
+                            willTransitionToViewControllers:(NSArray *)pendingViewControllers {
     pageViewController.pageIsAnimating = YES;
 }
 
 #pragma mark - Status Label
 
-- (void)uiUpdateTimeSinceLastRefresh:(id)sender {
+- (void)updateTimeSinceLastRefresh:(id)sender {
 
     MADLabelStatus *labelStatus = self.labelStatus;
     MTDateResolution resolution;
@@ -1126,26 +1152,24 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
-                                                  target: self selector: @selector(uiUpdateTimeSinceLastRefresh:)
+                                                  target: self selector: @selector(updateTimeSinceLastRefresh:)
                                                 userInfo: nil repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
 }
 
-- (void)uiUpdateRecordsRead {
-
-    NSNumber *numberOfResults = @(self.document.mainDataTable.rowCounter);
+- (void)updateRecordsRead {
+    MTDataTableFast *mainDataTable;
+    NSNumber *numberOfResults;
+    mainDataTable = self.document.mainDataTable;
+    numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: mainDataTable.rowCounter];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
 
 }
 
-- (void)uiUpdateNumberOfPages {
+- (void)updateNumberOfPages {
     self.numberOfPages = self.document.reportFormatter.numberOfPages;
-    [self uiUpdateNumberOfPages: (self.numberOfPages > 0 ? (self.numberOfPages - 1) : 0)];
+    [self updateNumberOfPages: (self.numberOfPages > 0 ? (self.numberOfPages - 1) : 0)];
     [self setDisplayActive];
-}
-
-- (void)uiUpdateNumberOfPages:(NSUInteger)numberOfPages {
-    [self updateNumberOfPages:(NSUInteger)numberOfPages];
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
