@@ -11,7 +11,7 @@
 
 #import "MADNavigationController.h"
 
-@interface MADNavigationControllerSplitParentViewController : MADNavigationController
+@interface MADNavigationControllerQueryBuilder : MADNavigationController
 
 @end
 

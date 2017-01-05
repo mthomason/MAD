@@ -6,28 +6,37 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADNavigationControllerSplitParentViewController.h"
+#import "MADNavigationControllerQueryBuilder.h"
 #import <UIKit/UINavigationBar.h>
 
-@interface MADNavigationControllerSplitParentViewController ()
+@interface MADNavigationControllerQueryBuilder ()
 
     @property (nonatomic, assign) BOOL firstTimeLayout;
 
 @end
 
-@implementation MADNavigationControllerSplitParentViewController
+@implementation MADNavigationControllerQueryBuilder
+
++ (void)initialize {
+    [super initialize];
+    
+    if (self == [MADNavigationController self]) {
+        @autoreleasepool {
+            
+        }
+    }
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.hidesBarsWhenVerticallyCompact = NO;
         _firstTimeLayout = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    //NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
+    self.hidesBarsWhenVerticallyCompact = NO;
 }
 
 #pragma mark - Navigation
@@ -62,12 +71,16 @@
     [super viewWillDisappear:animated];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (_firstTimeLayout) {
-        self.navigationBar.hidden = YES;
-        _firstTimeLayout = NO;
-    }
 }
 
 - (void)viewDidLayoutSubviews {
