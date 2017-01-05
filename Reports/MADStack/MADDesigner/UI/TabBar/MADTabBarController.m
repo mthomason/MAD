@@ -124,16 +124,17 @@ const int8_t MADIndexViewer = 2;
     MADocument *document = self.document;
     
     MADQueryBuilderSplitViewController *splitViewController;
+    MADDesignerViewController *designerViewController;
+    MADNavigationController *navControllerViewer;
+    
     splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
     [self.tabBarViewControllers addObject: splitViewController];
     self.querySplitViewController = splitViewController;
     
-    MADDesignerViewController *designerViewController;
     designerViewController = [MADDesignerViewController newDesignerViewController:document];
     [self.tabBarViewControllers addObject: designerViewController];
     self.designerViewController = designerViewController;
     
-    MADNavigationController *navControllerViewer;
     navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
     navControllerViewer.document = document;
     [self.tabBarViewControllers addObject: navControllerViewer];

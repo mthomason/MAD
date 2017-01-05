@@ -19,6 +19,13 @@
 #import "archive.h"
 #import "archive_entry.h"
 
+bool archive_function_result_handler(int ar, const char *description);
+bool directory_exist(const char *path);
+char *mad_copy_path_fix(const char *path);
+void strip_trailing_slashes(char **path);
+static inline bool path_exist(const char *path);
+bool mad_mkdir(const char *path);
+
 int mad_copy_data(struct archive *ar, struct archive *aw) {
     
     int r;
@@ -42,23 +49,18 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
     }
 }
 
-void strip_trailing_slashes(char *path);
-
-static inline bool path_exist(const char *path);
 static inline bool path_exist(const char *path) {
     return !(access(path, F_OK) == -1);
 }
 
-char *mad_copy_path_fix(const char *path);
 
-bool directory_exist(const char *path);
 bool directory_exist(const char *path) {
     bool opened_directory = false;
     size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len) * sizeof(char));
+    char *p = (char *) malloc((path_len) * sizeof(char *));
     p[0] = '\0';
     strcpy(p, path);
-    strip_trailing_slashes(path);
+    strip_trailing_slashes(&path);
     DIR *dir = opendir(p);
     if (dir) {
         opened_directory = true;
@@ -68,7 +70,6 @@ bool directory_exist(const char *path) {
     return opened_directory;
 }
 
-bool archive_function_result_handler(int ar, const char *description);
 bool archive_function_result_handler(int ar, const char *description) {
     bool result = false;
     switch (ar) {
@@ -85,14 +86,13 @@ bool archive_function_result_handler(int ar, const char *description) {
     return result;
 }
 
-bool mad_mkdir(const char *path);
 bool mad_mkdir(const char *path) {
     bool success;
     size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len + 1) * sizeof(char));
+    char *p = (char *) malloc((path_len + 1) * sizeof(char *));
     p[0] = '\0';
     strcpy(p, path);
-    strip_trailing_slashes(p);
+    strip_trailing_slashes(&p);
 
     success = mkdir(p, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0;
 //    success = mkdir(p, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) == 0;
@@ -134,11 +134,11 @@ bool mad_mkdir(const char *path) {
     return success;
 }
 
-void strip_trailing_slashes(char *path) {
+void strip_trailing_slashes(char **path) {
     int last;
-    last = strlen (path) - 1;
-    while (last > 0 && path[last] == '/')
-        path[last--] = '\0';
+    last = strlen(*path) - 1;
+    while (last > 0 && *path[last] == '/')
+        *path[last--] = '\0';
 }
 
 int mad_extract(const char *source, const char *dest, const char *filename) {
@@ -175,11 +175,16 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     ar = archive_write_disk_set_standard_lookup(ext);
     archive_function_result_handler(ar, "Archive correctly set standard lookup.");
     
-    if ((r = archive_read_open_filename(a, source, 10240)))
-        goto EXTRACT_MAD_FAIL;
+    r = archive_read_open_filename(a, source, 10240);
     
+    if (r < 0) {
+        goto EXTRACT_MAD_FAIL;  // Problably using non archvie format.
+        assert(r);
+    }
+
+//    char dest_root[(strlen(dest) + strlen(filename) + 1)];
     char *dest_root;
-    dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1) * sizeof(char));
+    dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char *));
     dest_root[0] = '\0';
     strcpy(dest_root, dest);
     strcat(dest_root, "/");
@@ -195,13 +200,13 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         const char *entry_pathname;
         entry_pathname = archive_entry_pathname(entry);
         
-        char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
+        char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char *));
         location[0] = '\0';
         strcpy(location, filename);
         strcat(location, "/");
         strcat(location, entry_pathname);
         
-        char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char));
+        char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char *));
         path[0] = '\0';
         
         strcpy(path, dest);
@@ -321,12 +326,20 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st)
 
 void mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath) {
     
-    struct stat st;
-    int fd, len;
-    char buff[8192];
-    struct archive_entry *entry;
+    const ssize_t buff_size = 8192;
+    int fd = 0, status = 0;
+    ssize_t len;
+    char buff[buff_size];
     
-    stat(filename, &st);
+    struct archive_entry *entry = NULL;
+    struct stat st;
+    
+    status = stat(filename, &st);
+    if (status == -1) {
+        fprintf(stderr, "Failed to get file status for %s.\n", filename);
+        goto ARCHIVE_WRITE_MAD_CLEANUP;
+    }
+    
     entry = archive_entry_new2(archive);
     archive_entry_copy_stat(entry, &st);
     archive_entry_set_pathname(entry, relativePath);
@@ -334,12 +347,25 @@ void mad_archive_write_file(struct archive *archive, const char *filename, const
     
     archive_write_header(archive, entry);
     fd = open(filename, O_RDONLY);
-    len = read(fd, buff, sizeof(buff));
-    while ( len > 0 ) {
-        archive_write_data(archive, buff, (size_t)len);
-        len = read(fd, buff, sizeof(buff));
+    if (fd == -1) {
+        fprintf(stderr, "Failed to open file %s.\n", filename);
+        goto ARCHIVE_WRITE_MAD_CLEANUP;
     }
-    close(fd);
-    archive_entry_free(entry);
+
+    la_ssize_t w_size;
+    while ((len = read(fd, buff, buff_size)) > 0) {
+        w_size = archive_write_data(archive, buff, len);
+    }
+    
+    status = close(fd);
+    if (status == -1) {
+        fprintf(stderr, "Failed to close file.\n");
+        goto ARCHIVE_WRITE_MAD_CLEANUP;
+    }
+    
+ARCHIVE_WRITE_MAD_CLEANUP:;
+    if (entry) {
+        archive_entry_free(entry);
+    }
 }
 

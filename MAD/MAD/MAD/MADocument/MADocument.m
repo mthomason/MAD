@@ -338,42 +338,61 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion  {
++ (void)close:(MADocument *)document
+   completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion  {
     
     MADocument *strongDocument = document;
     [strongDocument regenThumbnail];
     [strongDocument removeObservers];
 
-    void (^closeCompletionHandler)(BOOL);
+    //void (^closeCompletionHandler)(BOOL);
     //void (^origionalCompletionHandler)(BOOL, NSURL *);
     //origionalCompletionHandler = completion;
     
     NSURL *fileURL = strongDocument.fileURL.copy;
     NSURL *gutsUrl = strongDocument.urlGuts.copy;
-    closeCompletionHandler = ^(BOOL successClose) {
-        completion(successClose, fileURL, gutsUrl);
-    };
+    //closeCompletionHandler = ^(BOOL successClose) {
+    //    completion(successClose, fileURL, gutsUrl);
+    //};
     
     //MADocument * __weak weakdoc = document;
-    void (^ saveCompletionHandler)(BOOL);
+    /*void (^ saveCompletionHandler)(BOOL);
     saveCompletionHandler = ^(BOOL success) {
         
         if (strongDocument != nil) {
             if (success) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [strongDocument closeWithCompletionHandler:closeCompletionHandler];
+                    [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+                        completion(successClose, fileURL, gutsUrl);
+                    }];
                 }];
             }
             strongDocument.thumbnail = nil;
         }
         
-    };
-    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:document];
-    document.thumbnail = thumbnail;
-    
-    [document saveToURL: fileURL
-       forSaveOperation: UIDocumentSaveForOverwriting
-      completionHandler: saveCompletionHandler];
+    };*/
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
+        strongDocument.thumbnail = thumbnail;
+        //[strongDocument saveToURL: fileURL
+        //         forSaveOperation: UIDocumentSaveForOverwriting
+        //        completionHandler: ^(BOOL success) {
+                    
+                    if (strongDocument != nil) {
+                                                strongDocument.thumbnail = nil;
+                        //if (success) {
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+                                    completion(successClose, fileURL, gutsUrl);
+                                }];
+                            }];
+                        //}
+                    }
+                    
+          //      }];
+    //}];
+
     
 }
 

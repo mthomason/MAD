@@ -781,10 +781,12 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [NSString stringWithFormat:MTDatabaseSqlite3SafeFormatField, tableName, fieldName];
+    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatField, tableName, fieldName];
+    return result;
 }
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [MTDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
+    MADSafeQueryField * result = [MTDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
+    return result;
 }
 
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {

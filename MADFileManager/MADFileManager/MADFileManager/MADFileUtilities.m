@@ -48,27 +48,27 @@ static NSString * const MADPathComponentData       = @"Data";
                                                                                         options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                                    errorHandler: ErrorHandler];
             
-            dispatch_queue_t queueHigh = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0);
-            dispatch_group_t group = dispatch_group_create();
-            dispatch_group_enter(group);
+            //dispatch_queue_t queueHigh = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0);
+            //dispatch_group_t group = dispatch_group_create();
+            //dispatch_group_enter(group);
             
             for (NSURL *fileURL in enumerator) {
                 NSURL *file = fileURL.copy;
-                dispatch_group_async(group, queueHigh, ^{
+                //dispatch_group_async(group, queueHigh, ^{
                     //@autoreleasepool {
                     [MADFileUtilities removeFileAtURL:file];
                     //}
-                });
+                //});
             }
             
             NSURL *file = destinationUrl.copy;
-            dispatch_group_async(group, queueHigh, ^{
+            //dispatch_group_async(group, queueHigh, ^{
                 //@autoreleasepool {
                 [MADFileUtilities removeFileAtURL:file];
                 //}
-            });
-            dispatch_group_leave(group);
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+            //});
+            //dispatch_group_leave(group);
+            //dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
             
         }
     }

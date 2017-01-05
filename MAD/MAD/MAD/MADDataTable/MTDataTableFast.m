@@ -249,7 +249,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)filenameCacheMadDB {
-    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
+    NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
     return [tag stringByAppendingPathExtension:@"maddb"];
 }
 

@@ -11,4 +11,6 @@
 
 #include <stdio.h>
 
+void mad_malloc(char **str, size_t len);
+
 #endif /* madmalloc_h */

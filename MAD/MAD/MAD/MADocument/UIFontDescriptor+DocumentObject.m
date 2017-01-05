@@ -13,18 +13,25 @@
 
 + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)object {
 
+    NSString *fontname;
+    NSNumber *fontsize, *italic, *bold;
+    italic = object.italic;
+    bold = object.bold;
+    
     UIFontDescriptorSymbolicTraits traits = 0;
-    if (object.italic.boolValue) traits     |= UIFontDescriptorTraitItalic;
-    if (object.bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
+    if (italic.boolValue) traits     |= UIFontDescriptorTraitItalic;
+    if (bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
     
     NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
     
     NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     traitsWrapper, UIFontSymbolicTrait, nil];
     
-    NSString *fontname = object.fontname.copy;
-    NSNumber *fontsize = object.fontsize.copy;
-    NSDictionary *fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+    fontname = object.fontname.copy;
+    fontsize = object.fontsize.copy;
+    
+    NSDictionary *fontAttributes;
+    fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     fontname,       UIFontDescriptorFamilyAttribute,
                                     fontsize,       UIFontDescriptorSizeAttribute,
                                     symbolicTraits, UIFontDescriptorTraitsAttribute, nil];

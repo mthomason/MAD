@@ -7,16 +7,20 @@
 //
 
 #import "MADArchiveManager.h"
-#import <MADFileManager/MADFileUtilities.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSFileWrapper.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
 #import <stdlib.h>
 #import <string.h>
 #import <copyfile.h>
 #import <unistd.h>
+
+#import "madmalloc.h"
 #import "madpath.h"
 #import "madtar.h"
 #import "archive.h"
@@ -43,40 +47,38 @@
 }
 
 - (BOOL)archive:(BOOL)overwrite {
+    
+    NSURL *fileWrapperURL = self.filewrapper.copy;
+    NSURL *archiveURL = self.archive.copy;
+    
     NSDirectoryEnumerator <NSURL *> * directory =
-    [[NSFileManager defaultManager] enumeratorAtURL: _filewrapper
+    [[NSFileManager defaultManager] enumeratorAtURL: fileWrapperURL
                          includingPropertiesForKeys: nil
                                             options: NSDirectoryEnumerationSkipsHiddenFiles
                                        errorHandler: nil];
     BOOL success = NO;
     int r;
     struct archive *archive;
-
-    char *relativePathFileSystem;
-    char *origionalURLFileSystem;
-    char *archiveFilename;
-    char *filename;
     
-    NSString *basePath = _filewrapper.path.copy;
     NSString *relativePath;
-    NSString *unpacked_name = _filewrapper.lastPathComponent.copy;
+    NSString *unpacked_name = fileWrapperURL.lastPathComponent.copy;
 
-    
-    origionalURLFileSystem = strdup(_filewrapper.fileSystemRepresentation);
+    char *origionalURLFileSystem = strdup(fileWrapperURL.fileSystemRepresentation);
     chdir(origionalURLFileSystem);
     
-    archiveFilename = strdup(_archive.fileSystemRepresentation);
+    char *archiveFilename = strdup(archiveURL.fileSystemRepresentation);
+    char *outname = strdup(archiveURL.fileSystemRepresentation);
     
-    
-    char *outname = malloc( (strlen(archiveFilename) + 1 ) * sizeof(char *) + 1 );
-    char *backup = malloc( ( strlen(archiveFilename) + 1 ) * sizeof(char *) + 2 );
-    
-    strcpy(outname, archiveFilename);
-    strcpy(backup, archiveFilename);
-    strcat(backup, "~\0");
-    
+    const char * pathToArchive = strdup(archiveURL.fileSystemRepresentation);
+    char *backup;
+    mad_malloc(&backup, strlen(pathToArchive) + 2);
+    //backup = '\0';
+    strcpy(backup, pathToArchive);
+    strcat(backup, "~");
     mad_file_remove_if_exist(backup);
     
+    NSString *tmpRelativePath, *tmpRelativePath2;
+    NSURL *url;
     
     r = copyfile(archiveFilename, backup, NULL,
                  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
@@ -95,7 +97,8 @@
     r = archive_write_open_filename(archive, outname);
     if (r != ARCHIVE_OK) goto ARCHIVE_FILE_AT_URL_SHORT;
     
-    for (NSURL *url in directory) {
+    
+    for (url in directory) {
 
         NSURL *baseUrl = url.copy;
         while (![baseUrl.lastPathComponent isEqualToString:unpacked_name]) {
@@ -103,12 +106,13 @@
         }
         NSString *basePathFileName = baseUrl.path.copy;
         
-        NSString *tmpRelativePath = url.path.copy;
-        NSString *tmpRelativePath2 = [tmpRelativePath stringWithPathRelativeTo:basePathFileName];
+        tmpRelativePath = url.path.copy;
+        tmpRelativePath2 = [MADArchiveManager newStringWithPath:tmpRelativePath
+                                                     relativeTo:basePathFileName];
         relativePath = tmpRelativePath2.copy;
         
-        filename = strdup(url.fileSystemRepresentation);
-        relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
+        char *filename = strdup(url.fileSystemRepresentation);
+        char *relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
         
         mad_archive_write_file(archive, filename, relativePathFileSystem);
 
@@ -132,11 +136,47 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                  COPYFILE_COPY_XATTR | COPYFILE_DATA);
     }
     
-    free(backup); free(outname);
     free(origionalURLFileSystem);
+    free(backup); free(outname);
     free(archiveFilename);
     
     return success;
+}
+
++ (NSString *)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath {
+    NSString *baseString = basePath.copy;
+    NSString *anchorString = anchorPath.copy;
+    
+    NSString *pathComponent, *anchorComponent;
+    NSArray <NSString *> *pathComponents = baseString.pathComponents,
+                         *anchorComponents = anchorString.pathComponents;
+    
+    NSUInteger componentsInCommon = MIN(pathComponents.count, anchorComponents.count);
+    
+    for (NSUInteger i = 0, n = componentsInCommon; i < n; i++) {
+        pathComponent = pathComponents[i];
+        anchorComponent = anchorComponents[i];
+        if (![pathComponent isEqualToString:anchorComponent]) {
+            componentsInCommon = i;
+            break;
+        }
+    }
+    
+    const NSUInteger numberOfParentComponents = anchorComponents.count - componentsInCommon;
+    const NSUInteger numberOfPathComponents = pathComponents.count - componentsInCommon;
+    
+    NSMutableArray *relativeComponents;
+    relativeComponents = [[NSMutableArray alloc] initWithCapacity:
+                          numberOfParentComponents + numberOfPathComponents];
+    for (NSUInteger i = 0; i < numberOfParentComponents; i++) {
+        [relativeComponents addObject:@".."];
+    }
+    NSArray <NSString *> *subarrayWithRange;
+    subarrayWithRange = [pathComponents subarrayWithRange:
+                         NSMakeRange(componentsInCommon, numberOfPathComponents)];
+    [relativeComponents addObjectsFromArray: subarrayWithRange];
+    NSString *result = [NSString pathWithComponents:relativeComponents];
+    return result.copy;
 }
 
 - (BOOL)unarchive {
@@ -145,11 +185,12 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     //NSURL *urlGuts = _filewrapper.copy;
     NSString *fileWrapperPath = _filewrapper.path.copy;
     NSError * __autoreleasing *errorCreate = nil;
-    NSURL *destionURL;
-    NSString *lastPathComponent;
-    
     [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper];
     
+    NSURL *destionURL;
+    NSString *lastPathComponent;
+    char *dest;
+    char *filename;
     success = [[NSFileManager defaultManager] fileExistsAtPath: fileWrapperPath
                                                    isDirectory: &isDirectory];
     
@@ -167,25 +208,20 @@ ARCHIVE_FILE_AT_URL_SHORT:;
         if (!sucessExist) goto READ_FAIL;
     }
     
-    
     destionURL = _filewrapper.URLByDeletingLastPathComponent.copy;
-    const char *tmpDest = destionURL.fileSystemRepresentation;
-    char *dest = (char *)malloc((strlen(tmpDest) + 1) * sizeof(char *));
-    strcpy(dest, tmpDest);
-    
     lastPathComponent = _filewrapper.lastPathComponent.copy;
-    const char *tmpFilename = lastPathComponent.fileSystemRepresentation;
-    char *filename = (char *)malloc((strlen(tmpFilename) + 1) * sizeof(char *));
-    strcpy(filename, tmpFilename);
+    
+    dest = strdup(destionURL.fileSystemRepresentation);
+    filename = strdup(lastPathComponent.fileSystemRepresentation);
     
     r = chdir(dest);
     if (r != 0) goto READ_FAIL;
     
-    const char *tmpSourche = _archive.fileSystemRepresentation;
-    char *sourche = (char *)malloc((strlen(tmpSourche) + 1) * sizeof(char *));
-    strcpy(sourche, tmpSourche);
+    char *source = strdup(_archive.fileSystemRepresentation);
+    success = mad_extract(source, dest, filename) == ARCHIVE_OK;
     
-    success = mad_extract(sourche, dest, filename) == 0;
+    free(dest); free(filename); free(source);
+    
     if (!success) goto READ_FAIL;
     
     goto READ_END;
@@ -193,11 +229,13 @@ ARCHIVE_FILE_AT_URL_SHORT:;
 READ_FAIL:;
     
     {
-        
+        //Test to see if it's it's not a compressed  archive
         NSError * __autoreleasing *errorReading = NULL;
-        NSData *data = [[NSData alloc] initWithContentsOfURL:_archive];
+        NSData *data;
+        data = [[NSData alloc] initWithContentsOfURL:_archive options:NSDataReadingUncached
+                                               error:errorReading];
         
-        NSAssert(data != nil, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
+        NSAssert(!errorReading, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
                  _archive, *errorReading, __PRETTY_FUNCTION__);
         
         NSFileWrapper *fileWrapper;

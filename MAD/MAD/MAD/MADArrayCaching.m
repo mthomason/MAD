@@ -99,8 +99,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         _statementInsert = NULL;
         _statementSelect = NULL;
         
-        NSString *i = [NSString stringWithString:identifier];
-        self.identifier = i;
+        self.identifier = identifier.copy;
         self.cachedDelegate = cachedDelegate;
     }
     return self;

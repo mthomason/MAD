@@ -1287,7 +1287,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [[NSOperationQueue mainQueue] addOperation:operation];
  
 }
-
+/*
 - (void)openViewer {
     MADocument *document = self.activeDocumentManager.openDocument;
     
@@ -1308,7 +1308,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         NSLog(@"Did present navigation controller");
     }];
 }
-
+*/
 
 - (void)openViewerWithDocument {
     MADocument *document = self.activeDocumentManager.openDocument;
@@ -1349,8 +1349,8 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         self.activeDocumentManager.openDocument = document;
         
 
-    MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
-    [allocatedDocument openWithCompletionHandler:^(BOOL success) {
+    //MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
+    [document openWithCompletionHandler:^(BOOL success) {
         if (!success) {
             NSLog(@"Failed to open file");
         }

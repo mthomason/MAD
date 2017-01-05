@@ -10,10 +10,12 @@
 #define MADViewControllerDocumentProtocol_h
 
 @class MADocument;
+@class NSManagedObjectContext;
 
 @protocol MADViewControllerDocumentProtocol <NSObject>
 
     @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
 @end
 

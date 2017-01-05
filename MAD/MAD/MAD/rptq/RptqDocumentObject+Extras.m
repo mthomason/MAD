@@ -44,6 +44,8 @@
 
 #import <math.h>
 
+#import <UIKit/UIFontDescriptor.h>
+
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
 
@@ -390,7 +392,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: self.isGroupKey.groupNumber
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
-            result = [NSString stringWithFormat:gorupFormatString, groupNumberText.uppercaseString];
+            result = [[NSString alloc] initWithFormat:gorupFormatString, groupNumberText.uppercaseString];
             break;
         }
         
@@ -440,26 +442,26 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             if ([value isKindOfClass:[NSString class]]) {
                 result = value;
             } else if ([value isKindOfClass:[NSNumber class]]) {
-                result = [NSString stringWithFormat:@"%ld", (long)((NSNumber *)value).integerValue];
+                result = [[NSString alloc] initWithFormat:@"%ld", (long)((NSNumber *)value).integerValue];
             } else {
-                result = [NSString stringWithFormat:@"%@", value];
+                result = [[NSString alloc] initWithFormat:@"%@", value];
             }
             break;
             
         case MADDataTypeGeometry:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
             
         case MADDataTypeImage:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
             
         case MADDataTypeSet:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
             
         case MADDataTypeUnknown:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
             
         case MADDataTypeDate:
@@ -512,7 +514,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                     break;
 
                 default:
-                    result = [NSString stringWithFormat:@"%@", value];
+                    result = [[NSString alloc] initWithFormat:@"%@", value];
                     break;
             }
   
@@ -520,7 +522,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
         }
         
         case MADDataTypeBlob:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
             
         case MADDataTypeBit:
@@ -546,15 +548,15 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
                     NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
                     [formatString appendFormat:@"%ld", (long)self.formatNumericDecimals.integerValue];
                     [formatString appendString:@"f"];
-                    result = [NSString stringWithFormat:formatString, [value floatValue]];
+                    result = [[NSString alloc] initWithFormat:formatString, [value floatValue]];
                 }
             } else {
-                result = [NSString stringWithFormat:@"%@", value];
+                result = [[NSString alloc] initWithFormat:@"%@", value];
             }
             break;
         }
         case MADDataTypeString:
-            result = [NSString stringWithFormat:@"%@", value];
+            result = [[NSString alloc] initWithFormat:@"%@", value];
             break;
         default:
             result = [[NSString alloc] initWithFormat:@"%@", value];
@@ -573,7 +575,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat: @"%@-%@", self, [self copyDesignerRepresentationText]];
+    return [[NSString alloc] initWithFormat: @"%@-%@", self, [self copyDesignerRepresentationText]];
 }
 
 - (NSString *)toStringHumanReadable {
@@ -628,6 +630,37 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
             break;
     }
 }
+
+- (UIFontDescriptor *)fontDescriptor {
+    
+    NSString *fontname;
+    NSNumber *fontsize, *italic, *bold;
+    italic = self.italic;
+    bold = self.bold;
+    
+    UIFontDescriptorSymbolicTraits traits = 0;
+    if (italic.boolValue) traits     |= UIFontDescriptorTraitItalic;
+    if (bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
+    
+    NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
+    
+    NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    traitsWrapper, UIFontSymbolicTrait, nil];
+    
+    fontname = self.fontname.copy;
+    fontsize = self.fontsize.copy;
+    
+    NSDictionary *fontAttributes;
+    fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                      fontname,       UIFontDescriptorFamilyAttribute,
+                      fontsize,       UIFontDescriptorSizeAttribute,
+                      symbolicTraits, UIFontDescriptorTraitsAttribute, nil];
+    
+    UIFontDescriptor *fontDescriptor;
+    fontDescriptor = [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
+    return fontDescriptor;
+}
+
 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];

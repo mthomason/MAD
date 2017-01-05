@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 int mad_file_remove_if_exist(char *path) {
+    printf("mad_file_if_exist(char *path)\n%s\nstrlen(%d)", path, strlen(path));
     return (access(path, F_OK) == 0) ?
             remove(path) :
             -1;

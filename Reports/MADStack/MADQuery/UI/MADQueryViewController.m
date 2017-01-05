@@ -153,8 +153,9 @@ BOOL storeEnabled() {
 
 @implementation MADQueryViewController
 
-@synthesize document = _document;
 @synthesize title = _title;
+@synthesize document = _document;
+@synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark -
 #pragma mark Static
@@ -216,14 +217,14 @@ BOOL storeEnabled() {
 #pragma mark NSObject
 
 - (void)dealloc {
-    _handleConfigureCell = nil;
-    _queryViewDelegate.delegate = nil;
-    _queryViewDataSource.datasoruce = nil;
-    _barButtonItemEdit = nil;
-    _barButtonItemDone = nil;
-    [MADQueryViewController deleteCoreDataCache];
-
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+
+    if (_handleConfigureCell) _handleConfigureCell = NULL;
+    if (_queryViewDelegate) _queryViewDelegate.delegate = nil;
+    if (_queryViewDataSource) _queryViewDataSource.datasoruce = nil;
+    if (_barButtonItemEdit) _barButtonItemEdit = nil;
+    if (_barButtonItemDone) _barButtonItemDone = nil;
+    [MADQueryViewController deleteCoreDataCache];
     
 }
 
@@ -590,6 +591,10 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark Property Overrides
 
+- (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+}
+
 - (void)setDocument:(MADocument *)document {
     if (_document != document) {
         _document = document;
@@ -612,8 +617,8 @@ BOOL storeEnabled() {
         RptqDocument *rptqDocument;
         RptqDatabase *rptqDatabase;
         RptqQuery *rptqQuery;
-        
-        rptqDocument = [_document activeDocumentModel];
+        MADocument *document = _document;
+        rptqDocument = [document activeDocumentModel];
         
         hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
         rptqDatabase = hasDatabaseSchemas.anyObject;
@@ -623,9 +628,9 @@ BOOL storeEnabled() {
         
         MADQueryViewDataSource *dataSource;
         
-        dataSource = [[MADQueryViewDataSource alloc] initWithDocument:_document
-                                                     reportingEnabled:[MTStoreKitController sharedObject].reportingEnabled
-                                                  handleConfigureCell:_handleConfigureCell];
+        dataSource = [[MADQueryViewDataSource alloc] initWithDocument: document
+                                                     reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                  handleConfigureCell: _handleConfigureCell];
         
         //dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: hasQueryTables.count
         //                                                   reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled

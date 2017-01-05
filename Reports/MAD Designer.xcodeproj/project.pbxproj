@@ -95,7 +95,6 @@
 		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
-		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4C235CD31D1F1C1A00D3D77C /* MADQueryViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C235CD21D1F1C1A00D3D77C /* MADQueryViewDelegate.m */; };
@@ -446,7 +445,6 @@
 		4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
 		4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9AB1BAF123A00456DC8 /* MADTabBar.m */; };
 		4C6700031BA133AB001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
-		4C6700341BA133AB001C9D5A /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C67006F1BA133AB001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -528,7 +526,6 @@
 		4C67FB3F1BA1043B001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C67FB671BA1043B001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
-		4C67FB981BA1043B001C9D5A /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C67FBD31BA1043B001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C67FBDB1BA1043B001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C67FBDD1BA1043B001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -610,7 +607,6 @@
 		4C67FD8C1BA1183D001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FD991BA1183D001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C67FDB41BA1183D001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
-		4C67FDE51BA1183D001C9D5A /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C67FE201BA1183D001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C67FE281BA1183D001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C67FE2A1BA1183D001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -692,6 +688,7 @@
 		4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */; };
+		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -1283,7 +1280,6 @@
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
-		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C18BC721C7E29BD000DF79C /* MADPageViewAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewAttributes.h; sourceTree = "<group>"; };
 		4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewAttributes.m; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -1849,6 +1845,7 @@
 		4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTabBarNavigationController.m; path = Containers/MADTabBarNavigationController.m; sourceTree = "<group>"; };
 		4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerIdentity.h; path = UI/MADNavigationControllerIdentity.h; sourceTree = "<group>"; };
 		4C692B3C1E1D2C6800DC2CB0 /* MADTabBarItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBarItemProtocol.h; sourceTree = "<group>"; };
+		4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../StaticResources/Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -3736,8 +3733,8 @@
 		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */,
 				4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */,
-				4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -5525,6 +5522,7 @@
 				4CC3D7EA1BCB6D9500BDA5D3 /* UIImagePatternWhiteStationary@2x.png in Resources */,
 				4CC3D76F1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4CC3D7BC1BCB6D9500BDA5D3 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,
+				4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */,
 				4CC3D7CF1BCB6D9500BDA5D3 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
 				4CC3D7311BCB6D9500BDA5D3 /* Icon-29-Designer-Modern.png in Resources */,
 				4C26B9E31BAF148B00456DC8 /* MADImageClear@3x.png in Resources */,
@@ -5552,7 +5550,6 @@
 				4CC3D79A1BCB6D9500BDA5D3 /* UIImagePatternCarbonFiber@2x.png in Resources */,
 				4CC3D7791BCB6D9500BDA5D3 /* MADImageToolbarCloudDownload@2x.png in Resources */,
 				4CC3D7981BCB6D9500BDA5D3 /* UIImagePatternBuffTextured@2x.png in Resources */,
-				4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */,
 				4C26B9E21BAF148B00456DC8 /* MADImageClear@2x.png in Resources */,
 				4CFEE8021BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard in Resources */,
 				4C26B9E01BAF148B00456DC8 /* MADImageChevronRightTall@3x.png in Resources */,
@@ -5708,7 +5705,6 @@
 				4C67FB3F1BA1043B001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */,
 				4C67FB671BA1043B001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
-				4C67FB981BA1043B001C9D5A /* fontawesome-webfont.ttf in Resources */,
 				4C67FBD31BA1043B001C9D5A /* mysql_version.h.in in Resources */,
 				4C67FBDB1BA1043B001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C67FBDD1BA1043B001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -5775,7 +5771,6 @@
 				4C67FD8C1BA1183D001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FD991BA1183D001C9D5A /* my_config.he in Resources */,
 				4C67FDB41BA1183D001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
-				4C67FDE51BA1183D001C9D5A /* fontawesome-webfont.ttf in Resources */,
 				4C67FE201BA1183D001C9D5A /* mysql_version.h.in in Resources */,
 				4C67FE281BA1183D001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C67FE2A1BA1183D001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -5842,7 +5837,6 @@
 				4C67FFDB1BA133AB001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */,
 				4C6700031BA133AB001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
-				4C6700341BA133AB001C9D5A /* fontawesome-webfont.ttf in Resources */,
 				4C67006F1BA133AB001C9D5A /* mysql_version.h.in in Resources */,
 				4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,

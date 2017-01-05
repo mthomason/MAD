@@ -1232,13 +1232,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             
             NSString *systemMessage = @(osstr);
             NSString *dbMessage = @(dbstr);
-            NSString *errorMessage = [NSString stringWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
+            NSString *errorMessage = [[NSString alloc] initWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
             
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
             NSError *error = [NSError errorWithDomain:MADDomainTDS code:dberr userInfo:errorInfo];
             [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationError object:error];
             
-                result = INT_CANCEL;
+            result = INT_CANCEL;
         }
     
     return result;
@@ -1298,9 +1298,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             char *s = (char *)[IPAddress cStringUsingEncoding:NSUTF8StringEncoding];
             dbconn = dbopen(login, s);
             if (dbconn == NULL) {
-                NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
-                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                NSString *message;
+                NSDictionary *errorInfo;
+
+                message = [[NSString alloc] initWithFormat:@"Could not connect to DB Server: %s\n", s];
+                errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys: message, NSLocalizedDescriptionKey, nil];
                 *error = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
+                
             }
             
         }
@@ -1357,7 +1361,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
-    return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
+    id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
+    return result;
 }
 
 - (NSString *)sqlAggregateFunctionLength {
@@ -1389,7 +1394,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                       withSafeTableName: tableName];
     MADSafeQueryField *safeTable = [self newSafeIdentifier: tableName];
-    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT TOP 511 "
+    NSString *sql = [[NSString alloc] initWithFormat:@"SELECT DISTINCT TOP 511 "
                      @"%@ %@ %@ "
                      @"%@ %@ ",
                      safeField, [self tableAliasConnector], safeFieldAlias,
@@ -1571,13 +1576,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     RETCODE sqlReturnCode = FAIL;
     DBPROCESS *dbconn = [process process];
     if (dbconn) {
-        NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", tableName];
+        NSString *query, *queryFormat;
+        queryFormat = @"SELECT name, system_type_id, max_length, precision, scale FROM "
+                      @"sys.columns WHERE object_id = OBJECT_ID('%@')";
+        query = [[NSString alloc] initWithFormat:queryFormat, tableName];
         dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
         
         sqlReturnCode = dbsqlexec(dbconn);
         
         if (sqlReturnCode != SUCCEED && error == NULL) {
-            NSString * const message = @"Sql Syntax Error";
+            NSString *message = @"Sql Syntax Error";
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
             *error = [NSError errorWithDomain:MADDomainTDS code:3456 userInfo:errorInfo];
             NSAssert(error == NULL, @"Syntax error fields for table: %@", *error);

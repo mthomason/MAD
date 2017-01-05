@@ -98,7 +98,7 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
         } else {
             datatype = DataTypeLimited(datatype);
             if (datatype == MADDataTypeUnknown) {
-                value = [NSString stringWithFormat:@"%@", value];
+                value = [[NSString alloc] initWithFormat:@"%@", value];
                 datatype = MADDataTypeString;
             }
         }
