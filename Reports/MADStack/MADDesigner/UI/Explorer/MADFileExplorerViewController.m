@@ -228,72 +228,74 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [super initialize];
     
     if (self != [MADFileExplorerViewController self]) return;
+    
+    @autoreleasepool {
+        NSUserDefaults *defaults;
+        NSDictionary *defaultsToRegister;
         
-    NSUserDefaults *defaults;
-    NSDictionary *defaultsToRegister;
-    
-    defaults = [MADUserDefaults newUserDefaults];
-    defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
-                          @NO, MADUpgradeInstalledChinook,
-                          @NO, MADUpgradeInstalledSamples,
-                          @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
-    
-    [defaults registerDefaults:defaultsToRegister];
-    
-    
-    UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
-    UIColor *redColor = [MADColorEverydayApps newColorRed];
-    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-    
-    UITabBarItem *tabBarItemAppearance;
-    tabBarItemAppearance = [UITabBarItem appearance];
-    
-    UIBarButtonItem *barButtonItem;
-    barButtonItem = [UIBarButtonItem appearance];
-    barButtonItem.tintColor = whiteColor.copy;
-    
-    UINavigationBar *navigationBar;
-    Class controlClass;
-    controlClass = [QLPreviewController class];
-    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-    navigationBar.barTintColor  = madColor4.copy;
-    navigationBar.tintColor     = redColor.copy;
-    
-    controlClass = [UIViewController class];
-    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-    navigationBar.tintColor     = whiteColor.copy;
-    
-    controlClass = [UINavigationController class];
-    navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
-    navigationBar.tintColor     = whiteColor.copy;
-    
-    controlClass = [UIToolbar class];
-    barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
-    barButtonItem.tintColor = whiteColor.copy;
-    
-    id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              whiteColor, NSForegroundColorAttributeName, nil];
-    [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
-                                        forState: UIControlStateNormal];
-    
-    UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
-    navigationBarAppearance.titleTextAttributes = titleTextAttributes;
-    
-    UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-    
-    UILabel *labelInTableCell;
-    controlClass = [UITableViewCell class];
-    labelInTableCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
-    labelInTableCell.highlightedTextColor = orangeColor.copy;
-    
-    UILabel *labelInCollectionCell;
-    labelInCollectionCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
-    labelInCollectionCell.highlightedTextColor = orangeColor.copy;
-    
-    UIImageView *imageInCollectionViewCell;
-    imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:controlClass, nil];
-    imageInCollectionViewCell.tintColor = orangeColor.copy;
-
+        defaults = [MADUserDefaults newUserDefaults];
+        defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              @NO, MADUpgradeInstalledChinook,
+                              @NO, MADUpgradeInstalledSamples,
+                              @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
+        
+        [defaults registerDefaults:defaultsToRegister];
+        
+        
+        UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
+        UIColor *redColor = [MADColorEverydayApps newColorRed];
+        UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
+        
+        UITabBarItem *tabBarItemAppearance;
+        tabBarItemAppearance = [UITabBarItem appearance];
+        
+        UIBarButtonItem *barButtonItem;
+        barButtonItem = [UIBarButtonItem appearance];
+        barButtonItem.tintColor = whiteColor.copy;
+        
+        UINavigationBar *navigationBar;
+        Class controlClass;
+        controlClass = [QLPreviewController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.barTintColor  = madColor4.copy;
+        navigationBar.tintColor     = redColor.copy;
+        
+        controlClass = [UIViewController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.tintColor     = whiteColor.copy;
+        
+        controlClass = [UINavigationController class];
+        navigationBar = [UINavigationBar appearanceWhenContainedIn:controlClass, nil];
+        navigationBar.tintColor     = whiteColor.copy;
+        
+        controlClass = [UIToolbar class];
+        barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:controlClass, nil];
+        barButtonItem.tintColor = whiteColor.copy;
+        
+        id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                  whiteColor, NSForegroundColorAttributeName, nil];
+        [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
+                                            forState: UIControlStateNormal];
+        
+        UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
+        navigationBarAppearance.titleTextAttributes = titleTextAttributes;
+        
+        UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
+        
+        UILabel *labelInTableCell;
+        controlClass = [UITableViewCell class];
+        labelInTableCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+        labelInTableCell.highlightedTextColor = orangeColor.copy;
+        
+        UILabel *labelInCollectionCell;
+        labelInCollectionCell = [UILabel appearanceWhenContainedIn:controlClass, nil];
+        labelInCollectionCell.highlightedTextColor = orangeColor.copy;
+        
+        UIImageView *imageInCollectionViewCell;
+        imageInCollectionViewCell = [UIImageView appearanceWhenContainedIn:controlClass, nil];
+        imageInCollectionViewCell.tintColor = orangeColor.copy;
+   
+    }
 }
 
 - (void)dealloc {
@@ -1152,7 +1154,6 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     
 }
 
-
 #pragma mark -
 #pragma mark - UITextFieldDelegate
 
@@ -1192,10 +1193,17 @@ BOOL fileFound(NSURL *URL, NSString *name) {
                 
             }
             
-            MADTabBarController *tabController = self.tabController;
-            NSArray *viewControllers = [[NSArray alloc] init];
-            [tabController setViewControllers:viewControllers animated:YES];
-            [self dismissViewControllerAnimated:YES completion:^{ }];
+            self.tabController = nil;
+            //NSArray *viewControllers = [[NSArray alloc] init];
+            //[tabController setViewControllers:viewControllers animated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{
+            
+                id o = [[NSInvocationOperation alloc] initWithTarget:self
+                                                            selector:@selector(handleReloadAfterClose)
+                                                              object:nil];
+                [[NSOperationQueue mainQueue] addOperation:o];
+                
+            }];
         };
         
         [MADocument close:openDocument completion:handleCloseCompletion];
@@ -1255,15 +1263,12 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
                                                   object: document];
-/*    id o = [[NSInvocationOperation alloc] initWithTarget:self
-                                                selector:@selector(handleReloadAfterClose)
-                                                  object:nil];
-    [[NSOperationQueue mainQueue] addOperation:o];*/
+
     NSLog(@"\n\n\tDocument state closed.\n\n");
 }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-/*
+
     NSNotification *changeNotification;
     MADocument *document;
     SEL open;
@@ -1272,15 +1277,15 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     changeNotification = notification.copy;
     document = changeNotification.object;
     
-    open = @selector(openViewerWithDocument:);
+    open = @selector(openViewerWithDocument);
 
     id fileController = self;
     operation = [[NSInvocationOperation alloc] initWithTarget: fileController
                                                      selector: open
-                                                       object: document];
+                                                       object: nil];
     
     [[NSOperationQueue mainQueue] addOperation:operation];
-    */
+ 
 }
 
 - (void)openViewer {
@@ -1299,12 +1304,14 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     tabBarController.viewControllerDelegate = self;
     self.tabController = tabBarController;
     
-    [self presentViewController:navigationController animated:YES completion:nil];
+    [self presentViewController:navigationController animated:YES completion:^{
+        NSLog(@"Did present navigation controller");
+    }];
 }
 
 
-- (void)openViewerWithDocument:(MADocument *)document {
-    
+- (void)openViewerWithDocument {
+    MADocument *document = self.activeDocumentManager.openDocument;
     NSURL *fileURL = document.fileURL.copy;
     NSString *title = fileURL.lastPathComponent.copy;
     
@@ -1329,7 +1336,6 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 
 - (void)openDocumentAtURL:(NSURL *)url {
 
-    @autoreleasepool {
 
         MADocument *document = [[MADocument alloc] initWithFileURL:url];
         document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
@@ -1342,15 +1348,11 @@ BOOL fileFound(NSURL *URL, NSString *name) {
         
         self.activeDocumentManager.openDocument = document;
         
-    }
 
     MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
-    typeof(self) __weak wself = self;
     [allocatedDocument openWithCompletionHandler:^(BOOL success) {
         if (!success) {
             NSLog(@"Failed to open file");
-        } else {
-            [wself openViewer];
         }
     }];
 
@@ -1374,17 +1376,14 @@ BOOL fileFound(NSURL *URL, NSString *name) {
 #pragma mark Private events handlers
 
 - (void)handleReloadAfterClose {
-    UICollectionView *weakCollectionView __weak = self.collectionView;
-    /*[UIView performWithoutAnimation:^{
-     
-     }];
-     */
-    @autoreleasepool {
-        UICollectionView *collectionView = weakCollectionView;
-        NSArray <NSIndexPath *> *paths = collectionView.indexPathsForVisibleItems.copy;
-        [collectionView.backgroundView setNeedsDisplay];
-        [collectionView reloadItemsAtIndexPaths:paths];
-    }
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//        @autoreleasepool {
+            UICollectionView *collectionView = self.collectionView;
+            NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
+            [collectionView.backgroundView setNeedsDisplay];
+            [collectionView reloadItemsAtIndexPaths:paths];
+//        }
+    }];
 }
 
 #pragma mark - MADDocumentDelegate
@@ -1768,24 +1767,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 }
 
-+ (NSString *)safeFilenameWithDesiredFilename:(NSString *)desiredName {
-    
-    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
-    
-    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
-    [characterSet formUnionWithCharacterSet:unionSet];
-    
-    unionSet = [NSCharacterSet whitespaceCharacterSet];
-    [characterSet formUnionWithCharacterSet:unionSet];
-    
-    unionSet = characterSet.invertedSet;
-    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
-    NSString *result = [components componentsJoinedByString:@""];
-    return result.copy;
-    
-}
-
-- (void)actionRename:(id)sender {
+- (IBAction)actionRename:(id)sender {
     
     MADCollectionViewCellDocument *cellDocument;
     
@@ -1941,7 +1923,24 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     }
 }
 
-#pragma mark - 
++ (NSString *)safeFilenameWithDesiredFilename:(NSString *)desiredName {
+    
+    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+    
+    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = [NSCharacterSet whitespaceCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = characterSet.invertedSet;
+    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
+    NSString *result = [components componentsJoinedByString:@""];
+    return result.copy;
+    
+}
+
+#pragma mark -
 #pragma mark UIAdaptivePresentationControllerDelegate
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:
@@ -2057,7 +2056,7 @@ BOOL fileFound(NSURL *URL, NSString *name) {
     [debug appendFormat:@"Collection view delegate:          %@\n", self.collectionViewDelegate];
     [debug appendFormat:@"Active document manager:           %@\n", self.activeDocumentManager];
     [debug appendFormat:@"Document manager:                  %@\n", self.documentManager];
-    [debug appendFormat:@"File explorer view:                %@\n", self.fileExplorerView];
+    //[debug appendFormat:@"File explorer view:                %@\n", self.fileExplorerView];
     [debug appendFormat:@"Cloud activity running:            %@\n", self.cloudActivityRunning ? @"Yes" : @"No"];
     [debug appendFormat:@"Cloud activity running display:    %@\n", self.cloudActivityRunningDisplay ? @"Yes" : @"No"];
     [debug appendFormat:@"Shoulld show add document popover: %@\n", self.shouldShowAddDocumentPopover ? @"Yes" : @"No"];

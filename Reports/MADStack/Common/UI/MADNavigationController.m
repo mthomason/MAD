@@ -39,6 +39,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 @interface MADNavigationController ()
     @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
     @property (readwrite, nonatomic, assign) BOOL _completedFirstLayout;
+    @property (readwrite, nonatomic, assign) UIStatusBarStyle statusBarStyleDefault;
 @end
 
 @implementation MADNavigationController
@@ -51,14 +52,24 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     if (self == [MADNavigationController self]) {
         @autoreleasepool {
             NSArray<Class <UIAppearanceContainer>> * classes;
-            UINavigationBar *appearanceProxy;
+            UINavigationBar *navigationBar;
+            UIToolbar *toolbar;
             
             classes = [[NSArray alloc] initWithObjects: self, nil];
-            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-            appearanceProxy.barTintColor = [UIColor clearColor];
+            navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+            navigationBar.barTintColor = [UIColor clearColor];
+            navigationBar.translucent = YES;
+
+            toolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses:classes];
+            UIColor *white, *blue;
+            white = [MADColorEverydayApps newColorWhite];
+            blue = [MADColorEverydayApps newColorBlue];
+            toolbar.tintColor = white;
+            toolbar.barTintColor = blue;
+            toolbar.barStyle = UIBarStyleBlack;
+            toolbar.translucent = YES;
         }
     }
-
 }
 
 + (instancetype)newNavigationController:(MADNavigationControllerType)type {
@@ -146,50 +157,12 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return self;
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    if (!__completedFirstLayout) {
-        UIColor *white, *blue;
-        white = [MADColorEverydayApps newColorWhite];
-        blue = [MADColorEverydayApps newColorBlue];
-        self.toolbar.tintColor = white;
-        self.toolbar.barTintColor = blue;
-        self.toolbar.barStyle = UIBarStyleBlack;
-        self.toolbar.translucent = YES;
-        self.navigationBar.translucent = YES;
-        
-        NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-        titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-        __completedFirstLayout = YES;
-    }
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-}
-
-- (void)showViewController:(UIViewController *)vc sender:(id)sender {
-    if ([vc conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-        ((id <MADViewControllerDocumentProtocol>)vc).document = _document;
-    }
-    [super showViewController:vc sender:sender];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }
-}
-
-//- (UITabBarItem *)tabBarItem {
-//    [super tabBarItem];
-//    UITabBarItem *tabBarItems;
-//    UITabBarController *tabBarController = (UITabBarController *)self.topViewController;
-//    tabBarItems = tabBarController.tabBarItem;
-//    return tabBarItems;
-//}
+#pragma mark -
+#pragma mark UIViewController handle storyboard segue
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
@@ -222,6 +195,9 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return UIStatusBarStyleLightContent;
 }
 
+#pragma mark -
+#pragma mark UIViewControllerTransitioningDelegate
+
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                       presentingViewController:(UIViewController *)presenting
                                                           sourceViewController:(UIViewController *)source {
@@ -233,6 +209,18 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return result;
 }
 
+#pragma mark -
+#pragma mark MADViewControllerDocumentProtocol
+
+- (void)setDocument:(MADocument *)document {
+    if (_document != document) {
+        _document = document;
+    }
+}
+
+#pragma mark -
+#pragma mark IBActions
+
 - (IBAction)done:(id)sender {
     for (UIViewController *viewController in self.childViewControllers) {
         if ([viewController respondsToSelector:@selector(done:)]) {
@@ -240,12 +228,6 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
                                              withObject: self
                                           waitUntilDone: NO];
         }
-    }
-}
-
-- (void)setDocument:(MADocument *)document {
-    if (_document != document) {
-        _document = document;
     }
 }
 

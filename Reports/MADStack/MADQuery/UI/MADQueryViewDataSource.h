@@ -19,6 +19,7 @@
 @class NSIndexPath;
 @class NSIndexSet;
 @class UITableViewCell;
+@class MADocument;
 @class MADQueryViewSectionDelegate;
 
 typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
@@ -42,6 +43,10 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                           reportingEnabled:(BOOL)reportingEnabled
                        handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
+
+    - (instancetype)initWithDocument:(MADocument *)document
+                    reportingEnabled:(BOOL)reportingEnabled
+                 handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 

@@ -103,7 +103,9 @@
         }
         NSString *basePathFileName = baseUrl.path.copy;
         
-        relativePath = [url.path stringWithPathRelativeTo:basePathFileName];
+        NSString *tmpRelativePath = url.path.copy;
+        NSString *tmpRelativePath2 = [tmpRelativePath stringWithPathRelativeTo:basePathFileName];
+        relativePath = tmpRelativePath2.copy;
         
         filename = strdup(url.fileSystemRepresentation);
         relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
@@ -141,9 +143,10 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     BOOL success = NO, isDirectory;
     int r;
     //NSURL *urlGuts = _filewrapper.copy;
-    NSString *fileWrapperPath = _filewrapper.path;
+    NSString *fileWrapperPath = _filewrapper.path.copy;
     NSError * __autoreleasing *errorCreate = nil;
-    
+    NSURL *destionURL;
+    NSString *lastPathComponent;
     
     [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper];
     
@@ -165,12 +168,22 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     }
     
     
-    const char *dest = _filewrapper.URLByDeletingLastPathComponent.fileSystemRepresentation;
-    const char *filename = _filewrapper.lastPathComponent.fileSystemRepresentation;
+    destionURL = _filewrapper.URLByDeletingLastPathComponent.copy;
+    const char *tmpDest = destionURL.fileSystemRepresentation;
+    char *dest = (char *)malloc((strlen(tmpDest) + 1) * sizeof(char *));
+    strcpy(dest, tmpDest);
+    
+    lastPathComponent = _filewrapper.lastPathComponent.copy;
+    const char *tmpFilename = lastPathComponent.fileSystemRepresentation;
+    char *filename = (char *)malloc((strlen(tmpFilename) + 1) * sizeof(char *));
+    strcpy(filename, tmpFilename);
+    
     r = chdir(dest);
     if (r != 0) goto READ_FAIL;
     
-    const char *sourche = _archive.fileSystemRepresentation;
+    const char *tmpSourche = _archive.fileSystemRepresentation;
+    char *sourche = (char *)malloc((strlen(tmpSourche) + 1) * sizeof(char *));
+    strcpy(sourche, tmpSourche);
     
     success = mad_extract(sourche, dest, filename) == 0;
     if (!success) goto READ_FAIL;

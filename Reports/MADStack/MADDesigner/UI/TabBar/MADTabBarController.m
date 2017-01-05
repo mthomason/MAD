@@ -171,10 +171,6 @@ const int8_t MADIndexViewer = 2;
     if (navigationItem.rightBarButtonItem)
         [navigationItem setRightBarButtonItem: nil animated: animated];
     
-    detailNavigationController = self.querySplitViewController.detailNavigationController;
-    [detailNavigationController popToRootViewControllerAnimated:animated];
-
-    self.querySplitViewController.viewControllerDelegate = nil;
     self.designerViewController.delegate = nil;
 
     id emptyArray = [[NSArray alloc] init];
@@ -184,8 +180,9 @@ const int8_t MADIndexViewer = 2;
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.tabBarController.navigationItem setRightBarButtonItem:nil animated:animated];;
     [self.tabBarViewControllers removeAllObjects];
-    self.delegate = nil;
+    //self.delegate = nil;
 }
 
 - (void)viewWillLayoutSubviews {

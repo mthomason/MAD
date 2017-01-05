@@ -42,7 +42,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 @interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>
 
-    //@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, readwrite, assign) short count;
     @property (nonatomic, readwrite, assign) NSUInteger numberOfTables;
@@ -56,8 +56,60 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 @implementation MADQueryViewDataSource
 
 - (void)dealloc {
+    _sections = nil;
     _handleConfigureCell = nil;
     _datasoruce = nil;
+    _queryLinksController.delegate = nil;
+    _queryGroupsController.delegate = nil;
+    _queryTablesController.delegate = nil;
+    _queryPredicatesController.delegate = nil;
+    _queryLinksController = nil;
+    _queryGroupsController = nil;
+    _queryTablesController = nil;
+    _queryPredicatesController = nil;
+}
+
+- (instancetype)initWithDocument:(MADocument *)document
+                reportingEnabled:(BOOL)reportingEnabled
+             handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
+    
+    if (self = [super init]) {
+        
+        NSUInteger numberOfTables;
+        NSSet *hasDatabaseSchemas, *hasQueries, *hasQueryTables;
+        RptqDocument *rptqDocument;
+        RptqDatabase *rptqDatabase;
+        RptqQuery *rptqQuery;
+        
+        rptqDocument = [_document activeDocumentModel];
+        
+        hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
+        rptqDatabase = hasDatabaseSchemas.anyObject;
+        hasQueries = rptqDatabase.hasQueries;
+        rptqQuery = hasQueries.anyObject;
+        hasQueryTables = rptqQuery.hasQueryTables;
+        numberOfTables = hasQueryTables.count;
+        
+        short count;
+        switch (numberOfTables) {
+            case 0:
+                count = reportingEnabled ? 3 : 2;
+                break;
+            case 1:
+                count = reportingEnabled ? 5 : 4;
+                break;
+            default:
+                count = reportingEnabled ? 6 : 5;
+                break;
+        }
+        
+        _numberOfTables = numberOfTables;
+        _count = count;
+        _handleConfigureCell = handleConfigureCell;
+        
+    }
+    return self;
+    
 }
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
@@ -175,7 +227,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
 - (void)performFetchWithController:(NSFetchedResultsController *)controller {
     if (controller) {
-        [controller performFetch:nil];
+        NSError * __autoreleasing error = NULL;
+        [controller performFetch:&error];
+        NSAssert(error == nil, @"Error: %@", error);
     }
     [self.datasoruce reloadQueryViewData];
 }
@@ -265,7 +319,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             toGroup.weight = toWeight;
             
             NSError *error = nil;
-            [(self.queryGroupsController).managedObjectContext save:&error];
+            [self.document.managedObjectContext save:&error];
             [self performFetchGroups];
             break;
         }
@@ -293,9 +347,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
             
             NSManagedObjectContext *managedObjectContext;
-            managedObjectContext = self.queryTablesController.managedObjectContext;
+            managedObjectContext = self.document.managedObjectContext;
             RptqDocument *document;
-            document = [RptqDocument newDocumentForManagedObjectContext: managedObjectContext];
+            document = [_document activeDocumentModel];
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
                 
@@ -305,7 +359,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
                 id message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
                                                                                         databaseType: databaseType
                                                                                           schemaName: schemaName];
-                UILabel __weak *textLabel = cell.textLabel;
+                UILabel *textLabel = cell.textLabel;
                 textLabel.attributedText = message;
                 textLabel.text = localizedMessage;
             }

@@ -228,8 +228,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)collectionView:(UICollectionView *)collectionView
                                         didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    
     [self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 }
 

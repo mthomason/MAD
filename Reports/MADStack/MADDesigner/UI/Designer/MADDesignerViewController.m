@@ -13,6 +13,8 @@
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
+#import <math.h>
+
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
@@ -64,8 +66,6 @@
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
-
-#import <math.h>
 
 #import "MADTabBarController.h"
 #import "MADManagedObjectView.h"
@@ -783,11 +783,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return self.hidesStatusBar ||
-        self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -954,6 +949,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return self.hidesStatusBar ||
+        self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -1003,7 +1003,9 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 #pragma mark - UINavigationControllerDelegate
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
     viewController.view.frame = navigationController.view.frame;
 }
 

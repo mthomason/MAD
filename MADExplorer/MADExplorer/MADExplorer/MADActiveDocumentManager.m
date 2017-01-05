@@ -39,7 +39,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 
 - (void)setOpenDocument:(__kindof UIManagedDocument *)document {
     if (document) {
-        self.openUrl = document.fileURL;
+        self.openUrl = document.fileURL.copy;
         NSString *path = self.openUrl.absoluteURL.absoluteString;
         self.openFiles[path] = document;
     }

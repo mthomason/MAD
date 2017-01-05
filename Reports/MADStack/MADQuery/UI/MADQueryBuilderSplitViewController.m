@@ -35,6 +35,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 #import "MADQueryVisualizationViewController.h"
+#import "MADNavigationControllerQueryBuilder.h"
 
 static NSString * const TextTitleFormat = @"MAD %@";
 static NSString * const TextTitleQuery = @"Query";
@@ -67,6 +68,9 @@ static NSString * const TextRedraw = @"Redraw";
 
 @synthesize document = _document;
 @synthesize title = _title;
+@synthesize queryBuilderController =  _queryBuilderController;
+@synthesize queryBuilderControllerAdvanced =  _queryBuilderControllerAdvanced;
+@synthesize detailNavigationController =  _detailNavigationController;
 
 + (void)initialize {
     [super initialize];
@@ -82,10 +86,6 @@ static NSString * const TextRedraw = @"Redraw";
     }
 }
 
-- (void)dealloc {
-
-}
-
 + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document {
     id bundle = [NSBundle mainBundle];
     id storybard = [UIStoryboard storyboardWithName: MADStoryboardQuery bundle: bundle];
@@ -94,13 +94,10 @@ static NSString * const TextRedraw = @"Redraw";
     return controller;
 }
 
-- (NSString *)title {
-    if (_title == nil) {
-        NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
-        id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
-        _title = title;
-    }
-    return _title;
+- (void)dealloc {
+    _barButtonItemDone.target = nil;
+    _barButtonItemEdit.target = nil;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -111,7 +108,8 @@ static NSString * const TextRedraw = @"Redraw";
         _setupDetail = NO;
         _setupInitalLayout = NO;
         _localEditing = NO;
-        
+        self.delegate = self;
+
     }
     return self;
 }
@@ -142,7 +140,6 @@ static NSString * const TextRedraw = @"Redraw";
     self.barButtonItemRevealQuery = barButtonItemRevealQuery;
 
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-    self.delegate = self;
     
     /*UITabBarController *tabBarController = self.tabBarController;
     UINavigationItem *navigationItem = tabBarController.navigationItem;
@@ -173,16 +170,6 @@ static NSString * const TextRedraw = @"Redraw";
         navigationController.navigationBar.tintColor = whiteColor.copy;
         navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
 
-        /*[[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-            if (isLicensedUser == NO) {
-                NSNumber *animateObject;
-                animateObject = [[NSNumber alloc] initWithBool: NO];
-                [self performSelectorOnMainThread: @selector(layoutForUnlicensedUser:)
-                                       withObject: animateObject
-                                    waitUntilDone: NO];
-            }
-        }];*/
-
         _setupInitalLayout = YES;
     }
 }
@@ -193,6 +180,15 @@ static NSString * const TextRedraw = @"Redraw";
     [titleView sizeToFit];
     
     [super viewDidLayoutSubviews];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
+        id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
+        _title = title;
+    }
+    return _title;
 }
 
 - (UINavigationItem *)navigationItem {
@@ -226,52 +222,45 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (UINavigationController *)detailNavigationController {
-    UINavigationController *detailController = nil;
-    if (self.viewControllers.count > 0) {
-        detailController = self.viewControllers[0];
-        if (!_setupDetail) {
-            id traits = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
-            [self setOverrideTraitCollection:traits forChildViewController: detailController];
-            detailController.navigationBarHidden = NO;
-            _setupDetail = YES;
-            if ([detailController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-                ((id <MADViewControllerDocumentProtocol>) detailController).document = _document;
+    if (_detailNavigationController == nil) {
+        if (self.viewControllers.count > 0) {
+            _detailNavigationController = self.viewControllers[0];
+            if (!_setupDetail) {
+                id traits = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
+                [self setOverrideTraitCollection:traits forChildViewController: _detailNavigationController];
+                _detailNavigationController.navigationBarHidden = NO;
+                _setupDetail = YES;
             }
-                
         }
-    };
-    return detailController;
+    }
+    return _detailNavigationController;
 }
 
 - (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
-    MADQueryVisualizationViewController *queryVisulization = nil;
-    if (self.viewControllers.count > 1) {
-        queryVisulization = self.viewControllers[1];
-        MADocument *document = _document;
-        MADocument *documentQuery = queryVisulization.document;
-        if (documentQuery != nil && documentQuery != document) {
-            queryVisulization.document = document;
+    if (_queryBuilderControllerAdvanced == nil) {
+        if (self.viewControllers.count > 1) {
+            _queryBuilderControllerAdvanced = self.viewControllers[1];
         }
     }
-    return queryVisulization;
+    return _queryBuilderControllerAdvanced;
 }
 
 - (MADQueryViewController *)queryBuilderController {
-    UINavigationController *detailNavigationController = self.detailNavigationController;
-    MADQueryViewController *queryViewController = (MADQueryViewController *)detailNavigationController.topViewController;
-    if (queryViewController && queryViewController.document == nil) {
-        queryViewController.document = _document;
+    if (_queryBuilderController == nil) {
+        MADNavigationControllerQueryBuilder *detailNavigationController;
+        detailNavigationController = self.detailNavigationController;
+        _queryBuilderController = (MADQueryViewController *)detailNavigationController.topViewController;
     }
-    return queryViewController;
+    return _queryBuilderController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MADQueryViewController *queryBuilderController;
+    //MADQueryViewController *queryBuilderController;
     
-    queryBuilderController = self.queryBuilderController;
-    [queryBuilderController reloadMainDocumentAnimated: YES];
+    //queryBuilderController = self.queryBuilderController;
+    //[queryBuilderController reloadMainDocumentAnimated: animated];
     
     NSNumber *animateObject = [[NSNumber alloc] initWithBool:animated];
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
@@ -313,11 +302,23 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    UINavigationController *detailNavigationController;
+    detailNavigationController = self.detailNavigationController;
+    [detailNavigationController popToRootViewControllerAnimated:animated];
+    
+    self.viewControllerDelegate = nil;
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.navigationItem setLeftBarButtonItem:nil animated:animated];
+    [self.navigationItem setRightBarButtonItem:nil animated:animated];
+    _detailNavigationController = nil;
+    _queryBuilderController = nil;
+    _queryBuilderControllerAdvanced = nil;
+    //NSArray *viewControllers = [[NSArray alloc] init];
+    //[self setViewControllers:viewControllers animated]
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -527,11 +528,13 @@ static NSString * const TextRedraw = @"Redraw";
 - (void)setDocument:(MADocument *)document {
     if (document != _document) {
         _document = document;
-        //for (UIViewController *viewController in self.viewControllers) {
-        //    if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-        //        ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
-        //    }
-        //}
+        UIViewController *childViewController;
+        NSArray<__kindof UIViewController *> *childViewControllers = self.childViewControllers;
+        for (childViewController in childViewControllers) {
+            if ([childViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+                [((id <MADViewControllerDocumentProtocol>)childViewController) setDocument: self.document];
+            }
+        }
     }
 }
 

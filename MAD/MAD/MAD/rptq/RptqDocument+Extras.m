@@ -14,6 +14,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
+#import <Foundation/NSException.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSPathUtilities.h>
@@ -58,6 +59,18 @@
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides
+
+- (void)willTurnIntoFault {
+    [super willTurnIntoFault];
+}
+
+- (void)didTurnIntoFault {
+    [super didTurnIntoFault];
+}
+
+- (void)willChangeValueForKey:(NSString *)inKey withSetMutation:(NSKeyValueSetMutationKind)inMutationKind usingObjects:(NSSet *)inObjects {
+    [super willChangeValueForKey:inKey withSetMutation:inMutationKind usingObjects:inObjects];
+}
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
@@ -334,6 +347,7 @@
     docFetchRequest.fetchLimit = 1;
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
+    NSAssert(error == nil, @"Got error on new document fetch: %@", error);
     id document = documents.lastObject;
     return document;
 }

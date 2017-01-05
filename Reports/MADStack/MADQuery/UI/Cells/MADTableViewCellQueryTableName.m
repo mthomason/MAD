@@ -12,6 +12,10 @@
 
 @implementation MADTableViewCellQueryTableName
 
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
         self.textLabel.numberOfLines = 0;

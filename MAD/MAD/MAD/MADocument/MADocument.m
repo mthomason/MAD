@@ -215,6 +215,8 @@ void madwarn(char *err,  const char*err2) { }
         MTCacheProtocol,
         MTDatabaseProtocol>
 
+    @property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
+
     @property (nonatomic, readwrite, strong) MADReportSections *reportSections;
 
     @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
@@ -326,7 +328,8 @@ void madwarn(char *err,  const char*err2) { }
 
 - (MADReportSections *)reportSections {
     if (_reportSections == nil) {
-        id reportSections = [[MADReportSections alloc] initWithDocument:[self activeDocumentModel]];
+        RptqDocument *document = [self activeDocumentModel];        
+        id reportSections = [[MADReportSections alloc] initWithDocument: document];
         _reportSections = reportSections;
     }
     return _reportSections;
@@ -337,26 +340,31 @@ void madwarn(char *err,  const char*err2) { }
 
 + (void)close:(MADocument *)document completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion  {
     
-    [document regenThumbnail];
-    [document removeObservers];
+    MADocument *strongDocument = document;
+    [strongDocument regenThumbnail];
+    [strongDocument removeObservers];
 
     void (^closeCompletionHandler)(BOOL);
     //void (^origionalCompletionHandler)(BOOL, NSURL *);
     //origionalCompletionHandler = completion;
     
-    NSURL *fileURL = document.fileURL.copy;
-    NSURL *gutsUrl = document.urlGuts.copy;
-    closeCompletionHandler = ^(BOOL successClose) { completion(successClose, fileURL, gutsUrl); };
+    NSURL *fileURL = strongDocument.fileURL.copy;
+    NSURL *gutsUrl = strongDocument.urlGuts.copy;
+    closeCompletionHandler = ^(BOOL successClose) {
+        completion(successClose, fileURL, gutsUrl);
+    };
     
     //MADocument * __weak weakdoc = document;
     void (^ saveCompletionHandler)(BOOL);
     saveCompletionHandler = ^(BOOL success) {
         
-        if (document != nil) {
+        if (strongDocument != nil) {
             if (success) {
-                [document closeWithCompletionHandler:closeCompletionHandler];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [strongDocument closeWithCompletionHandler:closeCompletionHandler];
+                }];
             }
-            document.thumbnail = nil;
+            strongDocument.thumbnail = nil;
         }
         
     };
@@ -417,11 +425,12 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (NSDictionary *)persistentStoreOptions {
-    if (_madPersistentStoreOptions != nil) return _madPersistentStoreOptions;
+    if (_madPersistentStoreOptions == nil) {
     
-    _madPersistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @YES, NSInferMappingModelAutomaticallyOption,
-                                    @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
+        _madPersistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                      @YES, NSInferMappingModelAutomaticallyOption,
+                                      @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
+    }
     return _madPersistentStoreOptions;
 }
 
@@ -544,6 +553,11 @@ READFROMURL_END:;
 
 #pragma mark -
 #pragma mark UIManagedDocument Overrides
+
+- (NSManagedObjectContext *)managedObjectContext {
+    id managedObjectContext = [super managedObjectContext];
+    return managedObjectContext;
+}
 
 - (NSManagedObjectModel *)managedObjectModel {
     return self.madManagedObjectModel;
@@ -833,27 +847,29 @@ READFROMURL_END:;
 #pragma mark - UIDocument Notifications
 
 - (void)handleDocumentStateChanged:(NSNotification *)notification {
-/*
-    switch (self.documentState) {
-        case UIDocumentStateClosed:
-            NSLog(@"\n\n\tDocument state closed.\n\n");
-            break;
-        case UIDocumentStateEditingDisabled:
-            NSLog(@"\n\n\tDocument state editing disabled.\n\n");
-            break;
-        case UIDocumentStateInConflict:
-            NSLog(@"\n\n\tDocument state in conflict.\n\n");
-            break;
-        case UIDocumentStateNormal:
-            NSLog(@"\n\n\tDocument state normal.\n\n");
-            break;
-        case UIDocumentStateSavingError:
-            NSLog(@"\n\n\tDocument state saving error.\n\n");
-            break;
-        default:
-            break;
+
+    MADocument *document = notification.object;
+    if (document != nil) {
+        switch (document.documentState) {
+            case UIDocumentStateClosed:
+                NSLog(@"\n\n\tDocument state closed.\n\n");
+                break;
+            case UIDocumentStateEditingDisabled:
+                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                break;
+            case UIDocumentStateInConflict:
+                NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                break;
+            case UIDocumentStateNormal:
+                NSLog(@"\n\n\tDocument state normal.\n\n");
+                break;
+            case UIDocumentStateSavingError:
+                NSLog(@"\n\n\tDocument state saving error.\n\n");
+                break;
+            default:
+                break;
+        }
     }
-    */
 }
 
 #pragma mark - Report Notifications
@@ -920,38 +936,41 @@ READFROMURL_END:;
 
 - (RptqDocument *)activeDocumentModel {
 
-    RptqDocument *document = nil;
-
-    if (self.documentObjectID == nil) {
-
-        document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
-        if (document == nil) {
-            document = [RptqDocument newDocumentForManagedObjectContext: self.managedObjectContext];
-        }
-
+    if (self.reportDocument == nil) {
         
-        self.documentObjectID = document.objectID;
+        RptqDocument *document = nil;
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         
-        MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
-        self.paper = paper;
-        
-        if (self.database == nil) {
-            [self initializeMainDatabase:document];
-        }
-        
-        if (self.reportFormatter == nil) {
-            [self resetMainQueryWithDocumentModel:document];
+        if (self.documentObjectID == nil) {
             
-            [self resetSectionLayoutManagers: document];
+            document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
             
+            self.documentObjectID = document.objectID.copy;
             
-            [self initializeReportFormatter];
+            MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
+            self.paper = paper;
+            
+            if (self.database == nil) {
+                [self initializeMainDatabase:document];
+            }
+            
+            if (self.reportFormatter == nil) {
+                [self resetMainQueryWithDocumentModel:document];
+                
+                [self resetSectionLayoutManagers: document];
+                
+                
+                [self initializeReportFormatter];
+            }
+            
+            self.reportDocument = document;
+            
+        } else {
+            document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+            self.reportDocument = document;
         }
-
-    } else {
-        document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     }
-    return document;
+    return self.reportDocument;
 }
 
 - (void)resetSectionLayoutManagers:(RptqDocument *)document {
@@ -1116,8 +1135,8 @@ READFROMURL_END:;
 }
 
 - (void)initializeMainDatabase:(RptqDocument *)document {
-    RptqDatabase *database = document.defaultDatabase;
-    RptqQuery *query = database.defaultQuery;
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
     MTDatabaseConnection *connection;
     connection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];

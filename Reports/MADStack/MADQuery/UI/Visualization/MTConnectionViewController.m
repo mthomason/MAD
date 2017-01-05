@@ -93,14 +93,18 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 @implementation MADConnectionViewController
 
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
 
-- (void)loadView {
-}
+//- (void)loadView {
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

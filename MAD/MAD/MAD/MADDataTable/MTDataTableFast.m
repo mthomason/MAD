@@ -94,7 +94,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @implementation MTDataTableFast
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithId:(NSUInteger)objectId {
     return [self initWithId:objectId fromCache:YES];

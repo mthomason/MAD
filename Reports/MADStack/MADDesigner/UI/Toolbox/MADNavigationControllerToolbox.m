@@ -30,4 +30,12 @@
     return MADNavigationControllerTypeToolbox;
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
+}
+
 @end

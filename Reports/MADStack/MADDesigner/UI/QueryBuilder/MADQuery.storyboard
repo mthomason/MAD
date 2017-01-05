@@ -290,7 +290,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nfM-mZ-Ry6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-520" y="368"/>
+            <point key="canvasLocation" x="-774" y="19"/>
         </scene>
         <!--MADIdentifierQueryBuilderAddGroup-->
         <scene sceneID="rqS-hW-Euf">
@@ -326,10 +326,10 @@
             </objects>
             <point key="canvasLocation" x="1.5" y="465"/>
         </scene>
-        <!--Navigation Controller Split Parent View Controller-->
+        <!--Navigation Controller Query Builder-->
         <scene sceneID="CAc-4x-SdN">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SDg-oh-2Va" customClass="MADNavigationControllerSplitParentViewController" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SDg-oh-2Va" customClass="MADNavigationControllerQueryBuilder" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Afb-XM-has">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -340,7 +340,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rXs-qs-jtm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1149" y="377"/>
+            <point key="canvasLocation" x="-1875" y="19"/>
         </scene>
         <!--MAD Query-->
         <scene sceneID="H8u-lx-f3W">
@@ -373,7 +373,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UoJ-nK-elH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1777" y="1057"/>
+            <point key="canvasLocation" x="-2562" y="1135"/>
         </scene>
         <!--Query Visualization View Controller-->
         <scene sceneID="Kxy-tu-fxi">

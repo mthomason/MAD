@@ -11,11 +11,15 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSString.h>
 
-#import "RptqDocument+Extras.h"
+#import "RptqDocument.h"
 #import "RptqDocumentSectionEnumerator.h"
-#import "RptqQuery+Extras.h"
-#import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup.h"
+#import "RptqQuery.h"
+#import "RptqDatabase.h"
+
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDocument+Extras.h"
+#import "RptqQuery+Extras.h"
 
 #import "MADReportSectionEnumerator.h"
 #import "MADReportSection.h"
@@ -68,10 +72,13 @@
 
         NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
 
-        [document.mainQuery addObserver: self
-                             forKeyPath: path
-                                options: NSKeyValueObservingOptionNew
-                                context: NULL];
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query =  database.hasQueries.anyObject;
+
+        [query addObserver: self
+                forKeyPath: path
+                   options: NSKeyValueObservingOptionNew
+                   context: NULL];
         
         _numberOfGroups = document.mainQuery.hasQueryGroups.count;
         _document = document;

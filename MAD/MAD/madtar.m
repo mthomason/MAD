@@ -42,6 +42,8 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
     }
 }
 
+void strip_trailing_slashes(char *path);
+
 static inline bool path_exist(const char *path);
 static inline bool path_exist(const char *path) {
     return !(access(path, F_OK) == -1);
@@ -49,10 +51,14 @@ static inline bool path_exist(const char *path) {
 
 char *mad_copy_path_fix(const char *path);
 
-static inline bool directory_exist(const char *path);
-static inline bool directory_exist(const char *path) {
+bool directory_exist(const char *path);
+bool directory_exist(const char *path) {
     bool opened_directory = false;
-    char *p = mad_copy_path_fix(path);
+    size_t path_len = strlen(path);
+    char *p = (char *) malloc((path_len) * sizeof(char));
+    p[0] = '\0';
+    strcpy(p, path);
+    strip_trailing_slashes(path);
     DIR *dir = opendir(p);
     if (dir) {
         opened_directory = true;
@@ -82,7 +88,11 @@ bool archive_function_result_handler(int ar, const char *description) {
 bool mad_mkdir(const char *path);
 bool mad_mkdir(const char *path) {
     bool success;
-    char *p = mad_copy_path_fix(path);
+    size_t path_len = strlen(path);
+    char *p = (char *) malloc((path_len + 1) * sizeof(char));
+    p[0] = '\0';
+    strcpy(p, path);
+    strip_trailing_slashes(p);
 
     success = mkdir(p, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0;
 //    success = mkdir(p, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) == 0;
@@ -124,15 +134,11 @@ bool mad_mkdir(const char *path) {
     return success;
 }
 
-char *mad_copy_path_fix(const char *path) {
-    size_t path_len = strlen(path);
-    if (strcmp(&path[path_len - 1], "/") == 0) {
-        path_len--;
-    }
-    char *result = (char *) malloc((path_len + 1) * sizeof(char));
-    result[0] = '\0';
-    strncpy(result, path, path_len);
-    return result;
+void strip_trailing_slashes(char *path) {
+    int last;
+    last = strlen (path) - 1;
+    while (last > 0 && path[last] == '/')
+        path[last--] = '\0';
 }
 
 int mad_extract(const char *source, const char *dest, const char *filename) {

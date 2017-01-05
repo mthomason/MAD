@@ -1,5 +1,5 @@
 //
-//  MADNavigationControllerSplitParentViewController.m
+//  MADNavigationControllerQueryBuilder.m
 //  MAD
 //
 //  Created by Michael Thomason on 10/18/14.
@@ -7,7 +7,14 @@
 //
 
 #import "MADNavigationControllerQueryBuilder.h"
+#import <Foundation/NSObject.h>
 #import <UIKit/UINavigationBar.h>
+#import <UIKit/UIAppearance.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIResponder.h>
+
+#import "MADViewControllerDocumentProtocol.h"
 
 @interface MADNavigationControllerQueryBuilder ()
 
@@ -17,12 +24,18 @@
 
 @implementation MADNavigationControllerQueryBuilder
 
+@synthesize document = _document;
+
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 + (void)initialize {
     [super initialize];
     
-    if (self == [MADNavigationController self]) {
+    if (self == [MADNavigationControllerQueryBuilder self]) {
         @autoreleasepool {
-            
+
         }
     }
 }
@@ -30,6 +43,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         _firstTimeLayout = YES;
+        self.delegate = self;
     }
     return self;
 }
@@ -56,12 +70,6 @@
     [self setNavigationBarHidden: NO animated: animated];
 }
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    id s = segue;
-    id e = sender;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self setNavigationBarHidden:YES animated:animated];
@@ -85,10 +93,39 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x,
-                                          CGPointZero.y + self.topLayoutGuide.length,
-                                          self.navigationBar.frame.size.width,
-                                          self.navigationBar.frame.size.height);
+    //self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x,
+    //                                      CGPointZero.y + self.topLayoutGuide.length,
+    //                                      self.navigationBar.frame.size.width,
+    //                                      self.navigationBar.frame.size.height);
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    //[super navigationController:navigationController
+    //     willShowViewController:viewController
+    //                   animated:animated];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    //[super navigationController:navigationController
+    //      didShowViewController:viewController
+    //                   animated:animated];
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (document != _document) {
+        _document = document;
+        UIViewController *childViewController;
+        NSArray<__kindof UIViewController *> *childViewControllers = self.childViewControllers;
+        for (childViewController in childViewControllers) {
+            if ([childViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+                [((id <MADViewControllerDocumentProtocol>)childViewController) setDocument: self.document];
+            }
+        }
+    }
 }
 
 @end

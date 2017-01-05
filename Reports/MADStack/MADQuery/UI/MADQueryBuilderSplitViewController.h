@@ -16,6 +16,7 @@
 
 @class UINavigationController;
 @class MADQueryVisualizationViewController;
+@class MADNavigationControllerQueryBuilder;
 @class MADQueryViewController;
 @class MADocument;
 
@@ -26,11 +27,11 @@
 
     + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document;
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+    @property (readwrite, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-    @property (readonly) UINavigationController *detailNavigationController;
-    @property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
-    @property (readonly) MADQueryViewController *queryBuilderController;
+    @property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *detailNavigationController;
+    @property (readonly, nonatomic, strong) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
+    @property (readonly, nonatomic, strong) MADQueryViewController *queryBuilderController;
 
 @end
 

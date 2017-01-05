@@ -14,6 +14,7 @@
 #import <MAD/MADDatabaseProtocol.h>
 
 #import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationController.h>
 
 #import <CoreData/NSManagedObjectID.h>
 
@@ -31,7 +32,6 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MADNavigationControllerSplitParentViewController.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
@@ -52,7 +52,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderChooseFieldViewController class]]) {
         ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
-        [(segue.destinationViewController) setDocument: self.document];
+        MADocument *document = self.document;
+        [(segue.destinationViewController) setDocument: document];
     }
 }
 

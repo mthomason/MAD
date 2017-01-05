@@ -86,6 +86,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 @implementation MTQueryFull
 
 - (void)dealloc {
+    self.dataDelegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

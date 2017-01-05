@@ -32,9 +32,7 @@ static NSString * const CacheExt                    = @"qvvc";
 
 @implementation MADQueryVisualizationCacheData
 
-- (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)countTables {
     if (self = [super init]) {

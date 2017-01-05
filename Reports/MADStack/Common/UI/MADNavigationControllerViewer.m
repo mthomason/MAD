@@ -26,16 +26,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self pushViewController:self.viewerController animated:animated];
+    if (self.viewControllers.count == 0) {
+        [self pushViewController:self.viewerController animated:animated];
+    }
     [self setNavigationBarHidden:YES animated:NO];
     [self setToolbarHidden:NO animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    NSArray *emptyArray = [[NSArray alloc] init];
-    [self setViewControllers: emptyArray animated:animated];
-    //[self popViewControllerAnimated: NO];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
 }
 
 + (UIImage *)newTabBarImage {

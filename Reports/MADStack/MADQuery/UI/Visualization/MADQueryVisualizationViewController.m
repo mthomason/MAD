@@ -98,6 +98,11 @@ static NSString * const QueryVisualization = @"MADQueryVisualization";
 static NSString * const StoryboardDesigner = @"MADDesigner";
 static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStoryboardIDQueryVisulization";
 
+static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
+static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount) {
+    return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
+}
+
 @interface MADQueryVisualizationViewController ()
     <UIGestureRecognizerDelegate,
         UIScrollViewDelegate,
@@ -116,18 +121,12 @@ static NSString * const MADQueryVisualizationViewControllerIdentifer = @"MADStor
     @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
-    static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount);
 
 @end
 
 @implementation MADQueryVisualizationViewController
 
 @synthesize document = _document;
-
-static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCount) {
-    return CGPointMake(CGPointZero.x + 500, *viewHeight / (*tableCount + 2) * (*tableCount + 1));
-}
-
 
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName: QueryVisualization bundle: [NSBundle mainBundle]];
@@ -136,7 +135,25 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     return controller;
 }
 
+#pragma mark - NSObject
+
 - (void)dealloc { }
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
+        _controllersByObjectID = controllersByObjectID;
+        
+        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
+        _connectionViewsByObjectID = connectionViewsByObjectID;
+        
+        NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
+        _rootTables = rootTables;
+        
+    }
+    return self;
+}
 
 #pragma mark - UIContainerViewControllerCallbacks
 
@@ -193,24 +210,6 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
                                MADSchemaViewDefaultWidth,
                                MADSchemaViewDefaultHeight);
     return result;
-}
-
-#pragma mark - NSObject
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-
-        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
-        _controllersByObjectID = controllersByObjectID;
-        
-        NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
-        _connectionViewsByObjectID = connectionViewsByObjectID;
-        
-        NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
-        _rootTables = rootTables;
-        
-    }
-    return self;
 }
 
 - (void)setDocument:(MADocument *)document {
@@ -369,7 +368,9 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 }
 
 - (void)layoutQueryLinks {
-    for (RptqQueryLinks *queryLink in self.document.activeDocumentModel.defaultDatabase.defaultQuery.hasQueryLinks) {
+    NSSet *hasQueryLinks = self.document.activeDocumentModel.defaultDatabase.defaultQuery.hasQueryLinks;
+    RptqQueryLinks *queryLink;
+    for (queryLink in hasQueryLinks) {
         [self layoutQueryLinkViewController:queryLink];
     }
 }

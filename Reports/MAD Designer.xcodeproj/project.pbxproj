@@ -146,7 +146,7 @@
 		4C26BA0A1BAF14F200456DC8 /* MADGettingStartedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA061BAF14F200456DC8 /* MADGettingStartedTableViewController.m */; };
 		4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA081BAF14F200456DC8 /* MADInformationTableViewController.m */; };
 		4C26BA0C1BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA091BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard */; };
-		4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */; };
+		4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */; };
 		4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */; };
 		4C26BA201BAF150F00456DC8 /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA131BAF150F00456DC8 /* MADQueryVisualizationCacheData.m */; };
 		4C26BA211BAF150F00456DC8 /* MADQueryVisualizationDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA151BAF150F00456DC8 /* MADQueryVisualizationDefination.m */; };
@@ -1388,8 +1388,8 @@
 		4C26BA071BAF14F200456DC8 /* MADInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInformationTableViewController.h; sourceTree = "<group>"; };
 		4C26BA081BAF14F200456DC8 /* MADInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInformationTableViewController.m; sourceTree = "<group>"; };
 		4C26BA091BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardInformationTable.storyboard; sourceTree = "<group>"; };
-		4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerSplitParentViewController.h; path = ../MADQuery/UI/MADNavigationControllerSplitParentViewController.h; sourceTree = "<group>"; };
-		4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerSplitParentViewController.m; path = ../MADQuery/UI/MADNavigationControllerSplitParentViewController.m; sourceTree = "<group>"; };
+		4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerQueryBuilder.h; path = ../MADQuery/UI/MADNavigationControllerQueryBuilder.h; sourceTree = "<group>"; };
+		4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerQueryBuilder.m; path = ../MADQuery/UI/MADNavigationControllerQueryBuilder.m; sourceTree = "<group>"; };
 		4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderSplitViewController.h; sourceTree = "<group>"; };
 		4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryBuilderSplitViewController.m; sourceTree = "<group>"; };
 		4C26BA121BAF150F00456DC8 /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4352,8 +4352,8 @@
 				4C26BA941BAF9B9B00456DC8 /* MADNavigationBarTitleView.m */,
 				4C26B99F1BAF123A00456DC8 /* MADNavigationControllerFontPicker.h */,
 				4C26B9A01BAF123A00456DC8 /* MADNavigationControllerFontPicker.m */,
-				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */,
-				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
+				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.h */,
+				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */,
 				4C26BA6B1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
 				4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
@@ -6193,7 +6193,7 @@
 				4C26BA231BAF150F00456DC8 /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */,
 				4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */,
-				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m in Sources */,
+				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */,
 				4C26BA591BAF99F000456DC8 /* MTElementCanvas.m in Sources */,
 				4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */,
 				4C401F7E1BAE7EB500BAE5FC /* MTGradientView.m in Sources */,

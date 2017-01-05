@@ -70,6 +70,10 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @implementation MTQuery
 
+- (void)dealloc {
+    _dataDelegate = nil;
+}
+
 - (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
     id object = parameters;
     
