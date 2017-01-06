@@ -67,7 +67,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                       storageOption: (MADAppStorage)storageOption
                                          identifier: (NSString *)identifier
                                   firstQueryHandler: (void (^)(void))firstQueryHandler {
-    NSLog(@"Creating a File Controller with extension %@.", pathExtension);
+    //NSLog(@"Creating a File Controller with extension %@.", pathExtension);
 
     id coordinator, controller;
     coordinator = [MADFileCoordinator newFileCoordinatorWithPathExtension: pathExtension
@@ -86,7 +86,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                              identifier: (NSString *)identifier
                                       firstQueryHandler: (void (^)(void))firstQueryHandler {
 
-    NSLog(@"Creating a File Controller with last path component %@.", lastPathComponent);
+    //NSLog(@"Creating a File Controller with last path component %@.", lastPathComponent);
 
 
     id coordinator, controller;
@@ -103,8 +103,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 + (BOOL)isCloudReadilyAvailable {
-    NSLog(@"Checking if cloud is readily available %@.",
-          [NSFileManager defaultManager].ubiquityIdentityToken != nil ? @"YES" : @"NO");
+    //NSLog(@"Checking if cloud is readily available %@.",
+          //[NSFileManager defaultManager].ubiquityIdentityToken != nil ? @"YES" : @"NO");
     return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
 }
 
@@ -113,11 +113,11 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                                delay: (void (^)())handleLongRunningCall
                                           completion: (MADBlockFileStorageLocation)handleCompletion {
 
-    NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
+    //NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
 
     if ([self isCloudReadilyAvailable]) {
 
-        NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
+        //NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
 
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         
@@ -138,7 +138,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
             
             ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
 
-            NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
+            //NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
 
             dispatch_queue_t main_queue = dispatch_get_main_queue();
             dispatch_sync(main_queue, ^{
@@ -150,8 +150,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                 NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
                 [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
                 
-                NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
-                                                                            dataDirectory);
+                //NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
+                //                                                            dataDirectory);
                 if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
                 
             });
@@ -168,7 +168,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 + (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
-    NSLog(@"Detected a long running cloud lookup.");
+    //NSLog(@"Detected a long running cloud lookup.");
     if(timer.userInfo) {
         void (^block)() = (void (^)())timer.userInfo;
         block();
@@ -182,7 +182,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                          sortComparator: (NSComparisonResult (^)(MADMetaData *,
                                                                  MADMetaData *))sortComparator {
 
-    NSLog(@"Initalizing file coordinator.");
+    //NSLog(@"Initalizing file coordinator.");
     if (self = [super init]) {
         
         _fileCoordinator = fileCoordinator;
@@ -192,7 +192,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         dispatch_queue_t fileMetaDataQueue;
         fileMetaDataQueue = dispatch_queue_create(QueueFileInfoID, DISPATCH_QUEUE_SERIAL);
         self.fileMetaDataQueue = fileMetaDataQueue;
-        
+                
         NSMutableArray *fileMetaData = [[NSMutableArray alloc] init];
         self.fileMetaDatum = fileMetaData;
         
@@ -203,29 +203,29 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 - (void)startSearching {
-    NSLog(@"Starting search.");
+    //NSLog(@"Starting search.");
     [self.fileCoordinator startQuery];
 }
 
 - (void)stopSearching {
-    NSLog(@"Stopping search.");
+    //NSLog(@"Stopping search.");
     [self.fileCoordinator stopQuery];
 }
 
 #pragma mark - Property Overrides
 
 - (NSUInteger)count {
-    NSLog(@"We got a grand total of %d items.", self.fileMetaDatum.count);
+    //NSLog(@"We got a grand total of %d items.", self.fileMetaDatum.count);
     return self.fileMetaDatum.count;
 }
 
 - (void)setFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator {
     
-    NSLog(@"Trying to set the file coordinator.");
+    //NSLog(@"Trying to set the file coordinator.");
     
     if (![_fileCoordinator isEqual:fileCoordinator]) {
 
-        NSLog(@"Set the file coordinator.");
+        //NSLog(@"Set the file coordinator.");
 
         id <MADFileCoordinatorProtocol> oldFileCoordinator = _fileCoordinator;
         _fileCoordinator = fileCoordinator;
@@ -246,7 +246,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                         updatedMetaDatum: updated
                                               completion: ^(BOOL success, NSError *error) {
                                               
-            NSLog(@"processContentChangesWithInsertedMetaDatum completed.");
+            //NSLog(@"processContentChangesWithInsertedMetaDatum completed.");
 
         }];
         
@@ -261,7 +261,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
 
-    NSLog(@"Requesting object at index: %d.", index);
+    //NSLog(@"Requesting object at index: %d.", index);
 
     __block MADMetaData *fileInfo = nil;
     __unsafe_unretained typeof(self) weakSelf = self;
@@ -276,19 +276,19 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 #pragma mark - Inserting / Removing / Managing / Updating MADMetaData Objects
 
 - (void)removeFileInfo:(MADMetaData *)fileInfo {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     [self.fileCoordinator removeFileAtURL: fileInfo.URL];
 }
 
 - (void)duplicateFileInfo:(MADMetaData *)fileInfo {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     [self.fileCoordinator duplicateFileAtURL: fileInfo.URL];
 }
 
 - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSURL *url = fileInfo.URL.copy;
     [self.fileCoordinator renameFileAtURL: url toName: name];
@@ -296,7 +296,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name
                     extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     [self.fileCoordinator createURLForFile:list withName:name
                                  extention:extention fileGroup:fileGroup];
@@ -304,21 +304,21 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
                         fileGroup:(NSString *)fileGroup {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     return [self.fileCoordinator canCreateFileWithName:name extention:extention
                                              fileGroup:fileGroup];
 }
 
 - (NSURL *)documentDirectory {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     return (self.fileCoordinator).documentsDirectory;
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo {
 
-    NSLog(@"%s : %@", __PRETTY_FUNCTION__, fileInfo);
+    //NSLog(@"%s : %@", __PRETTY_FUNCTION__, fileInfo);
 
     dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
 
@@ -330,7 +330,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         
         [weakSelf.delegateQueue addOperationWithBlock:^{
 
-            NSLog(@"%s", __PRETTY_FUNCTION__);
+            //NSLog(@"%s", __PRETTY_FUNCTION__);
 
             MADFilesController *sself = weakSelf;
             id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -359,8 +359,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                              removedURLs:(MADURLArray *)removedURLs
                                              updatedURLs:(MADURLArray *)updatedURLs {
     
-    NSLog(@"(NSURL) File Coordinator Did Update Contents With \n"
-          @"\t%@\n" @"\t%@\n" @"\t%@", insertedURLs, removedURLs, updatedURLs);
     MADMutableMetaDatum *insertedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:insertedURLs.count],
                         *removedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:removedURLs.count],
                         *updatedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:updatedURLs.count];
@@ -403,8 +401,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                                    completion:(void (^)(BOOL success,
                                                                         NSError *error))completion {
     
-    NSLog(@"(MetaDatam) File Coordinator Did Update Contents With \n"
-          @"\t%@\n" @"\t%@\n" @"\t%@", insertedMetaDatum, removedMetaDatum, updatedMetaDatum);
+    //NSLog(@"(MetaDatam) File Coordinator Did Update Contents With \n"
+    //      @"\t%@\n" @"\t%@\n" @"\t%@", insertedMetaDatum, removedMetaDatum, updatedMetaDatum);
 
     NSArray *inserts = [NSArray arrayWithArray: insertedMetaDatum];
     NSArray *removes = [NSArray arrayWithArray: removedMetaDatum];
@@ -448,7 +446,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    NSLog(@"File Coordinator did fail duplicating URL: %@", URL);
+    //NSLog(@"File Coordinator did fail duplicating URL: %@", URL);
     typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
@@ -462,7 +460,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    NSLog(@"File Coordinator did fail renaming URL: %@", URL);
+    //NSLog(@"File Coordinator did fail renaming URL: %@", URL);
     typeof(self) __weak weakSelf = self;
     [self.delegateQueue addOperationWithBlock:^{
         MADFilesController *sself = weakSelf;
@@ -476,7 +474,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-    NSLog(@"File Coordinator did fail removing URL: %@", URL);
+    //NSLog(@"File Coordinator did fail removing URL: %@", URL);
 
     typeof(self) __weak weakSelf = self;
     void (^handleFailure)(void);
@@ -518,7 +516,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
                                   updatedMetaDatum:(NSArray *)updates
                                         completion:(void (^)(BOOL success, NSError *error))completion {
 
-    NSLog(@"%s\n\t%@\n\t%@\n\t%@", __PRETTY_FUNCTION__, inserts, removes, updates);
+    //NSLog(@"%s\n\t%@\n\t%@\n\t%@", __PRETTY_FUNCTION__, inserts, removes, updates);
     
     NSArray *insertedMetaDatum = inserts.copy;
     NSArray *removedMetaDatum = removes.copy;
@@ -528,9 +526,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     
     [self.delegateQueue addOperationWithBlock:^{
         
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-        
         MADFilesController *sself = weakSelf;
+
         dispatch_queue_t fileMetaDataQueue = sself.fileMetaDataQueue;
         id <MADFilesControllerDelegate> delegate = sself.delegate;
         
@@ -549,8 +546,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
             
         });
         
-        if (untrackedInsertedFileInfos.count == 0 &&
-            trackedRemovedFileInfos.count == 0 &&
+        if (untrackedInsertedFileInfos.count == 0 && trackedRemovedFileInfos.count == 0 &&
             updatedMetaDatum.count == 0) {
             return;
         }
@@ -635,8 +631,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
             
             SEL didUpdateFileInfo = @selector(filesController:didUpdateFileInfo:atIndex:);
             
-            if (updatedFileInfoIndex != NSNotFound &&
-                [delegate respondsToSelector:didUpdateFileInfo]) {
+            if (updatedFileInfoIndex != NSNotFound && [delegate respondsToSelector:didUpdateFileInfo]) {
                 
                 [delegate filesController: sself
                         didUpdateFileInfo: updatedFileInfo

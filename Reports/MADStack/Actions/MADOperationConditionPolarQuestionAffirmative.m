@@ -24,7 +24,7 @@
 @implementation MADOperationConditionPolarQuestionAffirmative
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithTag:(NSUInteger)tag {

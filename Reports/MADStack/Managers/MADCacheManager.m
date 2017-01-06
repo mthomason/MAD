@@ -51,7 +51,7 @@
         _queueForCachingData.name = @"com.everydayapps.mad.cache";
         _queueForCachingData.qualityOfService = NSQualityOfServiceBackground;
         _queueForCachingData.maxConcurrentOperationCount = 2;
-        assert(_queueForCachingData != nil);
+        assert(_queueForCachingData == nil);
     }
     return self;
 }

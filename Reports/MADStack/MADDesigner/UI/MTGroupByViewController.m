@@ -28,6 +28,8 @@
 
 #import "MADNavigationBarTitleView.h"
 
+#import "MADLabelTitle.h"
+
 NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";
 
 @interface MADGroupByViewController ()

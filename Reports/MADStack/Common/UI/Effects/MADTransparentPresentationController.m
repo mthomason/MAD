@@ -14,9 +14,15 @@
 
 + (void)initialize {
     [super initialize];
-    
-    if (self != [MADTransparentPresentationController self]) return;
-    [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
+    if (self == [MADTransparentPresentationController self]) {
+        @autoreleasepool {
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            UINavigationBar *appearanceProxy;
+            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.barTintColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (BOOL) shouldRemovePresentersView {

@@ -19,7 +19,8 @@
 @class MADCollectionViewCellDocument;
 
 @interface MADDocumentManager : NSObject
-    <UICollectionViewDataSource, MADFileLocationManagerDelegate>
+    <UICollectionViewDataSource,
+        MADFileLocationManagerDelegate>
 
     - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration NS_DESIGNATED_INITIALIZER;
 

@@ -136,9 +136,9 @@ bool mad_mkdir(const char *path) {
 
 void strip_trailing_slashes(char **path) {
     int last;
-    last = strlen(*path) - 1;
-    while (last > 0 && *path[last] == '/')
-        *path[last--] = '\0';
+    last = strlen((char *)*path) - 1;
+    while (last > 0 && ((char)((char *)(*path))[last]) == '/')
+        (*path)[last--] = '\0';
 }
 
 int mad_extract(const char *source, const char *dest, const char *filename) {

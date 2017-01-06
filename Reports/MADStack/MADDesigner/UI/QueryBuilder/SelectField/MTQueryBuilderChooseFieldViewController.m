@@ -36,6 +36,8 @@
 
 #import <MAD/MADocument.h>
 
+#import "MADLabelTitle.h"
+
 #import "MADNavigationBarTitleView.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"

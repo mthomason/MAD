@@ -57,6 +57,8 @@
 #import "MADNavigationBarTitleView.h"
 #import "MTViewControllerBarcodePreviewDelegate.h"
 
+#import "MADLabelTitle.h"
+
 static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 

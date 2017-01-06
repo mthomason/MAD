@@ -43,7 +43,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 @implementation MADGetCredentialsOperation
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)credentials {
@@ -60,7 +60,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
     if (self = [super init]) {
 
-        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         if (!(_shortCircut = ![databaseConnection requiresCredientals])) {
             [self addOperationsToGetCredentialsWithDatabaseConnection:databaseConnection viewController:viewController];
         }
@@ -71,7 +71,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (void)execute {
     
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     if (_shortCircut) {
         [self finish];
@@ -135,8 +135,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
                                              viewController: (UIViewController *)viewController {
     
     NSString *key = databaseConnection.connectionString;
-    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
     
     // ---------------------------------------------------
     // Operation 1: Read username.

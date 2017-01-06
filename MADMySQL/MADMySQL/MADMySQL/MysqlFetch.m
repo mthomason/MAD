@@ -159,7 +159,7 @@ char *mySQLTypeForType(int type) {
 
 + (void)logBindings:(MYSQL_BIND)binding {
 #ifdef DEBUG
-    NSLog(@"Binding %s (%lu)", mySQLTypeForType(binding.buffer_type), binding.buffer_length);
+    //NSLog(@"Binding %s (%lu)", mySQLTypeForType(binding.buffer_type), binding.buffer_length);
 #endif
 }
 

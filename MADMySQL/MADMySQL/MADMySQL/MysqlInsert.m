@@ -134,7 +134,7 @@
         
         if (mysql_stmt_execute(myStatement)) {
             if (ignoreDuplicateErrors && mysql_errno(connection.connection)==ER_DUP_ENTRY) {
-                NSLog(@"mysql_stmt_execute failure ignore %s", mysql_stmt_error(myStatement));
+                //NSLog(@"mysql_stmt_execute failure ignore %s", mysql_stmt_error(myStatement));
             } else {
                 [MysqlException raiseConnection:connection withFormat:@"mysql_stmt_execute failed %s", mysql_stmt_error(myStatement)];
             }

@@ -25,12 +25,12 @@
 @implementation MADKeyChainOperationGet
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description {
     if (self = [super init]) {
-        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _key = key.copy;
         _success = NO;
         _keyDescription = description.copy;
@@ -42,7 +42,7 @@
 
 - (void)execute {
 
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     CFDataRef queryData = NULL;
     NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key withDescription:self.keyDescription];

@@ -11,25 +11,27 @@
 #endif
 
 #import "MTDocumentObjectNewAggregateViewController.h"
-#import "MADAggregateFunctionsViewControllerDelegate.h"
-#import "MADGroupByViewControllerDelegate.h"
-
 #import <CoreData/NSManagedObjectID.h>
-
-#import "MTQueryBuilderChooseFieldDelegate.h"
-
 #import <UIKit/UIStoryboardSegue.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
+#import <UIKit/UILabel.h>
+
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+
+#import "MADAggregateFunctionsViewControllerDelegate.h"
+#import "MADGroupByViewControllerDelegate.h"
+
+#import "MTQueryBuilderChooseFieldDelegate.h"
+
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MADNavigationBarTitleView.h"
-
-#import <MAD/RptqQueryField+Extras.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import "MADLabelTitle.h"
 
 #import "MTAggregateFunctionsViewController.h"
 

@@ -7,15 +7,42 @@
 //
 
 #import "MADLabelTitle.h"
+#import "NSAttributedString+Logo.h"
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 @implementation MADLabelTitle
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.autoresizingMask = MADViewAutoresizingFlexable();
+        self.translatesAutoresizingMaskIntoConstraints = YES;
+        self.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.numberOfLines = 1;
+        self.minimumScaleFactor = 0.8f;
+        self.adjustsFontSizeToFitWidth = YES;
+    }
+    return self;
 }
-*/
+
+- (void)updateConstraints {
+    [super updateConstraints];
+    [self setContentCompressionResistancePriority:900 forAxis:UILayoutConstraintAxisHorizontal];
+}
+
+- (void)setText:(NSString *)text {
+    MADLogoString *attributedText;
+    NSString *safetext;
+    
+    safetext = text.copy;
+    attributedText = [NSAttributedString newLogoStringForTitle:safetext];
+    
+    super.text = safetext;
+    
+    self.attributedText = attributedText;
+    
+    [self sizeToFit];
+    
+}
 
 @end

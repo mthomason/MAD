@@ -18,8 +18,15 @@
 
 + (void)initialize {
     [super initialize];
-    if (self != [MADNavigationControllerToolbox self])  return;
-    [UINavigationBar appearanceWhenContainedIn:[MADNavigationControllerToolbox class], nil].barTintColor        = [UIColor clearColor];
+    if (self == [MADNavigationControllerToolbox self]) {
+        @autoreleasepool {
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            UINavigationBar <UIAppearance> *appearanceProxy;
+            classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
+            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.barTintColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (BOOL)prefersStatusBarHidden {

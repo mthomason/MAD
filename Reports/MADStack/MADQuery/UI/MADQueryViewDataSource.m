@@ -56,25 +56,25 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 @implementation MADQueryViewDataSource
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     _sections = nil;
     _handleConfigureCell = nil;
     _datasoruce = nil;
     if (_queryLinksController) {
         _queryLinksController.delegate = nil;
-        _queryLinksController = nil;
+//        _queryLinksController = nil;
     }
     if (_queryTablesController) {
         _queryTablesController.delegate = nil;
-        _queryTablesController = nil;
+//        _queryTablesController = nil;
     }
     if (_queryGroupsController) {
         _queryGroupsController.delegate = nil;
-        _queryGroupsController = nil;
+//        _queryGroupsController = nil;
     }
     if (_queryPredicatesController) {
         _queryPredicatesController.delegate = nil;
-        _queryPredicatesController = nil;
+//        _queryPredicatesController = nil;
     }
 }
 

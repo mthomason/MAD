@@ -42,7 +42,7 @@ const short errUserCancel = 1;
 
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+    //NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
     MADCredentialSource source = none;
     NSArray *dependencies = self.dependencies;
     for (MADKeyChainGetCredentials *dependency in dependencies) {

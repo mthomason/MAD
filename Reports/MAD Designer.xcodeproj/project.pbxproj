@@ -689,6 +689,8 @@
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
+		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
+		4C692B481E1F13F000DC2CB0 /* MADLabelTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -1846,6 +1848,10 @@
 		4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerIdentity.h; path = UI/MADNavigationControllerIdentity.h; sourceTree = "<group>"; };
 		4C692B3C1E1D2C6800DC2CB0 /* MADTabBarItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBarItemProtocol.h; sourceTree = "<group>"; };
 		4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../StaticResources/Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
+		4C692B431E1F132400DC2CB0 /* MADNavigationItemTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationItemTitle.h; sourceTree = "<group>"; };
+		4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationItemTitle.m; sourceTree = "<group>"; };
+		4C692B461E1F13F000DC2CB0 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelTitle.h; sourceTree = "<group>"; };
+		4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelTitle.m; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -3318,6 +3324,8 @@
 				4C26BA2C1BAF999800456DC8 /* Types */,
 				4C401F031BAE6DF100BAE5FC /* UI */,
 				4C26BA2E1BAF999800456DC8 /* User */,
+				4C692B461E1F13F000DC2CB0 /* MADLabelTitle.h */,
+				4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */,
 			);
 			name = Common;
 			path = MADStack/Common;
@@ -4359,6 +4367,8 @@
 				4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */,
 				4C692B381E1D1E1700DC2CB0 /* MADTabBarNavigationController.h */,
 				4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */,
+				4C692B431E1F132400DC2CB0 /* MADNavigationItemTitle.h */,
+				4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */,
 			);
 			name = NavigationControllers;
 			sourceTree = "<group>";
@@ -6024,6 +6034,7 @@
 				4CF6AFC61CAFC14200D3AD11 /* MADRefreshOperationInitalize.m in Sources */,
 				4C5C0DBF1C9CF1D300826BC2 /* MADKeyChainOperationPut.m in Sources */,
 				4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */,
+				4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */,
 				4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */,
 				4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */,
 				4C26B9CF1BAF123A00456DC8 /* MADToolboxStyleViewController.m in Sources */,
@@ -6177,6 +6188,7 @@
 				4C401F801BAE7EB500BAE5FC /* MTTextView.m in Sources */,
 				4C401FC61BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C780CE91BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m in Sources */,
+				4C692B481E1F13F000DC2CB0 /* MADLabelTitle.m in Sources */,
 				4C26B9C01BAF123A00456DC8 /* MADDocumentInformationTableViewController.m in Sources */,
 				4C26B96B1BAF11C800456DC8 /* MADOperationRegisterDefaults.m in Sources */,
 				4C4020461BAE92F200BAE5FC /* NSLayoutConstraint+QueryVisualization.m in Sources */,

@@ -34,6 +34,7 @@
     [super initialize];
     if (self == [MADTabBarNavigationController self]) {
         @autoreleasepool {
+            
             NSArray<Class <UIAppearanceContainer>> * classes;
             UINavigationBar *appearanceProxy;
             
@@ -56,7 +57,8 @@
     self.toolbar.translucent = YES;
     self.navigationBar.translucent = YES;
     
-    NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+    NSMutableDictionary *titleTextAttributes;
+    titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
     
 }

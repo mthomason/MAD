@@ -87,7 +87,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 - (instancetype)init {
 
     if (self = [super init]) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
 
         NSNumber *yes = @YES;
         NSNumber *notSet = [[NSNumber alloc] initWithShort: MADAppStorageNotSet];
@@ -104,7 +104,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 #pragma mark - Ubiquity Identity Token Handling (Account Change)
 
 - (BOOL)hasUbiquityIdentityChanged {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     BOOL hasChanged = NO;
     
@@ -127,7 +127,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     id <NSObject, NSCopying, NSCoding> storedToken = nil;
     
@@ -145,7 +145,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (void)persistAccount {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     id<NSObject, NSCopying, NSCoding> token;
     token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
@@ -187,7 +187,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 #pragma mark - Convenience
 
 - (BOOL)isFirstLaunch {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
                                                                                     YES : NO;
@@ -199,7 +199,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (void)setupFileStorageLocationsForCloud {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     UIViewController <MADFileLocationManagerDelegate> *safeDelegate = _delegate;
 
@@ -242,7 +242,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (void)setupFileStorageLocationsForLocal {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     id <MADFileLocationManagerDelegate> safedelegate;
     safedelegate = _delegate;
@@ -257,7 +257,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
     typeof(self) __weak weakself = self;
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
         
         UIViewController <MADFileLocationManagerDelegate> *delegate;
         delegate = wdelegate;
@@ -308,7 +308,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (void)getUserCloudPrefs {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
 
@@ -351,7 +351,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 }
 
 - (void)getUserCloudPrefsSubsquient {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADStorageState *storageState;
     storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
@@ -438,7 +438,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 
 - (NSString *)copyIdentifierForStorageOption {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     id <MADFileLocationManagerDelegate> delegate = _delegate;
 

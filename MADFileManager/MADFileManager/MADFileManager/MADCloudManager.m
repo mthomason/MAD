@@ -37,15 +37,11 @@ static const char * MADQueueCloudSerial
 
 @interface MADCloudManager() {
     BOOL _completedStepOne;
-
     BOOL _cloudReadilyAvailable;
     MADAppStorage _userPreference;
-    
 }
-
     @property (nonatomic, copy) NSString *ubiquityIdentifier;
     @property (nonatomic, copy) NSString *groupIdentifier;
-    
     @property (nonatomic, strong) dispatch_queue_t queue_background_serial;
 
 @end
@@ -267,11 +263,11 @@ static const char * MADQueueCloudSerial
 
 
     /*
-    NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
+    //NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
     
     if ([self isCloudReadilyAvailable]) {
         
-        NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
+        //NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
         
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         
@@ -292,7 +288,7 @@ static const char * MADQueueCloudSerial
             
             ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
             
-            NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
+            //NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
             
             dispatch_queue_t main_queue = dispatch_get_main_queue();
             dispatch_sync(main_queue, ^{
@@ -304,7 +300,7 @@ static const char * MADQueueCloudSerial
                 NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
                 [MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
                 
-                NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
+                //NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
                       dataDirectory);
                 if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
                 
@@ -361,7 +357,7 @@ static const char * MADQueueCloudSerial
     /*
      [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
     
         UINavigationController *navController;
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;

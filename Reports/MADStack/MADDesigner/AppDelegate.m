@@ -195,7 +195,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
     [vectorBool addTrue];
     [vectorBool addFalse];
     [vectorBool enumerateBools:^(NSUInteger inx, BOOL valid, BOOL *stop) {
-        NSLog(@"Valid %@\n", valid ? @"YES" : @"NO");
+        //NSLog(@"Valid %@\n", valid ? @"YES" : @"NO");
     }];*/
 //    [vectorBool enum]
 /*
@@ -227,7 +227,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     methodFinish = [NSDate date];
     executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"executionTime = %f", executionTime);
+    //NSLog(@"executionTime = %f", executionTime);
 
 
     i=0;
@@ -241,10 +241,10 @@ static inline UIUserNotificationType MADUserNotificationType() {
     
     methodFinish = [NSDate date];
     executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"executionTime = %f", executionTime);
+    //NSLog(@"executionTime = %f", executionTime);
 
     //NSUInteger i = UINT64_MAX;
-    NSLog(@"%llu", UINT64_MAX);
+    //NSLog(@"%llu", UINT64_MAX);
 
 */
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
@@ -316,7 +316,8 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (NSString *)bundleDisplayName {
     if (!_bundleDisplayName) {
-        NSString *result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+        NSString *result;
+        result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
         _bundleDisplayName = result.copy;
     }
     return _bundleDisplayName;

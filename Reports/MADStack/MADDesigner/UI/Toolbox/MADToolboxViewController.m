@@ -55,16 +55,16 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
 + (void)initialize {
     [super initialize];
-    
-    if (self != [MADToolboxViewController class]) return;
-
-    UISegmentedControl *controlAppearance;
-    id classes;
-    id controlClass = [UINavigationBar class];
-    classes = [[NSArray alloc] initWithObjects:controlClass, nil];
-    controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: classes];
-    controlAppearance.tintColor = [UIColor whiteColor];
-    
+    if (self == [MADToolboxViewController class]) {
+        @autoreleasepool {
+            UISegmentedControl *controlAppearance;
+            id classes;
+            id controlClass = [UINavigationBar class];
+            classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+            controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: classes];
+            controlAppearance.tintColor = [UIColor whiteColor];
+        }
+    }
 }
 
 - (void)dealloc {

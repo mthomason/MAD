@@ -109,7 +109,7 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
             NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
                                                                                         error: error];
             
-            NSLog(@"Reading image at path: %@,\n%@", sself.thumbnailAbsolutePath, attributes);
+            //NSLog(@"Reading image at path: %@,\n%@", sself.thumbnailAbsolutePath, attributes);
             if (sself) {
                 id thumbnail = [[UIImage alloc] initWithContentsOfFile: sself.thumbnailAbsolutePath];
                 if (!thumbnail) thumbnail = [UIImage imageNamed:MADImageBlank];

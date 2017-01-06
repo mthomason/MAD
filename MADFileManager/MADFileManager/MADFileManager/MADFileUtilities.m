@@ -365,7 +365,7 @@ static NSString * const MADPathComponentData       = @"Data";
 + (void)removeFileAndArchiveAtURL:(NSURL *)url {
     BOOL (^errorHandler)(NSURL *, NSError *);
     errorHandler = ^BOOL(NSURL *errorUrl, NSError *error) {
-        NSLog(@"Error %@", error);
+        //NSLog(@"Error %@", error);
         return YES;
     };
     NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
@@ -451,8 +451,8 @@ static NSString * const MADPathComponentData       = @"Data";
         if (accessError) {
             // An error occured when trying to coordinate moving URL to toURL.
             //  In your app, handle this gracefully.
-            NSLog(@"Couldn't move file: %@ to: %@ error: %@.", url.absoluteString,
-                    toURL.absoluteString, accessError.localizedDescription);
+            //NSLog(@"Couldn't move file: %@ to: %@ error: %@.", url.absoluteString,
+            //        toURL.absoluteString, accessError.localizedDescription);
             
             return;
         }
@@ -477,7 +477,7 @@ static NSString * const MADPathComponentData       = @"Data";
         
         if (!success) {
             // An error occured when moving URL to toURL. In your app, handle this gracefully.
-            NSLog(@"Couldn't move file: %@ to: %@.", url.absoluteString, toURL.absoluteString);
+            //NSLog(@"Couldn't move file: %@ to: %@.", url.absoluteString, toURL.absoluteString);
         }
     }];
 }
@@ -582,7 +582,7 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
-    NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
+    //NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
 
    NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
@@ -601,7 +601,7 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
                        groupIdentifier:(NSString *)groupIdentifier {
-    NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
+    //NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
 
     NSURL *cachedDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier
                                                                             fileURL: documentUrl];

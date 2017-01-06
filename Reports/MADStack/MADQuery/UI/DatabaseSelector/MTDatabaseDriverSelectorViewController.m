@@ -28,6 +28,7 @@
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTConnectionViewController.h"
+#import "MADLabelTitle.h"
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";

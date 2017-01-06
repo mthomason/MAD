@@ -17,17 +17,20 @@
 @implementation MTNavigationControllerHideBottomBarUnlicensed
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        MTNavigationControllerHideBottomBarUnlicensed * __weak weakself = self;
-        [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-            if (isLicensedUser == NO) {
-                weakself.toolbarHidden = YES;
-                weakself.hidesBottomBarWhenPushed = YES;
-            }
-        }];
+    if (self = [super initWithCoder:aDecoder]) {
     }
     return self;
+}
+
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser == NO) {
+            self.toolbarHidden = YES;
+            self.hidesBottomBarWhenPushed = YES;
+        }
+    }];
 }
 
 @end

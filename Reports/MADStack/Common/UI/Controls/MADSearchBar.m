@@ -7,11 +7,12 @@
 //
 
 #import "MADSearchBar.h"
-#import "objcmad.h"
 #import <UIKit/UIImage.h>
 #import <UIKit/UIButton.h>
 #import <UIKit/UIColor.h>
 #import <UIKit/UIImageView.h>
+
+#import "objcmad.h"
 
 @interface MADSearchBar ()
 
@@ -24,22 +25,42 @@
 
 + (void)initialize {
     [super initialize];
-    if (self != [MADSearchBar self]) return;
-    
-    Class searchBar = [UISearchBar class];
-    UIButton *button = [UIButton appearanceWhenContainedIn: searchBar, nil];
-    UIColor *white = [UIColor whiteColor];
-    button.tintColor = white;
+    if (self == [MADSearchBar self]) {
+        @autoreleasepool {
+            MADSearchBar <UIAppearance> *appearanceProxySearchBar;
+            UIButton <UIAppearance> *appearanceProxyButton;
+            UITextField <UIAppearance> *appearanceProxyTextField;
+            UIImageView <UIAppearance> *appearanceProxyImageView;
+            NSArray <Class <UIAppearanceContainer>> *classes;
+
+            classes = [[NSArray alloc] initWithObjects: [UISearchBar class], nil];
+            appearanceProxyButton = [UIButton appearanceWhenContainedInInstancesOfClasses: classes];
+            appearanceProxyButton.tintColor = [UIColor whiteColor];
+            
+            appearanceProxyTextField = [UITextField appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxyTextField.tintColor = [UIColor whiteColor];
+            appearanceProxyTextField.textColor = [UIColor whiteColor];
+
+            appearanceProxyImageView = [UIImageView appearanceWhenContainedInInstancesOfClasses:classes];;
+            
+            appearanceProxySearchBar = [MADSearchBar appearance];
+            UIImage *closeImage = [UIImage imageNamed: @"MADImageClear"];
+            UIImage *newImageTemplate = [closeImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [appearanceProxySearchBar setImage: newImageTemplate
+                              forSearchBarIcon: UISearchBarIconClear
+                                         state: UIControlStateNormal];
+            
+        }
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-
     if (self = [super initWithFrame:frame]) {
+        
         self.updatedIconColor = NO;
         self.updatedClearButtonColor = NO;
-        UIImage *closeImage = [UIImage imageNamed:@"MADImageClear"];
-        UIImage *newImageTemplate = [closeImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [self setImage:newImageTemplate forSearchBarIcon:UISearchBarIconClear state:UIControlStateNormal];
+        
+
         self.showsBookmarkButton = NO;
         self.showsCancelButton = YES;
         self.showsScopeBar = NO;
@@ -49,43 +70,37 @@
     return self;
 }
 
-
-- (void)setNeedsDisplay {
-    [super setNeedsDisplay];
-}
-
-- (void)setNeedsLayout {
-    [super setNeedsLayout];
-    [self setupIfNeeded];
-}
-
-- (void)setupIfNeeded {
-    if (self.isIconColorUpdated == NO || self.isClearButtonUpdated == NO) {
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!self.isIconColorUpdated || !self.isClearButtonUpdated) {
+        
         UIImage * __unsafe_unretained image;
         UIColor *whiteColor =  [UIColor whiteColor];
-        for (UIView *subview in self.subviews) {
-            for (id subview2 in subview.subviews) {
+        
+        UIView *subview;
+        NSArray<__kindof UIView *> *subviews;
+        NSArray<__kindof UIView *> *subviews2;
+        subviews = self.subviews;
+        
+        for (subview in subviews) {
+            
+            subviews2 = subview.subviews;
+            __kindof UIView * subview2;
+            for (subview2 in subviews2) {
                 if ([subview2 isKindOfClass:[UITextField class]]) {
-                    ((UITextField *)subview2).textColor = whiteColor;
-                    ((UITextField *)subview2).tintColor = whiteColor;
                     
                     image = ((UIImageView *)((UITextField *)subview2).leftView).image;
                     UIImage *imageRenderingTemplate = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     ((UIImageView *)((UITextField *)subview2).leftView).image = imageRenderingTemplate;
-                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = whiteColor;
+                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = whiteColor.copy;
                     
                 }
             }
-            if (self.isIconColorUpdated && self.isClearButtonUpdated) {
-                break;
-            }
         }
+        self.updatedIconColor = YES;
+        self.updatedClearButtonColor  = YES;
     }
 }
 
-- (void)layoutIfNeeded {
-    [super layoutIfNeeded];
-    [self setupIfNeeded];
-}
 
 @end

@@ -66,7 +66,7 @@
     //mysql_options(newObject->_connection,MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
     
     #ifdef DEBUG
-        NSLog(@"Connecting to %@",server);
+        //NSLog(@"Connecting to %@",server);
     #endif
     
     if (!mysql_real_connect(newObject->_connection,
@@ -78,17 +78,17 @@
                             NULL,  // default socket
                             server.flags)) {
         #ifdef DEBUG
-            NSLog(@"Failed to connect: Error: %s\n",mysql_error(NULL));
+            //NSLog(@"Failed to connect: Error: %s\n",mysql_error(NULL));
         #endif
         return nil;
     } else {
         #ifdef DEBUG
-            NSLog(@"Connected to %@",server);
+            //NSLog(@"Connected to %@",server);
         #endif
     }
     if (!mysql_set_character_set(newObject->_connection, "utf8")) {
         #ifdef DEBUG
-            NSLog(@"Client character set: %s\n", mysql_character_set_name(newObject->_connection));
+            //NSLog(@"Client character set: %s\n", mysql_character_set_name(newObject->_connection));
         #endif
 
     }
@@ -138,7 +138,7 @@
     }
     #ifdef DEBUG
         if (!mysql_set_character_set(connectionHandle, "utf8")) {
-            NSLog(@"Client character set: %s\n", mysql_character_set_name(connectionHandle));
+            //NSLog(@"Client character set: %s\n", mysql_character_set_name(connectionHandle));
         }
     #endif
     newObject->server = server;

@@ -84,7 +84,7 @@
 #import "MADPromptOperationDisplayError.h"
 
 #import "MADOperationObserver.h"
-
+#import "MADLabelTitle.h"
 #import "MADIdentifiersStoryboards.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
@@ -166,13 +166,23 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Static helpers
 
 + (void)setNavigationBarAppearanceTinted {
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorWhite];
+    NSArray <Class <UIAppearanceContainer>> *classes;
+    Class thisClass = self;
+    classes = [[NSArray alloc] initWithObjects: thisClass, nil];
+    UINavigationBar *appearanceProxy;
+    appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+    appearanceProxy.barTintColor = nil;
+    appearanceProxy.tintColor = [MADColorEverydayApps newColorWhite];
 }
 
 + (void)setNavigationBarAppearanceHighlighted {
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorRed];
+    NSArray <Class <UIAppearanceContainer>> *classes;
+    Class thisClass = self;
+    classes = [[NSArray alloc] initWithObjects: thisClass, nil];
+    UINavigationBar *appearanceProxy;
+    appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+    appearanceProxy.barTintColor = [MADColorEverydayApps newColorAnalogous4];
+    appearanceProxy.tintColor = [MADColorEverydayApps newColorRed];
 }
 
 + (instancetype)newViewerController:(MADocument *)document {
@@ -189,7 +199,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if (_timerLabelTimeSinceRefreh.valid) {

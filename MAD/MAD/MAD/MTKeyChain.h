@@ -25,8 +25,8 @@ extern NSString * const MTKeyChainPasswordAccountDesc;
           withDescription:(NSString *)description;
     + (NSDictionary *)queryDefination:(NSString *)key withDescription:(NSString *)description;
 
-    + (NSString *)keyForUsernameWithMainKey:(NSString *)key;
-    + (NSString *)keyForPasswordWithMainKey:(NSString *)key;
+    + (NSString *)newKeyForUsernameWithMainKey:(NSString *)key;
+    + (NSString *)newKeyForPasswordWithMainKey:(NSString *)key;
     + (NSDictionary *)queryUsernameDefination:(NSString *)key;
     + (NSDictionary *)queryPasswordDefination:(NSString *)key;
     + (OSStatus)saveUsername:(NSString *)username andPassword:(NSString *)password

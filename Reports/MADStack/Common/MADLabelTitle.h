@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADLabelTitle_h
+#define MAD_MADLabelTitle_h
+
+#import <UIKit/UILabel.h>
 
 @interface MADLabelTitle : UILabel
 
 @end
+
+#endif

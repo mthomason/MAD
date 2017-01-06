@@ -26,10 +26,11 @@
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _object = nil;
-    }
-    return self;
+    return [self initWithObject:nil];
+    //if (self = [super init]) {
+    //    _object = nil;
+    //}
+    //return self;
 }
 
 - (instancetype)initWithObject:(id <NSCopying>)object {

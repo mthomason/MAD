@@ -18,6 +18,8 @@
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";
 
+NSString * const MADIdentifierOpenFileSectionHeader = @"MADIdentifierOpenFileSectionHeader";
+
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView);
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
     return CGRectMake(view.width - activityView.width - 10.0000f,
@@ -46,13 +48,16 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 + (void)initialize {
     [super initialize];
-    if (self != [MADOpenFileSectionHeaderView self]) return;
-
-    UIActivityIndicatorView *appearance;
-    appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[self class], nil];
-    appearance.tintColor = [UIColor whiteColor];
-    appearance.color     = [UIColor whiteColor];
-
+    if (self == [MADOpenFileSectionHeaderView self]) {
+        @autoreleasepool {
+            UIActivityIndicatorView <UIAppearance> *appearanceProxy;
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            appearanceProxy = [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.tintColor = [UIColor whiteColor];
+            appearanceProxy.color     = [UIColor whiteColor];
+        }
+    }
 }
 
 - (void)awakeFromNib {

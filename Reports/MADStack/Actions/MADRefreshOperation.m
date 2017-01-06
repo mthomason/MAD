@@ -31,11 +31,11 @@ static const short errCache = 2;
 @implementation MADRefreshOperation
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDocument:(MADocument *)document {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
     }
@@ -45,7 +45,7 @@ static const short errCache = 2;
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     MADocument *document = self.document;
     MADCredential *credientals = nil;
@@ -92,7 +92,7 @@ static const short errCache = 2;
                                        withError: &executeError];
 
     if (!success) {
-        NSLog(@"Failed to execute sql!");
+        //NSLog(@"Failed to execute sql!");
         NSError *error = eerror;
         [self finishWithError:error];
         return;

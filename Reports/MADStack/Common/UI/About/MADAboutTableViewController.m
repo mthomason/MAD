@@ -49,15 +49,21 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 + (void)initialize {
     [super initialize];
     
-    if (self != [MADAboutTableViewController self]) return;
-    
-    UINavigationBar *navigationBarMailAppearance;
-    navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil];
-    
-    UIColor *color = [MADColorEverydayApps newColorAnalogous4];
-    navigationBarMailAppearance.barTintColor = [MADColorEverydayApps newColorAnalogous4];
-    navigationBarMailAppearance.tintColor = [MADColorEverydayApps newColorRed];
-    
+    if (self == [MADAboutTableViewController self]) {
+        @autoreleasepool {
+            
+            id classes;
+            id controlClass = [MFMailComposeViewController class];
+            UINavigationBar *navigationBarMailAppearance;
+            
+            classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+            
+            navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
+            
+            navigationBarMailAppearance.barTintColor = [MADColorEverydayApps newColorAnalogous4];
+            navigationBarMailAppearance.tintColor = [MADColorEverydayApps newColorRed];
+        }
+    }
 }
 
 + (instancetype)newAboutTableViewController {

@@ -41,6 +41,7 @@
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 
+#import "MADLabelTitle.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADTabBarController.h"
 #import "MTStoreKitController+Features.h"
@@ -155,7 +156,7 @@ BOOL storeEnabled() {
 
 @synthesize title = _title;
 @synthesize document = _document;
-@synthesize managedObjectContext = _managedObjectContext;
+//@synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark -
 #pragma mark Static

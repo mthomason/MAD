@@ -72,7 +72,6 @@
     const char * pathToArchive = strdup(archiveURL.fileSystemRepresentation);
     char *backup;
     mad_malloc(&backup, strlen(pathToArchive) + 2);
-    //backup = '\0';
     strcpy(backup, pathToArchive);
     strcat(backup, "~");
     mad_file_remove_if_exist(backup);

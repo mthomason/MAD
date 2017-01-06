@@ -11,7 +11,7 @@
 @implementation NSLayoutConstraint (Extras)
 
 // MARK: Use this to create debug description on NSLayoutConstraint
-//        NSLog(@"\n*****\nLayout constraint: \t%@ \n\t\t%@.%@\n\t\t\t %@\n\t\t %@.%@\n*****\n", constraint, constraint.firstItem, [self stringFromLayoutAttribute: constraint.firstAttribute], [self stringFromLayoutRelation: constraint.relation], constraint.secondItem, [self stringFromLayoutAttribute: constraint.secondAttribute]);
+//        //NSLog(@"\n*****\nLayout constraint: \t%@ \n\t\t%@.%@\n\t\t\t %@\n\t\t %@.%@\n*****\n", constraint, constraint.firstItem, [self stringFromLayoutAttribute: constraint.firstAttribute], [self stringFromLayoutRelation: constraint.relation], constraint.secondItem, [self stringFromLayoutAttribute: constraint.secondAttribute]);
 
 - (NSString *)stringFromLayoutRelation:(NSLayoutRelation)layoutRelation {
     switch (layoutRelation) {

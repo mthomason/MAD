@@ -52,6 +52,8 @@
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
 
+#import "MADLabelTitle.h"
+
 #import "MADProgressView.h"
 #import "MADGetCredentialsOperation.h"
 
@@ -82,7 +84,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    @property (nonatomic, strong) UIProgressView *progressView;
+    @property (nonatomic, strong) MADProgressView *progressView;
 
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
     @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
@@ -94,7 +96,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 @implementation MADConnectionViewController
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -102,9 +104,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 #pragma mark - View lifecycle
-
-//- (void)loadView {
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -114,7 +113,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     CGRect frameProgress, frameTable;
     
-    UIProgressView *progressView;
+    MADProgressView *progressView;
     progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
     progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
@@ -147,7 +146,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
     
     MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
+    NSString *databaseSettings = @"Database Settings";
+    titleView.text = NSLocalizedString(databaseSettings, databaseSettings);
     self.navigationItem.titleView = titleView;
 }
 

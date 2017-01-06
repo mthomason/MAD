@@ -29,11 +29,11 @@
 @implementation MADRefreshReloadOperation
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADGetCredentialsOperation *getCredentials = self.getCredentials;
     if (getCredentials.gotCredentials) {
         MADCredential *c = getCredentials.credentials.copy;
@@ -46,7 +46,7 @@
 - (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController
               databaseConnection: (MTDatabaseConnection *)databaseConnection {
 
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     if (self = [super init]) {
 

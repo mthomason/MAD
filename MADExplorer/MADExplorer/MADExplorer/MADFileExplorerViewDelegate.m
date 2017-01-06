@@ -16,8 +16,6 @@
 #import <UIKit/UILongPressGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
 
-#import <MADFoundation/NSURL+Document.h>
-
 #import <MADExplorer/MADAttributedStringFileExplorer.h>
 
 #import <MADCocoaExtensions/MADLabel.h>
@@ -152,7 +150,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
@@ -271,7 +269,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action
     forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     
 }
@@ -369,7 +367,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
                   contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     UILabel __unsafe_unretained *lbl = _testLabel;
     lbl.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     lbl.lineBreakMode = NSLineBreakByWordWrapping;
@@ -388,7 +386,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
     
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
     [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];

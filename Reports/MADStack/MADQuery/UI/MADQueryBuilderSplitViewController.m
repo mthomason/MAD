@@ -27,6 +27,8 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import "MADLabelTitle.h"
+
 #import "MADNavigationBarTitleView.h"
 
 #import "MADQueryViewController.h"
@@ -75,14 +77,14 @@ static NSString * const TextRedraw = @"Redraw";
 + (void)initialize {
     [super initialize];
     
-    if (self != [MADQueryBuilderSplitViewController self]) return;
-        
-    @autoreleasepool {
-        UIBarButtonItem *appearance;
-        appearance = [UIBarButtonItem appearanceWhenContainedIn:[self class], nil];
-        
-        UIColor *white =  [MADColorEverydayApps newColorWhite];
-        appearance.tintColor = white;
+    if (self != [MADQueryBuilderSplitViewController self]) {
+        @autoreleasepool {
+            UIBarButtonItem <UIAppearance> *appearanceProxy;
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            appearanceProxy = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.tintColor = [UIColor whiteColor];
+        }
     }
 }
 
@@ -97,7 +99,7 @@ static NSString * const TextRedraw = @"Redraw";
 - (void)dealloc {
     _barButtonItemDone.target = nil;
     _barButtonItemEdit.target = nil;
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

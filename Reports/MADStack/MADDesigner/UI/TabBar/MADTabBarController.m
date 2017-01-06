@@ -25,6 +25,8 @@
 
 #import "MADIdentifiersStoryboards.h"
 
+#import "MADLabelTitle.h"
+
 static NSString * const MADIdentifierTabBarController = @"MADIdentifierTabBarController";
 
 const int8_t MADIndexQuery = 0;

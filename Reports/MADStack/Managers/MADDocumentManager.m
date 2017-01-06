@@ -24,8 +24,6 @@
 
 #import "MADDocumentManagerProtocol.h"
 
-//#import "AppDelegate.h"
-
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 @interface MADDocumentManager ()
@@ -138,8 +136,6 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 #pragma mark MADFilesControllerDelegate
 
 - (void)filesControllerWillChangeContent:(MADFilesController *)filesController {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [_batchInserts removeAllIndexes];
     [_batchRemoves removeAllIndexes];
     [_batchUpdates removeAllIndexes];
@@ -147,32 +143,21 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 - (void)filesController:(MADFilesController *)filesController
       didInsertFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
-
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchInserts addIndex:index];
-
 }
 
 - (void)filesController:(MADFilesController *)filesController
       didRemoveFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
-
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchRemoves addIndex:index];
-
 }
 
 - (void)filesController:(MADFilesController *)filesController
       didUpdateFileInfo:(MADFileInfo *)fileInfo atIndex:(NSUInteger)index {
-
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.batchUpdates addIndex:index];
-
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController
                              completion:(void (^)(BOOL, NSError *))completion {
-
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity: _batchInserts.count],
                    *removes = [[NSMutableArray alloc] initWithCapacity: _batchRemoves.count],

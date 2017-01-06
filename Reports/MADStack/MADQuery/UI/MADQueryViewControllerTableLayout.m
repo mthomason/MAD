@@ -22,7 +22,7 @@
 @implementation MADQueryViewControllerTableLayout
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     _datamodel = nil;
 }
 

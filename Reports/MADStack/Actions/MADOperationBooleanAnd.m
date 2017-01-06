@@ -24,7 +24,7 @@
 @implementation MADOperationBooleanAnd
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithConditions:(NSArray <NSObject <MADOperationCondition> *> *)conditions {

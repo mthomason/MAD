@@ -21,7 +21,7 @@
 @implementation MADRefreshOperationInitalizeMainDataTable
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDocument:(MADocument *)document {
@@ -35,11 +35,11 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     MADocument *document = self.document;
     NSString *filename = document.filename;
-    NSLog(@"Filename:   %@ (%s)", filename, __func__);
+    //NSLog(@"Filename:   %@ (%s)", filename, __func__);
 
     //MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
     //datatable.cacheDelegate = document;

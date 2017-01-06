@@ -41,7 +41,7 @@
                         }
                         #if DEBUG
                             NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)returendError.code];
-                            NSLog(@"%@error %@", output,returendError.description);
+                            //NSLog(@"%@error %@", output,returendError.description);
                         #endif
                     }];
                 }
@@ -85,7 +85,7 @@
                 __block BOOL success = NO;
                 for (ACAccount *twitterAccount in accountsArray) {
                     NSDictionary *message = @{ @"id" : identifier };
-                    NSLog(@"*******tempDict %@*******",message);
+                    //NSLog(@"*******tempDict %@*******",message);
                     
                     NSURL *linkedInCompanyFriendships = [NSURL URLWithString:@"https://api.linkedin.com/v1/people/~/following/companies"];
                     SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:linkedInCompanyFriendships parameters:message];
@@ -96,7 +96,7 @@
                         }
 #if DEBUG
                         NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)error.code];
-                        NSLog(@"%@error %@", output,error.description);
+                        //NSLog(@"%@error %@", output,error.description);
 #endif
                     }];
                 }

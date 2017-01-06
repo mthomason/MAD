@@ -26,7 +26,7 @@
 @implementation MADOperationConditionHasResultString
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithKey:(NSString *)key {

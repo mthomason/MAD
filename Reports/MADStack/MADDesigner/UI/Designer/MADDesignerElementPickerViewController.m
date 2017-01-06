@@ -18,7 +18,7 @@
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 #import <UIKit/UIImagePickerController.h>
-
+#import <UIKit/UILabel.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
@@ -42,6 +42,8 @@
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
+
+#import "MADLabelTitle.h"
 
 const NSInteger MTViewTagAggregateFunctions             = 2003;
 const NSInteger MTViewTagGroupByOptions                 = 2011;

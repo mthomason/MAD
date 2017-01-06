@@ -177,7 +177,6 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
                                             pathComponent:(NSString *)pathComponent
                                       alternativeSelector:(SEL)alternativeSelector {
     
-    
     BOOL success = NO, isDirectory = NO;
     NSError *error;
     NSString *groupID, *pathPart, *cachePath;

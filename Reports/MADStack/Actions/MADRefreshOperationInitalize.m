@@ -44,11 +44,11 @@
 @implementation MADRefreshOperationInitalize
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithDocument:(MADocument *)document {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
         _success = NO;
@@ -59,7 +59,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADocument *doc = _document;
     /*
         for (NSOperation *dependency in self.dependencies) {

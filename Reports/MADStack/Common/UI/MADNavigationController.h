@@ -17,7 +17,8 @@
 @interface MADNavigationController : UINavigationController
     <UINavigationControllerDelegate,
         UIViewControllerTransitioningDelegate,
-        MADViewControllerDocumentProtocol, MADNavigationControllerIdentify>
+        MADViewControllerDocumentProtocol,
+        MADNavigationControllerIdentify>
 
     + (instancetype)newNavigationController:(MADNavigationControllerType)type;
 

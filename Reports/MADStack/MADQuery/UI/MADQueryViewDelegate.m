@@ -18,7 +18,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 @implementation MADQueryViewDelegate
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

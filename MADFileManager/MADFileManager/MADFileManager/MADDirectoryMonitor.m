@@ -71,22 +71,22 @@ static const int NotListening = -1;
             dispatch_source_proc_flags_t flags = dispatch_source_get_data(sself.directoryMonitorSource);
             switch (flags) {
                 case DISPATCH_VNODE_DELETE:
-                    NSLog(@"Delete event.");
+                    //NSLog(@"Delete event.");
                     break;
                 case DISPATCH_VNODE_RENAME:
-                    NSLog(@"Rename event.");
+                    //NSLog(@"Rename event.");
                     break;
                 case DISPATCH_VNODE_EXTEND:
-                    NSLog(@"Extend event.");
+                    //NSLog(@"Extend event.");
                     break;
                 case DISPATCH_VNODE_ATTRIB:
-                    NSLog(@"Attribute update event.");
+                    //NSLog(@"Attribute update event.");
                     break;
                 case DISPATCH_VNODE_WRITE:
-                    NSLog(@"Write event.");
+                    //NSLog(@"Write event.");
                     break;
                 default:
-                    NSLog(@"Untracked event.");
+                    //NSLog(@"Untracked event.");
                     break;
             }
             [sself.delegate directoryMonitorDidObserveChange:sself];

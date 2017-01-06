@@ -22,13 +22,17 @@
 + (void)initialize {
     [super initialize];
     
-    if (self != [MADNavigationControllerFileExplorer self]) return;
-    
-    Class thisClas = [MADTransparentPresentationController class];
-    UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedIn:thisClas, nil];
-    UIColor *clearColor = [UIColor clearColor];
-    appearanceProxy.barTintColor = clearColor;
-    
+    if (self == [MADNavigationControllerFileExplorer self]) {
+        @autoreleasepool {
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            Class thisClas = [MADTransparentPresentationController class];
+            classes = [[NSArray alloc] initWithObjects: thisClas, nil];
+            UINavigationBar *appearanceProxy;
+            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
+            appearanceProxy.barTintColor = [UIColor clearColor];
+
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

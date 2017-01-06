@@ -42,7 +42,7 @@
 
 - (void)execute {
 
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     NSURL *uniqueUrl = [MADURL newURLUniqueUrlInDirectory: self.documentsDirectory
                                         withDesiredHandle: self.desiredFilename
                                              andExtension: self.pathExtension];
