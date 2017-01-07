@@ -195,7 +195,7 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (UINavigationItem *)navigationItem {
     UINavigationItem *navigationItem = [super navigationItem];
-    if (navigationItem && navigationItem.titleView == nil) {
+    if (navigationItem.titleView == nil) {
         
         MADLabelTitle *titleView;
         UIBarButtonItem *editButton, *doneButton;

@@ -146,6 +146,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     
     struct archive *a, *ext;
     struct archive_entry *entry;
+    char *dest_root = 0;
     int flags, r, ar;
     bool mkdirstatus = 0;
     
@@ -184,7 +185,6 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     }
 
 //    char dest_root[(strlen(dest) + strlen(filename) + 1)];
-    char *dest_root;
     dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char));
     dest_root[0] = '\0';
     strlcpy(dest_root, dest, sizeof(dest_root));
@@ -192,7 +192,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     strlcat(dest_root, filename, sizeof(dest_root));
 
     if (!path_exist(dest_root)) {
-        mkdirstatus = mad_mkdir(dest_root);
+        mad_mkdir(dest_root);
     }
     
     while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&

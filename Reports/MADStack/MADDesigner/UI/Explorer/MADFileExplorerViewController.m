@@ -1477,9 +1477,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     selectedItems = [self.collectionView indexPathsForSelectedItems];
     metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
     
-    documentManager = self.documentManager;
     for (indexPath in selectedItems) {
-        metadata = [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
+        metadata = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
         [metadataItems addObject:metadata];
     }
     
@@ -1897,24 +1896,30 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     if (sender.state != UIGestureRecognizerStateBegan) return;
 
     [self actionEdit:nil];
-    
-    NSIndexPath *indexPath;
-    
+
     UICollectionView *collectionView = self.collectionView;
-    
-    if ([self.collectionViewDelegate collectionView: collectionView
-                        shouldSelectItemAtIndexPath: indexPath]) {
-        
-        [collectionView selectItemAtIndexPath: indexPath
-                                     animated: YES
-                               scrollPosition: UICollectionViewScrollPositionNone];
-        
-        [self.collectionViewDelegate collectionView: collectionView
-                           didSelectItemAtIndexPath: indexPath];
-        NSArray <NSIndexPath *> *selectedPath =
-        [[NSArray alloc] initWithObjects:indexPath, nil];
-        [collectionView reloadItemsAtIndexPaths:selectedPath];
+    NSIndexPath *indexPath;
+    if (sender.view) {
+        if ([sender.view isKindOfClass:[UICollectionViewCell class]]) {
+            indexPath = [collectionView indexPathForCell:(UICollectionViewCell *)sender.view];
+        }
     }
+    
+    if (indexPath) {
+        if ([self.collectionViewDelegate collectionView: collectionView
+                            shouldSelectItemAtIndexPath: indexPath]) {
+            
+            [collectionView selectItemAtIndexPath: indexPath
+                                         animated: YES
+                                   scrollPosition: UICollectionViewScrollPositionNone];
+            
+            [self.collectionViewDelegate collectionView: collectionView
+                               didSelectItemAtIndexPath: indexPath];
+        }
+    }
+    NSArray <NSIndexPath *> *selectedPath =
+    [[NSArray alloc] initWithObjects:indexPath, nil];
+    [collectionView reloadItemsAtIndexPaths:selectedPath];
 }
 
 #pragma mark -

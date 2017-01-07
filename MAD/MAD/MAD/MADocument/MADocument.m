@@ -1230,10 +1230,10 @@ READFROMURL_END:;
         png_init_io(p, fp);
         png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
         png_destroy_write_struct(&p, &info);
+        RegenThumbnailShortCircuit:;
         free(compressedPNG);
         free((void *)pngSignature);
         fclose(fp);
-        RegenThumbnailShortCircuit:;
     }
 }
 

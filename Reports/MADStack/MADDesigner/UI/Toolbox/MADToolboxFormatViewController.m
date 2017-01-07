@@ -178,14 +178,12 @@
 - (void)emptySelector:(id)sender {}
 
 - (IBAction)controlValueChanged:(id)sender {
-    
-    SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
     
     if ([sender isEqual:self.stepperNumberOfDecimals]) {
-        valueChangedAction = @selector(setFormatNumericDecimals:);
         valueThatChanged = @((self.stepperNumberOfDecimals).value);
-        (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
+        (self.labelNumberOfDecimals).attributedText =
+            [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];

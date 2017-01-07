@@ -41,9 +41,7 @@
     return _sharedManager;
 }
 
-- (void)dealloc {
-    assert(NO);
-}
+- (void)dealloc { }
 
 - (instancetype)init {
     return [[self class] sharedManager];

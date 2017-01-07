@@ -111,7 +111,7 @@
     NSNumber *wrapper;
     wrapper = [_metadataItem valueForAttribute: NSMetadataItemIsUbiquitousKey];
     isUbiquitous = wrapper.boolValue;
-    return wrapper;
+    return isUbiquitous;
 }
 
 - (NSData *)fileSystemFileCreationDate {

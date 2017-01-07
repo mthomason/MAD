@@ -1024,6 +1024,7 @@
 		4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
+		4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */; };
 		4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */; };
 		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
 		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
@@ -2340,6 +2341,8 @@
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageBolt20@2x.png"; path = "Reports/UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC909031D0FCA1E007A1C75 /* MADViewControllerBarcodeOptionsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeOptionsDelegate.h; sourceTree = "<group>"; };
 		4CC909041D0FCBCF007A1C75 /* MADViewControllerBarcodeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBarcodeDelegate.h; sourceTree = "<group>"; };
+		4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationItemTitleView.h; path = MADStack/Common/UI/MADNavigationItemTitleView.h; sourceTree = SOURCE_ROOT; };
+		4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationItemTitleView.m; path = MADStack/Common/UI/MADNavigationItemTitleView.m; sourceTree = SOURCE_ROOT; };
 		4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
 		4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
 		4CCE18661DA14A5C0093B166 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = opt/lib/archive/libarchive.a; sourceTree = "<group>"; };
@@ -3463,6 +3466,8 @@
 				4C401F131BAE703200BAE5FC /* Cells */,
 				4C26BA771BAF9AA700456DC8 /* DatabaseSelector */,
 				4C26BA111BAF150F00456DC8 /* Visualization */,
+				4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */,
+				4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -6049,6 +6054,7 @@
 				4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
+				4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MTRulerView.m in Sources */,
 				4C4754491CF362E900BC9E02 /* MADPageViewController.m in Sources */,
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,

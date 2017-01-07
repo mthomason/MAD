@@ -235,6 +235,22 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 }
 
+#pragma mark Select Item
+
+// Should Select
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+/*    BOOL shouldSelectItemAtIndexPath = YES;
+    if (_editing) {
+        if ([_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item]) {
+            shouldSelectItemAtIndexPath = NO;
+        }
+    }
+    return shouldSelectItemAtIndexPath;*/
+}
+
+// Did Select
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     [self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
@@ -253,6 +269,17 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
     
+}
+#pragma mark Deselect Item
+
+- (BOOL)collectionView:(UICollectionView *)collectionView
+        shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    //Deselect when not editing, or when editing and already selected.
+    BOOL shouldDeselectItemAtIndexPath = YES;
+    if (_editing) {
+        shouldDeselectItemAtIndexPath = [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item];
+    }
+    return shouldDeselectItemAtIndexPath;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -275,19 +302,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
-                                        shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    //Deselect when not editing, or when editing and already selected.
-    return _editing ?
-        [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView
                                         shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView
-                                        shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
@@ -367,7 +382,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
                   contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
 
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     UILabel __unsafe_unretained *lbl = _testLabel;
     lbl.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     lbl.lineBreakMode = NSLineBreakByWordWrapping;

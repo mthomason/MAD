@@ -289,7 +289,7 @@
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendString:@"-------------------------------\n"];
-    [debug appendFormat:@"Section Count: \t%d\n", [self count]];
+    [debug appendFormat:@"Section Count: \t%lu\n", (unsigned long)[self count]];
     [debug appendFormat:@"Report Header: \t%@\n", [self reportHeader]];
     [debug appendFormat:@"Page Header:   \t%@\n", [self pageHeader]];
     [debug appendFormat:@"Group Header:  \t%@\n", [self groupHeaders]];

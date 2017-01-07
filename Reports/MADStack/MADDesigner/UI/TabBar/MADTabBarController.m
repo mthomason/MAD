@@ -89,12 +89,10 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (UINavigationItem *)navigationItem {
-    UINavigationItem *navigationItem;
-    if ((navigationItem = [super navigationItem]) != nil) {
-        if (!_navigationItemInitalized) {
-            id newPrompt = _promptNavigationItem.copy;
-            navigationItem.prompt = newPrompt;
-        }
+    UINavigationItem *navigationItem = [super navigationItem];
+    if (!_navigationItemInitalized) {
+        id newPrompt = _promptNavigationItem.copy;
+        navigationItem.prompt = newPrompt;
     }
     return navigationItem;
 }

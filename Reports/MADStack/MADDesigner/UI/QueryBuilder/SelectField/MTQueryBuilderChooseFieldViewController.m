@@ -44,6 +44,9 @@
 
 #import "MADDatabaseTableSectionHeaderView.h"
 
+#import "MADNavigationItemTitleView.h"
+
+
 typedef NSArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoArray;
 typedef NSMutableArray <RptqDatabaseSchemaFieldSelectorManager *> MADSectionInfoMutableArray;
 
@@ -172,17 +175,13 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 
 - (UINavigationItem *)navigationItem {
     UINavigationItem *navigationItem = [super navigationItem];
-    if (navigationItem && navigationItem.titleView == nil) {
-        MADLabelTitle *titleView;
+    if (navigationItem == nil) {
         NSString *title;
-        navigationItem.leftItemsSupplementBackButton = YES;
-        navigationItem.hidesBackButton = NO;
         title = NSLocalizedString(@"Select Field",
                                   @"Title of form that allows you to choose "
                                   @"the name of a database field.");
-        titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-        titleView.text = title.copy;
-        navigationItem.titleView = titleView;
+    
+        navigationItem = [[MADNavigationItemTitleView alloc] initWithTitle: title];
     }
     return navigationItem;
 }

@@ -132,13 +132,11 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
     static NSString *reusableCellWithIdentifier = @"MADFontSelectorDefaultCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCellWithIdentifier forIndexPath:indexPath];
     
-    if (cell) {
-        NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
-        cell.textLabel.text = familyName;
-        cell.textLabel.font = [UIFont fontWithName: familyName
-                                              size: cell.textLabel.font.pointSize];
-        cell.accessoryType = [self.familyName isEqualToString:familyName] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    }
+    NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
+    cell.textLabel.text = familyName;
+    cell.textLabel.font = [UIFont fontWithName: familyName
+                                          size: cell.textLabel.font.pointSize];
+    cell.accessoryType = [self.familyName isEqualToString:familyName] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }

@@ -944,7 +944,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [super prepareForSegue:segue sender:sender];
     
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [(segue.destinationViewController) setDocument: self.document];
+        MADocument *document = self.document;
+        [(segue.destinationViewController) setDocument: document];
     }
     
 }

@@ -189,8 +189,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     
     NSURL *destionURL;
     NSString *lastPathComponent;
-    char *dest;
-    char *filename;
+    char *dest = 0, *filename = 0, *source = 0;
     success = [[NSFileManager defaultManager] fileExistsAtPath: fileWrapperPath
                                                    isDirectory: &isDirectory];
     
@@ -219,7 +218,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     r = chdir(dest);
     if (r != 0) goto READ_FAIL;
     
-    char *source = strdup(_archive.fileSystemRepresentation);
+    source = strdup(_archive.fileSystemRepresentation);
     success = mad_extract(source, dest, filename) == ARCHIVE_OK;
     
     if (!success) goto READ_FAIL;
@@ -253,7 +252,9 @@ READ_FAIL:;
     
 READ_END:;
     
-    free(dest); free(filename); free(source);
+    if (dest != 0) free(dest);
+    if (filename != 0) free(filename);
+    if (source != 0) free(source);
     
     
     return success;

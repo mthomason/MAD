@@ -1258,8 +1258,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     if (dbinit() == FAIL) {
         NSString *message = @"Could not init db.";
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-        NSError *e = [NSError errorWithDomain:MADDomainTDS code:1 userInfo:errorInfo];
-        if (e != nil) {
+        if (*error != NULL) {
+            NSError *e = [NSError errorWithDomain:MADDomainTDS code:1 userInfo:errorInfo];
             *error = e;
         }
     }
@@ -1417,9 +1417,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         if (success != SUCCEED) {
             
             NSString *message = @"Sql Syntax Error";
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-            *outError = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
-            
+            if (*outError != NULL) {
+                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                *outError = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
+            }
         }
         
         int numberOfColumns = dbnumcols(dbconn);
