@@ -96,7 +96,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         if (activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             [self.delegate showPrintDialog]; //Need some help getting out of this popover!!!
         }
-        item = nil;
+        item = self.placeholderItem;
     } else {                                                                                    //Return URL to PDF printout.
         NSString *temporaryDirectoryPath = NSTemporaryDirectory();
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];

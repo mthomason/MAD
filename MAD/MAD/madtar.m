@@ -28,7 +28,7 @@ bool mad_mkdir(const char *path);
 
 int mad_copy_data(struct archive *ar, struct archive *aw) {
     
-    int r;
+    la_ssize_t r;
     size_t size;
     int64_t offset;
     const void *buff;
@@ -41,10 +41,11 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
             return ARCHIVE_OK;
 
         if (r != ARCHIVE_OK)
-            return r;
+            return -1;
         
-        if ((r = archive_write_data_block(aw, buff, size, offset)) != ARCHIVE_OK)
-            return r;
+        r = archive_write_data_block(aw, buff, size, offset);
+        if (r != ARCHIVE_OK)
+            return -1;
         
     }
 }
@@ -57,9 +58,9 @@ static inline bool path_exist(const char *path) {
 bool directory_exist(const char *path) {
     bool opened_directory = false;
     size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len) * sizeof(char *));
+    char *p = (char *) malloc((path_len) * sizeof(char));
     p[0] = '\0';
-    strcpy(p, path);
+    strlcpy(p, path, sizeof(p));
     strip_trailing_slashes(&path);
     DIR *dir = opendir(p);
     if (dir) {
@@ -89,9 +90,9 @@ bool archive_function_result_handler(int ar, const char *description) {
 bool mad_mkdir(const char *path) {
     bool success;
     size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len + 1) * sizeof(char *));
+    char *p = (char *) malloc((path_len + 1) * sizeof(char));
     p[0] = '\0';
-    strcpy(p, path);
+    strlcpy(p, path, sizeof(p));
     strip_trailing_slashes(&p);
 
     success = mkdir(p, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0;
@@ -135,7 +136,7 @@ bool mad_mkdir(const char *path) {
 }
 
 void strip_trailing_slashes(char **path) {
-    int last;
+    unsigned long last;
     last = strlen((char *)*path) - 1;
     while (last > 0 && ((char)((char *)(*path))[last]) == '/')
         (*path)[last--] = '\0';
@@ -184,11 +185,11 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 
 //    char dest_root[(strlen(dest) + strlen(filename) + 1)];
     char *dest_root;
-    dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char *));
+    dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char));
     dest_root[0] = '\0';
-    strcpy(dest_root, dest);
-    strcat(dest_root, "/");
-    strcat(dest_root, filename);
+    strlcpy(dest_root, dest, sizeof(dest_root));
+    strlcat(dest_root, "/", sizeof(dest_root));
+    strlcat(dest_root, filename, sizeof(dest_root));
 
     if (!path_exist(dest_root)) {
         mkdirstatus = mad_mkdir(dest_root);
@@ -200,29 +201,29 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         const char *entry_pathname;
         entry_pathname = archive_entry_pathname(entry);
         
-        char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char *));
+        char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
         location[0] = '\0';
-        strcpy(location, filename);
-        strcat(location, "/");
-        strcat(location, entry_pathname);
+        strlcpy(location, filename, sizeof(location));
+        strlcat(location, "/", sizeof(location));
+        strlcat(location, entry_pathname, sizeof(location));
         
-        char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char *));
+        char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char));
         path[0] = '\0';
         
-        strcpy(path, dest);
+        strlcpy(path, dest, sizeof(path));
         
         //if (!path_exist(path)) {
         //    mkdirstatus = mad_mkdir(path);
         //    assert(mkdirstatus);
         //}
-        strcat(path, "/");
-        strcat(path, location);
+        strlcat(path, "/", sizeof(path));
+        strlcat(path, location, sizeof(path));
 
         mode_t file_mode = archive_entry_filetype(entry);
         bool file_is_directory = S_ISDIR(file_mode);
         if (file_is_directory) {
             if (!directory_exist(path)) {
-                mkdirstatus = mad_mkdir(path);
+                mad_mkdir(path);
                 //assert(mkdirstatus);
             }
             
@@ -233,7 +234,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         }
         
         archive_entry_set_pathname(entry, location);
-        const char *entry_pathname_confirm = archive_entry_pathname(entry);
+        //const char *entry_pathname_confirm = archive_entry_pathname(entry);
         
         if (!file_is_directory) {
             r = archive_write_header(ext, entry);
@@ -262,11 +263,10 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         free(path);
 
         //free(path);
-        //free(location);
+        free(location);
         
         
     }
-    free(dest_root);
     
 
     //free(dest_root);
@@ -277,6 +277,8 @@ EXTRACT_MAD_FAIL:;
     
 EXTRACT_MAD_FINISH:;
     
+    free(dest_root);
+
     archive_read_close(a);
     archive_read_free(a);
     archive_write_close(ext);

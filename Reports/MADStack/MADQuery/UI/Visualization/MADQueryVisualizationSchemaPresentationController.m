@@ -12,11 +12,12 @@
 
 @interface MADQueryVisualizationSchemaPresentationController ()
 
-    @property (nonatomic, copy) NSManagedObjectID *objectID;
+    @property (readwrite, nonatomic, copy) NSManagedObjectID *objectID;
 
 @end
 
 @implementation MADQueryVisualizationSchemaPresentationController
+
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
          presentedViewController:(UIViewController *)presentedViewController
@@ -40,7 +41,8 @@
 }
 
 - (void)presentationTransitionWillBegin {
-    [self.containerView addSubview:self.presentedViewController.view]; }
+    [self.containerView addSubview:self.presentedViewController.view];
+}
 
 - (void)presentationTransitionDidEnd:(BOOL)completed { }
 

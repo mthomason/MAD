@@ -95,12 +95,38 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 @implementation MADConnectionViewController
 
-- (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
++ (void)initialize {
+    [super initialize];
+    
+    if (self != [MADConnectionViewController self]) {
+        @autoreleasepool {
+            UIProgressView <UIAppearance> *appearanceProxyProgressView;
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            appearanceProxyProgressView = [UIProgressView appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxyProgressView.tintColor = [UIColor whiteColor];
+            appearanceProxyProgressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            appearanceProxyProgressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
+            appearanceProxyProgressView.trackTintColor = [UIColor grayColor];
+        }
+    }
 }
+
+- (void)dealloc { }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    
+    MADProgressView *progressView;
+    progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
+    self.progressView = progressView;
+    
 }
 
 #pragma mark - View lifecycle
@@ -111,25 +137,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
     self.credentialQueue = credentialQueue;
     
-    CGRect frameProgress, frameTable;
-    
-    MADProgressView *progressView;
-    progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
-    progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
-    progressView.trackTintColor = [UIColor grayColor];
-    self.progressView = progressView;
-    
-    frameProgress = progressView.frame;
-    frameTable = self.tableView.frame;;
-    
-    progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y, frameTable.size.width, frameProgress.size.height);
-
-    
-    //= [MADConnectionViewController progressViewWithWidth:slef.tableView.frame.size.width];
-    
-    [self.tableView addSubview:progressView];
-    self.progressView = progressView;
     
     NSString *prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
     self.navigationItem.prompt = prompt;
@@ -151,9 +158,21 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.navigationItem.titleView = titleView;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    CGRect frameProgress, frameTable;
+    frameProgress = self.progressView.frame;
+    frameTable = self.tableView.frame;;
+    
+    self.progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y,
+                                         frameTable.size.width, frameProgress.size.height);
+    [self.tableView addSubview:self.progressView];
+    
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    
 }
 
 #pragma mark - Post Report Notifications

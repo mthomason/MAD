@@ -216,6 +216,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     BOOL success = [self.database executeQuery:self withError:qerror];
     if (!success && error == NULL) {
         error = qerror;
+        if (error) {
+            NSLog(@"Error: %@", *error);
+        }
     }
     return success;
 }

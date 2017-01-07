@@ -155,7 +155,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
     return self;
 }
 
-#pragma mark - UIContainerViewControllerCallbacks
+#pragma mark - UIContainerViewController Callbacks
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods { return NO; }
 

@@ -92,7 +92,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 - (instancetype)initWithQuery: (RptqQuery *)query
                 andQueryLimit: (NSUInteger)queryLimit {
-    if (self = [super init]) {
+    if (self = [super initWithObject:query]) {
         _objectID = query.objectID.copy;
         _limitResults = queryLimit;
         
@@ -106,27 +106,16 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 }
 
 - (instancetype)initWithObject:(NSDictionary *)object {
-    if (self = [super initWithObject:object]) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]],
-                 @"MTQueryFull expects NSDictionary with parameters.");
+    
+    NSAssert([object isKindOfClass:[NSDictionary class]],
+             @"MTQueryFull expects NSDictionary with parameters.");
 
-        NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
-        
-        NSNumber *numberOfResults = object[@"MADQueryLimit"];
-        self.limitResults = numberOfResults.unsignedIntegerValue;
-        
-        RptqQuery *query = object[parameterScheam];
-        _objectID = query.objectID.copy;
-
-        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-        [defaultCenter addObserver: self
-                          selector: @selector(handleManagedObjectContextDidChange:)
-                              name: NSManagedObjectContextObjectsDidChangeNotification
-                            object: query.managedObjectContext];
-        
-    }
-    return self;
+    NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
+    NSNumber *queryLimitWrapper = object[@"MADQueryLimit"];
+    NSUInteger queryLimit = queryLimitWrapper.unsignedIntegerValue;
+    RptqQuery *query = object[parameterScheam];
+    id result = [self initWithQuery:query andQueryLimit:queryLimit];
+    return result;
 }
 
 - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
@@ -459,7 +448,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         changes = notification.userInfo[NSInsertedObjectsKey];
         queryChanged = queryObjectInSet(changes);
     }
-    
+    if (queryChanged) {
+        
+    }
 
 }
 

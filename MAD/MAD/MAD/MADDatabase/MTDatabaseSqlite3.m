@@ -72,6 +72,350 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
+/*
+ const char *errorName = NULL, *errorMessage = NULL;
+ mad_sqlite3Err(SQLITE_OK, &errorName, &errorMessage);
+ NSString *fullMessage = [[NSString alloc] initWithFormat:@"%s: %s", errorName, errorMessage];
+ NSLog(@"%@", fullMessage);
+ */
+void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
+    *errName = 0;
+    *errMsg = "unknown error";
+    int i;
+    for(i=0; i<2 && *errName==0; i++, rc &= 0xff){
+        switch( rc ){
+            case SQLITE_OK:
+                *errName = "SQLITE_OK";
+                *errMsg = "not an error";
+                break;
+            case SQLITE_ERROR:
+                *errName = "SQLITE_ERROR";
+                *errMsg = "SQL logic error or missing database";
+                break;
+            case SQLITE_INTERNAL:
+                *errName = "SQLITE_INTERNAL";
+                break;
+            case SQLITE_PERM:
+                *errName = "SQLITE_PERM";
+                *errMsg = "access permission denied";
+                break;
+            case SQLITE_ABORT:
+                *errName = "SQLITE_ABORT";
+                *errMsg = "callback requested query abort";
+                break;
+            case SQLITE_ABORT_ROLLBACK:
+                *errName = "SQLITE_ABORT_ROLLBACK";
+                *errMsg = "abort due to ROLLBACK";
+                break;
+            case SQLITE_BUSY:
+                *errName = "SQLITE_BUSY";
+                *errMsg = "database is locked";
+                break;
+            case SQLITE_BUSY_RECOVERY:
+                *errName = "SQLITE_BUSY_RECOVERY";
+                break;
+            case SQLITE_BUSY_SNAPSHOT:
+                *errName = "SQLITE_BUSY_SNAPSHOT";
+                break;
+            case SQLITE_LOCKED:
+                *errName = "SQLITE_LOCKED";
+                *errMsg = "database table is locked";
+                break;
+            case SQLITE_LOCKED_SHAREDCACHE:
+                *errName = "SQLITE_LOCKED_SHAREDCACHE";
+                break;
+            case SQLITE_NOMEM:
+                *errName = "SQLITE_NOMEM";
+                *errMsg = "out of memory";
+                break;
+            case SQLITE_READONLY:
+                *errName = "SQLITE_READONLY";
+                *errMsg = "attempt to write a readonly database";
+                break;
+            case SQLITE_READONLY_RECOVERY:
+                *errName = "SQLITE_READONLY_RECOVERY";
+                break;
+            case SQLITE_READONLY_CANTLOCK:
+                *errName = "SQLITE_READONLY_CANTLOCK";
+                break;
+            case SQLITE_READONLY_ROLLBACK:
+                *errName = "SQLITE_READONLY_ROLLBACK";
+                break;
+            case SQLITE_READONLY_DBMOVED:
+                *errName = "SQLITE_READONLY_DBMOVED";
+                break;
+            case SQLITE_INTERRUPT:
+                *errName = "SQLITE_INTERRUPT";
+                *errMsg = "interrupted";
+                break;
+            case SQLITE_IOERR:
+                *errName = "SQLITE_IOERR";
+                *errMsg = "disk I/O error";
+                break;
+            case SQLITE_IOERR_READ:
+                *errName = "SQLITE_IOERR_READ";
+                break;
+            case SQLITE_IOERR_SHORT_READ:
+                *errName = "SQLITE_IOERR_SHORT_READ";
+                break;
+            case SQLITE_IOERR_WRITE:
+                *errName = "SQLITE_IOERR_WRITE";
+                break;
+            case SQLITE_IOERR_FSYNC:
+                *errName = "SQLITE_IOERR_FSYNC";
+                break;
+            case SQLITE_IOERR_DIR_FSYNC:
+                *errName = "SQLITE_IOERR_DIR_FSYNC";
+                break;
+            case SQLITE_IOERR_TRUNCATE:
+                *errName = "SQLITE_IOERR_TRUNCATE";
+                break;
+            case SQLITE_IOERR_FSTAT:
+                *errName = "SQLITE_IOERR_FSTAT";
+                break;
+            case SQLITE_IOERR_UNLOCK:
+                *errName = "SQLITE_IOERR_UNLOCK";
+                break;
+            case SQLITE_IOERR_RDLOCK:
+                *errName = "SQLITE_IOERR_RDLOCK";
+                break;
+            case SQLITE_IOERR_DELETE:
+                *errName = "SQLITE_IOERR_DELETE";
+                break;
+            case SQLITE_IOERR_NOMEM:
+                *errName = "SQLITE_IOERR_NOMEM";
+                break;
+            case SQLITE_IOERR_ACCESS:
+                *errName = "SQLITE_IOERR_ACCESS";
+                break;
+            case SQLITE_IOERR_CHECKRESERVEDLOCK:
+                *errName = "SQLITE_IOERR_CHECKRESERVEDLOCK";
+                break;
+            case SQLITE_IOERR_LOCK:
+                *errName = "SQLITE_IOERR_LOCK";
+                break;
+            case SQLITE_IOERR_CLOSE:
+                *errName = "SQLITE_IOERR_CLOSE";
+                break;
+            case SQLITE_IOERR_DIR_CLOSE:
+                *errName = "SQLITE_IOERR_DIR_CLOSE";
+                break;
+            case SQLITE_IOERR_SHMOPEN:
+                *errName = "SQLITE_IOERR_SHMOPEN";
+                break;
+            case SQLITE_IOERR_SHMSIZE:
+                *errName = "SQLITE_IOERR_SHMSIZE";
+                break;
+            case SQLITE_IOERR_SHMLOCK:
+                *errName = "SQLITE_IOERR_SHMLOCK";
+                break;
+            case SQLITE_IOERR_SHMMAP:
+                *errName = "SQLITE_IOERR_SHMMAP";
+                break;
+            case SQLITE_IOERR_SEEK:
+                *errName = "SQLITE_IOERR_SEEK";
+                break;
+            case SQLITE_IOERR_DELETE_NOENT:
+                *errName = "SQLITE_IOERR_DELETE_NOENT";
+                break;
+            case SQLITE_IOERR_MMAP:
+                *errName = "SQLITE_IOERR_MMAP";
+                break;
+            case SQLITE_IOERR_GETTEMPPATH:
+                *errName = "SQLITE_IOERR_GETTEMPPATH";
+                break;
+            case SQLITE_IOERR_CONVPATH:
+                *errName = "SQLITE_IOERR_CONVPATH";
+                break;
+            case SQLITE_CORRUPT:
+                *errName = "SQLITE_CORRUPT";
+                *errMsg = "database disk image is malformed";
+                break;
+            case SQLITE_CORRUPT_VTAB:
+                *errName = "SQLITE_CORRUPT_VTAB";
+                break;
+            case SQLITE_NOTFOUND:
+                *errName = "SQLITE_NOTFOUND";
+                *errMsg = "unknown operation";
+                break;
+            case SQLITE_FULL:
+                *errName = "SQLITE_FULL";
+                *errMsg = "database or disk is full";
+                break;
+            case SQLITE_CANTOPEN:
+                *errName = "SQLITE_CANTOPEN";
+                *errMsg = "unable to open database file";
+                break;
+            case SQLITE_CANTOPEN_NOTEMPDIR:
+                *errName = "SQLITE_CANTOPEN_NOTEMPDIR";
+                break;
+            case SQLITE_CANTOPEN_ISDIR:
+                *errName = "SQLITE_CANTOPEN_ISDIR";
+                break;
+            case SQLITE_CANTOPEN_FULLPATH:
+                *errName = "SQLITE_CANTOPEN_FULLPATH";
+                break;
+            case SQLITE_CANTOPEN_CONVPATH:
+                *errName = "SQLITE_CANTOPEN_CONVPATH";
+                break;
+            case SQLITE_PROTOCOL:
+                *errName = "SQLITE_PROTOCOL";
+                *errMsg = "locking protocol";
+                break;
+            case SQLITE_EMPTY:
+                *errName = "SQLITE_EMPTY";
+                *errMsg = "table contains no data";
+                break;
+            case SQLITE_SCHEMA:
+                *errName = "SQLITE_SCHEMA";
+                *errMsg = "database schema has changed";
+                break;
+            case SQLITE_TOOBIG:
+                *errName = "SQLITE_TOOBIG";
+                *errMsg = "string or blob too big";
+                break;
+            case SQLITE_CONSTRAINT:
+                *errName = "SQLITE_CONSTRAINT";
+                *errMsg = "constraint failed";
+                break;
+            case SQLITE_CONSTRAINT_UNIQUE:
+                *errName = "SQLITE_CONSTRAINT_UNIQUE";
+                break;
+            case SQLITE_CONSTRAINT_TRIGGER:
+                *errName = "SQLITE_CONSTRAINT_TRIGGER";
+                break;
+            case SQLITE_CONSTRAINT_FOREIGNKEY:
+                *errName = "SQLITE_CONSTRAINT_FOREIGNKEY";
+                break;
+            case SQLITE_CONSTRAINT_CHECK:
+                *errName = "SQLITE_CONSTRAINT_CHECK";
+                break;
+            case SQLITE_CONSTRAINT_PRIMARYKEY:
+                *errName = "SQLITE_CONSTRAINT_PRIMARYKEY";
+                break;
+            case SQLITE_CONSTRAINT_NOTNULL:
+                *errName = "SQLITE_CONSTRAINT_NOTNULL";
+                break;
+            case SQLITE_CONSTRAINT_COMMITHOOK:
+                *errName = "SQLITE_CONSTRAINT_COMMITHOOK";
+                break;
+            case SQLITE_CONSTRAINT_VTAB:
+                *errName = "SQLITE_CONSTRAINT_VTAB";
+                break;
+            case SQLITE_CONSTRAINT_FUNCTION:
+                *errName = "SQLITE_CONSTRAINT_FUNCTION";
+                break;
+            case SQLITE_CONSTRAINT_ROWID:
+                *errName = "SQLITE_CONSTRAINT_ROWID";
+                break;
+            case SQLITE_MISMATCH:
+                *errName = "SQLITE_MISMATCH";
+                *errMsg = "datatype mismatch";
+                break;
+            case SQLITE_MISUSE:
+                *errName = "SQLITE_MISUSE";
+                *errMsg = "library routine called out of sequence";
+                break;
+            case SQLITE_NOLFS:
+                *errName = "SQLITE_NOLFS";
+                *errMsg = "large file support is disabled";
+                break;
+            case SQLITE_AUTH:
+                *errName = "SQLITE_AUTH";
+                *errMsg = "authorization denied";
+                break;
+            case SQLITE_FORMAT:
+                *errName = "SQLITE_FORMAT";
+                *errMsg = "auxiliary database format error";
+                break;
+            case SQLITE_RANGE:
+                *errName = "SQLITE_RANGE";
+                *errMsg = "bind or column index out of range";
+                break;
+            case SQLITE_NOTADB:
+                *errName = "SQLITE_NOTADB";
+                *errMsg = "file is encrypted or is not a database";
+                break;
+            case SQLITE_ROW:
+                *errName = "SQLITE_ROW";
+                break;
+            case SQLITE_NOTICE:
+                *errName = "SQLITE_NOTICE";
+                break;
+            case SQLITE_NOTICE_RECOVER_WAL:
+                *errName = "SQLITE_NOTICE_RECOVER_WAL";
+                break;
+            case SQLITE_NOTICE_RECOVER_ROLLBACK:
+                *errName = "SQLITE_NOTICE_RECOVER_ROLLBACK";
+                break;
+            case SQLITE_WARNING:
+                *errName = "SQLITE_WARNING";
+                break;
+            case SQLITE_WARNING_AUTOINDEX:
+                *errName = "SQLITE_WARNING_AUTOINDEX";
+                break;
+            case SQLITE_DONE:
+                *errName = "SQLITE_DONE";
+                break;
+            default:
+                *errName = "SQLITE_UNKNOWN(%d)";
+                break;
+        }
+    }
+
+}
+
+/*
+ ** Return a static string that describes the kind of error specified in the
+ ** argument.
+ */
+//const char *mad_sqlite3ErrStr(int rc){
+//    static const char* const aMsg[] = {
+//        /* SQLITE_OK          */ "not an error",
+//        /* SQLITE_ERROR       */ "SQL logic error or missing database",
+//        /* SQLITE_INTERNAL    */ 0,
+//        /* SQLITE_PERM        */ "access permission denied",
+//        /* SQLITE_ABORT       */ "callback requested query abort",
+//        /* SQLITE_BUSY        */ "database is locked",
+//        /* SQLITE_LOCKED      */ "database table is locked",
+//        /* SQLITE_NOMEM       */ "out of memory",
+//        /* SQLITE_READONLY    */ "attempt to write a readonly database",
+//        /* SQLITE_INTERRUPT   */ "interrupted",
+//        /* SQLITE_IOERR       */ "disk I/O error",
+//        /* SQLITE_CORRUPT     */ "database disk image is malformed",
+//        /* SQLITE_NOTFOUND    */ "unknown operation",
+//        /* SQLITE_FULL        */ "database or disk is full",
+//        /* SQLITE_CANTOPEN    */ "unable to open database file",
+//        /* SQLITE_PROTOCOL    */ "locking protocol",
+//        /* SQLITE_EMPTY       */ "table contains no data",
+//        /* SQLITE_SCHEMA      */ "database schema has changed",
+//        /* SQLITE_TOOBIG      */ "string or blob too big",
+//        /* SQLITE_CONSTRAINT  */ "constraint failed",
+//        /* SQLITE_MISMATCH    */ "datatype mismatch",
+//        /* SQLITE_MISUSE      */ "library routine called out of sequence",
+//        /* SQLITE_NOLFS       */ "large file support is disabled",
+//        /* SQLITE_AUTH        */ "authorization denied",
+//        /* SQLITE_FORMAT      */ "auxiliary database format error",
+//        /* SQLITE_RANGE       */ "bind or column index out of range",
+//        /* SQLITE_NOTADB      */ "file is encrypted or is not a database",
+//    };
+//    const char *zErr = "unknown error";
+//    switch( rc ){
+//        case SQLITE_ABORT_ROLLBACK: {
+//            zErr = "abort due to ROLLBACK";
+//            break;
+//        }
+//        default: {
+//            rc &= 0xff;
+//            if( ALWAYS(rc>=0) && rc<ArraySize(aMsg) && aMsg[rc]!=0 ){
+//                zErr = aMsg[rc];
+//            }
+//            break;
+//        }
+//    }
+//    return zErr;
+//}
+
 /*static inline BOOL Sqlite3ResultOK(int result);
 static inline BOOL Sqlite3ResultOK(int result) {
     return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
@@ -367,7 +711,7 @@ void sqliteLog(void *foo, const char* statement) {
     return partOfTransactionSet ? _bulkStatement : statement;
 }
 
-+ (void)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MTDatabaseDataBinding *)databinding {
++ (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MTDatabaseDataBinding *)databinding {
 
     int success = 0;
     if ([databinding.value isEqual:[NSNull null]]) {
@@ -425,6 +769,7 @@ void sqliteLog(void *foo, const char* statement) {
                 
         }
     }
+    return (success == SQLITE_OK);
 }
 
 - (void)handleFailureInMethod:(SEL)selector
@@ -482,7 +827,7 @@ void sqliteLog(void *foo, const char* statement) {
        partOfTransactionSet:NO returnsResults:YES binaryBindings:nil withError:error];
 }
 
-- (BOOL)executeSql: (NSString *)queryString
+- (BOOL)executeSql: (NSString *)sql
          fieldKeys: (NSArray *)fieldKeys onConnection: (id)dbconn
    intoResultTable: (MTDataTable *)dataTable partOfTransactionSet: (BOOL)partOfTransactionSet
     returnsResults: (BOOL)returnsResults
@@ -494,11 +839,12 @@ void sqliteLog(void *foo, const char* statement) {
 
     BOOL success = NO;
     char *errorMessage = NULL;
-    char *sql = sqlite3_mprintf(queryString.UTF8String);
+    const char *sqlUTF8String = sql.UTF8String;
+    char *csql = sqlite3_mprintf(sqlUTF8String);
     
     
     if (statement == NULL) {
-        success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+        success = SQLITE_OK == sqlite3_prepare_v2(_database, csql, -1, &statement, NULL);
         if (binaryBindings.count > 0) {
             for (MTDatabaseDataBinding *databinding in binaryBindings) {
                 [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
@@ -625,16 +971,16 @@ void sqliteLog(void *foo, const char* statement) {
     }
     if (resultError != NULL) *resultError = error;
 
-    sqlite3_free(sql);
+    sqlite3_free(csql);
     return success;
 }
 
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)resultError {
 
-    NSError *error = nil;
-    NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
-    //NSLog(@"SQL2: %@", queryString);
+    NSError * __autoreleasing *error = NULL;
+    NSString *queryString;
+    queryString = [query getSqlWithError: error];
 
     MTDataTable * dataTable;
     if (query.dataTable) {
@@ -642,10 +988,12 @@ void sqliteLog(void *foo, const char* statement) {
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
-
-    return [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
-            intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
-            returnsResults: query.returnsResults binaryBindings: query.binaryBindings withError: resultError];
+    BOOL status = [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
+                   intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
+                    returnsResults: query.returnsResults binaryBindings: query.binaryBindings
+                         withError: error];
+    resultError = error;
+    return status;
 }
 
 + (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement columnNumber:(int)columnNumber {

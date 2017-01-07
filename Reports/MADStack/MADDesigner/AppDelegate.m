@@ -45,26 +45,26 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 @interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate> {
-        NSString *_ubiquityIdentifier;
-        NSString *_groupIdentifier;
-        NSString *_name;
-        NSString *_localizedName;
-        NSString *_trademark;
-        NSString *_applicationNameSufixPart;
-        NSString *_applicationIdentifier;
-        NSString *_applicationBundleIdentifier;
-        NSString *_localizedApplicationNameSufixPart;
-        NSString *_versionNumber;
-        NSString *_revisionNumber;
-        NSString *_bundleDisplayName;
-}
+    <UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    NSString *_ubiquityIdentifier;
+    NSString *_groupIdentifier;
+    NSString *_name;
+    NSString *_localizedName;
+    NSString *_trademark;
+    NSString *_applicationNameSufixPart;
+    NSString *_applicationIdentifier;
+    NSString *_applicationBundleIdentifier;
+    NSString *_localizedApplicationNameSufixPart;
+    NSString *_versionNumber;
+    NSString *_revisionNumber;
+    NSString *_bundleDisplayName;
+}
 
 #pragma mark - MADApplicationProtocol
 

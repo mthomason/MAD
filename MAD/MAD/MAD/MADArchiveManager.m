@@ -69,11 +69,12 @@
     char *archiveFilename = strdup(archiveURL.fileSystemRepresentation);
     char *outname = strdup(archiveURL.fileSystemRepresentation);
     
-    const char * pathToArchive = strdup(archiveURL.fileSystemRepresentation);
+    char *pathToArchive = strdup(archiveURL.fileSystemRepresentation);
     char *backup;
     mad_malloc(&backup, strlen(pathToArchive) + 2);
-    strcpy(backup, pathToArchive);
-    strcat(backup, "~");
+    backup[0] = '\n';
+    strlcpy(backup, pathToArchive, sizeof(backup));
+    strlcat(backup, "~", sizeof(backup));
     mad_file_remove_if_exist(backup);
     
     NSString *tmpRelativePath, *tmpRelativePath2;
@@ -134,7 +135,7 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
                  COPYFILE_COPY_XATTR | COPYFILE_DATA);
     }
-    
+    free(pathToArchive);
     free(origionalURLFileSystem);
     free(backup); free(outname);
     free(archiveFilename);
@@ -194,15 +195,17 @@ ARCHIVE_FILE_AT_URL_SHORT:;
                                                    isDirectory: &isDirectory];
     
     if (!success || !isDirectory) {
-        BOOL successCreate;
+        BOOL successCreate, sucessExist;
         successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: fileWrapperPath
                                                   withIntermediateDirectories: YES
                                                                    attributes: nil
                                                                         error: errorCreate];
-        
-        BOOL sucessExist;
-        sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: fileWrapperPath
-                                                           isDirectory: &isDirectory];
+        if (successCreate) {
+            sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: fileWrapperPath
+                                                               isDirectory: &isDirectory];
+        } else {
+            sucessExist = NO;
+        }
         
         if (!sucessExist) goto READ_FAIL;
     }
@@ -219,13 +222,12 @@ ARCHIVE_FILE_AT_URL_SHORT:;
     char *source = strdup(_archive.fileSystemRepresentation);
     success = mad_extract(source, dest, filename) == ARCHIVE_OK;
     
-    free(dest); free(filename); free(source);
-    
     if (!success) goto READ_FAIL;
     
     goto READ_END;
     
 READ_FAIL:;
+
     
     {
         //Test to see if it's it's not a compressed  archive
@@ -250,6 +252,10 @@ READ_FAIL:;
     }
     
 READ_END:;
+    
+    free(dest); free(filename); free(source);
+    
+    
     return success;
 }
 

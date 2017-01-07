@@ -7,8 +7,7 @@
 //
 
 #import "MADNavigationControllerFileExplorer.h"
-#import "MADTransparentPresentationController.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UITabBarController.h>
@@ -17,6 +16,14 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIResponder.h>
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import "MADTransparentPresentationController.h"
+
+@interface MADNavigationControllerFileExplorer ()
+
+@end
+
 @implementation MADNavigationControllerFileExplorer
 
 + (void)initialize {
@@ -24,27 +31,38 @@
     
     if (self == [MADNavigationControllerFileExplorer self]) {
         @autoreleasepool {
+            
             NSArray <Class <UIAppearanceContainer>> *classes;
             Class thisClas = [MADTransparentPresentationController class];
             classes = [[NSArray alloc] initWithObjects: thisClas, nil];
-            UINavigationBar *appearanceProxy;
-            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-            appearanceProxy.barTintColor = [UIColor clearColor];
 
+            UINavigationBar *appearanceProxyNavigationBar;
+            UIToolbar *appearanceProxyToolbar;
+
+            appearanceProxyNavigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
+            appearanceProxyNavigationBar.barTintColor = [UIColor clearColor];
+            appearanceProxyNavigationBar.translucent = YES;
+            
+            //NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+            //titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+
+            appearanceProxyToolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses: classes];
+            appearanceProxyToolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+            appearanceProxyToolbar.tintColor    = [MADColorEverydayApps newColorWhite];
+            appearanceProxyToolbar.barStyle = UIBarStyleBlack;
+            appearanceProxyToolbar.translucent = YES;
+
+            
         }
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
-    self.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-    self.toolbar.barStyle = UIBarStyleBlack;
-    self.toolbar.translucent = YES;
-    self.navigationBar.translucent = YES;
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    [self.navigationBar setTitleTextAttributes:titleTextAttributes];
     
 }
 

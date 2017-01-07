@@ -13,8 +13,6 @@
 #import "MADFileExplorerViewController.h"
 #import "MADFileExplorerViewControllerProtocol.h"
 
-#import "AppDelegate.h"
-
 #import <QuickLook/QLPreviewController.h>
 
 #import <MessageUI/MFMailComposeViewController.h>
@@ -39,13 +37,11 @@
 #import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADDocumentState.h>
-//#import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADActiveDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
 
-//#import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
 
@@ -94,6 +90,13 @@
 #import "MADDocumentManagerProtocol.h"
 
 #import "MADLabelTitle.h"
+
+#import "MADFileExplorerView.h"
+
+#import "MADSearchBar.h"
+
+#import "AppDelegate.h"
+
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
@@ -145,21 +148,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         MADViewControllerStandardProtocol,
         MADOperationObserver,
         MADSaveFileProtocol,
-MADFileExplorerViewDelegateProtocol> {
-
-    BOOL cloudActivityRunning;
-    BOOL cloudActivityRunningDisplay;
-    
-    BOOL shouldShowAddDocumentPopover;
-    BOOL aboutViewControllerOnScreen;
-    
-    BOOL isActivityIndicatorRightVisible;
-    BOOL activityIndicatorRightVisible;
-    BOOL isUpdatingEnabled;
-    BOOL getUserCloudPrefsFirstCall;
-
-
-}
+        MADFileExplorerViewDelegateProtocol>
 
     @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *collectionViewDelegate;
 
@@ -210,7 +199,19 @@ MADFileExplorerViewDelegateProtocol> {
 
 @end
 
-@implementation MADFileExplorerViewController
+@implementation MADFileExplorerViewController {
+    
+    BOOL _cloudActivityRunning;
+    BOOL _cloudActivityRunningDisplay;
+    
+    BOOL _shouldShowAddDocumentPopover;
+    BOOL _aboutViewControllerOnScreen;
+    
+    BOOL _isActivityIndicatorRightVisible;
+    BOOL _activityIndicatorRightVisible;
+    BOOL _updatingEnabled;
+    BOOL _getUserCloudPrefsFirstCall;
+}
 
 #pragma mark -
 #pragma mark NSObject
@@ -332,6 +333,23 @@ MADFileExplorerViewDelegateProtocol> {
         MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
         self.searchBar = searchBar;
 
+        void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
+        handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
+            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+        };
+
+        MADDocumentManager *documentManager;
+        documentManager = [[MADDocumentManager alloc] initWithCellConfiguration:handleCellLayout];
+        self.documentManager = documentManager;
+        
+        MADActiveDocumentManager *openFileManager;
+        openFileManager = [[MADActiveDocumentManager alloc] init];
+        self.activeDocumentManager = openFileManager;
+        
+        MADProgressView *progressView;
+        progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
+        self.progressViewFileManager = progressView;
+        
     }
     return self;
     
@@ -343,10 +361,6 @@ MADFileExplorerViewDelegateProtocol> {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
-    handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
-        if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
-    };
  /*
     id <UIGestureRecognizerDelegate> __weak gestureDelegate = self;
     void (^handleCellConfiguration)(MADCollectionViewCellDocument *cell);
@@ -360,114 +374,66 @@ MADFileExplorerViewDelegateProtocol> {
         
     };
 */
-     MADDocumentManager *documentManager;
-    documentManager = [[MADDocumentManager alloc] initWithCellConfiguration:handleCellLayout];
-    documentManager.delegate = self;
-    
-    self.collectionView.dataSource = self.documentManager;
-    self.documentManager = documentManager;
-    
-    MADActiveDocumentManager *openFiles;
-    openFiles = [[MADActiveDocumentManager alloc] init];
-    self.activeDocumentManager = openFiles;
-    
-    MADProgressView *progressView;
-    progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
-    self.progressViewFileManager = progressView;
-    
-#pragma mark Start observing
-    
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    SEL resultHandler;
 
-    resultHandler = @selector(handleNotificationUbiquityIdentityDidChange:);
-    [center addObserver: self
-               selector: resultHandler
-                   name: NSUbiquityIdentityDidChangeNotification
-                 object: nil];
-    
-    resultHandler = @selector(handleContentSizeCategoryDidChangeNotification:);
-    [center addObserver: self
-               selector: resultHandler
-                   name: UIContentSizeCategoryDidChangeNotification
-                 object: nil];
-    
-    resultHandler = @selector(handleCloudActivityStarted:);
-    [center addObserver: self
-               selector: resultHandler
-                   name: MADNotificationCloudActivityStarted
-                 object: nil];
-    
-    resultHandler = @selector(handleCloudActivityCompleted:);
-    [center addObserver: self
-               selector: resultHandler
-                   name: MADNotificationCloudActivityCompleted
-                 object: nil];
 
 #pragma mark Initalize install operations
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-    MADOperationQueue *operationQueueBackground;
-    operationQueueBackground = [[MADOperationQueue alloc] init];
-    operationQueueBackground.maxConcurrentOperationCount = 1;
+        MADOperationQueue *operationQueueBackground;
+        NSOperation *getUserCloudPreferences;
+        MADOperation *operation;
+        NSOperation *resetReceipt;
+        
+        MADAppDelegate delegate = [MADApplication AppDelegate];
+        NSString *groupID = [delegate groupIdentifier].copy;
+        
+        operationQueueBackground = [[MADOperationQueue alloc] init];
+        operationQueueBackground.maxConcurrentOperationCount = 1;
+        
+        operation = [[MADInstallOperationSampleDatabase alloc] init];
+        [operationQueueBackground addOperation:operation];
+        
+        operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+                                                                  fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                groupIdentifier: groupID
+                                                                    installFlag: MADUpgradeInstalledSamplesLondon];
+        operation.tag = MADIDInstallOperationSampleDocumentLondon;
+        [operation addObserver:self];
+        [operationQueueBackground addOperation:operation];
+        
+        operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+                                                                  fileExtension: MADFileExtentionMobleApplicationDocument
+                                                                groupIdentifier: groupID
+                                                                    installFlag: MADUpgradeInstalledSamplesMusic];
+        operation.tag = MADIDInstallOperationSampleDocumentMusic;
+        [operation addObserver:self];
+        [operationQueueBackground addOperation:operation];
+        
+        SEL storeReceipt = @selector(resetReceipt);
+        id target = [MTVerificationController sharedInstance];
+        resetReceipt = [[NSInvocationOperation alloc] initWithTarget: target
+                                                            selector: storeReceipt
+                                                              object: NULL];
+        
+        [operationQueueBackground addOperation:resetReceipt];
+        
+        SEL cloudPrefs = @selector(updateCloudPreferences);
+        
+        MADDocumentManager *documentManager = self.documentManager;
+        getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: documentManager
+                                                                       selector: cloudPrefs
+                                                                         object: NULL];
+        [operationQueueBackground addOperation:getUserCloudPreferences];
+
+        
+    }];
     
-    NSOperation *getUserCloudPreferences;
-    MADOperation *operation;
-    NSOperation *resetReceipt;
-    
-    operation = [[MADInstallOperationSampleDatabase alloc] init];
-    [operationQueueBackground addOperation:operation];
-    
-    MADAppDelegate delegate = [MADApplication AppDelegate];
-    NSString *groupID = [delegate groupIdentifier].copy;
-    
-    operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
-                                                              fileExtension: MADFileExtentionMobleApplicationDocument
-                                                            groupIdentifier: groupID
-                                                                installFlag: MADUpgradeInstalledSamplesLondon];
-    operation.tag = MADIDInstallOperationSampleDocumentLondon;
-    [operation addObserver:self];
-    [operationQueueBackground addOperation:operation];
-    
-    operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
-                                                              fileExtension: MADFileExtentionMobleApplicationDocument
-                                                            groupIdentifier: groupID
-                                                                installFlag: MADUpgradeInstalledSamplesMusic];
-    operation.tag = MADIDInstallOperationSampleDocumentMusic;
-    [operation addObserver:self];
-    [operationQueueBackground addOperation:operation];
-    
-    SEL storeReceipt = @selector(resetReceipt);
-    id target = [MTVerificationController sharedInstance];
-    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: target
-                                                        selector: storeReceipt
-                                                          object: NULL];
-    
-    [operationQueueBackground addOperation:resetReceipt];
-    
-    SEL cloudPrefs = @selector(updateCloudPreferences);
-    //id targetDocumentManager = _documentManager;
-    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: _documentManager
-                                                                   selector: cloudPrefs
-                                                                     object: NULL];
-    [operationQueueBackground addOperation:getUserCloudPreferences];
-    
-    
-    // init
 
     
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
-
-    // setup ui - navigaion item
-    MADLabelTitle *titleView;
-    titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-    
-    titleView.text = [delegate name].copy;
-    titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
-    titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-    self.navigationItem.titleView = titleView;
-    self.navigationItem.hidesBackButton = YES;
     
     
     NSString *hint;
@@ -516,10 +482,6 @@ MADFileExplorerViewDelegateProtocol> {
     hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
     _barButtonItemAbout.accessibilityHint = hint;
     
-    [self.navigationItem setRightBarButtonItem:_barButtonItemEdit animated:NO];
-
-    self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-    self.navigationController.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
     
     // inital layout
     self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
@@ -536,6 +498,9 @@ MADFileExplorerViewDelegateProtocol> {
     tapGestureRecognizer.delegate = self;
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
+    self.documentManager.delegate = self;
+    self.collectionView.dataSource = self.documentManager;
+    
     // update statusbar?
     [self setNeedsStatusBarAppearanceUpdate];
 
@@ -544,11 +509,57 @@ MADFileExplorerViewDelegateProtocol> {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+#pragma mark Start observing
+    
+    SEL selector;
+    NSNotificationCenter *center;
+    center = [NSNotificationCenter defaultCenter];
+    selector = @selector(handleNotificationUbiquityIdentityDidChange:);
+    [center addObserver: self
+               selector: selector
+                   name: NSUbiquityIdentityDidChangeNotification
+                 object: nil];
+    
+    selector = @selector(handleContentSizeCategoryDidChangeNotification:);
+    [center addObserver: self
+               selector: selector
+                   name: UIContentSizeCategoryDidChangeNotification
+                 object: nil];
+    
+    selector = @selector(handleCloudActivityStarted:);
+    [center addObserver: self
+               selector: selector
+                   name: MADNotificationCloudActivityStarted
+                 object: nil];
+    
+    selector = @selector(handleCloudActivityCompleted:);
+    [center addObserver: self
+               selector: selector
+                   name: MADNotificationCloudActivityCompleted
+                 object: nil];
+
+    [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
+                                      animated: animated];
+
     @autoreleasepool {
+
         BOOL canMakePayments;
         canMakePayments = [SKPaymentQueue canMakePayments];
         _barButtonItemLicensing.enabled = canMakePayments;
+
     }
+    
+    // setup ui - navigaion item
+    MADLabelTitle *titleView;
+    titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+    
+    MADAppDelegate delegate = [MADApplication AppDelegate];
+    titleView.text = [delegate name].copy;
+    titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
+    titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+    
+    self.navigationItem.titleView = titleView;
+    self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
@@ -590,7 +601,9 @@ MADFileExplorerViewDelegateProtocol> {
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [self.searchBar sizeToFit];
+    if (self.searchBar.superview != nil) {
+        [self.searchBar sizeToFit];
+    }
 }
 
 - (void)setEditing:(BOOL)editing {
@@ -894,7 +907,7 @@ MADFileExplorerViewDelegateProtocol> {
 #pragma mark Notification Handlers
 
 - (void)handleCloudActivityStarted:(NSNotification *)notification {
-    self.cloudActivityRunning = YES;
+    _cloudActivityRunning = YES;
     NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
                                              target: self
                                            selector: @selector(displayActivityIndictor)
@@ -914,8 +927,8 @@ MADFileExplorerViewDelegateProtocol> {
 }
 
 - (void)handleCloudActivityCompleted:(NSNotification *)notification {
-    self.cloudActivityRunning = NO;
-    self.cloudActivityRunningDisplay = NO;
+    _cloudActivityRunning = NO;
+    _cloudActivityRunningDisplay = NO;
     [self.headerCloud stopAnimating];
 }
 
@@ -1267,44 +1280,21 @@ MADFileExplorerViewDelegateProtocol> {
 
     NSNotification *changeNotification;
     MADocument *document;
-    SEL open;
-    id operation;
+    SEL selector;
 
     changeNotification = notification.copy;
     document = changeNotification.object;
     
-    open = @selector(openViewer);
+    selector = @selector(openViewer);
 
-    id fileController = self;
-    operation = [[NSInvocationOperation alloc] initWithTarget: fileController
-                                                     selector: open
+    id operation = [[NSInvocationOperation alloc] initWithTarget: self
+                                                     selector: selector
                                                        object: nil];
     
     [[NSOperationQueue mainQueue] addOperation:operation];
  
 }
-/*
-- (void)openViewer {
-    MADocument *document = self.activeDocumentManager.openDocument;
-    
-    NSURL *fileURL = document.fileURL.copy;
-    NSString *title = fileURL.lastPathComponent.copy;
-    
-    MADTabBarController *tabBarController;
-    tabBarController = [MADTabBarController newTabBarController:document prompt:title];
-    
-    MADTabBarNavigationController *navigationController;
-    navigationController = [[MADTabBarNavigationController alloc] initWithRootViewController:tabBarController];
-    
-    tabBarController.document = document;
-    tabBarController.viewControllerDelegate = self;
-    self.tabController = tabBarController;
-    
-    [self presentViewController:navigationController animated:YES completion:^{
-        //NSLog(@"Did present navigation controller");
-    }];
-}
-*/
+
 
 - (void)openViewer {
     MADocument *document = self.activeDocumentManager.openDocument;
@@ -1531,7 +1521,9 @@ MADFileExplorerViewDelegateProtocol> {
 }
 
 - (IBAction)actionSearch:(id)sender {
+    
     if (self.searchBar.isHidden) {
+        
         self.searchBar.hidden = NO;
         self.searchBar.showsCancelButton = NO;
         self.searchBar.alpha = 0.0000f;
@@ -1565,26 +1557,36 @@ MADFileExplorerViewDelegateProtocol> {
                                } completion:^(BOOL finished) {
                                    if (self.searchBar.isFirstResponder == NO) {
                                        [self.searchBar becomeFirstResponder];
+                                       _searchBar.hidden = NO;
                                    }
                                }];
         }
         
     } else {
+        
         if (self.searchBar.text.length > 0) {
             self.searchBar.text = @"";
         }
         self.searchBar.hidden = YES;
-        self.searchBar.alpha = 0.1000f;
+        self.searchBar.alpha = 1.0000f;
+        
         self.navigationItem.titleView.alpha = 0.0000f;
         self.navigationItem.leftBarButtonItem.enabled = YES;
+        
         UIView *titleView = self.navigationItem.titleView;
         [UIView transitionWithView: titleView
                           duration: 0.2000f
                            options: UIViewAnimationOptionCurveEaseOut animations:^{
+                               
                                self.searchBar.alpha = 0.0000f;
                                self.navigationItem.titleView.alpha = 1.0000f;
-                               self.navigationItem.titleView = self.navigationItem.titleView;
-                           } completion:nil];
+                               self.navigationItem.titleView = titleView;
+                               
+                           } completion:^(BOOL finished) {
+                               if (finished) {
+                                   self.searchBar.hidden = YES;
+                               }
+                           }];
         
     }
 }
@@ -2063,13 +2065,13 @@ MADFileExplorerViewDelegateProtocol> {
     [debug appendFormat:@"Collection view delegate:          %@\n", self.collectionViewDelegate];
     [debug appendFormat:@"Active document manager:           %@\n", self.activeDocumentManager];
     [debug appendFormat:@"Document manager:                  %@\n", self.documentManager];
-    [debug appendFormat:@"Cloud activity running:            %@\n", self.cloudActivityRunning ? @"Yes" : @"No"];
-    [debug appendFormat:@"Cloud activity running display:    %@\n", self.cloudActivityRunningDisplay ? @"Yes" : @"No"];
-    [debug appendFormat:@"Shoulld show add document popover: %@\n", self.shouldShowAddDocumentPopover ? @"Yes" : @"No"];
-    [debug appendFormat:@"About view controller on screen:   %@\n", self.aboutViewControllerOnScreen ? @"Yes" : @"No"];
-    [debug appendFormat:@"Activity indicator right visible:  %@\n", self.activityIndicatorRightVisible ? @"Yes" : @"No"];
-    [debug appendFormat:@"Updating enabled:                  %@\n", self.updatingEnabled ? @"Yes" : @"No"];
-    [debug appendFormat:@"Get user cloud prefs first call:   %@\n", self.getUserCloudPrefsFirstCall ? @"Yes" : @"No"];
+    [debug appendFormat:@"Cloud activity running:            %@\n", _cloudActivityRunning ? @"Yes" : @"No"];
+    [debug appendFormat:@"Cloud activity running display:    %@\n", _cloudActivityRunningDisplay ? @"Yes" : @"No"];
+    [debug appendFormat:@"Shoulld show add document popover: %@\n", _shouldShowAddDocumentPopover ? @"Yes" : @"No"];
+    [debug appendFormat:@"About view controller on screen:   %@\n", _aboutViewControllerOnScreen ? @"Yes" : @"No"];
+    [debug appendFormat:@"Activity indicator right visible:  %@\n", _activityIndicatorRightVisible ? @"Yes" : @"No"];
+    [debug appendFormat:@"Updating enabled:                  %@\n", _updatingEnabled ? @"Yes" : @"No"];
+    [debug appendFormat:@"Get user cloud prefs first call:   %@\n", _getUserCloudPrefsFirstCall ? @"Yes" : @"No"];
     return debug;
 }
 

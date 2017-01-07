@@ -40,9 +40,7 @@
 #import "MTTableCellHeader.h"
 
 @interface MADTableController ()
-    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol> {
-    BOOL _firstTimeViewDidAppear;
-}
+    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol>
 
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MTDataTable *datatable;
@@ -52,7 +50,9 @@
 
 @end
 
-@implementation MADTableController
+@implementation MADTableController {
+    BOOL _firstTimeViewDidAppear;
+}
 
 - (void)dealloc { }
 

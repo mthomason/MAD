@@ -29,7 +29,7 @@ typedef NSString MADSqlite3SortDescription;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-    + (void)bindStatement:(void ** /* sqlite3_stmt ** */)statement
+    + (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
              withBindings:(MTDatabaseDataBinding *)databinding;
 
     - (void)openDatabase;
@@ -52,6 +52,8 @@ typedef NSString MADSqlite3SortDescription;
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
       queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet;
+
+    void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
 
 @end
 

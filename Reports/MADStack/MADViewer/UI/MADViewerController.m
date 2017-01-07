@@ -103,9 +103,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADPageSliderProtocol,
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
-        MADActivityItemProviderDelegate> {
-            BOOL _isFirstAppearance;
-}
+        MADActivityItemProviderDelegate>
 
     @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 
@@ -158,7 +156,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @end
 
-@implementation MADViewerController
+@implementation MADViewerController {
+    BOOL _isFirstAppearance;
+}
 
 @synthesize document = _document;
 @synthesize title = _title;

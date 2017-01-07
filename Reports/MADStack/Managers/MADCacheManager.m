@@ -7,13 +7,19 @@
 //
 
 #import "MADCacheManager.h"
-#import "MADOperationQueue.h"
+
+#import <Foundation/NSString.h>
+
+#import <dispatch/dispatch.h>
+#import <dispatch/once.h>
+
 #include <assert.h>
 
-@interface MADCacheManager () {
-    MADOperationQueue * _queueForCachingData;
-}
+#import "MADOperationQueue.h"
 
+@interface MADCacheManager () {
+    MADOperationQueue *_queueForCachingData;
+}
     @property (nonatomic, strong, readonly) MADOperationQueue *queueForCachingData;
 
 @end
@@ -51,7 +57,7 @@
         _queueForCachingData.name = @"com.everydayapps.mad.cache";
         _queueForCachingData.qualityOfService = NSQualityOfServiceBackground;
         _queueForCachingData.maxConcurrentOperationCount = 2;
-        assert(_queueForCachingData == nil);
+        assert(_queueForCachingData != nil);
     }
     return self;
 }
