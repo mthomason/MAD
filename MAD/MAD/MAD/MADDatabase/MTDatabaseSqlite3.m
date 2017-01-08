@@ -976,23 +976,39 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)resultError {
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
 
-    NSError * __autoreleasing *error = NULL;
-    NSString *queryString;
-    queryString = [query getSqlWithError: error];
-
-    MTDataTable * dataTable;
-    if (query.dataTable) {
-        dataTable = query.dataTable;
+    BOOL status = NO;
+    NSError * __autoreleasing *sqlError = NULL;
+    NSString *sqlResult = [query getSqlWithError: sqlError];
+    NSString *queryString = [[NSString alloc] initWithString: sqlResult];
+    
+    if (sqlError != NULL) {
+        if (sqlError && error != NULL) {
+            error = sqlError;
+        }
+        NSAssert(sqlError == NULL, @"Error: %@", error);
     } else {
-        dataTable = [self.delegate dataTableForQuery:query];
+        
+        MTDataTable * dataTable;
+        if (query.dataTable) {
+            dataTable = query.dataTable;
+        } else {
+            dataTable = [self.delegate dataTableForQuery:query];
+        }
+        NSError * __autoreleasing *executeError = NULL;
+        status = [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
+                  intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
+                   returnsResults: query.returnsResults binaryBindings: query.binaryBindings
+                        withError: executeError];
+        
+        if (executeError && error != NULL) {
+            error = executeError;
+        }
+        NSAssert(sqlError == NULL, @"Error: %@", error);
+
     }
-    BOOL status = [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
-                   intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
-                    returnsResults: query.returnsResults binaryBindings: query.binaryBindings
-                         withError: error];
-    resultError = error;
+
     return status;
 }
 

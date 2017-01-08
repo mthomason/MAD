@@ -303,7 +303,7 @@
 		4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EBF1BAE5E9000BAE5FC /* MADFeatures.m */; };
 		4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */; };
 		4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */; };
-		4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; };
 		4C401EDF1BAE5E9000BAE5FC /* ReceiptModule.ans1 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */; };
 		4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECA1BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m */; };
 		4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECC1BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m */; };
@@ -403,6 +403,7 @@
 		4C4754431CF362CB00BC9E02 /* MADCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754421CF362CB00BC9E02 /* MADCollectionViewController.m */; };
 		4C4754461CF362DB00BC9E02 /* MADSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */; };
 		4C4754491CF362E900BC9E02 /* MADPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754481CF362E900BC9E02 /* MADPageViewController.m */; };
+		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA5711C92C3D2008558E4 /* MADOperation.m */; };
@@ -759,6 +760,8 @@
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
+		4CB074D41E22006700643F32 /* MADFileExplorerToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */; };
+		4CB074D71E22010900643F32 /* MADFileExplorerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
@@ -1767,6 +1770,8 @@
 		4C4754471CF362E900BC9E02 /* MADPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewController.h; sourceTree = "<group>"; };
 		4C4754481CF362E900BC9E02 /* MADPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewController.m; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerViewControllerProtocol.h; sourceTree = "<group>"; };
+		4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerAnimatedTransitioning.h; sourceTree = "<group>"; };
+		4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
@@ -1973,6 +1978,10 @@
 		4CA9D7991E13820200ED9D78 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79B1E13820800ED9D78 /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79D1E13820E00ED9D78 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerToolbar.h; sourceTree = "<group>"; };
+		4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerToolbar.m; sourceTree = "<group>"; };
+		4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerNavigationBar.h; sourceTree = "<group>"; };
+		4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerNavigationBar.m; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -2769,6 +2778,10 @@
 				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
 				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
 				4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */,
+				4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */,
+				4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */,
+				4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */,
+				4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */,
 			);
 			path = Explorer;
 			sourceTree = "<group>";
@@ -3240,6 +3253,8 @@
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
 				4C26BA321BAF99BE00456DC8 /* Constants.h */,
 				4C26BA331BAF99BE00456DC8 /* Constants.m */,
+				4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */,
+				4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */,
 			);
 			name = MADDesigner;
 			path = MADStack/MADDesigner;
@@ -6116,6 +6131,7 @@
 				4C401F291BAE703200BAE5FC /* MADTableViewCellQueryInput.m in Sources */,
 				4C4754401CF362AE00BC9E02 /* MADTableViewController.m in Sources */,
 				4C26B9CD1BAF123A00456DC8 /* MADToolboxStyleLayoutViewController.m in Sources */,
+				4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */,
 				4C26B9531BAF0D4300456DC8 /* MADTableViewControllerCoreDataResults.m in Sources */,
 				4C26B9C41BAF123A00456DC8 /* MADNavigationControllerFontPicker.m in Sources */,
 				4C26BA5D1BAF99F000456DC8 /* MTDocumentObjectNewAggregateViewController.m in Sources */,
@@ -6170,6 +6186,7 @@
 				4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */,
 				4C59BDC01C9AA7C10031BC6C /* MADBlockOperation.m in Sources */,
 				4C26BA641BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
+				4CB074D71E22010900643F32 /* MADFileExplorerNavigationBar.m in Sources */,
 				4C4754431CF362CB00BC9E02 /* MADCollectionViewController.m in Sources */,
 				4C26BA9B1BAF9B9B00456DC8 /* MTTitleView.m in Sources */,
 				4C401F0C1BAE6DF100BAE5FC /* MADAboutTableView.m in Sources */,
@@ -6305,6 +6322,7 @@
 				4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 				4C994F111BDCA3A90058627A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
+				4CB074D41E22006700643F32 /* MADFileExplorerToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6737,6 +6755,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -6772,7 +6791,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",
@@ -6800,6 +6819,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ASSIGN_ENUM = NO;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -6833,7 +6853,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",

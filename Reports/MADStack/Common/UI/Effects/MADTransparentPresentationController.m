@@ -29,6 +29,8 @@
     return NO;
 }
 
-- (void)presentationTransitionWillBegin { }
+- (void)presentationTransitionWillBegin {
+    [super presentationTransitionWillBegin];
+}
 
 @end

@@ -613,7 +613,7 @@ BOOL storeEnabled() {
 - (MADQueryViewDataSource *)queryViewDataSource {
 
     if (_queryViewDataSource == nil) {
-
+/*
         NSSet *hasDatabaseSchemas, *hasQueries, *hasQueryTables;
         RptqDocument *rptqDocument;
         RptqDatabase *rptqDatabase;
@@ -626,10 +626,10 @@ BOOL storeEnabled() {
         hasQueries = rptqDatabase.hasQueries;
         rptqQuery = hasQueries.anyObject;
         hasQueryTables = rptqQuery.hasQueryTables;
-        
+        */
         MADQueryViewDataSource *dataSource;
         
-        dataSource = [[MADQueryViewDataSource alloc] initWithDocument: document
+        dataSource = [[MADQueryViewDataSource alloc] initWithDocument: _document
                                                      reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
                                                   handleConfigureCell: _handleConfigureCell];
         

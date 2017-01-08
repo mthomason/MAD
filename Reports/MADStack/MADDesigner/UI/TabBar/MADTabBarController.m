@@ -27,6 +27,8 @@
 
 #import "MADLabelTitle.h"
 
+#import "MADDesignerAnimatedTransitioning.h"
+
 static NSString * const MADIdentifierTabBarController = @"MADIdentifierTabBarController";
 
 const int8_t MADIndexQuery = 0;
@@ -244,6 +246,24 @@ const int8_t MADIndexViewer = 2;
             
         default:
             break;
+    }
+}
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)tabBarController:(UITabBarController *)tabBarController
+                               interactionControllerForAnimationController: (id <UIViewControllerAnimatedTransitioning>)animationController {
+    return nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)tabBarController:(UITabBarController *)tabBarController
+                     animationControllerForTransitionFromViewController:(UIViewController *)fromVC
+                                                       toViewController:(UIViewController *)toVC  {
+    NSArray *viewControllers = tabBarController.viewControllers;
+    if ([viewControllers indexOfObject:toVC] > [viewControllers indexOfObject:fromVC]) {
+        // The incoming view controller succeeds the outgoing view controller,
+        // slide towards the left.
+        return [[MADDesignerAnimatedTransitioning alloc] init];
+    } else {
+        return nil;
     }
 }
 

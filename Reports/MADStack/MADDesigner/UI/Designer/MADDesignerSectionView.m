@@ -63,10 +63,20 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 
 @implementation MADDesignerSectionView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    
++ (instancetype)newDesignerSectionView:(MADReportSection *)section
+                              delegate:(id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate {
+    id collectionView;
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
+    layout.delegate = layoutDelegate;
+    collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    ((MADDesignerSectionView *)collectionView).objectIdTag  = section.objectID.copy;
+    ((MADDesignerSectionView *)collectionView).tag          = section.identifier;
+    ((MADDesignerSectionView *)collectionView).visible      = section.isVisible;
+    return collectionView;
+}
 
+- (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
+    
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
 
         UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
@@ -107,19 +117,6 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     
     return self;
     
-}
-
-+ (instancetype)newDesignerSectionView:(MADReportSection *)section
-                              delegate:(id <MTReportDesignerSectionViewLayoutLiquidDelegate,
-                                                UICollectionViewDataSource>)layoutDelegate {
-    MADDesignerSectionView *collectionView;
-    collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
-    ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
-    collectionView.objectIdTag  = section.objectID.copy;
-    collectionView.tag          = section.identifier;
-    collectionView.visible      = section.isVisible;
-    collectionView.selected     = NO;
-    return collectionView;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -231,14 +228,14 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 
 #pragma mark - UIView
 
-- (void)drawRect:(CGRect)rect {
+/*- (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     UIColor *bgcolor = backgroundColor(self.selected, self.visible);
     CGContextSetFillColorWithColor(context, bgcolor.CGColor);
     CGContextFillRect(context, rect);
-}
+}*/
 
 #pragma mark - Overrides
 
@@ -246,7 +243,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     if (_visible != visible) {
         _visible = visible;
         [self setBorderState:borderState(_selected, _visible)];
-        [self setNeedsDisplay];
+        UIColor *bgcolor = backgroundColor(_selected, _visible);
+        self.backgroundColor = bgcolor;
     }
 }
 
@@ -254,7 +252,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     if (_selected != selected) {
         _selected = selected;
         [self setBorderState:borderState(_selected, _visible)];
-        [self setNeedsDisplay];
+        UIColor *bgcolor = backgroundColor(_selected, _visible);
+        self.backgroundColor = bgcolor;
     }
 }
 

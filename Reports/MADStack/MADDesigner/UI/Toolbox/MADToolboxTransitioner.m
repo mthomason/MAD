@@ -210,8 +210,9 @@
     designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     
+    NSTimeInterval transitionDuration = [self transitionDuration:context];
     typeof(toolboxNavigationController) __weak weakNavController = toolboxNavigationController;
-    [UIView animateWithDuration: [self transitionDuration:context]
+    [UIView animateWithDuration: transitionDuration
                           delay: 0.0000f
          usingSpringWithDamping: 300.0000f
           initialSpringVelocity: 5.0000f

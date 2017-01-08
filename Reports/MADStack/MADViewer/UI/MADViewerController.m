@@ -94,11 +94,14 @@ static NSString * const MADTextNoCache = @"No Cache";
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADViewerController ()
-    <UIPopoverControllerDelegate,
+    <UIPopoverPresentationControllerDelegate,
+        UIPopoverControllerDelegate,
         UIStateRestoring,
         UIPageViewControllerDelegate,
         UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate,
+        UIViewControllerTransitioningDelegate,
+        UIViewControllerAnimatedTransitioning,
         MADOperationObserver,
         MADPageSliderProtocol,
         MTPrintingProtocol,
@@ -225,7 +228,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
 }
 
-
 #pragma mark - Initalize
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -243,6 +245,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.refreshQueue = refreshQueue;
         
         CGRect boundsStatusLabel = CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f);
+        
+        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
+        pageSlider.sliderDelegate = self;
+        self.pageSlider = pageSlider;
+
         
         MADLabelStatus *labelStatus;
         labelStatus = [[MADLabelStatus alloc] initWithFrame: boundsStatusLabel];
@@ -262,98 +270,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     }
     return self;
-}
-
-#pragma mark - MADOperationObserver
-
-- (void)operationDidStart:(MADOperation *)operation { }
-
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
-
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    
-    if ([operation isKindOfClass:[MADRefreshReloadOperation class]]) {
-        
-        if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
-            
-            
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                
-                MADocument *document = self.document;
-                self.lastCacheDate = [NSDate date];
-                [self setDisplayActive];
-                
-                [self reloadWithSize:document.paper.paperSize];
-                
-                [self timerDealloc];
-                
-                [self updateTimeSinceLastRefresh: NULL];
-                
-                [self removeObserverDidReadRowsFromDatabase:document.database];
-                
-            }];
-        }
-        
-        MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
-        for (NSError *error in errors) {
-            MADPromptOperationDisplayError *operationErrorDisplay =
-            [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
-            [operationQueue addOperation:operationErrorDisplay];
-            
-        }
-        
-    }
-    
-}
-
-#pragma mark - MTPrintingProtocol
-
-- (MTReportViewerPrintPageRenderer *)printPageRenderer {
-    return self.printPageRendererReport;
-}
-
-#pragma mark - UIStateRestore
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-}
-
-- (void)applicationFinishedRestoringState {
-    [super applicationFinishedRestoringState];
-}
-
-#pragma mark -
-#pragma mark MADPageSliderDelegate
-
-- (void)sliderDidChangeToPage:(NSUInteger)page {
-    [self moveToPageAtIndex:page];
-}
-
-#pragma mark -
-#pragma mark Overrides
-
-- (MADDateFromTimeFormatter *)dateTimeFormatter {
-    if (_dateTimeFormatter == nil) {
-        MADDateFromTimeFormatter *dateTimeFormatter = [[MADDateFromTimeFormatter alloc] init];
-        _dateTimeFormatter = dateTimeFormatter;
-    }
-    return _dateTimeFormatter;
-}
-
-+ (NSString *)Title {
-    return [MADViewerController MADViewer];
-}
-
-- (NSString *)title {
-    if (_title == nil) {
-        NSString *title = [MADViewerController MADViewer];
-        _title = title.copy;
-    }
-    return _title;
 }
 
 #pragma mark -
@@ -396,20 +312,95 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self.labelStatus updatePageStatus: self.numberOfPages
                       currentPageIndex: self.currentPageIndex];
+
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return self;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source {
+    return self;
+}
+
+- (void)presentationTransitionWillBegin {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+- (void)presentationTransitionDidEnd:(BOOL)completed {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+- (void)dismissalTransitionWillBegin {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+- (void)dismissalTransitionDidEnd:(BOOL)completed {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// This is used for percent driven interactive transitions, as well as for container controllers that have companion animations that might need to
+// synchronize with the main animation.
+- (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
+    return 3.0;
+}
+
+// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
+- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    //UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    //CGPoint center = viewControllerFrom.view.center;
+    self.pageSlider.alpha = 0.0f;
+    NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
+    [UIView animateWithDuration:transitionDuration animations:^{
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+        self.pageSlider.alpha = 1.0f;
+        //viewControllerFrom.view.bounds = CGRectZero;
+        //viewControllerFrom.view.center = center;
+        //viewControllerFrom.view.transform = CGAffineTransformSwing();
+    } completion:^(BOOL finished) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+    }];
+}
+
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
+    
+    //short circuit
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+        NSLog(@"%@", [context viewControllerForKey:UITransitionContextToViewControllerKey]);
+        NSLog(@"%@", [context viewControllerForKey:UITransitionContextFromViewKey]);
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }];
     
 }
+
+// This is used for percent driven interactive transitions, as well as for
+// container controllers that have companion animations that might need to
+// synchronize with the main animation.
+//- (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
+//    super t
+//}
+// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
+//- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
-    pageSlider.sliderDelegate = self;
+    //self.presentationController.delegate = self;
     
     [self setToolbarItems: self.toolbarItemsActive animated: animated];
     
-    [self.view addSubview:pageSlider];
-    [self.view bringSubviewToFront:pageSlider];
+    [self.view addSubview:_pageSlider];
+    [self.view bringSubviewToFront:_pageSlider];
 
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
@@ -450,9 +441,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.printPageRendererReport = prtingPageRendererReport;
     }
     
-    [pageSlider setNeedsLayout];
-
-    self.pageSlider = pageSlider;
+    [_pageSlider setNeedsLayout];
     
     if (_isFirstAppearance) {
         MADPageViewAttributes *pageAttributes;
@@ -514,11 +503,58 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
     
 }
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+/*
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        //UIView * __weak backgroundView = self.collectionView.backgroundView;
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            //            [self.collectionView setNeedsDisplay];
+            NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+            
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+            
+        }];
+    }
+    
+}
+
+//- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+//    if (self.traitCollection.horizontalSizeClass != previousTraitCollection.horizontalSizeClass) {
+//        [self.collectionView.collectionViewLayout invalidateLayout];
+//    }
+//}
+
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, newCollection);
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        
+    }];
+    
+}
+*/
+
+
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
 
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
@@ -526,6 +562,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
         [self.pageSlider setNeedsLayout];
@@ -533,10 +570,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }];
 }
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
-}
+    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, newCollection);
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        
+        
+    }];
+}*/
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -559,6 +606,56 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion: nil];
     }*/
+}
+
+#pragma mark - MTPrintingProtocol
+
+- (MTReportViewerPrintPageRenderer *)printPageRenderer {
+    return self.printPageRendererReport;
+}
+
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+- (void)applicationFinishedRestoringState {
+    [super applicationFinishedRestoringState];
+}
+
+#pragma mark -
+#pragma mark MADPageSliderDelegate
+
+- (void)sliderDidChangeToPage:(NSUInteger)page {
+    [self moveToPageAtIndex:page];
+}
+
+#pragma mark -
+#pragma mark Overrides
+
+- (MADDateFromTimeFormatter *)dateTimeFormatter {
+    if (_dateTimeFormatter == nil) {
+        MADDateFromTimeFormatter *dateTimeFormatter = [[MADDateFromTimeFormatter alloc] init];
+        _dateTimeFormatter = dateTimeFormatter;
+    }
+    return _dateTimeFormatter;
+}
+
++ (NSString *)Title {
+    return [MADViewerController MADViewer];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        NSString *title = [MADViewerController MADViewer];
+        _title = title.copy;
+    }
+    return _title;
 }
 
 #pragma mark - properties
@@ -1305,6 +1402,48 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 + (NSString *)MADViewer {
     NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+}
+
+#pragma mark - MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation { }
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    
+    if ([operation isKindOfClass:[MADRefreshReloadOperation class]]) {
+        
+        if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
+            
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                
+                MADocument *document = self.document;
+                self.lastCacheDate = [NSDate date];
+                [self setDisplayActive];
+                
+                [self reloadWithSize:document.paper.paperSize];
+                
+                [self timerDealloc];
+                
+                [self updateTimeSinceLastRefresh: NULL];
+                
+                [self removeObserverDidReadRowsFromDatabase:document.database];
+                
+            }];
+        }
+        
+        MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+        for (NSError *error in errors) {
+            MADPromptOperationDisplayError *operationErrorDisplay =
+            [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+            [operationQueue addOperation:operationErrorDisplay];
+            
+        }
+        
+    }
+    
 }
 
 /*

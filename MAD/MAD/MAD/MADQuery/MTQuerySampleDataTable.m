@@ -57,9 +57,12 @@
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    NSError *sqlError = nil;
-    [super getSqlWithError:&sqlError];
-    *error = sqlError;
+    NSError * __autoreleasing *sqlError = NULL;
+    [super getSqlWithError: sqlError];
+    if (sqlError && error != NULL) {
+        error = sqlError;
+    }
+    NSAssert(sqlError == NULL, @"Error: %@", error);
 
     NSString *selectPart = [self.database selectPartWithLimitedResults:255];
     NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
@@ -85,8 +88,12 @@
                                                                object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
-    NSError * __autoreleasing blockError;
-    BOOL success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError:&blockError];
+    NSError * __autoreleasing *blockError = NULL;
+    BOOL success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError: blockError];
+    if (blockError && error != NULL) {
+        error = blockError;
+    }
+    NSAssert(blockError == NULL, @"Error: %@", blockError);
     if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
         
         for (RptqDatabaseSchemaField *field in fields) {
@@ -102,8 +109,6 @@
             f.calculatedWidth = maxSize;
         }
     }
-    
-    *error = blockError;
     
     [sql appendString:MADSqlTextFromPart];
     [sql appendString:safeTableName];

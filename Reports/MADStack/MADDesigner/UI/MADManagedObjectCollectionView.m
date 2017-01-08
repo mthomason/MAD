@@ -9,5 +9,7 @@
 #include "MADManagedObjectCollectionView.h"
 
 @implementation MADManagedObjectCollectionView
-    
+
+@synthesize objectIdTag = _objectIdTag;
+
 @end

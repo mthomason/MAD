@@ -20,25 +20,9 @@
         self.backgroundView = watermarkView;
         self.backgroundColor = [UIColor lightGrayColor];
         self.scrollIndicatorInsets = self.contentInset;
-        
-        UITapGestureRecognizer *tapGestureRecognizer;
-        SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: nil
-                                                                       action: didTapCollectionView];
-//        tapGestureRecognizer.delegate = self;
-        [self addGestureRecognizer:tapGestureRecognizer];
 
     }
     return self;
-}
-
-- (void)didMoveToSuperview {
-    [super didMoveToSuperview];
-    NSLog(@"%@", self.nextResponder);
-}
-
-- (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
-//    [UIResponder ]
 }
 
 @end

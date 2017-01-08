@@ -304,9 +304,9 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    UINavigationController *detailNavigationController;
-    detailNavigationController = self.detailNavigationController;
-    [detailNavigationController popToRootViewControllerAnimated:animated];
+    //UINavigationController *detailNavigationController;
+    //detailNavigationController = self.detailNavigationController;
+    //[detailNavigationController popToRootViewControllerAnimated:animated];
     
     self.viewControllerDelegate = nil;
     
@@ -389,7 +389,7 @@ static NSString * const TextRedraw = @"Redraw";
     _viewControllerDelegate = nil;
 }
 
-/*
+
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -405,7 +405,7 @@ static NSString * const TextRedraw = @"Redraw";
         [titleView sizeToFit];
     }];
     
-}*/
+}
 
 #pragma mark - MTTabBarImageProtocol
 

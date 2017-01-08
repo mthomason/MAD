@@ -20,7 +20,13 @@
 
 #import "MADTransparentPresentationController.h"
 
+#import "MADFileExplorerNavigationBar.h"
+#import "MADFileExplorerToolbar.h"
+
 @interface MADNavigationControllerFileExplorer ()
+
+@property (weak, nonatomic) IBOutlet MADFileExplorerNavigationBar *fileExplorerNavigationBar;
+@property (weak, nonatomic) IBOutlet MADFileExplorerToolbar *fileExplorerToolBar;
 
 @end
 
@@ -53,6 +59,18 @@
             appearanceProxyToolbar.translucent = YES;
 
             
+        }
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIViewController *childViewController;
+    NSArray<__kindof UIViewController *> *childViewControllers;
+    childViewControllers = self.childViewControllers;
+    for (childViewController in childViewControllers) {
+        if ([childViewController conformsToProtocol:@protocol(UINavigationControllerDelegate)]) {
+            self.delegate = (id <UINavigationControllerDelegate>)childViewController;
         }
     }
 }

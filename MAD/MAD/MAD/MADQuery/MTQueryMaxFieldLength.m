@@ -46,9 +46,12 @@
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    NSError *sqlError = nil;
+    NSError * __autoreleasing *sqlError = NULL;
     [super getSqlWithError:&sqlError];
-    *error = sqlError;
+    if (sqlError && error != NULL) {
+        error = sqlError;
+    }
+    NSAssert(sqlError == NULL, @"Error: %@", sqlError);
     
     NSString *sql = nil;
     NSArray *fields = [[NSArray alloc] initWithArray:self.queryObject];

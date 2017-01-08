@@ -214,12 +214,10 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error {
     NSError * __autoreleasing * qerror = NULL;
     BOOL success = [self.database executeQuery:self withError:qerror];
-    if (!success && error == NULL) {
+    if (!success && qerror != NULL && error != NULL) {
         error = qerror;
-        if (error) {
-            NSLog(@"Error: %@", *error);
-        }
     }
+    NSAssert(error == NULL, @"Error: %@", error);
     return success;
 }
 

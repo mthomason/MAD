@@ -10,8 +10,10 @@
 #define Reports_MADFileExplorerViewController_h
 
 #import <UIKit/UICollectionViewController.h>
+#import <UIKit/UINavigationController.h>
 
 @interface MADFileExplorerViewController : UICollectionViewController
+    <UINavigationControllerDelegate>
 
 @end
 

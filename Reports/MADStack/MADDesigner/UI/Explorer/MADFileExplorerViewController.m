@@ -134,6 +134,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 @interface MADFileExplorerViewController()
     <NSFileManagerDelegate,
+        UIViewControllerAnimatedTransitioning,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UIDocumentInteractionControllerDelegate,
@@ -407,6 +408,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    //self.navigationController.delegate = self;
     
  /*
     id <UIGestureRecognizerDelegate> __weak gestureDelegate = self;
@@ -494,12 +496,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
     // add gestures
     
-    //UITapGestureRecognizer *tapGestureRecognizer;
-    //SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
-    //tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-    //                                                               action: didTapCollectionView];
-    //tapGestureRecognizer.delegate = self;
-    //[self.collectionView addGestureRecognizer:tapGestureRecognizer];
+    UITapGestureRecognizer *tapGestureRecognizer;
+    SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
+    tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                   action: didTapCollectionView];
+    tapGestureRecognizer.delegate = self;
+    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
     self.documentManager.delegate = self;
     self.collectionView.dataSource = self.documentManager;
@@ -732,6 +734,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark UIViewController
+
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 /*
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -768,6 +772,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 }
 */
+//- (UIViewController *)childViewControllerForStatusBarHidden {
+//    return self.presentedViewController;
+//}
+
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.presentedViewController;
 }
@@ -829,7 +837,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark UIMenuController required methods
-
+/*
 - (BOOL)canBecomeFirstResponder {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     return YES;
@@ -846,7 +854,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         result = YES;
     }
     return result;
-}
+}*/
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
@@ -862,7 +870,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark Touch Event Handlers
 
 - (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.searchBar resignFirstResponder];
     if (self.isEditing) {
         [self actionEdit:self];
@@ -1286,12 +1293,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                     name: UIDocumentStateChangedNotification
                                                   object: document];
 
-    //NSLog(@"\n\n\tDocument state closed.\n\n");
 }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
 
-    NSNotification *changeNotification;
+/*    NSNotification *changeNotification;
     MADocument *document;
     SEL selector;
 
@@ -1304,7 +1310,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                      selector: selector
                                                        object: nil];
     
-    [[NSOperationQueue mainQueue] addOperation:operation];
+    [[NSOperationQueue mainQueue] addOperation:operation];*/
  
 }
 
@@ -1324,12 +1330,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     tabBarController.viewControllerDelegate = self;
     self.tabController = tabBarController;
 
-    //UIColor *color = [MADColorEverydayApps newColorBlue];
-    //navigationController.navigationBar.barTintColor = color;
-    
-    //color = [MADColorEverydayApps newColorWhite];
-    //navigationController.navigationBar.tintColor = color;
     [self presentViewController:navigationController animated:YES completion:^{
+        
     }];
 }
 
@@ -1348,10 +1350,17 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         self.activeDocumentManager.openDocument = document;
         
 
-    //MADocument *allocatedDocument = self.activeDocumentManager.openDocument;
     [document openWithCompletionHandler:^(BOOL success) {
         if (!success) {
             //NSLog(@"Failed to open file");
+        } else {
+            SEL selector = @selector(openViewer);
+            
+            id operation = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                selector: selector
+                                                                  object: nil];
+            
+            [[NSOperationQueue mainQueue] addOperation:operation];
         }
     }];
 
@@ -2108,6 +2117,31 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [debug appendFormat:@"Updating enabled:                  %@\n", _updatingEnabled ? @"Yes" : @"No"];
     [debug appendFormat:@"Get user cloud prefs first call:   %@\n", _getUserCloudPrefsFirstCall ? @"Yes" : @"No"];
     return debug;
+}
+
+#pragma mark -
+#pragma mark UINavigationControllerDelegate
+
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated { }
+//- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated { }
+
+//- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED;
+//- (UIInterfaceOrientation)navigationControllerPreferredInterfaceOrientationForPresentation:(UINavigationController *)navigationController NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED;
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
+    return nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC  {
+    if ([toVC isKindOfClass:[self class]]) {
+        return self;
+    } else {
+        return nil;
+    }
 }
 
 @end

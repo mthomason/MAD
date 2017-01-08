@@ -90,7 +90,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
         RptqDatabase *rptqDatabase;
         RptqQuery *rptqQuery;
         
-        rptqDocument = [_document activeDocumentModel];
+        rptqDocument = [document activeDocumentModel];
         
         hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
         rptqDatabase = hasDatabaseSchemas.anyObject;
@@ -115,7 +115,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
         _numberOfTables = numberOfTables;
         _count = count;
         _handleConfigureCell = handleConfigureCell;
-        
+        _document = document;
     }
     return self;
     
