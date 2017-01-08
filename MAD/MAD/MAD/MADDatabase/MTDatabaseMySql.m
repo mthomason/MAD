@@ -138,7 +138,10 @@
     return result;
 }
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+   intoResultTable:(MTDataTable *)dataTable
+         withError:(NSError * __autoreleasing *)error {
+    
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     myFetch.delegate = self;
     NSError *fetchError = nil;

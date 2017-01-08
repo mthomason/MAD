@@ -124,7 +124,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
     MADocument *document = _document;
     document.statusLabel = activityView;
     
-    MADocument * __weak weakdoc = document;
+    typeof(document) __weak weakdoc = document;
     
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);

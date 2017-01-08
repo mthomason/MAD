@@ -25,7 +25,7 @@ NSString * const MADNotificationProgressKey = @"p";
 
 @implementation MADNotificationProgress
 
-static MADNotificationProgress *sharedSingleton = nil;
+static MADNotificationProgress *_sharedSingleton = nil;
 
 static inline double min_time_interval() {
     return 1.0 / 60.0;
@@ -38,15 +38,15 @@ static inline double min_time_interval() {
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedSingleton = [[super allocWithZone:NULL] init];
+        _sharedSingleton = [[super allocWithZone:NULL] init];
         NSDate *lastUpdate = [NSDate date].copy;
-        sharedSingleton.lastUpdate = lastUpdate;
-        [sharedSingleton initializeProgressNotification];
+        _sharedSingleton.lastUpdate = lastUpdate;
+        [_sharedSingleton initializeProgressNotification];
     });
 }
 
 + (MADNotificationProgress *)sharedObject {
-    return sharedSingleton;
+    return _sharedSingleton;
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {
@@ -75,7 +75,7 @@ static inline double min_time_interval() {
     if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
         self.lastUpdate = [NSDate date];
         MADProgress *madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
             NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
                                                                          object: madProgress
                                                                        userInfo: nil];
@@ -88,7 +88,7 @@ static inline double min_time_interval() {
     if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
         NSDate *lastUpdate = [NSDate date].copy;
         self.lastUpdate = lastUpdate;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
             NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
                                                                          object: progress
                                                                        userInfo: nil];

@@ -235,7 +235,7 @@
 
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
 
-    id __weak wself = self;
+    typeof(self) __weak wself = self;
 
     void (^updateContent)();
     updateContent = ^{

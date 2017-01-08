@@ -39,7 +39,8 @@
 
 - (void)invalidateConstraints {
     UIVisualEffectView *effectView = self.effectView;
-    if (self.updatingConstraints == NO && effectView != nil && self.label != nil) {
+    UILabel *label = self.label;
+    if (self.updatingConstraints == NO && effectView != nil && label != nil) {
         self.updatingConstraints = YES;
         
         if (self.layoutConstraints.count > 0) {
@@ -62,7 +63,7 @@
         effectsHeight = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                                      attribute: NSLayoutAttributeHeight
                                                      relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                                        toItem: self.label
+                                                        toItem: label
                                                      attribute: NSLayoutAttributeHeight
                                                     multiplier: 1.0000f
                                                       constant: 0.0000f];
@@ -106,7 +107,7 @@
         labelLeadingMargin = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                                                           attribute: NSLayoutAttributeLeading
                                                                           relatedBy: NSLayoutRelationEqual
-                                                                             toItem: self.label
+                                                                             toItem: label
                                                                           attribute: NSLayoutAttributeLeading
                                                                          multiplier: 1.0000f
                                                                            constant: -4.0000f];
@@ -115,7 +116,7 @@
         labelTrailingMargin = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                                                      attribute: NSLayoutAttributeTrailing
                                                                      relatedBy: NSLayoutRelationEqual
-                                                                        toItem: self.label
+                                                                        toItem: label
                                                                      attribute: NSLayoutAttributeTrailing
                                                                     multiplier: 1.0000f
                                                                       constant: 4.0000f];
@@ -126,7 +127,7 @@
                                                                            self.marginStyle == MADTableViewCellMarginStyleFat ||
                                                                            self.marginStyle == MADTableViewCellMarginStyleMiddle ? NSLayoutAttributeTop : NSLayoutAttributeTop
                                                                 relatedBy: NSLayoutRelationEqual
-                                                                   toItem: self.label
+                                                                   toItem: label
                                                                 attribute: NSLayoutAttributeTop
                                                                multiplier: 1.0000f
                                                                  constant: self.marginStyle == MADTableViewCellMarginStyleTop ||
@@ -138,7 +139,7 @@
                                                                               self.marginStyle == MADTableViewCellMarginStyleFat ||
                                                                               self.marginStyle == MADTableViewCellMarginStyleMiddle ? NSLayoutAttributeBottomMargin : NSLayoutAttributeBottom
                                                                    relatedBy: NSLayoutRelationEqual
-                                                                      toItem: self.label
+                                                                      toItem: label
                                                                    attribute: NSLayoutAttributeBottom
                                                                   multiplier: 1.0000f
                                                                     constant: self.marginStyle == MADTableViewCellMarginStyleBottom ||

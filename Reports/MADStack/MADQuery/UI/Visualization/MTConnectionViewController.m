@@ -114,19 +114,13 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)dealloc { }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        
+        MADProgressView *progressView;
+        progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
+        self.progressView = progressView;
     }
-    
-    MADProgressView *progressView;
-    progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
-    self.progressView = progressView;
-    
+    return self;
 }
 
 #pragma mark - View lifecycle
@@ -193,21 +187,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark - Progress Notifications
 
 - (void)objectDidUpdateProgress:(NSNotification *)sender {
-    MADProgress *progressView;
-    UINavigationItem *navigationItem;
-    NSString *message;
-    float progress;
-    
-    progressView = sender.userInfo[MADNotificationProgressKey];
-    message = progressView.message.copy;
-    progress = progressView.progress;
-    
-    navigationItem = self.navigationItem;
-    progressView = self.progressView;
-
+    MADProgress *progress;
+    progress = sender.userInfo[MADNotificationProgressKey];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        self.progressView.progress = progress;
-        self.navigationItem.prompt = message;
+        self.progressView.progress = progress.progress;
+        self.navigationItem.prompt = progress.message.copy;
     }];
 }
 

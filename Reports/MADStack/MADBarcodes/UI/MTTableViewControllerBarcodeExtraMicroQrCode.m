@@ -68,7 +68,9 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [self.delegate barcodeMicroQrCodeAutomaticResizing];
+    id <MTTableViewControllerBarcodeExtraMicroQrCodeDelegate> delegate;
+    delegate = self.delegate;
+    BOOL autoresize = [delegate barcodeMicroQrCodeAutomaticResizing];
     UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -79,12 +81,12 @@
         cellError.detailTextLabel.text = automatic;
     } else {
         cellAuto.accessoryType = UITableViewCellAccessoryNone;
-        NSInteger initalErrorCorrecion = [self.delegate barcodeMicroQrCodeInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [delegate barcodeMicroQrCodeInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             cellError.detailTextLabel.text = automatic;
             cellSize.detailTextLabel.text = @"Custom";
         }
-        NSInteger initalSize = [self.delegate barcodeMicroQrCodeInitalSize];
+        NSInteger initalSize = [delegate barcodeMicroQrCodeInitalSize];
         if (initalSize == 0) {
             cellSize.detailTextLabel.text = automatic;
             cellError.detailTextLabel.text = @"Custom";
@@ -141,14 +143,19 @@
 }
 
 - (NSInteger)initalRow {
-    return self.displayingSize ? [self.delegate barcodeMicroQrCodeInitalSize] : [self.delegate barcodeMicroQrCodeInitalErrorCorrection];
+    id <MTTableViewControllerBarcodeExtraMicroQrCodeDelegate> delegate;
+    delegate = self.delegate;
+    return self.displayingSize ? [delegate barcodeMicroQrCodeInitalSize] :
+                                 [delegate barcodeMicroQrCodeInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
+    id <MTTableViewControllerBarcodeExtraMicroQrCodeDelegate> delegate;
+    delegate = self.delegate;
     if (self.displayingSize) {
-        [self.delegate barcodeMicroQrCodeDidSetSize:tag];
+        [delegate barcodeMicroQrCodeDidSetSize:tag];
     } else {
-        [self.delegate barcodeMicroQrCodeDidSetErrorCorrection:tag];
+        [delegate barcodeMicroQrCodeDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

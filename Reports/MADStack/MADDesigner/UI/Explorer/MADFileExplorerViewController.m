@@ -159,7 +159,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     @property (nonatomic, readwrite, strong) MADDocumentManager *documentManager;
 
     // This is the collection view
-    @property (weak, nonatomic)     IBOutlet MADFileExplorerView *fileExplorerView;
+    @property (nonatomic, weak)     IBOutlet MADFileExplorerView *fileExplorerView;
 
     @property (nonatomic, strong)   NSNumberFormatter *subtitleNumberFormatter;
 
@@ -350,6 +350,47 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
         self.progressViewFileManager = progressView;
         
+        NSString *hint;
+        hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
+        self.barButtonItemEdit.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemAddNewDocument,
+                                 MADHintBarButtonItemAddNewDocument);
+        self.barButtonItemAddNewDocument.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemStore, MADHintBarButtonItemStore);
+        self.barButtonItemLicensing.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemDelete, MADHintBarButtonItemDelete);
+        self.barButtonItemTrash.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemAction, MADHintBarButtonItemAction);
+        self.barButtonItemAction.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemDuplicate, MADHintBarButtonItemDuplicate);
+        self.barButtonItemDuplicate.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
+        self.barButtonItemInformationDocument.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
+        self.barButtonItemInformation.accessibilityHint = hint;
+        
+        hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
+        self.barButtonItemAbout.accessibilityHint = hint;
+
+        UIBarButtonItem *barButtonItemDuplicate;
+        SEL selector = @selector(actionDuplicate:);
+        barButtonItemDuplicate = [MADBarButtonItem newBarButtonItemDuplicate: self
+                                                                      action: selector];
+        
+        self.barButtonItemDuplicate = barButtonItemDuplicate;
+        
+        selector = @selector(actionEdit:);
+        UIBarButtonItem *editButton = [MADBarButtonItem newBarButtonItemEdit: self
+                                                                      action: selector];
+        self.barButtonItemEdit = editButton;
+
     }
     return self;
     
@@ -357,9 +398,15 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark UIViewController
+- (void)loadView {
+    [super loadView];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
  /*
     id <UIGestureRecognizerDelegate> __weak gestureDelegate = self;
@@ -425,7 +472,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                        selector: cloudPrefs
                                                                          object: NULL];
         [operationQueueBackground addOperation:getUserCloudPreferences];
-
         
     }];
     
@@ -436,80 +482,30 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
     
     
-    NSString *hint;
-    
-    UIBarButtonItem *barButtonItemDuplicate;
-    SEL handleDuplicate = @selector(actionDuplicate:);
-    barButtonItemDuplicate = [MADBarButtonItem newBarButtonItemDuplicate: self
-                                                                  action: handleDuplicate];
-    
+
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:_barButtonItemAction];
     [toolbarButtons removeObject:_barButtonItemCloudDown];
-    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
+    [toolbarButtons insertObject:_barButtonItemDuplicate atIndex:1];
     [self setToolbarItems:toolbarButtons animated:NO];
-    _barButtonItemDuplicate = barButtonItemDuplicate;
-    
-    UIBarButtonItem *editButton = [MADBarButtonItem newBarButtonItemEdit: self
-                                                                  action: @selector(actionEdit:)];
-    _barButtonItemEdit = editButton;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
-    _barButtonItemEdit.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemAddNewDocument,
-                             MADHintBarButtonItemAddNewDocument);
-    _barButtonItemAddNewDocument.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemStore, MADHintBarButtonItemStore);
-    _barButtonItemLicensing.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemDelete, MADHintBarButtonItemDelete);
-    _barButtonItemTrash.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemAction, MADHintBarButtonItemAction);
-    _barButtonItemAction.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemDuplicate, MADHintBarButtonItemDuplicate);
-    _barButtonItemDuplicate.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
-    _barButtonItemInformationDocument.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
-    _barButtonItemInformation.accessibilityHint = hint;
-    
-    hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
-    _barButtonItemAbout.accessibilityHint = hint;
-    
-    
-    // inital layout
-    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
     
     // not editing
     [self setEditing: NO animated: NO];
     
     // add gestures
     
-    UITapGestureRecognizer *tapGestureRecognizer;
-    SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
-    tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                   action: didTapCollectionView];
-    tapGestureRecognizer.delegate = self;
-    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
+    //UITapGestureRecognizer *tapGestureRecognizer;
+    //SEL didTapCollectionView = @selector(handleDidTapCollectionView:);
+    //tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+    //                                                               action: didTapCollectionView];
+    //tapGestureRecognizer.delegate = self;
+    //[self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
     self.documentManager.delegate = self;
     self.collectionView.dataSource = self.documentManager;
     
     // update statusbar?
     [self setNeedsStatusBarAppearanceUpdate];
-
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-#pragma mark Start observing
     
     SEL selector;
     NSNotificationCenter *center;
@@ -537,6 +533,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                selector: selector
                    name: MADNotificationCloudActivityCompleted
                  object: nil];
+
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+#pragma mark Start observing
 
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
@@ -729,26 +732,27 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark UIViewController
-
+/*
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        UIView * __weak backgroundView = self.collectionView.backgroundView;
+        //UIView * __weak backgroundView = self.collectionView.backgroundView;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self.collectionView setNeedsDisplay];
+            NSLog(@"%s", __PRETTY_FUNCTION__);
             
-            [backgroundView setNeedsDisplay];
-            
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            NSLog(@"%s", __PRETTY_FUNCTION__);
+
+        }];
     }
 
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (self.traitCollection.horizontalSizeClass != previousTraitCollection.horizontalSizeClass) {
         [self.collectionView.collectionViewLayout invalidateLayout];
     }
@@ -756,8 +760,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -765,7 +767,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
 
 }
-
+*/
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.presentedViewController;
 }
@@ -829,11 +831,21 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
-    return NO;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    return YES;
+}
+
+- (BOOL)canResignFirstResponder {
+    return YES;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return NO;
+    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromSelector(action));
+    BOOL result = NO;
+    if (@selector(handleDidTapCollectionView:) == action) {
+        result = YES;
+    }
+    return result;
 }
 
 #pragma mark -
@@ -850,6 +862,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark Touch Event Handlers
 
 - (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.searchBar resignFirstResponder];
     if (self.isEditing) {
         [self actionEdit:self];
@@ -1545,20 +1558,27 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         if (self.navigationItem.titleView != nil) {
         
+            typeof(self) __weak weakSelf = self;
             UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
             [UIView transitionWithView: titleView
                               duration: 0.2000f
                                options: UIViewAnimationOptionCurveEaseOut
                             animations: ^{
-                                   self.searchBar.alpha = 1.0000f;
-                                   self.navigationItem.titleView.alpha = 0.0000f;
-                                   self.navigationItem.titleView = searchViewHolder;
-                               } completion:^(BOOL finished) {
-                                   if (self.searchBar.isFirstResponder == NO) {
-                                       [self.searchBar becomeFirstResponder];
-                                       _searchBar.hidden = NO;
-                                   }
-                               }];
+                                typeof(self) strongSelf = weakSelf;
+                                if (strongSelf) {
+                                    strongSelf.searchBar.alpha = 1.0000f;
+                                    strongSelf.navigationItem.titleView.alpha = 0.0000f;
+                                    strongSelf.navigationItem.titleView = searchViewHolder;
+                                }
+                            } completion:^(BOOL finished) {
+                                typeof(self) strongSelf = weakSelf;
+                                if (strongSelf) {
+                                    if (strongSelf.searchBar.isFirstResponder == NO) {
+                                        [strongSelf.searchBar becomeFirstResponder];
+                                        strongSelf.searchBar.hidden = NO;
+                                    }
+                                }
+                            }];
         }
         
     } else {
@@ -1572,18 +1592,23 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         self.navigationItem.titleView.alpha = 0.0000f;
         self.navigationItem.leftBarButtonItem.enabled = YES;
         
+        typeof(self) __weak weakSelf = self;
         UIView *titleView = self.navigationItem.titleView;
         [UIView transitionWithView: titleView
                           duration: 0.2000f
                            options: UIViewAnimationOptionCurveEaseOut animations:^{
-                               
-                               self.searchBar.alpha = 0.0000f;
-                               self.navigationItem.titleView.alpha = 1.0000f;
-                               self.navigationItem.titleView = titleView;
-                               
+                               typeof(self) strongSelf = weakSelf;
+                               if (strongSelf) {
+                                   strongSelf.searchBar.alpha = 0.0000f;
+                                   strongSelf.navigationItem.titleView.alpha = 1.0000f;
+                                   strongSelf.navigationItem.titleView = titleView;
+                               }
                            } completion:^(BOOL finished) {
                                if (finished) {
-                                   self.searchBar.hidden = YES;
+                                   typeof(self) strongSelf = weakSelf;
+                                   if (strongSelf) {
+                                       strongSelf.searchBar.hidden = YES;
+                                   }
                                }
                            }];
         
@@ -1617,6 +1642,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 - (IBAction)actionDone:(id)sender {
+
     self.editing = NO;
     //self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -1635,7 +1661,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     for (NSIndexPath *path in collectionView.indexPathsForSelectedItems) {
         [collectionView deselectItemAtIndexPath:path animated:YES];
     }
-    for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+    
+    NSArray<__kindof UICollectionViewCell *> *visibleCells;
+    visibleCells = self.collectionView.visibleCells;
+    MADCollectionViewCellDocument *cell;
+    for (cell in visibleCells) {
         cell.editing = NO;
     }
 

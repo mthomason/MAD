@@ -342,57 +342,73 @@ void madwarn(char *err,  const char*err2) { }
    completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion  {
     
     MADocument *strongDocument = document;
+    
     [strongDocument regenThumbnail];
     [strongDocument removeObservers];
+    
+    NSURL *fileURL = strongDocument.fileURL.copy;
+    NSURL *gutsUrl = strongDocument.urlGuts.copy;
+    
 
+    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
+    strongDocument.thumbnail = thumbnail;
+    
+    if (strongDocument != nil) {
+        //strongDocument.thumbnail = nil;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+                completion(successClose, fileURL, gutsUrl);
+            }];
+        }];
+    }
+
+    
     //void (^closeCompletionHandler)(BOOL);
     //void (^origionalCompletionHandler)(BOOL, NSURL *);
     //origionalCompletionHandler = completion;
     
-    NSURL *fileURL = strongDocument.fileURL.copy;
-    NSURL *gutsUrl = strongDocument.urlGuts.copy;
     //closeCompletionHandler = ^(BOOL successClose) {
     //    completion(successClose, fileURL, gutsUrl);
     //};
     
     //MADocument * __weak weakdoc = document;
     /*void (^ saveCompletionHandler)(BOOL);
-    saveCompletionHandler = ^(BOOL success) {
-        
-        if (strongDocument != nil) {
-            if (success) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-                        completion(successClose, fileURL, gutsUrl);
-                    }];
-                }];
-            }
-            strongDocument.thumbnail = nil;
-        }
-        
-    };*/
+     saveCompletionHandler = ^(BOOL success) {
+     
+     if (strongDocument != nil) {
+     if (success) {
+     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+     [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+     completion(successClose, fileURL, gutsUrl);
+     }];
+     }];
+     }
+     strongDocument.thumbnail = nil;
+     }
+     
+     };*/
     //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        
-        UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
-        strongDocument.thumbnail = thumbnail;
-        //[strongDocument saveToURL: fileURL
-        //         forSaveOperation: UIDocumentSaveForOverwriting
-        //        completionHandler: ^(BOOL success) {
-                    
-                    if (strongDocument != nil) {
-                                                strongDocument.thumbnail = nil;
-                        //if (success) {
-                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-                                    completion(successClose, fileURL, gutsUrl);
-                                }];
-                            }];
-                        //}
-                    }
-                    
-          //      }];
+    
+    //UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
+    //strongDocument.thumbnail = thumbnail;
+    //[strongDocument saveToURL: fileURL
+    //         forSaveOperation: UIDocumentSaveForOverwriting
+    //        completionHandler: ^(BOOL success) {
+    
+    //if (strongDocument != nil) {
+    //    strongDocument.thumbnail = nil;
+    //    //if (success) {
+    //    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    //        [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+    //            completion(successClose, fileURL, gutsUrl);
+    //        }];
+    //    }];
+        //}
+    //}
+    
+    //      }];
     //}];
-
+    
     
 }
 
@@ -710,7 +726,7 @@ READFROMURL_END:;
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
-    [private performBlockAndWait:^{
+    [private performBlockAndWait: ^{
 
         RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -722,8 +738,9 @@ READFROMURL_END:;
                                                             forManagedObjectContext: private];
         newQueryTable.inQuery = query;
         
-        NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables],
-                     *newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
+        NSMutableSet *tablesInQuery, *newQueryFields;
+        tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables];
+        newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
         
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
             @autoreleasepool {
@@ -771,7 +788,8 @@ READFROMURL_END:;
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
-    [private performBlockAndWait:^{
+
+    [private performBlockAndWait: ^{
         
         RptqQueryField *queryField = [private objectWithID:queryFieldObjectID];
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -1010,7 +1028,7 @@ READFROMURL_END:;
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
-    [private performBlockAndWait:^{
+    [private performBlockAndWait: ^{
 
         RptqDocumentObject *documentObject = [private objectWithID:objectID];
         RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
@@ -1068,10 +1086,10 @@ READFROMURL_END:;
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = managedObjectContext;
-
-    void (^removeRptqGroup)(RptqQueryGroup *group);
-    removeRptqGroup = ^(RptqQueryGroup *group) {
-
+    
+    [private performBlockAndWait: ^{
+        
+        RptqQueryGroup *group = [private objectWithID:groupID];
         if (group) {
             RptqQuery *query = group.inQuery;
             
@@ -1105,14 +1123,8 @@ READFROMURL_END:;
                 sortedGroup.weight = counterWrapper;
                 counter++;
             }
-
+            
         }
-    };
-    
-    [private performBlockAndWait:^{
-        
-        RptqQueryGroup *group = [private objectWithID:groupID];
-        removeRptqGroup(group);
         
         NSError * __autoreleasing * error = NULL;
         [private save:error];

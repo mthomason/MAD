@@ -25,7 +25,7 @@ NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadK
 
 @implementation MADNotificationDidReadRows
 
-static MADNotificationDidReadRows *sharedSingleton = nil;
+static MADNotificationDidReadRows *_sharedSingleton = nil;
 
 - (void)dealloc {
     NSAssert(NO, @"Don't dealloc the singleton.");
@@ -34,14 +34,14 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedSingleton = [[super allocWithZone:NULL] init];
+        _sharedSingleton = [[super allocWithZone:NULL] init];
         NSDate *lastUpdate = [NSDate date].copy;
-        sharedSingleton.lastUpdate = lastUpdate;
+        _sharedSingleton.lastUpdate = lastUpdate;
     });
 }
 
 + (MADNotificationDidReadRows *)sharedObject {
-    return sharedSingleton;
+    return _sharedSingleton;
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {

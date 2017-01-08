@@ -53,11 +53,11 @@ static NSString * const SqlDelimitorObject = @", %@";
 
 - (NSString *)columnNames {
     NSMutableString *colmunNames = [[NSMutableString alloc] init];
-    
-    NSUInteger columnCount = self.columnKeys.count;
-    NSString * __weak fieldName;
+    NSArray *columnKeys = self.columnKeys;
+    NSUInteger columnCount = columnKeys.count;
+    NSString *fieldName;
     for (NSUInteger columnCounter=0; columnCounter<columnCount; columnCounter++) {
-        fieldName = self.columnKeys[columnCounter];
+        fieldName = columnKeys[columnCounter];
         
         MADSafeQueryField *safeFieldName = [self.cacheDatabase newSafeIdentifier:fieldName];
         if (columnCounter > 0) {

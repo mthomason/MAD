@@ -17,16 +17,11 @@
 
 #import "MADOperationQueue.h"
 
-@interface MADCacheManager () {
-    MADOperationQueue *_queueForCachingData;
-}
+@interface MADCacheManager ()
     @property (nonatomic, strong, readonly) MADOperationQueue *queueForCachingData;
-
 @end
 
 @implementation MADCacheManager
-
-@synthesize queueForCachingData = _queueForCachingData;
 
 + (instancetype)sharedManager {
     
@@ -37,7 +32,6 @@
         _sharedManager = [[self alloc] initPrivate];
         assert(_sharedManager != nil);
     });
-    
     return _sharedManager;
 }
 

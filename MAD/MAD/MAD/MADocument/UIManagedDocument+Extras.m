@@ -49,6 +49,7 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
     NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
     NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
     
+
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;

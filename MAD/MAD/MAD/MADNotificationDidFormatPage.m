@@ -28,7 +28,7 @@ static const NSInteger PageIntervalInitalMax = 7;
 
 @implementation MADNotificationDidFormatPage
 
-static MADNotificationDidFormatPage *sharedSingleton = nil;
+static MADNotificationDidFormatPage *_sharedSingleton = nil;
 
 - (void)dealloc {
     NSAssert(NO, @"Don't dealloc the singleton.");
@@ -37,13 +37,13 @@ static MADNotificationDidFormatPage *sharedSingleton = nil;
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedSingleton = [[super allocWithZone:NULL] init];
-        [sharedSingleton initializeRowInterval];
+        _sharedSingleton = [[super allocWithZone:NULL] init];
+        [_sharedSingleton initializeRowInterval];
     });
 }
 
 + (MADNotificationDidFormatPage *)sharedObject {
-    return sharedSingleton;
+    return _sharedSingleton;
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {
