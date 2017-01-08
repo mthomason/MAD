@@ -38,7 +38,7 @@
 }
 
 - (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
-    [UIResponder ]
+//    [UIResponder ]
 }
 
 @end
