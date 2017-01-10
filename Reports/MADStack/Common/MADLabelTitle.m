@@ -13,29 +13,24 @@
 @implementation MADLabelTitle
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         self.autoresizingMask = MADViewAutoresizingFlexable();
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.lineBreakMode = NSLineBreakByTruncatingTail;
         self.numberOfLines = 1;
         self.minimumScaleFactor = 0.8f;
         self.adjustsFontSizeToFitWidth = YES;
+        [self setContentCompressionResistancePriority:900 forAxis:UILayoutConstraintAxisHorizontal];
     }
     return self;
 }
 
-- (void)updateConstraints {
-    [super updateConstraints];
-    [self setContentCompressionResistancePriority:900 forAxis:UILayoutConstraintAxisHorizontal];
-}
-
 - (void)setText:(NSString *)text {
-    MADLogoString *attributedText;
+    MADAttributedStringLogo *attributedText;
     NSString *safetext;
     
     safetext = text.copy;
-    attributedText = [NSAttributedString newLogoStringForTitle:safetext];
+    attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
     
     super.text = safetext;
     

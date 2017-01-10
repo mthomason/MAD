@@ -48,6 +48,7 @@ struct MADMapStringsImpl {
 
     std::map<short, std::string>::const_iterator found = impl->_container.find(i);
     if (found == impl->_container.end()) return nil;
+    
     const char *c_str = found->second.c_str();
     NSString *result = [NSString stringWithCString:c_str encoding:NSUTF8StringEncoding];
     return result;

@@ -11,11 +11,9 @@
 
 #import <Foundation/NSAttributedString.h>
 
-typedef NSAttributedString MADLogoString;
+@interface MADAttributedStringLogo : NSAttributedString
 
-@interface NSAttributedString (Logo)
-
-    + (MADLogoString *)newLogoStringForTitle:(NSString *)title;
+    + (instancetype)newLogoStringForTitle:(NSString *)title;
 
 @end
 

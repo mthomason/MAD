@@ -39,65 +39,66 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
 
 @interface MTRulerView ()
 
+    @property (readwrite, nonatomic, strong) NSParagraphStyle *paragraphStyle;
+    @property (readwrite, nonatomic, strong) UIFontDescriptor *fontDescriptor;
+
 @end
 
 @implementation MTRulerView
 
 
 - (instancetype)init {
-    if (self = [super init]) {
-        [self commonInit];
-    }
-    return self;
+    return [self initWithFrame:CGRectZero];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self commonInit];
+        UIFontDescriptor *fontDescriptor;
+        NSMutableParagraphStyle *paragraphStyle;
+        
+        self.layer.borderWidth = [UIView borderWidthThin];
+        self.layer.borderColor = [UIColor blackColor].CGColor;
+        self.backgroundColor = [UIColor whiteColor];
+        
+        self.layer.borderWidth = [UIView borderWidthThin];
+        self.layer.borderColor = [MADColorEverydayApps newColorBorderColor].CGColor;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+        paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+
+        self.paragraphStyle = paragraphStyle;
+        
+        fontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
+        self.fontDescriptor = fontDescriptor;
     }
     return self;
-}
-
-- (void)commonInit {
-
-    UIColor *blackColor = [UIColor blackColor];
-    UIColor *whiteColor = [UIColor whiteColor];
-    UIColor *otherColor = [MADColorEverydayApps newColorBorderColor];
-
-    self.layer.borderWidth = [UIView borderWidthThin];
-    self.layer.borderColor = blackColor.CGColor;
-    self.backgroundColor = whiteColor;
-    
-    self.layer.borderWidth = [UIView borderWidthThin];
-    self.layer.borderColor = otherColor.CGColor;
-    self.translatesAutoresizingMaskIntoConstraints = NO;
-
 }
 
 - (void)drawRect:(CGRect)rect {
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
+    UIFont *font = [UIFont fontWithDescriptor:_fontDescriptor size:5.0000f];
+    NSDictionary *attributes;
+    attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            font, NSFontAttributeName,
+                                            _paragraphStyle, NSParagraphStyleAttributeName, nil];
     
-    UIFont *fontStandard = [UIFont systemFontOfSize: 5.0000f];
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.lineBreakMode = NSLineBreakByClipping;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                    fontStandard, NSFontAttributeName,
-                                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
-    
+    NSString *s;
     CGFloat length;
+    CGRect locationRect;
     CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
     static const CGFloat lineWidth = 1.0000f;
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / eigthInchInPoints(); i++) {
         @autoreleasepool {
             if ((i % 8) == 0) {
-                CGRect locationRect = CGRectMake((CGFloat)xPoint(i, eigthInchInPoints()) - 5.000f,
+                locationRect = CGRectMake((CGFloat)xPoint(i, eigthInchInPoints()) - 5.000f,
                                                  rect.size.height - 8.0000f,
                                                  10.0000f, 5.0000f);
-                NSString *s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 8];
+                s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 8];
                 [s drawInRect:locationRect withAttributes:attributes];
                 length = 1.0000f;
                 CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
@@ -116,18 +117,19 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
         }
     }
     
-    UIFont *fontMetric = [UIFont systemFontOfSize: 4.0000f];
-    NSDictionary *attributesMetric = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                    fontMetric, NSFontAttributeName,
-                                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
+    font = [font fontWithSize: 4.0000f];
+    attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            font, NSFontAttributeName,
+                                            _paragraphStyle, NSParagraphStyleAttributeName, nil];
     CGFloat offsetInPoints = (72.0000f / 2.5400f) / 10.0000f;   //One cm
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
             if ((i % 10) == 0) {
-                CGRect locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0000f) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
-                NSString *s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 10];
-                [s drawInRect:locationRect withAttributes:attributesMetric];
+                locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0000f) - 5.000f,
+                                                          1.0000f, 10.0000f, 5.0000f);
+                s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 10];
+                [s drawInRect:locationRect withAttributes:attributes];
                 length = 2.0000f;
                 CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
             } else if (i % 5) {

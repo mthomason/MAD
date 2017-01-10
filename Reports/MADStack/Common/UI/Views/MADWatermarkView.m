@@ -151,7 +151,6 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (!_drawn) {
         _drawn = YES;
         [MADWatermarkView drawBackground:self.frame onView:&self];

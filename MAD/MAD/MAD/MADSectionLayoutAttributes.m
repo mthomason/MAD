@@ -92,8 +92,7 @@
 #pragma mark NSCopying
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    NSIndexPath *path = [self.indexPath copyWithZone:zone];
-    MADSectionLayoutAttributes *copy = [[self class] layoutAttributesForCellWithIndexPath:path];
+    MADSectionLayoutAttributes *copy = [super copyWithZone:zone];
     copy.objectID = [self.objectID copyWithZone:zone];
     copy.frame = self.frame;
     return copy;

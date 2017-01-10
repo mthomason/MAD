@@ -11,20 +11,23 @@
 @implementation MADAnimatedTransitioningNavigationCrossFadePush
 
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.5;
+    return .70;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    UIViewController* toViewController   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     
-    [[transitionContext containerView] addSubview:toViewController.view];
+    [toViewController beginAppearanceTransition:YES animated:YES];
+
+    [[transitionContext containerView] addSubview:toView];
     
-    toViewController.view.alpha = 0.0;
-    
+    toView.alpha = 0.0000f;
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        toViewController.view.alpha = 1.0;
+        toView.alpha = 1.0000f;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        [toViewController endAppearanceTransition];
     }];
 }
 

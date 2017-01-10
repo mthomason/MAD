@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSAttributedString+Common.h"
+#import "MADAttributedStringCommon.h"
 #import <MAD/MADConstants.h>
 #import <UIKit/UIInterface.h>
 #import <UIKit/UIFont.h>
@@ -42,8 +42,8 @@
     style.lineBreakMode = NSLineBreakByWordWrapping;
     
     UIColor *black = [UIColor blackColor];
-    id twitter = [MADAttributedStringCommon newAttributedStringTwitter];
-    twitter = [twitter mutableCopy];
+    id twit = [MADAttributedStringCommon newAttributedStringTwitter];
+    id twitter = [twit mutableCopy];
     UIFont *sy = [[UIFont preferredFontForTextStyle:UIFontTextStyleBody] fontWithSize:12.0000f];
     NSDictionary *attributesBlack = @{ NSForegroundColorAttributeName :  black, NSFontAttributeName: sy};
     

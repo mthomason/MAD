@@ -17,8 +17,8 @@
 
 #import "MADTableViewCellAuto.h"
 #import "ACAccountStore+Social.h"
-#import "UIButton+FollowTwitter.h"
-#import "NSAttributedString+Common.h"
+#import "MADButtonTwitter.h"
+#import "MADAttributedStringCommon.h"
 
 #import "MADOperationQueue.h"
 #import "MADPromptOperationDisplayError.h"
@@ -162,7 +162,8 @@
         case 4: {
             cell.label.text = @"Twitter";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps)];
+            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget:self
+                                                                              action:@selector(followEverydayApps)];
             cell.accessoryView = b;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.userInteractionEnabled = YES;

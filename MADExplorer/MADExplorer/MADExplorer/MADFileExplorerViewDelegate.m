@@ -274,12 +274,17 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
         shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return _editing ?
+    [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
+/*
     //Deselect when not editing, or when editing and already selected.
     BOOL shouldDeselectItemAtIndexPath = YES;
     if (_editing) {
         shouldDeselectItemAtIndexPath = [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item];
     }
     return shouldDeselectItemAtIndexPath;
+ */
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -410,7 +415,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)openURL:(NSURL *)url {
     MADFileExplorerDelegate delegate = self.delegate;
     NSURL *urlToOpen = url.copy;
-    id open = [[NSInvocationOperation alloc] initWithTarget: self.delegate
+    id open = [[NSInvocationOperation alloc] initWithTarget: delegate
                                                    selector: @selector(openDocumentAtURL:)
                                                      object: urlToOpen];
     [[NSOperationQueue mainQueue] addOperation:open];

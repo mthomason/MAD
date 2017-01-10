@@ -16,12 +16,16 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIResponder.h>
 
+#import "MADAnimatedTransitioningNavigationCrossFadePop.h"
+#import "MADAnimatedTransitioningNavigationCrossFadePush.h"
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MADTransparentPresentationController.h"
 
 #import "MADFileExplorerNavigationBar.h"
 #import "MADFileExplorerToolbar.h"
+#import "MADFileExplorerViewController.h"
 
 @interface MADNavigationControllerFileExplorer ()
 
@@ -49,15 +53,11 @@
             appearanceProxyNavigationBar.barTintColor = [UIColor clearColor];
             appearanceProxyNavigationBar.translucent = YES;
             
-            //NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-            //titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-
             appearanceProxyToolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses: classes];
             appearanceProxyToolbar.barTintColor = [MADColorEverydayApps newColorBlue];
             appearanceProxyToolbar.tintColor    = [MADColorEverydayApps newColorWhite];
             appearanceProxyToolbar.barStyle = UIBarStyleBlack;
             appearanceProxyToolbar.translucent = YES;
-
             
         }
     }
@@ -65,23 +65,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIViewController *childViewController;
-    NSArray<__kindof UIViewController *> *childViewControllers;
-    childViewControllers = self.childViewControllers;
-    for (childViewController in childViewControllers) {
-        if ([childViewController conformsToProtocol:@protocol(UINavigationControllerDelegate)]) {
-            self.delegate = (id <UINavigationControllerDelegate>)childViewController;
-        }
-    }
+    self.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    [self.navigationBar setTitleTextAttributes:titleTextAttributes];
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear: animated];
+    if (self.viewControllers.count == 1) {
+        MADFileExplorerViewController *fileExplorer;
+        fileExplorer = [MADFileExplorerViewController newFileExplorerViewController];
+        [self pushViewController:fileExplorer animated:YES];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -109,6 +110,52 @@
 
 - (MADNavigationControllerType)controllerType {
     return MADNavigationControllerTypeFileExplorer;
+}
+
+#pragma mark -
+#pragma mark UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+ //   [viewController viewWillAppear: animated];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+  //  [viewController viewDidAppear:animated];
+}
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
+    return nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC  {
+
+    id <UIViewControllerAnimatedTransitioning> animationController;
+    if ([toVC isKindOfClass:[MADFileExplorerViewController class]]) {
+        toVC.modalPresentationStyle = UIModalPresentationCustom;
+        
+        switch (operation) {
+            case UINavigationControllerOperationPush:
+                animationController = [[MADFileExplorerAnimatedCrossFadePush alloc] init];
+                break;
+
+            case UINavigationControllerOperationPop:
+                animationController = [[MADFileExplorerAnimatedCrossFadePop alloc] init];
+                break;
+
+            case UINavigationControllerOperationNone:
+            default:
+                break;
+        }
+    }
+    return animationController;
 }
 
 @end

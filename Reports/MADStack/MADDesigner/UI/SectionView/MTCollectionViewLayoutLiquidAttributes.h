@@ -12,12 +12,13 @@
 #import <UIKit/UICollectionViewLayout.h>
 
 @interface MTCollectionViewLayoutLiquidAttributes : UICollectionViewLayoutAttributes
+    <NSCopying>
 
     @property (nonatomic, assign) CGPoint dropPoint;
     @property (nonatomic, assign) NSUInteger dropIndex;
     @property (nonatomic, assign) BOOL lastTouchPointValid;
     @property (nonatomic, assign) CGPoint lastTouchPoint;
-    @property (nonatomic, strong) NSString *layoutDescription;
+    @property (nonatomic, copy) NSString *layoutDescription;
 
 @end
 

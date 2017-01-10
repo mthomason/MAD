@@ -27,12 +27,14 @@
 
 #import "MADTableViewCellBase.h"
 
-#import "UIButton+FollowTwitter.h"
+#import "MADButtonTwitter.h"
 #import "ACAccountStore+Social.h"
 
 #import "MADOperationQueue.h"
 #import "MADPromptOperationDisplayError.h"
 #import "MADBlockOperation.h"
+
+#import "MADAttributedStringCommon.h"
 
 static NSString * const MADStoryboardAbout = @"MADStoryboardAbout";
 static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
@@ -75,6 +77,16 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     return controller;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.tableView.allowsSelection = YES;
+    self.preferredContentSize = CGSizeMake(320.0000f, 260.0000f);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToAbout:(UIStoryboardSegue *)action { }
@@ -85,10 +97,11 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     return action == @selector(unwindToAbout:);
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.tableView.allowsSelection = YES;
-    self.preferredContentSize = CGSizeMake(320.0000f, 260.0000f);
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"MTSegueAboutGettingStarted"] ||
+        [segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
+        ((MADAboutTableViewController *)segue.destinationViewController).delegate = self.delegate;
+    }
 }
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
@@ -102,42 +115,18 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
                                            withSender: sender];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
 - (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
     NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
-    NSString *versionText = [NSString stringWithFormat:versionTextKey, globalBundleVersion];
+    NSString *versionText = [[NSString alloc] initWithFormat:versionTextKey, globalBundleVersion];
     return versionText;
 }
 
 - (NSString *)buildText {
     NSString *buildTextKey = NSLocalizedString(@"r%@", @"r%@");
     NSString *revision = [[MADApplication AppDelegate] revisionNumber];
-    NSString *buildText = [NSString stringWithFormat:buildTextKey, revision];
+    NSString *buildText = [[NSString alloc] initWithFormat:buildTextKey, revision];
     return buildText;
-}
-
-- (NSAttributedString *)trademarkStatement {
-    NSNumber *superscript = @(1);
-    UIFont *font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-    NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript,
-                                 NSFontAttributeName : font};
-    NSAttributedString *r = [[NSAttributedString alloc] initWithString: @"®"
-                                                            attributes: attributes];
-    NSAttributedString *mad = [[NSAttributedString alloc] initWithString: MADTrademark
-                                                              attributes: nil];
-    
-    NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString: mad];
-    [tm appendAttributedString:r];
-    
-    NSAttributedString *statement = [[NSAttributedString alloc] initWithString: @" is a registered trademark of Everyday Apps LLC."
-                                                                    attributes: nil];
-    [tm appendAttributedString: statement];
-    
-    return tm;
 }
 
 - (IBAction)cancel:(id)sender {
@@ -162,13 +151,6 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
  
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MTSegueAboutGettingStarted"] ||
-        [segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        ((MADAboutTableViewController *)segue.destinationViewController).delegate = self.delegate;
-    }
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -179,8 +161,11 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADTableViewCellBase *cell;
+    id attributedText;
+    
     cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
     cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
+
     switch (indexPath.row) {
 
         case 0:
@@ -214,7 +199,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
+            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
@@ -223,7 +208,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             
         case 3:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = @"Copyright EVERYDAY APPS LLC 2015.  All rights reserved.";
+            cell.label.text = @"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.";
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
@@ -232,7 +217,8 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             
         case 4:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.attributedText = [self trademarkStatement];
+            attributedText = [MADAttributedStringCommon newAttributedStringTrademarkStatement];
+            cell.label.attributedText = attributedText;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
@@ -245,7 +231,9 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followMichael) size:small];
+            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget:self
+                                                                              action:@selector(followMichael)
+                                                                                size:small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];

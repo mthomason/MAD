@@ -15,10 +15,12 @@
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    UIViewController* toViewController   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIViewController* fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-
-    [[transitionContext containerView] insertSubview:toViewController.view belowSubview:fromViewController.view];
+    
+    UIView *toView = [transitionContext viewForKey: UITransitionContextToViewKey];
+    UIView *fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
+    [[transitionContext containerView] addSubview:toView];
+    [[transitionContext containerView] insertSubview:toView belowSubview:fromView];
 
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         fromViewController.view.alpha = 0.0000f;

@@ -1,5 +1,5 @@
 //
-//  UIButton+FollowTwitter.h
+//  MADButtonTwitter.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/24/15.

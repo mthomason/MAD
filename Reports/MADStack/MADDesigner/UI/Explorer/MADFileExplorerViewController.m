@@ -291,6 +291,18 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
 }
 
++ (instancetype)newFileExplorerViewController {
+    id controller;
+    NSString *explorerStoryboardIdentifier, *explorerViewControllerIdentifier;
+    explorerStoryboardIdentifier = @"MADDesignerExplorer";
+    explorerViewControllerIdentifier = @"MADIdentifierFileExplorerViewController";
+    id bundle = [NSBundle mainBundle];
+    UIStoryboard *storyboard;
+    storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier bundle:bundle];
+    controller = [storyboard instantiateViewControllerWithIdentifier:explorerViewControllerIdentifier];
+    return controller;
+}
+
 - (void)dealloc {
     
     _barButtonItemAction = nil;
@@ -401,13 +413,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark UIViewController
 - (void)loadView {
     [super loadView];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     //self.navigationController.delegate = self;
     
  /*
@@ -562,8 +574,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     titleView.text = [delegate name].copy;
     titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-    
-    self.navigationItem.titleView = titleView;
+    //self.navigationController.providesPresentationContextTransitionStyle;
+    //self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
@@ -736,7 +748,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark UIViewController
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-/*
+
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -746,10 +758,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         //UIView * __weak backgroundView = self.collectionView.backgroundView;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
             [self.collectionView setNeedsDisplay];
-            NSLog(@"%s", __PRETTY_FUNCTION__);
+            //NSLog(@"%s", __PRETTY_FUNCTION__);
             
         } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            NSLog(@"%s", __PRETTY_FUNCTION__);
+            //NSLog(@"%s", __PRETTY_FUNCTION__);
 
         }];
     }
@@ -768,11 +780,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                  withTransitionCoordinator: coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.collectionView.backgroundView setNeedsDisplay];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    
+    }];
 
 }
-*/
-//- (UIViewController *)childViewControllerForStatusBarHidden {
+
+ //- (UIViewController *)childViewControllerForStatusBarHidden {
 //    return self.presentedViewController;
 //}
 
@@ -2119,29 +2133,79 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     return debug;
 }
 
+@end
+
 #pragma mark -
-#pragma mark UINavigationControllerDelegate
+#pragma mark UIViewControllerContextTransitioning
 
-//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated { }
-//- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated { }
+@implementation MADFileExplorerAnimatedCrossFadePop
 
-//- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED;
-//- (UIInterfaceOrientation)navigationControllerPreferredInterfaceOrientationForPresentation:(UINavigationController *)navigationController NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED;
-
-- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
-                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
-    return nil;
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
+    return 0.7000;
 }
 
-- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-                                            animationControllerForOperation:(UINavigationControllerOperation)operation
-                                                         fromViewController:(UIViewController *)fromVC
-                                                           toViewController:(UIViewController *)toVC  {
-    if ([toVC isKindOfClass:[self class]]) {
-        return self;
-    } else {
-        return nil;
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    UIViewController *fromViewController, *toViewController;
+    UIView *toView, *fromView;
+    
+    fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    toViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    
+    BOOL poppingFileExplorer = NO;
+    if ([fromViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+        poppingFileExplorer = YES;
     }
+        
+    toView = [transitionContext viewForKey: UITransitionContextToViewKey];
+    fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
+    [[transitionContext containerView] addSubview:toView];
+    [[transitionContext containerView] insertSubview:toView belowSubview:fromView];
+    
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+        fromView.alpha = 0.0000f;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        }
+    }];
 }
+
+@end
+
+@implementation MADFileExplorerAnimatedCrossFadePush
+
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
+    return 0.7000;
+}
+
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+
+    UIViewController *fromViewController, *toViewController;
+    UIView *toView, *fromView;
+
+    fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+
+    BOOL pushingFileExplorer = NO;
+    if ([toViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+        pushingFileExplorer = YES;
+    }
+    
+    toView = [transitionContext viewForKey:UITransitionContextToViewKey];
+    fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
+
+    [[transitionContext containerView] addSubview:toView];
+    
+    toView.alpha = 0.0000f;
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+        toView.alpha = 1.0000f;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        }
+    }];
+}
+
 
 @end

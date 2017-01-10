@@ -13,7 +13,7 @@
 #import <UIKit/UICollectionViewLayout.h>
 
 @class MTReportDesignerSectionViewLayoutLiquid;
-@class MTCollectionViewLayoutLiquidAttributes;
+//@class MTCollectionViewLayoutLiquidAttributes;
 @class MADSectionLayoutAttributes;
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate

@@ -1,12 +1,12 @@
 //
-//  UIButton+FollowTwitter.m
+//  MADButtonTwitter.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/24/15.
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIButton+FollowTwitter.h"
+#import "MADButtonTwitter.h"
 #import "MADAttributedStringCommon.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -19,7 +19,8 @@
     return [self newButtonTwitterFolllowTwitterWithTarget:target action:action size:medium];
 }
 
-+ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action size:(MADSizeGeneral)size {
++ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action
+                                                    size:(MADSizeGeneral)size {
 
     void(^formatButton)(MADButtonTwitter *);
     formatButton = ^(MADButtonTwitter *b){

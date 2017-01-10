@@ -326,16 +326,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)presentationTransitionWillBegin {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 - (void)presentationTransitionDidEnd:(BOOL)completed {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 - (void)dismissalTransitionWillBegin {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 - (void)dismissalTransitionDidEnd:(BOOL)completed {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 // This is used for percent driven interactive transitions, as well as for container controllers that have companion animations that might need to
@@ -347,21 +347,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 // This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     //UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     //CGPoint center = viewControllerFrom.view.center;
     self.pageSlider.alpha = 0.0f;
     NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
     [UIView animateWithDuration:transitionDuration animations:^{
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
         self.pageSlider.alpha = 1.0f;
         //viewControllerFrom.view.bounds = CGRectZero;
         //viewControllerFrom.view.center = center;
         //viewControllerFrom.view.transform = CGAffineTransformSwing();
     } completion:^(BOOL finished) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-        //[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        //NSLog(@"%s", __PRETTY_FUNCTION__);
+        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
 }
 
@@ -372,13 +372,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     //short circuit
     
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-        NSLog(@"%@", [context viewControllerForKey:UITransitionContextToViewControllerKey]);
-        NSLog(@"%@", [context viewControllerForKey:UITransitionContextFromViewKey]);
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
     }];
     
 }
@@ -552,9 +547,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
+    //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
 
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
@@ -562,7 +557,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
-        NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
+        //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
         [self.pageSlider setNeedsLayout];

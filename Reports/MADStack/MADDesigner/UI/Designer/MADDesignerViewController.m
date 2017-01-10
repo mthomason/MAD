@@ -89,7 +89,6 @@
 
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
-#import "MTCollectionViewLayoutLiquidAttributes.h"
 
 #import "MADPopoverBackgroundView.h"
 
@@ -297,7 +296,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 }
 
 + (instancetype)newDesignerViewController:(MADocument *)document {
-    static NSString * MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
+    NSString *MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
     id bundle = [NSBundle mainBundle];
     UIStoryboard *storyboard;
     storyboard = [UIStoryboard storyboardWithName:MADStoryboardDesigner bundle:bundle];

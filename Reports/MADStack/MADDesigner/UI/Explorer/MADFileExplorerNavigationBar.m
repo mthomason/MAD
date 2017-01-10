@@ -7,15 +7,34 @@
 //
 
 #import "MADFileExplorerNavigationBar.h"
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/NSAttributedString.h>
+
+@class UINavigationController;
+@class UIViewController;
 
 @implementation MADFileExplorerNavigationBar
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (void)initialize {
+    if (self == [MADFileExplorerNavigationBar class]) {
+        @autoreleasepool {
+            
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            UINavigationBar *navigationBar;
+            NSMutableDictionary *titleTextAttributes;
+            classes = [[NSArray alloc] initWithObjects: [UINavigationController class],
+                                                         [UIViewController class], nil];
+            navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
+            navigationBar.tintColor     = [UIColor whiteColor];
+            titleTextAttributes = navigationBar.titleTextAttributes.mutableCopy;
+            if (!titleTextAttributes) {
+                titleTextAttributes = [[NSMutableDictionary <NSString *,id> alloc] initWithCapacity: 1];
+            }
+            titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+            [navigationBar setTitleTextAttributes:titleTextAttributes];
+        }
+    }
 }
-*/
 
 @end

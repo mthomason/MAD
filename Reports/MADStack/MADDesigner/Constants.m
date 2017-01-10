@@ -12,9 +12,9 @@
 
 #import "Constants.h"
 
-NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
-NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
-NSString * const MADTrademark                                       = @"MAD";
+//NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
+//NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
+//NSString * const MADTrademark                                       = @"MAD";
 //NSString * const MADIdentifierGroup                                 = @"group.everydayapps.mad";
 
 #pragma mark - Constants

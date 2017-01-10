@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "MTGraph.h"
 #import "MTVertex.h"
+#import "MADMapStrings.h"
 
 @interface MADDataStructuresTests : XCTestCase
 
@@ -26,6 +27,52 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+- (void)testMapStrings {
+    
+    NSString *ttt;
+    @autoreleasepool {
+        MADMapStrings *map = [[MADMapStrings alloc] init];
+        [map setObject:@"Three" toKey:3];
+        [map setObject:@"Two Hundred" toKey:200];
+        
+        @autoreleasepool {
+            ttt = [NSString stringWithFormat:@"%s", "Three hundred thirty three"];
+            [map setObject:ttt toKey:333];
+        }
+        
+        @autoreleasepool {
+            ttt = [NSString stringWithFormat:@"%s", "Thirty"];
+            [map setObject:ttt toKey:30];
+            ttt = nil;
+        }
+
+        [map setObject:@"Thirty" toKey:30];
+        [map setObject:@"Forty-Seven" toKey:47];
+
+        @autoreleasepool {
+            ttt = [NSString stringWithFormat:@"%s", "Three hundred thirty three again"];
+            [map setObject:ttt toKey:333];
+        }
+
+        [map setObject:@"Eighty-Four" toKey:84];
+        [map setObject:@"Four" toKey:4];
+        [map setObject:nil toKey:48];
+        [map setObject:nil toKey:200];
+        [map setObject:nil toKey:3];
+        [map setObject:nil toKey:47];
+
+        NSString *string = [map objectAtIndex:333];
+        NSLog(@"Result: %@", string);
+    }
+    
+    
+    NSLog(@"Test");
+    NSLog(@"Test");
+    
+    //MTLinkedList *dfsResultsU = [graph depthFirstSearch:vertexU];
+    
 }
 
 - (void)testDepthFirstSearch {

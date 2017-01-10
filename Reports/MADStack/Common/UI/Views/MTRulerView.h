@@ -10,7 +10,6 @@
 #define Reports_MTRulerView_h
 
 #import <UIKit/UIView.h>
-//#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 extern const CGFloat MTReportDesignerRulerHeight;
 

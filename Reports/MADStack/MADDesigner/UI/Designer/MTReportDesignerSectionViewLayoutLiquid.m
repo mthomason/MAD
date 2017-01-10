@@ -9,7 +9,7 @@
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerSectionDecorationView.h"
-#import "MTCollectionViewLayoutLiquidAttributes.h"
+//#import "MTCollectionViewLayoutLiquidAttributes.h"
 
 static inline CGRect rectAvailablePosition1(CGRect rect, CGRect centerRect);
 static inline CGRect rectAvailablePosition1(CGRect rect, CGRect centerRect) {
@@ -55,25 +55,30 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
 + (NSSet *)positionsOfRects: (CGRect)rect
                  aroundRect: (CGRect)centerRect {
     
+    NSSet *placements;
+    CGRect placement0, placement1, placement2, placement3;
+    NSValue *placement0v, *placement1v, *placement2v, *placement3v;
+
     //There exist four potental placement spots for each alredy placed rect
     CGFloat x1 = centerRect.origin.x;
     CGFloat x2 = centerRect.origin.x + centerRect.size.width;
     CGFloat y1 = centerRect.origin.y;
     CGFloat y2 = centerRect.origin.y + centerRect.size.height;
     
-    CGRect placement0, placement1, placement2, placement3;
-    
     placement0 = CGRectMake(x1, y1, rect.size.width, rect.size.height);
     placement1 = CGRectMake(x2, y1, rect.size.width, rect.size.height);
     placement2 = CGRectMake(x2, y2, rect.size.width, rect.size.height);
     placement3 = CGRectMake(x1, y2, rect.size.width, rect.size.height);
     
+    placement0v = [NSValue valueWithCGRect: placement0];
+    placement1v = [NSValue valueWithCGRect: placement1];
+    placement2v = [NSValue valueWithCGRect: placement2];
+    placement3v = [NSValue valueWithCGRect: placement3];
     
-    return [NSSet setWithObjects:
-            [NSValue valueWithCGRect: placement0],
-            [NSValue valueWithCGRect: placement1],
-            [NSValue valueWithCGRect: placement2],
-            [NSValue valueWithCGRect: placement3], nil];
+    placements = [[NSSet alloc] initWithObjects:placement0v, placement1v,
+                                                placement2v, placement3v, nil];
+    
+    return placements;
 }
 
 + (NSSet <NSValue *> *)availablePositionsOfRect: (CGRect)rect

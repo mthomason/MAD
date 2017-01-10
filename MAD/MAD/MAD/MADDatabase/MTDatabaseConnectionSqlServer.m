@@ -43,7 +43,8 @@
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.internalServer database:self.database andPort:self.port];
+    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.internalServer
+                                                     database:self.database andPort:self.port];
     return copy;
 }
 
