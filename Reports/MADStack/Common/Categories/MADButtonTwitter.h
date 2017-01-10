@@ -12,11 +12,11 @@
 #import <UIKit/UIButton.h>
 #import "MADSizeGeneral.h"
 
-@interface UIButton (FollowTwitter)
+@interface MADButtonTwitter : UIButton
 
-    + (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action;
-    + (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action
-                                        size:(MADSizeGeneral)size;
+    + (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action;
+    + (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action
+                                                        size:(MADSizeGeneral)size;
 
 @end
 
