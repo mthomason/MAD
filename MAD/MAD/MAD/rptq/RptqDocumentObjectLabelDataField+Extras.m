@@ -82,7 +82,7 @@
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
                     fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
+    NSManagedObject *result = [managedObjectContext objectWithID:objectId];
     return (RptqDocumentObjectLabelDataField *)result;
 }
 

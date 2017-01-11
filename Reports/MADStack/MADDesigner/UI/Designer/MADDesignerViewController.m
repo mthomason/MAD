@@ -3083,7 +3083,7 @@ END_deselectElementView:;
         private.parentContext = self.document.managedObjectContext;
         [private performBlockAndWait:^{
 
-            RptqDocumentSection *documentSection = [private objectRegisteredForID:sectionViewObjectIdTag];
+            RptqDocumentSection *documentSection = [private objectWithID:sectionViewObjectIdTag];
             NSManagedObjectID *documentSectionKey = [documentSection copySectionKey];
             CGFloat documentSectionHeight = documentSection.height.floatValue;
             
@@ -3133,7 +3133,7 @@ END_deselectElementView:;
                     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
                     
 
-                    RptqDocumentSection *documentSectionBlock = [managedObjectContext objectRegisteredForID:sectionViewObjectIdTag];
+                    RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
 
                     CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
                     CFNumberRef h = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &sectionViewIntrinsicContentSizeHeight);
@@ -3181,7 +3181,7 @@ END_deselectElementView:;
 
     [private performBlockAndWait:^{
         RptqDocumentSection *documentSection;
-        documentSection = [private objectRegisteredForID:objectId];
+        documentSection = [private objectWithID:objectId];
         key = [documentSection copySectionKey];
         height = documentSection.height.floatValue;
     }];

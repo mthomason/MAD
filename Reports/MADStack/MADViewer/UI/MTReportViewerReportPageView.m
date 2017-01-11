@@ -80,7 +80,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         self.firstTime = NO;
         if (self.displaysCacheTimer) {
             [self addTimerView];
-            [self uiUpdateTimeSinceLastRefresh:self];
+            [self updateTimeSinceLastRefresh:self];
         }
         if (self.displaysPageCounter) {
             [self displayPageCounterIndicator];
@@ -199,7 +199,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     }
 }
 
-- (void)uiUpdateTimeSinceLastRefresh:(id)sender {
+- (void)updateTimeSinceLastRefresh:(id)sender {
 
     UILabel *timeSinceRefrehLabel = self.timeSinceRefrehLabel;
     
@@ -227,7 +227,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         }
         
         NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                    selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil
+                                                    selector: @selector(updateTimeSinceLastRefresh:) userInfo:nil
                                                      repeats: NO];
         self.timerLabelTimeSinceRefreh = t;
     }

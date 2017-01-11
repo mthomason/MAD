@@ -13,11 +13,13 @@
 
 @class MADQueryViewSectionDelegate;
 
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
+
 @interface MADTableViewHeader (QueryViewSectionTypes)
 
     + (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewSectionDelegate *)layout
                                               andFrame:(CGRect)frame
-                                                target:(nullable id)target;
+                                                target:(nullable id <MADQueryViewControllerLayoutSectionSelectorProtocol>)target;
 
 @end
 

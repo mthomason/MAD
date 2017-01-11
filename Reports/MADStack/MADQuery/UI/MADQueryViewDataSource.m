@@ -49,15 +49,17 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
     @property (nonatomic, readwrite, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
-    @property (nonatomic, readwrite, copy) MADQueryViewCellConfigureHandler handleConfigureCell;
+    @property (nonatomic, readwrite, weak) MADQueryViewCellConfigureHandler handleConfigureCell;
 
 @end
 
-@implementation MADQueryViewDataSource
+@implementation MADQueryViewDataSource {
+    BOOL _reportingEnabled;
+}
 
 - (void)dealloc {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
-    _sections = nil;
+    //_sections = nil;
     _handleConfigureCell = nil;
     _datasoruce = nil;
     if (_queryLinksController) {
@@ -112,6 +114,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
                 break;
         }
         
+        _reportingEnabled = reportingEnabled;
         _numberOfTables = numberOfTables;
         _count = count;
         _handleConfigureCell = handleConfigureCell;
@@ -140,12 +143,32 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
                 break;
         }
         
+        _reportingEnabled = reportingEnabled;
         _numberOfTables = numberOfTables;
         _count = count;
         _handleConfigureCell = handleConfigureCell;
         
     }
     return self;
+}
+
+- (void)numberOfTablesChanged:(NSUInteger)numberOfTables {
+    short count;
+    switch (numberOfTables) {
+        case 0:
+            count = _reportingEnabled ? 3 : 2;
+            break;
+        case 1:
+            count = _reportingEnabled ? 5 : 4;
+            break;
+        default:
+            count = _reportingEnabled ? 6 : 5;
+            break;
+    }
+    
+    _numberOfTables = numberOfTables;
+    _count = count;
+    _sections = nil;
 }
 
 - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index {
@@ -194,8 +217,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
 - (NSInteger)numberOfRowsInSectionAtIndex:(short)index {
     MADQueryViewSectionDelegate *layoutSection = [self layoutAtIndex:(short)index];
-    return layoutSection.numberOfRows == NSNotFound ?
-                [self numberOfRowsInSection:layoutSection.querySection] : 1;
+    NSInteger numberOfSections = layoutSection.numberOfRows == NSNotFound ?
+                                    [self numberOfRowsInSection:layoutSection.querySection] : 1;
+    return numberOfSections;
 }
 
 - (NSInteger)numberOfRowsInSection:(MADIdentifierQueryViewSections)section {
@@ -238,7 +262,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     if (controller) {
         NSError * __autoreleasing error = NULL;
         [controller performFetch:&error];
-        NSAssert(error == nil, @"Error: %@", error);
+        NSAssert(error == NULL, @"Error: %@", error);
     }
     [self.datasoruce reloadQueryViewData];
 }
@@ -270,11 +294,15 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 #pragma mark Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return (NSInteger)self.count;
+    NSInteger count = (NSInteger)self.count;
+    NSLog(@"Number of sections in table view: %ld", (long)count);
+    return count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self numberOfRowsInSectionAtIndex:(short)section];
+    NSInteger rows = [self numberOfRowsInSectionAtIndex:(short)section];
+    NSLog(@"Section %ld has %ld rows.", section, rows);
+    return rows;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -288,6 +316,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)style
                                             forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSLog(@"Commit editing style for index path: (%ld, %ld)", (long)indexPath.section, indexPath.row);
     switch (style) {
             
         case UITableViewCellEditingStyleDelete:
@@ -309,7 +338,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
       toIndexPath:(NSIndexPath *)toIndexPath {
-    
+
+    NSLog(@"Move row at (%ld, %ld) to (%ld, %ld).", fromIndexPath.section, fromIndexPath.row, toIndexPath.section, toIndexPath.row);
+
     switch ([self sectionAtIndex:(short)toIndexPath.section]) {
         case MADIdentifierQueryViewSectionsGroups: {
             
@@ -328,7 +359,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             toGroup.weight = toWeight;
             
             NSError *error = nil;
-            [self.document.managedObjectContext save:&error];
+            [(self.queryGroupsController).managedObjectContext save:&error];
+
+            //[self.document.managedObjectContext save:&error];
             [self performFetchGroups];
             break;
         }
@@ -342,6 +375,8 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSLog(@"Cell for row at index path: (%ld, %ld)", indexPath.section, indexPath.row);
+
     UITableViewCell *cell = nil;
     
     NSInteger row = indexPath.row;
@@ -379,7 +414,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             // MARK: Display the table names that are used in the query
         case MADIdentifierQueryViewSectionsTables: {
             
-            static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
+            static NSString *MyIdentifierUITableViewCellTableName = @"MADTableCellSchemaName";
             cell = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
@@ -444,7 +479,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellPredicate];
             NSIndexPath *indexPathPredicates = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryPredicate *predicate = [self.queryPredicatesController objectAtIndexPath: indexPathPredicates];
-            
+
             NSString *leftFieldDisplay, *rightFieldDisplay, *symbol = [predicate symbolForDisplay];
             if (predicate.fieldleftpred != nil) {
                 leftFieldDisplay = predicate.fieldleftpred;
@@ -505,6 +540,5 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     
     return cell;
 }
-
 
 @end

@@ -90,7 +90,9 @@
     queryMaxFieldLenght.database.delegate = self;
 
     NSError * __autoreleasing *blockError = NULL;
-    BOOL success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError: blockError];
+    BOOL success = [queryMaxFieldLenght.database executeQuery: queryMaxFieldLenght
+                                                withDataTable: self.dataTableMaxFieldLength
+                                                     andError: blockError];
     if (blockError && error != NULL) {
         error = blockError;
     }

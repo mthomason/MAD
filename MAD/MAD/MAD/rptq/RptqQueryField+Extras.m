@@ -87,8 +87,9 @@
     return self.toStringHumanReadable.lowercaseString;
 }
 
-+ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectId managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    return (RptqQueryField *)[managedObjectContext objectRegisteredForID:objectId];
++ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectId
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqQueryField *)[managedObjectContext objectWithID:objectId];
 }
 
 #pragma mark - MTProtocolLog

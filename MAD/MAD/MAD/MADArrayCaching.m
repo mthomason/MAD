@@ -267,6 +267,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     BOOL success = NO;
     NSError * __autoreleasing *error = NULL;
     success = [self.database executeQuery:queryCacheAddColumn withError:error];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
+             __PRETTY_FUNCTION__);
 }
 
 + (NSData *)dataForObject:(id _Nonnull)object {

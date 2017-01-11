@@ -42,7 +42,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {

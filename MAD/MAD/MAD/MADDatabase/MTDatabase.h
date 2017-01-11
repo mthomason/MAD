@@ -87,6 +87,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
 
     - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error;
 
     - (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection;
     - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals;

@@ -50,8 +50,9 @@
 
     if (self = [super init]) {
 
-        MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                     viewController: viewController];
+        MADGetCredentialsOperation *getCredentials;
+        getCredentials= [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+                                                                        viewController: viewController];
         self.getCredentials = getCredentials;
         
         _document = document;

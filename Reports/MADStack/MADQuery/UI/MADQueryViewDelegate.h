@@ -13,6 +13,7 @@
 #import "MADIdentifierQueryViewSections.h"
 
 @class MADQueryViewSectionDelegate;
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
 @protocol MADQueryViewDelegateProtocol <NSObject>
 
@@ -26,7 +27,7 @@
 @interface MADQueryViewDelegate : NSObject
     <UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MADQueryViewDelegateProtocol> delegate;
+    @property (nonatomic, weak) id <MADQueryViewDelegateProtocol, MADQueryViewControllerLayoutSectionSelectorProtocol> delegate;
 
 @end
 

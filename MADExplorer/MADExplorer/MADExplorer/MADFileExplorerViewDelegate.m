@@ -87,7 +87,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
     if (self = [super init]) {
         
         id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
@@ -138,7 +138,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)setEditing:(BOOL)editing {
-    //NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
+    NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
     if (_editing != editing) {
         _editing = editing;
     }
@@ -151,8 +151,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
@@ -166,12 +164,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     cell.labelTitle.handleTap = ^(MADCollectionViewCellDocument *cell) {
         [self actionRename:cell];
     };
-    
-    /*MADLabelFileExplorerDocumentCellTitle *labelTitle = cell.labelTitle;
-    labelTitle.handleTap = ^(id sender) {
-        [self actionRename:sender];
-    };*/
-
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     _longPressGestures[hash] = longPressGesture;
@@ -198,14 +190,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    
-    
-    //id predicate = self.predicateKindOfLongPressGestureRecognizer;
-    
-    //NSArray<__kindof UIGestureRecognizer *> *gestures, *gesturesFiltered;
-    //gestures = cell.gestureRecognizers.copy;
-    //gesturesFiltered = [gestures filteredArrayUsingPredicate:predicate];
-    //[cell setGestureRecognizers:gesturesFiltered];
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     id gestureToRemove = _longPressGestures[hash];
@@ -247,13 +231,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return YES;
-/*    BOOL shouldSelectItemAtIndexPath = YES;
-    if (_editing) {
-        if ([_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item]) {
-            shouldSelectItemAtIndexPath = NO;
-        }
-    }
-    return shouldSelectItemAtIndexPath;*/
 }
 
 // Did Select
@@ -285,14 +262,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     return _editing ?
     [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
-/*
-    //Deselect when not editing, or when editing and already selected.
-    BOOL shouldDeselectItemAtIndexPath = YES;
-    if (_editing) {
-        shouldDeselectItemAtIndexPath = [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item];
-    }
-    return shouldDeselectItemAtIndexPath;
- */
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -302,10 +271,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
-// FIXME: Do something here.
-    /*MADCollectionViewCellDocument *cell;
-    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];*/
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action
@@ -387,15 +352,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                       (CGFloat)(128.0 + ceil(sizeLabel[0]) + ceil(sizeLabel[1]) + 20.0));
 }
 
-/*- (UILabel *)testLabel {
-    if (_testLabel == nil) {
-        id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
-                                               width: fLabelWidth];
-        _testLabel = label;
-    }
-    return _testLabel;
-}*/
-
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
                   contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
 
@@ -416,8 +372,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
-    
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
     [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
@@ -425,7 +379,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)openURL:(NSURL *)url {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, url);
     MADFileExplorerDelegate delegate = self.delegate;
     NSURL *urlToOpen = url.copy;
     id open = [[NSInvocationOperation alloc] initWithTarget: delegate
@@ -436,7 +389,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
     
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, metadata.URL);
     if (!metadata.isDownloaded) {
         
         NSURL *url = metadata.URL.copy;

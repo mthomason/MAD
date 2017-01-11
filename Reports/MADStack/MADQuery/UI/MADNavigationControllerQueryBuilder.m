@@ -27,7 +27,7 @@
 @synthesize document = _document;
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 + (void)initialize {

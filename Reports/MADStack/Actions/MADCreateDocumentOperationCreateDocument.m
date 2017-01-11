@@ -26,7 +26,6 @@
 @implementation MADCreateDocumentOperationCreateDocument
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {

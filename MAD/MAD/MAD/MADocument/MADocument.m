@@ -119,13 +119,10 @@ static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
 }
 
 static void png_error_func(png_structp png_ptr, png_const_charp message) {
-    //NSLog(@"PNG: %s", message);
     longjmp(png_jmpbuf(png_ptr), 1);
 }
 
-static void png_warn_func(png_structp png_ptr, png_const_charp message) {
-    //NSLog(@"%s", message);
-}
+static void png_warn_func(png_structp png_ptr, png_const_charp message) { }
 
 int process_data(png_structp *png_ptr, png_infop *info_ptr,
                  png_bytep buffer, png_uint_32 length);
@@ -280,6 +277,7 @@ void madwarn(char *err,  const char*err2) { }
         
         //Initalize the main data table.
         NSString *filename = self.filename;
+
         MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
         datatable.cacheDelegate = self;
         
@@ -1042,41 +1040,44 @@ READFROMURL_END:;
 }
 
 - (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
-                                 inContent: (NSManagedObjectContext *)context {
+                                 inContent: (NSManagedObjectContext *)managedObjectContext {
     NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
     fetchReqest.predicate = documentObjectsPredicate;
     NSError *fetchError = nil;
-    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
+    NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
         for (RptqDocumentObject *documentObject in objectsToDelete) {
         
             RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
             MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
             [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
-            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
+            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:managedObjectContext];
         }
     }
 }
 
 - (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
-                             inContent: (NSManagedObjectContext *)context {
+                             inContent: (NSManagedObjectContext *)managedObjectContext {
     
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
     fetchReqest.predicate = documentObjectsPredicate;
     
     NSError *fetchError = nil;
-    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
+    NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
         
         for (RptqDocumentObject *documentObject in objectsToDelete) {
             RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
             
             MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-            [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
-            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
+            [RptqDocumentObject removeDocumentObject: documentObject
+                                   fromParentSection: parentSection
+                                   withLayoutManager: layoutManager];
+            [RptqDocument removeDocumentObject: documentObject
+                      fromManagedObjectContext: managedObjectContext];
         }
     }
 }
@@ -1084,12 +1085,12 @@ READFROMURL_END:;
 - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
       fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = managedObjectContext;
+    //NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    //private.parentContext = managedObjectContext;
     
-    [private performBlockAndWait: ^{
+    //[private performBlockAndWait: ^{
         
-        RptqQueryGroup *group = [private objectWithID:groupID];
+        RptqQueryGroup *group = [managedObjectContext objectWithID:groupID];
         if (group) {
             RptqQuery *query = group.inQuery;
             
@@ -1127,8 +1128,8 @@ READFROMURL_END:;
         }
         
         NSError * __autoreleasing * error = NULL;
-        [private save:error];
-    }];
+        [managedObjectContext save:error];
+    //}];
     
 
 }

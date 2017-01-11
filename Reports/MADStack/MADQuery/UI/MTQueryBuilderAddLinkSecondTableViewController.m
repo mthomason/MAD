@@ -27,7 +27,7 @@
 #pragma mark Table View Data Source Protocol
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"UITableViewCellTableName";
+    static NSString *CellIdentifier = @"MADTableCellSchemaName";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
 
     RptqQueryTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];

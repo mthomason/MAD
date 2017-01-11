@@ -144,8 +144,12 @@
 
 - (NSUInteger)tag { return self.hash; }
 
-- (MADCredential *)getCredentialsForKey:(NSString *)key { return self.credentials; }
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+    return self.credentials;
+}
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query { return self.datatable; }
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return self.datatable;
+}
 
 @end

@@ -647,11 +647,12 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
         MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
         MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
+        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
         for (MTPair *pair in topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 
-                RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
+                RptqQueryTable *table = (RptqQueryTable *)[managedObjectContext objectWithID:tableIdVertext.object];
                 
                 NSManagedObjectID *objectID = table.objectID.copy;
                 NSURL *uriRepresentation = [objectID URIRepresentation];

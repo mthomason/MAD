@@ -211,8 +211,6 @@ static NSString * const StringEmpty = @"";
 - (BOOL)cacheWithUrl:(NSURL *)url {
     static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
 
-    //NSLog(@"Writing cache to url %@.", url);
-
     NSDictionary *plist = [self copyPlist].copy;
     
     NSError *error = NULL;

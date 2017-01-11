@@ -18,7 +18,8 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 @implementation MADQueryViewDelegate
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (_delegate) _delegate = nil;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -27,7 +28,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     
     id header = [MADTableViewHeader newTableViewHeaderWithType: layout
                                                       andFrame: headerSectionFrame([delegate headerHeight])
-                                                        target: self];
+                                                        target: self.delegate];
     return header;
 }
 

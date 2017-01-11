@@ -58,6 +58,8 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
     @property (nonatomic, readonly, assign) short count;
     @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
+    - (void)numberOfTablesChanged:(NSUInteger)numberOfTables;
+
     - (NSSet <NSNumber *> *)sectionTypes;
     - (NSIndexSet *)sectionTypesIndexs;
     - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;

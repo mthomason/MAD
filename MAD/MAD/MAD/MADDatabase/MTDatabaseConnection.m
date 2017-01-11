@@ -154,9 +154,9 @@ NSString * const MADStringEmpty = @"";
         //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
         //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
         
-        NSURL *appSupportDirectory;
+        MADURL *appSupportDirectory;
         MADAppDelegate appDelegate = [MADApplication AppDelegate];
-        NSArray *groupIdentifier = [appDelegate groupIdentifier].copy;
+        id groupIdentifier = [appDelegate groupIdentifier].copy;
         appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
         
         NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
@@ -190,13 +190,17 @@ NSString * const MADStringEmpty = @"";
     return [MTDatabaseConnection identifier];
 }
 
-+ (NSString *)identifier { @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                                          reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
-                                                        userInfo: nil]; }
++ (NSString *)identifier {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
 
-- (NSString *)connectionString { @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                                                reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
-                                                              userInfo: nil]; }
+- (NSString *)connectionString {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
 
 - (NSURL *)databaseUrl { return nil; }
 

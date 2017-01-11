@@ -271,23 +271,27 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    BOOL success = NO;
-    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
-    if (dbconn) {
-        success = [self runQuery:query onProcess:dbconn withError: NULL];
-    }
-    return success;
-}
-
-- (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process withError:(NSError * __autoreleasing *)error {
-    BOOL success = NO;
     MTDataTable *dataTable;
     if (query.dataTable) {
         dataTable = query.dataTable;
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
+    return [self executeQuery:query withDataTable:dataTable andError:error];
+}
 
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
+    BOOL success = NO;
+    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
+    if (dbconn) {
+        success = [self runQuery:query onProcess:dbconn withDataTable:dataTable withError: NULL];
+    }
+    return success;
+}
+
+- (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process
+   withDataTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+    BOOL success = NO;
     NSError *sqlError = nil;
     NSString *sql = [query getSqlWithError:&sqlError];
     if (sqlError == nil) {
@@ -415,25 +419,10 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         columnType = SYBMONEY;
                     }
                     
-                    /*
-                     DBINT columnTypeUser = dbcolutype(dbconn, columnOffsetCtr);
-                     const char *typeForDisplay = dbprtype(columnType);
-                     const char *typeForDisplayUser = dbprtype(columnTypeUser);
-                     */
-                    
                     if (columnType >= 0) {
                         
                         DBINT columnNumberBytes = dbdatlen(dbconn, columnOffsetCtr);
                         DBINT columnLength      = dbcollen(dbconn, columnOffsetCtr);
-                        
-                        /*
-                         char *columnName        = dbcolname(dbconn, columnOffsetCtr);
-                         DBCOL *ci = malloc(sizeof(DBCOL));
-                         dbcolinfo(dbconn, CI_REGULAR, columnOffsetCtr, 0, ci);
-                         //NSLog(@"\n%@\n%@\n%@", [NSString stringWithCString:ci->ActualName encoding:NSStringEncodingConversionAllowLossy],
-                         [NSString stringWithCString:ci->TableName encoding:NSStringEncodingConversionAllowLossy],
-                         [NSString stringWithCString:ci->Name encoding:NSStringEncodingConversionAllowLossy]);
-                         */
                         
                         NSString *fieldKey = fieldKeys[(NSUInteger)columnCtr];
                         
@@ -441,12 +430,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         
                         NSNumber *columnTypeNumber = @(columnType);
                         
-                        //NSCharacterSet *whitespaceAndNewlineCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-                        //NSString *cname = [[columns objectAtIndex:columnCtr] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet];
-                        //NSArray *fieldSelectComponents = [cname componentsSeparatedByString:[self tableAliasConnector]];
-                        NSString *columnNameString = fieldKey; // [[[fieldSelectComponents lastObject] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet] retain];
-                        //NSString *columnNameString = [[NSString alloc] initWithCString:columnName encoding:NSStringEncodingConversionAllowLossy];
-                        
+                        NSString *columnNameString = fieldKey;
                         NSNumber *columnDataLen = @(columnNumberBytes);
                         NSNumber *columTypeKey = @(columnType);
                         NSInteger columnIndexOfType = [counters[columTypeKey] integerValue];
@@ -1069,7 +1053,6 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                 case SYBBIT: {
                                     if (sybBitBindNull[indexOfType] != -1) {
                                         NSNumber *object = @((BOOL)sybBitBind[indexOfType]);
-                                        //NSLog(@"%@\t\t(SYBBIT):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                         resultsForRow[fieldName] = object;
                                     } else {
                                         resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");

@@ -92,15 +92,23 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return results;
 }
 
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable
+            andError:(NSError * __autoreleasing *)error {
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: reason
+                                 userInfo: nil];
+}
+
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    if (error != NULL) {
-        NSString *title = @"Abstract function.";
-        NSString *message = @"Don't go there.";
-        MADErrorUserInfo *errorUserInfo;
-        errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-        *error = [errorUserInfo errorWithDomain:@"MTDatabase" code:3190];
-    }
-    return NO;
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: reason
+                                 userInfo: nil];
 }
 
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
@@ -143,7 +151,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSString *reason;
-    reason = [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)];
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
@@ -151,7 +160,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSArray *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
     NSString *reason;
-    reason = [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)];
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
@@ -225,8 +235,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
-   static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
-   NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
@@ -234,8 +245,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn
                                                    error:(NSError *__autoreleasing *)error {
-    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
-    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
@@ -243,8 +255,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (void)getTablesFromConnection:(id)process
                      completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
-    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
@@ -253,8 +266,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (void)enumerateTablesFromConnection:(id)dbconn
                            usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
-    static NSString * const format = @"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.";
-    NSString *reason = [NSString stringWithFormat:format, NSStringFromSelector(_cmd)];
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];

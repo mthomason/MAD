@@ -175,7 +175,7 @@
             MADViewControllerValueBasedOnField * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 MADViewControllerValueBasedOnField *strongself5 = weakself3;
-                MTDataTable * __autoreleasing dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
+                MTDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
                 strongself5.dataTable = dt;
                 
                 NSArray *allObjects = [strongself5.dataTable allObjects];

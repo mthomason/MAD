@@ -129,7 +129,6 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     [layoutManager removeItemWithID:documentObject.objectID];
     [layoutManager layout];
     
-    
     sectionRow.hasObjects = hasObjects;
     documentObject.inSectionRow = nil;
     

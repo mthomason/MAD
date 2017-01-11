@@ -26,7 +26,7 @@
 @implementation MADInstallOperationSampleDocument
 
 - (void)dealloc {
-    //NSLog(@"dealloc MADInstallOperationSampleDocument");
+    NSLog(@"dealloc MADInstallOperationSampleDocument");
 }
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension

@@ -95,7 +95,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 @implementation MTDataTableFast
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
@@ -419,7 +419,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         
         query.database = _databaseForInserts;
         NSError * __autoreleasing *errorQuery = NULL;
-        [_databaseForInserts executeQuery:query withError:errorQuery];
+        BOOL success = [_databaseForInserts executeQuery:query withError:errorQuery];
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+                 __PRETTY_FUNCTION__);
 
     }
     
@@ -588,6 +590,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSError * __autoreleasing *errorQuery = NULL;
         query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
         success = [self.databaseForInserts executeQuery:query withError:errorQuery];
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+                 __PRETTY_FUNCTION__);
         errorQuery = NULL;
     }
 }
@@ -597,6 +601,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSError * __autoreleasing *errorQuery = NULL;
     MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
     success = [self.databaseForInserts executeQuery:queryVacuum withError:errorQuery];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+             __PRETTY_FUNCTION__);
 }
 
 - (void)dropTable {
@@ -609,6 +615,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
     success = [self.databaseForInserts executeQuery: queryDropTable
                                           withError: errorQuery];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+             __PRETTY_FUNCTION__);
 }
 
 - (void)deleteAll {
@@ -619,6 +627,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
     success = [self.databaseForInserts executeQuery: queryDeleteAllFromTable
                                           withError: errorQuery];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+             __PRETTY_FUNCTION__);
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

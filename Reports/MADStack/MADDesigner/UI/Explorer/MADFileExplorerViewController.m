@@ -674,14 +674,15 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                 removes:(NSArray *)removes
                                 updates:(NSArray *)updates
                              completion:(void (^)(BOOL, NSError *))completion {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     UICollectionView *__weak weakCollectionView = self.collectionView;
     
     void (^ batchUpdates)(void);
     void (^ batchCompletion)(BOOL finished);
     
     batchUpdates = ^{
-        
-        //NSLog(@"%s", __PRETTY_FUNCTION__);
         
         UICollectionView *collectionView = weakCollectionView;
         if (inserts.count > 0) {
@@ -755,14 +756,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        //UIView * __weak backgroundView = self.collectionView.backgroundView;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
             [self.collectionView setNeedsDisplay];
-            //NSLog(@"%s", __PRETTY_FUNCTION__);
-            
         } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            //NSLog(@"%s", __PRETTY_FUNCTION__);
-
         }];
     }
 
@@ -785,10 +781,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }];
 
 }
-
- //- (UIViewController *)childViewControllerForStatusBarHidden {
-//    return self.presentedViewController;
-//}
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.presentedViewController;
@@ -1278,11 +1270,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateEditingDisabled:
-                //NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
 
             case UIDocumentStateInConflict:
-                //NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
                 
             case UIDocumentStateNormal:
@@ -1290,7 +1282,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateSavingError:
-                //NSLog(@"\n\n\tDocument state saving error.\n\n");
+                NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
 
             default:
@@ -1366,7 +1358,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
     [document openWithCompletionHandler:^(BOOL success) {
         if (!success) {
-            //NSLog(@"Failed to open file");
+            NSLog(@"Failed to open file");
         } else {
             SEL selector = @selector(openViewer);
             

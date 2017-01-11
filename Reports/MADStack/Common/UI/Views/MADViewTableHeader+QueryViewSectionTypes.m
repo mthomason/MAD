@@ -24,7 +24,7 @@ static NSString * const MADTextButtonAddHintPredicate   = @"Adds a predicate to 
 
 + (nonnull instancetype)newTableViewHeaderWithType: (nonnull MADQueryViewSectionDelegate *)layout
                                           andFrame: (CGRect)frame
-                                            target: (nullable id)target {
+                                            target: (nullable id <MADQueryViewControllerLayoutSectionSelectorProtocol>)target {
 
     MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {

@@ -26,6 +26,7 @@
 
 #import <string.h>
 #import <stdlib.h>
+#import <stdio.h>
 
 #import <MADSqlite3/sqlite3.h>
 
@@ -53,16 +54,16 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
 NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
-@interface MTDatabaseSqlite3 () {
-    sqlite3_stmt *_bulkStatement;
-}
+@interface MTDatabaseSqlite3 ()
 
     @property (nonatomic, assign, getter=isOpen) BOOL open;
     @property (nonatomic, strong) MTDatabaseConnectionSqlite3 *databaseConnection;
 
 @end
 
-@implementation MTDatabaseSqlite3
+@implementation MTDatabaseSqlite3 {
+    sqlite3_stmt *_bulkStatement;
+}
 
 @dynamic databaseConnection;
 
@@ -422,12 +423,13 @@ static inline BOOL Sqlite3ResultOK(int result) {
     return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
 }*/
 
-#ifdef MAD_MTDatabaseSqlite3_DEBUG
+//#ifdef MAD_MTDatabaseSqlite3_DEBUG
 void sqliteLog(void *foo, const char* statement);
 void sqliteLog(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
+    printf("=> %s\n", statement);
+    //MTLogStatic(@"=> %s", statement);
 }
-#endif
+//#endif
 
 - (void *)databaseHandle {
     return _database;
@@ -451,15 +453,23 @@ void sqliteLog(void *foo, const char* statement) {
     //NSError *error = nil;
     //Open conneciton... closed in dealloc.
     if (!self.isOpen) {
-       const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-        if (sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK) {
-            sqlite3_extended_result_codes((struct sqlite3 *)_database, YES);
-            sqlite3_create_collation((struct sqlite3 *)_database, "LSASC",
+        
+        NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
+        
+        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
+        BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
+        NSAssert(databaseOpen, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
+
+        if (databaseOpen) {
+            databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
+            NSAssert(databaseOpen, @"Error: failed to extend result codes: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+            databaseOpen = sqlite3_create_collation((struct sqlite3 *)_database, "LSASC",
                                         SQLITE_UTF8, (struct sqlite3 *)_database,
-                                        compare_string_utf8_localized_asc_collation);
-#ifdef MAD_MTDatabaseSqlite3_DEBUG
+                                        compare_string_utf8_localized_asc_collation) == SQLITE_OK;
+            NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+//#ifdef MAD_MTDatabaseSqlite3_DEBUG
             sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
-#endif
+//#endif
 
         } else {
             //const char *errorMessage = sqlite3_errmsg(_database);
@@ -778,7 +788,7 @@ void sqliteLog(void *foo, const char* statement) {
                          file:(NSString *)fileName
                    lineNumber:(NSInteger)line
                   description:(NSString *)format {
-    //NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
+    NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
 }
 
 + (void)executeQueryWithSql:(NSString *)queryString
@@ -787,7 +797,7 @@ void sqliteLog(void *foo, const char* statement) {
              queryFieldKeys:(NSArray *)queryFieldKeys
   queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet {
 
-    //NSLog(@"SQL: %@", queryString);
+    NSLog(@"SQL: %@", queryString);
     BOOL success = YES;
 
     if (queryString.length > 0) {
@@ -798,6 +808,7 @@ void sqliteLog(void *foo, const char* statement) {
         if (statement == NULL) {
             int prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
             success = SQLITE_OK == prepare_result;
+            NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
                     [MTDatabaseSqlite3 bindStatement:(void **)&statement withBindings:databinding];
@@ -846,6 +857,7 @@ void sqliteLog(void *foo, const char* statement) {
     
     if (statement == NULL) {
         success = SQLITE_OK == sqlite3_prepare_v2(_database, csql, -1, &statement, NULL);
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
         if (binaryBindings.count > 0) {
             for (MTDatabaseDataBinding *databinding in binaryBindings) {
                 [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
@@ -934,25 +946,27 @@ void sqliteLog(void *foo, const char* statement) {
                 rowCounter++;
             }
             //NSLog(@"%@", queryString);
-            //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+            NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
 
             [dataTable endBulkInsert];
             
         }
     } else {
-        //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+        NSLog(@"Failed to run query.");
         // FIXME: Handle failures.
         sqlite3_step(statement);
     }
     if (partOfTransactionSet == NO) {
         success = SQLITE_OK == sqlite3_finalize(statement);
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
     } else {
         sqlite3_reset(statement);
         _bulkStatement = statement;
     }
     
-    if (success == NO) {
+    if (!success) {
         errorMessage = (char *)sqlite3_errmsg(_database);
+        NSLog(@"%s.", errorMessage);
     }
     
     NSString *message = nil;
@@ -964,11 +978,12 @@ void sqliteLog(void *foo, const char* statement) {
     }
 
     NSError *error = nil;
-    if (success == NO) {
+    if (!success) {
         NSString *title = NSLocalizedString(@"Error", @"Error");
         NSString *domain = @"MTSqlite3";
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
         error = [errorUserInfo errorWithDomain:domain code:4784];
+        NSLog(@"%@", error);
     }
     if (resultError != NULL) *resultError = error;
 
@@ -976,14 +991,13 @@ void sqliteLog(void *foo, const char* statement) {
     return success;
 }
 
-
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable
+            andError:(NSError * __autoreleasing *)error {
     BOOL status = NO;
     NSError * __autoreleasing *sqlError = NULL;
     NSString *sqlResult = [query getSqlWithError: sqlError];
     NSString *queryString = [[NSString alloc] initWithString: sqlResult];
-    
+    NSLog(@"SQL2: %@", queryString);
     if (sqlError != NULL) {
         if (sqlError && error != NULL) {
             error = sqlError;
@@ -991,26 +1005,39 @@ void sqliteLog(void *foo, const char* statement) {
         NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
     } else {
         
-        MTDataTable * dataTable;
-        if (query.dataTable) {
-            dataTable = query.dataTable;
-        } else {
-            dataTable = [self.delegate dataTableForQuery:query];
-        }
+        //NSAssert(dataTable != nil, @"Need a datatable");
+        
         NSError * __autoreleasing *executeError = NULL;
-        status = [self executeSql: queryString fieldKeys: query.fieldKeys onConnection: nil
-                  intoResultTable: dataTable partOfTransactionSet: query.partOfTransactionSet
-                   returnsResults: query.returnsResults binaryBindings: query.binaryBindings
+        status = [self executeSql: queryString
+                        fieldKeys: query.fieldKeys
+                     onConnection: nil
+                  intoResultTable: dataTable
+             partOfTransactionSet: query.partOfTransactionSet
+                   returnsResults: query.returnsResults
+                   binaryBindings: query.binaryBindings
                         withError: executeError];
         
         if (executeError && error != NULL) {
             error = executeError;
         }
         NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);
+        
+    }
+    
+    return status;
 
+}
+
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+
+    MTDataTable *dataTable;
+    if (query.dataTable) {
+        dataTable = query.dataTable;
+    } else {
+        dataTable = [self.delegate dataTableForQuery:query];
     }
 
-    return status;
+    return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
 + (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement columnNumber:(int)columnNumber {
@@ -1178,6 +1205,9 @@ void sqliteLog(void *foo, const char* statement) {
             NSError * __autoreleasing *errorQuery = NULL;
             BOOL successQuery = NO;
             successQuery = [self executeQuery:dropTable withError:errorQuery];
+            NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+                     __PRETTY_FUNCTION__);
+
             NSAssert(errorQuery == NULL, (*errorQuery).localizedDescription);
         }
         
@@ -1187,18 +1217,23 @@ void sqliteLog(void *foo, const char* statement) {
 
     BOOL success = NO;
     NSError * __autoreleasing *errorQuerySyncMode = NULL;
-    MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncOff alloc] init];
+    MTQuery *querySyncMode = [[MTQueryCacheSyncOff alloc] init];
     success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
-
+    NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+             __PRETTY_FUNCTION__);
 
     NSError * __autoreleasing *errorQueryJournalMode = NULL;
-    MTQuery * __autoreleasing queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
+    MTQuery *queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
     success = [self executeQuery:queryJournalMode withError:errorQueryJournalMode];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+             __PRETTY_FUNCTION__);
 
 
     NSError * __autoreleasing *errorQueryCacheBeginTransaction = NULL;
-    MTQuery * __autoreleasing query = [[MTQueryCacheBeginTransaction alloc] init];
+    MTQuery *query = [[MTQueryCacheBeginTransaction alloc] init];
     success = [self executeQuery:query withError:errorQueryCacheBeginTransaction];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+             __PRETTY_FUNCTION__);
 
 }
 
@@ -1207,12 +1242,16 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
 
     NSError * __autoreleasing *errorCacheEndTransaction = NULL;
-    MTQuery * __autoreleasing query = [[MTQueryCacheEndTransaction alloc] init];
+    MTQuery *query = [[MTQueryCacheEndTransaction alloc] init];
     success = [self executeQuery:query withError:errorCacheEndTransaction];
-    
+    NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+             __PRETTY_FUNCTION__);
+
     NSError * __autoreleasing *errorQuerySyncMode = NULL;
-    MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
+    MTQuery *querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
     success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+             __PRETTY_FUNCTION__);
 
     /*
      NSError * __autoreleasing errorJournalMode = NULL;
@@ -1239,7 +1278,7 @@ void sqliteLog(void *foo, const char* statement) {
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = queryStart.UTF8String;
     char *sql = sqlite3_mprintf((char *) queryStartChar);
-    //NSLog(@"SQL3: %s", sql);
+    NSLog(@"SQL3: %s", sql);
 
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -1252,7 +1291,8 @@ void sqliteLog(void *foo, const char* statement) {
                                                           encoding: NSUTF8StringEncoding];
             
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
+            MTDatabaseTable *databaseTable;
+            databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
             block(databaseTable, counter, &stop);
             if (stop) break;
@@ -1267,6 +1307,9 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        if (error) {
+            NSLog(@"Error: %@", error);
+        }
         completion(success, error, tables);
     }];
 }
@@ -1289,6 +1332,8 @@ void sqliteLog(void *foo, const char* statement) {
             MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
+    } else {
+        NSLog(@"Error: %@", queryStart);
     }
     sqlite3_finalize(statement);
     sqlite3_free(sql);
@@ -1315,6 +1360,8 @@ void sqliteLog(void *foo, const char* statement) {
             MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
+    } else {
+        NSLog(@"Error: %@", queryStart);
     }
     sqlite3_finalize(statement);
     sqlite3_free(sql);

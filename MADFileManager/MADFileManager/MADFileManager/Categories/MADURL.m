@@ -318,7 +318,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     groupIdentifier = [appDelegate groupIdentifier].copy;
     appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
     fileHandle = [[NSString alloc] initWithFormat: @"%@.%@", filename, extension];
-    result = [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    result = [appSupportDirectory URLByAppendingPathComponent:fileHandle isDirectory:NO];
     return result;
 }
 

@@ -104,7 +104,7 @@
     return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
     MTDatabaseConnection *connectionSettings = self.databaseConnection;
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
@@ -115,12 +115,6 @@
         NSError *sqlError = nil;
         NSString *queryString = [query getSqlWithError:&sqlError];
         if (queryString.length > 0 && sqlError == nil) {
-            MTDataTable *dataTable;
-            if (query.dataTable) {
-                dataTable = query.dataTable;
-            } else {
-                dataTable = [self dataTableForQuery:query];
-            }
             [myFetch fetchWithCommand: queryString
                             dataTable: &dataTable
                          onConnection: dbconn
@@ -138,6 +132,17 @@
         }
     }
     return result;
+    
+}
+
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+    MTDataTable *dataTable;
+    if (query.dataTable) {
+        dataTable = query.dataTable;
+    } else {
+        dataTable = [self.delegate dataTableForQuery:query];
+    }
+    return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn

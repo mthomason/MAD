@@ -15,7 +15,7 @@
 
 @interface MTQueryCache : MTQuery
 
-    @property (nonatomic, weak, readwrite) MTDatabaseCache *database;
+    //@property (nonatomic, weak, readwrite) MTDatabaseCache *database;
 
 @end
 

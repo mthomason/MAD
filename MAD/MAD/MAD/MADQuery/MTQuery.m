@@ -218,7 +218,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     if (!success && qerror != NULL && error != NULL) {
         error = qerror;
     }
-    NSAssert(error == NULL, @"Error: %@", (*error).localizedDescription);
+    NSAssert(qerror == NULL, @"Error: %@", (*error).localizedDescription);
     return success;
 }
 

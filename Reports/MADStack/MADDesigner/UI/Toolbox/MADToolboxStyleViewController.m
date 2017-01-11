@@ -829,7 +829,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     NSSet *userSelectedObjectIDs = _userSelectedObjectIds;
     RptqDocumentObject *documentObject;
     for (objectId in userSelectedObjectIDs) {
-        documentObject = [doc.managedObjectContext objectRegisteredForID:objectId];
+        documentObject = [doc.managedObjectContext objectWithID:objectId];
         documentObject.fontname = familyName;
     }
     [doc.managedObjectContext save:nil];

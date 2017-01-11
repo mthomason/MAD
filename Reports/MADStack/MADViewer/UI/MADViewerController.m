@@ -215,7 +215,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if (_timerLabelTimeSinceRefreh.valid) {
@@ -493,7 +493,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     //UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     //CGPoint center = viewControllerFrom.view.center;
@@ -677,7 +676,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark Overrides
 
 - (MADDateFromTimeFormatter *)dateTimeFormatter {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_dateTimeFormatter == nil) {
         MADDateFromTimeFormatter *dateTimeFormatter = [[MADDateFromTimeFormatter alloc] init];
         _dateTimeFormatter = dateTimeFormatter;
@@ -690,7 +688,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (NSString *)title {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_title == nil) {
         NSString *title = [self.class MADViewer];
         _title = title.copy;
@@ -703,12 +700,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - MTTabBarImageProtocol
 
 + (UIImage *)newTabBarImage {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
 
 - (nullable MADReportPageViewController *)visiblePageViewController {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
 }
 
@@ -1311,7 +1306,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Status Label
 
 - (void)updateTimeSinceLastRefresh:(id)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADLabelStatus *labelStatus = self.labelStatus;
     MTDateResolution resolution;

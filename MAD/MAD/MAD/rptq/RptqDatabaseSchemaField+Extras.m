@@ -107,7 +107,7 @@
 
 + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
        andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    return (RptqDatabaseSchemaField *)[managedObjectContext objectRegisteredForID:objectID];
+    return (RptqDatabaseSchemaField *)[managedObjectContext objectWithID:objectID];
 }
 
 - (NSString *)display {

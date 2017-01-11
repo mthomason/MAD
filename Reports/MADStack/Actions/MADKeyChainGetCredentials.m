@@ -69,7 +69,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     const char PromptForUsernameAndPassword = 1;
     const char PromptForPassword = 2;

@@ -208,7 +208,7 @@
 
 + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectID
                     inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    return (RptqDocumentSection *)[managedObjectContext objectRegisteredForID:objectID];
+    return (RptqDocumentSection *)[managedObjectContext objectWithID:objectID];
 }
 
 + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row

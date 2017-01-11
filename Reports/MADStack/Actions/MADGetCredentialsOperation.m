@@ -43,12 +43,13 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 @implementation MADGetCredentialsOperation
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)credentials {
     if (self.passwordSet && self.usernameSet) {
-        MADCredential * __autoreleasing credentials = [[MADCredential alloc] initWithUsername:self.username andPassword:self.password];
+        MADCredential *credentials = [[MADCredential alloc] initWithUsername:self.username
+                                                                 andPassword:self.password];
         return credentials;
     } else {
         return nil;
@@ -60,7 +61,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
     if (self = [super init]) {
 
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         if (!(_shortCircut = ![databaseConnection requiresCredientals])) {
             [self addOperationsToGetCredentialsWithDatabaseConnection:databaseConnection viewController:viewController];
         }
@@ -71,7 +72,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (void)execute {
     
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     if (_shortCircut) {
         [self finish];
