@@ -100,11 +100,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentObjectAggregate newStringDisplayForType: self.function.unsignedIntegerValue];
+    return [RptqDocumentObjectAggregate newStringDisplayForType: self.function.shortValue];
 }
 
 - (NSString *)functionNameShort {
-    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.unsignedIntegerValue];
+    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.shortValue];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {

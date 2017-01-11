@@ -28,6 +28,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
+    
     [[UIColor blackColor] setStroke];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextBeginPath(context);

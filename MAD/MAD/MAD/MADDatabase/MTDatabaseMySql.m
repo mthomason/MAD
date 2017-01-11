@@ -127,7 +127,9 @@
                                 error: &sqlError];
         }
         if (sqlError) {
-            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription andMessage:sqlError.localizedFailureReason];
+            MADErrorUserInfo *errorUserInfo;
+            errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription
+                                                         andMessage:sqlError.localizedFailureReason];
             if (error != NULL) {
                 *error = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
             }

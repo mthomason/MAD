@@ -35,6 +35,7 @@ static const CGFloat colors[] = {
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
 
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
 	CGGradientDrawingOptions options = kCGGradientDrawsBeforeStartLocation;

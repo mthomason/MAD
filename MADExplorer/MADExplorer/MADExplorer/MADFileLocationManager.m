@@ -24,7 +24,6 @@
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
-static NSString * const MADAppConfigurationUserDefaultsStorageOptionSet    = @"MADAppConfigurationUserDefaultsStorageOptionSet";
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                     = @"MADFirstLaunch";
@@ -90,7 +89,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
         //NSLog(@"%s", __PRETTY_FUNCTION__);
 
         NSNumber *yes = @YES;
-        NSNumber *notSet = [[NSNumber alloc] initWithShort: MADAppStorageNotSet];
+        NSNumber *notSet = [[NSNumber alloc] initWithInteger: MADAppStorageNotSet];
         NSDictionary *defaultValues;
         defaultValues = [[NSDictionary alloc] initWithObjectsAndKeys:
                                         yes,    MADFirstLaunch,
@@ -164,6 +163,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 #pragma mark - Overrides
 
 + (BOOL)StorageOptionsInitalized {
+    NSString *MADAppConfigurationUserDefaultsStorageOptionSet = @"MADAppConfigurationUserDefaultsStorageOptionSet";
     return [[NSUserDefaults standardUserDefaults] boolForKey:MADAppConfigurationUserDefaultsStorageOptionSet];
 }
 
@@ -251,7 +251,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
     NSString *ubiquityIdentifier = [safedelegate ubiquityIdentifier].copy;
     NSString *fileExtention = [safedelegate fileExtention].copy;
 
-    UIViewController <MADFileLocationManagerDelegate> __weak *wdelegate;
+    id <MADFileLocationManagerDelegate> __weak wdelegate;
     wdelegate = safedelegate;
     
     typeof(self) __weak weakself = self;
@@ -259,7 +259,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         //NSLog(@"%s", __PRETTY_FUNCTION__);
         
-        UIViewController <MADFileLocationManagerDelegate> *delegate;
+        id <MADFileLocationManagerDelegate> delegate;
         delegate = wdelegate;
         
         MADFileLocationManager *strongself;
@@ -365,7 +365,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
             
                 [self.class setStorageOption: MADAppStorageNotSet];
                 
-                UIViewController <MADFileLocationManagerDelegate> *delegate;
+                id <MADFileLocationManagerDelegate> delegate;
                 delegate = _delegate;
                 
                 if ([delegate respondsToSelector:@selector(didDisconnectFromCloud:)]) {

@@ -124,6 +124,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
+
     if (rect.size.width != CGSizeZero.width && rect.size.height != CGSizeZero.height) {
         rect = CGRectInset(rect, 10.0000f, 10.0000f);
         

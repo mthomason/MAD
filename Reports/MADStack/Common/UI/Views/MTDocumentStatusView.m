@@ -1,4 +1,4 @@
-
+/*
 #if __has_feature(objc_arc)
     #warning Not yet converted to use ARC.
 #endif
@@ -7,10 +7,10 @@
 
 @interface MTDocumentStatusView()
 
-@property (nonatomic, assign) UIDocumentState state;
-@property (nonatomic, retain) NSString *message;
-@property (atomic, retain) UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, assign) BOOL active;
+    @property (nonatomic, assign) UIDocumentState state;
+    @property (nonatomic, retain) NSString *message;
+    @property (atomic, retain) UIActivityIndicatorView *activityIndicator;
+    @property (nonatomic, assign) BOOL active;
 
 @end
 
@@ -151,4 +151,4 @@
     }
 }
 
-@end
+@end*/

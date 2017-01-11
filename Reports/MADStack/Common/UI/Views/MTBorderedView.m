@@ -34,6 +34,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
+
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, rect);
     CGContextRef currentContext = UIGraphicsGetCurrentContext();

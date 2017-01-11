@@ -78,8 +78,9 @@ static inline float wobbleFactor() {
 
 @implementation MADStringFormatted
 
-+ (NSString *)newStringFormattedSubtitle:(NSString *)status fileSize:(unsigned long long)fileSize {
-    NSString *result;
++ (NSString *)newStringFormattedSubtitle:(NSString *)status
+                                fileSize:(unsigned long long)fileSize {
+    id result;
     if (isStatusNotDownloading(status)) {
         NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
         result = [[NSString alloc] initWithString:textNotDownloaded];
@@ -180,7 +181,8 @@ static inline float wobbleFactor() {
 
 - (void)setText:(NSString *)text {
 
-    id attributedString = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption:text];
+    id attributedString;
+    attributedString = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption:text];
     UILabel *labelTitle = _labelTitle;
     labelTitle.attributedText = attributedString;
     labelTitle.text = text.copy;
@@ -373,7 +375,6 @@ static inline float wobbleFactor() {
     BOOL notDownloaded, isDownloading, isUploading, isUbiquitous;
     double percentage;
     
-    NSURL *metadataURL, *thumbnailUrl;
     MADLabelFileExplorerDocumentCellTitle *labelTitle;
     MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
     
@@ -383,7 +384,7 @@ static inline float wobbleFactor() {
     UIImage *cloudIndicatorImage;
 
     _editing = editing;
-    NSString *name, *cellText, *subtitle, *ubiquitousItemDownloadingStatus;
+    NSString *name, *subtitle, *ubiquitousItemDownloadingStatus;
     
     cloudIndicatorImageView = self.imageCloudIndicator;
     
@@ -439,23 +440,30 @@ static inline float wobbleFactor() {
     activityIndicator = self.activityIndicator;
     SEL animateSwitch = isDownloading || isUploading ? @selector(startAnimating) :
                                                        @selector(stopAnimating);
-    [activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
+    //[activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
     
     
-    imagePreview = self.imagePreview;
+    //imagePreview = self.imagePreview;
     
-    metadataURL = metadata.URL.copy;
-    thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
-    imagePreview.thumbnailURL = thumbnailUrl;
+    //metadataURL = metadata.URL.copy;
+    //thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
+    //imagePreview.thumbnailURL = thumbnailUrl;
     
-/*    dispatch_block_t read_iamge = ^{
+    dispatch_block_t read_iamge = ^{
         @autoreleasepool {
+            NSURL *metadataURL, *thumbnailUrl;
+            [self.activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
+
+            metadataURL = metadata.URL.copy;
+            thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
+            imagePreview.thumbnailURL = thumbnailUrl;
+            
             //MADMetaData *thumbnailMetadata = [[MADMetaData alloc] initWithURL:fileURL];
-            NSURL *thumbnailUrl = [NSURL newURLThumbnailForURL:fileURL];
+            //NSURL *thumbnailUrl = [NSURL newURLThumbnailForURL:fileURL];
             NSString *path = thumbnailUrl.path;
             NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
             UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-            if (image == nil) image = [MADCollectionViewCellDocument newDefaultThumbnail];
+            //if (image == nil) image = [MADCollectionViewCellDocument newDefaultThumbnail];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 self.imagePreview.image = image;
             });
@@ -463,7 +471,7 @@ static inline float wobbleFactor() {
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
-   */ 
+ 
     if (_editing) [self startWobble];
     else [self stopWobble];
 
@@ -477,7 +485,7 @@ static inline float wobbleFactor() {
 }
 
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
-    NSString *result;
+    id result;
     if (isStatusNotDownloading(status)) {
         NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
         result = [[NSString alloc] initWithString:textNotDownloaded];

@@ -10,50 +10,6 @@
 #import "MADAlertControllerAlertRemovedProtocol.h"
 #import "MADTextField.h"
 
-static NSString * const MADTitleCloudSignout           = @"iCloud Sign Out";
-static NSString * const MADTitleNewDocument            = @"New Document";
-static NSString * const MADTitleChooseStorageOptions   = @"Choose Storage Option";
-static NSString * const MADTitleEditLabel              = @"Edit Label";
-static NSString * const MADTitleEmailConfigNot         = @"Alert";
-static NSString * const MADTitleCredentials            = @"Credentials";
-static NSString * const MADTitleRenameDocument         = @"Rename Document";
-static NSString * const MADTitleSaveCredentials        = @"Save Credentials";
-static NSString * const MADTitlePassword               = @"Password";
-static NSString * const MADTitleTransactionComplete    = @"Transaction Complete";
-
-static NSString * const MADMessageSoftwareActivated    = @"Software activated.";
-static NSString * const MADMessagePassword             = @"Please enter your password.";
-
-static NSString * const MADMessageSaveCredentials      = @"Would you like to save the credentials to your "
-                                                            @"key chain?";
-static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
-
-static NSString * const MADTitleRemoveCredentials      = @"Remove Saved Password";
-static NSString * const MADMessageRemoveCredentials    = @"Should we remove the password saved in your "
-                                                            @"keychain?";
-
-static NSString * const MADMessageCloudSignout         = @"You have signed out of the iCloud account "
-                                                            @"previously used to store documents. Sign "
-                                                            @"back in to access those documents.";
-static NSString * const MADMessageNewDocument          = @"Added document.";
-static NSString * const MADMessageChooseStorageOptions = @"Do you want to store documents in iCloud or "
-                                                            @"only on this device?";
-static NSString * const MADMessageEditLabel            = @"Please enter a new name for the document.";
-static NSString * const MADMessageEmailConfigNot       = @"Device is not configured for email.";
-
-static NSString * const MADMessageDeleteItemsPlural    = @"Are you sure you would like to delete %@ "
-                                                            @"items?  This action is final.";
-static NSString * const MADMessageDeleteItem           = @"Are you sure you would like to delete %@ "
-                                                            @"item?  This action is final.";
-static NSString * const MADMessageDeleteItemsComment   = @"Delete message template (plural)";
-static NSString * const MADMessageDeleteItemComment    = @"Delete message template (singular)";
-static NSString * const MADMessageRename               = @"Please enter a new name for the document.";
-
-static NSString * const MADTitleDeleteItemsPlural      = @"Remove %@ items";
-static NSString * const MADTitleDeleteItemsComment     = @"Remove %@ items (plural)";
-static NSString * const MADTitleDeleteItem             = @"Remove %@ item";
-static NSString * const MADTitleDeleteItemComment      = @"Remove %@ item (singular)";
-
 static NSString * const MADTitleButtonDismiss          = @"Dismiss";
 static NSString * const MADTitleButtonLocalOnly        = @"Local Only";
 static NSString * const MADTitleButtonCloud            = @"iCloud";
@@ -61,19 +17,8 @@ static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 static NSString * const MADButtonChange                = @"Change";
 static NSString * const MADButtonConfirm               = @"Confirm";
-static NSString * const MADButtonRename                = @"Rename";
 static NSString * const MADButtonKeep                  = @"Keep";
 static NSString * const MADButtonRemove                = @"Remove";
-
-static NSString * const MADTitleErrorFileExist         = @"File Exist";
-static NSString * const MADMessageErrorFileExist       = @"File already exist. Please choose a new name.";
-
-static NSString * const MADTitleErrorValidation        = @"Validation Error";
-static NSString * const MADMessageErrorValidFileName   = @"Filename not valid.";
-
-static NSString * const MADTitleEmptyQuery             = @"Empty Query";
-static NSString * const MADMessageEmptyQuery           = @"Add tables to the query and data fields to "
-                                                            @"the designer to generate a query.";
 
 @interface MADAlertController ()
 
@@ -82,12 +27,14 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 @implementation MADAlertController
 
 + (instancetype)newAlertControllerAddedDocument {
+    NSString *MADTitleNewDocument = @"New Document";
+    NSString *MADMessageNewDocument = @"Added document.";
     NSString *newdoc = NSLocalizedString(MADTitleNewDocument, MADTitleNewDocument);
     NSString *addeddoc = NSLocalizedString(MADMessageNewDocument, MADMessageNewDocument);
     NSString *continueb = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: newdoc
-                                                                   message: addeddoc
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    id alert = [UIAlertController alertControllerWithTitle: newdoc
+                                                   message: addeddoc
+                                            preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle: continueb
                                                  style: UIAlertActionStyleDefault
@@ -100,20 +47,23 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
                                                         password:(void (^)(UITextField *textField))passwordSetup
                                                           submit:(void (^)(NSString *password))handlerContinue
                                                           cancel:(void (^)())handlerCancel {
-    
+    NSString *MADTitlePassword = @"Password";
+    NSString *MADMessagePassword = @"Please enter your password.";
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
 
-    UIAlertController *alertController;
+    id alertController;
     alertController = [UIAlertController alertControllerWithTitle: title
                                                           message: message
                                                    preferredStyle: UIAlertControllerStyleAlert];
     
     void (^actionConfirmHander)(UIAlertAction *);
     actionConfirmHander = ^(UIAlertAction *action) {
-        handlerContinue(((UITextField *)alertController.textFields.firstObject).text);
+        UIAlertController *controller = alertController;
+        NSString *text = ((UITextField *)controller.textFields.firstObject).text.copy;
+        handlerContinue(text);
     };
     
     UIAlertAction *actionConfirm;
@@ -137,7 +87,9 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
                                            password:(void (^)(UITextField *textField))passwordSetup
                                              submit:(void (^)(NSString *username, NSString *password))handlerContinue
                                              cancel:(void (^)())handlerCancel {
-
+    
+    NSString *MADTitleCredentials = @"Credentials";
+    NSString *MADMessageCredentials = @"Please enter your credentials.";
     NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
     NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -188,6 +140,9 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 + (instancetype)removeCredentials:(void (^)(UIAlertAction *action))handlerDestructive
                            cancel:(void (^)(UIAlertAction *action))handlerCancel {
 
+    NSString *MADTitleRemoveCredentials = @"Remove Saved Password";
+    NSString *MADMessageRemoveCredentials = @"Should we remove the password saved in your "
+                                            @"keychain?";
     NSString *title = NSLocalizedString(MADTitleRemoveCredentials, MADTitleRemoveCredentials);
     NSString *message = NSLocalizedString(MADMessageRemoveCredentials, MADMessageRemoveCredentials);
     NSString *keep = NSLocalizedString(MADButtonKeep, MADButtonKeep);
@@ -212,6 +167,10 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 + (instancetype)newAlertControllerSaveCredentials:(void (^)(UIAlertAction *action))handlerContinue
                                            cancel:(void (^)(UIAlertAction *action))handlerCancel {
 
+    NSString *MADTitleSaveCredentials = @"Save Credentials";
+    NSString *MADMessageSaveCredentials = @"Would you like to save the credentials to your "
+                                          @"key chain?";
+
     NSString *title = NSLocalizedString(MADTitleSaveCredentials, MADTitleSaveCredentials);
     NSString *message = NSLocalizedString(MADMessageSaveCredentials, MADMessageSaveCredentials);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -235,6 +194,10 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler {
+    NSString *MADTitleCloudSignout = @"iCloud Sign Out";
+    NSString *MADMessageCloudSignout = @"You have signed out of the iCloud account "
+                                       @"previously used to store documents. Sign "
+                                       @"back in to access those documents.";
     NSString *title = NSLocalizedString(MADTitleCloudSignout, MADTitleCloudSignout);
     NSString *message = NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout);
     NSString *ok = NSLocalizedString(MADTitleButtonDismiss, MADTitleButtonDismiss);
@@ -254,6 +217,8 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
     id alert;
     void (^handleActionChange)(UIAlertAction *);
 
+    NSString *MADTitleEditLabel = @"Edit Label";
+    NSString *MADMessageEditLabel = @"Please enter a new name for the document.";
     NSString *title = NSLocalizedString(MADTitleEditLabel, MADTitleEditLabel);
     NSString *message = NSLocalizedString(MADMessageEditLabel, MADMessageEditLabel);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
@@ -287,6 +252,8 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerNotConfiguredForEmail {
+    NSString *MADTitleEmailConfigNot = @"Alert";
+    NSString *MADMessageEmailConfigNot = @"Device is not configured for email.";
     NSString *title = NSLocalizedString(MADTitleEmailConfigNot, MADTitleEmailConfigNot);
     NSString *message = NSLocalizedString(MADMessageEmailConfigNot, MADMessageEmailConfigNot);
     NSString *titleButton = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -308,18 +275,26 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
     NSNumber *selectedItemsCount = [[NSNumber alloc] initWithUnsignedInteger:itemCount];
     NSString *number = [NSNumberFormatter localizedStringFromNumber: selectedItemsCount
                                                         numberStyle: NSNumberFormatterSpellOutStyle];
+    NSString *MADMessageDeleteItemsPlural = @"Are you sure you would like to delete %@ "
+                                            @"items?  This action is final.";
     NSString *title = NSLocalizedString(MADButtonConfirm, MADButtonConfirm);
-    NSString *messageTemplate = itemCount > 1 ?
-    NSLocalizedString(MADMessageDeleteItemsPlural, MADMessageDeleteItemsComment) :
-    NSLocalizedString(MADMessageDeleteItem, MADMessageDeleteItemComment);
+    NSString *messageTemplate;
+    NSString *MADMessageDeleteItem = @"Are you sure you would like to delete %@ "
+                                     @"item?  This action is final.";
+    
+    messageTemplate = itemCount > 1 ?
+                NSLocalizedString(MADMessageDeleteItemsPlural, @"Delete message template (plural)") :
+                NSLocalizedString(MADMessageDeleteItem, @"Delete message template (singular)");
     NSString *message = [NSString stringWithFormat:messageTemplate, number];
     id alert = [UIAlertController alertControllerWithTitle: title
                                                    message: message
                                             preferredStyle: UIAlertControllerStyleActionSheet];
     NSString *titleCancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
+    NSString *MADTitleDeleteItemsPlural = @"Remove %@ items";
+    NSString *MADTitleDeleteItem = @"Remove %@ item";
     NSString *titleDestructiveTemplate = itemCount > 1 ?
-    NSLocalizedString(MADTitleDeleteItemsPlural, MADTitleDeleteItemsComment) :
-    NSLocalizedString(MADTitleDeleteItem, MADTitleDeleteItemComment);
+                    NSLocalizedString(MADTitleDeleteItemsPlural, @"Remove %@ items (plural)") :
+                    NSLocalizedString(MADTitleDeleteItem, @"Remove %@ item (singular)");
     NSString *titleDestructive = [NSString stringWithFormat:titleDestructiveTemplate, number];
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:titleCancel
                                                            style:UIAlertActionStyleCancel
@@ -337,6 +312,9 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
                                           cancel:(void (^)(UIAlertAction *action))handlerCancel {
 
     id alert;
+    NSString * MADTitleRenameDocument = @"Rename Document";
+    NSString *MADMessageRename = @"Please enter a new name for the document.";
+    NSString *MADButtonRename = @"Rename";
     NSString *title = NSLocalizedString(MADTitleRenameDocument, MADTitleRenameDocument);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     NSString *rename = NSLocalizedString(MADButtonRename, MADButtonRename);
@@ -370,6 +348,8 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerErrorValidationFilename {
+    NSString *MADTitleErrorValidation = @"Validation Error";
+    NSString *MADMessageErrorValidFileName = @"Filename not valid.";
     NSString *title = NSLocalizedString(MADTitleErrorValidation, MADTitleErrorValidation);
     NSString *message = NSLocalizedString(MADMessageErrorValidFileName, MADMessageErrorValidFileName);
     id alert = [UIAlertController alertControllerWithTitle: title
@@ -385,6 +365,8 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerErrorFileExist {
+    NSString *MADTitleErrorFileExist = @"File Exist";
+    NSString *MADMessageErrorFileExist = @"File already exist. Please choose a new name.";
     NSString *title = NSLocalizedString(MADTitleErrorFileExist, MADTitleErrorFileExist);
     NSString *message = NSLocalizedString(MADMessageErrorFileExist, MADMessageErrorFileExist);
     id alert = [UIAlertController alertControllerWithTitle: title
@@ -399,6 +381,9 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerErrorEmptyQuery {
+    NSString *MADTitleEmptyQuery = @"Empty Query";
+    NSString *MADMessageEmptyQuery = @"Add tables to the query and data fields to "
+                                     @"the designer to generate a query.";
     NSString *title = NSLocalizedString(MADTitleEmptyQuery, MADTitleEmptyQuery);
     NSString *message = NSLocalizedString(MADMessageEmptyQuery, MADMessageEmptyQuery);
     NSString *buttonTitle = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -418,7 +403,9 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
     NSString *messageStart = error.localizedFailureReason.copy ?: @"";
     NSString *localizedRecoverySuggestion = error.localizedRecoverySuggestion.copy ?: @"";
     NSString *message = [messageStart stringByAppendingString:localizedRecoverySuggestion];
-    return [self newAlertControllerErrorDisplayErrorWithTitle:title message:message andCompletion:nil];
+    return [self newAlertControllerErrorDisplayErrorWithTitle: title
+                                                      message: message
+                                                andCompletion: nil];
 }
 
 + (instancetype)newAlertControllerErrorDisplayErrorWithTitle:(NSString *)title
@@ -437,6 +424,8 @@ static NSString * const MADMessageEmptyQuery           = @"Add tables to the que
 }
 
 + (instancetype)newAlertControllerNofityTransactionComplete {
+    NSString *MADTitleTransactionComplete = @"Transaction Complete";
+    NSString *MADMessageSoftwareActivated = @"Software activated.";
     NSString *title = NSLocalizedString(MADTitleTransactionComplete, MADTitleTransactionComplete);
     NSString *message = NSLocalizedString(MADMessageSoftwareActivated, MADMessageSoftwareActivated);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);

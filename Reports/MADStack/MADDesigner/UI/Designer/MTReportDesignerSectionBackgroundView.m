@@ -31,6 +31,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
 
     if (self.numberOfRowsInBackground >= 2) {
         [[UIColor groupTableViewBackgroundColor] setStroke];

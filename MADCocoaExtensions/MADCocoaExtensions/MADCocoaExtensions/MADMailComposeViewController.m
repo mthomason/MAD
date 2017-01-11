@@ -15,7 +15,7 @@
                                                  body: (NSString *)body
                                    userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom {
     
-    MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
+    MADMailComposeViewController *mailComposer = [[self alloc] init];
     mailComposer.subject = title;
     [mailComposer setMessageBody:body isHTML:NO];
     mailComposer.navigationController.navigationBar.barTintColor
@@ -42,7 +42,7 @@
     NSString *documentTitle = [NSString stringWithFormat:formatString,
                                                          attachmentURL.lastPathComponent];
     
-    MFMailComposeViewController	*mailComposer;
+    MADMailComposeViewController *mailComposer;
     mailComposer = [self newMailComposeViewControllerWithTitle: documentTitle
                                                           body: body
                                             userInterfaceIdiom: userInterfaceIdiom];

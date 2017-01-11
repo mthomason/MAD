@@ -23,8 +23,8 @@
     @property (nonatomic, assign, readwrite) NSUInteger numberOfPages;
     @property (nonatomic, assign, readwrite) CGPoint contentOffsetInital;
     @property (nonatomic, assign, readwrite) CGSize contentSizeInital;
-    @property (nonatomic, assign, readwrite) CGFloat zoomScaleInital;
-    @property (nonatomic, assign, readwrite) CGFloat contentScaleFactor;
+    @property (nonatomic, assign, readwrite) double zoomScaleInital;
+    @property (nonatomic, assign, readwrite) double contentScaleFactor;
     @property (nonatomic, copy) NSDate *reportLastCacheDate;
 
 @end

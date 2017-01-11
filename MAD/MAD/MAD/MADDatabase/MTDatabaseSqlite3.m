@@ -19,6 +19,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSCalendar.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
 
 #import <dispatch/time.h>
 #import <dispatch/semaphore.h>
@@ -987,7 +988,7 @@ void sqliteLog(void *foo, const char* statement) {
         if (sqlError && error != NULL) {
             error = sqlError;
         }
-        NSAssert(sqlError == NULL, @"Error: %@", error);
+        NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
     } else {
         
         MTDataTable * dataTable;
@@ -1005,7 +1006,7 @@ void sqliteLog(void *foo, const char* statement) {
         if (executeError && error != NULL) {
             error = executeError;
         }
-        NSAssert(sqlError == NULL, @"Error: %@", error);
+        NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);
 
     }
 
@@ -1174,9 +1175,10 @@ void sqliteLog(void *foo, const char* statement) {
         for (MTDatabaseTable *table in tables) {
             NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheDeleteAllFromTable object:queryDefination];
-            NSError * __autoreleasing error = NULL;
-            BOOL success = NO;
-            success = [self executeQuery:dropTable withError:&error];
+            NSError * __autoreleasing *errorQuery = NULL;
+            BOOL successQuery = NO;
+            successQuery = [self executeQuery:dropTable withError:errorQuery];
+            NSAssert(errorQuery == NULL, (*errorQuery).localizedDescription);
         }
         
         dispatch_semaphore_signal(s0);
@@ -1184,19 +1186,19 @@ void sqliteLog(void *foo, const char* statement) {
     dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
 
     BOOL success = NO;
-    NSError * __autoreleasing errorQuerySyncMode = NULL;
+    NSError * __autoreleasing *errorQuerySyncMode = NULL;
     MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncOff alloc] init];
-    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
 
 
-    NSError * __autoreleasing errorQueryJournalMode = NULL;
+    NSError * __autoreleasing *errorQueryJournalMode = NULL;
     MTQuery * __autoreleasing queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
-    success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
+    success = [self executeQuery:queryJournalMode withError:errorQueryJournalMode];
 
 
-    NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
+    NSError * __autoreleasing *errorQueryCacheBeginTransaction = NULL;
     MTQuery * __autoreleasing query = [[MTQueryCacheBeginTransaction alloc] init];
-    success = [self executeQuery:query withError:&errorQueryCacheBeginTransaction];
+    success = [self executeQuery:query withError:errorQueryCacheBeginTransaction];
 
 }
 
@@ -1204,13 +1206,13 @@ void sqliteLog(void *foo, const char* statement) {
 
     BOOL success = NO;
 
-    NSError * __autoreleasing errorCacheEndTransaction = NULL;
+    NSError * __autoreleasing *errorCacheEndTransaction = NULL;
     MTQuery * __autoreleasing query = [[MTQueryCacheEndTransaction alloc] init];
-    success = [self executeQuery:query withError:&errorCacheEndTransaction];
+    success = [self executeQuery:query withError:errorCacheEndTransaction];
     
-    NSError * __autoreleasing errorQuerySyncMode = NULL;
+    NSError * __autoreleasing *errorQuerySyncMode = NULL;
     MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
-    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
 
     /*
      NSError * __autoreleasing errorJournalMode = NULL;

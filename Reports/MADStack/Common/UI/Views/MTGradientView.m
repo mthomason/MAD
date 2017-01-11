@@ -15,6 +15,8 @@
 @synthesize highlight = _hidden;
 
 - (void)drawRect:(CGRect)rect{
+    [super drawRect: rect];
+
     CGContextRef currentContext =  UIGraphicsGetCurrentContext();
     
     CGContextSaveGState(currentContext);
@@ -24,25 +26,43 @@
     UIColor *startColor = [MADColorEverydayApps newColorGreenLight];
     CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents(startColor.CGColor);
     
-    UIColor *secondColor = [[UIColor alloc] initWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
+    UIColor *secondColor = [[UIColor alloc] initWithRed: (132.0000f/255.0000f)
+                                                  green: (174.0000f/255.0000f)
+                                                   blue: (98.0000f/255.0000f)
+                                                  alpha: 1.0000f];
     CGFloat *secondColorComponents = (CGFloat *)CGColorGetComponents(secondColor.CGColor);
     
-    UIColor *thirdColor = [[UIColor alloc] initWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
+    UIColor *thirdColor = [[UIColor alloc] initWithRed: (119.0000f/255.0000f)
+                                                 green: (166.0000f/255.0000f)
+                                                  blue: (82.0000f/255.0000f)
+                                                 alpha: 1.0000f];
     CGFloat *thirdColorComponents = (CGFloat *)CGColorGetComponents(thirdColor.CGColor);
     
-    UIColor *fourthColor = [[UIColor alloc] initWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
+    UIColor *fourthColor = [[UIColor alloc] initWithRed: (102.0000f/255.0000f)
+                                                  green: (155.0000f/255.0000f)
+                                                   blue: (61.0000f/255.0000f)
+                                                  alpha: 1.0000f];
     CGFloat *fourthColorComponents = (CGFloat *)CGColorGetComponents(fourthColor.CGColor);
     
     UIColor *middleColor = [MADColorEverydayApps newColorGreenDark];
     CGFloat *middleColorComponents = (CGFloat *)CGColorGetComponents(middleColor.CGColor);
 
-    UIColor *sixthColor = [[UIColor alloc] initWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
+    UIColor *sixthColor = [[UIColor alloc] initWithRed: (102.0000f/255.0000f)
+                                                 green: (155.0000f/255.0000f)
+                                                  blue: (61.0000f/255.0000f)
+                                                 alpha: 1.0000f];
     CGFloat *sixthColorComponents = (CGFloat *)CGColorGetComponents(sixthColor.CGColor);
 
-    UIColor *seventhColor = [[UIColor alloc] initWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
+    UIColor *seventhColor = [[UIColor alloc] initWithRed: (119.0000f/255.0000f)
+                                                   green: (166.0000f/255.0000f)
+                                                    blue: (82.0000f/255.0000f)
+                                                   alpha: 1.0000f];
     CGFloat *seventhColorComponents = (CGFloat *)CGColorGetComponents(seventhColor.CGColor);
     
-    UIColor *eightColor = [[UIColor alloc] initWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
+    UIColor *eightColor = [[UIColor alloc] initWithRed: (132.0000f/255.0000f)
+                                                 green: (174.0000f/255.0000f)
+                                                  blue: (98.0000f/255.0000f)
+                                                 alpha: 1.0000f];
     CGFloat *eightColorComponents = (CGFloat *)CGColorGetComponents(eightColor.CGColor);
     
     UIColor *ninthColor = [MADColorEverydayApps newColorGreenLight];

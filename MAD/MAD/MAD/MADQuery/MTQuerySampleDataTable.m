@@ -17,6 +17,7 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSError.h>
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
@@ -62,7 +63,7 @@
     if (sqlError && error != NULL) {
         error = sqlError;
     }
-    NSAssert(sqlError == NULL, @"Error: %@", error);
+    NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
 
     NSString *selectPart = [self.database selectPartWithLimitedResults:255];
     NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
@@ -93,7 +94,7 @@
     if (blockError && error != NULL) {
         error = blockError;
     }
-    NSAssert(blockError == NULL, @"Error: %@", blockError);
+    NSAssert(blockError == NULL, @"Error: %@", (*blockError).localizedDescription);
     if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
         
         for (RptqDatabaseSchemaField *field in fields) {

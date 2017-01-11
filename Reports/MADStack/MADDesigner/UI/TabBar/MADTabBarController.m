@@ -73,7 +73,7 @@ const int8_t MADIndexViewer = 2;
 
 - (void)dealloc {
     _promptNavigationItem = nil;
-    _viewControllerDelegate = nil;
+    //_viewControllerDelegate = nil;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -140,9 +140,13 @@ const int8_t MADIndexViewer = 2;
     navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
     navControllerViewer.document = document;
     [self.tabBarViewControllers addObject: navControllerViewer];
+
+    id <MADViewControllerStandardProtocol> delegate;
+    delegate = self.viewControllerDelegate;
+
     self.navControllerViewer = navControllerViewer;
- 
-    id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
+    navControllerViewer.viewControllerDelegate = delegate;
+    // navControllerViewer
     self.querySplitViewController.viewControllerDelegate = delegate;
     self.designerViewController.delegate = delegate;
 

@@ -9,7 +9,7 @@
 #ifndef MADAppStorageOption_h
 #define MADAppStorageOption_h
 
-typedef NS_ENUM(short, MADAppStorage) {
+typedef NS_ENUM(NSInteger, MADAppStorage) {
     MADAppStorageNotSet = 0,
     MADAppStorageCloud = 1,
     MADAppStorageLocal = 2,

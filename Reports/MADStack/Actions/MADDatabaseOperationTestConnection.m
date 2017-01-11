@@ -130,12 +130,12 @@
     queryTest.database = db;
     self.database = db;
     
-    NSError * __autoreleasing error = NULL;
-    if ((self.success = [queryTest.database executeQuery:queryTest withError:&error])) {
+    NSError * __autoreleasing *error = NULL;
+    if ((self.success = [queryTest.database executeQuery:queryTest withError:error])) {
         [self finish];
     } else {
-        NSError *err = error;
-        self.error = error;
+        NSError *err = *error;
+        self.error = *error;
         [self finishWithError:err];
     }
 }

@@ -13,6 +13,7 @@
 #import "MTQueryMaxFieldLength.h"
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSError.h>
 
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
@@ -47,11 +48,11 @@
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
     NSError * __autoreleasing *sqlError = NULL;
-    [super getSqlWithError:&sqlError];
+    [super getSqlWithError: sqlError];
     if (sqlError && error != NULL) {
         error = sqlError;
     }
-    NSAssert(sqlError == NULL, @"Error: %@", sqlError);
+    NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
     
     NSString *sql = nil;
     NSArray *fields = [[NSArray alloc] initWithArray:self.queryObject];

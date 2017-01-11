@@ -12,7 +12,7 @@
 #import <UIKit/UITableViewCell.h>
 
 #import "MADTableViewCellMargin.h"
-//#import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UIVisualEffectView.h>
 
 @class UIBlurEffect;
 @class UIVisualEffectView;
@@ -32,7 +32,7 @@
     @property (nonatomic, strong) NSArray *layoutConstraints;
     @property (atomic, assign) BOOL updatingConstraints;
 
-    + (NSInteger)blurEffectStyle;
+    + (UIBlurEffectStyle)blurEffectStyle;
 
     - (void)updateConstraints;
     - (void)initialize;

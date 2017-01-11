@@ -67,10 +67,10 @@ static NSString * const keyContentScaleFactor   = @"f";
     NSNumber *numberOfPages = [[NSNumber alloc] initWithUnsignedInteger:_numberOfPages];
     [coder encodeObject:numberOfPages forKey:keyNumberOfPages];
 
-    NSNumber *zoomScaleInital = [[NSNumber alloc] initWithFloat:_zoomScaleInital];
+    NSNumber *zoomScaleInital = [[NSNumber alloc] initWithDouble:_zoomScaleInital];
     [coder encodeObject:zoomScaleInital forKey:keyZoomScaleInital];
 
-    NSNumber *contentScaleFactor = [[NSNumber alloc] initWithFloat:_contentScaleFactor];
+    NSNumber *contentScaleFactor = [[NSNumber alloc] initWithDouble:_contentScaleFactor];
     [coder encodeObject:contentScaleFactor forKey:keyContentScaleFactor];
 
     [coder encodeCGPoint:_contentOffsetInital forKey:keyOffsetInital];

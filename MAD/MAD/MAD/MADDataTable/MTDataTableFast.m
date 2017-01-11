@@ -354,7 +354,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
        columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
     BOOL success = NO;
-    NSError * __autoreleasing errorQuery = NULL;
+    NSError * __autoreleasing *errorQuery = NULL;
 
     NSString *columnAffinity = [_databaseForInserts newNativeTypeForDataType: column.type];
 
@@ -365,7 +365,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                           uniqueColumnHack: unique
                                                             columnAffinity: columnAffinity];
     query.database = _databaseForInserts;
-    success = [_databaseForInserts executeQuery:query withError:&errorQuery];
+    success = [_databaseForInserts executeQuery:query withError:errorQuery];
     NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
              __PRETTY_FUNCTION__);
 
@@ -418,8 +418,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                [[MTQueryCacheAddRow alloc] initWithObject:parameters];
         
         query.database = _databaseForInserts;
-        NSError * __autoreleasing errorQuery = NULL;
-        [_databaseForInserts executeQuery:query withError:&errorQuery];
+        NSError * __autoreleasing *errorQuery = NULL;
+        [_databaseForInserts executeQuery:query withError:errorQuery];
 
     }
     
@@ -564,8 +564,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
   
         MTQuery *queryCreateIndex = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
         BOOL success;
-        NSError * __autoreleasing errorQuery = NULL;
-        success = [self.databaseForInserts executeQuery:queryCreateIndex withError:&errorQuery];
+        NSError * __autoreleasing *errorQuery = NULL;
+        success = [self.databaseForInserts executeQuery:queryCreateIndex withError:errorQuery];
 
         groupCounter++;
     }
@@ -577,23 +577,26 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSUInteger sortDescCtr = self.sortDescriptors.count;
     NSUInteger groupCounter = 0;
     BOOL success;
+    NSString *groupName;
+    NSNumber *key;
+    NSDictionary *parameters;
+    MTQuery *query;
     for (NSUInteger i = 0; i<sortDescCtr; i++) {
-        NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
-        NSDictionary *parameters = @{
-                                     @(MTQueryCacheIndexDropIndexName) : groupName,
-                                     };
-        NSError * __autoreleasing errorQuery = NULL;
-        MTQuery *query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
-        success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
+        groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
+        key = [[NSNumber alloc] initWithUnsignedInteger: MTQueryCacheIndexDropIndexName];
+        parameters = [[NSDictionary alloc] initWithObjectsAndKeys: groupName, key, nil];
+        NSError * __autoreleasing *errorQuery = NULL;
+        query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
+        success = [self.databaseForInserts executeQuery:query withError:errorQuery];
         errorQuery = NULL;
     }
 }
 
 - (void)vacuumCacheDb {
     BOOL success;
-    NSError * __autoreleasing errorQuery = NULL;
+    NSError * __autoreleasing *errorQuery = NULL;
     MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
-    success = [self.databaseForInserts executeQuery:queryVacuum withError:&errorQuery];
+    success = [self.databaseForInserts executeQuery:queryVacuum withError:errorQuery];
 }
 
 - (void)dropTable {
@@ -602,17 +605,20 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (void)dropTableName:(NSString *)tableName {
     BOOL success;
-    NSError * __autoreleasing errorQuery = NULL;
+    NSError * __autoreleasing *errorQuery = NULL;
     MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
-    success = [self.databaseForInserts executeQuery:queryDropTable withError:&errorQuery];
+    success = [self.databaseForInserts executeQuery: queryDropTable
+                                          withError: errorQuery];
 }
 
 - (void)deleteAll {
     BOOL success;
-    NSError * __autoreleasing errorQuery = NULL;
+    NSError * __autoreleasing *errorQuery = NULL;
     NSString *tableName = [self tableName];
-    MTQuery *queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
-    success = [self.databaseForInserts executeQuery:queryDeleteAllFromTable withError:&errorQuery];
+    MTQuery *queryDeleteAllFromTable;
+    queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
+    success = [self.databaseForInserts executeQuery: queryDeleteAllFromTable
+                                          withError: errorQuery];
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

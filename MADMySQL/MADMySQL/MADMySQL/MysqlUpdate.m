@@ -114,7 +114,7 @@
         NSString *escapeKey = [connection mysqlEscapeString: key];
         
         if ([value isKindOfClass:[NSString class]]) {
-            NSString *mysqlEscapeString = [connection mysqlEscapeString:value];
+            NSString *mysqlEscapeString = [connection mysqlEscapeString:(NSString *)value];
             [qualifierString appendFormat:@"AND %@='%@' ", escapeKey, mysqlEscapeString];
             
         } else if ([value isKindOfClass:[NSNull class]]) {

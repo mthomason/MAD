@@ -45,21 +45,22 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 #endif
 
-@interface MADArrayCaching () {
+@interface MADArrayCaching ()
 
-    int _numberOfRows;
-    sqlite3_stmt *_statementInsert;
-    sqlite3_stmt *_statementSelect;
-    sqlite3_stmt *_statementCount;
-    sqlite3_stmt *_statementEnumer;
-}
     @property (nonatomic, strong, readwrite) NSString *identifier;
     @property (nonatomic, strong, readwrite) MTDatabaseCache *database;
     @property (nonatomic, strong, readwrite) MADIndex *lastObjectSelected;
 
 @end
 
-@implementation MADArrayCaching
+@implementation MADArrayCaching {
+    
+    int _numberOfRows;
+    sqlite3_stmt *_statementInsert;
+    sqlite3_stmt *_statementSelect;
+    sqlite3_stmt *_statementCount;
+    sqlite3_stmt *_statementEnumer;
+}
 
 - (void)dealloc {
     _lastObjectSelected = nil;
@@ -264,7 +265,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                         uniqueColumnHack: unique
                                           columnAffinity: columnAffinity];
     BOOL success = NO;
-    NSError * __autoreleasing * error = NULL;
+    NSError * __autoreleasing *error = NULL;
     success = [self.database executeQuery:queryCacheAddColumn withError:error];
 }
 
@@ -376,9 +377,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
-    NSError * __autoreleasing error = NULL;
+    NSError * __autoreleasing *error = NULL;
     BOOL success = NO;
-    success = [self.database executeQuery:queryDeleteAllFromTable withError:&error];
+    success = [self.database executeQuery:queryDeleteAllFromTable withError:error];
 
 }
 

@@ -150,6 +150,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+
     //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
@@ -195,6 +197,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     
     //id predicate = self.predicateKindOfLongPressGestureRecognizer;
@@ -226,12 +229,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)collectionView:(UICollectionView *)collectionView
                                         didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
                                         didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 }
 
@@ -240,6 +245,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 // Should Select
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return YES;
 /*    BOOL shouldSelectItemAtIndexPath = YES;
     if (_editing) {
@@ -252,6 +258,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 // Did Select
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     [self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 
@@ -274,6 +281,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
         shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     return _editing ?
     [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
@@ -290,6 +298,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
                                             didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
@@ -301,18 +310,20 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action
     forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                                         shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                                         shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return NO;
 }
 
@@ -349,6 +360,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     CGFloat sizeLabel[2];
     UIFont *font;
@@ -405,7 +417,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
     
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
     [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
@@ -413,6 +425,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)openURL:(NSURL *)url {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, url);
     MADFileExplorerDelegate delegate = self.delegate;
     NSURL *urlToOpen = url.copy;
     id open = [[NSInvocationOperation alloc] initWithTarget: delegate
@@ -423,7 +436,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
     
-    if (metadata.isDownloaded) {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, metadata.URL);
+    if (!metadata.isDownloaded) {
         
         NSURL *url = metadata.URL.copy;
         
@@ -446,7 +460,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 
 - (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
-    NSString *result;
+    id result;
     result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
                         NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :
                         [MADStandard newStandardStringForFileSize:fileSize];

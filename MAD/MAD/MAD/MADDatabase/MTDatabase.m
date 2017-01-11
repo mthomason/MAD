@@ -96,7 +96,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     if (error != NULL) {
         NSString *title = @"Abstract function.";
         NSString *message = @"Don't go there.";
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+        MADErrorUserInfo *errorUserInfo;
+        errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
         *error = [errorUserInfo errorWithDomain:@"MTDatabase" code:3190];
     }
     return NO;

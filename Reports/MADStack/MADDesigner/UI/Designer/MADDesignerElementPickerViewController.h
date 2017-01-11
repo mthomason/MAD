@@ -36,7 +36,6 @@ extern const NSInteger MTViewTagFieldOrFormulaSelector;
                                                  inputObject:(NSManagedObjectID *)inputObject
                                                    groupType:(MTAggregateGroupByType)groupType
                                                  groupNumber:(NSNumber *)groupNumber;
-    //- (void)viewControllerDidFinish:(id)sender;
 
 @end
 

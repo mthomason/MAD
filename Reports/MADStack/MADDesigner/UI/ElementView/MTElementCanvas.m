@@ -10,6 +10,7 @@
 #import <UIKit/UIGraphics.h>
 
 #import <MADCocoaExtensions/MADColor.h>
+
 @implementation MTElementCanvas
 
 static const CGFloat kDashedBorderWidth     = (0.5f);
@@ -18,7 +19,8 @@ static const CGFloat kDashedLinesLength[]   = {4.0f, 2.0f};
 static size_t const kDashedCount            = (2.0f);
 
 - (void)drawRect:(CGRect)rect {
-    
+    [super drawRect: rect];
+
     id displayObject = [self.canvasDelegate displayObject];
     if ([displayObject isKindOfClass: [MTBarcode class]]) {
         [displayObject initSampleData];

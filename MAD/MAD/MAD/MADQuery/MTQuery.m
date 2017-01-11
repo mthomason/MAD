@@ -16,6 +16,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSError.h>
 
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
@@ -217,7 +218,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     if (!success && qerror != NULL && error != NULL) {
         error = qerror;
     }
-    NSAssert(error == NULL, @"Error: %@", error);
+    NSAssert(error == NULL, @"Error: %@", (*error).localizedDescription);
     return success;
 }
 

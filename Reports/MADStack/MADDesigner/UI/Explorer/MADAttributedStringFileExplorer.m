@@ -15,11 +15,11 @@
 
 + (instancetype)newAttributedStringFileExplorerCaption:(NSString *)text {
     
+    id attributes;
     NSString *caption = text.copy;
     UIFont *font;
     NSMutableParagraphStyle *paragraphStyle;
-    NSString *kern = [NSNull null];
-    id attributes;
+    id kern = [NSNull null];
     
     paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;

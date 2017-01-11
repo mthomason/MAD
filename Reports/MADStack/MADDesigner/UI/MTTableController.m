@@ -313,7 +313,8 @@
     
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     
-    MADTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
+    MADTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
+                                                                   forIndexPath:indexPath];
     
     NSDictionary *rowData = [self.datatable objectAtRow:row];
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
@@ -331,18 +332,26 @@
     NSString *reuseId = [self newReuseIdSupplementForColumn:(NSInteger)column];
     NSString *fieldKey = [self.query fieldKeyForIndex:(NSUInteger)indexPath.row];
     NSArray <NSString *>  *components = [fieldKey componentsSeparatedByString:@"."];
-    NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\""
+                                                                           withString:@""];
     
-    MADTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MADTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
+    MADTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MADTableCellHeader"
+                                                                  withReuseIdentifier:reuseId
+                                                                         forIndexPath:indexPath];
     view.label.text = fieldName;
     return view;
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width,
+                            CGSizeZero.height, CGSizeZero.width);
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+      widthRequiredColumn:(NSInteger)section {
     
     NSUInteger column = (NSUInteger)section;
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
@@ -356,8 +365,10 @@
     CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
     UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
     
-    NSString *s = [@"" stringByPaddingToLength:maxNumberOfCharacters withString:@"X" startingAtIndex:0];
-    NSDictionary *attributes = @{NSFontAttributeName: bodyFont};
+    NSDictionary *attributes;
+    attributes = [[NSDictionary alloc] initWithObjectsAndKeys: bodyFont, NSFontAttributeName, nil];
+    NSString *s = [@"" stringByPaddingToLength:maxNumberOfCharacters
+                                    withString:@"X" startingAtIndex:0];
     CGSize size = [s sizeWithAttributes:attributes];
     return size.width < 75.0000f ? 75.0000f : (size.width > 280.0000f) ? 280.0000f : size.width;
 }

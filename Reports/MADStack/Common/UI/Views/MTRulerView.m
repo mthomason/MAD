@@ -78,7 +78,8 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
 }
 
 - (void)drawRect:(CGRect)rect {
-    
+    [super drawRect: rect];
+
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
     UIFont *font = [UIFont fontWithDescriptor:_fontDescriptor size:5.0000f];

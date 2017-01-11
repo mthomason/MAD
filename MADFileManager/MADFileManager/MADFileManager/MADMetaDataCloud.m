@@ -200,7 +200,15 @@
 }
 
 - (BOOL)downloaded {
-    return [self isUbiquitous] && [self isUbiquitousItemDownloadingStatusNotDownloaded];
+    BOOL downloaded = YES;
+    if ([self isUbiquitous]) {
+        if ([self isUbiquitousItemDownloadingStatusCurrent]) {
+            downloaded = YES;
+        } else {
+            downloaded = NO;
+        }
+    }
+    return downloaded;
 }
 
 - (id)debugQuickLookObject {

@@ -8,7 +8,6 @@
 
 #import "MADClipboardView.h"
 #import <UIKit/UIGraphics.h>
-//#import <Foundation/Foundation.h>
 
 static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor);
 static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse);
@@ -19,7 +18,7 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
 static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor) {
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat locations[] = { 0.0, 1.0 };
+    CGFloat locations[] = { 0.0000f, 1.0000f };
     NSArray *colors = @[(__bridge id)startColor, (__bridge id)endColor];
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) colors, locations);
     CGPoint startPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMinY(rect));
@@ -29,6 +28,7 @@ static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef sta
     CGContextClip(context);
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
     CGContextRestoreGState(context);
+    
     CGColorSpaceRelease(colorSpace);
     CGGradientRelease(gradient);
     
@@ -117,7 +117,8 @@ static inline CGRect OuterRect(CGRect bounds) {
 }
 
 - (void)drawRect:(CGRect)rect {
-    
+    [super drawRect: rect];
+
     const CGFloat _brightness = 0.8000f, _hue = 0.5500f, _saturation = 0.8000f;
     const CGFloat zStrokeColour1[4]    = {0.0, 0.0, 1.0, 1.0};
     

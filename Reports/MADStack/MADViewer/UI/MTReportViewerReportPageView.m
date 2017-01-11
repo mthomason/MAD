@@ -89,6 +89,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect: rect];
     if (!self.drawBlankPage) {
         id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
         MTReportViewerPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];

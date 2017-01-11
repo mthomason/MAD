@@ -14,6 +14,8 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADNavigationControllerIdentity.h"
 
+@protocol MADViewControllerStandardProtocol;
+
 @interface MADNavigationController : UINavigationController
     <UINavigationControllerDelegate,
         UIViewControllerTransitioningDelegate,
@@ -23,6 +25,7 @@
     + (instancetype)newNavigationController:(MADNavigationControllerType)type;
 
     @property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
+    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
     - (IBAction)done:(id)sender;
 

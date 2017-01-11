@@ -73,7 +73,7 @@
         [cmd appendFormat:@" ) values ( "];
         
         firstAdd=YES;
-        for (NSInteger i=0; i<keys.count; i++) {
+        for (NSUInteger i=0; i<keys.count; i++) {
             if (firstAdd) {
                 [cmd appendString:@" ? "];
                 firstAdd=NO;
