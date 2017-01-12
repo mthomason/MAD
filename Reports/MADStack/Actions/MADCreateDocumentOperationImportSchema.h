@@ -11,7 +11,7 @@
 
 #import "MADOperation.h"
 
-@class MTDatabaseConnection;
+@class MADDatabaseConnection;
 
 @protocol MADCreateDocumentOperationImportSchemaProtocol <NSObject>
     - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress;
@@ -19,7 +19,7 @@
 
 @interface MADCreateDocumentOperationImportSchema : MADOperation
 
-    - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
     @property (nonatomic, weak) id <MADCreateDocumentOperationImportSchemaProtocol> parentOperation;
     
 @end

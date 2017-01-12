@@ -19,7 +19,7 @@
 #import <UIKit/NSParagraphStyle.h>
 
 #import "MADocument.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MTDatabaseField.h"
 
 #import "RptqDocument+Extras.h"
@@ -337,13 +337,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     
     RptqDocument *document;
     RptqDatabase *databaseSchemas;
-    MTDatabaseConnection *databaseConnection;
+    MADDatabaseConnection *databaseConnection;
     
     document = (reportFormatter.layout).activeDocumentModel;
     databaseSchemas = document.hasDatabaseSchemas.anyObject;
     
     RptqUserCredentals *credentals = databaseSchemas.ownedByUser;
-    databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals: credentals];
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals: credentals];
     
     MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
@@ -486,13 +486,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                             fontDescriptors[item.objectID] = fontDescriptor;
                         }
 
-                        [MTReportViewerPrintPageRenderer displayDrawingString: &drawingObject
-                                                            elementCanvasRect: &elementCanvasRect
+                        [MTReportViewerPrintPageRenderer displayDrawingString: drawingObject
+                                                            elementCanvasRect: elementCanvasRect
                                                                withAttributes: attt.fontAttributes];
                         
                     } else {
-                        [MTReportViewerPrintPageRenderer displayDrawingObject: &drawingObject
-                                                            elementCanvasRect: &elementCanvasRect];
+                        [MTReportViewerPrintPageRenderer displayDrawingObject: drawingObject
+                                                            elementCanvasRect: elementCanvasRect];
                     }
                     
                     line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
@@ -562,18 +562,18 @@ END_DrawSection:;
     return CGRectMake(pageRect.origin.x, originY, pageRect.size.width, sizeHeight);
 }
 
-+ (void)displayDrawingObject: (id __autoreleasing *)drawingObject
-           elementCanvasRect: (CGRect *)elementCanvasFrame {
-    [*drawingObject drawInRect: *elementCanvasFrame];
++ (void)displayDrawingObject: (id)drawingObject
+           elementCanvasRect: (CGRect)elementCanvasFrame {
+    [drawingObject drawInRect: elementCanvasFrame];
 }
 
-+ (void)displayDrawingString: (NSString * __autoreleasing *)drawingString
-           elementCanvasRect: (CGRect *)elementCanvasFrame
++ (void)displayDrawingString: (NSString *)drawingString
+           elementCanvasRect: (CGRect)elementCanvasFrame
               withAttributes: (NSDictionary *)attributes {
-    [*drawingString drawWithRect: *elementCanvasFrame
-                         options: NSStringDrawingUsesLineFragmentOrigin
-                      attributes: attributes
-                         context: nil];
+    [drawingString drawWithRect: elementCanvasFrame
+                        options: NSStringDrawingUsesLineFragmentOrigin
+                     attributes: attributes
+                        context: nil];
 }
 
 - (id)newDocumentObjectForDocumentImage:(RptqDocumentObjectImage *)item {
@@ -870,7 +870,7 @@ END_DrawSection:;
     NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
     
     if (columnKey) {
-        NSDictionary *queryParameters;
+        id queryParameters;
         
         switch (groupByType) {
             case MTAggregateGroupByTypePage: {
@@ -968,7 +968,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
     
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
+    MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
     MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
     NSUInteger numberOfPages = self.reportFormatter.numberOfPages;

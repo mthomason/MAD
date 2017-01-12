@@ -11,14 +11,14 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class MTDatabaseConnection, MTQuery;
+@class MADDatabaseConnection, MTQuery;
 
 @interface MTDataTableFastObjectEnumerator : NSEnumerator
 
     @property (nonatomic, assign) BOOL addRowId;
     @property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.
 
-    - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
+    - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                        columns: (NSDictionary *)columns
                                     columnKeys: (NSArray *)columnKeys
                                          query: (MTQuery *)query;

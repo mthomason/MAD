@@ -16,11 +16,12 @@
 
 @class MTDatabaseCache;
 @class MTQuery;
+@class MTDatabaseSqlite3;
 
 @interface MTDataTableFast : MTDataTablePlist
     <NSCoding, NSFastEnumeration>
 
-    @property (nonatomic, strong, readonly) MTDatabaseCache *databaseForSelects;
+    @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;
 
     @property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
     @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;

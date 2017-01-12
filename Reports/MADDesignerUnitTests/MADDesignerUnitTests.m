@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTQueryTest.h>
 
@@ -30,11 +30,11 @@
 
 - (void)testExample {
     
-    MTDatabaseConnection *databaseConnection;
-    databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType:MADIdentifierDatabaseMySQL
-                                                                        host:@"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
-                                                                    database:@"employees"
-                                                                        port:3306];
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: MADDatabaseCategoryMySQL
+                                                                         host: @"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
+                                                                     database: @"employees"
+                                                                         port: 3306];
     
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     NSError * __autoreleasing *error = NULL;

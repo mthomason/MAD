@@ -8,7 +8,7 @@
 
 #import "MADCreateDocumentOperationFirstTimeSetup.h"
 #import <CoreData/NSManagedObjectContext.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase+extras.h>
@@ -19,7 +19,7 @@
 @interface MADCreateDocumentOperationFirstTimeSetup ()
 
     @property (nonatomic, assign) BOOL success;
-    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -31,7 +31,7 @@
     return [self initWithDatabaseConnection:nil];
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
         self.success = NO;

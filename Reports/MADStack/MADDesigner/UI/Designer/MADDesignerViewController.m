@@ -3305,11 +3305,11 @@ END_deselectElementView:;
     return elementViews;
 }
 
-- (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
+- (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifier {
     MADDesignerSectionView *documentSectionView = nil;
     NSArray<__kindof UIView *> *subviews = _scroller.container.subviews;
     for (UIView *subview in subviews) {
-        if (subview.tag == identifer && [subview isKindOfClass:[MADDesignerSectionView class]]) {
+        if (subview.tag == identifier && [subview isKindOfClass:[MADDesignerSectionView class]]) {
             documentSectionView = (MADDesignerSectionView *)subview;
             break;
         }

@@ -33,9 +33,10 @@
 #import "MTDataTable.h"
 #import <MADFoundation/MADDataColumn.h>
 
+#import <MADCocoaExtensions/BDHost.h>
 #import <MADTdsClient/sybdb.h>
 
-#import "MTDatabaseConnectionSqlServer.h"
+#import "MADDatabaseConnection.h"
 
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
@@ -80,7 +81,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @interface MTDatabaseSqlServer ()
 
-    @property (nonatomic, strong) MTDatabaseConnectionSqlServer *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
 
 @end
 
@@ -119,7 +120,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            MTDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
+            MADDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
             DBPROCESS *dbconn = (__bridge DBPROCESS *)([blockSelf connectWithConnection:databaseConnection credentals:nil]);
 
             if (dbconn) {
@@ -1260,7 +1261,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             /* Initialize the login params in the structure */
             const char *u = [username cStringUsingEncoding:NSUTF8StringEncoding];
             const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
-            NSString *appName = [self.databaseConnection appname];
+            NSString *appName = @"mad";
             const char *a = [appName cStringUsingEncoding:NSUTF8StringEncoding];
             NSString *connection = (self.databaseConnection).database;
             const char *n = [connection cStringUsingEncoding:NSUTF8StringEncoding];
@@ -1277,7 +1278,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         DBSETLSECURE(login);
         if (*error == nil) {
         
-            NSString *IPAddress = [MTDatabaseConnection IPAddressForServer:self.databaseConnection.server];
+            NSString *IPAddress = [MTDatabaseSqlServer IPAddressForServer:self.databaseConnection.server];
             char *s = (char *)[IPAddress cStringUsingEncoding:NSUTF8StringEncoding];
             dbconn = dbopen(login, s);
             if (dbconn == NULL) {
@@ -1299,7 +1300,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return dbconn;
 }
 
-- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
++ (NSString *)IPAddressForServer:(NSString *)server {
+    NSString *address = [BDHost addressForHostname:server];
+    return address == nil ? server : [NSString stringWithString:address];
+}
+
+- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     
     if (credentals == nil) {
         credentals = [self copyCredentalsWithConnection:connection];
@@ -1324,11 +1330,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (NSString *)identifier {
-    return MADIdentifierDatabaseTDS;
-}
-
-+ (NSString *)identifier {
-    return MADIdentifierDatabaseTDS;
+    return self.databaseConnection.identifier;
 }
 
 - (id)connectionSettings {

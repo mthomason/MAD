@@ -198,10 +198,12 @@ static NSString * const StringEmpty = @"";
 
     if (inputStream.streamStatus == NSStreamStatusError) return;
     
-    NSPropertyListFormat format;
+    //NSPropertyListFormat format;
     NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream options: 0
-                                                            format: &format error: &error];
+    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream
+                                                           options: NSPropertyListImmutable
+                                                            format: nil //&format
+                                                             error: &error];
     NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     if (!plist) return;
     
@@ -209,13 +211,13 @@ static NSString * const StringEmpty = @"";
 }
 
 - (BOOL)cacheWithUrl:(NSURL *)url {
-    static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
+    //static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
 
     NSDictionary *plist = [self copyPlist].copy;
     
     NSError *error = NULL;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
-                                                               format: propertyListFormat
+                                                               format: NSPropertyListBinaryFormat_v1_0
                                                               options: 0
                                                                 error: &error];
 

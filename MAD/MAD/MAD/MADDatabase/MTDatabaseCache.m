@@ -7,20 +7,23 @@
 //
 
 #import "MTDatabaseCache.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
 #import <Foundation/NSString.h>
 
 @implementation MTDatabaseCache
 
-+ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection {
-    
-    NSString *identifier = connection.databaseTypeIdentifier.copy;
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
     
     id result = nil;
-    if ([MADIdentifierDatabaseSqlite3 isEqualToString:identifier]) {
-        
-        result = [[MTDatabaseSqlite3 alloc] init];
+    
+    switch (connection.databaseType) {
+        case MADDatabaseCategorySqlite3:
+            result = [[MTDatabaseSqlite3 alloc] init];
+            break;
+            
+        default:
+            break;
     }
     
     [result setDatabaseConnection:connection];

@@ -19,7 +19,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "MTDataTable.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MADDatabaseProtocol.h"
 
 @interface MTQuerySampleDataField ()
@@ -39,9 +39,14 @@
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]],
                  @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
-        RptqUserCredentals * __weak userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:userCredentals];
-        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        RptqUserCredentals *userCredentals;
+        MADDatabaseConnection *databaseConnection;
+        MTDatabase *db;
+        
+        userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:userCredentals];
+        
+        db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         db.delegate = self;
         
         NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;

@@ -22,7 +22,7 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
 @implementation RptqUserCredentals (Extras)
 
@@ -90,17 +90,17 @@
 
         case MADDatabaseTypeUnknown: {
             
-            if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseMySQL]) {
+            if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseCategoryMySQL]]) {
                 result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
-            } else if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseTDS]) {
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryTDS]]) {
                 result = self.tds_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMicrosoftSqlServer];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
-            } else if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseSqlite3]) {
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategorySqlite3]]) {
                 result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
                 self.inDatabase.databaseDriverTypeEnum = type;

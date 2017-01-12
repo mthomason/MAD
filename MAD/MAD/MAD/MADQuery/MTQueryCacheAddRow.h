@@ -17,7 +17,7 @@
 
     @property (nonatomic, readonly, copy) NSString *tableName;
     //@property (nonatomic, readonly, weak) NSDictionary *columns;
-    @property (nonatomic, readonly, weak) NSArray *columnKeys;
+    @property (nonatomic, readonly, strong) NSArray *columnKeys;
 
     @property (nonatomic, readonly, strong) NSString *sqlPreProcessColumnNames;
 

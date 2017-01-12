@@ -26,7 +26,7 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MAD/MTDataTable.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/MTDataTable.h>
 #import <MAD/MTDatabase.h>
@@ -128,10 +128,7 @@
     MADTableController * __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
-
-    
-    dispatch_block_t block;
-    block = ^{
+    dispatch_async(queue, ^{
         
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
@@ -139,7 +136,7 @@
         BOOL success = [strongself.tableFormatter.query performQueryWithError: error];
         
         MADTableController *strongself2 = weakSelf2;
-        
+
         UIBarButtonItem *rightBarButtonItem = strongself2.navigationItem.rightBarButtonItem;
         SEL selector = @selector(setRightBarButtonItem:);
         [strongself2.navigationItem performSelectorOnMainThread: selector
@@ -158,7 +155,7 @@
             deleteKey = ^(BOOL displayErrorSuccess) {
                 [MTKeyChain deleteKey:key];
             };
-
+            
             NSError *serror = [*error copyWithZone:nil];
             MADTableController * __weak weakself4 = strongself2;
             dispatch_block_t showError = ^{
@@ -167,18 +164,17 @@
                      onViewController: sself
                            completion: deleteKey];
             };
-
+            
             [NSThread isMainThread] ?
-                showError() :
-                dispatch_sync(dispatch_get_main_queue(), showError);
+            showError() :
+            dispatch_sync(dispatch_get_main_queue(), showError);
             
         }
         [strongself2 performSelectorOnMainThread: @selector(invalidateLayout)
                                       withObject: strongself2 waitUntilDone: NO];
         
         
-    };
-    dispatch_async(queue, block);
+    });
 }
 
 - (void)viewDidAppear:(BOOL)animated {

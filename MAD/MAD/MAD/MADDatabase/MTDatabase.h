@@ -26,10 +26,11 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 };
 
 @protocol MTDatabaseProtocol;
+@protocol MADDatabaseConnectionsProperties;
 
 @class NSMutableArray;
 @class MADCredential;
-@class MTDatabaseConnection;
+@class MADDatabaseConnection;
 @class MTDatabase;
 @class MTDatabaseTable;
 @class MTDataTable;
@@ -43,12 +44,11 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @interface MTDatabase : NSObject
 
     @property (nonatomic, weak) id <MTDatabaseProtocol> delegate;
-    @property (nonatomic, weak) id <MADErrorHandler> delegateError;
-    @property (nonatomic, copy) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 
     @property (nonatomic, strong) NSMutableArray *errors;
 
-    + (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection;
+    + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
 
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
@@ -89,8 +89,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
     - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error;
 
-    - (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection;
-    - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals;
+    - (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection;
+    - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals;
 
     - (void)readRow:(NSUInteger)row;
 

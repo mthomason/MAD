@@ -8,7 +8,7 @@
 
 #import "MADGetCredentialsOperation.h"
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import "NSOperation+Advanced.h"
 #import "MADOperationQueue.h"
 #import "MADKeyChainOperationGet.h"
@@ -58,7 +58,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (BOOL)gotCredentials { return self.usernameSet && self.passwordSet; }
 
-- (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
+- (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
     if (self = [super init]) {
 
         NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
@@ -132,7 +132,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 // Helper functions
 
-- (void)addOperationsToGetCredentialsWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
+- (void)addOperationsToGetCredentialsWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                              viewController: (UIViewController *)viewController {
     
     NSString *key = databaseConnection.connectionString;

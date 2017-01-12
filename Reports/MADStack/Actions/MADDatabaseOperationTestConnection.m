@@ -15,7 +15,7 @@
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADErrorUserInfo.h>
 #import <MAD/MTDataTable.h>
@@ -26,7 +26,7 @@
     <MTDatabaseProtocol>
 
     //Parameters
-    @property (nonatomic, weak) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, weak) MADDatabaseConnection *databaseConnection;
     @property (nonatomic, copy) MADCredential *credentials;
 
     //Store
@@ -41,7 +41,7 @@
 
 @implementation MADDatabaseOperationTestConnection
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection {
     if (self = [super init]) {
         _databaseConnection = connection;
         _credentials = nil;
@@ -50,7 +50,7 @@
     return self;
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
                                credentials:(MADCredential *)credentials {
     if (self = [super init]) {
         _databaseConnection = connection;
@@ -118,7 +118,7 @@
         return;
     }
     
-    MTDatabaseConnection *databaseConnection = self.databaseConnection;
+    MADDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     MTDataTable *datatable = [MTDataTable newDataTableOfType: MTDataTableTypeVirtual
                                                 withObjectID: databaseConnection.hash];

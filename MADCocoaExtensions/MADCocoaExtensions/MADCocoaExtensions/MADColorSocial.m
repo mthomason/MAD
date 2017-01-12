@@ -11,13 +11,16 @@
 @implementation MADColorSocial
 
 + (instancetype)newBlueTwitter {
-    return newColorWitColors(0.00000000f, 172.00000000f, 237.00000000f);
+    id color = newColorWitColors(0.00000000f, 172.00000000f, 237.00000000f);
+    return color;
 }
 + (instancetype)newBlueLinkedIn {
-    return newColorWitColors(0.0000f, 123.0000f, 182.0000f);
+    id color = newColorWitColors(0.0000f, 123.0000f, 182.0000f);
+    return color;
 }
 + (instancetype)newBlueFacebook {
-    return newColorWitColors(59.0000f, 89.0000f, 152.0000f);
+    id color = newColorWitColors(59.0000f, 89.0000f, 152.0000f);
+    return color;
 }
 
 @end

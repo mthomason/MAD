@@ -7,9 +7,11 @@
 //
 
 #import "MADCreateDocumentOperation.h"
-#import <MAD/MTDatabaseConnection.h>
+
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
+
 #import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADGetCredentialsOperation.h"
@@ -32,7 +34,7 @@
 - (void)dealloc { }
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
-              databaseConnection: (MTDatabaseConnection *)databaseConnection
+              databaseConnection: (MADDatabaseConnection *)databaseConnection
                   viewController: (UIViewController *)viewController {
     
     if (self = [super init]) {
@@ -47,32 +49,39 @@
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency:getCredentials];
         
-        MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
+        MADCreateDocumentOperationCreateDocument *createDocument;
+        createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
         [createDocument addDependency:getCredentials];  // This is because the document uses this task as delegate to get credentials.
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
-        MADCreateDocumentOperationFirstTimeSetup *firstTimeSetup = [[MADCreateDocumentOperationFirstTimeSetup alloc] init];
+        MADCreateDocumentOperationFirstTimeSetup *firstTimeSetup;
+        firstTimeSetup = [[MADCreateDocumentOperationFirstTimeSetup alloc] init];
         [firstTimeSetup addDependency:createDocument];
 
-        MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
+        MADCreateDocumentOperationAddConnection *addConnection;
+        addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency:createDocument];
         [addConnection addDependency:firstTimeSetup];
         
-        MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+        MADCreateDocumentOperationImportSchema *importSchema;
+        importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
         importSchema.parentOperation = self;
         
-        MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
+        MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation;
+        saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
         [saveOperation addDependency:createDocument];
         [saveOperation addDependency:importSchema];
         
-        MADDocumentOperationCloseDocument *closeDocument = [[MADDocumentOperationCloseDocument alloc] init];
+        MADDocumentOperationCloseDocument *closeDocument;
+        closeDocument = [[MADDocumentOperationCloseDocument alloc] init];
         [closeDocument addDependency:createDocument];
         [closeDocument addDependency:saveOperation];
         
-        MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
+        MADOperationBackgroundTaskEnd *taskEnd;
+        taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
         [taskEnd addDependency:taskBegin];
         [taskEnd addDependency:closeDocument];
         

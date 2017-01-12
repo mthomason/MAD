@@ -19,7 +19,7 @@
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MUIViewControllerDelegate.h"
@@ -144,24 +144,24 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    NSString *dbId = nil;
+    MADDatabaseCategory dbId;
     if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADIdentifierDatabaseMySQL;
+        dbId = MADDatabaseCategoryMySQL;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADIdentifierDatabaseTDS;
+        dbId = MADDatabaseCategoryTDS;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADIdentifierDatabaseSqlite3;
+        dbId = MADDatabaseCategorySqlite3;
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {

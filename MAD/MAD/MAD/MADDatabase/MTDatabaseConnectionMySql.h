@@ -9,17 +9,17 @@
 #ifndef Reports_MTDatabaseConnectionMySql_h
 #define Reports_MTDatabaseConnectionMySql_h
 
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
-@interface MTDatabaseConnectionMySql : MTDatabaseConnection
-    <NSCopying>
-    
+@interface MTDatabaseConnectionMySql : MADDatabaseConnection
+    <MADDatabaseConnectionConstructors,
+        MADDatabaseConnectionsProperties,
+        MADDatabaseConnectionsPropertiesCredentals,
+        NSCopying>
+
     - (instancetype)initWithHost:(NSString *)host
                         database:(NSString *)database
                          andPort:(NSInteger)port;
-
-    @property (nonatomic, readonly, copy)      NSString  *database;
-    @property (nonatomic, readonly, assign)    NSInteger port;
 
 @end
 

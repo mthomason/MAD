@@ -53,7 +53,7 @@ void sqliteCallback(void *foo, const char* statement) {
     _databaseForQuery = nil;
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection
                                    columns:(NSDictionary *)columns
                                 columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     if (self = [super init]) {

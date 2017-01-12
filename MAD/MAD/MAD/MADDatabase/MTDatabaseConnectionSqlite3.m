@@ -13,18 +13,50 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
-@interface MTDatabaseConnectionSqlite3 ()
+#import "RptqUserCredentals.h"
 
-    @property (nonatomic, readwrite, copy) NSURL *databaseUrl;
+#import <MADFoundation/MADURL.h>
 
-@end
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 @implementation MTDatabaseConnectionSqlite3
+
+@synthesize databaseUrl = _databaseUrl;
+@synthesize connectionString = _connectionString;
+@synthesize databaseType = _databaseType;
+
+@dynamic identifier;
+
++ (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
+
+    id dbConnection;
+    dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+    
+    NSString *databaseFilename = credentals.mysql_database.copy;
+    
+    // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
+    //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
+    //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
+    
+    MADURL *appSupportDirectory;
+    MADAppDelegate appDelegate = [MADApplication AppDelegate];
+    id groupIdentifier = [appDelegate groupIdentifier].copy;
+    appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
+    
+    NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
+                                                        isDirectory: NO];
+    NSString *path = dbUrl.path.copy;
+    NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
+    dbConnection = [[self alloc] initWithUrl:databaseUrl];
+    return dbConnection;
+    
+}
 
 - (instancetype)initWithUrl:(NSURL *)url {
     if (self = [super init]) {
         _databaseUrl = url.copy;
-        self.databaseTypeIdentifier = MADIdentifierDatabaseSqlite3;
     }
     return self;
 }
@@ -35,16 +67,24 @@
 }
 
 - (NSString *)connectionString {
-    NSString * __autoreleasing connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]", self.databaseTypeIdentifier, self.databaseUrl];
-    return connectionString;
+    if (!_connectionString) {
+        _connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]",
+                             self.identifier, self.databaseUrl];
+    }
+    return _connectionString;
+;
 }
 
 - (NSString *)identifier {
-    return MADIdentifierDatabaseSqlite3;
+    return [[self class] Identifier];
 }
 
-+ (NSString *)identifier {
-    return MADIdentifierDatabaseSqlite3;
++ (NSString *)Identifier {
+    return @"Sqlite 3";
+}
+
+- (BOOL)requiresCredientals {
+    return NO;
 }
 
 @end

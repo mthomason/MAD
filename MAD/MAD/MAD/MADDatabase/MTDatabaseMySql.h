@@ -23,7 +23,6 @@
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
     - (NSString *)identifier;
-    + (NSString *)identifier;
 
 @end
 

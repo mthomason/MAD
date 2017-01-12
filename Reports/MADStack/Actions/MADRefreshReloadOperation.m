@@ -10,7 +10,7 @@
 #import <Foundation/NSArray.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 
 #import "MADGetCredentialsOperation.h"
 #import "MADRefreshOperationInitalizeMainDataTable.h"
@@ -44,7 +44,7 @@
 }
 
 - (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController
-              databaseConnection: (MTDatabaseConnection *)databaseConnection {
+              databaseConnection: (MADDatabaseConnection *)databaseConnection {
 
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 

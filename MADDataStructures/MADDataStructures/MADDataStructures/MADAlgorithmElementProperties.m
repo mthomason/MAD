@@ -11,7 +11,7 @@
 @implementation MADAlgorithmElementProperties
 
 - (instancetype)init {
-    id elementProperties = [[self.class alloc] initWithColor: MTColorWhite];
+    id elementProperties = [self initWithColor: MTColorWhite];
     return elementProperties;
 }
 
@@ -23,7 +23,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    typeof(self.class) copy = [[self.class allocWithZone:zone] initWithColor: self.algorithmColor];
+    id copy = [[self.class allocWithZone:zone] initWithColor: self.algorithmColor];
     return copy;
 }
 

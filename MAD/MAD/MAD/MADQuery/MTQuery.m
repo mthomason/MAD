@@ -57,8 +57,6 @@
 
 #import "MADQueryCacheFullParameters.h"
 
-NSString * const MTQueryKeyType             = @"MTQueryKeyType";
-NSString * const MTQueryKeyObject           = @"MTQueryKeyObject";
 NSString * const MTQueryKeyPredicateColumn  = @"c";
 NSString * const MTQueryKeyPredicateValue   = @"v";
 NSString * const MADIdentifierROWID         = @"ROWID";

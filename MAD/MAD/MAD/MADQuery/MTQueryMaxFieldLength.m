@@ -16,7 +16,7 @@
 #import <Foundation/NSError.h>
 
 #import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
@@ -38,7 +38,7 @@
         RptqDatabaseSchemaField *field = array.firstObject;
 
         RptqUserCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:userCredentals];
+        id databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:userCredentals];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }

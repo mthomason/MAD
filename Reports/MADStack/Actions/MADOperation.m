@@ -275,6 +275,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
         }
         [self finished:combinedErrors];
         
+        
         NSArray *observers = self.observers;
         for (NSObject <MADOperationObserver> *observer in observers) {
             [observer operationDidFinish:self errors:combinedErrors];

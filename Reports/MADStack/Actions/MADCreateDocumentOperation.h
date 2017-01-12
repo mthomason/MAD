@@ -11,12 +11,12 @@
 
 #import "MADGroupOperation.h"
 
-@class UIViewController, MTDatabaseConnection;
+@class UIViewController, MADDatabaseConnection;
 
 @interface MADCreateDocumentOperation : MADGroupOperation
 
     - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
-                  databaseConnection: (MTDatabaseConnection *)databaseConnection
+                  databaseConnection: (MADDatabaseConnection *)databaseConnection
                       viewController: (UIViewController *)viewController;
 
 @end

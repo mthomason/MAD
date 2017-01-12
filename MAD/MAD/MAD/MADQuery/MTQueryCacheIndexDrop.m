@@ -12,7 +12,7 @@
 
 #import "MTQueryCacheIndexDrop.h"
 #import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MADQueryCacheIndexDropParameters.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>

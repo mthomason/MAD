@@ -12,7 +12,7 @@
 #import "MADGroupOperation.h"
 
 @class UIViewController;
-@class MADocument, MTDatabaseConnection;
+@class MADocument, MADDatabaseConnection;
 
 @interface MADRefreshReloadOperation : MADGroupOperation
 
@@ -21,7 +21,7 @@
 
     - (instancetype)initWithDocument: (MADocument *)document
                       viewController: (UIViewController *)viewController
-                  databaseConnection: (MTDatabaseConnection *)databaseConnection;
+                  databaseConnection: (MADDatabaseConnection *)databaseConnection;
 
 @end
 

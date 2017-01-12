@@ -12,66 +12,73 @@
 
 #import "MTDatabaseConnectionMySql.h"
 #import <Foundation/NSCharacterSet.h>
-
-@interface MTDatabaseConnectionMySql ()
-
-    @property (nonatomic, readwrite, copy)      NSString  *host;
-    @property (nonatomic, readwrite, copy)      NSString  *internalServer;
-    @property (nonatomic, readwrite, copy)      NSString  *database;
-    @property (nonatomic, readwrite, assign)    NSInteger port;
-
-@end
+#import "RptqUserCredentals.h"
 
 @implementation MTDatabaseConnectionMySql
 
-- (instancetype)initWithHost:(NSString *)host database:(NSString *)database
+@synthesize database = _database;
+@synthesize server = _server;
+@synthesize host = _host;
+@synthesize port = _port;
+@synthesize connectionString = _connectionString;
+@synthesize databaseType = _databaseType;
+
+@dynamic identifier;
+
++ (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
+    
+    id dbConnection;
+    dbConnection = [[self alloc] initWithHost: credentals.mysql_host
+                                     database: credentals.mysql_database
+                                      andPort: credentals.mysql_port.integerValue];
+    
+    return dbConnection;
+    
+}
+
+- (instancetype)initWithHost:(NSString *)host
+                    database:(NSString *)database
                      andPort:(NSInteger)port {
     if (self = [super init]) {
         NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-        NSString *internalServer = [host stringByTrimmingCharactersInSet: whitespace];
+        NSString *server = [host stringByTrimmingCharactersInSet: whitespace];
+        _server = server.copy;
         _host = host.copy;
-        _internalServer = internalServer.copy;
         _database = database.copy;
         _port = port;
-        self.databaseTypeIdentifier = [self identifier];
+        _databaseType = MADDatabaseCategoryMySQL;
     }
     return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost: self.host
-                                                     database: self.database
-                                                      andPort: self.port];
+    id copy = [[[self class] allocWithZone:zone] initWithHost: _host
+                                                     database: _database
+                                                      andPort: _port];
     return copy;
 }
 
 - (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
+    return [[self class] Identifier];
 }
 
-+ (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
++ (NSString *)Identifier {
+    return @"MySQL";
 }
 
 - (NSString *)connectionString {
-    NSString *connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
-                                                                self.databaseTypeIdentifier,
-                                                                self.server,
-                                                                (long)_port,
-                                                                _database];
-    return connectionString;
+    if (!_connectionString) {
+        _connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
+                                self.identifier,
+                                self.server,
+                                (long)_port,
+                                _database];
+    }
+    return _connectionString;
 }
 
-- (NSInteger)port { return _port; }
-
-- (NSString *)database {
-    NSString *database = _database.copy;
-    return database;
-}
-
-- (NSString *)server {
-    NSString *internalServer = _internalServer.copy;
-    return internalServer;
+- (BOOL)requiresCredientals {
+    return YES;
 }
 
 @end

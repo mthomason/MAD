@@ -11,7 +11,7 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDataTableFast.h>
 #import <MAD/MTQuery.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSURL.h>
@@ -49,6 +49,9 @@ static const short errCache = 2;
 
     MADocument *document = self.document;
     MADCredential *credientals = nil;
+    if (document.database.delegate == nil) {
+        document.database.delegate = (id <MTDatabaseProtocol>)document;
+    }
     
     if ([document.database.databaseConnection requiresCredientals]) {
 
@@ -68,8 +71,9 @@ static const short errCache = 2;
         }
     }
     
+    
     NSError * __autoreleasing eerror = NULL;
-    MTDatabaseConnection *connectionSettings = (document.database).databaseConnection;
+    MADDatabaseConnection *connectionSettings = (document.database).databaseConnection;
     id dbconn = [document.database connectWithConnection:connectionSettings credentals:credientals];
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
@@ -83,12 +87,12 @@ static const short errCache = 2;
     }];
     
     //NSLog(@"QueryString: %@", queryString);
-    
+    document.mainDataTable.dataDelegate = document;
     NSError *executeError = NULL;
     BOOL success = [document.database executeSql: queryString
                                        fieldKeys: query.fieldKeys
                                     onConnection: dbconn
-                                 intoResultTable: document.mainDataTable
+                                 intoResultTable: (MTDataTable *)document.mainDataTable
                                        withError: &executeError];
 
     if (!success) {

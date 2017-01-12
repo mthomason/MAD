@@ -25,7 +25,7 @@
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
 #import "MTDataTable.h"
 #import "MTDataTablePlist.h"
@@ -46,7 +46,8 @@
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
                  @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUserCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
+        MADDatabaseConnection *databaseConnection;
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;

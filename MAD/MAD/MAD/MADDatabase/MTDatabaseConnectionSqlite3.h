@@ -9,12 +9,15 @@
 #ifndef Reports_MTDatabaseConnectionSqlite3_h
 #define Reports_MTDatabaseConnectionSqlite3_h
 
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
-@interface MTDatabaseConnectionSqlite3 : MTDatabaseConnection
+@interface MTDatabaseConnectionSqlite3 : MADDatabaseConnection
+    <MADDatabaseConnectionConstructors,
+        MADDatabaseConnectionsProperties,
+        MADDatabaseConnectionsPropertiesURL,
+        NSCopying>
 
     - (instancetype)initWithUrl:(NSURL *)url;
-    @property (nonatomic, readonly, copy) NSURL *databaseUrl;
 
 @end
 

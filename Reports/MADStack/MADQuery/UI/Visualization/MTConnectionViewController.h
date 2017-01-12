@@ -11,6 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+#import <MAD/MADDatabaseConnection.h>
 
 @protocol MADViewControllerStandardProtocol;
 @protocol MADSaveFileProtocol;
@@ -25,7 +26,7 @@
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
-    @property (nonatomic, copy) NSString *databaseType;
+    @property (nonatomic, assign) MADDatabaseCategory databaseType;
 
     - (IBAction)save:(id)sender;
 

@@ -10,7 +10,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -20,7 +20,7 @@
 @interface MADCreateDocumentOperationAddConnection ()
 
     @property (nonatomic, assign) BOOL success;
-    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -34,7 +34,7 @@
     return [self initWithDatabaseConnection:nil];
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
         self.success = NO;

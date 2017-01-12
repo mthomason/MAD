@@ -47,7 +47,7 @@
 
 #import <MAD/MTReportFormatter.h>
 
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 
 #import <MAD/MTDataTableFast.h>
 
@@ -203,9 +203,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 + (void)initialize {
     [super initialize];
-    
     if (self == [MADViewerController self]) {
-        
         @autoreleasepool {
             
         }
@@ -928,9 +926,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         MTReportViewerPrintPageRenderer *printPageRenderer;
                         printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderer: document];
                         
-                        sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = document;
-                        
+                        sharedController.printPageRenderer = printPageRenderer;
                         
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
 

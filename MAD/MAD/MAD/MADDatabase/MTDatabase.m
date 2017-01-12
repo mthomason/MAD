@@ -20,12 +20,13 @@
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseSqlServer.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MTKeyChain.h"
 #import "MADNotificationDidReadRows.h"
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
 #import "MADDatabaseProtocol.h"
+
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
@@ -51,21 +52,28 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return self;
 }
 
-+ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection {
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
     
     id result = nil;
     
-    if ([MADIdentifierDatabaseMySQL isEqualToString:connection.databaseTypeIdentifier]) {
-        
-        result = [[MTDatabaseMySql alloc] init];
-        
-    } else if ([MADIdentifierDatabaseTDS isEqualToString:connection.databaseTypeIdentifier]) {
-        
-        result = [[MTDatabaseSqlServer alloc] init];
-        
-    } else if ([MADIdentifierDatabaseSqlite3 isEqualToString:connection.databaseTypeIdentifier]) {
-        
-        result = [[MTDatabaseSqlite3 alloc] init];
+    switch (connection.databaseType) {
+        case MADDatabaseCategorySqlite3:
+            result = [[MTDatabaseMySql alloc] init];
+            
+            break;
+            
+        case MADDatabaseCategoryTDS:
+            result = [[MTDatabaseSqlServer alloc] init];
+            
+            break;
+            
+        case MADDatabaseCategoryMySQL:
+            result = [[MTDatabaseSqlite3 alloc] init];
+            
+            break;
+            
+        default:
+            break;
     }
     
     [result setDatabaseConnection:connection];
@@ -77,7 +85,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return result;
 }
 
-- (MADCredential *)copyCredentalsWithConnection:(MTDatabaseConnection *)connection {
+- (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
     id <MTDatabaseProtocol> delegate = _delegate;
     BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
@@ -111,7 +119,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     return nil;
 }
 

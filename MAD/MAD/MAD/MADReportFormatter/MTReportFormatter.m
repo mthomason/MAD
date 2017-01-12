@@ -761,7 +761,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
  // FIXME: Write function to return results for keys without having data stored in memeory.
  */
 
-+ (instancetype)dataForGroupData:(id)data andKeys:(NSArray *)keys NS_RETURNS_RETAINED {
++ (id)dataForGroupData:(id)data andKeys:(NSArray *)keys NS_RETURNS_RETAINED {
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
         resultData = [[NSArray alloc] initWithArray:data];

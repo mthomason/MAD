@@ -12,12 +12,12 @@
 #import "MADGroupOperation.h"
 #import <MAD/MADCredential.h>
 
-@class UIViewController, MTDatabaseConnection, MADCredential;
+@class UIViewController, MADDatabaseConnection, MADCredential;
 
 @interface MADGetCredentialsOperation : MADGroupOperation
     <MADOperationHoldsCredentialsProtocol>
 
-    - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
+    - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                 viewController: (UIViewController *)viewController;
     @property (readonly) MADCredential *credentials;
     @property (readonly) BOOL gotCredentials;

@@ -18,6 +18,7 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSPersistentStoreCoordinator.h>
+#import <CoreData/CoreDataErrors.h>
 
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIImage.h>
@@ -26,7 +27,6 @@
 #import <UIKit/UIPrintInteractionController.h>
 
 #import <setjmp.h>
-//#import <copyfile.h>
 
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
@@ -62,7 +62,7 @@
 
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
 #import "MADNotificationDidFormatPage.h"
 
@@ -207,8 +207,7 @@ void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
 @interface MADocument ()
-    <UIPrintInteractionControllerDelegate,
-        MTReportFormatterDataSource,
+    <MTReportFormatterDataSource,
         MTCacheProtocol,
         MTDatabaseProtocol>
 
@@ -486,6 +485,28 @@ READFROMURL_END:;
     
 }
 
+#pragma mark -
+#pragma mark Error handling
+
+- (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
+    NSLog(@"Auto-Saving Document");
+    return [super contentsForType:typeName error:outError];
+}
+
+- (void)handleError:(NSError *)documentError userInteractionPermitted:(BOOL)userInteractionPermitted {
+    [super handleError:documentError userInteractionPermitted:userInteractionPermitted];
+    NSLog(@"UIManagedDocument error: %@", documentError.localizedDescription);
+    NSArray *errors = [[documentError userInfo] objectForKey:NSDetailedErrorsKey];
+    if(errors != nil && errors.count > 0) {
+        for (NSError *error in errors) {
+            NSLog(@"  Error: %@", error.userInfo);
+        }
+    } else {
+        NSLog(@"  %@", documentError.userInfo);
+    }
+}
+
+#pragma mark -
 #pragma mark Writing
 
 - (BOOL)writeContents:(id)contents
@@ -502,25 +523,6 @@ READFROMURL_END:;
     archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
                                                             archiveURL: self.fileURL];
     return [archiveManager archive:YES];
-}
-
-- (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
-    [super handleError:error userInteractionPermitted:userInteractionPermitted];
-    //if (userInteractionPermitted) {
-        if (error.code == 260) {
-            NSError *err = [MADErrorDocument newErrorFailedToOpenDocument];
-            //NSLog(@"Error saving context1: %@\n%@", err.localizedDescription, err.userInfo);
-            //[NSError presentError: err
-            //NSLog(@"Error saving context2: %@\n%@", error.localizedDescription, error.userInfo);
-            //     onViewController: nil
-            //           completion: NULL];
-        } else {
-            //NSLog(@"Error saving context: %@\n%@", error.localizedDescription, error.userInfo);
-            //[NSError presentError: error
-            //     onViewController: nil
-            //           completion: NULL];
-        }
-    //}
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
@@ -544,7 +546,7 @@ READFROMURL_END:;
     return MADFileExtentionMobleApplicationDocument;
 }
 
-- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
+/*- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
     if ([self hasUnsavedChanges]) {
         
         NSURL *url = self.fileURL.copy;
@@ -555,7 +557,7 @@ READFROMURL_END:;
     } else {
         completion(YES);
     }
-}
+}*/
 
 #pragma mark -
 #pragma mark MADocument Overrides
@@ -864,8 +866,7 @@ READFROMURL_END:;
 
 - (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
     NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
-    
-    //NSPredicate *p = [[NSPredicate alloc] init
+
     self.documentStatus.needsSave = YES;
     self.documentStatus.contextChagned = YES;
 }
@@ -987,6 +988,8 @@ READFROMURL_END:;
             
             if (self.database == nil) {
                 [self initializeMainDatabase:document];
+            } else {
+                self.database.delegate = self;
             }
             
             if (self.reportFormatter == nil) {
@@ -1169,8 +1172,8 @@ READFROMURL_END:;
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    MTDatabaseConnection *connection;
-    connection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
+    MADDatabaseConnection *connection;
+    connection = [MADDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;

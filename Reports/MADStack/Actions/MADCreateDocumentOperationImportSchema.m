@@ -12,18 +12,19 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseTable.h>
 #import <MAD/MTDatabaseField.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
+#import <MAD/MADDatabaseConnection.h>
 
 #import "MADCreateDocumentOperationCreateDocument.h"
 
 @interface MADCreateDocumentOperationImportSchema ()
 
     @property (nonatomic, assign) BOOL success;
-    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -35,7 +36,7 @@
     return [self initWithDatabaseConnection:nil];
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
         self.success = NO;

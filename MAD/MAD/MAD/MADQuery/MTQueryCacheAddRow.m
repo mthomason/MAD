@@ -14,7 +14,7 @@
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseDataBinding.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"
@@ -30,12 +30,13 @@ static NSString * const SqlDelimitor = @", ";
 static NSString * const SqlDelimitorObject = @", %@";
 
 @interface MTQueryCacheAddRow ()
+
     @property (nonatomic, weak, readwrite) MTDatabase *cacheDatabase;
 
     @property (nonatomic, readwrite, copy) NSString *tableName;
-    @property (nonatomic, readwrite, weak) NSDictionary *columns;
-    @property (nonatomic, readwrite, weak) NSArray *columnKeys;
 
+    @property (nonatomic, readwrite, strong) NSDictionary *columns;
+    @property (nonatomic, readwrite, strong) NSArray *columnKeys;
     @property (nonatomic, readwrite, strong) NSString *sqlPreProcessColumnNames;
 
 @end
@@ -92,7 +93,9 @@ static NSString * const SqlDelimitorObject = @", %@";
         self.columns = cols;
         
     }
+    
     return self;
+
 }
 
 - (instancetype)initWithObject:(id)object {
@@ -110,18 +113,18 @@ static NSString * const SqlDelimitorObject = @", %@";
         self.columns = columns;
         
         id keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumnKeys];
-        NSArray * __weak columnKeys = object[keyColumnKeys];
-        self.columnKeys = columnKeys;
+        NSArray * __unsafe_unretained columnKeys = object[keyColumnKeys];
+        self.columnKeys = [[NSArray alloc] initWithArray: columnKeys];
 
         id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowTableName];
-        NSString * __weak tableName = object[keyTableName];
+        NSString * __unsafe_unretained tableName = object[keyTableName];
         self.tableName = tableName.copy;
         
         id keyRowUrl = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowUrl];
-        NSURL * __weak url = object[keyRowUrl];
+        NSURL * __unsafe_unretained url = object[keyRowUrl];
         
         if (url != nil) {
-            id connection = [MTDatabaseConnection newDatabaseConnectionForUrl:url];
+            id connection = [MADDatabaseConnection newDatabaseConnectionForUrl:url];
             MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
             self.cacheDatabase = db;
@@ -176,6 +179,10 @@ static NSString * const SqlDelimitorObject = @", %@";
     NSString *result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)",
                         self.tableName, self.sqlPreProcessColumnNames, values];
     return result;
+}
+
+- (NSArray *)fieldKeys {
+    return self.columnKeys;
 }
 
 - (BOOL)returnsResults {

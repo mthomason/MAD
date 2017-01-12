@@ -24,7 +24,7 @@
 #import <UIKit/UIImage.h>
 
 #import "RptqDocument+Extras.h"
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
@@ -55,6 +55,8 @@
 #import "MTDatabaseTable.h"
 
 #import "MADReportSections.h"
+
+#import "MADDatabaseConnection.h"
 
 @implementation RptqDocument (Extras)
 
@@ -436,56 +438,61 @@
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
     userCredentals.database_driver_type = databaseIdentifier;
-    
-    if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseMySQL]) {
+
+    if (database.databaseConnection != nil) {
         
-        if (database.databaseConnection != nil) {
-        
-            NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
-            userCredentals.mysql_port = port;
+        switch (database.databaseConnection.databaseType) {
+            case MADDatabaseCategoryMySQL: {
+                MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
+                databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
+                NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
+                userCredentals.mysql_port = port;
+                
+                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
+                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
+                
+                NSString *server = [[NSString alloc] initWithString:databaseConnection.server];
+                userCredentals.mysql_host = server;
+                
+                NSString *db = [[NSString alloc] initWithString:databaseConnection.database];
+                userCredentals.mysql_database = db;
+                break;
+            }
 
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
-            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
+            case MADDatabaseCategorySqlite3: {
+                MADDatabaseConnection *databaseConnection;
+                databaseConnection = database.databaseConnection;
+                userCredentals.mysql_database = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
+                
+                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeSqlite3];
+                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
 
-            NSString *server = [[NSString alloc] initWithString:database.databaseConnection.server];
-            userCredentals.mysql_host = server;
+                break;
+            }
 
-            NSString *db = [[NSString alloc] initWithString:database.databaseConnection.database];
-            userCredentals.mysql_database = db;
+            case MADDatabaseCategoryTDS: {
+                MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
+                databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
+                NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
+                userCredentals.tds_port = port;
+                
+                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeMicrosoftSqlServer];
+                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
+                
+                NSString *server = [[NSString alloc] initWithString: databaseConnection.server];
+                userCredentals.tds_server = server;
+                
+                NSString *host = [[NSString alloc] initWithString: databaseConnection.server];
+                userCredentals.tds_host = host;
+                
+                NSString *db  = [[NSString alloc] initWithString: databaseConnection.database];
+                userCredentals.tds_database = db;
+                break;
+            }
+                
+            default:
+                break;
         }
-        
-    } else if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseTDS]) {
-        
-        if (database.databaseConnection != nil) {
-
-            NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
-            userCredentals.tds_port = port;
-
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeMicrosoftSqlServer];
-            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
- 
-            NSString *server = [[NSString alloc] initWithString: database.databaseConnection.server];
-            userCredentals.tds_server = server;
-
-            NSString *host = [[NSString alloc] initWithString: database.databaseConnection.server];
-            userCredentals.tds_host = host;
-
-            NSString *db  = [[NSString alloc] initWithString: database.databaseConnection.database];
-            userCredentals.tds_database = db;
-            
-        }
-        
-    } else if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseSqlite3]) {
-        
-        if (database.databaseConnection != nil) {
-
-            userCredentals.mysql_database = database.databaseConnection.
-                                                     databaseUrl.path.lastPathComponent.copy;
-
-            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeSqlite3];
-            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
-        }
-        
     }
     
     rptqDatabase.ownedByUser = userCredentals;

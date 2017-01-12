@@ -423,12 +423,12 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
         _filesController = filesController;
         
     } else if (accountChanged) {
-        NSString *identifer = [self copyIdentifierForStorageOption];
+        NSString *identifier = [self copyIdentifierForStorageOption];
         NSString *fileExtention = [delegate fileExtention].copy;
         MADAppStorage storageOption = [self.class StorageOption];
         id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: fileExtention
                                                           storageOption: storageOption
-                                                             identifier: identifer
+                                                             identifier: identifier
                                                       firstQueryHandler: storageChangedHandler];
         _filesController.fileCoordinator = fc;
         [delegate didConfigureFilesController: _filesController];

@@ -38,7 +38,7 @@
 
 #import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQueryField+Extras.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -855,7 +855,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     } else {
         MTViewControllerBarcodeOptions * __weak weakself = self;
         
-        __kindof MTDatabaseConnection *connection = database.databaseConnection;
+        __kindof MADDatabaseConnection *connection = database.databaseConnection;
         NSString *connectionString = connection.connectionString.copy;
         
         [NSError presentError: error

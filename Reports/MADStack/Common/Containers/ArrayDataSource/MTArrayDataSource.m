@@ -38,8 +38,8 @@
         NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
         [self setItems: itemsm];
         
-        NSString *identifer = [NSString stringWithString:cellIdentifier];
-        [self setCellIdentifier: identifer];
+        NSString *identifier = [NSString stringWithString:cellIdentifier];
+        [self setCellIdentifier: identifier];
         
         MTCellConfigureBlock block = [cellConfigureBlock copy];
         [self setConfigureCellBlock: block];

@@ -17,19 +17,16 @@ typedef NSString MADSqlite3SortDescription;
 
 @interface MTDatabaseSqlite3 : MTDatabaseCache
 
-    //@property (nonatomic, readwrite, assign) sqlite3 *database;
-
     - (void *)databaseHandle NS_RETURNS_INNER_POINTER;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
     - (NSString *)identifier;
-    + (NSString *)identifier;
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-    + (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
+    - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
              withBindings:(MTDatabaseDataBinding *)databinding;
 
     - (void)openDatabase;
@@ -47,8 +44,7 @@ typedef NSString MADSqlite3SortDescription;
     + (id)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
            withType:(MADDataType)type;
 
-    + (void)executeQueryWithSql:(NSString *)queryString
-                       database:(void * /* sqlite3 * */)database
+    - (void)executeQueryWithSql:(NSString *)queryString
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
       queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet;

@@ -20,7 +20,7 @@
 
 #import <MAD/MTReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQueryFull.h>
 
 #import <MAD/RptqDocument.h>
@@ -94,16 +94,17 @@
         //Initalize main database
         if (document.database == nil) {
             RptqUserCredentals *rptqUser;
-            MTDatabaseConnection *databaseConnection;
+            MADDatabaseConnection *databaseConnection;
             MTDatabase *database;
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
-            databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:rptqUser];
+            databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:rptqUser];
             database = [MTDatabase newDatabaseWithConnection:databaseConnection];
             document.database = database;
             
         }
+        document.database.delegate = (id <MTDatabaseProtocol>)document;
         
         if (rptqDatabase == nil || rptqQuery == nil) {
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;

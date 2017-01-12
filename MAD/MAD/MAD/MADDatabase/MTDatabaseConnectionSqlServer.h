@@ -9,20 +9,18 @@
 #ifndef Reports_MTDatabaseConnectionSqlServer_h
 #define Reports_MTDatabaseConnectionSqlServer_h
 
-#import "MTDatabaseConnection.h"
+#import "MADDatabaseConnection.h"
 
-@interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
-    <NSCopying>
+@interface MTDatabaseConnectionSqlServer : MADDatabaseConnection
+    <MADDatabaseConnectionConstructors,
+        MADDatabaseConnectionsProperties,
+        MADDatabaseConnectionsPropertiesCredentals,
+        NSCopying>
     
     - (instancetype)initWithHost:(NSString *)host
                           server:(NSString *)server
                         database:(NSString *)database
                          andPort:(NSInteger)port;
-
-    @property (nonatomic, readonly, copy) NSString  *database;
-    @property (nonatomic, readonly, copy) NSString  *server;
-    @property (nonatomic, readonly, copy) NSString  *host;
-    @property (nonatomic, readonly, assign) NSInteger port;
 
 @end
 

@@ -30,7 +30,7 @@
 #import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable.h>
@@ -296,7 +296,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return progressView;
 }
 
-- (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+- (MADCredential *)getCredentialsForDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     
     // Operation: Get credentials.
     // ---------------------------------------------------
@@ -337,8 +337,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
     
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
-                                                                                          database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection= [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
+                                                                    database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
     
     MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename: self.textFieldReportName.text
                                                                                    documentsDirectory: saveFileDelegate.documentDirectory

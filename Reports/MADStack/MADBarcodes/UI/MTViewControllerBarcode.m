@@ -27,7 +27,7 @@
 #import <MAD/MTDataTable.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseProtocol.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>

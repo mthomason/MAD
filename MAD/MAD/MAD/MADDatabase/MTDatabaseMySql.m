@@ -18,8 +18,7 @@
 
 #import "MADCredential.h"
 
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseConnectionMySql.h"
+#import "MADDatabaseConnection.h"
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADMySQL/MysqlConnection.h>
@@ -56,7 +55,7 @@
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>
 
-    @property (nonatomic, strong) MTDatabaseConnectionMySql *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
 
 @end
 
@@ -73,7 +72,7 @@
 }
 
 // FIXME: Return error.
-- (id)connectWithConnection:(MTDatabaseConnectionMySql *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)connection credentals:(MADCredential *)credentals {
 
     if (credentals == nil) {
         credentals = [self copyCredentalsWithConnection:connection];
@@ -106,7 +105,7 @@
 
 - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
-    MTDatabaseConnection *connectionSettings = self.databaseConnection;
+    id connectionSettings = self.databaseConnection;
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
     if (dbconn) {
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
@@ -170,7 +169,7 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    MTDatabaseConnection *connectionSettings = self.databaseConnection;
+    id connectionSettings = self.databaseConnection;
     MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil];
     if (conn) {
         
@@ -202,11 +201,7 @@
 }
 
 - (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
-}
-
-+ (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
+    return self.databaseConnection.identifier;
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {

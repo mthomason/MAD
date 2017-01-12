@@ -328,8 +328,8 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                         
                         
                         if (queryLink) {
-                            static NSString * const NewLineTab = @"\n\t";
-                            static NSString * const Tab = @"\t";
+                            NSString *NewLineTab = @"\n\t";
+                            NSString *Tab = @"\t";
 
                             [result appendString:NewLineTab];
                             for (NSInteger i = 0; i <= (*linkDepth).integerValue; i++) {

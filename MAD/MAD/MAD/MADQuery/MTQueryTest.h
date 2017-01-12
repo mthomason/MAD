@@ -11,13 +11,13 @@
 
 #import <MAD/MTQuery.h>
 
-@class MTDatabaseConnection;
+@class MADDatabaseConnection;
 
 @interface MTQueryTest : MTQuery
 
     @property (nonatomic, weak) MTDatabase *database;
     
-    - (instancetype)initWithObject:(MTDatabaseConnection *)object;
+    - (instancetype)initWithObject:(MADDatabaseConnection *)object;
 
 @end
 

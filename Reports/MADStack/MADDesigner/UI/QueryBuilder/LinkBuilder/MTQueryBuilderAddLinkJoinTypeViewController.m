@@ -16,10 +16,12 @@
 #import <UIKit/UILabel.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqUserCredentals+Extras.h>
 
 #import <MAD/MADSQLJoinType.h>
+
+#import <MAD/MADDatabaseConnection.h>
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 
@@ -47,7 +49,7 @@
     NSString *databaseDriverType = userCredentals.database_driver_type;
 
     UITableViewCell *tableViewCell;
-    if ([databaseDriverType isEqualToString:MADIdentifierDatabaseMySQL]) {
+    if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryMySQL]]) {
 
         tableViewCell = _tableViewCellEquiJoin;
         tableViewCell.userInteractionEnabled = YES;
@@ -66,7 +68,7 @@
 
 
         
-    } else if ([databaseDriverType isEqualToString:MADIdentifierDatabaseTDS]) {
+    } else if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryTDS]]) {
 
         tableViewCell = _tableViewCellEquiJoin;
         [tableViewCell setUserInteractionEnabled:YES];
