@@ -49,6 +49,8 @@
     // Evaluate the condition, to see if it has been satisfied or not.
     - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation;
 
+    -(void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
+
 @end
 
 #endif /* MADOperationCondition_h */

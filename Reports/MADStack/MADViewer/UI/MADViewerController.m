@@ -94,6 +94,32 @@ static NSString * const MADTextNoCache = @"No Cache";
 
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
+//#pragma mark - Attributes
+//#pragma mark Display Varables
+//
+//@interface MADOperationRenderOnViewert : NSOperation
+//    - (instancetype)initWithDocument:(MADocument *)document;
+//    @property (readonly, nonatomic, weak) MADocument *document;
+//@end
+
+
+#pragma mark - Attributes
+#pragma mark Display Varables
+
+@interface MADOperationLoadDocument : NSOperation
+    - (instancetype)initWithDocument:(MADocument *)document;
+    @property (readonly, nonatomic, weak) MADocument *document;
+@end
+
+#pragma mark - Attributes
+#pragma mark Display Varables
+
+@interface MADOperationLoadPrintPageRender : NSOperation
+    - (instancetype)initWithDocument:(MADocument *)document;
+    @property (readonly, nonatomic, weak) MADocument *document;
+    @property (readonly, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+@end
+
 @interface MADViewerController ()
     <UIPopoverPresentationControllerDelegate,
         UIPopoverControllerDelegate,
@@ -145,24 +171,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
-#pragma mark Viewer State
-
-    @property (nonatomic, assign, getter=isRefreshing) BOOL refreshing;
-    @property (nonatomic, assign) BOOL didRefreshBeforeReaload;
-    @property (nonatomic, assign) BOOL activityExporting;
-    @property (nonatomic, assign) BOOL startedRefresh;
-    @property (nonatomic, assign) BOOL pageIsAnimating;
-    @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
-
     @property (nonatomic, strong) MADOperationQueue *refreshQueue;
 
-    //@property (readonly) MADTabBarController *tabBarController;
+    @property (nonatomic, strong) NSOperationQueue *loadDocumentViewerQueue;
 
 @end
 
 @implementation MADViewerController {
     BOOL _isFirstAppearance;
     BOOL _firstTimeViewWillLayoutSubviews;
+    BOOL _refreshing;
+    BOOL _didRefreshBeforeReaload;
+    BOOL _activityExporting;
+    BOOL _startedRefresh;
+    BOOL _pageIsAnimating;
+    BOOL _updatingOfTimerIsPaused;
 }
 
 @synthesize document = _document;
@@ -271,6 +294,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         self.barButtonLabelStatus = barButtonLabelStatus;
         self.labelStatus = labelStatus;
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        queue.name = @"Load Document Viewer";
+        queue.maxConcurrentOperationCount = 1;
+        queue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
+        self.loadDocumentViewerQueue = queue;
 
     }
     return self;
@@ -282,9 +311,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    id blankPage;
-    NSArray *pages;
     
     NSMutableArray *toolbarItems;
     NSArray *emptyArray = [[NSArray alloc] init];
@@ -314,17 +340,64 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     self.currentPageIndex = 0;
     
-    blankPage = [[UIViewController alloc] init];
-    pages = [[NSArray alloc] initWithObjects:blankPage, nil];
     
-    //[self setViewControllers: pages
-    //               direction: UIPageViewControllerNavigationDirectionForward
-    //                animated: NO
-    //              completion: ^(BOOL finished) {
-    //}];
+    _refreshing = NO;
+    _startedRefresh = NO;
+
+    MADocument *document = self.document;
     
-    [self.labelStatus updatePageStatus: self.numberOfPages
-                      currentPageIndex: self.currentPageIndex];
+    MADOperationLoadDocument *opLoadDoc;
+    MADOperationLoadPrintPageRender *opLoadPtr;
+    NSInvocationOperation *invokeUpdateNumberOfPages, *invokeUpdateRecordsRead, *invokePageSliderNeedsLayout,
+                          *invokeSetDisplayActive, *invokeReloadWithSize, *invokeTimerDealloc,
+                          *invokeTimeSinceLastUpdate, *invokeRemoveObserver, *invokesetLastCacheDate;
+
+    opLoadDoc = [[MADOperationLoadDocument alloc] initWithDocument: document];
+    opLoadPtr = [[MADOperationLoadPrintPageRender alloc] initWithDocument: document];
+    
+    [opLoadPtr addDependency:opLoadDoc];
+
+    
+    invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateNumberOfPages) object:nil];
+    [invokeUpdateNumberOfPages addDependency:opLoadPtr];
+    
+    invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateRecordsRead) object:nil];
+    [invokeUpdateRecordsRead addDependency:opLoadPtr];
+    
+    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:_pageSlider selector:@selector(setNeedsLayout) object:nil];
+    [invokePageSliderNeedsLayout addDependency:opLoadPtr];
+
+    invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setLastCacheDate:) object:[NSDate date]];
+    [invokesetLastCacheDate addDependency:opLoadPtr];
+    
+    invokeSetDisplayActive = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setDisplayActive) object:nil];
+    [invokeSetDisplayActive addDependency:opLoadPtr];
+    
+    invokeReloadWithSize = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(reloadWithSize:) object:[NSValue valueWithCGSize:document.paper.paperSize]];
+    [invokeReloadWithSize addDependency:opLoadPtr];
+    
+    invokeTimerDealloc = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(timerDealloc) object:nil];
+    [invokeTimerDealloc addDependency:opLoadPtr];
+    
+    invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateTimeSinceLastRefresh:) object:nil];
+    [invokeTimeSinceLastUpdate addDependency:opLoadPtr];
+    
+    invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(removeObserverDidReadRowsFromDatabase:) object:document.database];
+    [invokeRemoveObserver addDependency:opLoadPtr];
+
+    
+    [[NSOperationQueue mainQueue] addOperation:opLoadDoc];
+    [[NSOperationQueue mainQueue] addOperation:opLoadPtr];
+    [[NSOperationQueue mainQueue] addOperation:invokeUpdateNumberOfPages];
+    [[NSOperationQueue mainQueue] addOperation:invokeUpdateRecordsRead];
+    [[NSOperationQueue mainQueue] addOperation:invokePageSliderNeedsLayout];
+    [[NSOperationQueue mainQueue] addOperation:invokesetLastCacheDate];
+    [[NSOperationQueue mainQueue] addOperation:invokeSetDisplayActive];
+    [[NSOperationQueue mainQueue] addOperation:invokeReloadWithSize];
+    [[NSOperationQueue mainQueue] addOperation:invokeTimerDealloc];
+    [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
+    [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -333,8 +406,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     self.presentationController.delegate = self;
     
-    [self setToolbarItems: self.toolbarItemsActive animated: animated];
-    
     MADPageSlider *pageSlider = self.pageSlider;
     [self.view addSubview: pageSlider];
     [self.view bringSubviewToFront: pageSlider];
@@ -342,33 +413,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
-    MADocument *document = self.document;
-    // MARK: Reporting feature (number of results in main query)
-    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-
-    RptqDocument *activeDocumentModel = document.activeDocumentModel;
-
-    [document resetMainQueryWithDocumentModel:activeDocumentModel];
-    [document activeDocumentModel];
-    [document prepareForQuery];
-    [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
     
-    MTReportViewerPrintPageRenderer *printPageRenderer =
-        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                               dataTable: document.mainDataTable];
-    self.printPageRendererReport = printPageRenderer;
-        
-    [self updateNumberOfPages];
+    //MADocument *document = self.document;
+    //[self updateNumberOfPages];
     
     
-    self.refreshing = NO;
-    self.startedRefresh = NO;
+    //[self updateRecordsRead];
     
-    [self updateRecordsRead];
-    
-    document.reportFormatter.didRefresh = NO;
-    
+    //document.reportFormatter.didRefresh = NO;
+    /*
     if (self.printPageRendererReport == nil) {
         [document activeDocumentModel];
         
@@ -377,10 +431,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                    dataTable: document.mainDataTable];
         self.printPageRendererReport = prtingPageRendererReport;
     }
+    */
+    //[_pageSlider setNeedsLayout];
     
-    [_pageSlider setNeedsLayout];
-    
-    if (_isFirstAppearance) {
+    /*if (_isFirstAppearance) {
         _isFirstAppearance = NO;
         MADPageViewAttributes *pageAttributes;
         pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
@@ -400,14 +454,62 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                       completion: ^(BOOL finished) {
                             
                         }];
-    }
+    }*/
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    id page;
+    NSArray *pages;
+    if (self.loadDocumentViewerQueue.operationCount > 0) {
+        NSLog(@"Loading a blank");
+        page = [[UIViewController alloc] init];
+    } else {
+        NSLog(@"Loading a document");
+        MADocument *document = self.document;
+        MADPageViewAttributes *pageAttributes;
+        CGSize paperSize = document.paper.paperSize;
+        NSUInteger pageNumber = self.currentPageNumber, pageCount = self.numberOfPages;;
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: pageNumber
+                                                               totalNumberOfPages: pageCount
+                                                                contentSizeInital: paperSize];
+        CGRect bounds = self.view.bounds;
+        page =
+        [MADReportPageViewController newReportPageViewControllerWithDocument: document
+                                                              pageAttributes: pageAttributes];
+        ((MADReportPageViewController *)page).view.frame = bounds;
+        ((MADReportPageViewController *)page).delegate = self;
+
+    }
+    
+    pages = [[NSArray alloc] initWithObjects:page, nil];
+    [self setViewControllers: pages
+                   direction: UIPageViewControllerNavigationDirectionForward
+                    animated: animated
+                  completion: ^(BOOL finished) { }];
+
+    [self setToolbarItems: self.toolbarItemsActive animated:animated];
+    [self.navigationController setToolbarHidden:NO animated:animated];
     [self updateTimeSinceLastRefresh:self];
-    [self.pageSlider setNeedsLayout];
+    
+    UIBarButtonItem *barButtonItemRefresh;
+    barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+                                                                        target: self
+                                                                        action: @selector(refresh:)];
+    barButtonItemRefresh.enabled = YES;
+    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
+                                                       animated: YES];
+
+    UIBarButtonItem *barButtonItemDone;
+    barButtonItemDone= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                        target: self
+                                                                        action: @selector(done:)];
+    barButtonItemDone.enabled = YES;
+    [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
+                                                      animated: YES];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -415,6 +517,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSArray *emptyArray = [[NSArray alloc] init];
     [self setToolbarItems: emptyArray animated: animated];
+    [self.navigationController setToolbarHidden:YES animated:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -444,9 +547,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         counter++;
     }
+    [self.pageSlider setNeedsLayout];
     [self.view bringSubviewToFront:self.pageSlider];
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
-    
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
 }
 
 #pragma mark -
@@ -617,30 +724,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }];
 }*/
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    /*if (_firstTimeViewWillLayoutSubviews) {
-        _firstTimeViewWillLayoutSubviews = NO;
-        
-        MADocument *document = self.document;
-        MADPageViewAttributes *pageAttributes;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
-                                                               totalNumberOfPages: self.numberOfPages
-                                                                contentSizeInital: document.paper.paperSize];
-        CGRect bounds = self.view.bounds;
-        MADReportPageViewController *pageOne =
-        [MADReportPageViewController newReportPageViewControllerWithDocument: document
-                                                              pageAttributes: pageAttributes];
-        pageOne.view.frame = bounds;
-        pageOne.delegate = self;
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects: pageOne, nil];
-        [self setViewControllers: viewControllers
-                       direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion: nil];
-    }*/
-}
-
 #pragma mark - MTPrintingProtocol
 
 - (MTReportViewerPrintPageRenderer *)printPageRenderer {
@@ -734,8 +817,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.view bringSubviewToFront: self.pageSlider];
  
         NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
-        self.updatingOfTimerIsPaused = NO;
-        self.refreshing = NO;
+        _updatingOfTimerIsPaused = NO;
+        _refreshing = NO;
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion:^(BOOL finished) {
@@ -807,8 +890,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.tabBarItemsEnabled = YES;
         self.pageSlider.enabled = YES;
         self.barButtonItemActivity.enabled = YES;
-        self.refreshing = NO;
-        self.updatingOfTimerIsPaused = NO;
+        self->_refreshing = NO;
+        self->_updatingOfTimerIsPaused = NO;
 
         UIBarButtonItem *barButtonItemRefresh;
         barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
@@ -830,8 +913,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.tabBarItemsEnabled = NO;
         self.pageSlider.enabled = NO;
         self.barButtonItemActivity.enabled = NO;
-        self.refreshing = YES;
-        self.updatingOfTimerIsPaused = NO;
+        self->_refreshing = YES;
+        self->_updatingOfTimerIsPaused = NO;
 
         UIActivityIndicatorView *activityIndicator;
         activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
@@ -874,6 +957,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [document.managedObjectContext save:&error];
     if (error != nil) { [document.managedObjectContext save:&error]; }
     
+    
     id <MADViewControllerStandardProtocol> viewControllerDelegate;
     viewControllerDelegate = self.viewControllerDelegate;
     [viewControllerDelegate viewControllerDidFinish: self];
@@ -883,7 +967,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (IBAction)activity:(id)sender {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    self.activityExporting = YES;
+    _activityExporting = YES;
     self.pageSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
@@ -901,25 +985,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                applicationActivities:applicationActivities];
     
     MADViewerController * __weak weakself = self;
-    UIActivityViewControllerCompletionWithItemsHandler activityCompletionHandler =
-    ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+
+    activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
         MADViewerController *sself = weakself;
         
         sself.pageSlider.enabled = YES;
-        sself.activityExporting = NO;
+        sself->_activityExporting = NO;
         
         if (completed || (!completed && activityType == nil)) {
             [(MADTabBarController *)sself.tabBarController enableTabBarItems];
             
         } else {
-
+            
             if (activityType.length > 0) {  // Long running activity
-
+                
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
-
+                    
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
-
+                    
                     if (sharedController) {
                         
                         id document = sself.document;
@@ -930,24 +1014,24 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         sharedController.printPageRenderer = printPageRenderer;
                         
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-
+                            
                             [MADViewerController setNavigationBarAppearanceHighlighted];
                             
                             MADViewerController * __weak weakself2 = sself;
                             [sharedController presentAnimated:YES completionHandler:
-                                ^(UIPrintInteractionController *printInteractionController,
-                                            BOOL animatinCompleted, NSError *error) {
-                            
-                                if (animatinCompleted) {
-                                    MADViewerController *sself2 = weakself2;
-                                    [MADViewerController setNavigationBarAppearanceTinted];
-
-                                    sself2.pageSlider.enabled = YES;
-                                    sself2.activityExporting = NO;
-                                    [(MADTabBarController *)sself2.tabBarController enableTabBarItems];
-                                }
-                                
-                            }];
+                             ^(UIPrintInteractionController *printInteractionController,
+                               BOOL animatinCompleted, NSError *error) {
+                                 
+                                 if (animatinCompleted) {
+                                     MADViewerController *sself2 = weakself2;
+                                     [MADViewerController setNavigationBarAppearanceTinted];
+                                     
+                                     sself2.pageSlider.enabled = YES;
+                                     sself2->_activityExporting = NO;
+                                     [(MADTabBarController *)sself2.tabBarController enableTabBarItems];
+                                 }
+                                 
+                             }];
                             
                         }
                         
@@ -959,7 +1043,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             }
         }
     };
-    activityViewController.completionWithItemsHandler = activityCompletionHandler;
     activityViewController.modalPresentationStyle = UIModalPresentationPopover;
     
     UIPopoverPresentationController *ppc = activityViewController.popoverPresentationController;
@@ -976,12 +1059,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (IBAction)refresh:(id)sender {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    self.didRefreshBeforeReaload = YES;
+    self->_didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
     
-    if (self.isRefreshing == NO) {
-        self.startedRefresh = YES;
-        self.refreshing = YES;
+    if (_refreshing == NO) {
+        self->_startedRefresh = YES;
+        _refreshing = YES;
+        
         [self setDisplayInactive];
 
         MADocument *document = self.document;
@@ -1007,7 +1091,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [[NSNotificationCenter defaultCenter] removeObserver: self name: MADNotificationDidReadRowsName
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationDidReadRowsName
                                                   object: database];
 }
 
@@ -1067,19 +1152,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setDisplayInactive];
 
     MADocument * __unsafe_unretained document = self.document;
-
-    //typedef typeof(self) MADSelf;
     
-    typeof(self) __weak weakself = self;
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(queue, ^{
-        typeof(self) sself = weakself;
+    //typeof(self) __weak weakself = self;
+    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    //dispatch_async(queue, ^{
+        typeof(self) sself = self;
         
         [document prepareForQuery];
         
         [sself watchFormatter: document.reportFormatter];
         
-        document.reportFormatter.didRefresh = sself.startedRefresh;
+        document.reportFormatter.didRefresh = sself->_startedRefresh;
         [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
         
         MTReportViewerPrintPageRenderer *printPageRenderer =
@@ -1103,7 +1186,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         
         typeof(self) __weak weakself2 = sself;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
             typeof(self) sself2 = weakself2;
             if (sself2) {
                 MADReportPageViewController *pageOne =
@@ -1116,14 +1199,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 
                 [sself2 setViewControllers: viewControllers
                                  direction: UIPageViewControllerNavigationDirectionForward
-                                  animated: NO completion: nil];
+                                  animated: NO
+                                completion: nil];
                 
                 [sself2 setDisplayActive];
             }
-        }];
+        //}];
         
-        sself.refreshing = NO;
-        sself.startedRefresh = NO;
+        sself->_refreshing = NO;
+        sself->_startedRefresh = NO;
         
         [sself updateRecordsRead];
         
@@ -1133,11 +1217,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             
             UILocalNotification *notification = [[UILocalNotification alloc] init];
             
-            if (sself.didRefreshBeforeReaload) {
+            if (sself->_didRefreshBeforeReaload) {
                 NSString *body = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
                 notification.alertBody = body;
                 [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                sself.didRefreshBeforeReaload = NO;
+                sself->_didRefreshBeforeReaload = NO;
             }
             
             NSNumber *bgtask;
@@ -1146,7 +1230,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             [[UIApplication sharedApplication] handoffBackground:bgtask];
         }
 
-    });
+    //});
 }
 
 #pragma mark - Post Report Notifications
@@ -1175,7 +1259,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     MADReportPageViewController *result = nil;
 
-    if (viewerViewController.pageIsAnimating == NO) {
+    if (viewerViewController->_pageIsAnimating == NO) {
         NSUInteger visiblePageNumber = 0;
         pageViewControllerLast.view.autoresizingMask = UIViewAutoresizingFlexibleHeight |
                                                        UIViewAutoresizingFlexibleWidth;
@@ -1217,7 +1301,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     MADReportPageViewController *result = nil;
     
-    if (viewerViewController.pageIsAnimating == NO) {
+    if (viewerViewController->_pageIsAnimating == NO) {
         
         NSUInteger visiblePageNumber = 0;
         
@@ -1254,23 +1338,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark -
 #pragma mark UIPageViewControllerDelegate
 
-//- (NSInteger)presentationCountForPageViewController:(MADViewerController *)pageViewController {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    return (NSInteger)pageViewController.numberOfPages;
-//}
-
-//- (NSInteger)presentationIndexForPageViewController:(MADViewerController *)pageViewController {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    return (NSInteger)pageViewController.currentPageIndex;
-//}
-
 - (void)pageViewController:(MADViewerController *)pageViewController
         didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
     if (completed || finished) {
-        pageViewController.pageIsAnimating = NO;
+        pageViewController->_pageIsAnimating = NO;
 
         if (pageViewController.viewControllers.count > 0) {
             MADReportPageViewController *viewController = pageViewController.viewControllers[0];
@@ -1289,7 +1363,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                    spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    pageViewController.pageIsAnimating = NO;
+    pageViewController->_pageIsAnimating = NO;
     return UIPageViewControllerSpineLocationMin;
 
 }
@@ -1297,7 +1371,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)pageViewController:(MADViewerController *)pageViewController
                             willTransitionToViewControllers:(NSArray *)pendingViewControllers {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    pageViewController.pageIsAnimating = YES;
+    pageViewController->_pageIsAnimating = YES;
 }
 
 #pragma mark - Status Label
@@ -1526,33 +1600,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
             
             
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                
-                MADocument *document = self.document;
-                self.lastCacheDate = [NSDate date];
-                [self setDisplayActive];
-                
-                [self reloadWithSize:document.paper.paperSize];
-                
-                [self timerDealloc];
-                
-                [self updateTimeSinceLastRefresh: NULL];
-                
-                [self removeObserverDidReadRowsFromDatabase:document.database];
-                
-            }];
         }
         
-        MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
-        for (NSError *error in errors) {
-            MADPromptOperationDisplayError *operationErrorDisplay =
-            [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
-            [operationQueue addOperation:operationErrorDisplay];
-            
-        }
+        //MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+        //for (NSError *error in errors) {
+        //    MADPromptOperationDisplayError *operationErrorDisplay =
+        //    [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+        //    [operationQueue addOperation:operationErrorDisplay];
+        //
+        //}
         
     }
-    
 }
 
 #pragma mark -
@@ -1605,14 +1663,255 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [debug appendFormat:@"Activity Item ProviderPdf:        %@\n", self.activityItemProviderPdf];
     [debug appendFormat:@"Popover Controller Activity:      %@\n", self.popoverControllerActivity];
     [debug appendFormat:@"Background Task Id Refresh:       %lu\n", (unsigned long)self.backgroundTaskIdRefresh];
-    [debug appendFormat:@"Refreshing:                       %@\n", self.refreshing ? @"Yes" : @"No"];
-    [debug appendFormat:@"Did Refresh Before Reaload:       %@\n", self.didRefreshBeforeReaload ? @"Yes" : @"No"];
-    [debug appendFormat:@"Activity Exporting:               %@\n", self.activityExporting ? @"Yes" : @"No"];
-    [debug appendFormat:@"Started Refresh:                  %@\n", self.startedRefresh ? @"Yes" : @"No"];
-    [debug appendFormat:@"Page is Animating:                %@\n", self.pageIsAnimating ? @"Yes" : @"No"];
-    [debug appendFormat:@"Updating of Timer is Paused:      %@\n", self.updatingOfTimerIsPaused ? @"Yes" : @"No"];
+    [debug appendFormat:@"Refreshing:                       %@\n", _refreshing ? @"Yes" : @"No"];
+    [debug appendFormat:@"Did Refresh Before Reaload:       %@\n", _didRefreshBeforeReaload ? @"Yes" : @"No"];
+    [debug appendFormat:@"Activity Exporting:               %@\n", _activityExporting ? @"Yes" : @"No"];
+    [debug appendFormat:@"Started Refresh:                  %@\n", _startedRefresh ? @"Yes" : @"No"];
+    [debug appendFormat:@"Page is Animating:                %@\n", _pageIsAnimating ? @"Yes" : @"No"];
+    [debug appendFormat:@"Updating of Timer is Paused:      %@\n", _updatingOfTimerIsPaused ? @"Yes" : @"No"];
     [debug appendFormat:@"Refresh Queue:                    %@\n", self.refreshQueue];
     return debug;
+}
+
+@end
+
+
+
+#pragma mark -
+#pragma mark MADOperationRenderOnViewert
+/*
+@interface MADOperationRenderOnViewert ()
+    @property (readwrite, nonatomic, weak) MADocument *document;
+    @property (readwrite, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+@end
+
+@implementation MADOperationLoadDocument {
+    BOOL _executing;
+    BOOL _finished;
+}
+
+- (instancetype)initWithDocument:(MADocument *)document {
+    if (self = [super init]) {
+        [self setDocument: document];
+        _executing = NO;
+    }
+    return self;
+}
+
+- (BOOL)isAsynchronous {
+    return YES;
+}
+
+- (BOOL)isFinished { return _finished; }
+
+- (BOOL)isExecuting { return _executing; }
+- (void)executing {
+
+    MADocument *document = self.document;
+    self.lastCacheDate = [NSDate date];
+    [self setDisplayActive];
+    
+    [self reloadWithSize:document.paper.paperSize];
+    
+    [self timerDealloc];
+    
+    [self updateTimeSinceLastRefresh: NULL];
+    
+    [self removeObserverDidReadRowsFromDatabase:document.database];
+    
+    
+    
+    MADocument *document = self.document;
+    _executing = YES;
+    
+    if (![self isCancelled]) {
+        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    }
+    
+    if (![self isCancelled]) {
+        RptqDocument *activeDocumentModel = document.activeDocumentModel;
+        [document resetMainQueryWithDocumentModel:activeDocumentModel];
+    }
+    
+    if (![self isCancelled]) {
+        [document prepareForQuery];
+    }
+    
+    if (![self isCancelled]) {
+        __block BOOL blockComplete = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
+            blockComplete = YES;
+        });
+        
+        if (blockComplete) {
+            _finished = YES;
+            _executing = NO;
+        }
+        
+    } else {
+        _finished = YES;
+        _executing = NO;
+    }
+}
+
+@end
+*/
+
+#pragma mark -
+#pragma mark MADOperationLoadPrintPageRender
+
+@interface MADOperationLoadPrintPageRender ()
+    @property (readwrite, nonatomic, weak) MADocument *document;
+    @property (readwrite, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+@end
+
+@implementation MADOperationLoadPrintPageRender
+
+- (instancetype)initWithDocument:(MADocument *)document {
+    if (self = [super init]) {
+        [self setDocument: document];
+    }
+    return self;
+}
+
+- (void)main {
+
+    MTReportViewerPrintPageRenderer *printPageRenderer;
+    MADocument *document;
+
+    if (!self.isCancelled) {
+    
+        document = self.document;
+        printPageRenderer =
+        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                               dataTable: document.mainDataTable];
+    
+        self.printPageRenderer = printPageRenderer;
+    }
+    
+    if (!self.isCancelled && printPageRenderer == nil) {    // Try again.
+
+        [document activeDocumentModel];
+        printPageRenderer =
+        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                               dataTable: document.mainDataTable];
+        self.printPageRenderer = printPageRenderer;
+    }
+    
+    if (!self.isCancelled) {
+        document.reportFormatter.didRefresh = NO;
+    }
+}
+
+@end
+
+#pragma mark -
+#pragma mark MADOperationLoadDocument
+
+@interface MADOperationLoadDocument ()
+
+    @property (readwrite, nonatomic, weak) MADocument *document;
+
+@end
+
+@implementation MADOperationLoadDocument {
+    BOOL _executing;
+    BOOL _finished;
+}
+
+static NSString * const MADOperatorSelectorIsReady      = @"isReady";
+static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
+static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (instancetype)initWithDocument:(MADocument *)document {
+    if (self = [super init]) {
+        [self setDocument: document];
+        _executing = NO;
+        _finished = NO;
+    }
+    return self;
+}
+
+/*- (void)start {
+    
+    // NSOperation.start() contains important logic that shouldn't be bypassed.
+    [super start];
+    
+    // If the operation has been cancelled, we still need to enter the "Finished" state.
+    if (self.cancelled) {
+        [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+        _executing = NO;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+
+        [self willChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+        _finished = YES;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+    } else {
+        [self main];
+    }
+}*/
+
+- (BOOL)isAsynchronous {
+    return NO;
+}
+
+- (BOOL)isFinished { return _finished; }
+
+- (BOOL)isExecuting { return _executing; }
+
+- (void)main {
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+    _executing = NO;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+
+    MADocument *document = self.document;
+    
+    if (![self isCancelled]) {
+        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    }
+    
+    if (![self isCancelled]) {
+        RptqDocument *activeDocumentModel = document.activeDocumentModel;
+        [document resetMainQueryWithDocumentModel:activeDocumentModel];
+    }
+    
+    if (![self isCancelled]) {
+        [document prepareForQuery];
+    }
+    
+    if (![self isCancelled]) {
+        __block BOOL blockComplete = NO;
+        //dispatch_async(dispatch_get_main_queue(), ^{
+            [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
+            blockComplete = YES;
+        //});
+        
+        if (blockComplete) {
+            
+            [self willChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+            _finished = YES;
+            [self didChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+            
+            [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+            _executing = NO;
+            [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+        }
+        
+    } else {
+        [self willChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+        _finished = YES;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
+        
+        [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+        _executing = NO;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+    }
 }
 
 @end

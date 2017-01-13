@@ -42,7 +42,7 @@ static const short errCache = 2;
     return self;
 }
 
-- (BOOL)isAsynchronous { return YES; }
+- (BOOL)isAsynchronous { return NO; }
 
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);

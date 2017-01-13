@@ -162,6 +162,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         
         dispatch_queue_t queue = dispatch_queue_create(MADQueueTextRepresentation,
                                                        DISPATCH_QUEUE_SERIAL);
+        
         self.textRepresentationQueue =  queue;
         
         self.showWaterMark = NO;

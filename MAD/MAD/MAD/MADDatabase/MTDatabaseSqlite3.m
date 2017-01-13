@@ -39,8 +39,6 @@
 #import "MADErrorUserInfo.h"
 #import "MTQuery.h"
 #import "MTDatabaseTable.h"
-#import "MTDatabaseField.h"
-#import "MTDataTable.h"
 
 #import "MTDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
@@ -640,6 +638,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
         //NSLog(@"Failed to run query.");
         // FIXME: Handle failures.
         int step_result = sqlite3_step(statement);
+        success = Sqlite3StepResultOK(step_result);
         NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
     }
     if (partOfTransactionSet == NO) {
@@ -1036,7 +1035,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
 
 #pragma mark - Reading Fields
 
-- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
     NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
     BOOL success = NO;
     sqlite3_stmt *statement;

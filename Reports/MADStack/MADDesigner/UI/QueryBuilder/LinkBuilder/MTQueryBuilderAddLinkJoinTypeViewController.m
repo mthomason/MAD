@@ -49,7 +49,7 @@
     NSString *databaseDriverType = userCredentals.database_driver_type;
 
     UITableViewCell *tableViewCell;
-    if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryMySQL]]) {
+    if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
 
         tableViewCell = _tableViewCellEquiJoin;
         tableViewCell.userInteractionEnabled = YES;
@@ -68,7 +68,7 @@
 
 
         
-    } else if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryTDS]]) {
+    } else if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
 
         tableViewCell = _tableViewCellEquiJoin;
         [tableViewCell setUserInteractionEnabled:YES];

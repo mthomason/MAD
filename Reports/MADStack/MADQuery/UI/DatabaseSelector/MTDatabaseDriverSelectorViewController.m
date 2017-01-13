@@ -144,24 +144,24 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    MADDatabaseCategory dbId;
+    MADDatabaseType dbId;
     if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseCategoryMySQL;
+        dbId = MADDatabaseTypeMySQL;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseCategoryTDS;
+        dbId = MADDatabaseTypeTDS;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseCategorySqlite3;
+        dbId = MADDatabaseTypeSqlite3;
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {

@@ -152,12 +152,12 @@ const int8_t MADIndexViewer = 2;
 
     [self setViewControllers: self.tabBarViewControllers animated: animated];
     
-    UIBarButtonItem *buttonDismiss;
-    buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                 target: self
-                                                                 action: @selector(viewControllerDidFinish:)];
-    
-    [self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
+    //UIBarButtonItem *buttonDismiss;
+    //buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+    //                                                             target: self
+    //                                                             action: @selector(viewControllerDidFinish:)];
+    //
+    //[self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
     
     /*if (self.viewControllers.count > 0) {
         UIViewController *vc = self.viewControllers.firstObject;

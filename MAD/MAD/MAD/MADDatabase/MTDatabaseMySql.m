@@ -325,7 +325,7 @@
 
 #pragma mark - Reading Fields
 
-- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
+- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
     
     MysqlConnection *conn = dbconn;
     NSMutableDictionary *resultsDictionary = nil;

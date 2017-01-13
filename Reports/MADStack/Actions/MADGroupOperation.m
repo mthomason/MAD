@@ -33,6 +33,10 @@
 
 @implementation MADGroupOperation
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
+
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations {
     [self addOperations:operations finishingOperation:nil];
 }

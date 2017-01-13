@@ -29,7 +29,7 @@
 @implementation MADRefreshReloadOperation
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -43,7 +43,8 @@
     }
 }
 
-- (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController
+- (instancetype)initWithDocument: (MADocument *)document
+                  viewController: (UIViewController *)viewController
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
 
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);

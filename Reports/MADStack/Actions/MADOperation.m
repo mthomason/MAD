@@ -35,7 +35,9 @@ static NSString * const MADOperatorSelectorState        = @"state";
     return self;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
 
 #pragma mark - Lazy Load
 

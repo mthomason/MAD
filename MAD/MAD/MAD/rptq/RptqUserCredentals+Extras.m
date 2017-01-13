@@ -23,6 +23,7 @@
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
+#import "MADDatabaseType.h"
 
 @implementation RptqUserCredentals (Extras)
 
@@ -84,23 +85,23 @@
             result = self.mysql_database;
             break;
         
-        case MADDatabaseTypeMicrosoftSqlServer:
+        case MADDatabaseTypeTDS:
             result = self.tds_database;
             break;
 
         case MADDatabaseTypeUnknown: {
             
-            if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseCategoryMySQL]]) {
+            if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
                 result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
-            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategoryTDS]]) {
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
                 result = self.tds_database;
-                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMicrosoftSqlServer];
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeTDS];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
-            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseCategorySqlite3]]) {
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
                 result = self.mysql_database;
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
                 self.inDatabase.databaseDriverTypeEnum = type;

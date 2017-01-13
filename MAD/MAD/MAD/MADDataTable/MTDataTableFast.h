@@ -9,7 +9,7 @@
 #ifndef Reports_MTDataTableFast_h
 #define Reports_MTDataTableFast_h
 
-#import "MTDataTablePlist.h"
+#import "MTDataTable.h"
 
 @protocol MTCacheProtocol;
 @protocol MADDataProtocol;
@@ -18,7 +18,7 @@
 @class MTQuery;
 @class MTDatabaseSqlite3;
 
-@interface MTDataTableFast : MTDataTablePlist
+@interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>
 
     @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;

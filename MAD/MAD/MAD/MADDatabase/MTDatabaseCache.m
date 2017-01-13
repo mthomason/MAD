@@ -7,9 +7,12 @@
 //
 
 #import "MTDatabaseCache.h"
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+
 #import "MADDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
-#import <Foundation/NSString.h>
 
 @implementation MTDatabaseCache
 
@@ -18,11 +21,12 @@
     id result = nil;
     
     switch (connection.databaseType) {
-        case MADDatabaseCategorySqlite3:
+        case MADDatabaseTypeSqlite3:
             result = [[MTDatabaseSqlite3 alloc] init];
             break;
             
         default:
+            NSAssert(NO, @"Not proper type of database connection. Use Sqlite3.");
             break;
     }
     

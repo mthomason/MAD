@@ -27,7 +27,7 @@ static NSString * const TextNo = @"No";
 @implementation MADPromptOperationPolarQuestion
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
@@ -53,7 +53,9 @@ static NSString * const TextNo = @"No";
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
     MADPromptOperationPolarQuestion * __weak weakSelf = self;
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
@@ -62,7 +64,9 @@ static NSString * const TextNo = @"No";
         });
     }];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo style: UIAlertActionStyleCancel handler: ^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = NO;
         sself.alertDisplayed = YES;

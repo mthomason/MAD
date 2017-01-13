@@ -10,21 +10,7 @@
 #define Reports_RptqDatabase_Extras_h
 
 #import "RptqDatabase.h"
-
-typedef NS_ENUM(short, MADDatabaseType) {
-	MADDatabaseTypeUnknown              = 0,
-	MADDatabaseTypeDatabaseCom          = 1,
-	MADDatabaseTypeMySQL                = 2,
-    MADDatabaseTypeMicrosoftSqlAzure    = 3,
-    MADDatabaseTypeAmazonSimpleDb       = 4,
-    MADDatabaseTypeMicrosoftSqlServer   = 5,
-    MADDatabaseTypeOracle               = 6,
-    MADDatabaseTypeODBC                 = 7,
-    MADDatabaseTypeGooleAppEngine       = 8,
-    MADDatabaseTypeNone                 = 9,
-    MADDatabaseTypeSqlite3              = 10,
-    MADDatabaseTypeSample1              = 11,
-};
+#import "MADDatabaseType.h"
 
 #define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 

@@ -46,7 +46,7 @@
         _host = host.copy;
         _database = database.copy;
         _port = port;
-        _databaseType = MADDatabaseCategoryMySQL;
+        _databaseType = MADDatabaseTypeMySQL;
     }
     return self;
 }

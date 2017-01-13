@@ -40,6 +40,12 @@
 
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
+- (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+    MADOperationConditionResult *result;
+    result = [self evaluateForOperation:operation];
+    completion(result);
+}
+
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
 
     BOOL succes = YES;

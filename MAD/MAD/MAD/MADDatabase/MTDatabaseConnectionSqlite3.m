@@ -32,7 +32,7 @@
 + (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
 
     id dbConnection;
-    dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+    //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
     
     NSString *databaseFilename = credentals.mysql_database.copy;
     
@@ -57,6 +57,7 @@
 - (instancetype)initWithUrl:(NSURL *)url {
     if (self = [super init]) {
         _databaseUrl = url.copy;
+        _databaseType = MADDatabaseTypeSqlite3;
     }
     return self;
 }

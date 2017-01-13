@@ -442,7 +442,7 @@
     if (database.databaseConnection != nil) {
         
         switch (database.databaseConnection.databaseType) {
-            case MADDatabaseCategoryMySQL: {
+            case MADDatabaseTypeMySQL: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
                 NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
@@ -459,7 +459,7 @@
                 break;
             }
 
-            case MADDatabaseCategorySqlite3: {
+            case MADDatabaseTypeSqlite3: {
                 MADDatabaseConnection *databaseConnection;
                 databaseConnection = database.databaseConnection;
                 userCredentals.mysql_database = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
@@ -470,13 +470,13 @@
                 break;
             }
 
-            case MADDatabaseCategoryTDS: {
+            case MADDatabaseTypeTDS: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
                 NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
                 userCredentals.tds_port = port;
                 
-                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeMicrosoftSqlServer];
+                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeTDS];
                 userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
                 
                 NSString *server = [[NSString alloc] initWithString: databaseConnection.server];

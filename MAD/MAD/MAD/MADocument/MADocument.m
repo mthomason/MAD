@@ -975,7 +975,7 @@ READFROMURL_END:;
     if (self.reportDocument == nil) {
         
         RptqDocument *document = nil;
-        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        //NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         
         if (self.documentObjectID == nil) {
             

@@ -49,6 +49,12 @@
     return nil;
 }
 
+- (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+    MADOperationConditionResult *result;
+    result = [self evaluateForOperation:operation];
+    completion(result);
+}
+
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;

@@ -24,7 +24,9 @@
 
 @implementation MADOperationUniqueUrlForFilename
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
                   andDocumentsDirectory:(NSURL *)documentsDirectory {

@@ -16,6 +16,10 @@
 
 @implementation MADBlockOperation
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
+
 /**
     The designated initializer.
  

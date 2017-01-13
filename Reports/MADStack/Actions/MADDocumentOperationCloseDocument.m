@@ -13,6 +13,10 @@
 
 @implementation MADDocumentOperationCloseDocument
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
+
 - (void)execute {
 
     MADocument * __weak document = nil;

@@ -47,7 +47,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
         return nil;
     }
 }
-
+/*
 + (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation
                 completion:(void(^)(NSArray * errors))completion {
     // Check conditions.
@@ -86,5 +86,40 @@ NSString * MADOperationConditionKey = @"OperationCondition";
         }
     });
 }
-
+*/
++ (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion {
+    // Check conditions.
+    dispatch_group_t conditionGroup = dispatch_group_create();
+    
+    //array of OperationConditionResult
+    NSMutableArray * results = [NSMutableArray arrayWithCapacity:conditions.count];
+    
+    // Ask each condition to evaluate and store its result in the "results" array.
+    [conditions enumerateObjectsUsingBlock:^(NSObject <MADOperationCondition> * condition, NSUInteger idx, BOOL *stop) {
+        
+        dispatch_group_enter(conditionGroup);
+        [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
+            
+            results[idx] = result;
+            dispatch_group_leave(conditionGroup);
+        }];
+    }];
+    
+    // After all the conditions have evaluated, this block will execute.
+    dispatch_group_notify(conditionGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+        // Aggregate the errors that occurred, in order.
+        NSArray * failures = [[results filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"error != nil"]] valueForKeyPath:@"error"];
+        
+        /*
+         If any of the conditions caused this operation to be cancelled,
+         check for that.
+         */
+        if (operation.isCancelled) {
+            failures = [failures arrayByAddingObject: [NSError errorWithCode:MADConditionFailed]];
+        }
+        if (completion){
+            completion(failures);
+        }
+    });
+}
 @end

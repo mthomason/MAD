@@ -31,7 +31,9 @@
 
 @implementation MADCreateDocumentOperation
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
               databaseConnection: (MADDatabaseConnection *)databaseConnection
@@ -103,10 +105,10 @@
 }
 
 - (void)execute {
-    if (self.cancelled) goto CANCEL_execute;
-    self.internalQueue.suspended = NO;
-    [self.internalQueue addOperation:self.finishingOperation];
-CANCEL_execute:;
+    if (!self.cancelled) {
+        self.internalQueue.suspended = NO;
+        [self.internalQueue addOperation:self.finishingOperation];
+    }
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {

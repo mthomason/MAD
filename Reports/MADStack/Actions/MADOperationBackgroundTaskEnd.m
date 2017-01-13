@@ -16,7 +16,7 @@
 @implementation MADOperationBackgroundTaskEnd
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (BOOL)isAsynchronous { return YES; }

@@ -26,7 +26,7 @@
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
-    @property (nonatomic, assign) MADDatabaseCategory databaseType;
+    @property (nonatomic, assign) MADDatabaseType databaseType;
 
     - (IBAction)save:(id)sender;
 

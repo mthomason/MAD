@@ -52,7 +52,7 @@
         _server = internalServer.copy;
         _database = database.copy;
         _port = port;
-        _databaseType = MADDatabaseCategoryTDS;
+        _databaseType = MADDatabaseTypeTDS;
     }
     return self;
 }

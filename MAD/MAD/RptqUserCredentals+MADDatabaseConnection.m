@@ -16,20 +16,20 @@
 
 @implementation RptqUserCredentals (MADDatabaseConnection)
 
-- (MADDatabaseCategory)databaseType {
+- (MADDatabaseType)databaseType {
 
-    MADDatabaseCategory category;
-    if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseCategoryMySQL]]) {
-        category = MADDatabaseCategoryMySQL;
+    MADDatabaseType category;
+    if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
+        category = MADDatabaseTypeMySQL;
         
-    } else if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseCategoryTDS]]) {
-        category = MADDatabaseCategoryTDS;
+    } else if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
+        category = MADDatabaseTypeTDS;
         
-    } else if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseCategorySqlite3]]) {
-        category = MADDatabaseCategorySqlite3;
+    } else if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
+        category = MADDatabaseTypeSqlite3;
     
     } else {
-        category = MADDatabaseCategorySqlite3;
+        category = MADDatabaseTypeSqlite3;
     }
     return category;
 }

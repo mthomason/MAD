@@ -57,18 +57,18 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     id result = nil;
     
     switch (connection.databaseType) {
-        case MADDatabaseCategorySqlite3:
-            result = [[MTDatabaseMySql alloc] init];
+        case MADDatabaseTypeSqlite3:
+            result = [[MTDatabaseSqlite3 alloc] init];
             
             break;
             
-        case MADDatabaseCategoryTDS:
+        case MADDatabaseTypeTDS:
             result = [[MTDatabaseSqlServer alloc] init];
             
             break;
             
-        case MADDatabaseCategoryMySQL:
-            result = [[MTDatabaseSqlite3 alloc] init];
+        case MADDatabaseTypeMySQL:
+            result = [[MTDatabaseMySql alloc] init];
             
             break;
             
@@ -124,7 +124,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    id safeQueryFieldName = [[NSString alloc] initWithFormat:@"%@.%@", tableName, fieldName];
+    id safeQueryFieldName = [[NSString alloc] initWithFormat:@"%1$@.%2$@", tableName, fieldName];
     return safeQueryFieldName;
 }
 
@@ -166,7 +166,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (NSArray *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MTDatabaseField *> *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];

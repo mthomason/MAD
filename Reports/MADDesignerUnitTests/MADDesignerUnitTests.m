@@ -31,7 +31,7 @@
 - (void)testExample {
     
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: MADDatabaseCategoryMySQL
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: MADDatabaseTypeMySQL
                                                                          host: @"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
                                                                      database: @"employees"
                                                                          port: 3306];

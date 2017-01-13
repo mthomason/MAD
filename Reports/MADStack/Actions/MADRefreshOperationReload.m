@@ -17,7 +17,7 @@
 
 @implementation MADRefreshOperationReload
 
-- (BOOL)isAsynchronous { return YES; }
+- (BOOL)isAsynchronous { return NO; }
 
 - (void)execute {
     [self finish];

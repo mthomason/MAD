@@ -1557,7 +1557,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 #pragma mark - Reading Fields
 
-- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
     NSMutableArray *results = nil;
     RETCODE sqlReturnCode = FAIL;
     DBPROCESS *dbconn = [process process];

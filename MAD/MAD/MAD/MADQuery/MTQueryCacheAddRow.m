@@ -181,9 +181,9 @@ static NSString * const SqlDelimitorObject = @", %@";
     return result;
 }
 
-- (NSArray *)fieldKeys {
-    return self.columnKeys;
-}
+//- (NSArray *)fieldKeys {
+//    return self.columnKeys;
+//}
 
 - (BOOL)returnsResults {
     return NO;
