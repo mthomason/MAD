@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef madmap_hpp
-#define madmap_hpp
+//#ifndef madmap_hpp
+//#define madmap_hpp
 /*
 #include <stdio.h>
 
@@ -21,4 +21,4 @@ namespace MAD {
     
 }
 */
-#endif /* madmap_hpp */
+//#endif /* madmap_hpp */

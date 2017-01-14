@@ -15,7 +15,6 @@
 
 @interface MADMetaDataCloud ()
 
-    @property (nonatomic, copy) NSURL *origionalURL;
     @property (nonatomic, strong) NSMetadataItem *metadataItem;
 
 @end
@@ -26,8 +25,6 @@
     
     if (self = [super init]) {
         self.metadataItem = item;
-        NSURL *url = [item valueForAttribute: NSMetadataItemURLKey];
-        _origionalURL = url.copy;
 
     }
     return self;
@@ -102,7 +99,7 @@
 }
 
 - (BOOL)isSyncing {
-    return self.ubiquitous &&
+    return self.isUbiquitous &&
         (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }
 
@@ -214,7 +211,7 @@
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     NSString *classname = NSStringFromClass([self class]);
-    NSString *url = _origionalURL.absoluteString;
+    NSURL *url = [self.metadataItem valueForAttribute: NSMetadataItemURLKey];
     id uppercaseClassname = [classname uppercaseString];
     [debug appendFormat:@"--%@--\n", uppercaseClassname];
     [debug appendFormat:@"\tOrigional URL: %@\n", url];

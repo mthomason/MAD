@@ -37,7 +37,7 @@
 #import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADDocumentState.h>
-#import <MADExplorer/MADActiveDocumentManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
@@ -53,7 +53,7 @@
 
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "MADDocumentManager.h"
+#import "MADFileExplorerDataSource.h"
 #import "MADFileExplorerView.h"
 
 #import "MADOpenFileSectionHeaderView.h"
@@ -151,13 +151,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         MADSaveFileProtocol,
         MADFileExplorerViewDelegateProtocol>
 
-    @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *collectionViewDelegate;
+    @property (nonatomic, readwrite, strong) MADFileExplorerDataSource *fileExplorerDataSource;
+    @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
 
-    // ActiveDocumentManager holds strong reference to open documents.
-    @property (nonatomic, readwrite, strong) MADActiveDocumentManager *activeDocumentManager;
-
-    // Document Manager manages the file location for the documents.
-    @property (nonatomic, readwrite, strong) MADDocumentManager *documentManager;
+    @property (nonatomic, readwrite, strong) MADOpenDocumentManager *activeDocumentManager;
 
     // This is the collection view
     @property (nonatomic, weak)     IBOutlet MADFileExplorerView *fileExplorerView;
@@ -351,12 +348,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
         };
 
-        MADDocumentManager *documentManager;
-        documentManager = [[MADDocumentManager alloc] initWithCellConfiguration:handleCellLayout];
-        self.documentManager = documentManager;
+        MADFileExplorerDataSource *fileExplorerDataSource;
+        fileExplorerDataSource = [[MADFileExplorerDataSource alloc] initWithCellConfiguration:handleCellLayout];
+        self.fileExplorerDataSource = fileExplorerDataSource;
         
-        MADActiveDocumentManager *openFileManager;
-        openFileManager = [[MADActiveDocumentManager alloc] init];
+        MADOpenDocumentManager *openFileManager;
+        openFileManager = [[MADOpenDocumentManager alloc] init];
         self.activeDocumentManager = openFileManager;
         
         MADProgressView *progressView;
@@ -481,8 +478,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         SEL cloudPrefs = @selector(updateCloudPreferences);
         
-        MADDocumentManager *documentManager = self.documentManager;
-        getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: documentManager
+        MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
+        getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: fileExplorerDataSource
                                                                        selector: cloudPrefs
                                                                          object: NULL];
         [operationQueueBackground addOperation:getUserCloudPreferences];
@@ -515,8 +512,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     tapGestureRecognizer.delegate = self;
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
-    self.documentManager.delegate = self;
-    self.collectionView.dataSource = self.documentManager;
+    self.fileExplorerDataSource.delegate = self;
+    self.collectionView.dataSource = self.fileExplorerDataSource;
     
     // update statusbar?
     [self setNeedsStatusBarAppearanceUpdate];
@@ -590,7 +587,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     layoutGroupedDelegate.delegate = self;
 
     self.collectionView.delegate = layoutGroupedDelegate;
-    self.collectionViewDelegate = layoutGroupedDelegate;
+    self.fileExplorerViewDelegate = layoutGroupedDelegate;
     
     //[self.collectionView.backgroundView setNeedsDisplay];
 }
@@ -625,12 +622,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (void)setEditing:(BOOL)editing {
     [super setEditing:editing];
-    _collectionViewDelegate.editing = editing;
+    _fileExplorerViewDelegate.editing = editing;
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     [super setEditing:editing animated:animated];
-    _collectionViewDelegate.editing = editing;
+    _fileExplorerViewDelegate.editing = editing;
 }
 
 #pragma mark -
@@ -642,7 +639,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     void (^actionConfirm)(UIAlertAction *action);
     actionConfirm = ^(UIAlertAction *action) {
         MADFileExplorerViewController *sself = weakself;
-        [sself.documentManager updateCloudPreferences];
+        [sself.fileExplorerDataSource updateCloudPreferences];
     };
     
     void (^block)(void) = ^ {
@@ -708,7 +705,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark MADSaveFileProtocol
 
 - (NSURL *)documentDirectory {
-    return _documentManager.documentsDirectory;
+    return _fileExplorerDataSource.documentsDirectory;
 }
 
 #pragma mark -
@@ -986,7 +983,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 - (NSURL *)copyMetaDataUrlForIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
+    MADMetaData *metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
     return metadata.URL.copy;
 }
 
@@ -1004,9 +1001,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
-    MADDocumentManager *documentManager = self.documentManager;
+    MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
     void (^handleSignout)(UIAlertAction *action) = ^(UIAlertAction *action) {
-        [documentManager updateCloudPreferences];
+        [fileExplorerDataSource updateCloudPreferences];
     };
     
     void (^ubiquityIdentityDidChange)(void) = ^ {
@@ -1072,7 +1069,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [_documentManager metadataAtIndex: (NSUInteger)indexPath.item];
+    return [_fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
 }
 
 #pragma mark -
@@ -1221,7 +1218,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 
                 NSURL *documentURL = fileURL.copy;
                 NSURL *dataURL = cleanupURL.copy;
-                MADActiveDocumentManager *fileManager = self.activeDocumentManager;
+                MADOpenDocumentManager *fileManager = self.activeDocumentManager;
                 [fileManager removeDocumentWithUrl:documentURL];
                 [MADFileUtilities removeFileAndArchiveAtURL:dataURL];
                 
@@ -1499,14 +1496,14 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSIndexPath *indexPath;
     NSMutableArray *metadataItems;
     UIPopoverPresentationController *ppc;
-    MADDocumentManager *documentManager;
+    MADFileExplorerDataSource *fileExplorerDataSource;
     MADDocumentInformationTableViewController *documentInformation;
     
-    selectedItems = [self.collectionView indexPathsForSelectedItems];
+    selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];
     metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
     
     for (indexPath in selectedItems) {
-        metadata = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
+        metadata = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
         [metadataItems addObject:metadata];
     }
     
@@ -1727,7 +1724,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (IBAction)actionActivity:(id)sender {
     
     NSMutableArray *wrappedUrls =
-        [[NSMutableArray alloc] initWithCapacity: self.documentManager.count];
+        [[NSMutableArray alloc] initWithCapacity: self.fileExplorerDataSource.count];
 
     NSArray<NSIndexPath *> *indexPaths = self.collectionView.indexPathsForSelectedItems;
     for (NSIndexPath *indexPath in indexPaths) {
@@ -1791,7 +1788,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                 confirm:^(UIAlertAction *action) {
                                                                     
         for (NSIndexPath *selectedItem in selectedItems) {
-            [self.documentManager removeItemAtIndex:(NSUInteger)selectedItem.item];
+            [self.fileExplorerDataSource removeItemAtIndex:(NSUInteger)selectedItem.item];
         }
         
     } cancel:^(UIAlertAction *action) { }];
@@ -1804,7 +1801,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (IBAction)actionDuplicate:(id)sender {
     for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
-        [_documentManager duplicateItemAtIndex:(NSUInteger)selectedItem.item];
+        [_fileExplorerDataSource duplicateItemAtIndex:(NSUInteger)selectedItem.item];
     }
 }
 
@@ -1823,7 +1820,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    MADMetaData *metaData = [self.documentManager metadataAtIndex: (NSUInteger)indexPath.item];
+    MADMetaData *metaData = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
     
     NSString *textFieldText = cellDocument.titleLabelText.copy;
     
@@ -1860,14 +1857,14 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         if (!shortcircut && metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
             
-            MADDocumentManager *documentManager = self.documentManager;
+            MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
             
             void (^closeCompletion)(BOOL, NSURL *, NSURL *);
             void (^openCompletion)(BOOL);
             
             closeCompletion = ^(BOOL successClose, NSURL *fileURL, NSURL *cleanupURL) {
                 if (successClose)
-                    [documentManager rename:text
+                    [fileExplorerDataSource rename:text
                                 itemAtIndex:(NSUInteger)indexPath.item];
             };
             
@@ -1880,7 +1877,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             [doc openWithCompletionHandler:openCompletion];
             
         } else {
-            [self.documentManager rename:text itemAtIndex:(NSUInteger)indexPath.item];
+            [self.fileExplorerDataSource rename:text itemAtIndex:(NSUInteger)indexPath.item];
         }
     };
 
@@ -1906,7 +1903,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
 
     indexPath = [self.collectionView indexPathForCell:cell];
-    metadata = [_documentManager metadataAtIndex:(NSUInteger)indexPath.item];
+    metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
     documentReport = [MADocument newManagedDocumentForURL:metadata.URL];
     
     if (documentReport.documentState != UIDocumentStateClosed) {
@@ -1951,14 +1948,14 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
     
     if (indexPath) {
-        if ([self.collectionViewDelegate collectionView: collectionView
+        if ([self.fileExplorerViewDelegate collectionView: collectionView
                             shouldSelectItemAtIndexPath: indexPath]) {
             
             [collectionView selectItemAtIndexPath: indexPath
                                          animated: YES
                                    scrollPosition: UICollectionViewScrollPositionNone];
             
-            [self.collectionViewDelegate collectionView: collectionView
+            [self.fileExplorerViewDelegate collectionView: collectionView
                                didSelectItemAtIndexPath: indexPath];
         }
     }
@@ -2112,9 +2109,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSString *classname = NSStringFromClass([self class]);
     id uppercaseClassname = [classname uppercaseString];
     [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    [debug appendFormat:@"Collection view delegate:          %@\n", self.collectionViewDelegate];
+    [debug appendFormat:@"Collection view delegate:          %@\n", self.fileExplorerViewDelegate];
     [debug appendFormat:@"Active document manager:           %@\n", self.activeDocumentManager];
-    [debug appendFormat:@"Document manager:                  %@\n", self.documentManager];
+    [debug appendFormat:@"Document manager:                  %@\n", self.fileExplorerDataSource];
     [debug appendFormat:@"Cloud activity running:            %@\n", _cloudActivityRunning ? @"Yes" : @"No"];
     [debug appendFormat:@"Cloud activity running display:    %@\n", _cloudActivityRunningDisplay ? @"Yes" : @"No"];
     [debug appendFormat:@"Shoulld show add document popover: %@\n", _shouldShowAddDocumentPopover ? @"Yes" : @"No"];

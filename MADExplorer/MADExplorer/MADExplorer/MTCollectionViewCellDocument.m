@@ -28,7 +28,7 @@
 #import <UIKit/UIAccessibility.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+//#import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFoundation/MADURL.h>
 
@@ -132,18 +132,15 @@ static inline float wobbleFactor() {
     [super prepareForReuse];
     [self stopWobble];
     [self.imagePreview prepareForReuse];
-    self.gestureRecognizers = nil;
+    NSArray *gestureRecognizers = [[NSArray alloc] init];
+    self.gestureRecognizers = gestureRecognizers;
 }
 
 - (void)awakeFromNib {
-    
-    _wobbling = false;
-    
-    self.contentView.autoresizingMask = MADViewAutoresizingFlexable();
-    self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
-    
     [super awakeFromNib];
+    _wobbling = false;
 }
+
 
 - (UIActivityIndicatorView *)activityIndicator {
     UIActivityIndicatorView *result = _activityIndicator;

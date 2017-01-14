@@ -1,5 +1,5 @@
 //
-//  MADDocumentManager.h
+//  MADFileExplorerDataSource.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/16/16.
@@ -18,7 +18,7 @@
 @class MADMetaData;
 @class MADCollectionViewCellDocument;
 
-@interface MADDocumentManager : NSObject
+@interface MADFileExplorerDataSource : NSObject
     <UICollectionViewDataSource,
         MADFileLocationManagerDelegate>
 

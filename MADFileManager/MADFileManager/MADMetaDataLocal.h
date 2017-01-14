@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADMetaDataLocal_h
+#define MAD_MADMetaDataLocal_h
+
 #import <MADFileManager/MADFileManager.h>
 
 @interface MADMetaDataLocal : MADMetaData
@@ -13,3 +16,5 @@
 - (instancetype)initWithURL:(NSURL *)url;
 
 @end
+
+#endif

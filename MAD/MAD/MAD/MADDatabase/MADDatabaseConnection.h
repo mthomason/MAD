@@ -37,8 +37,6 @@
     @property (readonly, nonatomic, copy) NSURL *databaseUrl;
 @end
 
-
-
 @interface MADDatabaseConnection : NSObject
     <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties>
 
@@ -54,7 +52,5 @@
     + (NSString *)Identifier:(MADDatabaseType)databaseType;
 
 @end
-
-
 
 #endif

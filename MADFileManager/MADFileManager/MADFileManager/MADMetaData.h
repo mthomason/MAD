@@ -21,7 +21,7 @@ typedef NSMutableArray <MADMetaData *> MADMutableMetaDatum;
 @interface MADMetaData : NSObject
     <NSCopying>
 
-    + (MADMetaDatum *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
+    + (MADMetaDatum *)newMetaDatumForMetadataItems:(NSArray *)metadataItems;
 
     - (instancetype)initWithURL:(NSURL *)url;
     - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
@@ -42,29 +42,24 @@ typedef NSMutableArray <MADMetaData *> MADMutableMetaDatum;
 
     @property (readonly) NSString  *contentType;
 
-    @property (getter=isUbiquitous, readonly) BOOL ubiquitous;
-
     // Download status of this item. The values are the three strings defined below.
     @property (readonly) NSString *ubiquitousItemDownloadingStatus;
 
-    // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
-    @property (getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusNotDownloaded;
+    - (BOOL)isUbiquitous;
+    - (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded;
+    - (BOOL)isUbiquitousItemDownloadingStatusDownloaded;
 
-    // there is a local version of this item available. The most current version will get downloaded as soon as possible.
-    @property (getter=isUbiquitousItemDownloadingStatusDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusDownloaded;
+    - (BOOL)isUbiquitousItemDownloadingStatusCurrent;
 
-    // there is a local version of this item and it is the most up-to-date version known to this device.
-    @property (getter=isUbiquitousItemDownloadingStatusCurrent, readonly) BOOL ubiquitousItemDownloadingStatusCurrent;
+    - (BOOL)isDownloaded;
+    - (BOOL)ubiquitousItemIsDownloading;
+    - (BOOL)ubiquitousItemIsUploaded;
+    - (BOOL)ubiquitousItemIsUploading;
+    - (BOOL)ubiquitousItemDownloadRequested;
+    - (BOOL)ubiquitousItemIsExternalDocument;
 
-    @property (readonly, getter=isDownloaded) BOOL downloaded;
-    @property (readonly) BOOL ubiquitousItemIsDownloading;
-    @property (readonly) BOOL ubiquitousItemIsUploaded;
-    @property (readonly) BOOL ubiquitousItemIsUploading;
-    @property (readonly) BOOL ubiquitousItemDownloadRequested;
-    @property (readonly) BOOL ubiquitousItemIsExternalDocument;
-
-    @property (readonly) double ubiquitousItemPercentDownloaded;
-    @property (readonly) double ubiquitousItemPercentUploaded;
+    - (double)ubiquitousItemPercentDownloaded;
+    - (double)ubiquitousItemPercentUploaded;
 
     @property (readonly) NSError *ubiquitousItemDownloadingError;                 // The error when downloading the item from iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h
     @property (readonly) NSError *ubiquitousItemUploadingError;                   // The error when uploading the item to iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h

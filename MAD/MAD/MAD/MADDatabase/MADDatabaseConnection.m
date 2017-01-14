@@ -7,8 +7,8 @@
 //
 
 #import "MADDatabaseConnection.h"
-
 #import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
 
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
@@ -53,6 +53,7 @@
             break;
             
         default:
+            NSAssert(NO, @"Unknown database type");
             break;
     }
 
@@ -81,7 +82,6 @@
 + (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
 
     id dbConnection = nil;
-    RptqDatabase *database = credentals.inDatabase;
     switch (credentals.databaseType) {
         case MADDatabaseTypeSqlite3:
             dbConnection = [MTDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
@@ -98,6 +98,7 @@
             break;
             
         default:
+            NSAssert(NO, @"Unknown database type");
             break;
     }
     
@@ -105,7 +106,10 @@
 
 }
 
-+ (NSString *)Identifier { return nil; }
++ (NSString *)Identifier {
+    NSAssert(NO, @"This is a factory class.  Don't call this.");
+    return nil;
+}
 
 + (NSString *)Identifier:(MADDatabaseType)databaseType {
     id identifier = nil;
@@ -126,6 +130,7 @@
             break;
             
         default:
+            NSAssert(NO, @"Unknown database type");
             break;
     }
     return identifier;

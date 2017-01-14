@@ -29,8 +29,8 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 
 @interface MADMetaData ()
 
-    @property (nonatomic, strong) NSMetadataItem *metadataItem;
-    @property (nonatomic, strong) NSDictionary *attributes;
+    //@property (nonatomic, strong) NSMetadataItem *metadataItem;
+    //@property (nonatomic, strong) NSDictionary *attributes;
 
 @end
 
@@ -46,7 +46,7 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
     return metadata;
 }
 
-+ (MADMetaDatum *)madMetaDataItemsForNSMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
++ (MADMetaDatum *)newMetaDatumForMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
     NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
     for (NSMetadataItem *metadataItem in metadataItems) {
         MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
@@ -101,10 +101,10 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 
 - (BOOL)isUbiquitousItemDownloadingStatusCurrent { @throw exceptionNotImplemented(_cmd); }
 
-- (BOOL)downloaded { @throw exceptionNotImplemented(_cmd); }
+- (BOOL)isDownloaded { @throw exceptionNotImplemented(_cmd); }
 
 - (BOOL)isSyncing {
-    return self.ubiquitous &&
+    return self.isUbiquitous &&
             (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }
 

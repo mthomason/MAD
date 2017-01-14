@@ -1,12 +1,12 @@
 //
-//  MADDocumentManager.m
+//  MADFileExplorerDataSource.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/16/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentManager.h"
+#import "MADFileExplorerDataSource.h"
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
@@ -26,7 +26,7 @@
 
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
-@interface MADDocumentManager ()
+@interface MADFileExplorerDataSource ()
     <MADFilesControllerDelegate>
 
     @property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
@@ -38,7 +38,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 @end
 
-@implementation MADDocumentManager
+@implementation MADFileExplorerDataSource
 
 - (instancetype)init {
     return [self initWithCellConfiguration:nil];

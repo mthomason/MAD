@@ -21,6 +21,7 @@
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 #import <MADFileManager/MADMetaData.h>
 
@@ -121,6 +122,34 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 #pragma mark -
 #pragma mark Properties
 
+- (NSArray <NSIndexPath *> *)indexPathsForSelectedItems {
+    __block NSArray *indexPaths = [[NSArray alloc] init];
+    NSInteger sectionIndex = 0;
+    for (NSIndexSet *set in _selected) {
+        [set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx
+                                                    inSection:sectionIndex];
+            indexPaths = [indexPaths arrayByAddingObject:path];
+        }];
+        sectionIndex++;
+    }
+    return indexPaths;
+}
+
+- (NSArray <NSIndexPath *> *)indexPathsForHighlightedItems {
+    __block NSArray *indexPaths = [[NSArray alloc] init];
+    NSInteger sectionIndex = 0;
+    for (NSIndexSet *set in _highlighted) {
+        [set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx
+                                                    inSection:sectionIndex];
+            indexPaths = [indexPaths arrayByAddingObject:path];
+        }];
+        sectionIndex++;
+    }
+    return indexPaths;
+}
+
 - (NSUInteger)numberOfItemsSelected {
     NSUInteger c = 0;
     for (NSIndexSet *set in _selected) {
@@ -138,7 +167,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)setEditing:(BOOL)editing {
-    NSLog(@"%s: %hhd", __PRETTY_FUNCTION__, editing);
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, editing ? @"YES" : @"NO");
     if (_editing != editing) {
         _editing = editing;
     }
@@ -151,6 +180,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    
+    cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
+    cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
     id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
@@ -248,7 +280,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     if (self.isEditing) {
         [self downloadIfNotYetDownloaded: metadata];
     } else {
-        [self openURL: url];
+        [self.delegate openDocumentAtURL:url];
     }
 
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
@@ -376,15 +408,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
     [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
 
-}
-
-- (void)openURL:(NSURL *)url {
-    MADFileExplorerDelegate delegate = self.delegate;
-    NSURL *urlToOpen = url.copy;
-    id open = [[NSInvocationOperation alloc] initWithTarget: delegate
-                                                   selector: @selector(openDocumentAtURL:)
-                                                     object: urlToOpen];
-    [[NSOperationQueue mainQueue] addOperation:open];
 }
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {

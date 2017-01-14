@@ -33,7 +33,7 @@
     
     NSString *ttt;
     @autoreleasepool {
-        MADMapStrings *map = [[MADMapStrings alloc] init];
+        MADMapStringsUnsignedInteger *map = [[MADMapStringsUnsignedInteger alloc] init];
         [map setObject:@"Three" toKey:3];
         [map setObject:@"Two Hundred" toKey:200];
         

@@ -12,6 +12,13 @@
 #import "MTDatabase.h"
 #import <MADFoundation/MADDataType.h>
 
+@protocol MADDatabaseCacheProtocol <NSObject>
+
+    - (void)beginBulkInsert;
+    - (void)endBulkInsert;
+
+@end
+
 @interface MTDatabaseCache : MTDatabase {
   @public
     void * /* sqlite3 * */ _database;

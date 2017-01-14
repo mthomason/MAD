@@ -285,7 +285,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
                                                         object: nil];
     
-    NSArray *i = [MADMetaData madMetaDataItemsForNSMetadataItems:_metadataQuery.results];
+    NSArray *i = [MADMetaData newMetaDatumForMetadataItems:_metadataQuery.results];
     
     id inserted = [[NSArray alloc] initWithArray:i],
        removed = [[NSArray alloc] init],
@@ -323,9 +323,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
             *removedMetadata  = removedMetadataItemsOrNil  ?: [[NSArray alloc] init],
             *updatedMetadata  = updatedMetadataItemsOrNil  ?: [[NSArray alloc] init];
     
-    NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata],
-            *removed  = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata],
-            *updated  = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
+    NSArray *inserted = [MADMetaData newMetaDatumForMetadataItems:insertedMetadata],
+            *removed  = [MADMetaData newMetaDatumForMetadataItems:removedMetadata],
+            *updated  = [MADMetaData newMetaDatumForMetadataItems:updatedMetadata];
 
     NSMetadataQuery * __weak metadataQuery = self.metadataQuery;
     void (^handleContentUpdated)(BOOL success, NSError *error);

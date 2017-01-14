@@ -24,12 +24,13 @@ typedef id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> MA
     
     @property (nonatomic, weak) MADFileExplorerDelegate delegate;
 
-    @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *selected;
-    @property (nonatomic, readonly, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
 
     @property (readonly) NSUInteger numberOfItemsSelected;
     @property (readonly) NSUInteger numberOfItemsHighlighted;
+
+    - (NSArray <NSIndexPath *> *)indexPathsForSelectedItems;
+    - (NSArray <NSIndexPath *> *)indexPathsForHighlightedItems;
 
 @end
 

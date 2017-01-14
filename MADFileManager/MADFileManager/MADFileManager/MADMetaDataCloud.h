@@ -6,6 +6,9 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADMetaDataCloud_h
+#define MAD_MADMetaDataCloud_h
+
 #import <MADFileManager/MADFileManager.h>
 
 @interface MADMetaDataCloud : MADMetaData
@@ -13,3 +16,5 @@
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
 
 @end
+
+#endif

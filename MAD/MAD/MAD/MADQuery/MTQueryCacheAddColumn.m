@@ -87,10 +87,14 @@
     return self.sql;
 }
 
-+ (NSString *)newSqlWithTableName:(NSString *)tableName columnName:(NSString *)columnName
-                         database:(MTDatabaseCache *)database datatype:(MADDataType)datatype
-                     isPrimaryKey:(BOOL)isPrimaryKey createTable:(BOOL)createTable
-                 uniqueColumnHack:(BOOL)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
++ (NSString *)newSqlWithTableName:(NSString *)tableName
+                       columnName:(NSString *)columnName
+                         database:(MTDatabaseCache *)database
+                         datatype:(MADDataType)datatype
+                     isPrimaryKey:(BOOL)isPrimaryKey
+                      createTable:(BOOL)createTable
+                 uniqueColumnHack:(BOOL)uniqueColumnHack
+                   columnAffinity:(NSString *)columnAffinity {
     
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     NSString *unique = uniqueColumnHack ? @"UNIQUE" : @"";
