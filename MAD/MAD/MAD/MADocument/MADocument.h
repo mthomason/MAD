@@ -34,6 +34,7 @@
 @class MTReportFormatter;
 @class MTDataTableFast;
 @class MTPaper;
+@class MADDatabaseConnection;
 
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
@@ -57,14 +58,14 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
-    @property (nonatomic, readwrite, strong)    MTDataTableFast *mainDataTable;
-    @property (nonatomic, readwrite, strong)    MTDatabase *database;
+    @property (nonatomic, readonly, strong)     MTDataTableFast *mainDataTable;
+    @property (nonatomic, readonly, strong)     MTDatabase *database;
 
     // Set and used by export operations
     @property (nonatomic, weak)                 MADActivityIndicator    *statusLabel;
     @property (nonatomic, strong, readwrite)    MADocumentState         *documentStatus;
 
-    @property (nonatomic, strong)               MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (nonatomic, readonly, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
     @property (readonly)                        NSString        *filename;
     @property (nonatomic, strong, readwrite)    MTQueryFull     *mainQuery;
@@ -76,13 +77,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
     - (instancetype)initWithFileURL:(NSURL *)url;
-
-    - (void)saveContext;
-
-    - (void)resetSectionLayoutManagers:(RptqDocument *)document;
-    - (void)resetMainQueryWithDocumentModel:(RptqDocument *)document;
-
-    - (void)prepareForQuery;
+    - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
@@ -108,6 +103,15 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
        completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion;
 
     - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
+
+    - (void)regenThumbnail;
+
+    - (void)saveContext;
+    - (void)prepareForQuery;
+    - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection;
+    - (void)resetCache;
+    - (void)resetMainQuery;
+    - (void)resetSectionLayoutManagers;
 
 @end
 

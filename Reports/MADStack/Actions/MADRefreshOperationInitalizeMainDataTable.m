@@ -37,27 +37,7 @@
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
-    MADocument *document = self.document;
-    NSString *filename = document.filename.copy;
-    
-    //MADocument *document = self.document;
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypePhysical);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    //NSString *filename = document.filename;
-    NSNumber *objectIdV =  @(filename.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    
-    MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
-    datatable.cacheDelegate = document;
-    [datatable loadFromCacheWithUrl:document.urlDataTableCache];
-    document.mainDataTable = datatable;
-    //NSLog(@"Filename:   %@ (%s)", filename, __func__);
-
-    //MTDataTableFast *datatable = [MTDataTableFast newDataTableOfType:MTDataTableTypePhysical withObjectID:filename.hash];
-    //datatable.cacheDelegate = document;
-    //[datatable loadFromCacheWithUrl:document.urlDataTableCache];
-    //document.mainDataTable = datatable;
+    [self.document resetCache];
     
     [self finish];
 }

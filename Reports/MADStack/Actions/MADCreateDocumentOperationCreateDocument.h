@@ -12,6 +12,7 @@
 #import "MADOperation.h"
 
 @class MADocument;
+@class MADDatabaseConnection;
 
 @protocol MADCreateDocumentOperationCreateDocumentProtocol <NSObject>
     @property (readonly) MADocument *document;
@@ -19,6 +20,8 @@
 
 @interface MADCreateDocumentOperationCreateDocument : MADOperation
     <MADCreateDocumentOperationCreateDocumentProtocol>
+
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
     
 @end
 

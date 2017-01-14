@@ -52,7 +52,7 @@
         [taskBegin addDependency:getCredentials];
         
         MADCreateDocumentOperationCreateDocument *createDocument;
-        createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
+        createDocument = [[MADCreateDocumentOperationCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
         [createDocument addDependency:getCredentials];  // This is because the document uses this task as delegate to get credentials.
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];

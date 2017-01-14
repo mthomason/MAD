@@ -29,7 +29,7 @@ extern NSString * const MTNullIdentifier;
 @class RptqDocumentSection;
 @class RptqDocument;
 @class MADArrayCaching;
-@class MADReportFormatterPageDefinition;
+@class MADPageOptions;
 @class NSManagedObjectID;
 @class MADArrayCaching <ObjectType>;
 
@@ -42,12 +42,15 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
 
 @interface MTReportFormatter : MTTableFormatter
 
+    - (instancetype)initWithDocument: (MADocument *)layout
+                             options: (MTReportFormatterOptions)options;
+                             
+    + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
+                                         options: (MTReportFormatterOptions)options;
+
+
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-    //  These are the rowids by page.  These point to data in the cache.
-    //      Once these arrays are populated, they are used by the print page render to
-    //      draw the report.
-    @property (nonatomic, strong, readonly) MADCachingIndexes *reportIndexes;
 
     //  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
     //      which represents a page.  The array contains dictionaries for each object on that page.
@@ -56,7 +59,7 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
     @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
 
-    @property (nonatomic, strong, readonly) MADReportFormatterPageDefinition *page;
+    @property (nonatomic, strong, readonly) MADPageOptions *page;
     @property (nonatomic, weak,   readonly) MADocument *layout;
 
     @property (readonly) NSUInteger numberOfPages;
@@ -65,12 +68,6 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     //  Use this to cache in location other than default.
     @property (nonatomic, copy, readwrite) NSString *overrideIdentifier;
 
-    - (instancetype)initWithDocument: (MADocument *)layout
-                             options: (MTReportFormatterOptions)options;
-                             
-    + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-                                         options: (MTReportFormatterOptions)options;
-    
     - (void)formatForSize:(CGSize)printableSize;
     - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
 
@@ -82,10 +79,11 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     - (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID;
     //- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
     - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
-    - (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid;
-
+\
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
+
+    - (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
 
 @end
 

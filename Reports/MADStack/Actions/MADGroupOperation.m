@@ -99,7 +99,7 @@
 #pragma mark - MADOperationQueueDelegate
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue willAddOperation:(NSOperation *)operation {
-    NSAssert(!self.finishingOperation.finished && !self.finishingOperation.executing, @"cannot add new operations to a group after the group has completed");
+    NSAssert(!self.finishingOperation.finished, @"cannot add new operations to a group after the group has completed");
 
     /*
      Some operation in this group has produced a new operation to execute.

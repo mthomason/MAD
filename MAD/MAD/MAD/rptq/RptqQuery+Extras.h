@@ -20,7 +20,7 @@
 
     - (RptqQueryGroup *)firstQueryGroup;
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
-    - (NSArray *)sortedQueryGroups;
+    - (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
     - (NSUInteger)numberOfTables;
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
     - (NSUInteger)sectionCount;

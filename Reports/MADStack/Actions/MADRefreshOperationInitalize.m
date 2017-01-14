@@ -100,9 +100,8 @@
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
             databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:rptqUser];
+            [document updateDatabaseWithConnection:databaseConnection];
             database = [MTDatabase newDatabaseWithConnection:databaseConnection];
-            document.database = database;
-            
         }
         document.database.delegate = (id <MTDatabaseProtocol>)document;
         
@@ -120,27 +119,11 @@
         [document.mainDataTable sortUsingDescriptors:sortDescriptors];
         
         //Initalize the section layout manager... Not neede for creating the report.
-        
-        NSMutableDictionary *sectionLayoutManagers;
-        RptqDocumentSectionEnumerator *sectionEnumerator;
-        MADSectionLayoutManager *layoutManager;
-        RptqDocumentSection *reportSection;
-        
-        sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-        sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
-        for (reportSection in sectionEnumerator) {
-            layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-            sectionLayoutManagers[reportSection.objectID] = layoutManager;
-        }
-        
-        document.sectionLayoutManagers = sectionLayoutManagers;
+        [document resetSectionLayoutManagers];
 
         MTReportFormatter *formatter;
         formatter = [MTReportFormatter newReportFormatterWithLayout: document
                                                             options: MTReportFormatterOptionsNone];
-        formatter.dataDelegate = document;
-        formatter.datasource = document;
-        formatter.cachedDelegate = document;
 
         document.reportFormatter = formatter;
         

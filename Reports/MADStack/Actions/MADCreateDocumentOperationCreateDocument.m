@@ -11,6 +11,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
+#import <MAD/MTDatabase.h>
 #import "MADOperationUniqueUrlForFilename.h"
 
 @interface MADCreateDocumentOperationCreateDocument ()
@@ -20,6 +21,7 @@
 
     @property (nonatomic, readwrite, copy) NSURL *url;
     @property (nonatomic, readwrite, copy) MADCredential *credentials;
+    @property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -27,6 +29,13 @@
 
 - (void)dealloc {
     NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
+
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
+    if (self = [super init]) {
+        self.databaseConnection = databaseConnection;
+    }
+    return self;
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -68,7 +77,8 @@
     }
     
     //Create MADocument File and Remove Cache
-    MADocument *document = [[MADocument alloc] initWithFileURL: self.url];
+    MADocument *document = [[MADocument alloc] initWithFileURL: self.url andDatabaseConnection:self.databaseConnection];
+
     document.documentDelegate = self;
     [document archiveAndRemoveFileWrapper];
     self.document = document;

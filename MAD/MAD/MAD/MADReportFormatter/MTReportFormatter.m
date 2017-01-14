@@ -34,7 +34,7 @@
 #import "MADArrayCaching.h"
 
 #import "MADNotificationDidFormatPage.h"
-#import "MADReportFormatterPageDefinition.h"
+#import "MADPageOptions.h"
 
 #import "NSData+Comparson.h"
 
@@ -68,8 +68,8 @@ static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize la
                             layoutSize.width - printableRect.size.width - printableRect.origin.x);
 }
 
-static inline CGFloat PrintableHeightForPage(MADReportFormatterPageDefinition *page);
-static inline CGFloat PrintableHeightForPage(MADReportFormatterPageDefinition *page) {
+static inline CGFloat PrintableHeightForPage(MADPageOptions *page);
+static inline CGFloat PrintableHeightForPage(MADPageOptions *page) {
     return page.layoutSize.height - page.margins.top - page.margins.bottom;
 }
 
@@ -86,15 +86,18 @@ typedef NSMutableArray  <__kindof NSNumber *>               MADMutableIndexArray
 typedef NSDictionary    <NSManagedObjectID *, NSNumber *>   MADNumberMapByObjectID;
 
 typedef NSDictionary    <NSString *, NSNumber *>            MADStringNumberMap;
-typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
 @interface MTReportFormatter ()
 
     @property (nonatomic, readwrite, weak)      MADocument *layout;
     @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
 
-    @property (nonatomic, readwrite, strong)    MADReportFormatterPageDefinition *page;
+    @property (nonatomic, readwrite, strong)    MADPageOptions *page;
 
+    //  These are the rowids by page.  These point to data in the cache.
+    //      Once these arrays are populated, they are used by the print page render to
+    //      draw the report.
+    //
     @property (nonatomic, readwrite, strong)    MADCachingIndexes *reportIndexes;
     @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
 
@@ -106,17 +109,11 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 
     @property (nonatomic, readwrite, strong)    MADObjectArray      *lastComparsonValues;
     @property (nonatomic, readwrite, strong)    MADNumberMapByObjectID  *layoutHeightsBySectionKey;
-    @property (nonatomic, readwrite, strong)    MADQueryGroupArray  *sortedQueryGroups;
+    @property (nonatomic, readwrite, strong)    NSArray <RptqQueryGroup *> *sortedQueryGroups;
 
 @end
 
 @implementation MTReportFormatter
-
-- (MADObjectArray *)newObjectArrayOfKeysForCachedID:(NSNumber *)rowid {
-    NSDictionary *row = [self.datasource copyDataForCacheId: rowid];
-    MADObjectArray *keyValues = [self newObjectArrayKeyValuesForResultRow:row];
-    return keyValues;
-}
 
 - (void)dealloc { }
 
@@ -124,7 +121,12 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
                          options: (MTReportFormatterOptions)options  {
     if (self = [super init]) {
     
-        MADReportFormatterPageDefinition *page = [[MADReportFormatterPageDefinition alloc] init];
+        self.cachedDelegate = layout;
+        self.dataDelegate = layout;
+        self.datasource = layout;
+        self.layout = layout;
+        
+        MADPageOptions *page = [[MADPageOptions alloc] init];
         self.page = page;
         
         self.page.margins = (options & MTReportFormatterOptionsMargin) ?
@@ -148,17 +150,10 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
         self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     
         self.options = options;
-        self.layout = layout;
         self.didRefresh = NO;
+        
     }
     return self;
-}
-
-+ (instancetype)newReportFormatterWithDocument: (MADocument *)layout
-                                       options: (MTReportFormatterOptions)options {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument: layout
-                                                                    options: options];
-    return result;
 }
 
 + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
@@ -171,8 +166,8 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
 #pragma mark - Accessors
 
 - (MADSectionArray *)layoutForPage:(NSUInteger)page {
-    MADSectionArray *result = page < _reportLayout.count ?
-                                        _reportLayout[page] : nil;
+    MADSectionArray *result = page < (NSUInteger)_reportLayout.count ?
+                                                _reportLayout[page] : nil;
     return result;
 }
 
@@ -270,7 +265,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     [self.machineState resetWithDocument:(layout).activeDocumentModel
                          andDataDelegate:self.dataDelegate];
 
-    [layout resetSectionLayoutManagers: self.machineState.document];
+    [layout resetSectionLayoutManagers];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
@@ -528,7 +523,7 @@ typedef NSArray         <RptqQueryGroup *>                  MADQueryGroupArray;
     RptqDocumentSection *detailSection = self.machineState.document.hasDetailSection;
     
     BOOL firstRow = YES;
-        
+    
     NSArray *sortedQueryGroups = [self.layout.mainQuery.queryObject sortedQueryGroups];
     self.sortedQueryGroups = sortedQueryGroups.copy;
     

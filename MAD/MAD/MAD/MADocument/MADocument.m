@@ -228,6 +228,9 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, assign) BOOL didRefresh;
 
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
+    @property (nonatomic, readwrite, strong) MTDataTableFast *mainDataTable;
+    @property (nonatomic, readwrite, strong) MTDatabase *database;
+    @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
 @end
 
@@ -235,8 +238,33 @@ void madwarn(char *err,  const char*err2) { }
 
 #pragma mark - NSObject
 
+@synthesize database = _database;
+@synthesize sectionLayoutManagers = _sectionLayoutManagers;
+
 - (void)dealloc {
     _thumbnail = nil;
+}
+
+- (void)resetCache {
+
+    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
+    NSNumber *type = [[NSNumber alloc] initWithShort: MTDataTableTypePhysical];
+    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
+    NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
+    NSDictionary *parameters;
+    parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
+    
+    MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
+    datatable.cacheDelegate = self;
+    [datatable loadFromCacheWithUrl:self.urlDataTableCache];
+    self.mainDataTable = datatable;
+
+}
+
+- (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
+    MTDatabase *database;
+    database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    self.database = database;
 }
 
 - (void)removeObservers {
@@ -268,6 +296,10 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (instancetype)initWithFileURL:(NSURL *)url {
+    return [self initWithFileURL:url andDatabaseConnection:nil];
+}
+
+- (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super initWithFileURL:url]) {
         
         _urlGuts = [MADURL newURLDocumentArchiveForFileURL: url
@@ -293,6 +325,11 @@ void madwarn(char *err,  const char*err2) { }
         //Initzlize the extra info output container
         id extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
         self.extraInformation = extraInfo;
+        
+        if (databaseConnection != nil) {
+            MTDatabase *database = [MTDatabase newDatabaseWithConnection: databaseConnection];
+            self.database = database;
+        }
         
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver: self
@@ -340,7 +377,6 @@ void madwarn(char *err,  const char*err2) { }
     
     MADocument *strongDocument = document;
     
-    [strongDocument regenThumbnail];
     [strongDocument removeObservers];
     
     NSURL *fileURL = strongDocument.fileURL.copy;
@@ -970,12 +1006,24 @@ READFROMURL_END:;
     }
 }
 
+- (MTPaper *)paper {
+    if (_paper == nil) {
+        RptqDocument *document = [self activeDocumentModel];
+        MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
+        self.paper = paper;
+    }
+    return _paper;
+}
+
+- (void)resetPaper {
+    self.paper = nil;
+}
+
 - (RptqDocument *)activeDocumentModel {
 
     if (self.reportDocument == nil) {
         
         RptqDocument *document = nil;
-        //NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         
         if (self.documentObjectID == nil) {
             
@@ -983,23 +1031,10 @@ READFROMURL_END:;
             
             self.documentObjectID = document.objectID.copy;
             
-            MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
-            self.paper = paper;
-            
-            if (self.database == nil) {
-                [self initializeMainDatabase:document];
-            } else {
-                self.database.delegate = self;
-            }
-            
-            if (self.reportFormatter == nil) {
-                [self resetMainQueryWithDocumentModel:document];
-                
-                [self resetSectionLayoutManagers: document];
-                
-                
-                [self initializeReportFormatter];
-            }
+            [self resetPaper];
+            [self resetMainQuery];
+            [self resetSectionLayoutManagers];
+            [self resetReportFormatter];
             
             self.reportDocument = document;
             
@@ -1011,18 +1046,25 @@ READFROMURL_END:;
     return self.reportDocument;
 }
 
-- (void)resetSectionLayoutManagers:(RptqDocument *)document {
-    NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-    RptqDocumentSectionEnumerator *sections;
-    sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
-    for (RptqDocumentSection *reportSection in sections) {
+- (MADSectionLayoutManagerMutableMap *)sectionLayoutManagers {
+    if (!_sectionLayoutManagers || _sectionLayoutManagers.count == 0) {
+        NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
+        RptqDocument *document = [self activeDocumentModel];
+        RptqDocumentSectionEnumerator *sections;
+        sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
+        for (RptqDocumentSection *reportSection in sections) {
+            
+            MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
+            sectionLayoutManagers[reportSection.objectID] = layoutManager;
+        }
         
-        MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-        sectionLayoutManagers[reportSection.objectID] = layoutManager;
+        _sectionLayoutManagers = sectionLayoutManagers;
     }
-    
-    self.sectionLayoutManagers = sectionLayoutManagers;
-    
+    return _sectionLayoutManagers;
+}
+
+- (void)resetSectionLayoutManagers {
+    [_sectionLayoutManagers removeAllObjects];
 }
 
 - (void)removeDocumentObjectWithObjectID: (NSManagedObjectID *)objectID {
@@ -1137,43 +1179,63 @@ READFROMURL_END:;
 
 }
 
-- (void)resetMainQueryWithDocumentModel:(RptqDocument *)document {
-    RptqDatabase *database = document.defaultDatabase;
-    if (!database) return;
-    
-    RptqQuery *rquery = database.defaultQuery;
-    MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
-    NSMutableDictionary *extraParameters = parameters.mutableCopy;
-    
-    NSNumber *queryLimit;
-    queryLimit = [[NSNumber alloc] initWithUnsignedInteger: self.limitResultsDesignMode ?
-                                                                50 : NSUIntegerMax];
-    extraParameters[@"MADQueryLimit"] = queryLimit;
-    
-    MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
-    defaultQuery.dataDelegate = self;
-    
-    NSArray *sortDescriptors = [self readCurrentSortDescriptors];
-    [self.mainDataTable sortUsingDescriptors:sortDescriptors];
-    self.mainQuery = defaultQuery;
+- (MTQuery *)mainQuery {
+    if (!_mainQuery) {
+        RptqDocument *document = [self activeDocumentModel];
+        RptqDatabase *database = document.defaultDatabase;
+        if (database) {
+            
+            RptqQuery *rquery = database.defaultQuery;
+            MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
+            NSMutableDictionary *extraParameters = parameters.mutableCopy;
+            
+            NSNumber *queryLimit;
+            queryLimit = [[NSNumber alloc] initWithUnsignedInteger: self.limitResultsDesignMode ?
+                          50 : NSUIntegerMax];
+            extraParameters[@"MADQueryLimit"] = queryLimit;
+            
+            MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
+            defaultQuery.dataDelegate = self;
+            
+            NSArray *sortDescriptors = [self readCurrentSortDescriptors];
+            [self.mainDataTable sortUsingDescriptors:sortDescriptors];
+            self.mainQuery = defaultQuery;
+        }
+    }
+    return _mainQuery;
 }
 
-- (void)initializeReportFormatter {
-    MTReportFormatter *reportFormatter;
-    reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
-                                                          options: MTReportFormatterOptionsNone];
-    reportFormatter.dataDelegate = self;
-    reportFormatter.datasource = self;
-    reportFormatter.cachedDelegate = self;
+- (void)resetMainQuery {
+    self.mainQuery = nil;
+}
 
-    self.reportFormatter = reportFormatter;
+- (MTReportFormatter *)reportFormatter {
+    if (!_reportFormatter) {
+        MTReportFormatter *reportFormatter;
+        reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
+                                                              options: MTReportFormatterOptionsNone];
+        _reportFormatter = reportFormatter;
+    }
+    return _reportFormatter;
+}
+
+- (void)resetReportFormatter {
+    self.reportFormatter = nil;
+}
+
+- (MTDatabase *)database {
+    if (!_database) {
+        RptqDocument *document = [self activeDocumentModel];
+        [self initializeMainDatabase:document];
+    }
+    return _database;
 }
 
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
     MADDatabaseConnection *connection;
-    connection = [MADDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
+    RptqUserCredentals *ownedByUser = database.ownedByUser;
+    connection = [MADDatabaseConnection newDatabaseConnectionForObject: ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;
@@ -1196,8 +1258,7 @@ READFROMURL_END:;
     if (!path) contentChanged = YES;
     if (!contentChanged) {
         contentChanged = self.activeDocumentModel != nil &&
-                         (self.documentStatus.contextChagned) &&
-                         (self.reportFormatter).numberOfPages > 0;
+                         (self.documentStatus.contextChagned);
     }
     contentChanged = YES;
     if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {

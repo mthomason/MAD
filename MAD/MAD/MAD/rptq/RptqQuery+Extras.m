@@ -141,7 +141,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     return (index < queryGroups.count) ? queryGroups[index] : nil;
 }
 
-- (NSArray *)sortedQueryGroups {
+- (NSArray <RptqQueryGroup *> *)sortedQueryGroups {
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:weight ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];

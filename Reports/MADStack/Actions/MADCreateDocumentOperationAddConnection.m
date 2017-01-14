@@ -58,22 +58,9 @@
     }
 
     [document activeDocumentModel];
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
 
-    if (database) {
-    
-        document.database = database;
-        self.success = YES;
-        [self finish];
-
-    } else {
-
-        self.success = NO;
-        NSString *domain = NSStringFromClass(self.class);
-        NSError *error = [NSError errorWithDomain:domain code:289 userInfo:nil];
-        [self finishWithError:error];
-    
-    }
+    self.success = YES;
+    [self finish];
 }
 
 @end

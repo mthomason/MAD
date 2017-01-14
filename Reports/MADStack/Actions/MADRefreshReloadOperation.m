@@ -65,8 +65,8 @@
 
 - (void)execute {
     [self addAllOperations];
-    self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];
+    self.internalQueue.suspended = NO;
 }
 
 - (void)addAllOperations {

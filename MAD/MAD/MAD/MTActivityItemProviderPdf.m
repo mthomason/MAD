@@ -142,9 +142,6 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         MTReportFormatter *reportFormatter;
         reportFormatter = [[MTReportFormatter alloc] initWithDocument: sdocument
                                                               options: MTReportFormatterOptionsMargin];
-        reportFormatter.cachedDelegate = sdocument;
-        reportFormatter.dataDelegate = sdocument;
-        reportFormatter.datasource = sdocument;
         reportFormatter.overrideIdentifier = @"madpreview";
         reportFormatter.didRefresh = YES;
         reportFormatter.layoutSize = letterRect.size;

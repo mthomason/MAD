@@ -444,6 +444,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
     [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
     
+    [[NSOperationQueue currentQueue] addOperationWithBlock:^{
+        [document regenThumbnail];
+    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1189,7 +1193,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Load data
 
-- (void)reloadWithSize:(CGSize)viewBounds {
+- (void)reloadWithSize:(NSValue *)viewBoundsWrapper {
+    CGSize viewBounds = [viewBoundsWrapper CGSizeValue];
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
@@ -1647,6 +1652,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
             
             [self relaodByBlocks];
+            
         }
         
         //MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
@@ -1925,7 +1931,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
     
     if (![self isCancelled]) {
         RptqDocument *activeDocumentModel = document.activeDocumentModel;
-        [document resetMainQueryWithDocumentModel:activeDocumentModel];
+        [document resetMainQuery];
     }
     
     if (![self isCancelled]) {

@@ -66,21 +66,17 @@
         MADocument *doc = weakdoc;
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         
-        MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
-        doc.database = database;
-        
-        
-        [rptqDocument storeDatabaseConnectionDefination:database forManagedObjectContext:private];
+        [rptqDocument storeDatabaseConnectionDefination:document.database forManagedObjectContext:private];
         
         MADErrorContainer *errorContainer = [MADErrorContainer new];
         
-        id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
+        id dbconnection = [document.database connectWithConnection:document.database.databaseConnection credentals:nil];
         
         NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
         NSMutableArray *tables                 = [NSMutableArray array];
         
         NSError *error = NULL;
-        NSArray *resultTables = [database getTablesFromConnection:dbconnection error:&error];
+        NSArray *resultTables = [document.database getTablesFromConnection:dbconnection error:&error];
         
         [tables setArray:resultTables];
         
@@ -92,7 +88,9 @@
                 [self.parentOperation updateImportProgressWithMessage:name progress:(counter + 1) / numberOfTables];
                                 
                 NSError *getFieldsError = NULL;
-                NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
+                NSArray *fieldsForTable = [document.database fieldsForTable: databaseTable.name
+                                                                 connection: dbconnection
+                                                                      error: &getFieldsError];
                 
                 NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
                 tablesAndFields[databaseTable.name] = fields;
@@ -104,7 +102,7 @@
         MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
         [errorContainer addErrorsFromContainer:additionalErrors];
         
-        [database closeProcess:dbconnection];
+        [document.database closeProcess:dbconnection];
         
         NSError *saveError = nil;
         success = [private save:&saveError];

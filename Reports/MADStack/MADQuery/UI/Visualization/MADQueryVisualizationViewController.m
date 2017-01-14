@@ -274,7 +274,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self reloadDocument:YES];
+    [self reloadDocument: YES];
     
     NSManagedObject *reportSchema = self.document.activeDocumentModel;
     NSManagedObjectContext *managedObjectContext = reportSchema.managedObjectContext;
@@ -625,14 +625,18 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         [self.connectionViewsByObjectID removeAllObjects];
         
         NSString *path = self.localCacheFileUrl.path.copy;
+        RptqDocument *document = [documentReport activeDocumentModel];
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query = database.hasQueries.anyObject;
         if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
-            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery
-               withSchemaHints:schemaLocations animated:animated];
+            [self displayQuery: query
+               withSchemaHints: schemaLocations
+                      animated: animated];
         } else {
-            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery
-                      animated:animated];
+            [self displayQuery: query
+                      animated: animated];
         }
     }
 }

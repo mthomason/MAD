@@ -132,9 +132,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     reportFormatter = [MTReportFormatter newReportFormatterWithLayout: document
                                                               options: MTReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
-    reportFormatter.dataDelegate = document;
-    reportFormatter.datasource = document;
-    reportFormatter.cachedDelegate = document;
     
     MTDataTableFast *mainDataTable;
     id printPageRenderer;
@@ -522,7 +519,9 @@ END_DrawSection:;
     MTReportFormatter *reportFormatter = self.reportFormatter;
     NSArray *keys;
     if (reportFormatter.numberOfGroups > 0) {
-        keys = [reportFormatter newObjectArrayOfKeysForCachedID:detailRowID];
+        NSDictionary *row = [self.dataTable copyDataForCacheId: detailRowID];
+        keys = [reportFormatter newObjectArrayKeyValuesForResultRow:row];
+
         return keys;
     } else {
         keys = [[NSArray alloc] init];
