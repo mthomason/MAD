@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReportFormatterPageDefinition.h"
+#import "MADPageOptions.h"
 
-@implementation MADReportFormatterPageDefinition
+@implementation MADPageOptions
 
 @end

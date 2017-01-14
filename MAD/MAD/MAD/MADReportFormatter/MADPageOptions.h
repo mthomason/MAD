@@ -13,7 +13,7 @@
 #import <Foundation/NSObject.h>
 #import <UIKit/UIGeometry.h>
 
-@interface MADReportFormatterPageDefinition : NSObject
+@interface MADPageOptions : NSObject
 
     @property (nonatomic, assign) CGSize layoutSize;
     @property (nonatomic, assign) UIEdgeInsets margins;
