@@ -400,6 +400,52 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 }
 
+- (void)relaodByBlocks {
+    NSInvocationOperation *invokeUpdateNumberOfPages, *invokeUpdateRecordsRead, *invokePageSliderNeedsLayout,
+    *invokeSetDisplayActive, *invokeReloadWithSize, *invokeTimerDealloc,
+    *invokeTimeSinceLastUpdate, *invokeRemoveObserver, *invokesetLastCacheDate;
+    
+    MADocument *document = self.document;
+
+    invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateNumberOfPages) object:nil];
+    
+    invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateRecordsRead) object:nil];
+    [invokeUpdateRecordsRead addDependency:invokeUpdateNumberOfPages];
+    
+    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:_pageSlider selector:@selector(setNeedsLayout) object:nil];
+    [invokePageSliderNeedsLayout addDependency:invokeUpdateRecordsRead];
+    
+    invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setLastCacheDate:) object:[NSDate date]];
+    [invokesetLastCacheDate addDependency:invokePageSliderNeedsLayout];
+    
+    invokeSetDisplayActive = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setDisplayActive) object:nil];
+    [invokeSetDisplayActive addDependency:invokesetLastCacheDate];
+    
+    invokeReloadWithSize = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(reloadWithSize:) object:[NSValue valueWithCGSize:document.paper.paperSize]];
+    [invokeReloadWithSize addDependency:invokeSetDisplayActive];
+    
+    invokeTimerDealloc = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(timerDealloc) object:nil];
+    [invokeTimerDealloc addDependency:invokeReloadWithSize];
+    
+    invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateTimeSinceLastRefresh:) object:nil];
+    [invokeTimeSinceLastUpdate addDependency:invokeTimerDealloc];
+    
+    invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(removeObserverDidReadRowsFromDatabase:) object:document.database];
+    [invokeRemoveObserver addDependency:invokeTimeSinceLastUpdate];
+    
+    
+    [[NSOperationQueue mainQueue] addOperation:invokeUpdateNumberOfPages];
+    [[NSOperationQueue mainQueue] addOperation:invokeUpdateRecordsRead];
+    [[NSOperationQueue mainQueue] addOperation:invokePageSliderNeedsLayout];
+    [[NSOperationQueue mainQueue] addOperation:invokesetLastCacheDate];
+    [[NSOperationQueue mainQueue] addOperation:invokeSetDisplayActive];
+    [[NSOperationQueue mainQueue] addOperation:invokeReloadWithSize];
+    [[NSOperationQueue mainQueue] addOperation:invokeTimerDealloc];
+    [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
+    [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -1078,6 +1124,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [refreshOperation addObserver:self];
         [self.refreshQueue addOperation:refreshOperation];
         
+        
     }
 }
 
@@ -1599,7 +1646,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
             
-            
+            [self relaodByBlocks];
         }
         
         //MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
@@ -1866,9 +1913,9 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 
 - (void)main {
 
-    [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
-    _executing = NO;
-    [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+    //[self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+    //_executing = NO;
+    //[self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
 
     MADocument *document = self.document;
     
