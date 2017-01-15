@@ -11,7 +11,7 @@
 
 #import "MADOperation.h"
 
-@interface MADDocumentOperationCloseDocument : MADOperation
+@interface MADOperationDocumentCloseDocument : MADOperation
 
 @end
 

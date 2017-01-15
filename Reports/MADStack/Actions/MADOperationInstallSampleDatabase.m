@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADInstallOperationSampleDatabase.h"
+#import "MADOperationInstallSampleDatabase.h"
 
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
@@ -24,7 +24,7 @@ NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChino
 static NSString * const MTSampleDatabaseChinook            = @"chinook";
 static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
-@implementation MADInstallOperationSampleDatabase
+@implementation MADOperationInstallSampleDatabase
 
 - (void)dealloc { }
 
@@ -42,8 +42,8 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     if (installed) goto FINISH;
 
     
-    fileURL = [MADInstallOperationSampleDatabase newApplicationBundleSampleDatabaseChinook];
-    databaseURL = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
+    fileURL = [MADOperationInstallSampleDatabase newApplicationBundleSampleDatabaseChinook];
+    databaseURL = [MADOperationInstallSampleDatabase newApplicationSupportSampleDatabaseChinook];
     
     if (databaseURL == nil) goto FINISH;
     

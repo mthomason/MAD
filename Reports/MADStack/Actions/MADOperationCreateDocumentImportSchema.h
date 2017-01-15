@@ -1,5 +1,5 @@
 //
-//  MADCreateDocumentOperationAddConnection.h
+//  MADOperationCreateDocumentAddConnection.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
@@ -13,14 +13,14 @@
 
 @class MADDatabaseConnection;
 
-@protocol MADCreateDocumentOperationImportSchemaProtocol <NSObject>
+@protocol MADOperationCreateDocumentImportSchemaProtocol <NSObject>
     - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress;
 @end
 
-@interface MADCreateDocumentOperationImportSchema : MADOperation
+@interface MADOperationCreateDocumentImportSchema : MADOperation
 
     - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
-    @property (nonatomic, weak) id <MADCreateDocumentOperationImportSchemaProtocol> parentOperation;
+    @property (nonatomic, weak) id <MADOperationCreateDocumentImportSchemaProtocol> parentOperation;
     
 @end
 

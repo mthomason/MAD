@@ -17,7 +17,7 @@
     @property (readonly) MADocument *document;
 @end
 
-@interface MADRefreshOperationInitalize : MADOperation
+@interface MADOperationRefreshInitialize : MADOperation
 
     - (instancetype)initWithDocument:(MADocument *)document;
 

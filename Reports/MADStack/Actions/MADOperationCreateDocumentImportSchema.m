@@ -1,12 +1,12 @@
 //
-//  MADCreateDocumentOperationAddConnection.m
+//  MADOperationCreateDocumentAddConnection.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCreateDocumentOperationImportSchema.h"
+#import "MADOperationCreateDocumentImportSchema.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
@@ -21,17 +21,17 @@
 
 #import "MADCreateDocumentOperationCreateDocument.h"
 
-@interface MADCreateDocumentOperationImportSchema ()
+@interface MADOperationCreateDocumentImportSchema ()
 
     @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
-@implementation MADCreateDocumentOperationImportSchema
+@implementation MADOperationCreateDocumentImportSchema
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
@@ -52,8 +52,8 @@
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
-            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
     }

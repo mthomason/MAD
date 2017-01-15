@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADRefreshReloadOperation.h"
+#import "MADOperationRefreshReload.h"
 #import <Foundation/NSArray.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADocument.h>
@@ -18,7 +18,7 @@
 #import "MADRefreshOperation.h"
 #import "MADOperationQueue.h"
 
-@interface MADRefreshReloadOperation ()
+@interface MADOperationRefreshReload ()
 
     @property (nonatomic, readwrite, weak) MADocument *document;
     @property (nonatomic, readwrite, strong) MADGetCredentialsOperation *getCredentials;
@@ -26,10 +26,10 @@
 
 @end
 
-@implementation MADRefreshReloadOperation
+@implementation MADOperationRefreshReload
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -86,9 +86,9 @@
     
     NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: self.getCredentials, initializeMainDataTable, initialize, refresh, nil];
         
-    MADRefreshReloadOperation * __weak wself = self;
+    MADOperationRefreshReload * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-        MADRefreshReloadOperation *sself = wself;
+        MADOperationRefreshReload *sself = wself;
         sself.completedSuccessfully = YES;
         [sself finish];
     }];

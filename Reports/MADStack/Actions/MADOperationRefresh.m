@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADRefreshOperation.h"
+#import "MADOperationRefresh.h"
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDataTableFast.h>
@@ -16,19 +16,19 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSURL.h>
 #import <CoreData/NSManagedObjectContext.h>
-#import "MADRefreshOperationInitalize.h"
+#import "MADOperationRefreshInitialize.h"
 #import <MAD/MADCredential.h>
 #import <MAD/MTQueryFull.h>
 
 static const short errCache = 2;
 
-@interface MADRefreshOperation ()
+@interface MADOperationRefresh ()
 
     @property (nonatomic, weak) MADocument *document;
 
 @end
 
-@implementation MADRefreshOperation
+@implementation MADOperationRefresh
 
 - (void)dealloc {
     //NSLog(@"\t%s", __PRETTY_FUNCTION__);

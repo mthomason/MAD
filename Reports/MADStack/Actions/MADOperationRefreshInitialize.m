@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADRefreshOperationInitalize.h"
+#import "MADOperationRefreshInitialize.h"
 
 #import <MAD/MTDataTable.h>
 
@@ -32,16 +32,16 @@
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
-#import "MADRefreshOperationInitalizeMainDataTable.h"
+#import "MADOperationRefreshInitalizeMainDataTable.h"
 
-@interface MADRefreshOperationInitalize ()
+@interface MADOperationRefreshInitialize ()
 
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, assign) BOOL success;
 
 @end
 
-@implementation MADRefreshOperationInitalize
+@implementation MADOperationRefreshInitialize
 
 - (void)dealloc {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
@@ -63,8 +63,8 @@
     MADocument *doc = _document;
     /*
         for (NSOperation *dependency in self.dependencies) {
-            if ([dependency conformsToProtocol:@protocol(MADRefreshOperationInitalizeMainDataTableProtocol)]) {
-                doc = ((id <MADRefreshOperationInitalizeMainDataTableProtocol>)dependency).document;
+            if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitalizeMainDataTableProtocol)]) {
+                doc = ((id <MADOperationRefreshInitalizeMainDataTableProtocol>)dependency).document;
                 break;
             }
         }

@@ -22,7 +22,7 @@
 
 @end
 
-@interface MADDatabaseOperationTestConnection : MADOperation
+@interface MADOperationDatabaseTestConnection : MADOperation
     <MADPromptOperationDisplayErrorProtocol, MADDatabaseOperationTestConnectionProtocol>
 
     @property (nonatomic, readonly, strong) NSError *error;

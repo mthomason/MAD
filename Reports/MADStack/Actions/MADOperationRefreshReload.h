@@ -14,7 +14,7 @@
 @class UIViewController;
 @class MADocument, MADDatabaseConnection;
 
-@interface MADRefreshReloadOperation : MADGroupOperation
+@interface MADOperationRefreshReload : MADGroupOperation
 
     @property (readonly) BOOL completedSuccessfully;
     @property (nonatomic, readonly, weak) MADocument *document;

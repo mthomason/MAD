@@ -6,19 +6,19 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADRefreshOperationInitalizeMainDataTable.h"
+#import "MADOperationRefreshInitalizeMainDataTable.h"
 #import <MAD/MADocument.h>
 #import <MAD/MTDataTableFast.h>
 #import <MAD/MTDataTable.h>
 
-@interface MADRefreshOperationInitalizeMainDataTable ()
+@interface MADOperationRefreshInitalizeMainDataTable ()
 
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, assign) BOOL success;
 
 @end
 
-@implementation MADRefreshOperationInitalizeMainDataTable
+@implementation MADOperationRefreshInitalizeMainDataTable
 
 - (void)dealloc {
     //NSLog(@"\t%s", __PRETTY_FUNCTION__);

@@ -17,7 +17,7 @@
     @property (readonly, nonatomic, weak) MADocument *document;
 @end
 
-@interface MADRefreshOperationInitalizeMainDataTable : MADOperation
+@interface MADOperationRefreshInitalizeMainDataTable : MADOperation
     <MADRefreshOperationInitalizeMainDataTableProtocol>
 
     - (instancetype)initWithDocument:(MADocument *)document;

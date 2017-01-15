@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCreateDocumentOperationFirstTimeSetup.h"
+#import "MADOperationCreateDocumentFirstTimeSetup.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADocument.h>
@@ -16,17 +16,17 @@
 #import <MAD/RptqDocumentSection.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
-@interface MADCreateDocumentOperationFirstTimeSetup ()
+@interface MADOperationCreateDocumentFirstTimeSetup ()
 
     @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
-@implementation MADCreateDocumentOperationFirstTimeSetup
+@implementation MADOperationCreateDocumentFirstTimeSetup
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
@@ -47,8 +47,8 @@
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
-            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
     }

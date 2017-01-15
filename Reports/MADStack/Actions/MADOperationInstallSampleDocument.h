@@ -11,7 +11,7 @@
 
 #import "MADOperation.h"
 
-@interface MADInstallOperationSampleDocument : MADOperation
+@interface MADOperationInstallSampleDocument : MADOperation
 
     - (instancetype)initWithFilename:(NSString *)filename
                        fileExtension:(NSString *)fileExtension

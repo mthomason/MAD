@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADInstallOperationSampleDocument.h"
+#import "MADOperationInstallSampleDocument.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSUserDefaults.h>
@@ -14,7 +14,7 @@
 #import <Foundation/NSURL.h>
 #import <MADFoundation/MADURL.h>
 
-@interface MADInstallOperationSampleDocument ()
+@interface MADOperationInstallSampleDocument ()
 
     @property (nonatomic, copy) NSString *filename;
     @property (nonatomic, copy) NSString *fileExtension;
@@ -23,10 +23,10 @@
 
 @end
 
-@implementation MADInstallOperationSampleDocument
+@implementation MADOperationInstallSampleDocument
 
 - (void)dealloc {
-    NSLog(@"dealloc MADInstallOperationSampleDocument");
+    //NSLog(@"dealloc MADInstallOperationSampleDocument");
 }
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension

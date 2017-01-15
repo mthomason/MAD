@@ -13,7 +13,7 @@
 
 @class MADocument;
 
-@interface MADRefreshOperation : MADOperation
+@interface MADOperationRefresh : MADOperation
 
     - (instancetype)initWithDocument:(MADocument *)document;
 

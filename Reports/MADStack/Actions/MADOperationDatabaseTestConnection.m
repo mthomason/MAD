@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDatabaseOperationTestConnection.h"
+#import "MADOperationDatabaseTestConnection.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
@@ -22,7 +22,7 @@
 
 #import "MADKeyChainOperationGet.h"
 
-@interface MADDatabaseOperationTestConnection ()
+@interface MADOperationDatabaseTestConnection ()
     <MTDatabaseProtocol>
 
     //Parameters
@@ -39,7 +39,7 @@
 
 @end
 
-@implementation MADDatabaseOperationTestConnection
+@implementation MADOperationDatabaseTestConnection
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection {
     if (self = [super init]) {

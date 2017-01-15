@@ -6,15 +6,15 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentOperationCloseDocument.h"
+#import "MADOperationDocumentCloseDocument.h"
 #import <MAD/MADocument.h>
 #import <MAD/MADErrorUserInfo.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
-@implementation MADDocumentOperationCloseDocument
+@implementation MADOperationDocumentCloseDocument
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (void)execute {
@@ -22,8 +22,8 @@
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
-            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
     }

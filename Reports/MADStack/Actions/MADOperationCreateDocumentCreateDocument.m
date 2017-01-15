@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 #import <MAD/MADDocumentProtocol.h>
 
 #import <MAD/MADocument.h>
@@ -14,7 +14,7 @@
 #import <MAD/MTDatabase.h>
 #import "MADOperationUniqueUrlForFilename.h"
 
-@interface MADCreateDocumentOperationCreateDocument ()
+@interface MADOperationCreateDocumentCreateDocument ()
     <MADocumentDelegate>
     
     @property (nonatomic, readwrite, strong) MADocument *document;
@@ -25,10 +25,10 @@
 
 @end
 
-@implementation MADCreateDocumentOperationCreateDocument
+@implementation MADOperationCreateDocumentCreateDocument
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {

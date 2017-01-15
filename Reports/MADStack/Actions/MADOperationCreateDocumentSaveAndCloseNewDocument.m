@@ -6,12 +6,12 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCreateDocumentOperationSaveAndCloseNewDocument.h"
+#import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
 #import <MAD/MADocument.h>
 #import <MAD/MADErrorUserInfo.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
-@implementation MADCreateDocumentOperationSaveAndCloseNewDocument
+@implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 
 - (BOOL)isAsynchronous {
     return YES;
@@ -22,8 +22,8 @@
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
-            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
     }

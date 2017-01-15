@@ -11,7 +11,7 @@
 
 #import "MADOperation.h"
 
-@interface MADCreateDocumentOperationFirstTimeSetup : MADOperation
+@interface MADOperationCreateDocumentFirstTimeSetup : MADOperation
 
 @end
 

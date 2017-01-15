@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCreateDocumentOperationAddConnection.h"
+#import "MADOperationCreateDocumentAddConnection.h"
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
@@ -17,17 +17,17 @@
 
 #import "MADCreateDocumentOperationCreateDocument.h"
 
-@interface MADCreateDocumentOperationAddConnection ()
+@interface MADOperationCreateDocumentAddConnection ()
 
     @property (nonatomic, assign) BOOL success;
     @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
-@implementation MADCreateDocumentOperationAddConnection
+@implementation MADOperationCreateDocumentAddConnection
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
@@ -50,8 +50,8 @@
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
     
-        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
-            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
         

@@ -13,7 +13,7 @@
 
 @class MADDatabaseConnection;
 
-@interface MADCreateDocumentOperationAddConnection : MADOperation
+@interface MADOperationCreateDocumentAddConnection : MADOperation
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
 
