@@ -1,5 +1,5 @@
 //
-//  MADRefreshOperationInitalize.m
+//  MADOperationRefreshInitialize.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
@@ -63,8 +63,8 @@
     MADocument *doc = _document;
     /*
         for (NSOperation *dependency in self.dependencies) {
-            if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitalizeMainDataTableProtocol)]) {
-                doc = ((id <MADOperationRefreshInitalizeMainDataTableProtocol>)dependency).document;
+            if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitializeMainDataTableProtocol)]) {
+                doc = ((id <MADOperationRefreshInitializeMainDataTableProtocol>)dependency).document;
                 break;
             }
         }
@@ -91,7 +91,7 @@
         RptqDatabase *rptqDatabase;;
         RptqQuery *rptqQuery;
         
-        //Initalize main database
+        //Initialize main database
         if (document.database == nil) {
             RptqUserCredentals *rptqUser;
             MADDatabaseConnection *databaseConnection;
@@ -118,7 +118,7 @@
         NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:document.database];
         [document.mainDataTable sortUsingDescriptors:sortDescriptors];
         
-        //Initalize the section layout manager... Not neede for creating the report.
+        //Initialize the section layout manager... Not neede for creating the report.
         [document resetSectionLayoutManagers];
 
         MTReportFormatter *formatter;

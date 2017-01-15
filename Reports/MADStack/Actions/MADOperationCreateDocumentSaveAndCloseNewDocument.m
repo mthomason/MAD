@@ -9,7 +9,7 @@
 #import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
 #import <MAD/MADocument.h>
 #import <MAD/MADErrorUserInfo.h>
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 @implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 

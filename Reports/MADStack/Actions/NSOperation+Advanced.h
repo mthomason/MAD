@@ -14,7 +14,7 @@
 @interface NSOperation (Advanced)
 
     - (void)addCompletionBlock:(void(^)(void))block;
-    - (void)addDependencies:(NSArray /*NSOperation*/ *)dependencies;
+    - (void)addDependencies:(NSArray <__kindof NSOperation *> *)dependencies;
 
 @end
 

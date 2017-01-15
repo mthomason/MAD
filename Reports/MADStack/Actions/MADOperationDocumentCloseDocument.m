@@ -1,5 +1,5 @@
 //
-//  MADDocumentOperationCloseDocument.m
+//  MADOperationDocumentCloseDocument.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/29/16.
@@ -9,7 +9,7 @@
 #import "MADOperationDocumentCloseDocument.h"
 #import <MAD/MADocument.h>
 #import <MAD/MADErrorUserInfo.h>
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 @implementation MADOperationDocumentCloseDocument
 

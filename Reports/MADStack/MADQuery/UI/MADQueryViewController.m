@@ -1339,7 +1339,7 @@ BOOL storeEnabled() {
 - (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
                      fromTableView:(UITableView *)tableView
                        atIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Delete item %ld from section %ld-%hd.", indexPath.item, indexPath.section, querySection);
+    //NSLog(@"Delete item %ld from section %ld-%hd.", indexPath.item, indexPath.section, querySection);
     
     switch (querySection) {
         case MADIdentifierQueryViewSectionsTables:

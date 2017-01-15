@@ -1,5 +1,5 @@
 //
-//  MADRefreshOperation.m
+//  MADOperationRefresh.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/15/16.

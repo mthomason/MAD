@@ -18,7 +18,7 @@
 #import "MADPromptOperationPassword.h"
 #import "MADPromptOperationPolarQuestion.h"
 #import "MADPromptOperationDisplayError.h"
-#import "MADDatabaseOperationTestConnection.h"
+#import "MADOperationDatabaseTestConnection.h"
 #import "MADKeyChainOperationPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
@@ -43,7 +43,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 @implementation MADGetCredentialsOperation
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (MADCredential *)credentials {
@@ -61,7 +61,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection viewController: (UIViewController *)viewController {
     if (self = [super init]) {
 
-        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         if (!(_shortCircut = ![databaseConnection requiresCredientals])) {
             [self addOperationsToGetCredentialsWithDatabaseConnection:databaseConnection viewController:viewController];
         }
@@ -72,7 +72,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (void)execute {
     
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     if (_shortCircut) {
         [self finish];
@@ -200,7 +200,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     // Operation 5a: Test the connection (credentials prompt)
     // ---------------------------------------------------
-    MADDatabaseOperationTestConnection *testConnectionOperationCredentials = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    MADOperationDatabaseTestConnection *testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
     [testConnectionOperationCredentials addDependency:getUsername];
     [testConnectionOperationCredentials addDependency:getPassword];
     [testConnectionOperationCredentials addDependency:promptCredntials];
@@ -211,7 +211,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     // Operation 5b: Test the connection (password prompt)
     // ---------------------------------------------------
-    MADDatabaseOperationTestConnection *testConnectionOperationPassword = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    MADOperationDatabaseTestConnection *testConnectionOperationPassword = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
     [testConnectionOperationPassword addDependency:getUsername];
     [testConnectionOperationPassword addDependency:getPassword];
     [testConnectionOperationPassword addDependency:promptPassword];

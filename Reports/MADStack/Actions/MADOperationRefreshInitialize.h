@@ -1,19 +1,19 @@
 //
-//  MADRefreshOperationInitalize.h
+//  MADOperationRefreshInitialize.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADRefreshOperationInitalize_h
-#define Reports_MADRefreshOperationInitalize_h
+#ifndef Reports_MADRefreshOperationInitialize_h
+#define Reports_MADRefreshOperationInitialize_h
 
 #import "MADOperation.h"
 
 @class MADocument;
 
-@protocol MADRefreshOperationInitalizeProtocol <NSObject>
+@protocol MADRefreshOperationInitializeProtocol <NSObject>
     @property (readonly) MADocument *document;
 @end
 

@@ -295,13 +295,13 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     NSInteger count = (NSInteger)self.count;
-    NSLog(@"Number of sections in table view: %ld", (long)count);
+    //NSLog(@"Number of sections in table view: %ld", (long)count);
     return count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger rows = [self numberOfRowsInSectionAtIndex:(short)section];
-    NSLog(@"Section %ld has %ld rows.", section, rows);
+    //NSLog(@"Section %ld has %ld rows.", section, rows);
     return rows;
 }
 
@@ -316,7 +316,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)style
                                             forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"Commit editing style for index path: (%ld, %ld)", (long)indexPath.section, indexPath.row);
+    //NSLog(@"Commit editing style for index path: (%ld, %ld)", (long)indexPath.section, indexPath.row);
     switch (style) {
             
         case UITableViewCellEditingStyleDelete:
@@ -339,7 +339,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
       toIndexPath:(NSIndexPath *)toIndexPath {
 
-    NSLog(@"Move row at (%ld, %ld) to (%ld, %ld).", fromIndexPath.section, fromIndexPath.row, toIndexPath.section, toIndexPath.row);
+    //NSLog(@"Move row at (%ld, %ld) to (%ld, %ld).", fromIndexPath.section, fromIndexPath.row, toIndexPath.section, toIndexPath.row);
 
     switch ([self sectionAtIndex:(short)toIndexPath.section]) {
         case MADIdentifierQueryViewSectionsGroups: {
@@ -375,7 +375,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"Cell for row at index path: (%ld, %ld)", indexPath.section, indexPath.row);
+    //NSLog(@"Cell for row at index path: (%ld, %ld)", indexPath.section, indexPath.row);
 
     UITableViewCell *cell = nil;
     

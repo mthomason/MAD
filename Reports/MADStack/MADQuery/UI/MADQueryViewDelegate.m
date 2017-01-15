@@ -19,7 +19,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 
 - (void)dealloc {
     if (_delegate) _delegate = nil;
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

@@ -30,13 +30,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 @implementation MADOperation
 
-- (instancetype)init {
-    if (self = [super init]) { }
-    return self;
+- (void)dealloc {
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+- (instancetype)init {
+    if (self = [super init]) {
+    
+    }
+    return self;
 }
 
 #pragma mark - Lazy Load

@@ -1,5 +1,5 @@
 //
-//  MADCreateDocumentOperation.h
+//  MADOperationCreateDocument.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.

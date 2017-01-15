@@ -23,12 +23,12 @@ static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
 }
 
 static void png_error_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"PNG: %s", message);
+    //NSLog(@"PNG: %s", message);
     longjmp(png_jmpbuf(png_ptr), 1);
 }
 
 static void png_warn_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"%s", message);
+    //NSLog(@"%s", message);
 }
 
 int process_data(png_structp *png_ptr, png_infop *info_ptr,

@@ -1,5 +1,5 @@
 //
-//  MADInstallOperationSampleDocument.m
+//  MADOperationInstallSampleDocument.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 9/11/15.
@@ -26,7 +26,7 @@
 @implementation MADOperationInstallSampleDocument
 
 - (void)dealloc {
-    //NSLog(@"dealloc MADInstallOperationSampleDocument");
+    //NSLog(@"dealloc MADOperationInstallSampleDocument");
 }
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension

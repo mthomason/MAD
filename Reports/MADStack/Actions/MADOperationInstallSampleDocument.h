@@ -1,5 +1,5 @@
 //
-//  MADInstallOperationSampleDocument.h
+//  MADOperationInstallSampleDocument.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 9/11/15.

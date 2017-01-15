@@ -1,5 +1,5 @@
 //
-//  MADCreateDocumentOperation.m
+//  MADOperationCreateDocument.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/18/16.
@@ -15,17 +15,17 @@
 #import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADGetCredentialsOperation.h"
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 #import "MADOperationBackgroundTaskBegin.h"
 #import "MADOperationBackgroundTaskEnd.h"
-#import "MADCreateDocumentOperationAddConnection.h"
-#import "MADCreateDocumentOperationImportSchema.h"
-#import "MADCreateDocumentOperationSaveAndCloseNewDocument.h"
-#import "MADDocumentOperationCloseDocument.h"
-#import "MADCreateDocumentOperationFirstTimeSetup.h"
+#import "MADOperationCreateDocumentAddConnection.h"
+#import "MADOperationCreateDocumentImportSchema.h"
+#import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
+#import "MADOperationDocumentCloseDocument.h"
+#import "MADOperationCreateDocumentFirstTimeSetup.h"
 
 @interface MADOperationCreateDocument ()
-    <MADCreateDocumentOperationImportSchemaProtocol>
+    <MADOperationCreateDocumentImportSchemaProtocol>
 
 @end
 
@@ -51,34 +51,34 @@
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency:getCredentials];
         
-        MADCreateDocumentOperationCreateDocument *createDocument;
-        createDocument = [[MADCreateDocumentOperationCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
+        MADOperationCreateDocumentCreateDocument *createDocument;
+        createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
         [createDocument addDependency:getCredentials];  // This is because the document uses this task as delegate to get credentials.
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
-        MADCreateDocumentOperationFirstTimeSetup *firstTimeSetup;
-        firstTimeSetup = [[MADCreateDocumentOperationFirstTimeSetup alloc] init];
+        MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup;
+        firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] init];
         [firstTimeSetup addDependency:createDocument];
 
-        MADCreateDocumentOperationAddConnection *addConnection;
-        addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
+        MADOperationCreateDocumentAddConnection *addConnection;
+        addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency:createDocument];
         [addConnection addDependency:firstTimeSetup];
         
-        MADCreateDocumentOperationImportSchema *importSchema;
-        importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+        MADOperationCreateDocumentImportSchema *importSchema;
+        importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
         importSchema.parentOperation = self;
         
-        MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation;
-        saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
+        MADOperationCreateDocumentSaveAndCloseNewDocument *saveOperation;
+        saveOperation = [[MADOperationCreateDocumentSaveAndCloseNewDocument alloc] init];
         [saveOperation addDependency:createDocument];
         [saveOperation addDependency:importSchema];
         
-        MADDocumentOperationCloseDocument *closeDocument;
-        closeDocument = [[MADDocumentOperationCloseDocument alloc] init];
+        MADOperationDocumentCloseDocument *closeDocument;
+        closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
         [closeDocument addDependency:createDocument];
         [closeDocument addDependency:saveOperation];
         

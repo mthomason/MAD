@@ -57,9 +57,9 @@
 #import "MADProgressView.h"
 #import "MADGetCredentialsOperation.h"
 
-#import "MADDatabaseOperationTestConnection.h"
+#import "MADOperationDatabaseTestConnection.h"
 
-#import "MADCreateDocumentOperation.h"
+#import "MADOperationCreateDocument.h"
 
 #import "UIApplication+Extras.h"
 
@@ -341,7 +341,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     databaseConnection= [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
                                                                     database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
     
-    MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename: self.textFieldReportName.text
+    MADOperationCreateDocument *createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
                                                                                    documentsDirectory: saveFileDelegate.documentDirectory
                                                                                    databaseConnection: databaseConnection
                                                                                        viewController: self];

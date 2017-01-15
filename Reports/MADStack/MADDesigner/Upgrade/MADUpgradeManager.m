@@ -7,7 +7,7 @@
 //
 
 #import "MADUpgradeManager.h"
-#import "MADInstallOperationSampleDatabase.h"
+#import "MADOperationInstallSampleDatabase.h"
 #import <MADFoundation/MADApplication.h>
 //#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
@@ -41,7 +41,7 @@ const NSInteger currentMajorVersion = 8;
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:MADUpgradeLastVersionRun];
     
     NSURL *dbURL;
-    dbURL = [MADInstallOperationSampleDatabase newApplicationSupportSampleDatabaseChinook];
+    dbURL = [MADOperationInstallSampleDatabase newApplicationSupportSampleDatabaseChinook];
     BOOL isDirectory;
     NSString *path = dbURL.path;
     BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath: path

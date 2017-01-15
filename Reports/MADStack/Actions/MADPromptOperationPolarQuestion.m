@@ -27,7 +27,7 @@ static NSString * const TextNo = @"No";
 @implementation MADPromptOperationPolarQuestion
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message

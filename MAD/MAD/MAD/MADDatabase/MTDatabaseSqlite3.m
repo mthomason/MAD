@@ -109,7 +109,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     //Open conneciton... closed in dealloc.
     if (!_isOpen) {
         
-        NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
+        //NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
         
         const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
         BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
@@ -445,7 +445,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
                          file:(NSString *)fileName
                    lineNumber:(NSInteger)line
                   description:(NSString *)format {
-    NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
+    //NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
 }
 
 - (void)executeQueryWithSql:(NSString *)queryString
@@ -453,7 +453,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
              queryFieldKeys:(NSArray *)queryFieldKeys
   queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet {
 
-    NSLog(@"SQL: %@", queryString);
+    //NSLog(@"SQL: %@", queryString);
     BOOL success = YES;
 
     if (queryString.length > 0) {
@@ -561,10 +561,13 @@ static inline BOOL Sqlite3StepResultOK(int result) {
                             NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
                             
                             const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
-                            NSAssert(tableName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+                        //if (tableName == NULL) {
+                            //NSLog(@"Bad table name.");
+                        //}
+                        //    NSAssert(tableName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
 
                             const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
-                            NSAssert(databaseName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+                            //NSAssert(databaseName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
                             
                             char const *pzDataType = NULL;
                             char const *pzCollSeq = NULL;
@@ -652,7 +655,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     
     if (!success) {
         errorMessage = (char *)sqlite3_errmsg(_database);
-        NSLog(@"%s.", errorMessage);
+        //NSLog(@"%s.", errorMessage);
     }
     
     NSString *message = nil;
@@ -669,7 +672,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
         NSString *domain = @"MTSqlite3";
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
         error = [errorUserInfo errorWithDomain:domain code:4784];
-        NSLog(@"%@", error);
+        //NSLog(@"%@", error);
     }
     if (resultError != NULL) *resultError = error;
 
@@ -685,14 +688,14 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     NSString *queryString = [[NSString alloc] initWithString: sqlResult];
     
     if (queryString.length <= 0) {
-        NSLog(@"No string");
+        //NSLog(@"No string");
     }
     
     NSAssert(sqlError == NULL, @"Error %@", @"Could not create query string.");
     //NSAssert(queryString.length > 0, @"Error: %@", @"No query string.");
     if (queryString.length > 0) {
 
-        NSLog(@"SQL2: %@", queryString);
+        //NSLog(@"SQL2: %@", queryString);
         if (sqlError != NULL) {
             if (sqlError && error != NULL) {
                 error = sqlError;
@@ -971,7 +974,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = queryStart.UTF8String;
     char *sql = sqlite3_mprintf((char *) queryStartChar);
-    NSLog(@"SQL3: %s", sql);
+    //NSLog(@"SQL3: %s", sql);
 
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -1001,7 +1004,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         if (error) {
-            NSLog(@"Error: %@", error);
+            //NSLog(@"Error: %@", error);
         }
         completion(success, error, tables);
     }];
@@ -1026,7 +1029,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
             [result addObject:databaseTable];
         }
     } else {
-        NSLog(@"Error: %@", queryStart);
+        //NSLog(@"Error: %@", queryStart);
     }
     sqlite3_finalize(statement);
     sqlite3_free(sql);
@@ -1054,7 +1057,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
             [result addObject:databaseTable];
         }
     } else {
-        NSLog(@"Error: %@", queryStart);
+        //NSLog(@"Error: %@", queryStart);
     }
     sqlite3_finalize(statement);
     sqlite3_free(sql);
@@ -1065,7 +1068,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
  const char *errorName = NULL, *errorMessage = NULL;
  mad_sqlite3Err(SQLITE_OK, &errorName, &errorMessage);
  NSString *fullMessage = [[NSString alloc] initWithFormat:@"%s: %s", errorName, errorMessage];
- NSLog(@"%@", fullMessage);
+ //NSLog(@"%@", fullMessage);
  */
 void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
     *errName = 0;

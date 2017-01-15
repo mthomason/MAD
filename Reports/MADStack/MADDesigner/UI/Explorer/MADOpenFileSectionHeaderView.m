@@ -77,7 +77,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
         NSString *localizedTextLocal = NSLocalizedString(MADTextLocal, MADTextLocal);
         self.localizedTextLocal = localizedTextLocal;
         
-        // Initalize the section type
+        // Initialize the section type
         CGRect labelRect = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y,
                                       frame.size.width - 10.0000f, frame.size.height);
         

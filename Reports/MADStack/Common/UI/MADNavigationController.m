@@ -158,7 +158,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #pragma mark -

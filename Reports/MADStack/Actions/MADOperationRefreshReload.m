@@ -13,9 +13,9 @@
 #import <MAD/MADDatabaseConnection.h>
 
 #import "MADGetCredentialsOperation.h"
-#import "MADRefreshOperationInitalizeMainDataTable.h"
-#import "MADRefreshOperationInitalize.h"
-#import "MADRefreshOperation.h"
+#import "MADOperationRefreshInitalizeMainDataTable.h"
+#import "MADOperationRefreshInitialize.h"
+#import "MADOperationRefresh.h"
 #import "MADOperationQueue.h"
 
 @interface MADOperationRefreshReload ()
@@ -72,14 +72,14 @@
 - (void)addAllOperations {
 
     MADocument *document = _document;
-    MADRefreshOperationInitalizeMainDataTable *initializeMainDataTable = [[MADRefreshOperationInitalizeMainDataTable alloc] initWithDocument:document];
+    MADOperationRefreshInitializeMainDataTable *initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
     [initializeMainDataTable addDependency:self.getCredentials];
     
-    MADRefreshOperationInitalize *initialize = [[MADRefreshOperationInitalize alloc] initWithDocument:document];
+    MADOperationRefreshInitialize *initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
     [initialize addDependency: initializeMainDataTable];
     [initialize addDependency: self.getCredentials];
     
-    MADRefreshOperation *refresh = [[MADRefreshOperation alloc] initWithDocument:document];
+    MADOperationRefresh *refresh = [[MADOperationRefresh alloc] initWithDocument:document];
     [refresh addDependency: initializeMainDataTable];
     [refresh addDependency: self.getCredentials];
     [refresh addDependency: initialize];
@@ -98,7 +98,7 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    //if ([operation isKindOfClass:[MADRefreshOperation class]]) {
+    //if ([operation isKindOfClass:[MADOperationRefresh class]]) {
     //    [self finish];
     //}
 }

@@ -306,7 +306,7 @@ void madwarn(char *err,  const char*err2) { }
                                                  extension: MADFileExtentionMobleApplicationDocumentArchive];
         _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
         
-        //Initalize the main data table.
+        //Initialize the main data table.
         NSString *filename = self.filename;
 
         MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
@@ -525,20 +525,20 @@ READFROMURL_END:;
 #pragma mark Error handling
 
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
-    NSLog(@"Auto-Saving Document");
+    //NSLog(@"Auto-Saving Document");
     return [super contentsForType:typeName error:outError];
 }
 
 - (void)handleError:(NSError *)documentError userInteractionPermitted:(BOOL)userInteractionPermitted {
     [super handleError:documentError userInteractionPermitted:userInteractionPermitted];
-    NSLog(@"UIManagedDocument error: %@", documentError.localizedDescription);
+    //NSLog(@"UIManagedDocument error: %@", documentError.localizedDescription);
     NSArray *errors = [[documentError userInfo] objectForKey:NSDetailedErrorsKey];
     if(errors != nil && errors.count > 0) {
         for (NSError *error in errors) {
-            NSLog(@"  Error: %@", error.userInfo);
+            //NSLog(@"  Error: %@", error.userInfo);
         }
     } else {
-        NSLog(@"  %@", documentError.userInfo);
+        //NSLog(@"  %@", documentError.userInfo);
     }
 }
 
@@ -924,19 +924,19 @@ READFROMURL_END:;
     if (document != nil) {
         switch (document.documentState) {
             case UIDocumentStateClosed:
-                NSLog(@"\n\n\tDocument state closed.\n\n");
+                //NSLog(@"\n\n\tDocument state closed.\n\n");
                 break;
             case UIDocumentStateEditingDisabled:
-                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                //NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
             case UIDocumentStateInConflict:
-                NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                //NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
             case UIDocumentStateNormal:
-                NSLog(@"\n\n\tDocument state normal.\n\n");
+                //NSLog(@"\n\n\tDocument state normal.\n\n");
                 break;
             case UIDocumentStateSavingError:
-                NSLog(@"\n\n\tDocument state saving error.\n\n");
+                //NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
             default:
                 break;

@@ -32,7 +32,7 @@
 }
 
 // Add multiple depdendencies to the operation.
-- (void)addDependencies:(NSArray /*NSOperation*/ *)dependencies {
+- (void)addDependencies:(NSArray <__kindof NSOperation *> *)dependencies {
     for (NSOperation * dependency in dependencies) {
         [self addDependency:dependency];
     }

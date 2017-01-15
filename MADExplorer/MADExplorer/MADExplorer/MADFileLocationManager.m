@@ -162,7 +162,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 
 #pragma mark - Overrides
 
-+ (BOOL)StorageOptionsInitalized {
++ (BOOL)StorageOptionsInitialized {
     NSString *MADAppConfigurationUserDefaultsStorageOptionSet = @"MADAppConfigurationUserDefaultsStorageOptionSet";
     return [[NSUserDefaults standardUserDefaults] boolForKey:MADAppConfigurationUserDefaultsStorageOptionSet];
 }
@@ -173,7 +173,7 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
 
 + (MADAppStorage)StorageOption {
     MADAppStorage storageOption;
-    storageOption = [self StorageOptionsInitalized] ? [self StorageOptionUserDefaults] :
+    storageOption = [self StorageOptionsInitialized] ? [self StorageOptionUserDefaults] :
                                                       MADAppStorageStateUnknown;
     return storageOption;
 }

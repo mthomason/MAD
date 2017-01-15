@@ -1,5 +1,5 @@
 //
-//  MADRefreshOperationInitalizeMainDataTable.m
+//  MADRefreshOperationInitializeMainDataTable.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
@@ -11,14 +11,14 @@
 #import <MAD/MTDataTableFast.h>
 #import <MAD/MTDataTable.h>
 
-@interface MADOperationRefreshInitalizeMainDataTable ()
+@interface MADOperationRefreshInitializeMainDataTable ()
 
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, assign) BOOL success;
 
 @end
 
-@implementation MADOperationRefreshInitalizeMainDataTable
+@implementation MADOperationRefreshInitializeMainDataTable
 
 - (void)dealloc {
     //NSLog(@"\t%s", __PRETTY_FUNCTION__);

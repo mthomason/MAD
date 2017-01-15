@@ -19,7 +19,7 @@
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/MADDatabaseConnection.h>
 
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 @interface MADOperationCreateDocumentImportSchema ()
 

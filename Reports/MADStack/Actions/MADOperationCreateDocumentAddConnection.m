@@ -15,7 +15,7 @@
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 
-#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 @interface MADOperationCreateDocumentAddConnection ()
 

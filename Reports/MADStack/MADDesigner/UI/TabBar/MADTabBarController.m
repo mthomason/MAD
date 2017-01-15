@@ -39,7 +39,7 @@ const int8_t MADIndexViewer = 2;
     <UITabBarControllerDelegate>
 
     @property (nonatomic, strong) NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
-    @property (nonatomic, assign, getter=isNavigationItemInitalized) BOOL navigationItemInitalized;
+    @property (nonatomic, assign, getter=isNavigationItemInitialized) BOOL navigationItemInitialized;
     @property (nonatomic, assign) NSUInteger lastSelectedIndex;
 
     @property (nonatomic, copy) NSString *promptNavigationItem;
@@ -79,7 +79,7 @@ const int8_t MADIndexViewer = 2;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         
-        _navigationItemInitalized = NO;
+        _navigationItemInitialized = NO;
         _lastSelectedIndex = NSNotFound;
         
         NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
@@ -92,7 +92,7 @@ const int8_t MADIndexViewer = 2;
 
 - (UINavigationItem *)navigationItem {
     UINavigationItem *navigationItem = [super navigationItem];
-    if (!_navigationItemInitalized) {
+    if (!_navigationItemInitialized) {
         id newPrompt = _promptNavigationItem.copy;
         navigationItem.prompt = newPrompt;
     }

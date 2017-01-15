@@ -1,5 +1,5 @@
 //
-//  MADDocumentOperationCloseDocument.h
+//  MADOperationDocumentCloseDocument.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/29/16.

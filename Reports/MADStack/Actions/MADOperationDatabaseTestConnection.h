@@ -15,7 +15,7 @@
 @class MADDatabaseConnection;
 @class MADCredential;
 
-@protocol MADDatabaseOperationTestConnectionProtocol <NSObject>
+@protocol MADOperationDatabaseTestConnectionProtocol <NSObject>
 
     @property (nonatomic, readonly, strong) NSError *error;
     @property (nonatomic, readonly, assign) BOOL success;
@@ -23,7 +23,7 @@
 @end
 
 @interface MADOperationDatabaseTestConnection : MADOperation
-    <MADPromptOperationDisplayErrorProtocol, MADDatabaseOperationTestConnectionProtocol>
+    <MADPromptOperationDisplayErrorProtocol, MADOperationDatabaseTestConnectionProtocol>
 
     @property (nonatomic, readonly, strong) NSError *error;
     @property (nonatomic, readonly, assign) BOOL success;

@@ -79,8 +79,8 @@
 #import "MADOperationQueue.h"
 #import "MADOperationObserver.h"
 
-#import "MADInstallOperationSampleDatabase.h"
-#import "MADInstallOperationSampleDocument.h"
+#import "MADOperationInstallSampleDatabase.h"
+#import "MADOperationInstallSampleDocument.h"
 #import "MTVerificationController.h"
 
 #import "NSUserDefaults+MADDesigner.h"
@@ -434,7 +434,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 */
 
 
-#pragma mark Initalize install operations
+#pragma mark Initialize install operations
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
@@ -449,10 +449,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         operationQueueBackground = [[MADOperationQueue alloc] init];
         operationQueueBackground.maxConcurrentOperationCount = 1;
         
-        operation = [[MADInstallOperationSampleDatabase alloc] init];
+        operation = [[MADOperationInstallSampleDatabase alloc] init];
         [operationQueueBackground addOperation:operation];
         
-        operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+        operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
                                                                   fileExtension: MADFileExtentionMobleApplicationDocument
                                                                 groupIdentifier: groupID
                                                                     installFlag: MADUpgradeInstalledSamplesLondon];
@@ -460,7 +460,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         [operation addObserver:self];
         [operationQueueBackground addOperation:operation];
         
-        operation = [[MADInstallOperationSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+        operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
                                                                   fileExtension: MADFileExtentionMobleApplicationDocument
                                                                 groupIdentifier: groupID
                                                                     installFlag: MADUpgradeInstalledSamplesMusic];
@@ -672,7 +672,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                 updates:(NSArray *)updates
                              completion:(void (^)(BOOL, NSError *))completion {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     UICollectionView *__weak weakCollectionView = self.collectionView;
     
@@ -842,7 +842,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark UIMenuController required methods
 /*
 - (BOOL)canBecomeFirstResponder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return YES;
 }
 
@@ -851,7 +851,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromSelector(action));
+    //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromSelector(action));
     BOOL result = NO;
     if (@selector(handleDidTapCollectionView:) == action) {
         result = YES;
@@ -1267,11 +1267,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateEditingDisabled:
-                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                //NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
 
             case UIDocumentStateInConflict:
-                NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                //NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
                 
             case UIDocumentStateNormal:
@@ -1279,7 +1279,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateSavingError:
-                NSLog(@"\n\n\tDocument state saving error.\n\n");
+                //NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
 
             default:
@@ -1355,7 +1355,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
     [document openWithCompletionHandler:^(BOOL success) {
         if (!success) {
-            NSLog(@"Failed to open file");
+            //NSLog(@"Failed to open file");
         } else {
             SEL selector = @selector(openViewer);
             

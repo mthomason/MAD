@@ -16,7 +16,7 @@
 @implementation MADOperationBackgroundTaskEnd
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (BOOL)isAsynchronous { return YES; }
@@ -27,8 +27,8 @@
     UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
     NSArray<NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADBackgroundTaskProtocol)]) {
-            backgroundTaskIdentifier = [(id <MADBackgroundTaskProtocol>)dependency backgroundTaskIdentifier];
+        if ([dependency conformsToProtocol:@protocol(MADOperationBackgroundTaskProtocol)]) {
+            backgroundTaskIdentifier = [(id <MADOperationBackgroundTaskProtocol>)dependency backgroundTaskIdentifier];
         }
     }
     if (backgroundTaskIdentifier != UIBackgroundTaskInvalid) {

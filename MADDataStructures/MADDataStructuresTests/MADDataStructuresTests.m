@@ -64,12 +64,12 @@
         [map setObject:nil toKey:47];
 
         NSString *string = [map objectAtIndex:333];
-        NSLog(@"Result: %@", string);
+        //NSLog(@"Result: %@", string);
     }
     
     
-    NSLog(@"Test");
-    NSLog(@"Test");
+    //NSLog(@"Test");
+    //NSLog(@"Test");
     
     //MTLinkedList *dfsResultsU = [graph depthFirstSearch:vertexU];
     
