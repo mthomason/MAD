@@ -314,8 +314,8 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.navigationItem setLeftBarButtonItem:nil animated:animated];
-    [self.navigationItem setRightBarButtonItem:nil animated:animated];
+    //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
+    //[self.navigationItem setRightBarButtonItem:nil animated:animated];
     _detailNavigationController = nil;
     _queryBuilderController = nil;
     _queryBuilderControllerAdvanced = nil;

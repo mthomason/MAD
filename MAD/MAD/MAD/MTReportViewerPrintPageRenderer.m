@@ -484,13 +484,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                             fontDescriptors[item.objectID] = fontDescriptor;
                         }
 
-                        [MTReportViewerPrintPageRenderer displayDrawingString: drawingObject
-                                                            elementCanvasRect: elementCanvasRect
-                                                               withAttributes: attt.fontAttributes];
+                        [drawingObject drawWithRect: elementCanvasRect
+                                            options: NSStringDrawingUsesLineFragmentOrigin
+                                         attributes: attt.fontAttributes
+                                            context: nil];
                         
                     } else {
-                        [MTReportViewerPrintPageRenderer displayDrawingObject: drawingObject
-                                                            elementCanvasRect: elementCanvasRect];
+                        [drawingObject drawInRect: elementCanvasRect];
                     }
                     
                     line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
@@ -500,14 +500,10 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                     offsetElement++;
                     
                     [rowRepresentation addLine:line];
-                    
-                //}
-                
             }
             
             [sectionRepresentation addRow:rowRepresentation];
             [fontDescriptors removeAllObjects];
-        //}
     }
 
 END_DrawSection:;
@@ -565,15 +561,6 @@ END_DrawSection:;
 + (void)displayDrawingObject: (id)drawingObject
            elementCanvasRect: (CGRect)elementCanvasFrame {
     [drawingObject drawInRect: elementCanvasFrame];
-}
-
-+ (void)displayDrawingString: (NSString *)drawingString
-           elementCanvasRect: (CGRect)elementCanvasFrame
-              withAttributes: (NSDictionary *)attributes {
-    [drawingString drawWithRect: elementCanvasFrame
-                        options: NSStringDrawingUsesLineFragmentOrigin
-                     attributes: attributes
-                        context: nil];
 }
 
 - (id)newDocumentObjectForDocumentImage:(RptqDocumentObjectImage *)item {

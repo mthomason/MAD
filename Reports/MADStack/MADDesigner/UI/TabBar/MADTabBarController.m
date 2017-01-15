@@ -152,13 +152,6 @@ const int8_t MADIndexViewer = 2;
 
     [self setViewControllers: self.tabBarViewControllers animated: animated];
     
-    //UIBarButtonItem *buttonDismiss;
-    //buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-    //                                                             target: self
-    //                                                             action: @selector(viewControllerDidFinish:)];
-    //
-    //[self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
-    
     /*if (self.viewControllers.count > 0) {
         UIViewController *vc = self.viewControllers.firstObject;
         NSString *title = vc.title.copy;
@@ -166,11 +159,20 @@ const int8_t MADIndexViewer = 2;
     }*/
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    UIBarButtonItem *buttonDismiss;
+    buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                 target: self
+                                                                 action: @selector(viewControllerDidFinish:)];
+    
+    [self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     UINavigationItem *navigationItem = self.navigationItem;
-    UINavigationController *detailNavigationController;
 
     if (navigationItem.leftBarButtonItem)
         [navigationItem setLeftBarButtonItem: nil animated: animated];
@@ -180,16 +182,15 @@ const int8_t MADIndexViewer = 2;
     
     self.designerViewController.delegate = nil;
 
-    id emptyArray = [[NSArray alloc] init];
-    [self setViewControllers: emptyArray animated: animated];
+    [self setViewControllers: nil animated: animated];
+    [self.navigationItem setLeftBarButtonItem:nil animated:animated];
+    [self.navigationItem setRightBarButtonItem:nil animated:animated];;
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.tabBarController.navigationItem setRightBarButtonItem:nil animated:animated];;
     [self.tabBarViewControllers removeAllObjects];
-    //self.delegate = nil;
 }
 
 - (void)viewWillLayoutSubviews {

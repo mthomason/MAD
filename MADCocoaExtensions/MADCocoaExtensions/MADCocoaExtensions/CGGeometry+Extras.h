@@ -44,6 +44,18 @@ static inline double square (double x) {
     return ( (x) * (x) );
 }
 
+struct MADReportPosition {
+    NSUInteger currentPage;
+    NSUInteger totalPages;
+};
+typedef struct MADReportPosition MADReportPosition;
+
+static inline MADReportPosition MADReportPositionMake(NSUInteger currentPage, NSUInteger totalPages);
+static inline MADReportPosition MADReportPositionMake(NSUInteger currentPage, NSUInteger totalPages) {
+    MADReportPosition position; position.currentPage = currentPage; position.totalPages = totalPages; return position;
+}
+
+
 /* Lines. */
 
 struct CGLine {

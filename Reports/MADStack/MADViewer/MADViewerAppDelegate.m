@@ -26,7 +26,7 @@
 
 #import "MADFileExplorerViewController.h"
 
-@class MADTransparentPresentationController;
+//@class MADTransparentPresentationController;
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 NSString * const MADIDUser                                          = @"MADIDUser";

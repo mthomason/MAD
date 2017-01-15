@@ -24,7 +24,7 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
 - (void)dealloc {
-    //[_pages removeAllObjects];
+    [_pages removeAllObjects];
 }
 
 - (instancetype)init {

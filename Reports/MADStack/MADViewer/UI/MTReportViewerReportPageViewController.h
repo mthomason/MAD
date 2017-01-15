@@ -15,8 +15,9 @@
 
 @class MADocument;
 @class MADPageViewAttributes;
+@class MADDocumentScroller;
 
-@interface MADReportPageViewController : UIViewController
+@interface MADDocumentPageController : UIViewController
 
     + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
                                              pageAttributes:(MADPageViewAttributes *)pageAttributes;
@@ -26,7 +27,7 @@
 
     @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
-    @property (readonly) UIScrollView *documentScroller;
+    @property (readonly, nonatomic, weak) MADDocumentScroller *documentScroller;
     @property (readonly, nonatomic, weak) UIView *documentView;
     @property (readonly, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
 

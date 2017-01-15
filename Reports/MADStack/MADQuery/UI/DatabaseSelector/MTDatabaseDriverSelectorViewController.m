@@ -25,7 +25,6 @@
 #import "MUIViewControllerDelegate.h"
 
 #import "MADVibrantTableView.h"
-#import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTConnectionViewController.h"
 #import "MADLabelTitle.h"

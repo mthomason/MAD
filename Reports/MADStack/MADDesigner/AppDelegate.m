@@ -20,10 +20,6 @@
 
 #import <MADDataStructures/MADVectorBool.h>
 
-@class MADTransparentPresentationController;
-@class MFMailComposeViewController;
-@class MADFileExplorerViewController;
-
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
 static NSString * const MADIdentifierFileMusic                             = @"Music";

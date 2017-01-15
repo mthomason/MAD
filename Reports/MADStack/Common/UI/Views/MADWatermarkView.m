@@ -16,7 +16,7 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
-typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView * const __strong *);
+typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView *);
 
 static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
 
@@ -140,25 +140,41 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     return attributedString;
 }
 
+- (void)dealloc {
+    NSLog(@"Dealloc");
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
         self.backgroundColor =  bgColor;
         _drawn = NO;
+        [self drawBackground];
     }
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    if (!_drawn) {
-        _drawn = YES;
-        [MADWatermarkView drawBackground:self.frame onView:&self];
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    if (!newSuperview) {
+        for (UIView *subview in self.subviews) {
+            [subview removeFromSuperview];
+        }
     }
 }
 
+/*- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!_drawn) {
+        _drawn = YES;
+        [self drawBackground];
+    }
+}*/
+
 // Uses about 10 MB of VM
-+ (void)drawBackground:(CGRect)rect onView:(UIView * const __strong *)view {
+- (void)drawBackground {
+    
+    CGRect rect = self.frame;
     const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
 
     NSAttributedString *displayString = [MADWatermarkView newWaterMarkStringMad];
@@ -167,13 +183,12 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     NSUInteger counter[2] = {0, 0};
     CGRect logoRect[2];
 
-    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string,
-                                      UIView * const __strong *backgroundView) {
+    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string, UIView *backgroundView) {
         UILabel *l2 = [[UILabel alloc] initWithFrame:labelFrame];
         l2.attributedText = string;
         l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
                               UIViewAutoresizingFlexibleBottomMargin;
-        [*backgroundView addSubview:l2];
+        [backgroundView addSubview:l2];
     };
     
     do {
@@ -186,13 +201,13 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
             addLabel(LRect1(
                             LogoOrigin(counter, strings, logoMargin), &logoRect[0], counter[0], logoMargin.height),
                      displayString,
-                     view);
+                     self);
             
             
             addLabel(LRect2(
                             LogoOrigin(counter, strings, logoMargin), &logoRect, counter[0], logoMargin.height),
                      displayString2,
-                     view);
+                     self);
 
 
             counter[0]++;

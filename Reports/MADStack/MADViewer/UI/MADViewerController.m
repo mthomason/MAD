@@ -37,6 +37,7 @@
 
 #import <MAD/MTDataTable.h>
 
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -87,6 +88,7 @@
 #import "MADOperationObserver.h"
 #import "MADLabelTitle.h"
 #import "MADIdentifiersStoryboards.h"
+#import "MADDocumentScroller.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
@@ -140,9 +142,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Attributes
 #pragma mark Display Varables
 
-    @property (nonatomic, assign) NSUInteger numberOfPages;
-    @property (nonatomic, assign) NSUInteger currentPageIndex;
-
     @property (nonatomic, assign, readwrite) CGFloat zoomScale;
 
     @property (nonatomic, strong) NSDate *lastCacheDate;
@@ -153,8 +152,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark User Interface
 
-    @property (nonatomic, strong) MADPageSlider *pageSlider;
-    @property (nonatomic, weak) MADLabelStatus *labelStatus;
+    @property (nonatomic, strong)   MADPageSlider *pageSlider;
+    @property (nonatomic, weak)     MADLabelStatus *labelStatus;
+
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
     @property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
 
@@ -178,6 +178,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @end
 
 @implementation MADViewerController {
+    MADReportPosition _currentLocation;
     BOOL _isFirstAppearance;
     BOOL _firstTimeViewWillLayoutSubviews;
     BOOL _refreshing;
@@ -338,8 +339,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.dataSource = self;
     self.delegate = self;
     
-    self.currentPageIndex = 0;
-    
+    _currentLocation = MADReportPositionMake(0, 0);
     
     _refreshing = NO;
     _startedRefresh = NO;
@@ -478,16 +478,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADocument *document = self.document;
         MADPageViewAttributes *pageAttributes;
         CGSize paperSize = document.paper.paperSize;
-        NSUInteger pageNumber = self.currentPageNumber, pageCount = self.numberOfPages;;
+        NSUInteger pageNumber = self.currentPageNumber, pageCount = _currentLocation.totalPages;;
         pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: pageNumber
                                                                totalNumberOfPages: pageCount
                                                                 contentSizeInital: paperSize];
         page =
-        [MADReportPageViewController newReportPageViewControllerWithDocument: document
+        [MADDocumentPageController newReportPageViewControllerWithDocument: document
                                                               pageAttributes: pageAttributes];
 
-        ((MADReportPageViewController *)page).view.frame = self.view.bounds;
-        ((MADReportPageViewController *)page).delegate = self;
+        ((MADDocumentPageController *)page).view.frame = self.view.bounds;
+        ((MADDocumentPageController *)page).delegate = self;
 
     }
     
@@ -717,30 +717,32 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
 
-- (nullable MADReportPageViewController *)visiblePageViewController {
+- (nullable MADDocumentPageController *)visiblePageViewController {
     return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     BOOL result = NO;
-    if ((unsigned long)index != self.currentPageIndex && index != NSNotFound) {
+    if ((unsigned long)index != _currentLocation.currentPage && index != NSNotFound) {
         
-        MADReportPageViewController *visiblePageViewController = [self visiblePageViewController];
-        self.currentPageIndex = index;
+        MADDocumentPageController *visiblePageViewController = [self visiblePageViewController];
+        _currentLocation.currentPage = index;
         
-        [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
+        [self.labelStatus updatePageStatus:_currentLocation.totalPages currentPageIndex:_currentLocation.currentPage];
 
         MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
         pageAttributes.pageNumber = index + 1;
-        pageAttributes.numberOfPages = self.numberOfPages;
-        pageAttributes.zoomScaleInital = visiblePageViewController.documentScroller.zoomScale;
-        pageAttributes.contentOffsetInital = visiblePageViewController.documentScroller.contentOffset;
-        pageAttributes.contentSizeInital = visiblePageViewController.documentScroller.contentSize;
+        pageAttributes.numberOfPages = _currentLocation.totalPages;
+        
+        MADDocumentScroller *documentScroller = visiblePageViewController.documentScroller;
+        pageAttributes.zoomScaleInital = documentScroller.zoomScale;
+        pageAttributes.contentOffsetInital = documentScroller.contentOffset;
+        pageAttributes.contentSizeInital = documentScroller.contentSize;
         pageAttributes.contentScaleFactor = visiblePageViewController.documentView.contentScaleFactor;
         
-        MADReportPageViewController *pageOne =
-            [[MADReportPageViewController alloc] initWithDocument: self.document
+        MADDocumentPageController *pageOne =
+            [[MADDocumentPageController alloc] initWithDocument: self.document
                                                andPageAttributtes: pageAttributes];
 
         pageOne.view.frame = self.view.bounds;
@@ -766,14 +768,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return result;
 }
 
-- (MADReportPageViewController *)currentPageviewController {
+- (MADDocumentPageController *)currentPageviewController {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
-    MADReportPageViewController *currentPageviewController;
-    currentPageviewController = [self pageViewControllerAtIndex: self.currentPageIndex];
+    MADDocumentPageController *currentPageviewController;
+    currentPageviewController = [self pageViewControllerAtIndex: _currentLocation.currentPage];
     return currentPageviewController;
 }
 
-- (MADReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
+- (MADDocumentPageController *)pageViewControllerAtIndex:(NSUInteger)index {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     return index < self.viewControllers.count ? self.viewControllers[index] :
                                                 self.viewControllers.lastObject;
@@ -1105,12 +1107,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     MADPageViewAttributes *pageAttributes;
     pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
-                                                           totalNumberOfPages: self.numberOfPages
+                                                           totalNumberOfPages: _currentLocation.totalPages
                                                             contentSizeInital: document.paper.paperSize];
     
     if (self) {
-        MADReportPageViewController *pageOne =
-        [MADReportPageViewController newReportPageViewControllerWithDocument: document
+        MADDocumentPageController *pageOne =
+        [MADDocumentPageController newReportPageViewControllerWithDocument: document
                                                               pageAttributes: pageAttributes];
         pageOne.view.frame = self.view.bounds;
         pageOne.delegate = self;
@@ -1171,10 +1173,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark UIPageViewControllerDataSrouce
 
 - (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
-       viewControllerAfterViewController:(MADReportPageViewController *)pageViewControllerLast {
+       viewControllerAfterViewController:(MADDocumentPageController *)pageViewControllerLast {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    MADReportPageViewController *result = nil;
+    MADDocumentPageController *result = nil;
 
     if (viewerViewController->_pageIsAnimating == NO) {
         NSUInteger visiblePageNumber = 0;
@@ -1187,19 +1189,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             visiblePageNumber = pageViewControllerLast.pageViewAttributes.pageNumber;
         }
         
-        if (visiblePageNumber + 1 <= self.numberOfPages) {
+        if (visiblePageNumber + 1 <= _currentLocation.totalPages) {
             
             UIScrollView *documentScroller = pageViewControllerLast.documentScroller;
 
             MADPageViewAttributes *pageAttributes;
             pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber - 1
-                                                                   totalNumberOfPages: self.numberOfPages
+                                                                   totalNumberOfPages: _currentLocation.totalPages
                                                                     contentSizeInital: documentScroller.contentSize];
             pageAttributes.zoomScaleInital = documentScroller.zoomScale;
             pageAttributes.contentOffsetInital = documentScroller.contentOffset;
             pageAttributes.contentScaleFactor = pageViewControllerLast.documentView.contentScaleFactor;
 
-            result = [[MADReportPageViewController alloc] initWithDocument: self.document
+            result = [[MADDocumentPageController alloc] initWithDocument: self.document
                                                         andPageAttributtes: pageAttributes];
             result.delegate = self;
             result.view.backgroundColor = self.view.backgroundColor;
@@ -1213,10 +1215,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
-      viewControllerBeforeViewController:(MADReportPageViewController *)pageViewControllerPrevious {
+      viewControllerBeforeViewController:(MADDocumentPageController *)pageViewControllerPrevious {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    MADReportPageViewController *result = nil;
+    MADDocumentPageController *result = nil;
     
     if (viewerViewController->_pageIsAnimating == NO) {
         
@@ -1233,13 +1235,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             //MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
             MADPageViewAttributes *pageAttributes;
             pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber - 1
-                                                                   totalNumberOfPages: self.numberOfPages
+                                                                   totalNumberOfPages: _currentLocation.totalPages
                                                                     contentSizeInital: documentScroller.contentSize];
             pageAttributes.zoomScaleInital = documentScroller.zoomScale;
             pageAttributes.contentOffsetInital = documentScroller.contentOffset;
             pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;
 
-            result = [[MADReportPageViewController alloc] initWithDocument: self.document
+            result = [[MADDocumentPageController alloc] initWithDocument: self.document
                                                         andPageAttributtes: pageAttributes];
             result.view.backgroundColor = self.view.backgroundColor;
 
@@ -1260,17 +1262,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)pageViewController:(MADViewerController *)pageViewController
         didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+
     if (completed || finished) {
         pageViewController->_pageIsAnimating = NO;
 
         if (pageViewController.viewControllers.count > 0) {
-            MADReportPageViewController *viewController = pageViewController.viewControllers[0];
-            pageViewController.currentPageIndex = viewController.pageViewAttributes.pageNumber - 1;
-            [self.labelStatus updatePageStatus: self.numberOfPages
-                              currentPageIndex: self.currentPageIndex];
-            [pageViewController.pageSlider.pageSlider setValue: pageViewController.currentPageIndex
+            MADDocumentPageController *viewController = pageViewController.viewControllers[0];
+            pageViewController->_currentLocation.currentPage = viewController.pageViewAttributes.pageNumber - 1;
+            [self.labelStatus updatePageStatus: _currentLocation.totalPages
+                              currentPageIndex: _currentLocation.currentPage];
+            [pageViewController.pageSlider.pageSlider setValue: pageViewController->_currentLocation.currentPage
                                                       animated: YES];
         }
 
@@ -1352,8 +1353,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)updateNumberOfPages {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    self.numberOfPages = self.document.reportFormatter.numberOfPages;
-    [self updateNumberOfPages: (self.numberOfPages > 0 ? (self.numberOfPages - 1) : 0)];
+    _currentLocation.totalPages = self.document.reportFormatter.numberOfPages;
+    [self updateNumberOfPages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
     [self setDisplayActive];
 }
 
@@ -1364,8 +1365,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if (round(slider.maximumValue) != round(numberOfPages)) {
         slider.maximumValue = numberOfPages;
     }
-    [self.labelStatus updatePageStatus: self.numberOfPages
-                      currentPageIndex: self.currentPageIndex];
+    [self.labelStatus updatePageStatus: _currentLocation.totalPages
+                      currentPageIndex: _currentLocation.currentPage];
 
 }
 
@@ -1443,12 +1444,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         case UIAccessibilityScrollDirectionNext:
         case UIAccessibilityScrollDirectionRight:
-            return [self moveToPageAtIndex: self.currentPageIndex + 1 ];
+            return [self moveToPageAtIndex: _currentLocation.currentPage + 1 ];
             break;
             
         case UIAccessibilityScrollDirectionPrevious:
         case UIAccessibilityScrollDirectionLeft:
-            return [self moveToPageAtIndex: self.currentPageIndex - 1 ];
+            return [self moveToPageAtIndex: _currentLocation.currentPage - 1 ];
             break;
             
         default:
@@ -1492,7 +1493,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (NSUInteger)currentPageNumber {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
-    return self.currentPageIndex + 1;
+    return _currentLocation.currentPage + 1;
 }
 
 #pragma mark -
@@ -1570,8 +1571,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSString *classname = NSStringFromClass([self class]);
     id uppercaseClassname = [classname uppercaseString];
     [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    [debug appendFormat:@"Number of Pages:                  %lu\n", (unsigned long)self.numberOfPages];
-    [debug appendFormat:@"Current Page Index:               %lu\n", (unsigned long)self.currentPageIndex];
+    [debug appendFormat:@"Number of Pages:                  %lu\n", (unsigned long)_currentLocation.totalPages];
+    [debug appendFormat:@"Current Page Index:               %lu\n", (unsigned long)_currentLocation.currentPage];
     [debug appendFormat:@"Zoom Scale:                       %f\n", self.zoomScale];
     [debug appendFormat:@"Last Cache Date:                  %@\n", self.lastCacheDate];
     [debug appendFormat:@"Timer Label Time Since Refreh:    %@\n", self.timerLabelTimeSinceRefreh];

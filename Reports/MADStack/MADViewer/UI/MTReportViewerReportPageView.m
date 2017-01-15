@@ -74,6 +74,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 }
 
 - (void)layoutSubviews {
+    [super layoutSubviews];
     if (self.firstTime) {
         MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
         self.dateTimeFormatter = dateTimeFormatter;

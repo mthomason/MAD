@@ -24,6 +24,7 @@
 
 #import <dispatch/time.h>
 #import <dispatch/semaphore.h>
+#import <dispatch/object.h>
 
 #import <string.h>
 #import <stdlib.h>
@@ -692,10 +693,9 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     }
     
     NSAssert(sqlError == NULL, @"Error %@", @"Could not create query string.");
-    //NSAssert(queryString.length > 0, @"Error: %@", @"No query string.");
+
     if (queryString.length > 0) {
 
-        //NSLog(@"SQL2: %@", queryString);
         if (sqlError != NULL) {
             if (sqlError && error != NULL) {
                 error = sqlError;
@@ -892,7 +892,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
     int	wal = sqlite3_wal_checkpoint_v2(_database, NULL, SQLITE_CHECKPOINT_RESTART,
                                    &size_of_wal_log, &number_of_checkpointed_frames);
     NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
-    dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+    //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
         for (MTDatabaseTable *table in tables) {
@@ -901,16 +901,17 @@ static inline BOOL Sqlite3StepResultOK(int result) {
             NSError * __autoreleasing *errorQuery = NULL;
             BOOL successQuery = NO;
             successQuery = [self executeQuery:dropTable withError:errorQuery];
-            NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-                     __PRETTY_FUNCTION__);
+            //NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+            //         __PRETTY_FUNCTION__);
 
             NSAssert(errorQuery == NULL, (*errorQuery).localizedDescription);
         }
         
-        dispatch_semaphore_signal(s0);
+    //    dispatch_semaphore_signal(s0);
     }];
-    dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
-
+    //dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+    //dispatch_release(s0);
+    
     BOOL success = NO;
     NSError * __autoreleasing *errorQuerySyncMode = NULL;
     MTQuery *querySyncMode = [[MTQueryCacheSyncOff alloc] init];

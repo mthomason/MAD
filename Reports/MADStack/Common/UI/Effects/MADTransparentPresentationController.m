@@ -25,6 +25,13 @@
     }
 }
 
+- (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController {
+    if (self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
+        
+    }
+    return self;
+}
+
 - (BOOL) shouldRemovePresentersView {
     return NO;
 }
