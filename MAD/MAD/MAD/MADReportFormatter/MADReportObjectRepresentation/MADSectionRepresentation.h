@@ -1,5 +1,5 @@
 //
-//  MADSectionPlist.h
+//  MADSectionRepresentation.h
 //  MAD
 //
 //  Created by Michael Thomason on 10/25/15.
@@ -16,16 +16,13 @@ extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 
-typedef NSDictionary  <NSString *, NSNumber *> MADSectionPlist;
+@interface MADSectionRepresentation : NSObject
 
-@interface  NSDictionary (MADSectionPlist)
-
-    + (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
-                                               groupLevel:(NSUInteger)groupLevel
-                                                      row:(NSNumber *)row;
-
-    + (MADSectionPlist *)newSectionRepresentationWithType:(MADDocumentSectionType)sectionType
-                                                      row:(NSNumber *)row;
+    + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
+                                  groupLevel:(NSUInteger)groupLevel
+                                         row:(NSNumber *)row;
+    + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
+                                         row:(NSNumber *)row;
 
     - (NSUInteger)groupLevel;
     - (MADDocumentSectionType)sectionType;
