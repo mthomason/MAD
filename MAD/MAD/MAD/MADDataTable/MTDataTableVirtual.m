@@ -38,7 +38,7 @@
     return nil;
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
     NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

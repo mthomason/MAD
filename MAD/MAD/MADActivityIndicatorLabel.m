@@ -10,12 +10,20 @@
 
 @implementation MADActivityIndicatorLabel
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame: frame]) {
+
+        UIFont *font = [UIFont fontWithName: @"Helvetica-Light" size: 11.0000f];
+        UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
+                                           UIViewAutoresizingFlexibleWidth;
+
+        self.font = font;
+        self.textColor = [UIColor lightTextColor];
+        self.text = @"Formatting report.";
+        self.autoresizingMask = maskLabelView;
+        self.textAlignment = NSTextAlignmentCenter;
+    }
+    return self;
 }
-*/
 
 @end

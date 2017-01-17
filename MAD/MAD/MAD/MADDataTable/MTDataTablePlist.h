@@ -77,7 +77,7 @@ typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
     - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
     - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
-    - (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId;
+    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId;
 
     - (NSString *)newFilenameMDCache;
 

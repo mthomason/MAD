@@ -468,7 +468,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         self.buttonUnderline.selected = NO;
         self.buttonUnderline.highlighted = NO;
-        
+
         segmentedControlHorizontalAlignment.selected = NO;
         segmentedControlHorizontalAlignment.highlighted = NO;
         

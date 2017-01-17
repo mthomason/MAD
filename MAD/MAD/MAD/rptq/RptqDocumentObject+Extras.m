@@ -364,7 +364,7 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 
 #pragma mark - Member
 
-- (MTDocumentObjectType)getType {
+- (MTDocumentObjectType)documentObjectType {
     return self.type.shortValue;
 }
 

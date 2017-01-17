@@ -1924,7 +1924,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                   documentObjectSize.width, documentObjectSize.height);
     
-    switch (documentObject.getType) {
+    switch (documentObject.documentObjectType) {
         case MTDocumentObjectTypeFormula:
         case MTDocumentObjectTypeLabelStatic:
         case MTDocumentObjectTypeLabelDynamic:

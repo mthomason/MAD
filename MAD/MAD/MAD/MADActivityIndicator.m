@@ -12,62 +12,71 @@
 
 #import <UIKit/UILabel.h>
 #import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIAppearance.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import "MADActivityIndicatorLabel.h"
+
+@interface MADActivityIndicator ()
+    @property(readwrite, nonatomic, weak) UIActivityIndicatorView *activityIndicator;;
+@end
 
 @implementation MADActivityIndicator
 
++ (void)initialize {
+    [super initialize];
+    if (self == [MADActivityIndicator self]) {
+        @autoreleasepool {
+            UIColor *bgColor = [MADColorEverydayApps newColorBlueLightBackground];
+            [[MADActivityIndicator appearance] setBackgroundColor:bgColor];
+        }
+    }
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-
-        UIViewAutoresizing maskView = UIViewAutoresizingFlexibleLeftMargin |
-                                      UIViewAutoresizingFlexibleRightMargin |
-                                      UIViewAutoresizingFlexibleTopMargin |
-                                      UIViewAutoresizingFlexibleBottomMargin;
-        
-        UIViewAutoresizing maskIndicatorView = UIViewAutoresizingFlexibleLeftMargin |
-                                               UIViewAutoresizingFlexibleRightMargin |
-                                               UIViewAutoresizingFlexibleTopMargin;
-        
-        UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
-                                           UIViewAutoresizingFlexibleWidth;
         
         self.layer.cornerRadius = 5.0000f;
         
-        UIColor *bgColor = [MADColorEverydayApps newColorBlueLightBackground];
-        self.backgroundColor = bgColor;
         UIActivityIndicatorView *activityIndicator;
         activityIndicator= [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                                                         UIActivityIndicatorViewStyleWhiteLarge];
         
-        self.autoresizingMask = maskView;
-        activityIndicator.autoresizingMask = maskIndicatorView;
+        self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                UIViewAutoresizingFlexibleRightMargin |
+                                UIViewAutoresizingFlexibleTopMargin |
+                                UIViewAutoresizingFlexibleBottomMargin;
+        
+        activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                             UIViewAutoresizingFlexibleRightMargin |
+                                             UIViewAutoresizingFlexibleTopMargin;
         
         
+        activityIndicator.center = CGPointMake(self.bounds.size.width / 2.0000f,
+                                               self.bounds.size.height / 2.0000f);
+
+        CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f,
+                                       frame.size.width, 44.0000f);
+        
+        id status = [[MADActivityIndicatorLabel alloc] initWithFrame:labelFrame];
+
         [self addSubview:activityIndicator];
-        CGPoint indicatorCenter = CGPointMake(self.bounds.size.width / 2.0000f,
-                                              self.bounds.size.height / 2.0000f);
-        activityIndicator.center = indicatorCenter;
-        [activityIndicator startAnimating];
-        
-        CGRect labelFrame = CGRectMake(CGPointZero.x,
-                                       frame.size.height - 44.0000f,
-                                       frame.size.width,
-                                       44.0000f);
-        UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
-        status.textColor = [UIColor lightTextColor];
-        UIFont *font = [UIFont fontWithName: @"Helvetica-Light"
-                                       size: 11.0000f];
-        
-        status.font = font;
-        status.text = @"Formatting report.";
-        status.autoresizingMask = maskLabelView;
-        status.textAlignment = NSTextAlignmentCenter;
         [self addSubview:status];
+        
+        self.activityIndicator = activityIndicator;
         self.status = status;
         
     }
     return self;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    id activityIndicator = self.activityIndicator;
+    if (newSuperview) {
+        [activityIndicator startAnimating];
+    } else {
+        [activityIndicator stopAnimating];
+    }
 }
 
 @end

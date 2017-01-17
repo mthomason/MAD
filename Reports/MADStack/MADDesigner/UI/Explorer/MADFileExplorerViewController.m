@@ -191,7 +191,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
     @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
 
-    @property (nonatomic, strong) UIProgressView *progressViewFileManager;
+    @property (nonatomic, strong) MADProgressView *progressViewFileManager;
 
     @property (nonatomic, strong) NSArray *defaultPassthroughViews;
 
@@ -340,54 +340,14 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         _cloudActivityRunningDisplay = NO;
         _activityIndicatorRightVisible = NO;
 
-        MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-        self.searchBar = searchBar;
-
         void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
         handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
             if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
         };
 
-        MADFileExplorerDataSource *fileExplorerDataSource;
-        fileExplorerDataSource = [[MADFileExplorerDataSource alloc] initWithCellConfiguration:handleCellLayout];
-        self.fileExplorerDataSource = fileExplorerDataSource;
-        
         MADOpenDocumentManager *openFileManager;
         openFileManager = [[MADOpenDocumentManager alloc] init];
         self.activeDocumentManager = openFileManager;
-        
-        MADProgressView *progressView;
-        progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
-        self.progressViewFileManager = progressView;
-        
-        NSString *hint;
-        hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
-        self.barButtonItemEdit.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemAddNewDocument,
-                                 MADHintBarButtonItemAddNewDocument);
-        self.barButtonItemAddNewDocument.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemStore, MADHintBarButtonItemStore);
-        self.barButtonItemLicensing.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemDelete, MADHintBarButtonItemDelete);
-        self.barButtonItemTrash.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemAction, MADHintBarButtonItemAction);
-        self.barButtonItemAction.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemDuplicate, MADHintBarButtonItemDuplicate);
-        self.barButtonItemDuplicate.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
-        self.barButtonItemInformationDocument.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
-        self.barButtonItemInformation.accessibilityHint = hint;
-        
-        hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
-        self.barButtonItemAbout.accessibilityHint = hint;
 
         UIBarButtonItem *barButtonItemDuplicate;
         SEL selector = @selector(actionDuplicate:);
@@ -406,33 +366,39 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
 }
 
-#pragma mark -
-#pragma mark UIViewController
-- (void)loadView {
-    [super loadView];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+- (MADFileExplorerDataSource *)fileExplorerDataSource {
+    if (!_fileExplorerDataSource) {
+        MADFileExplorerDataSource *datasource;
+        datasource = [[MADFileExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
+            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+        }];
+        _fileExplorerDataSource = datasource;
+    }
+    return _fileExplorerDataSource;
 }
 
+- (MADSearchBar *)searchBar {
+    if (!_searchBar) {
+        MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
+        _searchBar = searchBar;
+    }
+    return _searchBar;
+}
+
+- (MADProgressView *)progressViewFileManager {
+    if (!_progressViewFileManager) {
+        MADProgressView *progressView;
+        progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
+        _progressViewFileManager = progressView;
+    }
+    return _progressViewFileManager;
+}
+
+#pragma mark -
+#pragma mark UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    //self.navigationController.delegate = self;
-    
- /*
-    id <UIGestureRecognizerDelegate> __weak gestureDelegate = self;
-    void (^handleCellConfiguration)(MADCollectionViewCellDocument *cell);
-    handleCellConfiguration = ^(MADCollectionViewCellDocument *cell) {
-        
-        id <UIGestureRecognizerDelegate> cellDelegate, delegate;
-        cellDelegate = cell.delegate;
-        delegate = gestureDelegate;
-        if (cellDelegate == nil || ![cellDelegate isEqual:delegate])
-            [cell setDelegate: delegate];
-        
-    };
-*/
-
 
 #pragma mark Initialize install operations
     
@@ -486,7 +452,34 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
     }];
     
-
+    NSString *hint;
+    hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
+    self.barButtonItemEdit.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemAddNewDocument,
+                             MADHintBarButtonItemAddNewDocument);
+    self.barButtonItemAddNewDocument.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemStore, MADHintBarButtonItemStore);
+    self.barButtonItemLicensing.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemDelete, MADHintBarButtonItemDelete);
+    self.barButtonItemTrash.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemAction, MADHintBarButtonItemAction);
+    self.barButtonItemAction.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemDuplicate, MADHintBarButtonItemDuplicate);
+    self.barButtonItemDuplicate.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
+    self.barButtonItemInformationDocument.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
+    self.barButtonItemInformation.accessibilityHint = hint;
+    
+    hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
+    self.barButtonItemAbout.accessibilityHint = hint;
     
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader

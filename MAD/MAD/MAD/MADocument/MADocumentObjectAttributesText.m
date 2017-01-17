@@ -20,33 +20,44 @@
 
 @interface MADocumentObjectAttributesText ()
 
-    @property (nonatomic, strong, readwrite) UIFontDescriptor *fontDescriptor;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
     @property (nonatomic, strong, readwrite) NSDictionary *fontAttributes;
 
 @end
 
 @implementation MADocumentObjectAttributesText
 
-- (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object
-                      andFontDescriptor:(UIFontDescriptor * _Nullable)fontDescriptor {
+- (instancetype)init {
+    return (self = [super init]);
+}
+
+- (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
+                                 fontSize:(NSNumber * _Nullable) fontsize
+                                     bold:(BOOL)bold
+                                   italic:(BOOL)italic
+                                underline:(BOOL)underline
+                                   strike:(BOOL)strike
+                      horizontalAlignment:(NSTextAlignment)horizontalAlignment {
     
-    if (self = [super initWithObject:object]) {
+    if (self = [super init]) {
     
-        if (fontDescriptor == nil)
-            fontDescriptor = [MADFontDescriptor newFontDescriptorForDocumentObject:object];
+        UIFontDescriptor *fontDescriptor;
+        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
+                                                                fontSize: fontsize
+                                                                    bold: bold
+                                                                  italic: italic];
     
         
         UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
                                                    size: 0.0];
 
-        _fontDescriptor = fontDescriptor.copy;
 
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
         paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
         paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
         
-        switch (object.horizontalAlignment.integerValue) {
+        switch (horizontalAlignment) {
             case MTHorizontalAlignmentLeft:
                 paragraphStyle.alignment = NSTextAlignmentLeft;
                 break;
@@ -68,10 +79,11 @@
         }
         
         NSNumber *baselineOffset = @0.00000000f;
-        NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: object.underline.boolValue ?
-                                             NSUnderlineStyleSingle : NSUnderlineStyleNone];
-        NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger:object.strike.boolValue ?
-                                                 NSUnderlineStyleSingle : NSUnderlineStyleNone];
+        NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: underline ?
+                                              NSUnderlineStyleSingle: NSUnderlineStyleNone];
+        
+        NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: strike ?
+                                                  NSUnderlineStyleSingle: NSUnderlineStyleNone];
         
         NSDictionary *fontAttributes;
         fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -86,10 +98,6 @@
     }
     return self;
     
-}
-
-- (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object {
-    return [self initWithObject:object andFontDescriptor:nil];
 }
 
 @end

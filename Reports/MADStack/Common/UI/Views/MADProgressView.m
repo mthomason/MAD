@@ -25,7 +25,7 @@
             break;
 
         case MADProgressViewTypeConnection:
-            progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+            progressView = [[self.class alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
             ((__kindof UIProgressView *) progressView).autoresizingMask = UIViewAutoresizingFlexibleWidth;
             ((__kindof UIProgressView *) progressView).progressTintColor = [MADColorEverydayApps newColorAnalogous4];
             ((__kindof UIProgressView *) progressView).trackTintColor = [UIColor grayColor];

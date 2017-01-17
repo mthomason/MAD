@@ -138,7 +138,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         CGRect letterRect = [MTPaper rectLetter];
         NSArray *sortDescriptors = sdocument.sortDescriptors;
         
-        [sdocument.mainDataTable sortUsingDescriptors:sortDescriptors];
+        [sdocument.dataTable sortUsingDescriptors:sortDescriptors];
         MTReportFormatter *reportFormatter;
         reportFormatter = [[MTReportFormatter alloc] initWithDocument: sdocument
                                                               options: MTReportFormatterOptionsMargin];
@@ -161,8 +161,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                                                       object: reportFormatter];
         
         MTReportViewerPrintPageRenderer *printPageRenderer;
-        printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
-                                                                                 dataTable: sdocument.mainDataTable];
+        printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
         
         NSString *filePath = fileURL.path.copy;
         UIGraphicsBeginPDFContextToFile(filePath, letterRect, options);

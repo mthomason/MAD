@@ -13,14 +13,11 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "MADDocumentObjectType.h"
 
-@class RptqDocumentObject;
+@class MADDocumentObjectDataReference;
 
 @interface MADDocumentObject : NSObject
 
-    - (instancetype)initWithObject:(RptqDocumentObject *)object;
-
-    - (instancetype)initWithType:(MTDocumentObjectType)type
-                       andObject:(RptqDocumentObject *)documentObject;
+    + (instancetype)newDocumentObject:(MADDocumentObjectDataReference *)definition;
 
     - (void)drawInRect:(CGRect)rect;
 

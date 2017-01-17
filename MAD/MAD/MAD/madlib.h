@@ -15,5 +15,6 @@ void ultoa(unsigned long n, char s[]);
 void uitoa(unsigned int n, char s[]);
 void itoa(int n, char s[]);
 void reverse(char s[]);
+void ltoa(long n, char s[]);
 
 #endif /* madlib_h */

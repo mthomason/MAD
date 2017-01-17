@@ -69,7 +69,7 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
 - (BOOL)isEqual:(id)object {
     if (![object isKindOfClass:[MADFileInfo class]]) return NO;
-    return [self.URL isEqual:((MADFileInfo *)object).URL];
+    return [self.URL.absoluteURL isEqual:((MADFileInfo *)object).URL.absoluteURL];
 
 }
 

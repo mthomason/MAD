@@ -6,58 +6,60 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADSectionPlist.h"
+#import "MADSectionRepresentation.h"
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSCoder.h>
 
-//Keys stored in the cache.  Short and unique.
-
-NSString * const MTReportSectionType                    = @"a";
-NSString * const MTReportGroupLevel                     = @"b";
-NSString * const MTReportDetailRowId                    = @"d";
-
-static NSString * const MADIdentifierReportObject       = @"o";
-
-@interface MADSectionRepresentation ()
-
-    @property (readwrite, nonatomic, copy) NSNumber *row;
-
-@end
-
 @implementation MADSectionRepresentation {
     MADDocumentSectionType _sectionType;
     NSUInteger _groupLevel;
+    NSUInteger _row;
 }
 
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
                               groupLevel:(NSUInteger)groupLevel
-                                     row:(NSNumber *)row {
+                                     row:(NSUInteger)row {
     id result = [[self alloc] initSectionRepresentation:sectionType groupLevel:groupLevel row:row];
     return result;
 }
 
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
-                                     row:(NSNumber *)row {
-    id result = [[self alloc] initSectionRepresentation:sectionType row:row];
+                                     row:(NSUInteger)row {
+    id result = [[self alloc] initSectionRepresentation:sectionType groupLevel:NSUIntegerMax row:row];
     return result;
 }
 
 - (instancetype)initSectionRepresentation:(MADDocumentSectionType)sectionType
-                                      row:(NSNumber *)row {
+                                      row:(NSUInteger)row {
     return [self initSectionRepresentation:sectionType groupLevel:NSUIntegerMax row:row];
 }
 
 - (instancetype)initSectionRepresentation:(MADDocumentSectionType)sectionType
                               groupLevel:(NSUInteger)groupLevel
-                                     row:(NSNumber *)row {
+                                     row:(NSUInteger)row {
     if (self = [super init]) {
         _sectionType = sectionType;
         _groupLevel = groupLevel;
-        self.row = row.copy;
+        _row = row;
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    if (self = [super init]) {
+        [decoder decodeValueOfObjCType:@encode(MADDocumentSectionType) at:&_sectionType];
+        [decoder decodeValueOfObjCType:@encode(NSUInteger) at:&_groupLevel];
+        [decoder decodeValueOfObjCType:@encode(NSUInteger) at:&_row];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeValueOfObjCType:@encode(MADDocumentSectionType) at:&_sectionType];
+    [encoder encodeValueOfObjCType:@encode(NSUInteger) at:&_groupLevel];
+    [encoder encodeValueOfObjCType:@encode(NSUInteger) at:&_row];
 }
 
 - (NSUInteger)groupLevel {
@@ -68,17 +70,17 @@ static NSString * const MADIdentifierReportObject       = @"o";
     return _sectionType;
 }
 
-- (NSNumber *)detailRowId {
-    return self.row;
+- (NSUInteger)detailRowId {
+    return _row;
 }
 
 - (id)debugQuickLookObject {
     NSMutableString *debugString = [[NSMutableString alloc] init];
     [debugString appendString:@"MADReportplist\n"];
     [debugString appendString:@"-----------------------------\n"];
-    [debugString appendFormat:@"Row ID:       %lu\n", (unsigned long)self.detailRowId.unsignedIntegerValue];
-    [debugString appendFormat:@"Section type: %lu\n", (unsigned long)self.sectionType];
-    [debugString appendFormat:@"Group level:  %lu\n", (unsigned long)self.groupLevel];
+    [debugString appendFormat:@"Row ID:       %lu\n", self.detailRowId];
+    [debugString appendFormat:@"Section type: %lu\n", self.sectionType];
+    [debugString appendFormat:@"Group level:  %lu\n", self.groupLevel];
     [debugString appendString:@"-----------------------------\n"];
     [debugString appendString:@"\n"];
     return @"";

@@ -11,13 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSString;
+@class MADDocumentObjectDataReference;
 
 @interface MADDocumentCachedDataReference : NSObject
 
-    - (instancetype)initWithTableName:(NSString *)tableName
-                            fieldName:(NSString *)fieldName
-                                rowID:(NSUInteger)rowID;
+    - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 
 @end
 

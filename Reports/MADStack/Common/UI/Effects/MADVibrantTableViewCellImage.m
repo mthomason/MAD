@@ -38,8 +38,12 @@
 
 - (void)invalidateConstraints {
     
+    UIVisualEffectView *effectView;
+    UILabel *label;
+    effectView = self.effectView;
+    label = self.label;
     if (self.updatingConstraints == NO && self.initalSetupImageComplete &&
-        self.effectView != nil && self.label != nil && self.imageViewMain != nil) {
+        effectView != nil && label != nil && self.imageViewMain != nil) {
         self.updatingConstraints = YES;
         
         if (self.layoutConstraints.count > 0) {
@@ -51,16 +55,16 @@
         ch = [NSLayoutConstraint constraintWithItem: self.contentView
                                           attribute: NSLayoutAttributeHeight
                                           relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                             toItem: self.effectView.contentView
+                                             toItem: effectView.contentView
                                           attribute: NSLayoutAttributeHeight
                                          multiplier: 1.0000f
                                            constant: 0.0000f];
         
         NSLayoutConstraint *eh;
-        eh = [NSLayoutConstraint constraintWithItem: self.effectView.contentView
+        eh = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                           attribute: NSLayoutAttributeHeight
                                           relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                             toItem: self.label
+                                             toItem: label
                                           attribute: NSLayoutAttributeHeight
                                          multiplier: 1.0000f
                                            constant: 0.0000f];
@@ -107,7 +111,7 @@
         lcmil = [NSLayoutConstraint constraintWithItem: self.imageViewMain
                                              attribute: NSLayoutAttributeTrailing
                                              relatedBy: NSLayoutRelationEqual
-                                                toItem: self.effectView.contentView
+                                                toItem: effectView.contentView
                                              attribute: NSLayoutAttributeLeading
                                             multiplier: 1.0000f
                                               constant: 0.0000f];
@@ -118,7 +122,7 @@
         lc2 = [NSLayoutConstraint constraintWithItem: self.contentView
                                            attribute: NSLayoutAttributeTrailing
                                            relatedBy: NSLayoutRelationEqual
-                                              toItem: self.effectView.contentView
+                                              toItem: effectView.contentView
                                            attribute: NSLayoutAttributeTrailing
                                           multiplier: 1.0000f
                                             constant: 0.0000f];
@@ -128,7 +132,7 @@
         lc4 = [NSLayoutConstraint constraintWithItem: self.contentView
                                            attribute: NSLayoutAttributeTop
                                            relatedBy: NSLayoutRelationEqual
-                                              toItem: self.effectView.contentView
+                                              toItem: effectView.contentView
                                            attribute: NSLayoutAttributeTop
                                           multiplier: 1.0000f
                                             constant: 0.0000f];
@@ -138,7 +142,7 @@
         lc6 = [NSLayoutConstraint constraintWithItem: self.contentView
                                            attribute: NSLayoutAttributeBottom
                                            relatedBy: NSLayoutRelationEqual
-                                              toItem: self.effectView.contentView
+                                              toItem: effectView.contentView
                                            attribute: NSLayoutAttributeBottom
                                           multiplier: 1.0000f
                                             constant: 0.0000f];
@@ -156,40 +160,40 @@
         
         
         NSLayoutConstraint *lcllm;
-        lcllm = [NSLayoutConstraint constraintWithItem: self.effectView.contentView
+        lcllm = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                              attribute: NSLayoutAttributeLeadingMargin
                                              relatedBy: NSLayoutRelationEqual
-                                                toItem: self.label
+                                                toItem: label
                                              attribute: NSLayoutAttributeLeading
                                             multiplier: 1.0000f
                                               constant: 0.0000f];
         lcllm.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lcla;
-        lcla = [NSLayoutConstraint constraintWithItem: self.effectView.contentView
+        lcla = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                             attribute: NSLayoutAttributeTrailing
                                             relatedBy: NSLayoutRelationEqual
-                                               toItem: self.label
+                                               toItem: label
                                             attribute: NSLayoutAttributeTrailing
                                            multiplier: 1.0000f
                                              constant: 4.0000f];
         lcla.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lclt;
-        lclt = [NSLayoutConstraint constraintWithItem: self.effectView.contentView
+        lclt = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                             attribute: self.marginStyle == MADTableViewCellMarginStyleTop || self.marginStyle == MADTableViewCellMarginStyleFat || self.marginStyle == MADTableViewCellMarginStyleMiddle ? NSLayoutAttributeTop : NSLayoutAttributeTop
                                             relatedBy: NSLayoutRelationEqual
-                                               toItem: self.label
+                                               toItem: label
                                             attribute: NSLayoutAttributeTop
                                            multiplier: 1.0000f
                                              constant: self.marginStyle == MADTableViewCellMarginStyleTop || self.marginStyle == MADTableViewCellMarginStyleFat ? -4.0000f : 0.0000f];
         lclt.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lclb;
-        lclb = [NSLayoutConstraint constraintWithItem: self.effectView.contentView
+        lclb = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                             attribute: lclbAttribute1(self.marginStyle)
                                             relatedBy: NSLayoutRelationEqual
-                                               toItem: self.label
+                                               toItem: label
                                             attribute: NSLayoutAttributeBottom
                                            multiplier: 1.0000f
                                              constant: lclbConstant(self.marginStyle)];
@@ -218,10 +222,20 @@ static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyl
 
 - (void)updateConstraints {
     [super updateConstraints];
-
     [self invalidateConstraints];
+}
 
-    
++ (void)initialize {
+    [super initialize];
+    if (self == [MADVibrantTableViewCellImage self]) {
+        @autoreleasepool {
+            id classes;
+            classes = [[NSArray alloc] initWithObjects: self, nil];
+            UIButton *button = [UIButton appearanceWhenContainedInInstancesOfClasses: classes];
+            UIImage *image = [UIImage imageNamed:@"MADImageChevronRightTall"];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (void)layoutSubviews {
@@ -251,9 +265,6 @@ static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyl
         
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
                                                                       16.0000f, 16.0000f)];
-        UIImage *image = [UIImage imageNamed:@"MADImageChevronRightTall"];
-        [button setBackgroundImage: image
-                          forState: UIControlStateNormal];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x,
                                                                                CGPointZero.y,
@@ -264,8 +275,6 @@ static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyl
         [self.contentView addSubview:imageView];
         _imageViewMain = imageView;
         
-        UIImageView *imageViewIndicator = [[UIImageView alloc] initWithImage:image];
-        imageViewIndicator.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f);
         UIBlurEffect *blurEffect = [vibrantTableViewCellDelegate blurEffectForCell:self];
         UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
         UIVisualEffectView *visualEffectView;

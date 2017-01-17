@@ -93,13 +93,13 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
                        LogoPointOriginY(counter[1], logoMargin.height, strings));
 }
 
-@interface MADWatermarkView() {
-    BOOL _drawn;
-}
+@interface MADWatermarkView()
 
 @end
 
-@implementation MADWatermarkView
+@implementation MADWatermarkView {
+    BOOL _drawn;
+}
 
 + (NSAttributedString *)newWaterMarkStringMad {
 

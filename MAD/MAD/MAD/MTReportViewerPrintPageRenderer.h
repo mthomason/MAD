@@ -17,12 +17,13 @@
 @class MTDataTableFast;
 @class MADocument;
 
+@protocol MADPrintPageRendererDataSourceProtocol;
+
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
-    - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter
-                                  dataTable:(MTDataTableFast *)dataTable;
+    - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 
-    + (instancetype)newReportViewerPrintPageRenderer:(MADocument *)document;
+    + (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 
     @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 

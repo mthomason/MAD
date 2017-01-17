@@ -15,7 +15,10 @@
 
 @interface MADFontDescriptor : UIFontDescriptor
 
-    + (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)documentObject;
+    + (instancetype)newFontDescriptorForFontName:(NSString *) fontname
+                                        fontSize:(NSNumber *) fontSize
+                                            bold:(BOOL)bold
+                                          italic:(BOOL)italic;
 
 @end
 

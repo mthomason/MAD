@@ -13,12 +13,22 @@
 
 @implementation MADFileExplorerView
 
++ (void)initialize {
+    [super initialize];
+    if (self == [MADFileExplorerView self]) {
+        @autoreleasepool {
+            MADFileExplorerView *view;
+            view = [MADFileExplorerView appearance];
+            view.backgroundColor = [UIColor lightGrayColor];
+
+        }
+    }
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        
         id watermarkView = [[MADWatermarkView alloc] initWithFrame: self.bounds];
         self.backgroundView = watermarkView;
-        self.backgroundColor = [UIColor lightGrayColor];
         self.scrollIndicatorInsets = self.contentInset;
 
     }

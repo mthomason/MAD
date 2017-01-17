@@ -9,9 +9,13 @@
 #ifndef Reports_MAD_MADDocumentObjectAggregate_h
 #define Reports_MAD_MADDocumentObjectAggregate_h
 
-#import "MADDocumentObject.h"
+#import "MADDocumentObjectText.h"
 
-@interface MADDocumentObjectAggregate : MADDocumentObject
+@class MADDocumentObjectDataReference;
+
+@interface MADDocumentObjectAggregate : MADDocumentObjectText
+
+    - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 
 @end
 

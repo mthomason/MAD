@@ -9,9 +9,13 @@
 #ifndef Reports_MAD_UMADDocumentObjectLabelDynamic_h
 #define Reports_MAD_UMADDocumentObjectLabelDynamic_h
 
-#import "MADDocumentObject.h"
+#import "MADDocumentObjectText.h"
 
-@interface MADDocumentObjectLabelDynamic : MADDocumentObject
+@class MADDocumentObjectDataReference;
+
+@interface MADDocumentObjectLabelDynamic : MADDocumentObjectText
+
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 
 @end
 

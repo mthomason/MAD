@@ -228,18 +228,44 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, assign) BOOL didRefresh;
 
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
-    @property (nonatomic, readwrite, strong) MTDataTableFast *mainDataTable;
+
+    @property (nonatomic, readwrite, strong) MTDataTableFast *dataTable;
     @property (nonatomic, readwrite, strong) MTDatabase *database;
+
     @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
 @end
 
 @implementation MADocument
 
-#pragma mark - NSObject
+@synthesize sectionLayoutManagers = _sectionLayoutManagers;
+
+#pragma mark -
+#pragma mark MADPrintPageRendererDataSourceProtocol
 
 @synthesize database = _database;
-@synthesize sectionLayoutManagers = _sectionLayoutManagers;
+@synthesize dataTable = _dataTable;
+@synthesize reportFormatter = _reportFormatter;
+
+- (NSArray *)groupLevelKeys:(NSUInteger)rowID {
+        NSArray *groupLevelKeys;
+
+    if (self.reportFormatter.numberOfGroups > 0) {
+        
+        NSDictionary *row = [self.dataTable copyDataForCacheId: rowID];
+        groupLevelKeys = [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
+        return groupLevelKeys;
+        
+    } else {
+        
+        groupLevelKeys = [[NSArray alloc] init];
+        return groupLevelKeys;
+        
+    }
+}
+
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc {
     _thumbnail = nil;
@@ -257,7 +283,7 @@ void madwarn(char *err,  const char*err2) { }
     MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
     datatable.cacheDelegate = self;
     [datatable loadFromCacheWithUrl:self.urlDataTableCache];
-    self.mainDataTable = datatable;
+    self.dataTable = datatable;
 
 }
 
@@ -316,7 +342,7 @@ void madwarn(char *err,  const char*err2) { }
         NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
         self.urlDataTableCache = cacheUrl;
         [datatable loadFromCacheWithUrl:cacheUrl];
-        self.mainDataTable = datatable;
+        self.dataTable = datatable;
         
         //Initzlize the main document state
         id documentState = [[MADocumentState alloc] init];
@@ -455,7 +481,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (NSURL *)urlDataTableCache {
-    NSString *cacheName = [self.mainDataTable newFilenameMDCache];
+    NSString *cacheName = [self.dataTable newFilenameMDCache];
     return [self newUrlCacheForFilename:cacheName];
 }
 
@@ -754,6 +780,14 @@ READFROMURL_END:;
     self.printingReportFormatter = nil;
 }
 
+- (void)updatePrintingReportFormatter {
+    MTReportFormatter *reportFormatter;
+    reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
+                                                              options: MTReportFormatterOptionsMargin];
+    reportFormatter.overrideIdentifier = @"madprinter";
+    self.printingReportFormatter = reportFormatter;
+}
+
 #pragma mark -
 #pragma mark Query Building
 
@@ -970,8 +1004,8 @@ READFROMURL_END:;
     switch (query.type) {
         
         case MADQueryTypeFull:
-            self.mainDataTable.dataDelegate = self;
-            return self.mainDataTable;
+            self.dataTable.dataDelegate = self;
+            return self.dataTable;
             break;
     
         default:
@@ -983,7 +1017,7 @@ READFROMURL_END:;
 #pragma mark - MTReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData {
-    return [self.mainDataTable enumeratorForKeyObjectsSorted];
+    return [self.dataTable enumeratorForKeyObjectsSorted];
 }
 
 - (BOOL)cacheExist {
@@ -991,8 +1025,8 @@ READFROMURL_END:;
     return [[NSFileManager defaultManager] fileExistsAtPath: path];
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSNumber *)cachedID {
-    return  [self.mainDataTable copyDataForCacheId:cachedID];
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cachedID {
+    return  [self.dataTable copyDataForCacheId:cachedID];
 }
 
 #pragma mark - Helpers
@@ -1198,7 +1232,7 @@ READFROMURL_END:;
             defaultQuery.dataDelegate = self;
             
             NSArray *sortDescriptors = [self readCurrentSortDescriptors];
-            [self.mainDataTable sortUsingDescriptors:sortDescriptors];
+            [self.dataTable sortUsingDescriptors:sortDescriptors];
             self.mainQuery = defaultQuery;
         }
     }
@@ -1243,7 +1277,7 @@ READFROMURL_END:;
 
 - (void)prepareForQuery {
     NSArray *sortDescriptors = [self readCurrentSortDescriptors];
-    [self.mainDataTable sortUsingDescriptors:sortDescriptors];
+    [self.dataTable sortUsingDescriptors:sortDescriptors];
 }
 
 - (void)notifyThumbnailUpdated {

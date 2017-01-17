@@ -198,8 +198,8 @@
 }
 
 - (void)setInterfaceHeight:(CGFloat)height {
-    NSNumber *layoutHeightWrapper = [[NSNumber alloc] initWithFloat: height];
-    NSNumber *heightWrapper =       [[NSNumber alloc] initWithFloat: height + 44.0000f];
+    NSNumber *layoutHeightWrapper = [[NSNumber alloc] initWithDouble: height];
+    NSNumber *heightWrapper =       [[NSNumber alloc] initWithDouble: height + 44.0000f];
     self.layoutHeight = layoutHeightWrapper;
     self.height = heightWrapper;
 }
@@ -416,20 +416,15 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
 
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section {
     
-    NSInteger result = 0;
-    BOOL breakNow = NO;
     RptqDocument *document = [section inRptqDocument];
+
     RptqDocumentSectionEnumerator *enumerator;
     enumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
-
-    NSURL *urlNeedle = [section.objectID URIRepresentation];
-    for (RptqDocumentSection *sec in enumerator) {
-        @autoreleasepool {
-            NSURL *urlInHaystack = [sec.objectID URIRepresentation];
-            breakNow = [urlNeedle isEqual:urlInHaystack];
-            if (breakNow) break;
-            result++;
-        }
+    RptqDocumentSection *sec;
+    NSInteger result = 0;
+    for (sec in enumerator) {
+        if ([section.objectID isEqual:sec.objectID]) break;
+        result++;
     }
     return result;
 }

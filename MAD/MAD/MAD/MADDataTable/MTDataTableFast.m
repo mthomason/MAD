@@ -306,9 +306,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)tableName {
-    char buf[12];
+    char buf[17];
     buf[0] = 't';
-    uitoa(self.tag, (buf+1));
+    ultoa(self.tag, (buf+1));
     char *ptr = buf;
     NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     return tableName;
@@ -317,9 +317,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)addColumn:(MADDataColumn *)column {
 
     BOOL createTable = self.columnKeys.count == 0;
-    char buf[12];
+    char buf[17];
     buf[0] = 'c';
-    uitoa(column.identifier.hash, (buf+1));
+    ultoa(column.identifier.hash, (buf+1));
     char *ptr = buf;
 
     NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
@@ -662,10 +662,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 // FIXME: Return error handler... remove credentals
-- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
     
     if (self.lastDataForCacheId != nil) {
-        if (cacheId.unsignedIntegerValue == self.lastDataForCacheId.index) {
+        if (cacheId == self.lastDataForCacheId.index) {
             NSDictionary *result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.object];
             return result;
         }
@@ -680,7 +680,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSNumber *keyFieldDef = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
     
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    cacheId,            keyRowId,
+                                    @(cacheId),            keyRowId,
                                     self.columnKeys,    keyFieldKey,
                                     tableName,          keyTableNmae,
                                     self.columns,       keyFieldDef , nil];
@@ -703,7 +703,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
             result = [self newCurrentObject:statement];
             
-            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue
+            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId
                                                                   andObject:result];
             self.lastDataForCacheId = lastDataForCacheId;
             

@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 #import <MADSqlite3/sqlite3.h>
 #import "MTDatabaseSqlite3.h"
+#import <objc/runtime.h>
+#import <malloc/malloc.h>
+#import "MADSectionRepresentation.h"
 
 @interface MADTests : XCTestCase
 
@@ -26,6 +29,12 @@
     [super tearDown];
 }
 
+- (void)testInstanceSize {
+    NSLog(@"size of %@: %zd", NSStringFromClass([MADSectionRepresentation class]), class_getInstanceSize([MADSectionRepresentation class]));
+    id sr = [[MADSectionRepresentation alloc] init];
+    NSLog(@"size of %@: %zd", NSStringFromClass([MADSectionRepresentation class]), malloc_size((__bridge const void *)sr));
+}
+
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -35,6 +44,7 @@
     const char *errorName = NULL, *errorMessage = NULL;
     mad_sqlite3Err(SQLITE_OK, &errorName, &errorMessage);
     NSString *fullMessage = [[NSString alloc] initWithFormat:@"%s: %s", errorName, errorMessage];
+    NSLog(@"%@", fullMessage);
 }
 
 - (void)testPerformanceExample {

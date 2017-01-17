@@ -9,24 +9,21 @@
 #ifndef MAD_MADSectionPlist_MADReportObjectRepresentation_h
 #define MAD_MADSectionPlist_MADReportObjectRepresentation_h
 
-#import <Foundation/NSDictionary.h>
+#import <Foundation/NSObject.h>
 #import "MADocumentSectionType.h"
 
-extern NSString * const MTReportSectionType;
-extern NSString * const MTReportDetailRowId;
-extern NSString * const MTReportGroupLevel;
-
 @interface MADSectionRepresentation : NSObject
+    <NSCoding>
 
     + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
                                   groupLevel:(NSUInteger)groupLevel
-                                         row:(NSNumber *)row;
+                                         row:(NSUInteger)row;
     + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
-                                         row:(NSNumber *)row;
+                                         row:(NSUInteger)row;
 
     - (NSUInteger)groupLevel;
     - (MADDocumentSectionType)sectionType;
-    - (NSNumber *)detailRowId;
+    - (NSUInteger)detailRowId;
 
 @end
 

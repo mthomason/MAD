@@ -116,7 +116,7 @@
         document.mainQuery = madQuery;
         
         NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:document.database];
-        [document.mainDataTable sortUsingDescriptors:sortDescriptors];
+        [document.dataTable sortUsingDescriptors:sortDescriptors];
         
         //Initialize the section layout manager... Not neede for creating the report.
         [document resetSectionLayoutManagers];

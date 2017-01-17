@@ -9,14 +9,13 @@
 #ifndef Reports_MAD_MADDocumentObjectLabelStatic_h
 #define Reports_MAD_MADDocumentObjectLabelStatic_h
 
-#import "MADDocumentObject.h"
+#import "MADDocumentObjectText.h"
 
-@class MADocumentObjectAttributesText;
+@class MADDocumentObjectDataReference;
 
-@interface MADDocumentObjectLabelStatic : MADDocumentObject
+@interface MADDocumentObjectLabelStatic : MADDocumentObjectText
 
-    - (void)drawInRect:(CGRect)rect
-        withAttributes:(__kindof MADocumentObjectAttributesText *)attributes;
+    - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 
 @end
 

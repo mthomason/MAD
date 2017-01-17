@@ -12,7 +12,7 @@
 #import <MAD/MTTableFormatter.h>
 
 #import <CoreGraphics/CGGeometry.h>
-#import <MAD/MADSectionPlist.h>
+#import <MAD/MADSectionRepresentation.h>
 
 typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone    = 0,
@@ -34,7 +34,7 @@ extern NSString * const MTNullIdentifier;
 @class MADArrayCaching <ObjectType>;
 
 typedef NSArray         <id>                                            MADObjectArray;
-typedef NSArray         <MADSectionPlist *>                             MADSectionArray;
+typedef NSArray         <MADSectionRepresentation *>                    MADSectionArray;
 typedef NSArray         <NSNumber *>                                    MADIndexArray;
 
 typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
@@ -73,13 +73,13 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
 
     - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
-    - (NSEnumerator <__kindof MADSectionPlist *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
+    - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
     - (MADSectionArray *)layoutForPage:(NSUInteger)page;
 
     - (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID;
-    //- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
+
     - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
-\
+
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 

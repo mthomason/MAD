@@ -87,12 +87,12 @@ static const short errCache = 2;
     }];
     
     //NSLog(@"QueryString: %@", queryString);
-    document.mainDataTable.dataDelegate = document;
+    document.dataTable.dataDelegate = document;
     NSError *executeError = NULL;
     BOOL success = [document.database executeSql: queryString
                                        fieldKeys: query.fieldKeys
                                     onConnection: dbconn
-                                 intoResultTable: (MTDataTable *)document.mainDataTable
+                                 intoResultTable: (MTDataTable *)document.dataTable
                                        withError: &executeError];
 
     if (!success) {
@@ -102,7 +102,7 @@ static const short errCache = 2;
         return;
     }
 
-    success = [document.mainDataTable cacheWithUrl:document.urlDataTableCache];
+    success = [document.dataTable cacheWithUrl:document.urlDataTableCache];
     
     if (!success) {
         NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];

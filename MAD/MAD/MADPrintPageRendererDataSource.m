@@ -7,7 +7,3 @@
 //
 
 #import "MADPrintPageRendererDataSource.h"
-
-@implementation MADPrintPageRendererDataSource
-
-@end

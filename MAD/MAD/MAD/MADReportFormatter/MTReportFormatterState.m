@@ -25,8 +25,8 @@
     _rowCounter = 0;
     _groupCounter = 0;
     _pageCounter = 0;
-    _detailRowId = @0;
-    _detailRowIdLast = @0;
+    _detailRowId = 0;
+    _detailRowIdLast = 0;
     _counterHeightUsedCurrentPage = 0.0;
     _document = document;
 }

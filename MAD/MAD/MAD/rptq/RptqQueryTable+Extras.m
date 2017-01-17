@@ -83,7 +83,8 @@
     RptqQuery *query = database.defaultQuery;
     NSSet *queryTables = query.hasQueryTables;
     NSInteger dupeCtr = 0;
-    for (RptqQueryTable *queryTable in queryTables) {
+    RptqQueryTable *queryTable;
+    for (queryTable in queryTables) {
         if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
             dupeCtr++;
         }
@@ -91,7 +92,7 @@
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
                                                    inManagedObjectContext: managedObjectContext];
-    RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
+    queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
 
     queryTable.databaseSchemaTable = databaseSchemaTable;
     queryTable.inQuery = query;
@@ -111,7 +112,7 @@
 
 - (NSString *)copyQueryAlias {
     char buf[12]; char *ptr;
-    itoa(self.dropIndex.integerValue, buf);
+    ltoa(self.dropIndex.integerValue, buf);
     ptr = buf;
     NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     NSString *databaseName = self.databaseSchemaTable.name.copy;

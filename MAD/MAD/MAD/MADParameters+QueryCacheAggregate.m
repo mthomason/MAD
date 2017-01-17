@@ -110,7 +110,7 @@
                                            andFunctionType:(MTAggregateFunctionType)functionType
                                               andDataTable:(MTDataTableFast *)dataTable {
     
-    NSDictionary *paramaters;
+    id paramaters;
     paramaters = [self newParamatersAggregateWithFieldKey: fieldKey
                                           andFunctionType: functionType
                                              andDataTable: dataTable

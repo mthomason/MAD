@@ -11,28 +11,19 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectLabel.h"
 #import "MADocumentObjectAttributesText.h"
-
-@interface MADDocumentObjectLabelStatic ()
-
-    @property (nonatomic, copy, readwrite) NSString *text;
-
-@end
+#import "MADDocumentObjectReference.h"
 
 @implementation MADDocumentObjectLabelStatic
 
-- (instancetype)initWithObject:(RptqDocumentObject *)object {
-    if (self = [super initWithType:MTDocumentObjectTypeLabelStatic andObject:object]) {
-        _text = object.isLabel.text.copy;
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
+    if (self = [super initWithDefinition:definition]) {
+        self.text = definition.item.isLabel.text.copy;
     }
     return self;
 }
 
-- (void)drawInRect:(CGRect)rect
-    withAttributes:(__kindof MADocumentObjectAttributesText *)attributes {
-    [_text drawWithRect: rect
-                options: NSStringDrawingUsesLineFragmentOrigin
-             attributes: attributes.fontAttributes
-                context: nil];
+- (void)drawInRect:(CGRect)rect {
+    [super drawInRect:rect];
 }
 
 @end

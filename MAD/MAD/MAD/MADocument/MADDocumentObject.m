@@ -7,18 +7,52 @@
 //
 
 #import "MADDocumentObject.h"
+#import <Foundation/NSException.h>
+#import "MADDocumentObjectReference.h"
+
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+
+#import "MADDocumentObjectAggregate.h"
+#import "MADDocumentObjectLabelDynamic.h"
+#import "MADDocumentObjectImage.h"
+#import "MADDocumentObjectBarcode.h"
+#import "MADDocumentObjectLabelStatic.h"
 
 @implementation MADDocumentObject
 
-    - (instancetype)initWithObject:(RptqDocumentObject *)object {
-        return self = [super init];
-    }
++ (instancetype)newDocumentObject:(MADDocumentObjectDataReference *)definition {
 
-    - (instancetype)initWithType:(MTDocumentObjectType)type
-                       andObject:(RptqDocumentObject *)documentObject {
-        return self = [super init];
+    id documentObject;
+    switch (definition.item.documentObjectType) {
+            
+        case MTDocumentObjectTypeAggregate:
+            documentObject = [[MADDocumentObjectAggregate alloc] initWithDefinition:definition];
+            break;
+            
+        case MTDocumentObjectTypeImage:
+            documentObject = [[MADDocumentObjectImage alloc] initWithDefinition:definition];
+            break;
+            
+        case MTDocumentObjectTypeBarcode:
+            documentObject = [[MADDocumentObjectBarcode alloc] initWithDefinition:definition];
+            break;
+            
+        case MTDocumentObjectTypeLabelDynamic:
+            documentObject = [[MADDocumentObjectLabelDynamic alloc] initWithDefinition:definition];
+            break;
+            
+        case MTDocumentObjectTypeLabelStatic:
+            documentObject = [[MADDocumentObjectLabelStatic alloc] initWithDefinition:definition];
+            break;
+            
+        default:
+            documentObject = @"";
+            break;
     }
+    return documentObject;
+}
 
-    - (void)drawInRect:(CGRect)rect { }
+- (void)drawInRect:(CGRect)rect { }
 
 @end

@@ -11,7 +11,11 @@
 
 #import "MADDocumentObject.h"
 
+@class MADDocumentObjectDataReference;
+
 @interface MADDocumentObjectBarcode : MADDocumentObject
+
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 
 @end
 

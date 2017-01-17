@@ -11,6 +11,15 @@
 #import <stdio.h>
 #import <strings.h>
 
+void ltoa(long n, char s[]) {
+    int i = 0;
+    do {                            /* generate digits in reverse order */
+        s[i++] = n % 10 + '0';      /* get next digit */
+    } while ((n /= 10) > 0);        /* delete it */
+    s[i] = '\0';
+    reverse(s);
+}
+
 void ultoa(unsigned long n, char s[]) {
     int i = 0;
     do {                            /* generate digits in reverse order */

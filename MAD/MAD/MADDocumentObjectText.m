@@ -7,7 +7,53 @@
 //
 
 #import "MADDocumentObjectText.h"
+#import <UIKit/UIFontDescriptor.h>
+#import <UIKit/NSStringDrawing.h>
+#import "RptqDocumentObject.h"
+#import "MADDocumentObjectReference.h"
+#import "MADPrintPageRendererDataSource.h"
+#import "MADocumentObjectAttributesText.h"
+
+@interface MADDocumentObjectText()
+    @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;
+@end
 
 @implementation MADDocumentObjectText
+
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
+    if (self = [super init]) {
+        _definition = definition;
+    }
+    return self;
+}
+
+- (void)drawInRect:(CGRect)rect {
+    MADocumentObjectAttributesText *attt;
+    MADDocumentObjectDataReference *definition;
+
+    RptqDocumentObject *item;
+    definition = self.definition;
+    item = definition.item;
+    
+    attt = definition.fontDescriptors[item.objectID];
+    
+    if (attt == nil) {
+        attt = [[MADocumentObjectAttributesText alloc] initWithFontName: item.fontname
+                                                               fontSize: item.fontsize
+                                                                   bold: item.bold.boolValue
+                                                                 italic: item.italic.boolValue
+                                                              underline: item.underline.boolValue
+                                                                 strike: item.strike.boolValue
+                                                    horizontalAlignment: item.horizontalAlignment.integerValue];
+        
+        definition.fontDescriptors[item.objectID] = attt;
+    }
+    
+    [self.text drawWithRect: rect
+                    options: NSStringDrawingUsesLineFragmentOrigin
+                 attributes: attt.fontAttributes
+                    context: nil];
+    
+}
 
 @end

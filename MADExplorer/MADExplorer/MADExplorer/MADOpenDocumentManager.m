@@ -61,7 +61,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
     NSString *absoluteString = absoluteURL.absoluteString;
     [self.openFiles removeObjectForKey:absoluteString];
     
-    if ([url isEqual:self.openUrl]) {
+    if ([url.absoluteURL isEqual:self.openUrl.absoluteURL]) {
         self.openUrl = nil;
     }
 }

@@ -28,10 +28,16 @@
   #import <Foundation/NSString.h>
 #endif
 
-@interface MADReportSections () {
-  @private
+@interface MADReportSections ()
+
+    @property (nonatomic, readwrite, strong)    RptqDocument *document;
+    @property (nonatomic, readwrite, strong)    RptqQuery *mainQuery;
+    @property (nonatomic, readwrite, strong)    MADReportSectionEnumerator *sectionEnumerator;
+
+@end
+
+@implementation MADReportSections {
     NSUInteger _numberOfGroups;
-    
     MADReportSection *_reportHeader;
     MADReportSection *_pageHeader;
     NSMutableArray <MADReportSection *> *_groupHeaders;
@@ -40,16 +46,6 @@
     MADReportSection *_pageFooter;
     MADReportSection *_reportFooter;
 }
-
-    @property (nonatomic, readwrite, strong)    RptqDocument *document;
-    @property (nonatomic, readwrite, strong)    RptqQuery *mainQuery;
-
-    @property (nonatomic, readwrite, strong)    MADReportSectionEnumerator *sectionEnumerator;
-
-
-@end
-
-@implementation MADReportSections
 
 #pragma mark -
 #pragma mark NSObject

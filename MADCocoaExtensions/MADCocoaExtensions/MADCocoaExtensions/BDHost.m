@@ -136,7 +136,7 @@
                 sprintf(paddedAddress, "%02X:%02X:%02X:%02X:%02X:%02X",a,b,c,d,e,f);
                 address = [NSString stringWithUTF8String:paddedAddress];
                 
-                if (![address isEqual:@"00:00:00:00:00:00"] && ![address isEqual:@"00:00:00:00:00:FF"]) {
+                if (![address isEqualToString:@"00:00:00:00:00:00"] && ![address isEqualToString:@"00:00:00:00:00:FF"]) {
                     //NSLog(@"%@ mac: %@", [NSString stringWithUTF8String:currentAddress->ifa_name], address);
                     [addresses addObject:address];
                 }

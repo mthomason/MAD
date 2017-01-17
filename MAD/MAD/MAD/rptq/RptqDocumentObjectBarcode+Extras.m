@@ -120,56 +120,74 @@
     return barcode;
 }
 
-+ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED {
++ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
+                       queryFieldOne:(RptqQueryField *)queryFieldOne
+                       queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED {
     
     RptqDocumentObjectBarcode *reportObject = nil;
     
     if (queryFieldOne != nil) {
-
+    
         NSString *className = NSStringFromClass([RptqDocumentObjectBarcode class]);
-        NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: className
-                                                                                  inManagedObjectContext: queryFieldOne.managedObjectContext];
+        NSEntityDescription *entityDescription;
+        NSManagedObjectContext *objectContext = queryFieldOne.managedObjectContext;
+        entityDescription = [NSEntityDescription entityForName: className
+                                        inManagedObjectContext: objectContext];
         
-        reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                          insertIntoManagedObjectContext: queryFieldOne.managedObjectContext];
+        reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescription
+                                          insertIntoManagedObjectContext: objectContext];
         
         
-        NSNumber *componentEnabled = @(barcode.has2dComponentEnabled);
-        NSNumber *borderStyle = @(barcode.borderStyle);
-        NSNumber *borderWidth = @(barcode.borderWidth);
-        NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
-        NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
-        
-        NSNumber *height = @(barcode.height);
-        NSNumber *humanReadable = @(barcode.humanReadable);
-        NSNumber *option1 = @(barcode.option1);
-        NSNumber *option2 = @(barcode.option2);
-        NSNumber *option3 = @(barcode.option3);
-        NSNumber *showErrorMessage = @(barcode.showErrorMessages);
-        NSNumber *barcodeType = @(barcode.barcodeType);
-        NSNumber *whitespaceWidth = @(barcode.whitespaceWidth);
-        NSNumber *useStaticInput1 = @(NO);
-        NSNumber *useStaticInput2 = @(NO);
-        NSNumber *scale = @(barcode.scale);
-        
+        NSNumber *componentEnabled = [[NSNumber alloc] initWithBool: barcode.has2dComponentEnabled];
         reportObject.add2dComponent = componentEnabled;
+        
+        NSNumber *borderStyle = [[NSNumber alloc] initWithInteger: barcode.borderStyle];
         reportObject.borderStyle = borderStyle;
+        
+        NSNumber *borderWidth = [[NSNumber alloc] initWithInteger: barcode.borderWidth];
         reportObject.borderWidth = borderWidth;
+
+        NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
         reportObject.colorBackground = colorBackground;
+
+        NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
         reportObject.colorForeground = colorForeground;
+        
+        NSNumber *height = [[NSNumber alloc] initWithInteger: barcode.height];
         reportObject.height = height;
+        
+        NSNumber *humanReadable = [[NSNumber alloc] initWithBool: barcode.humanReadable];
         reportObject.humanReadable = humanReadable;
+        
+        NSNumber *option1 = [[NSNumber alloc] initWithInteger: barcode.option1];
+        reportObject.option1 = option1;
+        
+        NSNumber *option2 = [[NSNumber alloc] initWithInteger: barcode.option2];
+        reportObject.option2 = option2;
+        
+        NSNumber *option3 = [[NSNumber alloc] initWithInteger: barcode.option3];
+        reportObject.option3 = option3;
+        
+        NSNumber *showErrorMessage = [[NSNumber alloc] initWithBool:barcode.showErrorMessages];
+        reportObject.showErrorMessage = showErrorMessage;
+        
+        NSNumber *barcodeType = [[NSNumber alloc] initWithInteger: barcode.barcodeType];
+        reportObject.type = barcodeType;
+        
+        NSNumber *whitespaceWidth = [[NSNumber alloc] initWithInteger: barcode.whitespaceWidth];
+        reportObject.whitespaceWidth = whitespaceWidth;
+        
+        NSNumber *useStaticInput1 = [[NSNumber alloc] initWithBool: NO];
+        reportObject.useStaticInput1 = useStaticInput1;
+        
+        NSNumber *useStaticInput2 = [[NSNumber alloc] initWithBool: NO];
+        reportObject.useStaticInput2 = useStaticInput2;
+        
+        NSNumber *scale = [[NSNumber alloc] initWithFloat: barcode.scale];
+        reportObject.scale = scale;
+        
         reportObject.referencesField1 = queryFieldOne;
         reportObject.referencesField2 = queryFieldTwo;
-        reportObject.option1 = option1;
-        reportObject.option2 = option2;
-        reportObject.option3 = option3;
-        reportObject.showErrorMessage = showErrorMessage;
-        reportObject.type = barcodeType;
-        reportObject.whitespaceWidth = whitespaceWidth;
-        reportObject.useStaticInput1 = useStaticInput1;
-        reportObject.useStaticInput2 = useStaticInput2;
-        reportObject.scale = scale;
 
     }
     

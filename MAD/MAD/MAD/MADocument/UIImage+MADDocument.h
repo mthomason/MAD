@@ -19,9 +19,6 @@
 
     + (instancetype)newImageThumbnailWithDocument:(MADocument *)document;
 
-    + (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
-                                            andDataTable:(MTDataTableFast *)dataTable;
-
 @end
 
 #endif

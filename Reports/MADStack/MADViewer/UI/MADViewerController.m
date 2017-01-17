@@ -325,7 +325,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
-    
+
     UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
     self.navigationController.toolbar.tintColor = whiteColor;
     
@@ -466,8 +466,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+
     id page;
     NSArray *pages;
     if (self.loadDocumentViewerQueue.operationCount > 0) {
@@ -579,7 +578,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)presentationTransitionWillBegin {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);2
 }
 - (void)presentationTransitionDidEnd:(BOOL)completed {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -698,12 +697,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 + (NSString *)Title {
-    return [MADViewerController MADViewer];
+    NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
+    NSString *title = [[NSString alloc] initWithFormat: @"MAD %@", localizedSuffix];
+    return title;
 }
 
 - (NSString *)title {
     if (_title == nil) {
-        NSString *title = [self.class MADViewer];
+        NSString *title = [self.class Title];
         _title = title.copy;
     }
     return _title;
@@ -943,7 +944,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         
                         id document = sself.document;
                         MTReportViewerPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderer: document];
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
                         
                         sharedController.delegate = document;
                         sharedController.printPageRenderer = printPageRenderer;
@@ -1080,7 +1081,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)reloadWithSize:(NSValue *)viewBoundsWrapper {
     CGSize viewBounds = [viewBoundsWrapper CGSizeValue];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
         self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
@@ -1098,8 +1098,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
     
     MTReportViewerPrintPageRenderer *printPageRenderer =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                           dataTable: document.mainDataTable];
+    [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
     self.printPageRendererReport = printPageRenderer;
     
     [self ignoreFormatter: document.reportFormatter];
@@ -1155,7 +1154,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Post Report Notifications
 
 - (void)watchFormatter:(MTReportFormatter *)formatter {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportFormatterDidFormatPage:)
                                                  name: MADNotificationDidFormatPagesName
@@ -1163,7 +1161,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)ignoreFormatter:(MTReportFormatter *)formatter {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationDidFormatPagesName
                                                   object: formatter];
@@ -1174,8 +1171,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
        viewControllerAfterViewController:(MADDocumentPageController *)pageViewControllerLast {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADDocumentPageController *result = nil;
 
     if (viewerViewController->_pageIsAnimating == NO) {
@@ -1281,8 +1276,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
                    spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     pageViewController->_pageIsAnimating = NO;
     return UIPageViewControllerSpineLocationMin;
 
@@ -1290,15 +1283,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)pageViewController:(MADViewerController *)pageViewController
                             willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     pageViewController->_pageIsAnimating = YES;
 }
 
 #pragma mark - Status Label
 
 - (void)updateTimeSinceLastRefresh:(id)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADLabelStatus *labelStatus = self.labelStatus;
     MTDateResolution resolution;
     
@@ -1340,27 +1330,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)updateRecordsRead {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    MTDataTableFast *mainDataTable;
     NSNumber *numberOfResults;
-    mainDataTable = self.document.mainDataTable;
-    numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: mainDataTable.rowCounter];
+    numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: self.document.dataTable.rowCounter];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
 
 }
 
 - (void)updateNumberOfPages {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     _currentLocation.totalPages = self.document.reportFormatter.numberOfPages;
     [self updateNumberOfPages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
     [self setDisplayActive];
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADPageSlider *slider = self.pageSlider;
     if (round(slider.maximumValue) != round(numberOfPages)) {
         slider.maximumValue = numberOfPages;
@@ -1376,7 +1358,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 // ???: Why is it like this?
 
 - (void)showPrintDialog {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADViewerController * __weak weakself = self;
     
@@ -1397,22 +1378,23 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         document.activityDelegate = sself;
                         
                         UIPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRenderer: document];
+                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
                         sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = document;
                         
                         MADViewerController * __weak weakself2 = sself;
                         
-                        void (^completion)(UIPrintInteractionController *, BOOL, NSError *) =
-                            ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                        ;
+                        
+                        [sharedController presentFromBarButtonItem: sself.barButtonItemActivity
+                                                          animated: YES
+                                                 completionHandler: ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             
                             MADViewerController *sself2 = weakself2;
                             
                             sself2.pageSlider.enabled = YES;
                             [(MADTabBarController *)sself2.tabBarController enableTabBarItems];
-                        };
-                        
-                        [sharedController presentFromBarButtonItem:sself.barButtonItemActivity animated:YES completionHandler:completion];
+                        }];
                     }
                 });
             });
@@ -1494,14 +1476,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (NSUInteger)currentPageNumber {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     return _currentLocation.currentPage + 1;
-}
-
-#pragma mark -
-#pragma mark Custom
-
-+ (NSString *)MADViewer {
-    NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
-    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
 
 #pragma mark -
@@ -1705,18 +1679,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
         document = self.document;
         printPageRenderer =
-        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                               dataTable: document.mainDataTable];
+        [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
     
         self.printPageRenderer = printPageRenderer;
     }
     
-    if (!self.isCancelled && printPageRenderer == nil) {    // Try again.
+    if (!self.isCancelled && printPageRenderer == nil) {
 
         [document activeDocumentModel];
         printPageRenderer =
-        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                               dataTable: document.mainDataTable];
+        [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
         self.printPageRenderer = printPageRenderer;
     }
     

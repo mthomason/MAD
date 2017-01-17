@@ -163,7 +163,8 @@
             break;
             
         case MADDocumentSectionTypeGroupHeader: {
-            RptqQuery *query = self.mainQuery;
+            RptqDatabase *database = self.hasDatabaseSchemas.anyObject;
+            RptqQuery *query = database.hasQueries.anyObject;
             RptqQueryGroup *group = [query queryGroupForIndex:
                                      queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
             resultSection = [RptqDocumentSection headerSectionInSections:group.hasSection];
@@ -171,7 +172,8 @@
         }
             
         case MADDocumentSectionTypeGroupFooter: {
-            RptqQuery *query = self.mainQuery;
+            RptqDatabase *database = self.hasDatabaseSchemas.anyObject;
+            RptqQuery *query = database.hasQueries.anyObject;
             RptqQueryGroup *group = [query queryGroupForIndex:
                                      queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex,
                                                                                  numberOfGroups)];

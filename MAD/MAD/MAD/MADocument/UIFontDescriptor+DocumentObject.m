@@ -11,32 +11,32 @@
 
 @implementation MADFontDescriptor
 
-+ (instancetype)newFontDescriptorForDocumentObject:(RptqDocumentObject *)object {
++ (instancetype)newFontDescriptorForFontName:(NSString *) fontname
+                                    fontSize:(NSNumber *) fontSize
+                                        bold:(BOOL)bold
+                                      italic:(BOOL)italic {
 
-    NSString *fontname;
-    NSNumber *fontsize, *italic, *bold;
-    italic = object.italic;
-    bold = object.bold;
+    NSString *name;
+    NSNumber *size;;
     
+    name = fontname.copy;
+    size = fontSize.copy;
+
     UIFontDescriptorSymbolicTraits traits = 0;
-    if (italic.boolValue) traits     |= UIFontDescriptorTraitItalic;
-    if (bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
+    if (italic) traits     |= UIFontDescriptorTraitItalic;
+    if (bold)   traits     |= UIFontDescriptorTraitBold;
     
-    NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
-    
+    NSValue *traitsWrapper = @(traits);
     NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     traitsWrapper, UIFontSymbolicTrait, nil];
     
-    fontname = object.fontname.copy;
-    fontsize = object.fontsize.copy;
-    
     NSDictionary *fontAttributes;
     fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    fontname,       UIFontDescriptorFamilyAttribute,
-                                    fontsize,       UIFontDescriptorSizeAttribute,
+                                    name,       UIFontDescriptorFamilyAttribute,
+                                    size,       UIFontDescriptorSizeAttribute,
                                     symbolicTraits, UIFontDescriptorTraitsAttribute, nil];
     
-    UIFontDescriptor *fontDescriptor;
+    id fontDescriptor;
     fontDescriptor = [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
     return fontDescriptor;
 }

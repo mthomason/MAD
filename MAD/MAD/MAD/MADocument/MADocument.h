@@ -17,6 +17,7 @@
 #import "MADReportFormatterDataSourceProtocol.h"
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MAD/MADSortOrder.h>
+#import <MAD/MADPrintPageRendererDataSource.h>
 
 @protocol MADActivityProtocol;
 @protocol MADocumentDelegate;
@@ -46,7 +47,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     <UIPrintInteractionControllerDelegate,
         MADDataProtocol,
         MTCacheProtocol,
-        MTReportFormatterDataSource>
+        MTReportFormatterDataSource,
+        MADPrintPageRendererDataSourceProtocol>
     
     @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
 
@@ -56,10 +58,12 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (nonatomic, readonly, strong)     MADReportSections *reportSections;
 
-    @property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
-    @property (nonatomic, readonly, strong)     MTDataTableFast *mainDataTable;
-    @property (nonatomic, readonly, strong)     MTDatabase *database;
+
+    //@property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
+    //@property (nonatomic, readonly, strong)     MTDataTableFast *dataTable;
+
+    //@property (nonatomic, readonly, strong)     MTDatabase *database;
 
     // Set and used by export operations
     @property (nonatomic, weak)                 MADActivityIndicator    *statusLabel;

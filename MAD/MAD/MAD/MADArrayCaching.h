@@ -1,5 +1,5 @@
 //
-//  MTArrayCached.h
+//  MADArrayCaching.h
 //  MAD
 //
 //  Created by Michael Thomason on 7/4/14.

@@ -9,17 +9,25 @@
 #ifndef Reports_MAD_MADocumentObjectAttributesText_h
 #define Reports_MAD_MADocumentObjectAttributesText_h
 
-#import "MADocumentObjectAttributes.h"
+#import <Foundation/NSObject.h>
+#import <UIKit/NSText.h>
 
 @class UIFontDescriptor;
+@class RptqDocumentObject;
+@class NSString;
+@class NSNumber;
 
-@interface MADocumentObjectAttributesText : MADocumentObjectAttributes
+@interface MADocumentObjectAttributesText : NSObject
 
-    - (nullable instancetype)initWithObject:(RptqDocumentObject * _Nonnull)object
-                          andFontDescriptor:(UIFontDescriptor * _Nullable)fontDescriptor
+    - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
+                                     fontSize:(NSNumber * _Nullable) fontsize
+                                         bold:(BOOL)bold
+                                       italic:(BOOL)italic
+                                    underline:(BOOL)underline
+                                       strike:(BOOL)strike
+                          horizontalAlignment:(NSTextAlignment)horizontalAlignment
                                                                     NS_DESIGNATED_INITIALIZER;
 
-    @property (nonnull, nonatomic, strong, readonly) UIFontDescriptor    *fontDescriptor;
     @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
 
 @end

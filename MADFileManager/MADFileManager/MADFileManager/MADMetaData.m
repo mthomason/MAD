@@ -154,7 +154,7 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
     if ([object isKindOfClass:[MADMetaData class]]) {
         NSString *fileSystemNameUnknown = ((MADMetaData *)object).fileSystemName;
         NSString *fileSystemName = self.fileSystemName;
-        return [fileSystemName compare:fileSystemNameUnknown] == NSOrderedSame;
+        return [fileSystemName isEqualToString:fileSystemNameUnknown];
     }
     return  NO;
 }

@@ -236,10 +236,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     RptqDocumentObject *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
 
-    NSNumber *n = [[NSNumber alloc] initWithFloat:size.width];
+    NSNumber *n = [[NSNumber alloc] initWithDouble:size.width];
     documentObject.sizewidth = n;
     
-    n = [[NSNumber alloc] initWithFloat:size.height];
+    n = [[NSNumber alloc] initWithDouble:size.height];
     documentObject.sizeheight = n;
 
     NSError * __autoreleasing *error = NULL;
@@ -296,6 +296,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
+    
     RptqDocumentObject *documentObject = (RptqDocumentObject *)[context objectWithID:self.objectIdTag];
     if (documentObject != nil) {
         
@@ -309,7 +310,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         
         NSString *string = [documentObject copyDesignerRepresentationText];
         
-        switch (documentObject.getType) {
+        switch (documentObject.documentObjectType) {
                 
             case MTDocumentObjectTypeImage:
                 self.displayImage = documentObject.isImage.image;
@@ -325,8 +326,14 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 break;
         }
         
-        MADocumentObjectAttributesText *attributesText = [[MADocumentObjectAttributesText alloc] initWithObject: documentObject
-                                                                                              andFontDescriptor: nil];
+        MADocumentObjectAttributesText *attributesText;
+        attributesText = [[MADocumentObjectAttributesText alloc] initWithFontName:documentObject.fontname
+                                                                         fontSize:documentObject.fontsize
+                                                                             bold:documentObject.bold.boolValue
+                                                                           italic:documentObject.italic.boolValue
+                                                                        underline:documentObject.underline.boolValue
+                                                                           strike:documentObject.strike.boolValue
+                                                              horizontalAlignment:documentObject.horizontalAlignment.integerValue];
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
                                                                                 attributes: attributesText.fontAttributes];

@@ -14,6 +14,7 @@
 #import <Foundation/NSPropertyList.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSKeyedArchiver.h>
 
 #import <MADSqlite3/sqlite3.h>
 
@@ -287,10 +288,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
 + (NSData *)dataForObject:(id _Nonnull)object {
     NSError * __autoreleasing * error = NULL;
     NSData *data;
-    data = [NSPropertyListSerialization dataWithPropertyList: object
-                                                      format: NSPropertyListBinaryFormat_v1_0
-                                                     options: 0
-                                                       error: error];
+    data = [NSKeyedArchiver archivedDataWithRootObject:object];
     NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
     return data;
 }
@@ -298,23 +296,23 @@ static inline BOOL Sqlite3StepResultOK(int result) {
 + (id)newObjectForData:(NSData *)data {
     NSError * __autoreleasing * error = NULL;
     id plist;
-    plist = [NSPropertyListSerialization propertyListWithData: data
-                                                      options: NSPropertyListImmutable
-                                                       format: nil error: error];
-    NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
-    return plist;
+    if (data) {
+        plist = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
+        return plist;
+    } else {
+        return nil;
+    }
 }
 
 - (void)addObject:(id _Nonnull)object {
+    
     @autoreleasepool {
 
         _lastObjectSelected = nil;
         NSError * __autoreleasing * error = NULL;
         NSData *data;
-        data = [NSPropertyListSerialization dataWithPropertyList: object
-                                                          format: NSPropertyListBinaryFormat_v1_0
-                                                         options: 0
-                                                           error: error];
+        data = [NSKeyedArchiver archivedDataWithRootObject:object];
         NSAssert(error == NULL, @"%@", *error);
         int bind_result;
         bind_result = sqlite3_bind_int(_statementInsert, 1, _numberOfRows);

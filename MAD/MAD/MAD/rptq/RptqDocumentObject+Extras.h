@@ -40,7 +40,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
                fromParentSection:(RptqDocumentSection *)section
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;
 
-    @property (readonly) MTDocumentObjectType getType;
+    @property (readonly) MTDocumentObjectType documentObjectType;
     @property (readonly) CGRect frame;
     
     - (CGSize)size;

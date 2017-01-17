@@ -45,7 +45,6 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     @property (nonatomic, readonly, strong) MADReportSection *pageFooter;
     @property (nonatomic, readonly, strong) MADReportSection *reportFooter;
 
-
     - (NSUInteger)count;
     
 @end

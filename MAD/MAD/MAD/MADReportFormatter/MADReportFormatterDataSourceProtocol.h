@@ -12,8 +12,8 @@
 @protocol MTReportFormatterDataSource <NSObject>
 
     - (BOOL)cacheExist;
-    - (NSEnumerator *)enumeratorForReportData;
-    - (NSDictionary *)copyDataForCacheId:(NSNumber *)cachedID;
+    - (NSEnumerator <NSDictionary *> *)enumeratorForReportData;
+    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cachedID;
 
 @end
 

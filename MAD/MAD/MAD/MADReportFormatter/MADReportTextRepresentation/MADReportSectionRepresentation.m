@@ -31,7 +31,7 @@
 - (instancetype)initWithNumberOfRows:(NSUInteger)capacity {
     if (self = [super init]) {
         NSMutableArray *rows = capacity > 0 ? [[NSMutableArray alloc] initWithCapacity:capacity] :
-                                                [NSMutableArray new];
+                                                [[NSMutableArray alloc] init];
         self.rows = rows;
     }
     return self;

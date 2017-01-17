@@ -158,9 +158,10 @@
 
 - (NSInteger)location {
     NSArray *sortedQueryGroups = self.inQuery.sortedQueryGroups;
+    RptqQueryGroup *queryGroup;
     NSInteger location = 0;
-    for (RptqQueryGroup *queryGroup in sortedQueryGroups) {
-        if ([queryGroup isEqual:self]) {
+    for (queryGroup in sortedQueryGroups) {
+        if ([queryGroup.objectID isEqual:self.objectID]) {
             break;
         }
         location++;

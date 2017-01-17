@@ -31,23 +31,11 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 @implementation MADImageThumbnail
 
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
-    MTReportFormatter *reportFormatter = document.reportFormatter;
-    MTDataTableFast *mainDataTable = document.mainDataTable;
-    id thumbnail = [self newImageThumbnailWithReportFormatter: reportFormatter
-                                                 andDataTable: mainDataTable];
-    return thumbnail;
-}
 
-+ (instancetype)newImageThumbnailWithReportFormatter:(MTReportFormatter *)reportFormatter
-                                        andDataTable:(MTDataTableFast *)mainDataTable {
-    
-    MTReportFormatter *formatter = reportFormatter;
-    MTDataTableFast *dataTable = mainDataTable;
     MTReportViewerPrintPageRenderer *printPageRenderer =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: formatter
-                                                           dataTable: dataTable];
+    [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
     
-    UIImage *thumbnail;
+    id thumbnail;
     
     
     thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
@@ -171,7 +159,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     CGContextRestoreGState(context);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *croppedImage;
+    id croppedImage;
     
     CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
     croppedImage = [UIImage imageWithCGImage:imageRef];

@@ -170,7 +170,7 @@ static NSString * const StringEmpty = @"";
     return nil;
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSNumber *)cacheId {
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
     NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
@@ -213,18 +213,18 @@ static NSString * const StringEmpty = @"";
 - (BOOL)cacheWithUrl:(NSURL *)url {
     //static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
 
-    NSDictionary *plist = [self copyPlist].copy;
+    BOOL success = NO;
+    if (url) {
+        NSDictionary *plist = [self copyPlist].copy;
     
-    NSError *error = NULL;
-    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
-                                                               format: NSPropertyListBinaryFormat_v1_0
-                                                              options: 0
-                                                                error: &error];
+        NSError *error = NULL;
+        NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
+                                                                   format: NSPropertyListBinaryFormat_v1_0
+                                                                  options: 0
+                                                                    error: &error];
 
     NSAssert(error == NULL, @"%s %@", __PRETTY_FUNCTION__, error);
 
-    BOOL success = NO;
-    if (url) {
         NSError *errorWriting = NULL;
         success = [cache writeToURL: url
                             options: NSDataWritingAtomic |
