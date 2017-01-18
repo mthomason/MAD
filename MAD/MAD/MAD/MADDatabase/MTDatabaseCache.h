@@ -24,8 +24,8 @@
     void * /* sqlite3 * */ _database;
 }
 
+    - (id <MTDatabaseProtocol>)delegate;
     - (BOOL)tableExist:(NSString *)tablename;
-    - (NSString *)newNativeTypeForDataType:(MADDataType)dataType;
     - (void)beginBulkInsert;
     - (void)endBulkInsert;
 

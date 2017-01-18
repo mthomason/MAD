@@ -1770,7 +1770,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
     }
     
     if (![self isCancelled]) {
-        RptqDocument *activeDocumentModel = document.activeDocumentModel;
+        [document activeDocumentModel];
         [document resetMainQuery];
     }
     

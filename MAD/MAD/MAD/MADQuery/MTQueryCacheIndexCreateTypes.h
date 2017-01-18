@@ -1,19 +1,21 @@
 //
-//  MADQueryCacheIndexCreateParameters.h
+//  MADQueryCacheIndexCreateTypes.h
 //  MAD
 //
 //  Created by Michael Thomason on 5/25/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADQueryCacheIndexCreateParameters_h
-#define MAD_MADQueryCacheIndexCreateParameters_h
+#ifndef MAD_MADQueryCacheIndexCreateTypes_h
+#define MAD_MADQueryCacheIndexCreateTypes_h
 
-typedef NS_ENUM(short, MTQueryCacheIndexCreateParameters) {
+typedef NS_ENUM(short, MTQueryCacheIndexCreateTypes) {
+    MTQueryCacheIndexCreateIndexGroupCount,
     MTQueryCacheIndexCreateIndexName,
     MTQueryCacheIndexCreateTableName,
     MTQueryCacheIndexCreateSortDescriptors,
     MTQueryCacheIndexCreateColumns,
 };
 
-#endif /* Header_h */
+#endif
+

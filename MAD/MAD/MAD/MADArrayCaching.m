@@ -28,6 +28,7 @@
 #import "MADDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTQueryCacheAddColumn.h"
+#import "MTDatabaseSqlite3.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -61,11 +62,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     sqlite3_stmt *_statementSelect;
     sqlite3_stmt *_statementCount;
     sqlite3_stmt *_statementEnumer;
-}
-
-static inline BOOL Sqlite3StepResultOK(int result);
-static inline BOOL Sqlite3StepResultOK(int result) {
-    return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
 }
 
 - (void)dealloc {
@@ -269,7 +265,7 @@ static inline BOOL Sqlite3StepResultOK(int result) {
 - (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
        columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
-    NSString *columnAffinity = [self.database newNativeTypeForDataType:column.type];
+    NSString *columnAffinity = [MADSqlite3NativeType newSqlite3NativeType:column.type];
     MTQueryCacheAddColumn *queryCacheAddColumn;
     queryCacheAddColumn =
         [[MTQueryCacheAddColumn alloc] initWithTableName: table

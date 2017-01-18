@@ -244,7 +244,7 @@ static NSString * const StringEmpty = @"";
     NSString *keyColumnKeys = [MTDataTablePlist keyColumnKeys];
     NSString *keyColumns = [MTDataTablePlist keyColumns];
     NSString *keyRowCounter = [MTDataTablePlist keyRowCounter];
-    NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: self.rowCounter];
+    NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
     
     NSArray *ck = self.columnKeys;
     NSArray *columnKeys = [[NSArray alloc] initWithArray:ck];
@@ -252,12 +252,12 @@ static NSString * const StringEmpty = @"";
     NSDictionary *cp = [self columnsPlist];
     NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:cp];
     
-    return @{
-             keyName        : self.name,
-             keyColumnKeys  : columnKeys,
-             keyColumns     : columnsPlist,
-             keyRowCounter  : rowCounter,
-             };
+    id name = self.name.copy;
+    return [[NSDictionary alloc] initWithObjectsAndKeys:
+                    name, keyName,
+                    columnKeys, keyColumnKeys,
+                    columnsPlist, keyColumns,
+                    rowCounter, keyRowCounter, nil];
 }
 
 - (void)loadWithPlist:(MADDataTablePlist *)plist {

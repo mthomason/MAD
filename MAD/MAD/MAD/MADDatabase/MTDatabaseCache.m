@@ -50,8 +50,8 @@
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
 
-- (NSString *)newNativeTypeForDataType:(MADDataType)dataType {
-    return nil;
+- (id <MTDatabaseProtocol>)delegate {
+    return [super delegate];
 }
 
 @end

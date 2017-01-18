@@ -19,7 +19,7 @@
 - (NSString *)copyKey {
     char buf[12];
     buf[0] = 's';
-    uitoa(self.hash, (buf+1));
+    ultoa(self.hash, (buf+1));
     char *ptr = buf;
     id result = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     return result;

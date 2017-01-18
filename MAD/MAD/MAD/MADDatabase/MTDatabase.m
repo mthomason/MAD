@@ -231,10 +231,6 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                     safeFieldAlias, MADSqlTextFromPart, safeTable];
 }
 
-- (NSString *)newNativeTypeForDataType:(MADDataType)dataType {
-    return @"";
-}
-
 - (void)readRow:(NSUInteger)row {
     [[MADNotificationDidReadRows sharedObject] database:self readRow:row];
 }

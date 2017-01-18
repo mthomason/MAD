@@ -676,7 +676,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     [debug appendFormat:@"Delegate:         %@--\n", _delegate];
     [debug appendFormat:@"File coordinator: %@--\n", _fileCoordinator];
     [debug appendFormat:@"Directory:        %@--\n", self.documentDirectory];
-    [debug appendFormat:@"File count:       %d--\n", self.count];
+    [debug appendFormat:@"File count:       %lu--\n", (unsigned long)self.count];
     [debug appendFormat:@"%@", _fileMetaDatum];
     return debug;
 }

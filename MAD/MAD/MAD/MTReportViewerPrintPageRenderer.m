@@ -453,37 +453,12 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         items = row.hasObjects;
         rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
                              initWithNumberOfSectionRowElements:items.count];
-        //fontDescriptors = [[MADMutableFontDescriptorMap alloc] initWithCapacity:items.count];
-        
         for (item in items) {
 
             self.dataReference.item = item;
 
             drawingObject = [MADDocumentObject newDocumentObject:self.dataReference];
             [drawingObject drawInRect:documentObjectBounds(item.frame, sectionRect.origin)];
-            /*
-            if ([drawingObject isKindOfClass:[NSString class]]) {
-                
-                fontDescriptor = fontDescriptors[item.objectID];
-                
-                MADocumentObjectAttributesText *attt;
-                attt = [[MADocumentObjectAttributesText alloc] initWithObject: item
-                                                            andFontDescriptor: fontDescriptor];
-                
-                if (!fontDescriptor) {
-                    fontDescriptor = attt.fontDescriptor.copy;
-                    fontDescriptors[item.objectID] = fontDescriptor;
-                }
-                
-                [drawingObject drawWithRect: documentObjectBounds(item.frame, sectionRect.origin)
-                                    options: NSStringDrawingUsesLineFragmentOrigin
-                                 attributes: attt.fontAttributes
-                                    context: nil];
-                
-            } else {
-                [drawingObject drawInRect: documentObjectBounds(item.frame, sectionRect.origin)];
-            }
-            */
             line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
                                                                   type: item.documentObjectType
                                                                  frame: item.frame];

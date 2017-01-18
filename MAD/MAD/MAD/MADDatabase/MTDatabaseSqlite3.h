@@ -10,6 +10,9 @@
 #define Reports_MTDatabaseSqlite3_h
 
 #import "MTDatabaseCache.h"
+#import <Foundation/NSString.h>
+
+BOOL Sqlite3StepResultOK(int result);
 
 @class MTDatabaseDataBinding;
 
@@ -33,23 +36,46 @@ typedef NSString MADSqlite3SortDescription;
     - (void)openDatabaseWithFlags:(int)flags;
 
     int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
-    int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
-    + (NSString *)newNativeTypeForDataType:(MADDataType)dataType;
     + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
                                                                 ascending:(BOOL)ascending;
 
-    + (id)newValueForStatement:(void * /* sqlite3_stmt * */)statement
-                  columnNumber:(int)columnNumber;
-    + (id)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
-           withType:(MADDataType)type;
+    + (id <NSCopying>)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
+                       withType:(MADDataType)type;
+
+    - (BOOL)executeQuery:(MTQuery *)query withDataTable:(__kindof MTDataTable *)dataTable
+                andError:(NSError * __autoreleasing *)error;
 
     - (void)executeQueryWithSql:(NSString *)queryString
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
-      queryPartOfTransactionSet:(BOOL)queryPartOfTransactionSet;
+                 transactionSet:(BOOL)partOfTransactionSet;
+
+    - (BOOL)executeSql: (NSString *)sql
+             fieldKeys: (NSArray *)fieldKeys
+          onConnection: (id)dbconn
+       intoResultTable: (MTDataTable *)dataTable
+        transactionSet: (BOOL)partOfTransactionSet
+        returnsResults: (BOOL)returnsResults
+        binaryBindings: (NSArray *)binaryBindings
+             withError: (NSError * __autoreleasing *)resultError;
 
     void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
+
+@end
+
+@interface MADSqlite3NativeType : NSString
+
+    + (instancetype)newSqlite3NativeType:(MADDataType)dataType;
+
+@end
+
+@interface MADDatabaseResultValue : NSObject <NSCopying>
+
+    + (instancetype)newDatabaseResultValue:(void *)statement columnNumber:(int)columnNumber;
+    + (instancetype)newDatabaseResultValueCast: (void * /* sqlite3_stmt * */)statement
+                               forColumnNumber: (int)columnCounter
+                                      withType: (MADDataType)type;
 
 @end
 

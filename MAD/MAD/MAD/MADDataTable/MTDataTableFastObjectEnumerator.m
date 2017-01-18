@@ -152,7 +152,7 @@ void sqliteCallback(void *foo, const char* statement) {
     return i;
 }
 
-- (id)currentObject {
+- (id <NSCopying>)currentObject {
 
     NSMutableDictionary *currentObject;
     currentObject = _singleColumnNoWrapper ?
@@ -161,7 +161,8 @@ void sqliteCallback(void *foo, const char* statement) {
     
     int columnCounter = 0;
 
-    id columnValue, key;
+    id <NSCopying> columnValue;
+    id key;
 
     for (key in _columnKeys) {
         
@@ -173,7 +174,7 @@ void sqliteCallback(void *foo, const char* statement) {
             if (sqlite3DataType == SQLITE_NULL) {
                 columnValue = [NSNull null];
             } else {
-                columnValue = [MTDatabaseSqlite3 newValueForStatement:_statement
+                columnValue = [MADDatabaseResultValue newDatabaseResultValue:_statement
                                                          columnNumber:columnCounter];
             }
             

@@ -550,9 +550,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
     @autoreleasepool {
 
-        BOOL canMakePayments;
-        canMakePayments = [SKPaymentQueue canMakePayments];
-        _barButtonItemLicensing.enabled = canMakePayments;
+        _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
     }
     

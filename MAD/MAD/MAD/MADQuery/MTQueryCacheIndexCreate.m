@@ -22,74 +22,45 @@
 
 @interface MTQueryCacheIndexCreate ()
 
-@property (nonatomic, strong) NSString *indexName;
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *sortDescriptors;
-
 @end
 
-@implementation MTQueryCacheIndexCreate
+@implementation MTQueryCacheIndexCreate {
+    NSString *_sql;
+}
 
-- (instancetype)initWithObject:(id)object {
+- (instancetype)initWithObject:(MADQueryCacheIndexCreateParameters *)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
+        NSMutableString *sql;
+        NSArray *sortDescriptors = object.sortDescriptors;
+        if (sortDescriptors.count == 0) return self;
         
-        NSNumber *keyIndexName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateIndexName];
+        sql = [[NSMutableString alloc] initWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (", object.groupName, object.tableName];
         
-        NSString *indexName = object[keyIndexName];
-        self.indexName = indexName;
-
-        NSNumber *keyTableName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateTableName];
-        NSString *tableName = object[keyTableName];
-        self.tableName = tableName;
-        
-        NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateSortDescriptors];
-        NSArray *sortDescriptors = object[keySortDescriptors];
-        self.sortDescriptors = sortDescriptors;
-        
-        NSNumber *keyColumns = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateColumns];
-        NSDictionary *columns = object[keyColumns];
-        self.columns = columns;
-        
-        self.queryObject = object;
-        
+        NSDictionary *columns;
+        columns = object.columns;
+        MADSqlite3SortDescription *sortDirection;
+        NSUInteger sortCounter = 0;
+        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+            
+            NSString *keySortDescriptor = sortDescriptor.key;
+            
+            MADDataColumn *column = columns[keySortDescriptor];
+            
+            NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+            sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
+                                                                            ascending: sortDescriptor.ascending];
+            [sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
+            sortCounter++;
+        }
+        [sql appendString:@")"];
+        _sql = sql;
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-
-    NSMutableString *sql = [[NSMutableString alloc] init];
-
-    if (self.sortDescriptors.count > 0) {
-
-        NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ ", self.indexName, self.tableName];
-        [sql appendString: queryCreateIndexFirstPart];
-        
-        if (self.sortDescriptors.count > 0) {
-        
-            [sql appendString:@" ("];
-
-            NSUInteger sortCounter = 0;
-            for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
-
-                if (sortCounter != 0) [sql appendString:@", "];
-                
-                NSString *keySortDescriptor = sortDescriptor.key;
-                MADDataColumn *column = self.columns[keySortDescriptor];
-                
-                NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-                MADSqlite3SortDescription *sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: column.nativeType
-                                                                                                           ascending: sortDescriptor.ascending];
-                [sql appendFormat:@"%@ %@", keySortDescriptor, sortDirection];
-                sortCounter++;
-            }
-            [sql appendString:@" )"];
-        }
-    }
-    
-    return sql;
+    return _sql;
 }
 
 - (BOOL)returnsResults { return NO; }

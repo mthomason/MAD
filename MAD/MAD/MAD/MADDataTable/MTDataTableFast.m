@@ -63,6 +63,13 @@
 #import "MADQueryCacheIndexDropParameters.h"
 #import "MADQuerySelectParameters.h"
 
+#import "MTDatabaseSqlite3.h"
+
+#import "MADQueryCacheIndexCreateParameters.h"
+
+#import "MTDatabase.h"
+#import "MADDatabaseProtocol.h"
+
 #import "MADQueryCacheIndexCreateParameters.h"
 
 #import <stdio.h>
@@ -137,8 +144,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
         NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
         self.groupKeyIndexes = groupKeys;
-        
-        [self reopenDbConnection];
+    
     }
     return self;
 }
@@ -182,7 +188,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     self.queueBulkAdd = queue;
 
     id keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
-    NSString * __weak absoluteString = plist[keyUrlFastCache];
+    NSString *absoluteString = plist[keyUrlFastCache];
     NSURL *url = [[NSURL alloc] initWithString:absoluteString];
     self.urlFastCache = url;
     
@@ -363,7 +369,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     BOOL success = NO;
     NSError * __autoreleasing *errorQuery = NULL;
 
-    NSString *columnAffinity = [_databaseForInserts newNativeTypeForDataType: column.type];
+    NSString *columnAffinity;
+    columnAffinity = [MADSqlite3NativeType newSqlite3NativeType: column.type];
 
     MTQueryCache *query = [[MTQueryCacheAddColumn alloc] initWithTableName: table
                                                                 columnName: columnName
@@ -399,9 +406,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         MTDatabaseSqlite3 *dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
         
         [dbForInserts executeQueryWithSql: sql
-                           queryBinaryBindings: binaryBindings
-                                queryFieldKeys: fieldKeys
-                     queryPartOfTransactionSet: YES];
+                      queryBinaryBindings: binaryBindings
+                           queryFieldKeys: fieldKeys
+                           transactionSet: YES];
         
     } else {
 
@@ -439,46 +446,50 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     //@autoreleasepool {
         
-        NSMutableArray *rowData = [[NSMutableArray alloc] init];
-        for (id columnDefKey in self.columnKeys) {
+    NSMutableArray *rowData = [[NSMutableArray alloc] init];
+    NSMutableArray *columnKeys = self.columnKeys;
+    for (id columnDefKey in columnKeys) {
         
-            MADDataColumn *columnDef = self.columns[columnDefKey];
-            id obj = row[columnDef.fieldName];
-            if (obj == nil) obj = [NSNull null];
-            [rowData addObject:obj];
-            
-        }
-        [self addRow:rowData];
+        MADDataColumn *columnDef = self.columns[columnDefKey];
+        id obj = row[columnDef.fieldName];
+        if (obj == nil) obj = [NSNull null];
+        [rowData addObject:obj];
         
+    }
+    [self addRow:rowData];
+    
     //}
     
 }
 
-- (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+- (void)sortUsingDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors {
 
     [_groupKeyIndexes removeAllIndexes];
-    if (self.columnKeys.count > 0 && self.columns.count > 0) {
-        
-        if (sortDescriptors.count > 0 /*&& self.sortDescriptorsSet == NO*/) {
+    
+    if (self.columnKeys.count > 0 && self.columns.count > 0 && sortDescriptors.count > 0) {
             
-            NSMutableArray <__kindof NSSortDescriptor *> *newSortDescriptors = [[NSMutableArray <__kindof NSSortDescriptor *> alloc] initWithCapacity:sortDescriptors.count];
+        NSMutableArray <__kindof NSSortDescriptor *> *newSortDescriptors;
+        newSortDescriptors = [[NSMutableArray <__kindof NSSortDescriptor *> alloc] initWithCapacity:sortDescriptors.count];
 
             NSUInteger groupKeyCounter;
-            for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+        NSArray *columnKeys;
+        
+        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
                 groupKeyCounter = 0;
 
-                NSArray *columnKeys = self.columnKeys;
+                columnKeys = self.columnKeys;
                 for (NSString *columnKey in columnKeys) {
                     
                     @autoreleasepool {
                         MADDataColumn *column = self.columns[columnKey];
                         NSString *key = sortDescriptor.key;
-                        if (key && [column.fieldName isEqualToString: key]) {
+                        if (key.length > 0 && [column.fieldName isEqualToString: key]) {
                         
                             SEL sortAlgo = MADDataTypeSelectorForSorting(column.type);
-                            NSSortDescriptor *newSortDescriptor = [[NSSortDescriptor alloc] initWithKey: columnKey
-                                                                                              ascending: sortDescriptor.ascending
-                                                                                               selector: sortAlgo];
+                            NSSortDescriptor *newSortDescriptor;
+                            newSortDescriptor = [[NSSortDescriptor alloc] initWithKey: columnKey
+                                                                            ascending: sortDescriptor.ascending
+                                                                             selector: sortAlgo];
                             [newSortDescriptors addObject:newSortDescriptor];
                             
                             [_groupKeyIndexes addIndex:groupKeyCounter];
@@ -493,7 +504,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                     self.sortDescriptors = newSortDescriptors;
                 }
             }
-        }
+        
     } else {
         NSMutableArray *sd = [[NSMutableArray alloc] initWithArray:sortDescriptors];
         self.sortDescriptors = sd;
@@ -527,34 +538,29 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return results;
 }
 
-- (NSString *)cacheTableNameForGroupLevel:(NSInteger)groupLevel {
-    return [NSString stringWithFormat:@"s%ld", (long)groupLevel];
+- (NSString *)cacheTableNameForGroupLevel:(NSUInteger)groupLevel {
+    char buf[17];
+    buf[0] = 's';
+    ultoa(groupLevel, (buf+1));
+    char *ptr = buf;
+    id result = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    return result;
 }
 
 - (NSString *)indexNameForGroupLevel:(NSUInteger)groupLevel andIndex:(NSUInteger)index {
-    return [NSString stringWithFormat:@"i%ld%ld", (long)groupLevel, (long)index];
-}
-
-- (NSDictionary *)newIndexParametersForIndexName:(NSString *)indexName
-                                       tableName:(NSString *)tableName
-                              andSortDescriptors:(NSArray *)sortDescriptors {
-
-    MADMapDataColumns *columns = [MADMapDataColumns dictionaryWithDictionary: self.columns];
-    NSNumber *createIndexName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateIndexName];
-    NSNumber *createTableName = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateTableName];
-    NSNumber *createSortDescriptors = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateSortDescriptors];
-    NSNumber *createColumns = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateColumns];
-    NSDictionary * parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                            indexName, createIndexName,
-                                            tableName, createTableName,
-                                            sortDescriptors, createSortDescriptors,
-                                            columns, createColumns, nil];
-    return parameters;
+    char buf[17];
+    buf[0] = 'i';
+    ultoa(groupLevel, (buf+1));
+    ultoa(index, (buf+1));
+    char *ptr = buf;
+    id result = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    return result;
 }
 
 - (void)createIndex {
+    id <MADDataProtocol> dataDelegate = self.dataDelegate;
     
-    NSArray *sortDescriptors = [self.dataDelegate sortDescriptors];
+    NSArray <NSSortDescriptor *> *sortDescriptors = [dataDelegate sortDescriptors];
     [self.sortDescriptors setArray:sortDescriptors];
     [self sortUsingDescriptors:self.sortDescriptors];
     
@@ -563,23 +569,35 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors: self.sortDescriptors];
     
     NSUInteger groupCounter = 0;
+    NSMutableArray *queries = [[NSMutableArray alloc] initWithCapacity:sortDescriptorGroups.count];
+    
+    MADQueryCacheIndexCreateParameters *parameters;
+    parameters = [[MADQueryCacheIndexCreateParameters alloc] init];
+    parameters.columns = self.columns;
+    parameters.tableName = self.tableName.copy;
+    
     for (NSArray *sortDescriptorGroup in sortDescriptorGroups) {
-
+        
         if (sortDescriptorGroup.count > 0) {
-            NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
-            NSString *tableName = [self tableName];
-            NSDictionary *parameters = [self newIndexParametersForIndexName: groupName
-                                                                  tableName: tableName
-                                                         andSortDescriptors: sortDescriptorGroup];
+            parameters.sortDescriptors = sortDescriptorGroup;
+            parameters.groupName = [self indexNameForGroupLevel: sortDescCtr
+                                                      andIndex: groupCounter].copy;
             
             MTQuery *queryCreateIndex = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
-            queryCreateIndex.dataDelegate = self.dataDelegate;
-            BOOL success;
-            NSError * __autoreleasing *errorQuery = NULL;
-            success = [self.databaseForInserts executeQuery:queryCreateIndex withError:errorQuery];
+            queryCreateIndex.dataDelegate = dataDelegate;
+            
+            NSError * __autoreleasing *sqlError = NULL;
+            NSString *sqlResult = [queryCreateIndex getSqlWithError: sqlError];
+            if (sqlResult.length > 0) {
+                queries[groupCounter] = sqlResult.copy;
+            }
+            groupCounter++;
         }
-        groupCounter++;
     }
+    NSString *queryString = [queries componentsJoinedByString:@";\n"];
+    char *zErr = NULL;
+    int exec_result = sqlite3_exec(self.databaseForInserts.databaseHandle, queryString.UTF8String, NULL, NULL, &zErr);
+    NSAssert(exec_result != SQLITE_ABORT, @"%s at %s", sqlite3_errmsg(self.databaseForInserts.databaseHandle), __PRETTY_FUNCTION__);
 }
 
 - (void)dropIndex {
@@ -596,9 +614,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         parameters = [[NSDictionary alloc] initWithObjectsAndKeys: groupName, key, nil];
         NSError * __autoreleasing *errorQuery = NULL;
         query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
-        success = [self.databaseForInserts executeQuery:query withError:errorQuery];
-        NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
-                 __PRETTY_FUNCTION__);
+        success = [self.databaseForInserts executeQuery:query withDataTable:self andError:errorQuery];
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database), __PRETTY_FUNCTION__);
         errorQuery = NULL;
     }
 }
@@ -769,8 +786,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
     
-    const char *sqlc = sql.UTF8String;
-    char *queryString = sqlite3_mprintf((char *) sqlc);
+    char *queryString = sqlite3_mprintf(sql.UTF8String);
     
     MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     
@@ -1030,8 +1046,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return [self.columnKeys indexOfObject:key];
 }
 
-- (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
-    return [MTDatabaseSqlite3 newValueForStatement:statement columnNumber:columnIndex];
+- (id <NSCopying>)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
+    id <NSCopying> result =  [MADDatabaseResultValue newDatabaseResultValue:statement columnNumber:columnIndex];
+    return result;
 }
 
 - (id)newCurrentObject:(sqlite3_stmt *)statement {
@@ -1040,8 +1057,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     int columnCounter = 0;
     for (NSString *key in self.columnKeys) {
         @autoreleasepool {
-            id columnValue = [MTDatabaseSqlite3 newValueForStatement: statement
-                                                        columnNumber: columnCounter];
+            id <NSCopying> columnValue = [MADDatabaseResultValue newDatabaseResultValue: statement
+                                                                           columnNumber: columnCounter];
             if (columnValue != nil) {
                 MADDataColumn *dataColumn = self.columns[key];
                 [currentObject setValue: columnValue
