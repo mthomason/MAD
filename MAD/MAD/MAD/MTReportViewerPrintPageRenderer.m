@@ -153,7 +153,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 }
 
 - (void)dealloc {
-
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #pragma -

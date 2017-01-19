@@ -444,8 +444,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
     [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
     
-    [[NSOperationQueue currentQueue] addOperationWithBlock:^{
-        [document regenThumbnail];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        //[document regenThumbnail];
     }];
     
 }
@@ -1097,8 +1097,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = self->_startedRefresh;
     [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
     
-    MTReportViewerPrintPageRenderer *printPageRenderer =
-    [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+    MTReportViewerPrintPageRenderer *printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
     self.printPageRendererReport = printPageRenderer;
     
     [self ignoreFormatter: document.reportFormatter];
@@ -1750,7 +1749,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 }*/
 
 - (BOOL)isAsynchronous {
-    return NO;
+    return YES;
 }
 
 - (BOOL)isFinished { return _finished; }

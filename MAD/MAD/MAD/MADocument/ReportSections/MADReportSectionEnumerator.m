@@ -13,11 +13,6 @@
 #import "RptqDatabase.h"
 #import "RptqDocument+Extras.h"
 
-const NSInteger MADIndexMutationPointer = 0;
-const NSInteger MADIndexGroupCounter    = 1;
-const NSInteger MADIndexSectionCount    = 2;
-const NSInteger MADIndexGroupCount      = 3;
-
 @interface MADReportSectionEnumerator ()
 
     @property (nonatomic, readwrite, strong) RptqQuery *query;
@@ -45,6 +40,11 @@ const NSInteger MADIndexGroupCount      = 3;
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
                                   objects:(id __unsafe_unretained [])stackbuf
                                     count:(NSUInteger)stackbufLength {
+    static const NSInteger MADIndexMutationPointer = 0;
+    static const NSInteger MADIndexGroupCounter    = 1;
+    static const NSInteger MADIndexSectionCount    = 2;
+    static const NSInteger MADIndexGroupCount      = 3;
+    
     NSUInteger count = 0;
     
     RptqQuery *query = _query;

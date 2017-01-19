@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDatabaseSqlite3_h
-#define Reports_MTDatabaseSqlite3_h
+#ifndef Reports_MADDatabaseSqlite3_h
+#define Reports_MADDatabaseSqlite3_h
 
+#import "MTDatabase.h"
+#import "MTDatabaseSqlite3.h"
 #import "MTDatabaseCache.h"
 #import <Foundation/NSString.h>
 
@@ -18,8 +20,11 @@ BOOL Sqlite3StepResultOK(int result);
 
 typedef NSString MADSqlite3SortDescription;
 
-@interface MTDatabaseSqlite3 : MTDatabaseCache
-
+@interface MTDatabaseSqlite3 : MTDatabase
+<MADDatabaseCacheProtocol> {
+  @public
+    void * /* sqlite3 * */ _database;
+}
     - (void *)databaseHandle NS_RETURNS_INNER_POINTER;
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 

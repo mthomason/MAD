@@ -320,15 +320,19 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return tableName;
 }
 
+- (NSString *)columnNameForIdentifier:(NSString *)identifier {
+    char buf[17];
+    buf[0] = 'c';
+    ultoa(identifier.hash, (buf+1));
+    char *ptr = buf;
+    NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    return tableName;
+}
+
 - (void)addColumn:(MADDataColumn *)column {
 
     BOOL createTable = self.columnKeys.count == 0;
-    char buf[17];
-    buf[0] = 'c';
-    ultoa(column.identifier.hash, (buf+1));
-    char *ptr = buf;
-
-    NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    NSString *columnName = [self columnNameForIdentifier:column.identifier];
     
     self.columns[columnName] = column;
     [self.columnKeys addObject:columnName];
@@ -678,6 +682,58 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId andColumnIdentifier:(NSString *)columnIdentifier {
+    NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
+    NSArray *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
+    NSAssert([self.columnKeys containsObject:columnName], @"Searching for a field that doesn't exist");
+
+    NSDictionary * result = nil;
+    NSString *tableName = [self tableName].copy;
+    
+    NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
+    NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
+    NSNumber *keyTableNmae = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+    
+    NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:cacheId];
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             cacheID,           keyRowId,
+                             columnKeys,         keyFieldKey,
+                             tableName,          keyTableNmae, nil];
+    
+    MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
+                                                  object: options];
+    sqlite3_stmt *statement = NULL;
+    NSError *error = nil;
+    NSString *sql = [query getSqlWithError:&error];
+    
+    const char *sqlUTF8String = sql.UTF8String;
+    char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
+    
+    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+    BOOL success = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1,
+                                      &statement, NULL) == SQLITE_OK;
+    
+    if (success) {  //Expect success to == NO in normal working conditions.
+        int stepResult = sqlite3_step(statement);
+        if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+            result = [self newCurrentObject:statement fieldKey:columnName];
+            
+            //MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId
+            //                                                      andObject:result];
+            //self.lastDataForCacheId = lastDataForCacheId;
+            
+        } else {
+            // FIXME: Log error.
+            result = [[NSDictionary alloc] init];
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    sqlite3_free(queryString);
+    
+    return result;
+}
+
 // FIXME: Return error handler... remove credentals
 - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
     
@@ -694,13 +750,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
     NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
     NSNumber *keyTableNmae = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-    NSNumber *keyFieldDef = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
-    
+    NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:cacheId];
+
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @(cacheId),            keyRowId,
+                                    cacheID,            keyRowId,
                                     self.columnKeys,    keyFieldKey,
-                                    tableName,          keyTableNmae,
-                                    self.columns,       keyFieldDef , nil];
+                                    tableName,          keyTableNmae, nil];
     
     MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
                                                   object: options];
@@ -711,7 +766,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
 
-    MTDatabaseCache *databaseForSelects = self.databaseForSelects;
+    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     BOOL success = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1,
                                       &statement, NULL) == SQLITE_OK;
     
@@ -831,7 +886,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         const char *sqlc = sql.UTF8String;
         char *queryString = sqlite3_mprintf((char *) sqlc);
         
-        MTDatabaseCache *databaseForSelects = self.databaseForSelects;
+        MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 
         BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,
                                           queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -1051,9 +1106,25 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return result;
 }
 
+- (id)newCurrentObject:(sqlite3_stmt *)statement fieldKey:(NSString *)fieldKey {
+    NSDictionary *currentObject;
+    currentObject = [[NSMutableDictionary alloc] initWithCapacity:2];
+    id <NSCopying> columnValue = [MADDatabaseResultValue newDatabaseResultValue: statement
+                                                                   columnNumber: 0];
+    if (columnValue != nil) {
+        MADDataColumn *dataColumn = self.columns[fieldKey];
+        [currentObject setValue: columnValue
+                         forKey: dataColumn.identifier];
+    }
+    NSNumber *rowid;
+    rowid = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, 1)];
+    [currentObject setValue:rowid forKey:MADIdentifierROWID];
+    return currentObject;
+}
+
 - (id)newCurrentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject;
-    currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
+    currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count + 1];
     int columnCounter = 0;
     for (NSString *key in self.columnKeys) {
         @autoreleasepool {

@@ -12,7 +12,7 @@
 
 #import "MADocument.h"
 
-#import "MADReportSections.h"
+#import "MADReportSectionsEnumerator.h"
 
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
@@ -213,8 +213,6 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
 
-    @property (nonatomic, readwrite, strong) MADReportSections *reportSections;
-
     @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
     @property (nonatomic, readwrite, strong) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
     @property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;
@@ -384,18 +382,6 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 #pragma mark -
-#pragma mark Lazy Load Document Model
-
-- (MADReportSections *)reportSections {
-    if (_reportSections == nil) {
-        RptqDocument *document = [self activeDocumentModel];        
-        id reportSections = [[MADReportSections alloc] initWithDocument: document];
-        _reportSections = reportSections;
-    }
-    return _reportSections;
-}
-
-#pragma mark -
 #pragma mark Static Helpers
 
 + (void)close:(MADocument *)document
@@ -511,7 +497,7 @@ void madwarn(char *err,  const char*err2) { }
                                                                     MADSectionLayoutManager *sectionLayoutManager,
                                                                     BOOL *stop) {
         
-        NSNumber *height = [[NSNumber alloc] initWithFloat:sectionLayoutManager.size.height];
+        NSNumber *height = [[NSNumber alloc] initWithDouble:sectionLayoutManager.size.height];
         dictionary[key] = height;
         
     }];
@@ -1390,7 +1376,6 @@ READFROMURL_END:;
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendString:@"-------------------------------\n"];
     [debug appendFormat:@"Filename:\t%@\n", [self filename]];
-    [debug appendFormat:@"Sections:\t%@\n", [self reportSections]];
     [debug appendString:@"-------------------------------\n"];
     return debug;
 }

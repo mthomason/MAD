@@ -1,12 +1,12 @@
 //
-//  MADReportSections.m
+//  MADReportSectionsEnumerator.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/25/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReportSections.h"
+#import "MADReportSectionsEnumerator.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSString.h>
@@ -28,33 +28,38 @@
   #import <Foundation/NSString.h>
 #endif
 
-@interface MADReportSections ()
+@interface MADReportSectionsEnumerator ()
 
-    @property (nonatomic, readwrite, strong)    RptqDocument *document;
-    @property (nonatomic, readwrite, strong)    RptqQuery *mainQuery;
-    @property (nonatomic, readwrite, strong)    MADReportSectionEnumerator *sectionEnumerator;
+    @property (nonatomic, readwrite, strong) RptqDocument *document;
+    @property (nonatomic, readwrite, strong) RptqQuery *mainQuery;
+    @property (nonatomic, readwrite, strong) MADReportSectionEnumerator *sectionEnumerator;
+
+    @property (nonatomic, readwrite, strong) MADReportSection *reportHeader;
+    @property (nonatomic, readwrite, strong) MADReportSection *pageHeader;
+    @property (nonatomic, readwrite, strong) NSArray <MADReportSection *> *groupHeaders;
+    @property (nonatomic, readwrite, strong) MADReportSection *detail;
+    @property (nonatomic, readwrite, strong) NSArray <MADReportSection *> *groupFooters;
+    @property (nonatomic, readwrite, strong) MADReportSection *pageFooter;
+    @property (nonatomic, readwrite, strong) MADReportSection *reportFooter;
 
 @end
 
-@implementation MADReportSections {
+@implementation MADReportSectionsEnumerator {
     NSUInteger _numberOfGroups;
-    MADReportSection *_reportHeader;
-    MADReportSection *_pageHeader;
-    NSMutableArray <MADReportSection *> *_groupHeaders;
-    MADReportSection *_detail;
-    NSMutableArray <MADReportSection *> *_groupFooters;
-    MADReportSection *_pageFooter;
-    MADReportSection *_reportFooter;
 }
+
+@synthesize reportHeader = _reportHeader;
+@synthesize pageHeader = _pageHeader;
+@synthesize groupHeaders = _groupHeaders;
+@synthesize detail = _detail;
+@synthesize groupFooters = _groupFooters;
+@synthesize pageFooter = _pageFooter;
+@synthesize reportFooter = _reportFooter;
 
 #pragma mark -
 #pragma mark NSObject
 
-- (void)dealloc {
-    NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
-    [_document.mainQuery removeObserver: self
-                             forKeyPath: path];
-}
+- (void)dealloc { }
 
 #pragma mark -
 #pragma mark Constructors
@@ -80,31 +85,6 @@
         _document = document;
     }
     return self;
-}
-
-#pragma mark -
-#pragma mark KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    
-    NSString *pathToObserve = NSStringFromSelector(@selector(hasQueryGroups));
-    if ([keyPath isEqualToString: pathToObserve]) {
-    
-        //reset the group count and read remove the group objects so they will be read again
-        //  next time around.
-        _numberOfGroups = ((RptqQuery *)object).hasQueryGroups.count;
-        
-        [_groupHeaders removeAllObjects];
-        _groupHeaders = nil;
-
-        [_groupFooters removeAllObjects];
-        _groupFooters = nil;
-        
-    }
-    
 }
 
 #pragma mark -
@@ -194,6 +174,10 @@
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
                                   objects:(id __unsafe_unretained [])stackbuf
                                     count:(NSUInteger)stackbufLength {
+    static const NSInteger MADIndexMutationPointer = 0;
+    static const NSInteger MADIndexGroupCounter    = 1;
+    static const NSInteger MADIndexSectionCount    = 2;
+    static const NSInteger MADIndexGroupCount      = 3;
     NSUInteger count = 0;
     
     unsigned long countOfItemsAlreadyEnumerated = state->state;

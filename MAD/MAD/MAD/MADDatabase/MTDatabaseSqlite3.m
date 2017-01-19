@@ -166,10 +166,8 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (BOOL)tableExist:(NSString *)tablename {
     BOOL exist = NO;
-	NSString *query;
-    query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
     sqlite3_stmt *statement = NULL;
-    const char *queryc = query.UTF8String;
+    const char *queryc = "SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
 	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
         const char *t = tablename.UTF8String;
         int bind_result = sqlite3_bind_text(statement, 1, t, (int)strlen(t), SQLITE_STATIC);
@@ -182,7 +180,7 @@ void sqliteLog(void *foo, const char* statement) {
     return exist;
 }
 
-- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
 	sqlite3_stmt *statement;

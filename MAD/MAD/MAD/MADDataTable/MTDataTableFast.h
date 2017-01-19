@@ -14,7 +14,7 @@
 @protocol MTCacheProtocol;
 @protocol MADDataProtocol;
 
-@class MTDatabaseCache;
+@class MTDatabaseSqlite3;
 @class MTQuery;
 @class MTDatabaseSqlite3;
 
@@ -31,6 +31,8 @@
     - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
     - (id)runSelectQuery:(MTQuery *)query;
+
+    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId andColumnIdentifier:(NSString *)columnIdentifier;
 
 @end
 

@@ -36,7 +36,7 @@
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
 
-    @property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
+    @property (nonatomic, strong) MTDatabaseSqlite3 *databaseForQuery;
     @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
 @end
@@ -61,7 +61,7 @@ void sqliteCallback(void *foo, const char* statement) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;
 
-        MTDatabaseCache *database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
+        MTDatabaseSqlite3 *database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
         self.databaseForQuery = database;
 
         self.empty = columnKeys.count == 0;

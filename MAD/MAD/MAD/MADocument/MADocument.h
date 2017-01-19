@@ -27,7 +27,6 @@
 
 @class MADActivityIndicator;
 
-@class MADReportSections;
 @class MADocumentState;
 @class MADSectionLayoutManager;
 @class MTQueryFull;
@@ -55,8 +54,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
     @property (readonly)                        RptqDocument    *activeDocumentModel;
-
-    @property (nonatomic, readonly, strong)     MADReportSections *reportSections;
 
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
 

@@ -115,7 +115,9 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 @implementation MTReportFormatter
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithDocument: (MADocument *)layout
                          options: (MTReportFormatterOptions)options  {
@@ -265,6 +267,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     [self.machineState resetWithDocument:(layout).activeDocumentModel
                          andDataDelegate:self.dataDelegate];
 
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [layout resetSectionLayoutManagers];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
@@ -644,7 +647,8 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     
     id pageInfo = self.pageLayoutTemporary != nil ?
                             [MADMutableSectionArray arrayWithArray: self.pageLayoutTemporary] :
-                            @[];
+                            [[NSArray alloc] init];
+    
     [self.reportLayout addObject:pageInfo];
     
     MADIndexArray *rowids = self.pageIndexesTemporary != nil ?

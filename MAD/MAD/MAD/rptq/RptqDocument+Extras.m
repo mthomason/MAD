@@ -54,7 +54,7 @@
 #import "MADErrorContainer.h"
 #import "MTDatabaseTable.h"
 
-#import "MADReportSections.h"
+#import "MADReportSectionsEnumerator.h"
 
 #import "MADDatabaseConnection.h"
 

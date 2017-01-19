@@ -37,12 +37,13 @@
         
         datasource = definition.datasource;
         item = definition.item;
+        NSString *qa = [item.isLabelDataField.referencesQueryField.inQueryTable copyQueryAlias];
+        NSString *tableFieldKey = [datasource.database newSafeQueryField: item.isLabelDataField.referencesQueryField.databaseSchemaField.name
+                                                                andTable: qa];
 
-        NSDictionary *rowData = [datasource.dataTable copyDataForCacheId:definition.detailRowId];
+        NSDictionary *rowData = [datasource.dataTable copyDataForCacheId: definition.detailRowId
+                                                     andColumnIdentifier: tableFieldKey];
         if (rowData != nil) {
-            NSString *qa = [item.isLabelDataField.referencesQueryField.inQueryTable copyQueryAlias];
-            NSString *tableFieldKey = [datasource.database newSafeQueryField: item.isLabelDataField.referencesQueryField.databaseSchemaField.name
-                                                                    andTable: qa];
             
             NSString *text = [item.isLabelDataField formattedString: item.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.shortValue
                                                            forValue: rowData[tableFieldKey]];

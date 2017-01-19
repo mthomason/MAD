@@ -45,9 +45,13 @@
         case MTDocumentObjectTypeLabelStatic:
             documentObject = [[MADDocumentObjectLabelStatic alloc] initWithDefinition:definition];
             break;
-            
+        //case MTDocumentObjectTypeWhtiespace:
+        //case MTDocumentObjectTypeGroupKey:
+        //case MTDocumentObjectTypeChart:
+        //case MTDocumentObjectTypeFormula:
+        //case MTDocumentObjectTypeAggregateFunctionList:
         default:
-            documentObject = @"";
+            documentObject = nil;
             break;
     }
     return documentObject;

@@ -41,7 +41,7 @@
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
-#import <MAD/MADReportSections.h>
+#import <MAD/MADReportSectionsEnumerator.h>
 #import <MAD/MADReportSection.h>
 
 #import <MAD/MADocument.h>
@@ -555,21 +555,19 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    
     [self addObservers];
     
     MADBackgroundScrollView *scroller = _scroller;
-    //MADTabBarController *tabBarController = self.tabBarController;
 
     _lastMenuItemSelectRequiresElementView = NO;
     _zoomScaleRestore = scroller.zoomScale;
     [scroller setZoomScale: 1.0000f animated: NO];
 
-    MADReportSections *reportSections = self.document.reportSections;
-
+    RptqDocument *document = [self.document activeDocumentModel];
+    MADReportSectionsEnumerator *reportSectionsEnumerator = [[MADReportSectionsEnumerator alloc] initWithDocument:document];
+    
     NSInteger sectionCounter = 0;
-    NSUInteger numberOfSections = reportSections.count;
+    NSUInteger numberOfSections = reportSectionsEnumerator.count;
     
     [scroller.container addSubview:self.ruler];
     
@@ -637,7 +635,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     NSArray *collectionViewConstraints, *sectionViewLabelConstraints;
     UIGestureRecognizer *strayTouchGesture = self.strayTouchGesture;
 
-    for (MADReportSection *reportSection in reportSections) {
+    for (MADReportSection *reportSection in reportSectionsEnumerator) {
         NSManagedObjectID *reportSectionKey;
         MADDesignerSectionView *sectionView;
         MADDesignerSectionLabel *sectionViewLabel;

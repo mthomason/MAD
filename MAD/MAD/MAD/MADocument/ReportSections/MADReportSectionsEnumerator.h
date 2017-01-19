@@ -1,5 +1,5 @@
 //
-//  MADReportSections.h
+//  MADReportSectionsEnumerator.h
 //  MAD
 //
 //  Created by Michael Thomason on 6/25/16.
@@ -32,7 +32,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 }
 
 
-@interface MADReportSections : NSObject
+@interface MADReportSectionsEnumerator : NSObject
     <NSFastEnumeration>
 
     - (instancetype)initWithDocument:(RptqDocument *)document NS_DESIGNATED_INITIALIZER;

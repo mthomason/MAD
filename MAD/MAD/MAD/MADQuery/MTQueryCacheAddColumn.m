@@ -54,7 +54,6 @@
         }
         
         NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
-                                                          database:self.database
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
                                                        createTable:createTable.boolValue ?
@@ -66,12 +65,14 @@
     return self;
 }
 
-- (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName
-                           column:(MADDataColumn *)column createTable:(BOOL)createTable
-                 uniqueColumnHack:(BOOL)uniqueColumnHack columnAffinity:(NSString *)columnAffinity {
+- (instancetype)initWithTableName: (NSString *)tableName
+                       columnName: (NSString *)columnName
+                           column: (MADDataColumn *)column
+                      createTable: (BOOL)createTable
+                 uniqueColumnHack: (BOOL)uniqueColumnHack
+                   columnAffinity: (NSString *)columnAffinity {
     if (self = [super init]) {
         NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
-                                                          database:self.database
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
                                                        createTable:createTable
@@ -89,7 +90,6 @@
 
 + (NSString *)newSqlWithTableName:(NSString *)tableName
                        columnName:(NSString *)columnName
-                         database:(MTDatabaseCache *)database
                          datatype:(MADDataType)datatype
                      isPrimaryKey:(BOOL)isPrimaryKey
                       createTable:(BOOL)createTable

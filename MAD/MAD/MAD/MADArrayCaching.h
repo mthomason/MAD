@@ -16,7 +16,7 @@
 @interface MADArrayCaching<ObjectType> : NSEnumerator
 
     @property (nonatomic, readwrite, weak, nullable) id <MTCacheProtocol> cachedDelegate;
-    @property (nonatomic, readonly, strong, nonnull) NSString * identifier;
+    @property (nonatomic, readonly, copy, nonnull) NSString * identifier;
     @property (readonly) long long int count;
 
     - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
@@ -32,7 +32,6 @@
     - (void)beginBulkInserts;
     - (void)endBulkInserts;
 
-    - (void)resetEnumerator;
     - (id _Nullable)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end

@@ -54,7 +54,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 
-#import "MADReportSections.h"
+#import "MADReportSectionsEnumerator.h"
 
 //#import "MAD"
 

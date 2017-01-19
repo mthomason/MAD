@@ -19,14 +19,11 @@ static NSString * const SqlFormat = @", %@";
 
 @interface MTQueryCacheSelectRowId ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, copy)   NSNumber *rowId;
-@property (nonatomic, strong) NSArray *columnKeys;
-@property (nonatomic, strong) NSString *columnNames;
-
 @end
 
-@implementation MTQueryCacheSelectRowId
+@implementation MTQueryCacheSelectRowId {
+    NSString *_sql;
+}
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
@@ -36,40 +33,20 @@ static NSString * const SqlFormat = @", %@";
         NSNumber *key = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
         NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
         NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
         
         NSArray *columnKeys = object[key];
-        if (columnKeys) {
-            NSArray *ck = [[NSArray alloc] initWithArray:columnKeys];
-            self.columnKeys = ck;
-        }
         
-        if (columnKeys.count > 0) {
-            NSString *firstKey = columnKeys.firstObject;
-            NSMutableString *columnNames = [[NSMutableString alloc] initWithString:firstKey];
-            NSArray *columnKeysMinusFirst = [columnKeys subarrayWithRange:NSMakeRange(1, columnKeys.count - 1)];
-            for (NSString *key in columnKeysMinusFirst) {
-                [columnNames appendFormat:SqlDelimitorObject, key];
-            }
-            self.columnNames = columnNames;
-        } else {
-            self.columnNames = WildCard;
-        }
- 
-        _rowId = ((NSNumber *)object[keyRowId]).copy;
+        NSString *columnNames = columnKeys.count > 0 ? [columnKeys componentsJoinedByString:@", "] : WildCard;
         
-        NSString *tableName = [[NSString alloc] initWithString: object[keyTableName]];
-        self.tableName = tableName;
-        
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithDictionary: object[keyFieldDescriptors]];
-        self.columns = columns;
-        
+        NSString *sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld",
+                         columnNames, object[keyTableName], (long)((NSNumber *)object[keyRowId]).integerValue];;
+        _sql = sql;
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    return [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld", self.columnNames, self.tableName, (long)self.rowId.integerValue];
+    return _sql;
 }
 
 @end
