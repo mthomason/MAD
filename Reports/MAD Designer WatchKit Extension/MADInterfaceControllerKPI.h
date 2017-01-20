@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <WatchKit/WatchKit.h>
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADInterfaceControllerKPI_h
+#define Reports_MADInterfaceControllerKPI_h
+
+#import <Foundation/WKInterfaceController.h>
 
 @interface MADInterfaceControllerKPI : WKInterfaceController
 
@@ -15,3 +17,5 @@
 @property (weak, nonatomic) IBOutlet WKInterfaceTable *tableKPI;
 
 @end
+
+#endif

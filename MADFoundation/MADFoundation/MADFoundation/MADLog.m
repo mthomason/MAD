@@ -8,6 +8,7 @@
 
 #import "MADLog.h"
 #import <asl.h>
+#import <Foundation/NSBundle.h>
 
 aslmsg mad_log_next(aslresponse response);
 void mad_log_free(aslresponse response);

@@ -211,6 +211,13 @@
     return (RptqDocumentSection *)[managedObjectContext objectWithID:objectID];
 }
 
+
++ (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
+                          withNumberOfSections:(NSUInteger)numberOfSections {
+    return [self getSectionTypeforRow: row
+                   withNumberOfGroups: (numberOfSections > 5 ? (numberOfSections - 2 - 2 - 1) / 2 : 0)];
+}
+
 + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
                             withNumberOfGroups:(NSUInteger)numberOfGroups {
     NSUInteger documentHeader    = 0;

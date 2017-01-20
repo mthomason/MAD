@@ -102,9 +102,6 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @interface MTReportViewerPrintPageRenderer ()
 
-    @property (nonatomic, assign) BOOL showWaterMark;
-    @property (nonatomic, assign) BOOL accessibilityCacheNeedsUpdate;
-
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
     @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
 
@@ -121,7 +118,11 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @end
 
-@implementation MTReportViewerPrintPageRenderer
+@implementation MTReportViewerPrintPageRenderer {
+    BOOL _showWaterMark;
+    BOOL _accessibilityCacheNeedsUpdate;
+    NSUInteger _accessibilityCurrentPageIndex;
+}
 
 + (void)initialize {
     [super initialize];
@@ -168,8 +169,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
         
         self.textRepresentationQueue =  queue;
         
-        self.showWaterMark = NO;
-        self.accessibilityCacheNeedsUpdate = NO;
+        _showWaterMark = NO;
+        _accessibilityCacheNeedsUpdate = NO;
         self.dataReference = [[MADDocumentObjectDataReference alloc] initWithDataSource:datasource];
 
 
@@ -353,7 +354,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     
     [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 
-    if (self.showWaterMark) {
+    if (_showWaterMark) {
         [MTReportViewerPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
     }
 
@@ -378,16 +379,15 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     document = (reportFormatter.layout).activeDocumentModel;
     
     NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
-    NSArray *pageSections = layoutEnumerator.allObjects;
     
     MADReportPageRepresentation *pageRepresentation =
-            [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
+            [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
     
     RptqDocumentSection *documentSection;
     MADReportSectionRepresentation *sectionRepresentation;
     
     self.dataReference.pageIndex = pageIndex;
-    for (MADSectionRepresentation *pageSection in pageSections) {
+    for (MADSectionRepresentation *pageSection in layoutEnumerator) {
 
         self.dataReference.detailRowId = pageSection.detailRowId;
         
@@ -454,6 +454,15 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     return sectionRepresentation;
 }
 
+- (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [[self backgroundColorForDocumentSectionType:type] setFill];
+    CGPathRef path = CGPathCreateWithRect(rect, NULL);
+    CGContextAddPath(ctx, path);
+    CGContextDrawPath(ctx, kCGPathFill);
+    CGPathRelease(path);
+}
+
 - (MADReportSectionRepresentation *)drawSection: (MADSectionRepresentation *)pageSection
                                 documentSection: (RptqDocumentSection *)documentSection
                                          inRect: (CGRect)sectionRect
@@ -467,34 +476,30 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
     RptqDocumentSectionRows *row;
     RptqDocumentObject *item;
-    NSOrderedSet <RptqDocumentObject *> *items;
 
     id drawingObject;
 
-    NSOrderedSet <RptqDocumentSectionRows *> *rows;
-    rows = documentSection.hasRows;
-
-    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
+    NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
+    
+    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:0];
     sectionRepresentation.type = pageSection.sectionType;
     sectionRepresentation.elementOffset = offsetElement;
     
+    NSEnumerator *documentObjectEnumerator;
     if (!((sectionRepresentation.visibility =
            documentSection.visibility.boolValue))) goto END_DrawSection;
     
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [[self backgroundColorForDocumentSectionType:[documentSection getDocumentSectionType]] setFill];
-
-    CGPathRef path = CGPathCreateWithRect(sectionRect, NULL);
-    CGContextAddPath(ctx, path);
-    CGContextDrawPath(ctx, kCGPathFill);
-    CGPathRelease(path);
-
-    for (row in rows) {
+    MADDocumentSectionType type = [documentSection getDocumentSectionType];
+    [self setBackgroundColorForSectionType: type
+                                    inRect: sectionRect];
+    
+    for (row in rowsEnumerator) {
         
-        items = row.hasObjects;
+        documentObjectEnumerator = row.hasObjects.objectEnumerator;
         rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
-                             initWithNumberOfSectionRowElements:items.count];
-        for (item in items) {
+                             initWithNumberOfSectionRowElements:0];
+        
+        for (item in documentObjectEnumerator) {
 
             self.dataReference.item = item;
 

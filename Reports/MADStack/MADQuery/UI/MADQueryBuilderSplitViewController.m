@@ -131,7 +131,7 @@ static NSString * const TextRedraw = @"Redraw";
     id redraw = NSLocalizedString(TextRedraw, TextRedraw);
     
     id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                         target: self
+                                                                         target: self.parentViewController
                                                                          action: @selector(done:)];
     self.barButtonItemDone = barButtonItemDone;
     
@@ -176,12 +176,18 @@ static NSString * const TextRedraw = @"Redraw";
     }
 }
 
-- (void)viewDidLayoutSubviews {
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSArray *toolbarItems = [[NSArray alloc] initWithObjects:_barButtonItemSQL, nil];
+    [self setToolbarItems:toolbarItems animated:YES];
+    [self.detailNavigationController setToolbarItems:toolbarItems animated:animated];
+    [self.view setNeedsLayout];
+}
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     UIView *titleView = self.navigationItem.titleView;
     [titleView sizeToFit];
-    
-    [super viewDidLayoutSubviews];
 }
 
 - (NSString *)title {
@@ -265,15 +271,16 @@ static NSString * const TextRedraw = @"Redraw";
     //[queryBuilderController reloadMainDocumentAnimated: animated];
     
     NSNumber *animateObject = [[NSNumber alloc] initWithBool:animated];
-    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        if (isLicensedUser == NO) {
-            NSInvocationOperation *operation;
-            operation = [[NSInvocationOperation alloc] initWithTarget:self
-                                                             selector:@selector(layoutForUnlicensedUser:)
-                                                               object:animateObject];
-            [[NSOperationQueue mainQueue] addOperation:operation];
-        }
-    }];
+    
+    //[[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+    //    if (isLicensedUser == NO) {
+    //        NSInvocationOperation *operation;
+    //        operation = [[NSInvocationOperation alloc] initWithTarget:self
+    //                                                         selector:@selector(layoutForUnlicensedUser:)
+    //                                                           object:animateObject];
+    //        [[NSOperationQueue mainQueue] addOperation:operation];
+    //    }
+    //}];
 }
 
 - (void)layoutForUnlicensedUser:(NSNumber *)animated {
@@ -413,8 +420,19 @@ static NSString * const TextRedraw = @"Redraw";
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
+/*- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
+              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    }];
+}*/
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
+    //self.presentationController
     
     /*
     typeof(__kindof UITabBarController) *tabBarController;
@@ -494,6 +512,24 @@ static NSString * const TextRedraw = @"Redraw";
     return NO;
 }
 
+- (void)presentationTransitionWillBegin {
+    // Add a custom dimming view behind the presented view controller's view
+    //[[self containerView] addSubview:_dimmingView];
+    //[_dimmingView addSubview:[[self presentedViewController] view]];
+    
+    // Use the transition coordinator to set up the animations.
+    id <UIViewControllerTransitionCoordinator> transitionCoordinator =
+    [[self presentingViewController] transitionCoordinator];
+    
+    // Fade in the dimming view during the transition.
+    [self.view setAlpha:0.0];
+    [transitionCoordinator animateAlongsideTransition:
+     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+         [self.view setAlpha:1.0];
+     } completion:nil];
+}
+
+
 - (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
     return splitViewController.viewControllers[0];
 }
@@ -541,5 +577,11 @@ static NSString * const TextRedraw = @"Redraw";
         }
     }
 }
+
+//- (void)done:(id)sender {
+//    if (self.navigationController respondsToSelector:@selector(done:)) {
+//        [self.navigationController done:sender];
+//    }
+//}
 
 @end

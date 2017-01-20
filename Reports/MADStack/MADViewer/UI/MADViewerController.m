@@ -525,7 +525,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     NSArray *emptyArray = [[NSArray alloc] init];
     [self setToolbarItems: emptyArray animated: animated];
-    [self.navigationController setToolbarHidden:YES animated:animated];
+    //[self.navigationController setToolbarHidden:YES animated:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

@@ -10,8 +10,6 @@
 
 #import <MessageUI/MessageUI.h>
 
-#import <Foundation/Foundation.h>
-
 #import <MADCocoaExtensions/UIViewController+Utilities.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 

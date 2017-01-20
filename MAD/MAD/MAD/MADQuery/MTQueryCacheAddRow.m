@@ -24,6 +24,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <stdio.h>
+#import <string.h>
 #import "madlib.h"
 
 static NSString * const SqlDelimitor = @", ";

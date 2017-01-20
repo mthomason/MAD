@@ -27,6 +27,8 @@
 
     + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document;
 
+    - (IBAction)redrawQueryVisualization:(id)sender;
+
     @property (readwrite, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
     @property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *detailNavigationController;

@@ -52,7 +52,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 }
 
 @interface  MTActivityItemProviderPdf ()
+    <MADDocumentStatusProtocol>
     @property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
+    @property (nonatomic, weak, readwrite) MADActivityIndicator *activityIndicatorController;
 @end
 
 @implementation MTActivityItemProviderPdf
@@ -107,11 +109,16 @@ static inline CGRect PdfTrimBox(CGRect rect) {
     return item;
 }
 
+- (void)setStatusText:(NSString *)text {
+    NSString *statusText = text.copy;
+    [self.activityIndicatorController.status setText:statusText];
+}
+
 - (void)writeToPdf:(NSURL *)fileURL withViewController:(UIViewController *)window {
 
     [self disableUserInteraction:window.view];
 
-    UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForBaselineLayout;
+    UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForLastBaselineLayout;
 
     MADActivityIndicator *activityView;
     activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
@@ -122,7 +129,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                               waitUntilDone: YES];
     
     MADocument *document = _document;
-    document.statusLabel = activityView;
+    self.activityIndicatorController = activityView;
+    //document.statusLabel = activityView;
+    document.documentStatusProtocol = self;
     
     typeof(document) __weak weakdoc = document;
     

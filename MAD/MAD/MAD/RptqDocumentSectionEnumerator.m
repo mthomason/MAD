@@ -19,6 +19,50 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
+@interface RptqDocumentSectionTypeEnumerator ()
+
+@end
+
+@implementation RptqDocumentSectionTypeEnumerator {
+    NSUInteger _total;
+    NSUInteger _current;
+}
+
+- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
+           managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super init]) {
+        _total = [RptqQuery sectionCountFectch:queryID managedObjectContext:managedObjectContext];
+        _current = 0;
+    }
+    return self;
+}
+
+- (NSUInteger)count {
+    return _total;
+}
+
+- (NSArray *)allObjects {
+    
+    NSMutableArray *sectionTypes = [[NSMutableArray alloc] initWithCapacity:(_total - _current)];
+    for (; _current<_total; _current++) {
+        @autoreleasepool {
+            NSNumber *section;
+            section = @([RptqDocumentSection getSectionTypeforRow: _current
+                                             withNumberOfSections: _total]);
+            [sectionTypes addObject:section];
+            section = nil;
+        }
+    }
+    return sectionTypes;
+}
+
+- (id)nextObject {
+    return @([RptqDocumentSection getSectionTypeforRow: ++_current
+                                  withNumberOfSections: _total]);
+}
+
+@end
+
 @interface RptqDocumentSectionEnumerator ()
 
     @property (nonatomic, assign)   NSUInteger numberOfGroups;

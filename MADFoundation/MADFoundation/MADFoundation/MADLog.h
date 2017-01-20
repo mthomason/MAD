@@ -9,8 +9,8 @@
 #ifndef MADFoundation_MADLog_h
 #define MADFoundation_MADLog_h
 
+#import <Foundation/NSObject.h>
 #import <objc/NSObjCRuntime.h>
-#import <Foundation/Foundation.h>
 
 @class NSString;
 

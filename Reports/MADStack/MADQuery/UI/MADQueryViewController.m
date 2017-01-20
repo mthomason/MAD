@@ -21,6 +21,7 @@
 #import <UIKit/UISwitch.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIImage.h>
+#import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -217,6 +218,15 @@ BOOL storeEnabled() {
 
 #pragma mark -
 #pragma mark NSObject
+
++ (instancetype)newQueryViewController:(MADocument *)document {
+    id bundle = [NSBundle mainBundle];
+    id storybard = [UIStoryboard storyboardWithName: @"MADQuery" bundle: bundle];
+    id controller = [storybard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryViewController"];
+    [((typeof(self))controller) setDocument: document];
+    return controller;
+}
+
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -419,7 +429,6 @@ BOOL storeEnabled() {
                                                    self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
-
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.firstTimeViewWillLayoutSubviews) {
@@ -552,7 +561,16 @@ BOOL storeEnabled() {
     
 //}
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        self.view.frame = self.navigationController.view.bounds;
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    }];
+    
+}
+
+/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
@@ -570,15 +588,19 @@ BOOL storeEnabled() {
     titleView = navigationItem.titleView;
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        UIView *toView = [context viewForKey:UITransitionContextToViewKey];
+        UIView *fromView = [context viewForKey:UITransitionContextFromViewKey];
+        UIViewController *toViewController = [context viewForKey:UITransitionContextToViewControllerKey];
+        UIViewController *fromViewController = [context viewForKey:UITransitionContextFromViewControllerKey];
         //[backgroundView setNeedsDisplay];
         [titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [titleView sizeToFit];
     }];
     
-}
+}*/
 
-- (void)viewWillTransitionToSize:(CGSize)size
+/*- (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -594,7 +616,7 @@ BOOL storeEnabled() {
     };
     [coordinator animateAlongsideTransition: handleAnimate completion: nil];
     
-}
+}*/
 
 #pragma mark -
 #pragma mark Property Overrides
@@ -1041,12 +1063,12 @@ BOOL storeEnabled() {
 
 }
 
-/*- (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidFinish:self];
-    [self dismissViewControllerAnimated:YES completion:^{
+- (IBAction)done:(id)sender {
+    [((MADNavigationController *)self.navigationController) done:sender];
+    //[self dismissViewControllerAnimated:YES completion:^{
         
-    }];
-}*/
+    //}];
+}
 
 - (void)addConnection:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers

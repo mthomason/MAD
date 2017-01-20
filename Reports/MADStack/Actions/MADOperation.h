@@ -14,7 +14,7 @@
 
 @class NSMutableArray<ObjectType>;
 
-typedef NS_ENUM(char, MADOperationState) {
+typedef NS_ENUM(NSInteger, MADOperationState) {
     MADOperationStateInitialized,
     MADOperationStatePending,
     MADOperationStateEvaluatingConditions,

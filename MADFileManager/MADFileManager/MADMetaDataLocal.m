@@ -110,6 +110,7 @@
 }
 
 - (BOOL)downloaded { return YES; }
+- (BOOL)isDownloaded { return YES; }
 
 - (BOOL)isSyncing { return NO; }
 - (BOOL)isUbiquitous { return NO; }

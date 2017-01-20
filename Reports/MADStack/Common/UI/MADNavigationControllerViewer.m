@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    id rootViewController = [MADViewerController newViewerController: self.document];
+    id rootViewController = [MADViewerController newViewerController: _document];
     self.viewerController = rootViewController;
     self.viewerController.viewControllerDelegate = self.viewControllerDelegate;
 }

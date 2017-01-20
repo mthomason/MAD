@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADTextFormatter_h
+#define MAD_MADTextFormatter_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADTextFormatter : NSObject
 
 @end
+
+#endif

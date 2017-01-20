@@ -6,9 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <WatchKit/WatchKit.h>
+#ifndef MAD_GlanceController_h
+#define MAD_GlanceController_h
+
+#import <WatchKit/WKInterfaceController.h>
 
 @interface GlanceController : WKInterfaceController
 
 @end
+
+#endif

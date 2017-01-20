@@ -23,6 +23,8 @@ extern NSString * const MADSegueShowSql;
         MADTabBarImageProtocol,
         UIViewControllerAnimatedTransitioning>
 
+    + (instancetype)newQueryViewController:(MADocument *)document;
+
     + (void)deleteCoreDataCache;
 
     - (void)reloadMainDocumentAnimated:(BOOL)animated;

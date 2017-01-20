@@ -96,6 +96,7 @@ const int8_t MADIndexViewer = 2;
     if (!_navigationItemInitialized) {
         id newPrompt = _promptNavigationItem.copy;
         navigationItem.prompt = newPrompt;
+        _navigationItemInitialized = YES;
     }
     return navigationItem;
 }
@@ -131,8 +132,10 @@ const int8_t MADIndexViewer = 2;
     MADNavigationController *navControllerViewer;
     
     splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-    [self.tabBarViewControllers addObject: splitViewController];
     self.querySplitViewController = splitViewController;
+    [self.tabBarViewControllers addObject: splitViewController];
+    //UINavigationController *navigationControllerSplit = [[UINavigationController alloc] initWithRootViewController:_querySplitViewController];
+    //[navigationControllerSplit setToolbarHidden:NO animated:NO];
     
     designerViewController = [MADDesignerViewController newDesignerViewController:document];
     [self.tabBarViewControllers addObject: designerViewController];
@@ -160,14 +163,42 @@ const int8_t MADIndexViewer = 2;
     }*/
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
+            [self.view setNeedsDisplay];
+        };
+    } else {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
+    }
+    UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [toView setNeedsDisplay];
+
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+
+    }];
+    
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     UIBarButtonItem *buttonDismiss;
     buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                  target: self
-                                                                 action: @selector(viewControllerDidFinish:)];
-    
+                                                                 action: @selector(done:)];
+    id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: @"Redraw"
+                                                                   style: UIBarButtonItemStylePlain
+                                                                  target: self.querySplitViewController
+                                                                  action: @selector(redrawQueryVisualization:)];
+    //self.barButtonItemRevealQuery = barButtonItemRevealQuery;
     [self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
+    [self setToolbarItems:@[barButtonItemRevealQuery] animated:YES];
+
+    [self.view setNeedsLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -334,6 +365,10 @@ const int8_t MADIndexViewer = 2;
         // finished or not.
         [transitionContext completeTransition:!wasCancelled];
     }];
+}
+
+- (void)done:(id)sender {
+    [self viewControllerDidFinish:sender];
 }
 
 #pragma mark -

@@ -63,6 +63,10 @@
     }
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.delegate = self;
@@ -97,6 +101,10 @@
     return UIStatusBarStyleLightContent;
 }
 
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//    super
+//}
+/*
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                       presentingViewController:(UIViewController *)presenting
                                                           sourceViewController:(UIViewController *)source {
@@ -107,9 +115,18 @@
     }
     return result;
 }
-
+*/
 - (MADNavigationControllerType)controllerType {
     return MADNavigationControllerTypeFileExplorer;
+}
+
+- (void)transitionFromViewController:(UIViewController *)fromViewController
+                    toViewController:(UIViewController *)toViewController
+                            duration:(NSTimeInterval)duration
+                             options:(UIViewAnimationOptions)options
+                          animations:(void (^)(void))animations
+                          completion:(void (^)(BOOL))completion {
+    [super transitionFromViewController:fromViewController toViewController:toViewController duration:duration options:options animations:animations completion:completion];
 }
 
 #pragma mark -
@@ -118,6 +135,11 @@
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
+//    if ([viewController isKindOfClass:[MADFileExplorerViewController class]]) {
+//        [self setToolbarHidden:NO animated:animated];
+//    } else {
+//        [self setToolbarHidden:YES animated:animated];
+//    }
  //   [viewController viewWillAppear: animated];
 }
 
@@ -138,16 +160,19 @@
                                                            toViewController:(UIViewController *)toVC  {
 
     id <UIViewControllerAnimatedTransitioning> animationController;
-    if ([toVC isKindOfClass:[MADFileExplorerViewController class]]) {
+    BOOL toTabViewController = NO;
+    BOOL toFileExplorferViewController = NO;
+    if ((toFileExplorferViewController = [toVC isKindOfClass:[MADFileExplorerViewController class]]) ||
+        (toTabViewController = [toVC isKindOfClass:[UITabBarController class]])) {
         toVC.modalPresentationStyle = UIModalPresentationCustom;
         
         switch (operation) {
             case UINavigationControllerOperationPush:
-                animationController = [[MADFileExplorerAnimatedCrossFadePush alloc] init];
+                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController pushing:YES];
                 break;
 
             case UINavigationControllerOperationPop:
-                animationController = [[MADFileExplorerAnimatedCrossFadePop alloc] init];
+                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController pushing:NO];
                 break;
 
             case UINavigationControllerOperationNone:

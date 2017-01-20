@@ -83,8 +83,6 @@
             rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
         }
         
-        document.documentObjectID = rptqDocument.objectID.copy;
-        
         MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
         document.paper = paper;
         

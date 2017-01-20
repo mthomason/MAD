@@ -9,9 +9,7 @@
 #ifndef MAD_Feedback_MADFeedbackUncaughtExceptionHandler_h
 #define MAD_Feedback_MADFeedbackUncaughtExceptionHandler_h
 
-#import <Foundation/Foundation.h>
-#import <libkern/OSAtomic.h>
-#import <execinfo.h>
+#import <Foundation/NSObject.h>
 
 @interface MADFeedbackUncaughtExceptionHandler : NSObject;
 

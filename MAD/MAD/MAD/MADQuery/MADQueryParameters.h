@@ -6,10 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADQueryParameters_h
+#define MAD_MADQueryParameters_h
 
-#ifndef MADQueryParameters_h
-#define MADQueryParameters_h
+#import <Foundation/NSObject.h>
 
 @protocol MADQueryParametersStandardProtocol <NSObject>
     - (NSString *)queryTableName;

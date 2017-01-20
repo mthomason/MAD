@@ -19,13 +19,22 @@
 
 @end
 
-@interface MADFileExplorerAnimatedCrossFadePush : NSObject
+@interface MADFileExplorerAnimated : NSObject
     <UIViewControllerAnimatedTransitioning>
+
+    + (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing;
 
 @end
 
-@interface MADFileExplorerAnimatedCrossFadePop : NSObject
-    <UIViewControllerAnimatedTransitioning>
+@interface MADFileExplorerAnimatedCrossFadePush : MADFileExplorerAnimated
+
+    - (instancetype)initToolbar:(BOOL)showToolbar;
+
+@end
+
+@interface MADFileExplorerAnimatedCrossFadePop : MADFileExplorerAnimated
+
+    - (instancetype)initToolbar:(BOOL)showToolbar;
 
 @end
 

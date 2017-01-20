@@ -38,7 +38,8 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 
     + (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
     + (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
-
+    + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
+                              withNumberOfSections:(NSUInteger)numberOfSections;
     + (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
     + (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
 

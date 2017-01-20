@@ -175,7 +175,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 - (NSUInteger)layoutIdentifier {
     return _overrideIdentifier == nil ?
-                    _layout.documentObjectID.URIRepresentation.absoluteString.hash :
+                    _layout.documentObjectIDStore.objectID.URIRepresentation.absoluteString.hash :
                     _overrideIdentifier.hash;
 }
 

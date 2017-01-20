@@ -197,6 +197,9 @@
 }
 
 - (BOOL)downloaded {
+    return [self isDownloaded];
+}
+- (BOOL)isDownloaded {
     BOOL downloaded = YES;
     if ([self isUbiquitous]) {
         if ([self isUbiquitousItemDownloadingStatusCurrent]) {

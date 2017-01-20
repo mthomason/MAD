@@ -55,11 +55,11 @@
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
-    MADocument * __weak wdoc = document;
+    //MADocument * __weak wdoc = document;
     [private performBlockAndWait:^{
-        MADocument *doc = wdoc;
+        //MADocument *doc = wdoc;
         RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
-        doc.documentObjectID = rptqDocument.objectID;
+        NSManagedObjectID *objectID = rptqDocument.objectID;
 
         NSError *error = nil;
         [private save:&error];

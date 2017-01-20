@@ -81,6 +81,18 @@
     [self setNavigationBarHidden:YES animated:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    /*if (self.childViewControllers.count <= 0) {
+        MADQueryViewController *madQueryViewController = [MADQueryViewController newQueryViewController:_document];
+        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        self.modalPresentationStyle = UIModalPresentationCustom;
+        madQueryViewController.modalPresentationStyle = UIModalPresentationNone;
+        madQueryViewController.providesPresentationContextTransitionStyle = YES;
+        [self pushViewController:madQueryViewController animated:YES];
+    }*/
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
@@ -95,6 +107,9 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    for (UIViewController *vc in self.childViewControllers) {
+        [vc.view setNeedsLayout];
+    }// self.childViewControllers
 }
 
 - (void)viewDidLayoutSubviews {

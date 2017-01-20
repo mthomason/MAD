@@ -11,7 +11,7 @@
 
 #import "MADNavigationController.h"
 
-@interface MADQueryNavigationController : MADNavigationController
+@interface MADNavigationControllerQueryVisualization : MADNavigationController
 
 @end
 

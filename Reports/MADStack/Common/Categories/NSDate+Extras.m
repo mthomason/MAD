@@ -104,24 +104,33 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
     
     if (forceInclude && aDateComponents.year != 0) {
         
-        NSNumber *year = @(ABS(aDateComponents.year));
-        NSString *spelledOut = [self.formatter stringFromNumber: year];
-        [text appendFormat:newStringLocalizedFormatYears(aDateComponents.year), spelledOut];
-        printedOne = YES;
-        forceInclude = YES;
-        includedComponetsCounter++;
-        resultResolution = MTDateResolutionYear;
+        @autoreleasepool {
+            NSNumber *year = @(ABS(aDateComponents.year));
+            NSString *spelledOut = [self.formatter stringFromNumber: year].copy;
+            [text appendFormat:newStringLocalizedFormatYears(aDateComponents.year), spelledOut];
+            printedOne = YES;
+            forceInclude = YES;
+            includedComponetsCounter++;
+            resultResolution = MTDateResolutionYear;
+            spelledOut = nil;
+            year = nil;
+        }
     }
     
     if ((forceInclude && aDateComponents.month != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            NSNumber *month = @(ABS(aDateComponents.month));
-            NSString *spelledOut = [self.formatter stringFromNumber: month];
-            NSString *format = newStringLocalizedFormatMonths(aDateComponents.month);
-            [text appendFormat:format, spelledOut];
-            printedOne = YES;
-            forceInclude = YES;
-            resultResolution = MTDateResolutionMonth;
+            @autoreleasepool {
+                NSNumber *month = @(ABS(aDateComponents.month));
+                NSString *spelledOut = [self.formatter stringFromNumber: month].copy;
+                NSString *format = newStringLocalizedFormatMonths(aDateComponents.month);
+                [text appendFormat:format, spelledOut];
+                printedOne = YES;
+                forceInclude = YES;
+                resultResolution = MTDateResolutionMonth;
+                spelledOut = nil;
+                format = nil;
+                month = nil;
+            }
         } else {
             forceInclude = NO;
         }
@@ -130,14 +139,18 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
     
     if ((forceInclude && aDateComponents.weekOfMonth != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            
-            NSNumber *week = @(ABS(aDateComponents.weekOfMonth));
-            NSString *spelledOut = [self.formatter stringFromNumber: week];
-            NSString *format = aDateComponents.weekOfMonth == 1 ? NSLocalizedString(FormatWeek, FormatWeek) : NSLocalizedString(FormatWeeks, FormatWeeks);
-            [text appendFormat:format, spelledOut];
-            printedOne = YES;
-            forceInclude = YES;
-            resultResolution = MTDateResolutionWeek;
+            @autoreleasepool {
+                NSNumber *week = @(ABS(aDateComponents.weekOfMonth));
+                NSString *spelledOut = [self.formatter stringFromNumber: week].copy;
+                NSString *format = aDateComponents.weekOfMonth == 1 ? NSLocalizedString(FormatWeek, FormatWeek) : NSLocalizedString(FormatWeeks, FormatWeeks);
+                [text appendFormat:format, spelledOut];
+                printedOne = YES;
+                forceInclude = YES;
+                resultResolution = MTDateResolutionWeek;
+                spelledOut = nil;
+                format = nil;
+                week = week;
+            }
         } else {
             forceInclude = NO;
         }
@@ -146,14 +159,18 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
     
     if ((forceInclude && aDateComponents.day != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            
-            NSNumber *day = @(ABS(aDateComponents.day));
-            NSString *spelledOut = [self.formatter stringFromNumber: day];
-            NSString *format = aDateComponents.day == 1 ? NSLocalizedString(FormatDay, FormatDay) : NSLocalizedString(FormatDays, FormatDays);
-            [text appendFormat:format, spelledOut];
-            printedOne = YES;
-            forceInclude = YES;
-            resultResolution = MTDateResolutionDay;
+            @autoreleasepool {
+                NSNumber *day = @(ABS(aDateComponents.day));
+                NSString *spelledOut = [self.formatter stringFromNumber: day].copy;
+                NSString *format = aDateComponents.day == 1 ? NSLocalizedString(FormatDay, FormatDay) : NSLocalizedString(FormatDays, FormatDays);
+                [text appendFormat:format, spelledOut];
+                printedOne = YES;
+                forceInclude = YES;
+                resultResolution = MTDateResolutionDay;
+                spelledOut = nil;
+                format = nil;
+                day = nil;
+            }
         } else {
             forceInclude = NO;
         }
@@ -164,12 +181,15 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
         if (includedComponetsCounter < permittedComponents) {
             @autoreleasepool {
                 NSNumber *hour = @(ABS(aDateComponents.hour));
-                NSString *spelledOut = [self.formatter stringFromNumber: hour];
+                NSString *spelledOut = [self.formatter stringFromNumber: hour].copy;
                 NSString *format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) : NSLocalizedString(FormatHours, FormatHours);
                 [text appendFormat:format, spelledOut];
                 printedOne = YES;
                 forceInclude = YES;
                 resultResolution = MTDateResolutionHour;
+                spelledOut = nil;
+                format = nil;
+                hour = nil;
             }
         } else {
             forceInclude = NO;
@@ -181,12 +201,15 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
         if (includedComponetsCounter < permittedComponents) {
             @autoreleasepool {
                 NSNumber *minute = @(ABS(aDateComponents.minute));
-                NSString *spelledOut = [self.formatter stringFromNumber: minute];
+                NSString *spelledOut = [self.formatter stringFromNumber: minute].copy;
                 NSString *format = newStringLocalizedFormatFormatMinutes(aDateComponents.minute);
                 [text appendFormat:format, spelledOut];
                 printedOne = YES;
                 forceInclude = YES;
                 resultResolution = MTDateResolutionMinute;
+                spelledOut = nil;
+                format = nil;
+                minute = nil;
             }
         } else {
             forceInclude = NO;
@@ -198,12 +221,15 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
         if (includedComponetsCounter < permittedComponents) {
             @autoreleasepool {
                 NSNumber *second = @(ABS(aDateComponents.second));
-                NSString *spelledOut = [self.formatter stringFromNumber: second];
+                NSString *spelledOut = [self.formatter stringFromNumber: second].copy;
                 NSString *format = newStringLocalizedFormatSeconds(aDateComponents.second);
                 [text appendFormat:format, spelledOut];
                 printedOne = YES;
                 forceInclude = YES;
                 resultResolution = MTDateResolutionSecond;
+                spelledOut = nil;
+                format = nil;
+                second = nil;
             }
         } else {
             forceInclude = NO;
@@ -216,9 +242,12 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
         if (includedComponetsCounter < permittedComponents) {
             NSTimeInterval ti = [lastDate timeIntervalSinceDate:now];
             NSNumber *milliseconds = @((NSInteger)fabs(((ti - (NSInteger)ti) * 1000)));
-            NSString *spelledOut = [self.formatter stringFromNumber: milliseconds];
+            NSString *spelledOut = [self.formatter stringFromNumber: milliseconds].copy;
             NSString *format = newStringLocalizedFormatMilliseconds(milliseconds.integerValue);
             [text appendFormat:format, spelledOut];
+            spelledOut = nil;
+            format = nil;
+            milliseconds = nil;
             resultResolution = MTDateResolutionMillisecond;
         }
         includedComponetsCounter++;

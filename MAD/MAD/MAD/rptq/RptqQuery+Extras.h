@@ -24,6 +24,8 @@
     - (NSUInteger)numberOfTables;
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
     - (NSUInteger)sectionCount;
+    + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
+                managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

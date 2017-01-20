@@ -26,6 +26,9 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIPrintInteractionController.h>
 
+#import <Foundation/NSEnumerator.h>
+#import <Foundation/NSComparisonPredicate.h>
+
 #import <setjmp.h>
 
 #import <MADFoundation/UIScreen+Properties.h>
@@ -169,6 +172,202 @@ typedef struct png_control {
  }
  */
 
+@interface MADObjectID ()
+    - (instancetype)newObjectIDDocument:(NSManagedObjectContext *)managedObjectContext;
+@end
+
+@interface MADDocumentObjectID ()
+    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readwrite, copy) NSMutableOrderedSet <MADDatabaseObjectID *> *databaseIDs;
+    @property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
+@end
+
+@interface MADDatabaseObjectID ()
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readwrite, copy) NSMutableOrderedSet <MADQueryObjectID *> *queryIDs;
+    @property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
+@end
+
+@interface MADQueryObjectID ()
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID;
+@end
+
+@implementation MADObjectID
+    @dynamic objectID;
+    @dynamic managedObjectContext;
+- (instancetype)newObjectIDDocument:(NSManagedObjectContext *)managedObjectContext {
+    return [[MADDocumentObjectID alloc] initWithManagedObjectContext:managedObjectContext];
+}
+
+@end
+
+#pragma mark -
+#pragma mark MAD Document Object ID
+
+@implementation MADDocumentObjectID
+
+@synthesize objectID = _objectID;
+@synthesize managedObjectContext = _managedObjectContext;
+
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super init]) {
+        _managedObjectContext = managedObjectContext;
+    }
+    return self;
+}
+
+/*- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super init]) {
+        _objectID = objectID.copy;
+        NSMutableOrderedSet <MADDatabaseObjectID *> *databaseIDs;
+        databaseIDs = [[NSMutableOrderedSet <MADDatabaseObjectID *> alloc] initWithCapacity: 1];
+        _databaseIDs = databaseIDs;
+        self.managedObjectContext = managedObjectContext;
+    }
+    return self;
+}*/
+
+- (NSMutableOrderedSet <MADDatabaseObjectID *> *)databaseIDs {
+    if (!_databaseIDs) {
+        NSFetchRequest *request;
+        NSArray <NSManagedObjectID *> *result;
+        NSManagedObjectContext *managedObjectContext;
+        managedObjectContext = _managedObjectContext;
+        NSExpression *expression[2];
+        expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
+                                        NSStringFromSelector(@selector(ownedByQueryAsStaticResource)),
+                                        NSStringFromSelector(@selector(objectID))];
+        expression[1] = [NSExpression expressionForConstantValue:_objectID];
+        
+        NSAssert(expression != nil, @"Need an expression");
+        NSComparisonPredicate *predicate;
+        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
+                                                      rightExpression: expression[1]
+                                                             modifier: NSDirectPredicateModifier
+                                                                 type: NSEqualToPredicateOperatorType
+                                                              options: 0];
+        
+        request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabase class])];
+        request.resultType = NSManagedObjectIDResultType;
+        request.includesSubentities = NO;
+        request.includesPropertyValues = NO;
+        NSError * __autoreleasing *error = NULL;
+        result = [managedObjectContext executeFetchRequest:request error:error];
+        NSMutableOrderedSet <MADDatabaseObjectID *> *databaseIDs;
+        databaseIDs = [[NSMutableOrderedSet <MADDatabaseObjectID *> alloc] init];
+        MADDatabaseObjectID *databaseObjectID;
+        NSUInteger i = 0;
+        for (NSManagedObjectID *objid in result) {
+            databaseObjectID = [[MADDatabaseObjectID alloc] initWithObjectID:objid
+                                                        managedObjectContext:managedObjectContext];
+            [databaseIDs addObject: databaseObjectID];
+            i++;
+        }
+        predicate = nil;
+        expression[0] = nil;
+        expression[1] = nil;
+    }
+    return _databaseIDs;
+}
+
+- (NSManagedObjectID *)objectID {
+    if (!_objectID) {
+        NSFetchRequest *request;
+        request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+        request.fetchLimit = 1;
+        request.resultType = NSManagedObjectIDResultType;
+        request.includesSubentities = NO;
+        request.includesPropertyValues = NO;
+        NSError * __autoreleasing *error = NULL;
+        NSArray <NSManagedObjectID *> *result = [_managedObjectContext executeFetchRequest:request error:error];
+        _objectID = result.firstObject.copy;
+    }
+    return _objectID;
+}
+
+
+@end
+
+#pragma mark -
+#pragma mark MAD Database Object ID
+
+@implementation MADDatabaseObjectID
+
+@synthesize objectID = _objectID;
+@synthesize managedObjectContext = _managedObjectContext;
+
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super init]) {
+        _objectID = objectID.copy;
+        _managedObjectContext = managedObjectContext;
+    }
+    return self;
+}
+
+- (NSMutableOrderedSet <MADQueryObjectID *> *)queryIDs {
+    if (!_queryIDs) {
+        NSFetchRequest *request;
+        NSArray <NSManagedObjectID *> *result;
+        
+        NSExpression *expression[2];
+        expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
+                         NSStringFromSelector(@selector(inDatabase)),
+                         NSStringFromSelector(@selector(objectID))];
+        expression[1] = [NSExpression expressionForConstantValue:_objectID];
+        
+        NSAssert(expression != nil, @"Need an expression");
+        NSComparisonPredicate *predicate;
+        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
+                                                      rightExpression: expression[1]
+                                                             modifier: NSDirectPredicateModifier
+                                                                 type: NSEqualToPredicateOperatorType
+                                                              options: 0];
+        
+        request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
+        request.resultType = NSManagedObjectIDResultType;
+        request.includesSubentities = NO;
+        request.includesPropertyValues = NO;
+        NSError * __autoreleasing *error = NULL;
+        result = [_managedObjectContext executeFetchRequest:request error:error];
+        
+        NSMutableOrderedSet <MADQueryObjectID *> *queryIDs;
+        queryIDs = [[NSMutableOrderedSet <MADQueryObjectID *> alloc] init];
+        MADQueryObjectID *queryObjectID;
+        NSUInteger i = 0;
+        for (NSManagedObjectID *objid in result) {
+            queryObjectID = [[MADQueryObjectID alloc] initWithObjectID:objid];
+            [queryIDs addObject: queryObjectID];
+            i++;
+        }
+        _queryIDs = queryIDs;
+        result = nil;;
+        request = nil;
+        predicate = nil;
+        expression[0] = nil;
+        expression[1] = nil;
+    }
+    return _queryIDs;
+}
+
+@end
+
+#pragma mark -
+#pragma mark MADQueryObjectID
+
+@implementation MADQueryObjectID
+
+@synthesize objectID = _objectID;
+
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
+    if (self = [super init]) {
+        _objectID = objectID.copy;
+    }
+    return self;
+}
+
+@end
+
 NSString * const MADMimeType                                    = @"application/vnd.everydayapps.mad";
 NSString * const MADDocumentInfoKeyThumbnail                    = @"thumbnail";
 
@@ -232,6 +431,8 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
+    @property (nonatomic, readwrite, strong) MADDocumentObjectID *documentObjectIDStore;
+
 @end
 
 @implementation MADocument
@@ -267,6 +468,7 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)dealloc {
     _thumbnail = nil;
+    _madManagedObjectModel = nil;
 }
 
 - (void)resetCache {
@@ -459,6 +661,15 @@ void madwarn(char *err,  const char*err2) { }
 
 // Helpers
 
+- (MADDocumentObjectID *)documentObjectIDStore {
+    if (!_documentObjectIDStore) {
+        MADDocumentObjectID *documentObjectIDStore;
+        documentObjectIDStore = [[MADDocumentObjectID alloc] initWithManagedObjectContext:self.managedObjectContext];
+        _documentObjectIDStore = documentObjectIDStore;
+    }
+    return _documentObjectIDStore;
+}
+
 - (NSURL *)copyThumbnailURL {
     NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
     NSURL *url = [MADURL newURLThumbnailForHandle: name
@@ -626,8 +837,7 @@ READFROMURL_END:;
             NSManagedObjectModel *managedObjectModel;
             modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
                                                withExtension: MADManagedObjectModelExtention];
-            managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-            _madManagedObjectModel = managedObjectModel;
+            _madManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
         }
         
     }
@@ -973,9 +1183,9 @@ READFROMURL_END:;
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
-    [self.statusLabel.status performSelectorOnMainThread: @selector(setText:)
-                                              withObject: readRecords
-                                           waitUntilDone: NO];
+    [self.documentStatusProtocol performSelectorOnMainThread: @selector(setStatusText:)
+                                                  withObject: readRecords
+                                               waitUntilDone: NO];
 }
 
 #pragma mark - MTDatabaseProtocol
@@ -1045,11 +1255,11 @@ READFROMURL_END:;
         
         RptqDocument *document = nil;
         
-        if (self.documentObjectID == nil) {
+        //if (self.documentObjectID == nil) {
             
             document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
             
-            self.documentObjectID = document.objectID.copy;
+            //self.documentObjectID = document.objectID.copy;
             
             [self resetPaper];
             [self resetMainQuery];
@@ -1058,10 +1268,10 @@ READFROMURL_END:;
             
             self.reportDocument = document;
             
-        } else {
-            document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-            self.reportDocument = document;
-        }
+        //} else {
+        //    document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+        //    self.reportDocument = document;
+        //}
     }
     return self.reportDocument;
 }
@@ -1339,7 +1549,7 @@ READFROMURL_END:;
 }
 
 - (NSArray *)readCurrentSortDescriptors {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectIDStore.objectID];
     if (self.database == nil) {
         [self initializeMainDatabase:document];        // FIXME: I doubt this ever runs.
     }

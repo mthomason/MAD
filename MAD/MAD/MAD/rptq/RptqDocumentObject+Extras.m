@@ -254,9 +254,9 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
+//- (void)awakeFromFetch {
+//    [super awakeFromFetch];
+//}
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
@@ -279,8 +279,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (void)setOrigin:(CGPoint)origin {
-    NSNumber *x = [[NSNumber alloc] initWithFloat: origin.x];
-    NSNumber *y = [[NSNumber alloc] initWithFloat: origin.y];
+    NSNumber *x = [[NSNumber alloc] initWithUnsignedLong:(unsigned long) origin.x];
+    NSNumber *y = [[NSNumber alloc] initWithUnsignedLong:(unsigned long) origin.y];
     self.originx = x;
     self.originy = y;
 }
@@ -301,16 +301,40 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     return self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
 }
 
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
+    return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight + paddingRight;
+}
+
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop, CGFloat borderHeightTop, CGFloat marginTop, CGFloat sizeheight, CGFloat marginBottom, CGFloat borderHeightBottom, CGFloat paddingBottom) {
+    return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom + borderHeightBottom + paddingBottom;
+}
+
+static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
+    return CGRectMake(x + sx, y + sy, w + sw, h + wh);
+}
+
 - (CGFloat)sizeWidthCalculated {
-    return self.paddingLeft.floatValue + self.borderWidthLeft.floatValue + self.marginLeft.floatValue +
-            self.sizewidth.floatValue + self.marginRight.floatValue + self.borderWidthRight.floatValue +
-            self.paddingRight.floatValue;
+    return MADDocObjSizeWidthCalculated(self.paddingLeft.floatValue,
+                                         self.borderWidthLeft.floatValue,
+                                         self.marginLeft.floatValue,
+                                         self.sizewidth.floatValue,
+                                         self.marginRight.floatValue,
+                                         self.borderWidthRight.floatValue,
+                                         self.paddingRight.floatValue);
 }
 
 - (CGFloat)sizeHeightCalculated {
-    return self.paddingTop.floatValue + self.borderHeightTop.floatValue + self.marginTop.floatValue +
-            self.sizeheight.floatValue + self.marginBottom.floatValue + self.borderHeightBottom.floatValue +
-            self.paddingBottom.floatValue;
+    return MADDocObjSizeHeightCalculated(self.paddingTop.floatValue,
+                                         self.borderHeightTop.floatValue,
+                                         self.marginTop.floatValue,
+                                         self.sizeheight.floatValue,
+                                         self.marginBottom.floatValue,
+                                         self.borderHeightBottom.floatValue,
+                                         self.paddingBottom.floatValue);
 }
 
 - (CGSize)size { return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]); }
@@ -358,8 +382,10 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 }
 
 - (CGRect)frame {
-    return CGRectMake(self.originx.floatValue + self.spacingLeft, self.originy.floatValue + self.spacingTop,
-                      self.sizewidth.floatValue + self.spacingRight, self.sizeheight.floatValue + self.spacingBottom);
+    return MADDocObjFrameCalculated(self.originx.floatValue, self.spacingLeft,
+                                    self.originy.floatValue, self.spacingTop,
+                                    self.sizewidth.floatValue, self.spacingRight,
+                                    self.sizeheight.floatValue, self.spacingBottom);
 }
 
 #pragma mark - Member

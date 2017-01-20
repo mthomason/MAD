@@ -53,6 +53,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSPredicate.h>
 
 #import "MADReportSectionsEnumerator.h"
 
@@ -127,7 +128,27 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     return [key isEqualToString:NSStringFromSelector(@selector(hasQueryGroups))];
 }
 
-- (NSUInteger)sectionCount { return 5 + self.hasQueryGroups.count * 2; }
+static inline unsigned long MADSectionCountWithGroupCount(unsigned long);
+static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCount) {
+    return 5 + groupCount * 2;
+}
+
+- (NSUInteger)sectionCount { return MADSectionCountWithGroupCount(self.hasQueryGroups.count); }
+
++ (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
+            managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    NSPredicate *predicate;
+    NSFetchRequest *request;
+    predicate = [NSPredicate predicateWithFormat:@"@% == %@", NSStringFromSelector(@selector(inQuery)), queryObjectID];
+    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    request.predicate = predicate;
+    request.includesSubentities = NO;
+    request.includesPropertyValues = NO;
+    NSError * __autoreleasing *error = NULL;
+    NSUInteger count = [managedObjectContext countForFetchRequest:request error:error];
+    return MADSectionCountWithGroupCount(count);
+}
 
 #pragma mark - Actions
 

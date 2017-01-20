@@ -42,28 +42,62 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
+@protocol MADDocumentStatusProtocol <NSObject>
+
+    - (void)setStatusText:(NSString *)statusText;
+
+@end
+
+@class MADDocumentObjectID;
+@class MADDatabaseObjectID;
+@class MADQueryObjectID;
+
+typedef NS_ENUM(short, MADObjectType) {
+    MADObjectTypeDocument,
+    MADObjectTypeDatabase,
+    MADObjectTypeQueries,
+};
+
+@protocol MADObjectIDProtocol <NSObject>
+    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, readonly, copy)      NSManagedObjectID *objectID;
+@end
+
+@interface MADObjectID : NSObject
+    <MADObjectIDProtocol>
+@end
+
+@interface MADDocumentObjectID : MADObjectID
+    <MADObjectIDProtocol>
+    @property (nonatomic, readonly, copy)      NSOrderedSet <MADDatabaseObjectID *> *databaseIDs;
+@end
+
+@interface MADDatabaseObjectID : MADObjectID
+    <MADObjectIDProtocol>
+    @property (nonatomic, readonly, copy)      NSOrderedSet <MADQueryObjectID *> *queryIDs;
+@end
+
+@interface MADQueryObjectID : MADObjectID
+    <MADObjectIDProtocol>
+@end
+
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
         MADDataProtocol,
         MTCacheProtocol,
         MTReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
-    
+
     @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
 
-    @property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
+    @property (nonatomic, readonly, strong)     MADDocumentObjectID *documentObjectIDStore;
+    //@property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
     @property (readonly)                        RptqDocument    *activeDocumentModel;
 
     @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
 
-    //@property (nonatomic, readwrite, strong)    MTReportFormatter *reportFormatter;
-    //@property (nonatomic, readonly, strong)     MTDataTableFast *dataTable;
-
-    //@property (nonatomic, readonly, strong)     MTDatabase *database;
-
-    // Set and used by export operations
-    @property (nonatomic, weak)                 MADActivityIndicator    *statusLabel;
+    @property (nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
     @property (nonatomic, strong, readwrite)    MADocumentState         *documentStatus;
 
     @property (nonatomic, readonly, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;

@@ -92,16 +92,20 @@ static inline float wobbleFactor() {
 
 @end
 
-@implementation MADCollectionViewCellDocument
-
-- (UIView *)selectedBackgroundView {
-    if (_selectedBackgroundView == nil) {
-        _selectedBackgroundView = [[MADBackgroundViewSelected alloc]
-                                                initWithFrame:self.contentView.frame];
-        self.selectedBackgroundView = _selectedBackgroundView;
-    }
-    return _selectedBackgroundView;
+@implementation MADCollectionViewCellDocument {
+    
 }
+
+//- (void)
+
+//- (UIView *)selectedBackgroundView {
+//    if (_selectedBackgroundView == nil) {
+//        _selectedBackgroundView = [[MADBackgroundViewSelected alloc]
+//                                                initWithFrame:self.contentView.frame];
+//        self.selectedBackgroundView = _selectedBackgroundView;
+//    }
+//    return _selectedBackgroundView;
+//}
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
@@ -110,7 +114,7 @@ static inline float wobbleFactor() {
 
 - (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted: highlighted];
-    [_labelTitle setHighlighted:highlighted];
+    [_labelTitle setHighlighted: highlighted];
 }
 
 + (UIActivityIndicatorView *)newActivityIndicatorView {
@@ -127,6 +131,9 @@ static inline float wobbleFactor() {
     return activityIndicatorView;
 }
 
+- (void)dealloc {
+    [self setSelectedBackgroundView:nil];
+}
 
 - (void)prepareForReuse {
     [super prepareForReuse];
@@ -139,6 +146,9 @@ static inline float wobbleFactor() {
 - (void)awakeFromNib {
     [super awakeFromNib];
     _wobbling = false;
+    UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc]
+                                      initWithFrame:self.contentView.frame];
+    [self setSelectedBackgroundView: selectedBackgroundView];
 }
 
 

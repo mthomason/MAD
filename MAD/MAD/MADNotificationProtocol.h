@@ -9,7 +9,7 @@
 #ifndef MAD_MADNotificationProtocol_h
 #define MAD_MADNotificationProtocol_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @protocol MADNotificationProtocol <NSObject>
 

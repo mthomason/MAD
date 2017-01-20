@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADQueryFullTableEnumerator_h
+#define Reports_MADQueryFullTableEnumerator_h
+
+#import <Foundation/NSEnumerator.h>
 
 @class RptqDocument;
 
@@ -15,3 +18,5 @@
     - (instancetype)initWithDocument:(RptqDocument *)document;
 
 @end
+
+#endif

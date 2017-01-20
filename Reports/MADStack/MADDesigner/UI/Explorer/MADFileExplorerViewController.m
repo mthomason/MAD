@@ -574,7 +574,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
         [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
-        [self setToolbarItems:toolbarButtons animated:animated];
+        [self setToolbarItems:toolbarButtons animated:NO];
     }
 
     // set delegates
@@ -1223,7 +1223,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             self.tabController = nil;
             //NSArray *viewControllers = [[NSArray alloc] init];
             //[tabController setViewControllers:viewControllers animated:YES];
-            [self dismissViewControllerAnimated:YES completion:^{
+            [self.navigationController popViewControllerAnimated:YES];
             
                 id handlerClose;
                 handlerClose = [[NSInvocationOperation alloc] initWithTarget:self
@@ -1231,7 +1231,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                       object:nil];
                 [[NSOperationQueue mainQueue] addOperation:handlerClose];
                 
-            }];
+            //}];
         };
         
         [MADocument close:openDocument completion:handleCloseCompletion];
@@ -1328,10 +1328,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     tabBarController.document = document;
     tabBarController.viewControllerDelegate = self;
     self.tabController = tabBarController;
+    UINavigationController *onController = self.navigationController;
+    [self.navigationController pushViewController:tabBarController animated:YES];
 
-    [self presentViewController:navigationController animated:YES completion:^{
+    //[self presentViewController:navigationController animated:YES completion:^{
         
-    }];
+    //}];
 }
 
 - (void)openDocumentAtURL:(NSURL *)url {
@@ -2123,73 +2125,193 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark -
 #pragma mark UIViewControllerContextTransitioning
 
-@implementation MADFileExplorerAnimatedCrossFadePop
+static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing);
+static inline CGRect CGRectTabBarOffscreen(CGRect rect);
+static inline CGRect CGRectTabBarOnscreen(CGRect rect);
 
-- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.7000;
+static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing)  {
+    return pushing ? CGRectTabBarOnscreen(rect) : CGRectTabBarOffscreen(rect);
 }
+
+static inline CGRect CGRectTabBarOffscreen(CGRect rect)  {
+    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
+}
+
+static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
+    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
+}
+
+@implementation MADFileExplorerAnimated
+
++ (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing {
+    id instance = pushing ? [[MADFileExplorerAnimatedCrossFadePush alloc] initToolbar:showToolbar] :
+                            [[MADFileExplorerAnimatedCrossFadePop alloc] initToolbar:showToolbar];
+    return instance;
+}
+
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    return 1.70;
+}
+
+
+//- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+//    @throw NSInternalInconsistencyException;
+//}
+
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
     UIViewController *fromViewController, *toViewController;
     UIView *toView, *fromView;
     
-    fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    toViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    
-    BOOL poppingFileExplorer = NO;
-    if ([fromViewController isKindOfClass:[MADFileExplorerViewController class]]) {
-        poppingFileExplorer = YES;
-    }
-        
-    toView = [transitionContext viewForKey: UITransitionContextToViewKey];
-    fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
-    [[transitionContext containerView] addSubview:toView];
-    [[transitionContext containerView] insertSubview:toView belowSubview:fromView];
-    
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        fromView.alpha = 0.0000f;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-        }
-    }];
-}
-
-@end
-
-@implementation MADFileExplorerAnimatedCrossFadePush
-
-- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.7000;
-}
-
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-
-    UIViewController *fromViewController, *toViewController;
-    UIView *toView, *fromView;
-
     fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-
-    BOOL pushingFileExplorer = NO;
+    
+    BOOL pushingFileExplorer = NO, poppingFileExplorer = NO,
+    pushingTabBarController = NO, poppingTabBarController = NO;
     if ([toViewController isKindOfClass:[MADFileExplorerViewController class]]) {
         pushingFileExplorer = YES;
+        poppingFileExplorer = NO;
+    }
+    
+    if ([fromViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+        pushingFileExplorer = NO;
+        poppingFileExplorer = YES;
+    }
+    
+    if ([toViewController isKindOfClass:[UITabBarController class]]) {
+        pushingTabBarController = YES;
+        poppingTabBarController = NO;
+    } else if ([fromViewController isKindOfClass:[UITabBarController class]]) {
+        pushingTabBarController = NO;
+        poppingTabBarController = YES;
     }
     
     toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
-
+    
     [[transitionContext containerView] addSubview:toView];
     
-    toView.alpha = 0.0000f;
+    void(^animationToolbarPushing)(UINavigationController *, BOOL);
+    animationToolbarPushing = ^(UINavigationController *navigationController, BOOL pushFileExplorder){
+        if (pushFileExplorder) {
+            navigationController.toolbar.alpha = 0.0;
+            [navigationController setToolbarHidden: NO animated:NO];
+        }
+    };
+    
+    void(^animationToolbarPopping)(UINavigationController *, BOOL);
+    animationToolbarPopping = ^(UINavigationController *navigationController, BOOL popFileExplorder){
+        if (popFileExplorder) {
+            navigationController.toolbar.alpha = 1.0;
+            [navigationController setToolbarHidden: NO animated:NO];
+        }
+    };
+    
+    
+    animationToolbarPushing(toViewController.navigationController, pushingFileExplorer);
+    animationToolbarPopping(fromViewController.navigationController, poppingFileExplorer);
+    
+    toView.alpha = 0.0;
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        toView.alpha = 1.0000f;
+        toView.alpha = 1.0;
+        if (pushingFileExplorer) {
+            toViewController.navigationController.toolbar.alpha = 1.0;
+        } else if (poppingFileExplorer) {
+            fromViewController.navigationController.toolbar.alpha = 0.0;
+        }
+        [toViewController.view setNeedsLayout];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            BOOL canceled;
+            if (!(canceled = [transitionContext transitionWasCancelled])) {
+                if (pushingFileExplorer) {
+                    [toViewController.navigationController setToolbarHidden: NO animated:NO];
+                } else if (poppingFileExplorer) {
+                    [fromViewController.navigationController setToolbarHidden: YES animated:NO];
+                }
+                [fromView removeFromSuperview];
+            }
+            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+            
+        }
+    }];
+}
+
+
+@end
+
+@implementation MADFileExplorerAnimatedCrossFadePop {
+    BOOL _hideToolbar;
+}
+
+- (instancetype)initToolbar:(BOOL)showToolbar {
+    if (self = [super init]) {
+        _hideToolbar = !showToolbar;
+    }
+    return self;
+}
+
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
+    return 0.7000;
+}
+/*
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    UIViewController *fromViewController, *toViewController;
+    UIView *toView, *fromView;
+    
+    fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    
+    BOOL poppingFileExplorer = NO, pushingTabBarController = NO;
+    if ([toViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+        poppingFileExplorer = YES;
+    } else if ([fromViewController isKindOfClass:[UITabBarController class]]) {
+        pushingTabBarController = YES;
+    }
+    
+    toView = [transitionContext viewForKey: UITransitionContextToViewKey];
+    fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
+    [[transitionContext containerView] addSubview:toView];
+    [[transitionContext containerView] insertSubview:toView belowSubview:fromView];
+    BOOL hideToolbar = _hideToolbar;
+    if ([fromViewController isKindOfClass:[UITabBarController class]]) {
+        toViewController.navigationController.toolbar.alpha = _hideToolbar ? 1.0000f : 0.0000f;
+        [toViewController.navigationController setToolbarHidden: hideToolbar ? NO : YES animated:NO];
+    }
+
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+        fromView.alpha = 0.0000f;
+        toViewController.navigationController.toolbar.alpha = hideToolbar ? 0.0000f : 1.0000f;
+        //[toViewController.view setNeedsLayout];
+ 
     } completion:^(BOOL finished) {
         if (finished) {
             [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+            [toViewController.navigationController setToolbarHidden: hideToolbar ? YES : NO animated:NO];
+            [fromView removeFromSuperview];
+            
         }
     }];
+}
+*/
+@end
+
+
+@implementation MADFileExplorerAnimatedCrossFadePush {
+    BOOL _hideToolbar;
+}
+
+- (instancetype)initToolbar:(BOOL)showToolbar {
+    if (self = [super init]) {
+        _hideToolbar = !showToolbar;
+    }
+    return self;
+}
+
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
+    return 0.7000;
 }
 
 

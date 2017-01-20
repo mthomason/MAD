@@ -8,6 +8,8 @@
 
 #import "MADFeedbackUncaughtExceptionHandler.h"
 #import <UIKit/UIAlertView.h>
+#import <libkern/OSAtomic.h>
+#import <execinfo.h>
 
 NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
 NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
