@@ -234,21 +234,29 @@ typedef struct png_control {
         NSArray <NSManagedObjectID *> *result;
         NSManagedObjectContext *managedObjectContext;
         managedObjectContext = _managedObjectContext;
-        NSExpression *expression[2];
-        expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
-                                        NSStringFromSelector(@selector(ownedByQueryAsStaticResource)),
-                                        NSStringFromSelector(@selector(objectID))];
-        expression[1] = [NSExpression expressionForConstantValue:_objectID];
-        
-        NSAssert(expression != nil, @"Need an expression");
-        NSComparisonPredicate *predicate;
-        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
-                                                      rightExpression: expression[1]
-                                                             modifier: NSDirectPredicateModifier
-                                                                 type: NSEqualToPredicateOperatorType
-                                                              options: 0];
         
         request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabase class])];
+        if (_objectID) {
+            NSExpression *expression[2];
+            expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
+                             NSStringFromSelector(@selector(ownedByQueryAsStaticResource)),
+                             NSStringFromSelector(@selector(objectID))];
+            expression[1] = [NSExpression expressionForConstantValue:_objectID];
+            
+            NSAssert(expression != nil, @"Need an expression");
+            NSComparisonPredicate *predicate;
+            predicate = [NSComparisonPredicate predicateWithLeftExpression: expression[0]
+                                                           rightExpression: expression[1]
+                                                                  modifier: NSDirectPredicateModifier
+                                                                      type: NSEqualToPredicateOperatorType
+                                                                   options: 0];
+            request.predicate = predicate;
+
+            predicate = nil;
+            expression[0] = nil;
+            expression[1] = nil;
+        }
+        
         request.resultType = NSManagedObjectIDResultType;
         request.includesSubentities = NO;
         request.includesPropertyValues = NO;
@@ -256,17 +264,16 @@ typedef struct png_control {
         result = [managedObjectContext executeFetchRequest:request error:error];
         NSMutableOrderedSet <MADDatabaseObjectID *> *databaseIDs;
         databaseIDs = [[NSMutableOrderedSet <MADDatabaseObjectID *> alloc] init];
-        MADDatabaseObjectID *databaseObjectID;
+        MADDatabaseObjectID *databaseInnerObjectID;
         NSUInteger i = 0;
         for (NSManagedObjectID *objid in result) {
-            databaseObjectID = [[MADDatabaseObjectID alloc] initWithObjectID:objid
+            databaseInnerObjectID = [[MADDatabaseObjectID alloc] initWithObjectID:objid
                                                         managedObjectContext:managedObjectContext];
-            [databaseIDs addObject: databaseObjectID];
+            [databaseIDs addObject: databaseInnerObjectID];
+            databaseInnerObjectID = nil;
             i++;
         }
-        predicate = nil;
-        expression[0] = nil;
-        expression[1] = nil;
+        _databaseIDs = databaseIDs;
     }
     return _databaseIDs;
 }
@@ -338,6 +345,7 @@ typedef struct png_control {
         for (NSManagedObjectID *objid in result) {
             queryObjectID = [[MADQueryObjectID alloc] initWithObjectID:objid];
             [queryIDs addObject: queryObjectID];
+            queryObjectID = nil;
             i++;
         }
         _queryIDs = queryIDs;
@@ -720,7 +728,8 @@ void madwarn(char *err,  const char*err2) { }
     
         _madPersistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
                                       @YES, NSInferMappingModelAutomaticallyOption,
-                                      @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
+                                      @YES, NSMigratePersistentStoresAutomaticallyOption,
+                                      @{@"journal_mode" : @"DELETE"}, NSSQLitePragmasOption, nil];
     }
     return _madPersistentStoreOptions;
 }
@@ -837,7 +846,21 @@ READFROMURL_END:;
             NSManagedObjectModel *managedObjectModel;
             modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
                                                withExtension: MADManagedObjectModelExtention];
-            _madManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+            /*if (modelURL == nil) {
+                for (NSBundle *bundle in [NSBundle allBundles]) {
+                    if (bundle.isLoaded) {
+                        
+                        modelURL = [bundle URLForResource: MADManagedObjectModelName
+                                            withExtension: MADManagedObjectModelExtention];
+                        NSURL *resourceURL = [[NSBundle bundleForClass:[self class]] resourceURL];
+                        NSURL *url = [resourceURL URLByAppendingPathComponent:@"Music.mad"].filePathURL;
+                        if (modelURL) break;
+                    }
+                }
+            }*/
+            managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+            _madManagedObjectModel = managedObjectModel;;
+            managedObjectModel = nil;
         }
         
     }

@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <MADSqlite3/sqlite3.h>
 #import "MTDatabaseSqlite3.h"
+#import "MADocument.h"
 #import <objc/runtime.h>
 #import <malloc/malloc.h>
 #import "MADSectionRepresentation.h"
@@ -33,6 +34,23 @@
     NSLog(@"size of %@: %zd", NSStringFromClass([MADSectionRepresentation class]), class_getInstanceSize([MADSectionRepresentation class]));
     id sr = [[MADSectionRepresentation alloc] init];
     NSLog(@"size of %@: %zd", NSStringFromClass([MADSectionRepresentation class]), malloc_size((__bridge const void *)sr));
+}
+
+- (void)testDocument {
+    
+    for (NSBundle *bundle in [NSBundle allBundles]) {
+        NSLog(@"%@", bundle);
+    }
+    NSURL *resourceURL = [[NSBundle bundleForClass:[self class]] resourceURL];
+   NSURL *url = [resourceURL URLByAppendingPathComponent:@"Music.mad"].filePathURL; // URL to file
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+ 
+    NSLog(@"Document: %@", document);
+    // Call the asynchronous method with completion block
+    [document saveToURL:document.fileURL
+        forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            XCTAssert(success, @"Should have been success!");
+        }];
 }
 
 - (void)testExample {

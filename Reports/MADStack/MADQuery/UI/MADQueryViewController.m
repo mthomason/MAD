@@ -13,6 +13,7 @@
 #import "MADQueryViewController.h"
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSExpressionDescription.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/NSAttributedString.h>
@@ -88,6 +89,9 @@
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
 
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSPersistentStoreResult.h>
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -107,6 +111,7 @@ static NSString * const NSFetchedResultsCachePredicates             = @"NSFetche
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
 static NSString * const ViewControllerTitle = @"MAD Query";
+
 
 #pragma mark - Private Category
 
@@ -642,29 +647,89 @@ BOOL storeEnabled() {
 - (MADQueryViewDataSource *)queryViewDataSource {
 
     if (_queryViewDataSource == nil) {
-/*
+
         NSSet *hasDatabaseSchemas, *hasQueries, *hasQueryTables;
         RptqDocument *rptqDocument;
         RptqDatabase *rptqDatabase;
         RptqQuery *rptqQuery;
-        MADocument *document = _document;
-        rptqDocument = [document activeDocumentModel];
         
+        
+        MADocument *document = _document;
+        NSManagedObjectContext *managedObjectContext = document.documentObjectIDStore.managedObjectContext;
+ 
+        NSFetchRequest *request;
+
+        MADQueryViewDataSource *dataSource;
+        
+        //dataSource = [[MADQueryViewDataSource alloc] initWithDocument: _document
+        //                                             reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+        //                                          handleConfigureCell: _handleConfigureCell];
+        
+        //MADocument *document = _document;
+        NSManagedObjectID *objectID = document.documentObjectIDStore.databaseIDs.firstObject.queryIDs.firstObject.objectID.copy;
+        NSComparisonPredicate *predicate;
+                NSExpression *expression[2];
+        //NSString *keyPath = [[NSString alloc] initWithFormat:@"%@",
+        //                     NSStringFromSelector(@selector(inQuery)),
+        //                     NSStringFromSelector(@selector(objectID))];
+        //NSExpression *conditin = [NSExpression expression]
+        
+        NSExpressionDescription* descObjectID = [[NSExpressionDescription alloc] init];
+        descObjectID.name = NSStringFromSelector(@selector(objectID));;
+        descObjectID.expression = [NSExpression expressionForEvaluatedObject];
+        descObjectID.expressionResultType = NSObjectIDAttributeType;
+        
+        //NSExpressionDescription* descObjectID = [[NSExpressionDescription alloc] init];
+        //descObjectID.name = NSStringFromSelector(@selector(hasQueryTables));
+        //descObjectID.expression = [NSExpression expresso] [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(hasQueryTables))];
+        //descObjectID.expressionResultType = NSObjectIDAttributeType;
+        
+        expression[0] = [NSExpression expressionForEvaluatedObject];
+        expression[1] = [NSExpression expressionForConstantValue: objectID];
+        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
+                                                      rightExpression: expression[1]
+                                                             modifier: NSDirectPredicateModifier
+                                                                 type: NSEqualToPredicateOperatorType
+                                                              options: 0];
+        NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQuery class])
+                                              inManagedObjectContext: managedObjectContext];
+        request = [[NSFetchRequest alloc] init];// fetchRequestWithEntityName: ed];
+        //NSExpression *keyPathQueryTables = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(hasQueryTables))];
+        
+        //NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+        //expressionDescription.expression = keyPathQueryTables;
+        descObjectID.expressionResultType = NSManagedObjectIDResultType;
+        request.propertiesToFetch = @[descObjectID];
+        request.entity = ed;
+        request.predicate = predicate;
+        request.resultType = NSDictionaryResultType;
+        request.includesSubentities = NO;
+        //request.includesPropertyValues = NO;
+        NSError * __autoreleasing *error = NULL;
+        id result;
+        result = [managedObjectContext executeFetchRequest:request error:error];
+        //[((NSAsynchronousFetchResult *)result) finalResult];
+        NSLog(@"%@", result);
+        request.resultType = NSDictionaryResultType;
+        request.includesSubentities = NO;
+        request.includesPropertyValues = NO;
+        //NSError * __autoreleasing *error = NULL;
+        NSArray *result2;
+        //result2 = [managedObjectContext executeFetchRequest:request error:error];
+
+        RptqQuery *query = [managedObjectContext objectWithID:objectID];
+        
+        rptqDocument = [document activeDocumentModel];
         hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
         rptqDatabase = hasDatabaseSchemas.anyObject;
         hasQueries = rptqDatabase.hasQueries;
         rptqQuery = hasQueries.anyObject;
         hasQueryTables = rptqQuery.hasQueryTables;
-        */
-        MADQueryViewDataSource *dataSource;
         
-        dataSource = [[MADQueryViewDataSource alloc] initWithDocument: _document
-                                                     reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-                                                  handleConfigureCell: _handleConfigureCell];
         
-        //dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: hasQueryTables.count
-        //                                                   reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
-        //                                                handleConfigureCell: _handleConfigureCell];
+        dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: result
+                                                           reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+                                                        handleConfigureCell: _handleConfigureCell];
         
         dataSource.datasoruce = self;
         

@@ -69,7 +69,8 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
         NSNumber *o2 = @YES;
         id options = [[NSDictionary alloc] initWithObjectsAndKeys:
                       o1, NSMigratePersistentStoresAutomaticallyOption,
-                      o2, NSInferMappingModelAutomaticallyOption, nil];
+                      o2, NSInferMappingModelAutomaticallyOption,
+                      @{@"journal_mode" : @"DELETE"}, NSSQLitePragmasOption, nil];
         
         [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
                                                  configuration: nil

@@ -80,6 +80,12 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     }
 }
 
+/*- (instancetype)initWithQueryObjectID:(NSManagedObjectID *)document
+                     reportingEnabled:(BOOL)reportingEnabled
+                  handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
+    
+}*/
+
 - (instancetype)initWithDocument:(MADocument *)document
                 reportingEnabled:(BOOL)reportingEnabled
              handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
