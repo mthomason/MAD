@@ -1211,7 +1211,7 @@ READFROMURL_END:;
             
             NSNumber *queryLimit;
             queryLimit = [[NSNumber alloc] initWithUnsignedInteger: self.limitResultsDesignMode ?
-                          50 : NSUIntegerMax];
+                                                                        50 : NSUIntegerMax];
             extraParameters[@"MADQueryLimit"] = queryLimit;
             
             MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];

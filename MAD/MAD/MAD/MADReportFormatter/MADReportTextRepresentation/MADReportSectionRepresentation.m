@@ -21,6 +21,7 @@
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
 - (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [_rows removeAllObjects];
 }
 
@@ -29,6 +30,7 @@
 }
 
 - (instancetype)initWithNumberOfRows:(NSUInteger)capacity {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         NSMutableArray *rows = capacity > 0 ? [[NSMutableArray alloc] initWithCapacity:capacity] :
                                                 [[NSMutableArray alloc] init];

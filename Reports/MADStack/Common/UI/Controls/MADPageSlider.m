@@ -74,7 +74,8 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 - (void)dealloc { }
 
-- (instancetype)initWithEffect:(UIBlurEffect *)effect {
+- (instancetype)init {
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     if (self = [super initWithEffect:effect]) {
         
         self.contentView.tintColor = [UIColor blueColor];

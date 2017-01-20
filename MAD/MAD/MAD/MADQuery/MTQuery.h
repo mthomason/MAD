@@ -56,6 +56,8 @@ extern NSString * const MADIdentifierROWID;
 
     - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error;
 
+    - (void)update;
+
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only

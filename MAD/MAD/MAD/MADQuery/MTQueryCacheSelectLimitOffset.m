@@ -206,6 +206,10 @@
     return self.sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheSelectLimitOffset;
+}
+
 - (BOOL)returnsResults {
     return YES;
 }

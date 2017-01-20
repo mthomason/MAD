@@ -73,4 +73,8 @@
     return self.datatable;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeSampleDataTable;
+}
+
 @end

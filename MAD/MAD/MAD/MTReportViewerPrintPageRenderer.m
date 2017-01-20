@@ -259,6 +259,42 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 #pragma -
 #pragma Drawing Helpers
 
+- (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
+    switch (type) {
+        case MADDocumentSectionTypeBody:
+            return [UIColor redColor];
+            break;
+            
+        case MADDocumentSectionTypeGroupFooter:
+            return [UIColor purpleColor];
+            break;
+            
+        case MADDocumentSectionTypeGroupHeader:
+            return [UIColor yellowColor];
+            break;
+            
+        case MADDocumentSectionTypePageFooter:
+            return [UIColor grayColor];
+            break;
+            
+        case MADDocumentSectionTypePageHeader:
+            return [UIColor greenColor];
+            break;
+            
+        case MADDocumentSectionTypeReportFooter:
+            return [UIColor brownColor];
+            break;
+            
+        case MADDocumentSectionTypeReportHeader:
+            return [UIColor blueColor];
+            break;
+            
+        default:
+            return [UIColor magentaColor];
+            break;
+    }
+}
+
 - (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
                                       inRect:(CGRect)rect {
 
@@ -338,7 +374,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
     CGRect rect;
     
-
+    [self.textRepresentation removeAllPages];
     document = (reportFormatter.layout).activeDocumentModel;
     
     NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
@@ -359,7 +395,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                                   andLevel: pageSection.groupLevel];
         
         rect = sectionBounds(pageRect,
-                             [reportFormatter heightForSectionWithObjectID:documentSection.objectID],
+                             heightWithVisibility([reportFormatter heightForSectionWithObjectID:documentSection.objectID], documentSection.visibility.boolValue),
                              documentSection.visibility.boolValue,
                              pageSection.sectionType,
                              reportFormatter.numberOfPages,
@@ -445,8 +481,13 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     if (!((sectionRepresentation.visibility =
            documentSection.visibility.boolValue))) goto END_DrawSection;
     
-    [self setBackgroundColorForDocumentSection: documentSection
-                                        inRect: sectionRect];
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [[self backgroundColorForDocumentSectionType:[documentSection getDocumentSectionType]] setFill];
+
+    CGPathRef path = CGPathCreateWithRect(sectionRect, NULL);
+    CGContextAddPath(ctx, path);
+    CGContextDrawPath(ctx, kCGPathFill);
+    CGPathRelease(path);
 
     for (row in rows) {
         

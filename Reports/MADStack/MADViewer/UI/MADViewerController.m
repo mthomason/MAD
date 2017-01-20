@@ -246,7 +246,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         _timerLabelTimeSinceRefreh = nil;
     }
-    //[_toolbarItemsActive removeAllObjects];
+    [_toolbarItemsActive removeAllObjects];
 }
 
 - (void)timerDealloc {
@@ -283,7 +283,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         CGRect boundsStatusLabel = CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f);
         
         UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
+        MADPageSlider *pageSlider = [[MADPageSlider alloc] init];
+        effect = nil;
+        
         self.pageSlider = pageSlider;
 
         

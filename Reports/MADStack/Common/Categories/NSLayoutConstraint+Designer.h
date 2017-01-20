@@ -15,7 +15,7 @@
 @class MTRulerView;
 @class UIScrollView;
 
-@interface NSLayoutConstraint (Designer)
+@interface MADLayoutConstraint : NSLayoutConstraint
 
     + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
                           marginTop:(CGFloat)marginTop heigh:(CGFloat)height;

@@ -113,4 +113,8 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
     return sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheAggregateFunction;
+}
+
 @end

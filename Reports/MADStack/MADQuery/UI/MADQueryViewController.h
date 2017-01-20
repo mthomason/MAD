@@ -10,6 +10,7 @@
 #define Reports_MADQueryViewController_h
 
 #import <UIKit/UITableViewController.h>
+#import <UIKit/UIViewControllerTransitioning.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
 
@@ -19,7 +20,8 @@ extern NSString * const MADSegueShowSql;
 
 @interface MADQueryViewController : UITableViewController
     <MADViewControllerDocumentProtocol,
-        MADTabBarImageProtocol>
+        MADTabBarImageProtocol,
+        UIViewControllerAnimatedTransitioning>
 
     + (void)deleteCoreDataCache;
 

@@ -44,7 +44,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
 @implementation MADNavigationController
 
-@synthesize document = _document;
+@dynamic document;
 
 + (void)initialize {
     [super initialize];
@@ -150,20 +150,20 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return controller;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        __completedFirstLayout = NO;
-    }
-    return self;
-}
+//- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+//    if (self = [super initWithCoder:aDecoder]) {
+//        __completedFirstLayout = NO;
+//    }
+//    return self;
+//}
 
-- (void)dealloc {
+//- (void)dealloc {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+//}
 
 #pragma mark -
 #pragma mark UIViewController handle storyboard segue
-
+/*
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
@@ -193,11 +193,11 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
-}
+}*/
 
 #pragma mark -
 #pragma mark UIViewControllerTransitioningDelegate
-
+/*
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                       presentingViewController:(UIViewController *)presenting
                                                           sourceViewController:(UIViewController *)source {
@@ -208,16 +208,16 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     }
     return result;
 }
-
+*/
 #pragma mark -
 #pragma mark MADViewControllerDocumentProtocol
-
+/*
 - (void)setDocument:(MADocument *)document {
     if (_document != document) {
         _document = document;
     }
 }
-
+*/
 #pragma mark -
 #pragma mark IBActions
 

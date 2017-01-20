@@ -85,4 +85,8 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
     return [NSString stringWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@", self.columnName, self.tableName, self.sqlSpeedPredicate, self.columnName, self.sqlSpeedSorting];
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheSelectGroupKeys;
+}
+
 @end

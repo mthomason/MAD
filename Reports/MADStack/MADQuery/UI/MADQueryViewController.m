@@ -109,7 +109,7 @@ static NSString * const ViewControllerTitle = @"MAD Query";
 
 #pragma mark - Private Category
 
-@interface MADQueryViewController()
+@interface MADQueryViewController ()
 
     <NSFetchedResultsControllerDelegate,
         MADQueryViewDelegateProtocol,
@@ -122,7 +122,8 @@ static NSString * const ViewControllerTitle = @"MAD Query";
         MADViewControllerStandardProtocol,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate,
-        MADQueryViewControllerDatasourceProtocol>
+        MADQueryViewControllerDatasourceProtocol,
+        UIViewControllerTransitioningDelegate>//, UIViewControllerTransitionCoordinator>
 
     @property (nonatomic, assign) BOOL firstTimeViewWillLayoutSubviews;
 
@@ -229,6 +230,11 @@ BOOL storeEnabled() {
     
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    [self.tableView setBackgroundView:nil];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     
     [MADQueryViewController deleteCoreDataCache];
@@ -306,11 +312,7 @@ BOOL storeEnabled() {
     //if (document == nil) {
     //    return;
     //}
-    
-    MADWatermarkView *watermarkView;
-    CGRect bounds = self.tableView.bounds;
-    watermarkView = [[MADWatermarkView alloc] initWithFrame: bounds];
-    self.tableView.backgroundView = watermarkView;
+    //self.transitioningDelegate = self;
     
     NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory.copy;
     [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
@@ -545,6 +547,11 @@ BOOL storeEnabled() {
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
+//- (BOOL)animateAlongsideTransition:(void (^ __nullable)(id <UIViewControllerTransitionCoordinatorContext>context))animation
+//                        completion:(void (^ __nullable)(id <UIViewControllerTransitionCoordinatorContext>context))completion {
+    
+//}
+
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -563,7 +570,7 @@ BOOL storeEnabled() {
     titleView = navigationItem.titleView;
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [backgroundView setNeedsDisplay];
+        //[backgroundView setNeedsDisplay];
         [titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [titleView sizeToFit];
@@ -1681,11 +1688,252 @@ BOOL storeEnabled() {
     _headerSectionHeight = [self.class SizeCategoryHeight:category];
 }
 
+- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
+    return nil;
+}
+- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator {
+    return nil;
+}
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return self;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return self;
+}
+
+
+- (void)presentationTransitionWillBegin {
+    // Add a custom dimming view behind the presented view controller's view
+    //[[self containerView] addSubview:_dimmingView];
+    //[_dimmingView addSubview:[[self presentedViewController] view]];
+    
+    // Use the transition coordinator to set up the animations.
+    id <UIViewControllerTransitionCoordinator> transitionCoordinator =
+    [[self presentingViewController] transitionCoordinator];
+    
+    // Fade in the dimming view during the transition.
+    [self.tableView.backgroundView setAlpha:0.0];
+    [transitionCoordinator animateAlongsideTransition:
+     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+         [self.tableView.backgroundView setAlpha:1.0];
+     } completion:nil];
+}
+
+- (void)presentationTransitionDidEnd:(BOOL)completed {
+    // Remove the dimming view if the presentation was aborted.
+    if (!completed) {
+        [self.tableView.backgroundView removeFromSuperview];
+    }
+}
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    return 0.35;
+}
+
+static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
+static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
+
+static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
+    return pushing ? UITransitionContextFromViewControllerKey : UITransitionContextToViewControllerKey;
+}
+static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
+    return pushing ? UITransitionContextToViewControllerKey : UITransitionContextFromViewControllerKey;
+}
+
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+/*
+    UIViewController *leftViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    BOOL fromIsQueryView = [leftViewController isKindOfClass:[MADQueryViewController class]];
+    BOOL pushing = fromIsQueryView;
+
+    UIViewController *rightViewController;
+    if (pushing) {
+        rightViewController = [transitionContext viewControllerForKey:UITransitionContextToViewKey];
+        leftViewController =
+    } else {
+        rightViewController = leftViewController;
+    }
+    
+    UIView *containerView = transitionContext.containerView;
+    UIView *tableViewQuery, *collectionViewGrid;
+
+    UIViewController *leftController = [transitionContext viewControllerForKey: leftCntrollerKey(pushing)];
+    UIViewController *toViewController = [transitionContext viewControllerForKey: rightControllerKey(pushing)];
+
+    tableViewQuery = [transitionContext viewForKey: fromIsQueryView ? UITransitionContextFromViewKey : UITransitionContextToViewKey];
+    collectionViewGrid = [transitionContext viewForKey: fromIsQueryView ? UITransitionContextToViewKey : UITransitionContextFromViewKey];
+    
+    CGRect queryFrameInital = [transitionContext initialFrameForViewController:fromViewController];
+    
+    CGRect toFrameInital = [transitionContext initialFrameForViewController:toViewController];
+    CGRect fromFrameFinal = [transitionContext finalFrameForViewController:fromViewController];
+    CGRect toFrameFinal = [transitionContext finalFrameForViewController:toViewController];
+    
+    CGVector offset;
+    offset = CGVectorMake(1.f, 0.f);
+    [containerView addSubview:toView];
+
+    if (!fromIsQueryView) {
+        
+    } else {
+        toView.frame = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width, toFrameFinal.origin.y, toFrameFinal.size.width, toFrameFinal.size.height);
+        toFrameFinal = CGRectMake(toFrameFinal.origin.x, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+    }
+    
+    NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
+    if (!fromIsQueryView) {
+        
+        MADWatermarkView *watermarkView;
+        CGRect bounds = self.tableView.bounds;
+        watermarkView = [[MADWatermarkView alloc] initWithFrame: bounds];
+        watermarkView.alpha = 0.0;
+        ((UITableView *)toView).backgroundView = watermarkView;
+
+    } else {
+        ((UITableView *)fromView).alpha = 1.0;
+    }
+   // toView.frame = toFrameFinal;
+    [UIView animateWithDuration:transitionDuration animations:^{
+        if (fromIsQueryView) {
+            [((UITableView *)fromView).backgroundView setAlpha:0.0];
+        } else {
+            [((UITableView *)toView).backgroundView setAlpha:1.0];
+        }
+        //[toView setFrame:self.navigationController.view.bounds];
+        
+        fromView.frame = CGRectMake(fromFrameFinal.origin.x - fromFrameFinal.size.width, fromFrameFinal.origin.y, fromFrameFinal.size.width, fromFrameFinal.size.height);
+        toView.frame = toFrameFinal;
+    } completion:^(BOOL finished) {
+
+        BOOL wasCancelled = [transitionContext transitionWasCancelled];
+        if (!wasCancelled) {
+
+            if (fromIsQueryView) {
+                [((UITableView *)fromView) setBackgroundView:nil];
+            }
+
+        }
+        [transitionContext completeTransition:!wasCancelled];
+    }];*/
+}
+
 #pragma mark - UIAccessibility
 
 /*- (BOOL)accessibilityPerformEscape {
     [self.delegate viewControllerDidFinish:nil];
     return YES;
 }*/
+
+@end
+
+@interface MADAnimatedTransitioningPop : NSObject <UIViewControllerAnimatedTransitioning>
+
+@end
+
+@implementation MADAnimatedTransitioningPop
+
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    return 0.35;
+}
+
+//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
+//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
+
+//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
+//    return pushing ? UITransitionContextFromViewControllerKey : UITransitionContextToViewControllerKey;
+//}
+//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
+//    return pushing ? UITransitionContextToViewControllerKey : UITransitionContextFromViewControllerKey;
+//}
+
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    UIViewController *leftViewController = [transitionContext viewControllerForKey: UITransitionContextToViewControllerKey];
+    UIViewController *rightViewController = [transitionContext viewControllerForKey: UITransitionContextFromViewControllerKey];
+    CGRect leftFrameFinal = [transitionContext finalFrameForViewController:leftViewController];
+    CGRect rightFrameFinal = [transitionContext finalFrameForViewController:rightViewController];
+    CGRect leftFrameInital = [transitionContext initialFrameForViewController:leftViewController];
+    CGRect rightFrameInital = [transitionContext initialFrameForViewController:rightViewController];
+
+    /*
+    UIViewController *rightViewController;
+    if (pushing) {
+        rightViewController = [transitionContext viewControllerForKey:UITransitionContextToViewKey];
+        leftViewController =
+    } else {
+        rightViewController = leftViewController;
+    }
+    
+    UIView *containerView = transitionContext.containerView;
+    UIView *tableViewQuery, *collectionViewGrid;
+    
+    //UIViewController *leftController = [transitionContext viewControllerForKey: leftCntrollerKey(pushing)];
+    //UIViewController *toViewController = [transitionContext viewControllerForKey: rightControllerKey(pushing)];
+    
+    //tableViewQuery = [transitionContext viewForKey: fromIsQueryView ? UITransitionContextFromViewKey : UITransitionContextToViewKey];
+    //collectionViewGrid = [transitionContext viewForKey: fromIsQueryView ? UITransitionContextToViewKey : UITransitionContextFromViewKey];
+    
+    CGRect queryFrameInital = [transitionContext initialFrameForViewController:fromViewController];
+    
+    leftFrameInital = CGRectMake(leftFrameFinal.origin.x, leftFrameFinal.origin.y, leftFrameFinal.size.width, leftFrameFinal.size.height);
+    //[transitionContext initialFrameForViewController:toViewController];
+    CGRect fromFrameFinal = [transitionContext finalFrameForViewController:fromViewController];
+    CGRect toFrameFinal = [transitionContext finalFrameForViewController:toViewController];
+    
+    CGVector offset;
+    offset = CGVectorMake(1.f, 0.f);
+    [containerView addSubview:toView];
+    
+    if (!fromIsQueryView) {
+        
+    } else {
+        toView.frame = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width, toFrameFinal.origin.y, toFrameFinal.size.width, toFrameFinal.size.height);
+        toFrameFinal = CGRectMake(toFrameFinal.origin.x, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+    }
+    
+    NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
+    if (!fromIsQueryView) {
+        
+        MADWatermarkView *watermarkView;
+        CGRect bounds = self.tableView.bounds;
+        watermarkView = [[MADWatermarkView alloc] initWithFrame: bounds];
+        watermarkView.alpha = 0.0;
+        ((UITableView *)toView).backgroundView = watermarkView;
+        
+    } else {
+        ((UITableView *)fromView).alpha = 1.0;
+    }*/
+    // toView.frame = toFrameFinal;
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+        //if (fromIsQueryView) {
+        //    [((UITableView *)fromView).backgroundView setAlpha:0.0];
+        //} else {
+        //    [((UITableView *)toView).backgroundView setAlpha:1.0];
+        //}
+        //[toView setFrame:self.navigationController.view.bounds];
+        
+        //fromView.frame = CGRectMake(fromFrameFinal.origin.x - fromFrameFinal.size.width, fromFrameFinal.origin.y, fromFrameFinal.size.width, fromFrameFinal.size.height);
+        //toView.frame = toFrameFinal;
+    } completion:^(BOOL finished) {
+        
+        BOOL wasCancelled = [transitionContext transitionWasCancelled];
+        if (!wasCancelled) {
+            
+          //  if (fromIsQueryView) {
+          //      [((UITableView *)fromView) setBackgroundView:nil];
+          //  }
+            
+        }
+        [transitionContext completeTransition:!wasCancelled];
+    }];
+}
+
+@end
+
+@interface MADAnimatedTransitioningPush : NSObject <UIViewControllerAnimatedTransitioning>
+
+@end
+
+@implementation MADAnimatedTransitioningPush
 
 @end

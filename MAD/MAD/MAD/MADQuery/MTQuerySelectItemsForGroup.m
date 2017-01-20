@@ -85,4 +85,8 @@
     return sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheSelectItemsForGroupKeys;
+}
+
 @end

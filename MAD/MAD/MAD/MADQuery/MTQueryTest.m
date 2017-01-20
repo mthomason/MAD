@@ -32,5 +32,8 @@
     return sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeConnectionTest;
+}
 
 @end

@@ -204,7 +204,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     UIScrollViewDelegate,
     UIImagePickerControllerDelegate>
 
-    @property (nonatomic, weak) IBOutlet MADBackgroundScrollView    *scroller;
+    @property (nonatomic, strong) IBOutlet MADBackgroundScrollView *scroller;
+
 
     @property (nonatomic, strong) MADMutableSetElementViews         *visibleElementViews;
     @property (nonatomic, strong) MADMutableSetSectionViews         *passthroughContainers;
@@ -375,6 +376,15 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
         
+        MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
+        toolboxTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+        self.toolboxTransitioningDelegate = toolboxTransitioningDelegate;
+        
+        UINavigationController *navigationControllerToolbox;
+        navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
+        self.navigationControllerToolbox = navigationControllerToolbox;
+
+
     }
     return self;
 }
@@ -414,8 +424,45 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     return _title;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+- (void)loadView {
+    [super loadView];
+    NSLog(@"%@", self.view);
+
+    void (^initalizeScroller)(MADBackgroundScrollView *) = ^(MADBackgroundScrollView *scroller) {
+        scroller.scrollsToTop              = YES;
+        scroller.scrollEnabled             = YES;
+        scroller.userInteractionEnabled    = YES;
+        scroller.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
+        scroller.maximumZoomScale          = 4.0000f;
+        scroller.minimumZoomScale          = 0.3000f;
+        scroller.bouncesZoom               = NO;
+        scroller.opaque = NO;
+        scroller.backgroundColor = [UIColor clearColor];
+        scroller.container.opaque = NO;
+        scroller.container.backgroundColor = [UIColor clearColor];
+    };
+
+    void (^initalizeSelf)(MADDesignerViewController *) = ^(MADDesignerViewController *designer) {
+        designer.boundsOnDisappear = CGRectZero;
+        designer.zoomScaleRestore = -1.0000f;
+        designer.shownAndHidden = NO;
+        designer.editAggregate = NO;
+        
+        designer.insetsSetup = NO;
+        designer.toolboxVisible = NO;
+        designer.sectionSettingsVisible = NO;
+    };
+
+    void (^initalizeNavigationToolbox)(UINavigationController *) = ^(UINavigationController *nav) {
+        nav.transitioningDelegate = self.toolboxTransitioningDelegate;
+        nav.modalPresentationStyle = UIModalPresentationCustom;
+        nav.preferredContentSize = sizePopoverDefault();
+        
+    };
+    initalizeScroller(self.scroller);
+    initalizeSelf(self);
+    initalizeNavigationToolbox(self.navigationControllerToolbox);
+
 }
 
 - (void)viewDidLoad {
@@ -424,40 +471,20 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
-    self.scroller.scrollsToTop              = YES;
-    self.scroller.scrollEnabled             = YES;
-    self.scroller.userInteractionEnabled    = YES;
-    self.scroller.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
-    self.scroller.maximumZoomScale          = 4.0000f;
-    self.scroller.minimumZoomScale          = 0.3000f;
-    self.scroller.bouncesZoom               = NO;
     
     self.hidesStatusBar = NO;
     
-    MADToolboxTransitioningDelegate *transitioningDelegate;
-    transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-    transitioningDelegate.popoverPresentationControllerDelegate = self;
-    transitioningDelegate.passthroughContainer = self.scroller;
 
-    MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
-    settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-    settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
-
-    UINavigationController *navigationControllerToolbox;
-    navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
-    navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
-    navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
-    navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
+    self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
+    self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
 
     MADToolboxViewController *viewControllerToolbox;
-    viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
+    viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
     viewControllerToolbox.clearsBackground = [self padLike];
     viewControllerToolbox.document = document;
     viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
     self.viewControllerToolbox = viewControllerToolbox;
     
-    self.navigationControllerToolbox = navigationControllerToolbox;
-    self.toolboxTransitioningDelegate = transitioningDelegate;
     
     MADPromptManager *promptManager;
     NSString *lastPathComponent = document.fileURL.lastPathComponent.copy;
@@ -471,15 +498,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     }
     
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
-    
-    self.boundsOnDisappear = CGRectZero;
-    self.zoomScaleRestore = -1.0000f;
-    self.shownAndHidden = NO;
-    self.editAggregate = NO;
-        
-    self.insetsSetup = NO;
-    self.toolboxVisible = NO;
-    self.sectionSettingsVisible = NO;
     
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];
@@ -497,27 +515,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     self.scroller.delegate = self;
     
-    NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
-                       *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
 
-    constraintContentLeft = [NSLayoutConstraint newLayoutConstraintView: self.view
-                                                          containerLeft: self.scroller.container];
-    
-    constraintContentRight = [NSLayoutConstraint newLayoutConstraintView: self.view
-                                                          containerRight: self.scroller.container];
-    
-    constraintContentTop = [NSLayoutConstraint newLayoutConstraintView: self.scroller
-                                                          containerTop: self.scroller.container];
-    constraintScrollerBottom = [NSLayoutConstraint newLayoutConstraintScroller: self.scroller
-                                                                        bottom: self.bottomLayoutGuide];
-    constraintWidth = [NSLayoutConstraint newLayoutConstraintContent: self.scroller.container
-                                                               width: self.view.frame.size.width / self.scroller.zoomScale];
-    
-    constraintContentLeft.priority = 999;
-    constraintContentRight.priority = 999;
-
-    self.layoutConstraintContainerWidth = constraintWidth;
-    
     MTReportDesignerSectionLayoutSettingsViewController *viewControllerLayoutSettings;
     viewControllerLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
     viewControllerLayoutSettings.delegate = self;
@@ -525,36 +523,61 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     UINavigationController *navigationController;
     navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
-    navigationController.transitioningDelegate = settingsTransitioningDelegate;
+    navigationController.transitioningDelegate = self.toolboxTransitioningDelegate;
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
     
     self.navigationControllerSectionLayoutSettings = navigationController;
     self.navigationControllerSectionLayoutSettings.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
     
-    self.settingsTransitioningDelegate = settingsTransitioningDelegate;
+    self.settingsTransitioningDelegate = self.toolboxTransitioningDelegate;
     
-    viewScrollerTop = [NSLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
-                                                                        view: self.topLayoutGuide];
 
     MADMutableSetManagedObjectIDs *selectedObjectIds;
     selectedObjectIds = [[MADMutableSetManagedObjectIDs alloc] init];
     self.selectedObjectIds = selectedObjectIds;
     
+    self.scroller.container.backgroundColor =   [UIColor greenColor];
+    self.scroller.backgroundColor =             [UIColor blueColor];
+
+        NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
+    *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
+    
+    constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
+                                                           containerLeft: self.scroller.container];
+    
+    constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view
+                                                           containerRight: self.scroller.container];
+    
+    constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.scroller
+                                                           containerTop: self.scroller.container];
+    constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.scroller
+                                                                         bottom: self.bottomLayoutGuide];
+    constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.scroller.container
+                                                                width: self.view.frame.size.width / self.scroller.zoomScale];
+    
+    constraintContentLeft.priority = 999;
+    constraintContentRight.priority = 999;
+
+    viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
+                                                                         view: self.topLayoutGuide];
     NSArray *constraints;
     constraints = [[NSArray alloc] initWithObjects: constraintContentLeft,
-                                                    constraintContentRight,
-                                                    constraintContentTop,
-                                                    constraintScrollerBottom,
-                                                    constraintWidth,
-                                                    viewScrollerTop, nil];
+                   constraintContentRight,
+                   constraintContentTop,
+                   constraintScrollerBottom,
+                   constraintWidth,
+                   viewScrollerTop, nil];
     [self.view addConstraints:constraints];
-    
-    self.scroller.container.backgroundColor =   [UIColor clearColor];
-    self.scroller.backgroundColor =             [UIColor clearColor];
+
+    self.layoutConstraintContainerWidth = constraintWidth;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    
+
     [self addObservers];
     
     MADBackgroundScrollView *scroller = _scroller;
@@ -564,7 +587,9 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [scroller setZoomScale: 1.0000f animated: NO];
 
     RptqDocument *document = [self.document activeDocumentModel];
-    MADReportSectionsEnumerator *reportSectionsEnumerator = [[MADReportSectionsEnumerator alloc] initWithDocument:document];
+
+    MADReportSectionsEnumerator *reportSectionsEnumerator;
+    reportSectionsEnumerator = [[MADReportSectionsEnumerator alloc] initWithDocument:document];
     
     NSInteger sectionCounter = 0;
     NSUInteger numberOfSections = reportSectionsEnumerator.count;
@@ -575,12 +600,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self updateDisplayDetailZoomValue];
     
     MADLayoutConstraints *rulerConstraints, *rulerSideConstraints;
-    rulerConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
+    rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
                                                      designer: scroller.container
                                                     marginTop: MTReportDesignerBorderPaddingVertical
                                                         heigh: MTReportDesignerRulerHeight].copy;
     
-    rulerSideConstraints = [NSLayoutConstraint constraintForRuler: self.ruler
+    rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
                                                          designer: scroller.container
                                                        sideMargin: MTReportDesignerBorderPaddingSides].copy;
     
@@ -672,28 +697,28 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         self.ruler : sectionViewsDictionary[key];
         
         
-        constraintViewTop = [NSLayoutConstraint newLayoutConstraintViewTop: constraintItem
+        constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: constraintItem
                                                                 viewBottom: sectionView
                                                                    padding: MTReportDesignerBufferPaddingVertical];
         
-        constraintView = [NSLayoutConstraint newLayoutConstraintView: sectionView
+        constraintView = [MADLayoutConstraint newLayoutConstraintView: sectionView
                                                               height: reportSection.height];
         
-        constraintLabelRight = [NSLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel
+        constraintLabelRight = [MADLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel
                                                                        container: sectionView
                                                                          padding: MTReportDesignerSectionLabelPaddingRight];
         
-        constraintLabelBottom = [NSLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel
+        constraintLabelBottom = [MADLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel
                                                                          container: sectionView
                                                                            padding: MTReportDesignerBufferPaddingVertical];
-        constraintLabel = [NSLayoutConstraint newLayoutConstraintLabel: sectionViewLabel
+        constraintLabel = [MADLayoutConstraint newLayoutConstraintLabel: sectionViewLabel
                                                               toHeight: MTReportDesignerSectionLabelHeight];
         
-        constraintViewLeft = [NSLayoutConstraint newLayoutConstraintViewLeft:sectionView
+        constraintViewLeft = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
                                                                      content:scroller.container
                                                                      padding:MTReportDesignerBorderPaddingSides];
         
-        constraintViewRight = [NSLayoutConstraint newLayoutConstraintViewRight:sectionView
+        constraintViewRight = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
                                                                        content:scroller.container
                                                                        padding:MTReportDesignerBorderPaddingSides];
         
@@ -750,7 +775,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
     NSLayoutConstraint *constraintContentViewHeight;
-    constraintContentViewHeight = [NSLayoutConstraint newLayoutConstraintView: scroller.container
+    constraintContentViewHeight = [MADLayoutConstraint newLayoutConstraintView: scroller.container
                                                                        height: sectionHeights];
 
     [scrollerLayoutConstraints addObject:constraintContentViewHeight];
@@ -759,7 +784,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     
     NSLayoutConstraint *constraintToScollerBottom;
-    constraintToScollerBottom = [NSLayoutConstraint newLayoutConstraintView: scroller.container
+    constraintToScollerBottom = [MADLayoutConstraint newLayoutConstraintView: scroller.container
                                                                    containerBottom: scroller];
     
     [scrollerLayoutConstraints addObject:constraintToScollerBottom];
@@ -777,6 +802,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
+    [[self view] addSubview:self.scroller];
+    [self.scroller setNeedsLayout];
 
 }
 
@@ -794,6 +821,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     }
     [self.scroller flashScrollIndicators];
     [self.view setNeedsUpdateConstraints];
+    [self.view setNeedsLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -906,35 +934,40 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)updateViewConstraints {
     [super updateViewConstraints];
-    
-    self.layoutConstraintContainerWidth.constant = self.view.frame.size.width / self.scroller.zoomScale;
-    
+   
+    NSLog(@"Loaded %@", self.isViewLoaded ? @"YES" : @"NO");
     CGFloat zoomscale = self.scroller.zoomScale;
-    CGFloat borderPaddingSides = MTReportDesignerBorderPaddingSides / self.scroller.zoomScale;
-    
-    void (^calculateBorder)(NSLayoutConstraint *, NSUInteger, BOOL *);
-    void (^calculateVerticalBuffer)(NSLayoutConstraint *, NSUInteger, BOOL *);
-    void (^calculateLabelHeight)(NSLayoutConstraint *, NSUInteger, BOOL *);
+    CGFloat ratio = self.view.frame.size.width / zoomscale;
+    //if (!isinf(ratio) && !isnan(ratio)) {
+        self.layoutConstraintContainerWidth.constant = ratio;
 
-    calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = constraint.constant > 0 ? borderPaddingSides : -borderPaddingSides;
-    };
+        CGFloat borderPaddingSides = MTReportDesignerBorderPaddingSides / zoomscale;
+        
+        void (^calculateBorder)(NSLayoutConstraint *, NSUInteger, BOOL *);
+        void (^calculateVerticalBuffer)(NSLayoutConstraint *, NSUInteger, BOOL *);
+        void (^calculateLabelHeight)(NSLayoutConstraint *, NSUInteger, BOOL *);
+        
+        calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
+            constraint.constant = constraint.constant > 0 ? borderPaddingSides : -borderPaddingSides;
+        };
+        
+        calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+            constraint.constant = constraint.constant > 0 ?
+            MTReportDesignerBufferPaddingVertical :
+            -MTReportDesignerBufferPaddingVertical;
+        };
+        
+        calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+            constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
+        };
+        
+        [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:calculateBorder];
+        [self.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:calculateVerticalBuffer];
+        [self.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:calculateLabelHeight];
+        
+        self.layoutConstraintDesignerContentViewHeight.constant = [self designerContentViewSize].height;
+    //}
     
-    calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = constraint.constant > 0 ?
-                                MTReportDesignerBufferPaddingVertical :
-                                -MTReportDesignerBufferPaddingVertical;
-    };
-    
-    calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
-    };
-
-    [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:calculateBorder];
-    [self.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:calculateVerticalBuffer];
-    [self.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:calculateLabelHeight];
-    
-    self.layoutConstraintDesignerContentViewHeight.constant = [self designerContentViewSize].height;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

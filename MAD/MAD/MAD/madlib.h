@@ -11,10 +11,13 @@
 
 #include <stdio.h>
 
-void ultoa(unsigned long n, char s[]);
+int ultoa(unsigned long n, char s[]);
 void uitoa(unsigned int n, char s[]);
 void itoa(int n, char s[]);
 void reverse(char s[]);
 void ltoa(long n, char s[]);
+
+unsigned long count_digits_ul(unsigned long i);
+int count_digits(int);
 
 #endif /* madlib_h */

@@ -49,4 +49,8 @@ static NSString * const SqlFormat = @", %@";
     return _sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheSelectRowId;
+}
+
 @end

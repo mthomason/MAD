@@ -76,6 +76,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (void)dealloc {
     _predicateKindOfLongPressGestureRecognizer = nil;
+    _testLabel = nil;
     [_longPressGestures removeAllObjects];
 }
 
@@ -385,9 +386,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
-                  contentScaleFactor:(CGFloat)contentScaleFactor font:(UIFont *)font {
+                  contentScaleFactor:(CGFloat)contentScaleFactor
+                                font:(UIFont *)font {
 
-    UILabel __unsafe_unretained *lbl = _testLabel;
+    UILabel *lbl = _testLabel;
     lbl.frame = MADCollectionViewLayoutGroupedCellLabelRect();
     lbl.lineBreakMode = NSLineBreakByWordWrapping;
     lbl.contentScaleFactor = contentScaleFactor;
@@ -399,6 +401,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     lbl.font = nil;
     lbl.attributedText = nil;
+    lbl = nil;
 
     return height;
 }

@@ -27,4 +27,8 @@
     return NO;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheJournalModeOverride;
+}
+
 @end

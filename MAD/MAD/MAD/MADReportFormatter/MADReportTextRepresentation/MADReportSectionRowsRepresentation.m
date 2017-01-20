@@ -23,6 +23,7 @@ typedef NSMutableSet <__kindof MADReportLineRepresentation *>  MADMutableSetRepo
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
 - (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [_lines removeAllObjects];
 }
 
@@ -31,6 +32,7 @@ typedef NSMutableSet <__kindof MADReportLineRepresentation *>  MADMutableSetRepo
 }
 
 - (instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         MADMutableSetReportLines *lines = [[MADMutableSetReportLines alloc] initWithCapacity:elementCount];
         self.lines = lines;

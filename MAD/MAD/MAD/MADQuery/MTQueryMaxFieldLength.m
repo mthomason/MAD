@@ -112,4 +112,8 @@
     return sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeMaxFieldLength;
+}
+
 @end

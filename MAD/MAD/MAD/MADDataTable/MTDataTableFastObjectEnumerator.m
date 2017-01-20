@@ -28,11 +28,8 @@
 
 #import <MADFoundation/MADLog.h>
 
-@interface MTDataTableFastObjectEnumerator () {
-    sqlite3_stmt *_statement;
-}
+@interface MTDataTableFastObjectEnumerator ()
 
-    @property (atomic, assign) BOOL empty;
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
 
@@ -41,7 +38,10 @@
 
 @end
 
-@implementation MTDataTableFastObjectEnumerator
+@implementation MTDataTableFastObjectEnumerator {
+    sqlite3_stmt *_statement;
+    BOOL _empty;
+}
 
 void sqliteCallback(void *foo, const char* statement);
 void sqliteCallback(void *foo, const char* statement) {
@@ -50,12 +50,14 @@ void sqliteCallback(void *foo, const char* statement) {
 
 - (void)dealloc {
     sqlite3_finalize(_statement);
+    [_fastEnumerationObjects removeAllObjects];
     _databaseForQuery = nil;
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection
                                    columns:(NSDictionary *)columns
-                                columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
+                                columnKeys:(NSArray *)columnKeys
+                                     query:(MTQuery *)query {
     if (self = [super init]) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
@@ -64,8 +66,8 @@ void sqliteCallback(void *foo, const char* statement) {
         MTDatabaseSqlite3 *database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
         self.databaseForQuery = database;
 
-        self.empty = columnKeys.count == 0;
-        if (!self.empty) {
+        _empty = columnKeys.count == 0;
+        if (!_empty) {
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
             char *queryString = sqlite3_mprintf(sql.UTF8String);
@@ -87,10 +89,9 @@ void sqliteCallback(void *foo, const char* statement) {
 
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    if (!self.empty) {
+    if (!_empty) {
         while (sqlite3_step(_statement) == SQLITE_ROW) {
-            NSDictionary *newObject = [[NSDictionary alloc] initWithDictionary: self.currentObject];
-            [results addObject:newObject];
+            [results addObject:self.currentObject];
         }
     }
     return results;
@@ -98,7 +99,7 @@ void sqliteCallback(void *foo, const char* statement) {
 
 - (id)nextObject {
     BOOL success;
-    if (!self.empty) {
+    if (!_empty) {
         success = sqlite3_step(_statement) == SQLITE_ROW;
     } else {
         success = NO;
@@ -135,6 +136,7 @@ void sqliteCallback(void *foo, const char* statement) {
                     } else {
                         stackbuf[i] = nil;
                     }
+                    co = nil;
                 } else if (stepResult == SQLITE_DONE) {
                     sqlite3_reset(_statement);
                     stackbuf[i] = nil;
@@ -168,7 +170,7 @@ void sqliteCallback(void *foo, const char* statement) {
         
         @autoreleasepool {
             
-            MADDataColumn *dataColumn = _columns[key];
+            
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
             if (sqlite3DataType == SQLITE_NULL) {
@@ -182,10 +184,12 @@ void sqliteCallback(void *foo, const char* statement) {
                 columnValue = [NSNull null];
             }
             if (columnValue != nil && _singleColumnNoWrapper == NO) {
+                MADDataColumn *dataColumn = _columns[key];
                 [currentObject setValue:columnValue forKey:dataColumn.identifier];
+                columnValue = nil;
+                dataColumn = nil;
             }
             columnCounter++;
-
         }
     }
     if (_addRowId && _singleColumnNoWrapper == NO &&
@@ -193,6 +197,7 @@ void sqliteCallback(void *foo, const char* statement) {
         NSNumber *rowid;
         rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
         [currentObject setValue:rowid forKey:MADIdentifierROWID];
+        rowid = nil;
     }
     return _singleColumnNoWrapper ? columnValue : currentObject;
 }

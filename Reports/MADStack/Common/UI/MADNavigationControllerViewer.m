@@ -17,6 +17,7 @@
 @implementation MADNavigationControllerViewer
 
 @synthesize title = _title;
+@synthesize document = _document;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,6 +53,12 @@
                     [MADViewerController Title] : self.viewerController.title.copy;
     }
     return _title;
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (_document != document) {
+        _document = document;
+    }
 }
 
 /*

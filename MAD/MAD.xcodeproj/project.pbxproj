@@ -511,6 +511,8 @@
 		4CE233B21D8F7E3400949451 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233B11D8F7E3400949451 /* MADCocoaExtensions.framework */; };
 		4CE233B41D8F7E4B00949451 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233B31D8F7E4B00949451 /* MADTdsClient.framework */; };
 		4CE233B61D8F7E6A00949451 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233B51D8F7E6A00949451 /* MADSqlite3.framework */; };
+		4CE295BE1E30F7BD009D0BC9 /* MADQueryParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE295BC1E30F7BD009D0BC9 /* MADQueryParameters.h */; };
+		4CE295BF1E30F7BD009D0BC9 /* MADQueryParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE295BD1E30F7BD009D0BC9 /* MADQueryParameters.m */; };
 		4CEA62CF1E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEA62CD1E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.h */; };
 		4CEA62D01E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA62CE1E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.m */; };
 		4CEFDCF71CF5A8710092C148 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEFDCF61CF5A8710092C148 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1066,6 +1068,8 @@
 		4CE233B11D8F7E3400949451 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../DerivedData/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4CE233B31D8F7E4B00949451 /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../DerivedData/Build/Products/Debug-iphoneos/MADTdsClient.framework"; sourceTree = "<group>"; };
 		4CE233B51D8F7E6A00949451 /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../DerivedData/Build/Products/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
+		4CE295BC1E30F7BD009D0BC9 /* MADQueryParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryParameters.h; path = MAD/MADQuery/MADQueryParameters.h; sourceTree = "<group>"; };
+		4CE295BD1E30F7BD009D0BC9 /* MADQueryParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryParameters.m; path = MAD/MADQuery/MADQueryParameters.m; sourceTree = "<group>"; };
 		4CEA62CD1E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryCacheIndexCreateParameters.h; sourceTree = "<group>"; };
 		4CEA62CE1E2EF58700FCCC6D /* MADQueryCacheIndexCreateParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryCacheIndexCreateParameters.m; sourceTree = "<group>"; };
 		4CEFDCF61CF5A8710092C148 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryType.h; path = MAD/MADQuery/MADQueryType.h; sourceTree = "<group>"; };
@@ -1880,6 +1884,8 @@
 		4CEFDD0F1CF5AEA80092C148 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				4CE295BC1E30F7BD009D0BC9 /* MADQueryParameters.h */,
+				4CE295BD1E30F7BD009D0BC9 /* MADQueryParameters.m */,
 				4CEFDD0C1CF5AE510092C148 /* MADQuerySelectParameters.h */,
 				4C401D751BAE3BD500BAE5FC /* MTQueryCacheAddColumn.h */,
 				4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */,
@@ -2081,6 +2087,7 @@
 				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */,
 				4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */,
+				4CE295BE1E30F7BD009D0BC9 /* MADQueryParameters.h in Headers */,
 				4C3080ED1D05509900A7D597 /* MADDocumentObjectImage.h in Headers */,
 				4CC2840F1BADE93A00775B72 /* RptqDocumentObjectFormula.h in Headers */,
 				4C7044F61E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h in Headers */,
@@ -2541,6 +2548,7 @@
 				4C401E6F1BAE4F4000BAE5FC /* NSManagedObject+Extras.m in Sources */,
 				4CC284921BADE9DC00775B72 /* RptqQueryCache+Extras.m in Sources */,
 				4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */,
+				4CE295BF1E30F7BD009D0BC9 /* MADQueryParameters.m in Sources */,
 				4C401E341BAE3DCB00BAE5FC /* MTDatabaseMySql.m in Sources */,
 				4CC2840C1BADE93700775B72 /* RptqDocumentObjectBarcode.m in Sources */,
 				4C401D291BAE3AF800BAE5FC /* MTPaperA1.m in Sources */,

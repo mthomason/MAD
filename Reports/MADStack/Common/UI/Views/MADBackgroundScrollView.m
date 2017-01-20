@@ -12,20 +12,17 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
-
 @interface MADBackgroundScrollView ()
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) NSArray *availableZoomScales;
+    @property (nonatomic, strong) NSArray *availableZoomScales;
 
 @end
 
 @implementation MADBackgroundScrollView
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;
@@ -48,22 +45,21 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
 
         [self addSubview:container];
         
-        NSString *layoutHorizontal = @"H:|[container]|";
-        NSString *layoutVertical = @"V:|[container]|";
-        NSDictionary *metrics = @{};
+        NSDictionary *metrics = [[NSDictionary alloc] init];
         NSDictionary *views = NSDictionaryOfVariableBindings(container);
         
-        NSArray *horizontalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: layoutHorizontal
-                                                                                           options: NSLayoutFormatAlignAllCenterX
-                                                                                           metrics: metrics
-                                                                                             views: views];
+        NSArray *horizontalConstrains, *verticalConstrains, *constraints;
+        horizontalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[container]|"
+                                                                       options: NSLayoutFormatAlignAllCenterX
+                                                                       metrics: metrics
+                                                                         views: views];
         
-        NSArray *verticalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: layoutVertical
-                                                                                         options: NSLayoutFormatAlignAllCenterY
-                                                                                         metrics: metrics
-                                                                                           views: views];
+        verticalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[container]|"
+                                                                     options: NSLayoutFormatAlignAllCenterY
+                                                                     metrics: metrics
+                                                                       views: views];
 
-        NSArray *constraints = [horizontalConstrains arrayByAddingObjectsFromArray:verticalConstrains];
+        constraints = [horizontalConstrains arrayByAddingObjectsFromArray:verticalConstrains];
         
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
@@ -81,6 +77,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
 }
 
 - (void)doubleTapZoom:(UITapGestureRecognizer *)sender {
+    static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
     if (sender.state == UIGestureRecognizerStateEnded) {
         CGFloat initalZoomScale = self.zoomScale;
         CGFloat zoomScale = MADBackgroundScrollViewZoomScales[0];
@@ -97,7 +94,29 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
     }
 }
 
-- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment {
+static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect);
+static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect) {
+    CGRect r = CGRectMake(offset.x, offset.y,
+                                    size.width, size.height - presentedRect.size.height);
+    return r;
+}
+
+static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest);
+static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest) {
+    CGRect r = zoomScale >= 1 ? rectOfInterest :
+                                                CGRectAdjustForScale(rectOfInterest, zoomScale);
+    return r;
+}
+
+static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect);
+static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
+    CGRect r = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), rect.origin.y + adjustment,
+                                    CGFLOAT_MAX, rect.size.height - adjustment);
+    return r;
+}
+
+- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect
+                      containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment {
     
     if (presentedRect.origin.y > CGPointZero.y) {
         
@@ -105,18 +124,12 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
             [self setZoomScale: 1.0000f animated: YES];
         }
         
-        CGRect visibleRect;
-        visibleRect.origin = CGPointMake(self.contentOffset.x, self.contentOffset.y);
-        visibleRect.size = CGSizeMake(containerSize.width, containerSize.height - presentedRect.size.height);
+        CGRect visibleRect = CGRectAdjustForScale(displayBoundsRect(self.contentOffset, containerSize, presentedRect), self.zoomScale);
         
-        visibleRect = CGRectAdjustForScale(visibleRect, self.zoomScale);
+        CGRect rectOfInterestAdjusted = displayBoundsToScale(self.zoomScale, rectOfInterest);
         
-        CGRect rectOfInterestAdjusted = self.zoomScale >= 1 ?
-        rectOfInterest :
-        CGRectAdjustForScale(rectOfInterest, self.zoomScale);
-        
-        CGRect visibleRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), visibleRect.origin.y + adjustment, CGFLOAT_MAX, visibleRect.size.height - adjustment);
-        
+        CGRect visibleRectAdjusted = displayBoundsScaled(adjustment, visibleRect);
+
         if (CGRectContainsRect(visibleRectAdjusted, rectOfInterestAdjusted) == NO) {
             
             CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visibleRect);

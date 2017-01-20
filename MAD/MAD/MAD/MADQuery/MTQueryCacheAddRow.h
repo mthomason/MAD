@@ -10,20 +10,14 @@
 #define Reports_MTQueryCacheAddRow_h
 
 #import "MTQuery.h"
+#import "MADQueryParameters.h"
 
 @interface MTQueryCacheAddRow : MTQuery
 
-    @property (nonatomic, weak) NSArray *rowData;
-
-    @property (nonatomic, readonly, copy) NSString *tableName;
-    @property (nonatomic, readonly, strong) NSArray *columnKeys;
-
-    @property (nonatomic, readonly, strong) NSString *sqlPreProcessColumnNames;
-
-    - (instancetype)initWithColumnKeys:(NSArray *)columnKeys
-                               columns:(NSDictionary *)columns
-                          andTableName:(NSString *)tablename
-                           forDatabase:(MTDatabase *)database;
+    @property (nonatomic, weak) id <MADQueryParametersStandardProtocol,
+                                    MADQueryParametersColumnKeysProtocol,
+                                    MADQueryParametersColumnMetaProtocol,
+                                    MADQueryParametersColumnDataProtocol> delegate;
 
 @end
 

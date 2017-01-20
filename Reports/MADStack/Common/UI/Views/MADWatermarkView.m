@@ -18,8 +18,6 @@
 
 typedef void (^MADWatermarkAddLabel)(CGRect, NSAttributedString *, UIView *);
 
-static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
-
 static inline CGRect LogoRect1(CGPoint origin, CGSize size);
 static inline CGRect LogoRect1(CGPoint origin, CGSize size) {
     return CGRectMake(origin.x, origin.y, size.width, size.height);
@@ -97,12 +95,102 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 
 @end
 
+@interface MADWatermarkString : NSAttributedString
+
+    + (instancetype)newWaterMarkStringMad;
+    + (instancetype)newWaterMarkStringDesigner;
+
+@end
+
 @implementation MADWatermarkView {
     BOOL _drawn;
 }
 
-+ (NSAttributedString *)newWaterMarkStringMad {
+- (void)dealloc {
+    NSLog(@"Dealloc");
+}
 
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
+        self.backgroundColor =  bgColor;
+        _drawn = NO;
+        @autoreleasepool {
+            [self drawBackground];
+        }
+    }
+    return self;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    //if (!newSuperview) {
+    //    for (UIView *subview in self.subviews) {
+    //        [subview removeFromSuperview];
+    //    }
+    //}
+}
+
+/*- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!_drawn) {
+        _drawn = YES;
+        [self drawBackground];
+    }
+}*/
+
+// Uses about 10 MB of VM
+- (void)drawBackground {
+
+    CGRect rect = self.frame;
+    const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
+
+    NSAttributedString *displayString = [MADWatermarkString newWaterMarkStringMad];
+    NSAttributedString *displayString2 = [MADWatermarkString newWaterMarkStringDesigner];
+    const CGSize strings[2] = {displayString.size, displayString2.size};
+    NSUInteger counter[2] = {0, 0};
+    CGRect logoRect[2];
+    
+    do {
+        counter[0] = 0;
+        do {
+            logoRect[0] = LogoRect1(LogoOrigin(counter, strings, logoMargin), strings[0]);
+            logoRect[1] = LogoRect2(LogoOrigin(counter, strings, logoMargin), strings);
+
+            @autoreleasepool {
+                
+                UILabel *l2 = [[UILabel alloc] initWithFrame:LRect1(LogoOrigin(counter, strings, logoMargin), &logoRect[0], counter[0], logoMargin.height)];
+                l2.attributedText = displayString.copy;;
+                l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
+                UIViewAutoresizingFlexibleBottomMargin;
+                [self addSubview:l2];
+                
+                l2 = [[UILabel alloc] initWithFrame:LRect2(LogoOrigin(counter, strings, logoMargin), &logoRect, counter[0], logoMargin.height)];
+                l2.attributedText = displayString2.copy;;
+                l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
+                UIViewAutoresizingFlexibleBottomMargin;
+                [self addSubview:l2];
+                l2 = nil;
+                
+            }
+            counter[0]++;
+            
+        } while (logoRect[0].origin.x + logoRect[0].size.width < rect.size.width);
+        
+        counter[1]++;
+        
+    } while (logoRect[0].origin.y + logoRect[0].size.height < rect.size.height);
+ 
+}
+
+@end
+
+@implementation MADWatermarkString
+
+static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
+
++ (instancetype)newWaterMarkStringMad {
+    
     UIColor *foregroundColor = [UIColor lightTextColor];
 
     UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack
@@ -112,14 +200,14 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
                                             foregroundColor, NSForegroundColorAttributeName,
                                             customFont, NSFontAttributeName, nil];
     
-    NSString *trademark = [[MADApplication AppDelegate] trademark].copy;
+    NSString *trademark = [[MADApplication AppDelegate] trademark];
     
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: trademark
-                                                                           attributes: attributes];
+    id attributedString = [[NSAttributedString alloc] initWithString: trademark
+                                                          attributes: attributes];
     return attributedString;
 }
 
-+ (NSAttributedString *)newWaterMarkStringDesigner {
++ (instancetype)newWaterMarkStringDesigner {
 
     UIColor *foregroundColor = [UIColor lightTextColor];
 
@@ -135,88 +223,9 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
                                 paragraphStyle, NSParagraphStyleAttributeName, nil];
 
     NSString *suffix = [[MADApplication AppDelegate] applicationNameSufixPart].uppercaseString;
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: suffix
-                                                                           attributes: attributes];
+    id attributedString = [[NSAttributedString alloc] initWithString: suffix
+                                                          attributes: attributes];
     return attributedString;
-}
-
-- (void)dealloc {
-    NSLog(@"Dealloc");
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-        self.backgroundColor =  bgColor;
-        _drawn = NO;
-        [self drawBackground];
-    }
-    return self;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    [super willMoveToSuperview:newSuperview];
-    if (!newSuperview) {
-        for (UIView *subview in self.subviews) {
-            [subview removeFromSuperview];
-        }
-    }
-}
-
-/*- (void)layoutSubviews {
-    [super layoutSubviews];
-    if (!_drawn) {
-        _drawn = YES;
-        [self drawBackground];
-    }
-}*/
-
-// Uses about 10 MB of VM
-- (void)drawBackground {
-    
-    CGRect rect = self.frame;
-    const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
-
-    NSAttributedString *displayString = [MADWatermarkView newWaterMarkStringMad];
-    NSAttributedString *displayString2 = [MADWatermarkView newWaterMarkStringDesigner];
-    const CGSize strings[2] = {displayString.size, displayString2.size};
-    NSUInteger counter[2] = {0, 0};
-    CGRect logoRect[2];
-
-    MADWatermarkAddLabel addLabel = ^(CGRect labelFrame, NSAttributedString *string, UIView *backgroundView) {
-        UILabel *l2 = [[UILabel alloc] initWithFrame:labelFrame];
-        l2.attributedText = string;
-        l2.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
-                              UIViewAutoresizingFlexibleBottomMargin;
-        [backgroundView addSubview:l2];
-    };
-    
-    do {
-        counter[0] = 0;
-        do {
-
-            logoRect[0] = LogoRect1(LogoOrigin(counter, strings, logoMargin), strings[0]);
-            logoRect[1] = LogoRect2(LogoOrigin(counter, strings, logoMargin), strings);
-            
-            addLabel(LRect1(
-                            LogoOrigin(counter, strings, logoMargin), &logoRect[0], counter[0], logoMargin.height),
-                     displayString,
-                     self);
-            
-            
-            addLabel(LRect2(
-                            LogoOrigin(counter, strings, logoMargin), &logoRect, counter[0], logoMargin.height),
-                     displayString2,
-                     self);
-
-
-            counter[0]++;
-            
-        } while (logoRect[0].origin.x + logoRect[0].size.width < rect.size.width);
-        
-        counter[1]++;
-        
-    } while (logoRect[0].origin.y + logoRect[0].size.height < rect.size.height);
 }
 
 @end

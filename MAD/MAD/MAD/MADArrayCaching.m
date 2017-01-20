@@ -318,8 +318,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             sqlite3_reset(statementInsert);
             sqlite3_clear_bindings(statementInsert);
         }
-        
-        
     });
     ++_numberOfRows;
 }
@@ -340,6 +338,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             NSAssert(Sqlite3StepResultOK(bind_result), @"Error: '%s'.", __PRETTY_FUNCTION__);
             if (bind_result == SQLITE_DONE) {
                 sqlite3_reset(statementInsert);
+                sqlite3_clear_bindings(statementInsert);
                 //numberOfRows++;
             }
         }
@@ -363,6 +362,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             result = [[NSData alloc] initWithBytes: blob
                                             length: (NSUInteger)bytes];
             sqlite3_reset(statementSelect);
+            sqlite3_clear_bindings(statementSelect);
         }
     });
     
@@ -397,6 +397,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                 //NSLog(@"%@-%@", NSStringFromClass([result2 class]), result2);
                 
             }
+            sqlite3_clear_bindings(statementSelect);
             sqlite3_reset(statementSelect);
         }
     });
@@ -456,8 +457,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (long long int)count {
-    __block sqlite_int64 lastRowid = 0;
-    sqlite3_stmt *stmt_count = _statementCount;
+    //__block sqlite_int64 lastRowid = 0;
+    //sqlite3_stmt *stmt_count = _statementCount;
     
     //int stepResult = sqlite3_step(stmt_count);
     //if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {

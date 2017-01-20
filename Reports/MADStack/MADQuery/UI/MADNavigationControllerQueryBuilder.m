@@ -16,6 +16,12 @@
 
 #import "MADViewControllerDocumentProtocol.h"
 
+#import "MADQueryViewController.h"
+
+#import "MADAnimatedTransitionControllerPop.h"
+#import "MADAnimatedTransitionControllerPush.h"
+
+
 @interface MADNavigationControllerQueryBuilder ()
 
     @property (nonatomic, assign) BOOL firstTimeLayout;
@@ -102,6 +108,7 @@
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
+    //[self.presentedViewController presentationTransitionWillBegin];
     //[super navigationController:navigationController
     //     willShowViewController:viewController
     //                   animated:animated];
@@ -113,6 +120,18 @@
     //[super navigationController:navigationController
     //      didShowViewController:viewController
     //                   animated:animated];
+}
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController NS_AVAILABLE_IOS(7_0) {
+    return nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC  NS_AVAILABLE_IOS(7_0) {
+    return [fromVC isKindOfClass:[MADQueryViewController class]] ? [[MADAnimatedTransitionControllerPush alloc] init] : [[MADAnimatedTransitionControllerPop alloc] init];
 }
 
 - (void)setDocument:(MADocument *)document {

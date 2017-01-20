@@ -116,7 +116,7 @@ void sqliteLog(void *foo, const char* statement) {
         
         const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
         BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
-        NSAssert(databaseOpen, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
+        NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s).", (char *)sqlite3_errmsg(_database));
 
         if (databaseOpen) {
             databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
@@ -144,7 +144,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (void)dealloc {
     
-    if (_bulkStatement != NULL && sqlite3_finalize(_bulkStatement)) {
+    if (_bulkStatement != NULL && sqlite3_clear_bindings(_bulkStatement) && sqlite3_finalize(_bulkStatement)) {
         NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.",
                     __PRETTY_FUNCTION__,
                     sqlite3_errmsg((struct sqlite3 *)_database));
@@ -176,6 +176,7 @@ void sqliteLog(void *foo, const char* statement) {
             exist = sqlite3_column_int(statement, 0) == 1;
         }
     }
+    sqlite3_clear_bindings(statement);
     sqlite3_finalize(statement);
     return exist;
 }
@@ -433,6 +434,7 @@ void sqliteLog(void *foo, const char* statement) {
         
         int step_result = sqlite3_step(statement);
         NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (%s).", (char *)sqlite3_errmsg(_database));
+        step_result = sqlite3_clear_bindings(statement);
         step_result = sqlite3_finalize(statement);
         NSAssert(step_result == SQLITE_OK, @"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
         statement = NULL;
@@ -586,6 +588,7 @@ void sqliteLog(void *foo, const char* statement) {
         NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
     }
     if (partOfTransactionSet == NO) {
+        success = sqlite3_clear_bindings(statement)  == SQLITE_OK;
         success = sqlite3_finalize(statement) == SQLITE_OK;
         NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
     } else {
@@ -780,6 +783,11 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
++ (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
+    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
+    return result;
+}
+
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
     id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
     return result;
@@ -900,6 +908,7 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     sqlite3_finalize(statement);
+    sqlite3_clear_bindings(statement);
     sqlite3_free(sql);
     completion(success, nil, result);
     

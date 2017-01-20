@@ -43,4 +43,8 @@
     return NO;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheDropTable;
+}
+
 @end

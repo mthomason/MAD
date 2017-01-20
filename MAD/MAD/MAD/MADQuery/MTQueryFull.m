@@ -454,5 +454,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeFull;
+}
+
 @end
 

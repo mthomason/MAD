@@ -76,11 +76,18 @@
 
 #import "madlib.h"
 
+#import "MADQueryParameters.h"
+#import "MTDataTablePlist.h"
+#import "MTDatabaseDataBinding.h"
+
 typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
-@interface MTDataTableFast ()
+@interface MTDataTableFast () <MADQueryParametersStandardProtocol,
+        MADQueryParametersColumnKeysProtocol,
+        MADQueryParametersColumnMetaProtocol,
+        MADQueryParametersColumnDataProtocol>
 
     @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForInserts;
     @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForSelects;
@@ -94,11 +101,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     @property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;
 
+    @property (nonatomic, readwrite, strong) id rowDataLastInserted;
+
+    @property (nonatomic, readwrite, strong) NSMutableArray <MTDatabaseDataBinding *> *binaryBindings;
+
 @end
 
 @implementation MTDataTableFast {
     BOOL _bulkInsertLoop;
     BOOL _sortDescriptorsSet;
+    sqlite3_stmt *_statementInsert;
 }
 
 - (void)dealloc {
@@ -328,7 +340,18 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     return tableName;
 }
-
+- (NSString *)queryTableName {
+    return [self tableName];
+}
+- (NSArray <NSString *> *)queryColumnKeys {
+    return [self columnKeys];
+}
+- (NSDictionary *)queryColumns {
+    return [self columns];
+}
+- (NSArray *)queryRowData {
+    return [self rowDataLastInserted];
+}
 - (void)addColumn:(MADDataColumn *)column {
 
     BOOL createTable = self.columnKeys.count == 0;
@@ -376,12 +399,13 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSString *columnAffinity;
     columnAffinity = [MADSqlite3NativeType newSqlite3NativeType: column.type];
 
-    MTQueryCache *query = [[MTQueryCacheAddColumn alloc] initWithTableName: table
-                                                                columnName: columnName
-                                                                    column: column
-                                                               createTable: create
-                                                          uniqueColumnHack: unique
-                                                            columnAffinity: columnAffinity];
+    MTQueryCache *query;
+    query = [[MTQueryCacheAddColumn alloc] initWithTableName: table
+                                                  columnName: columnName
+                                                      column: column
+                                                 createTable: create
+                                            uniqueColumnHack: unique
+                                              columnAffinity: columnAffinity];
     query.database = _databaseForInserts;
     success = [_databaseForInserts executeQuery:query withError:errorQuery];
     NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
@@ -389,69 +413,87 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 }
 
-- (void)addRow:(NSArray *)row {
 
+
+- (void)addRow:(NSArray <id> *)row {
+
+    _rowDataLastInserted = row;
+    
     self.rowCounter++;
 
     if (self.groupKeyIndexes == nil) {
         [self setupGroupKeyIndexes];
     }
     
+    sqlite3 *sqlite_database = _databaseForInserts->_database;
+
     if (_bulkInsertLoop) {
         
-        NSArray *rowData = [NSArray arrayWithArray: row];
-        self.bulkInsertQuery.rowData = rowData;
+        [self.bulkInsertQuery update];
         
-        NSString *sql = [_bulkInsertQuery getSqlWithError:nil];
+        BOOL success = YES;
         
-        id binaryBindings   = [[NSArray alloc] initWithArray: _bulkInsertQuery.binaryBindings];
-        id fieldKeys        = [[NSArray alloc] initWithArray: _bulkInsertQuery.fieldKeys];
+        if (self.binaryBindings == nil) {
+            NSMutableArray <MTDatabaseDataBinding *> *binaryBindings;
+            binaryBindings = [[NSMutableArray alloc] init];
+            self.binaryBindings = binaryBindings;
+        }
         
-        MTDatabaseSqlite3 *dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
+        if (_statementInsert == NULL) {
+            NSString *sql = [[NSString alloc] initWithString: [_bulkInsertQuery getSqlWithError:nil]];
+            char *csql = sqlite3_mprintf(sql.UTF8String);
+            int prepare_result = sqlite3_prepare_v2(sqlite_database, csql, -1, &_statementInsert, NULL);
+            NSAssert(prepare_result == SQLITE_OK, @"ExecuteQueryWithSql failed (%s).",
+                     (char *)sqlite3_errmsg(sqlite_database));
+            success = prepare_result == SQLITE_OK;
+            sqlite3_free(csql);
+            csql = NULL;
+            
+        }
         
-        [dbForInserts executeQueryWithSql: sql
-                      queryBinaryBindings: binaryBindings
-                           queryFieldKeys: fieldKeys
-                           transactionSet: YES];
+        NSUInteger columnCounter = 0;
+        for (id docObject in row) {
+            @autoreleasepool {
+                NSString *fieldName = self.columnKeys[columnCounter];
+                MADDataColumn *column = self.queryColumns[fieldName];
+                
+                id databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.type
+                                                                      fieldIndex: columnCounter
+                                                                           value: docObject];
+                [_databaseForInserts bindStatement:(void **)&_statementInsert withBindings:databinding];
+            }
+            columnCounter++;
+        }
+        
+        NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
+        
+        int step_result = sqlite3_step(_statementInsert);
+        
+        NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
+        
+        step_result = sqlite3_clear_bindings(_statementInsert);
+        step_result = sqlite3_reset(_statementInsert);
+        
+        NSAssert(step_result == SQLITE_OK, @"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
         
     } else {
 
-
-        NSNumber *keyKeys = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumnKeys];
-        NSNumber *keyColumns = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumns];
-        NSNumber *keyData = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowData];
-        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowTableName];
-        NSString *tableName = [self tableName];
-        NSDictionary *columns = self.columns;
-        NSArray *columKeys = self.columnKeys;
-        
-        NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    columKeys,  keyKeys,
-                                    columns,    keyColumns,
-                                    row,        keyData,
-                                    tableName,  keyTableName, nil];
-
-        MTQuery *query = _bulkInsertLoop ? self.bulkInsertQuery :
-                                               [[MTQueryCacheAddRow alloc] initWithObject:parameters];
-        
-        query.database = _databaseForInserts;
+        MTQuery *query;
+        query = [[MTQueryCacheAddRow alloc] initWithObject: self];
         NSError * __autoreleasing *errorQuery = NULL;
         BOOL success = [_databaseForInserts executeQuery:query withError:errorQuery];
-        NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
+        NSAssert(success, @"%s at %s", sqlite3_errmsg(sqlite_database),
                  __PRETTY_FUNCTION__);
-
     }
-    
-    
 }
 
 // FIXME: Maybe wrap in autorelease block.
-- (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
+- (void)addRowWithDataForFieldKeys:(NSDictionary <NSString *, id> *)row {
 
     //@autoreleasepool {
         
-    NSMutableArray *rowData = [[NSMutableArray alloc] init];
-    NSMutableArray *columnKeys = self.columnKeys;
+    NSArray <NSString *> *columnKeys = self.columnKeys;
+    NSMutableArray *rowData = [[NSMutableArray alloc] initWithCapacity:columnKeys.count];
     for (id columnDefKey in columnKeys) {
         
         MADDataColumn *columnDef = self.columns[columnDefKey];
@@ -864,7 +906,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     }
     NSAssert(success, @"%s at %s", sqlite3_errmsg(databaseForSelects->_database),
              __PRETTY_FUNCTION__);
-    
+    sqlite3_clear_bindings(statement);
     sqlite3_finalize(statement);
     sqlite3_free(queryString);
     return results;
@@ -1091,7 +1133,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         result = [self objectOfUnknownType:statement forColumnNumber:0];
     }
     NSAssert(success, @"%s", sqlite3_errmsg(databaseForSelects->_database));
-    
+
+    sqlite3_clear_bindings(statement);
     sqlite3_finalize(statement);
     sqlite3_free(queryString);
     return result;
@@ -1157,16 +1200,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     [self createIndex];
     
     [self.databaseForInserts beginBulkInsert];
-
-    NSString *tableName = [self tableName];
-    MADMapDataColumns *columns = self.columns;
-    NSArray *columnKeys = self.columnKeys;
     
     MTQueryCacheAddRow *bulkInsertQuery;
-    bulkInsertQuery = [[MTQueryCacheAddRow alloc] initWithColumnKeys: columnKeys
-                                                             columns: columns
-                                                        andTableName: tableName
-                                                         forDatabase: self.databaseForInserts];
+    bulkInsertQuery = [[MTQueryCacheAddRow alloc] initWithObject: self];
     self.bulkInsertQuery = bulkInsertQuery;
     
     if (self.queueBulkAdd == nil) {
@@ -1179,6 +1215,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 /*! Call right after bulk insert of data. */
 
 - (void)endBulkInsert {
+
+    sqlite3_finalize(_statementInsert);
+    _statementInsert = NULL;
+
     __block typeof(self) myself = self;
     __block BOOL internalBulkInsertLoop = _bulkInsertLoop;
     dispatch_barrier_sync(self.queueBulkAdd, ^{

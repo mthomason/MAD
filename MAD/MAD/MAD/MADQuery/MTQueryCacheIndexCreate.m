@@ -65,4 +65,8 @@
 
 - (BOOL)returnsResults { return NO; }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheIndexCreateParameters;
+}
+
 @end

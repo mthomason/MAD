@@ -24,6 +24,8 @@
     - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex;
     - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex;
 
+    - (void)removeAllPages;
+
 @end
 
 #endif

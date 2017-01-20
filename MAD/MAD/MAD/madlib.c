@@ -11,6 +11,24 @@
 #import <stdio.h>
 #import <strings.h>
 
+unsigned long count_digits_ul(unsigned long i) {
+    unsigned long digits = 0;
+    while (i) {
+        i /= 10;
+        digits++;
+    }
+    return digits;
+}
+
+int count_digits(int i) {
+    int digits = 0;
+    while (i) {
+        i /= 10;
+        digits++;
+    }
+    return digits;
+}
+
 void ltoa(long n, char s[]) {
     int i = 0;
     do {                            /* generate digits in reverse order */
@@ -20,13 +38,14 @@ void ltoa(long n, char s[]) {
     reverse(s);
 }
 
-void ultoa(unsigned long n, char s[]) {
+int ultoa(unsigned long n, char s[]) {
     int i = 0;
     do {                            /* generate digits in reverse order */
         s[i++] = n % 10 + '0';      /* get next digit */
     } while ((n /= 10) > 0);        /* delete it */
     s[i] = '\0';
     reverse(s);
+    return i;
 }
 
 void uitoa(unsigned int n, char s[]) {

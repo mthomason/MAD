@@ -479,7 +479,9 @@ static NSString * const TextRedraw = @"Redraw";
     if ([vc conformsToProtocol: viewControllerDocumentProtocol]) {
         [(id <MADViewControllerDocumentProtocol>)vc setDocument:_document];
     }
-    [self.navigationController pushViewController:vc animated:YES];
+    [self.navigationController presentViewController:vc animated:YES completion:^{
+        
+    }];//:vc animated:YES];
 
     return YES;
 }

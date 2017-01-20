@@ -30,4 +30,8 @@
     return NO;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheJournalModeDefault;
+}
+
 @end

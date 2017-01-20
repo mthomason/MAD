@@ -47,4 +47,8 @@
 
 - (BOOL)returnsResults { return NO; }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheDeleteAllFromTable;
+}
+
 @end

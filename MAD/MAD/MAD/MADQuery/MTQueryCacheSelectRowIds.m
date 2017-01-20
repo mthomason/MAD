@@ -57,4 +57,8 @@
     return sql;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCacheSelectRowIds;
+}
+
 @end

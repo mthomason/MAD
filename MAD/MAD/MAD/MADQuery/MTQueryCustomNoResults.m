@@ -35,4 +35,8 @@
     return NO;
 }
 
+- (MADQueryType)type {
+    return MADQueryTypeCustomSql;
+}
+
 @end

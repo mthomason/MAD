@@ -36,8 +36,8 @@ const int8_t MADIndexDesigner = 1;
 const int8_t MADIndexViewer = 2;
 
 @interface MADTabBarController ()
-    <UITabBarControllerDelegate,
-        UIViewControllerAnimatedTransitioning>
+    //<UITabBarControllerDelegate,
+    //    UIViewControllerAnimatedTransitioning>
 
     @property (nonatomic, strong) NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
     @property (nonatomic, assign, getter=isNavigationItemInitialized) BOOL navigationItemInitialized;

@@ -74,118 +74,119 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
-    id object = parameters;
+    id query;
     
     switch (type) {
             
         case MADQueryTypeCacheSelectRowIds:
-            self = [[MTQueryCacheSelectRowIds alloc] initWithObject:object];
+            query = [[MTQueryCacheSelectRowIds alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheSelectItemsForGroupKeys:
-            self = [[MADQuerySelectItemsForGroup alloc] initWithObject:object];
+            query = [[MADQuerySelectItemsForGroup alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheAggregateFunction:
-            self = [[MTQueryCacheAggregateFunction alloc] initWithObject:object];
+            query = [[MTQueryCacheAggregateFunction alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheSelectGroupKeys:
-            self = [[MTQueryCacheSelectGroupKeys alloc] initWithObject:object];
+            query = [[MTQueryCacheSelectGroupKeys alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheSelectRowId:
-            self = [[MTQueryCacheSelectRowId alloc] initWithObject:object];
+            query = [[MTQueryCacheSelectRowId alloc] initWithObject:parameters];
             break;
 
         case MADQueryTypeMaxFieldLength:
-            self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
+            query = [[MTQueryMaxFieldLength alloc] initWithObject:parameters];
             break;
 
         case MADQueryTypeCustomSql:
-            self = [[MTQueryCustomNoResults alloc] initWithObject:object];
+            query = [[MTQueryCustomNoResults alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeFull:
-            self = [[MTQueryFull alloc] initWithObject:object];
+            query = [[MTQueryFull alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeConnectionTest:
-            self = [[MTQueryTest alloc] initWithObject:object];
+            query = [[MTQueryTest alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeSampleDataField:
-            self = [[MTQuerySampleDataField alloc] initWithObject:object];
+            query = [[MTQuerySampleDataField alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeSampleDataTable:
-            self = [[MTQuerySampleDataTable alloc] initWithObject:object];
+            query = [[MTQuerySampleDataTable alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheAddColumn:
-            self = [[MTQueryCacheAddColumn alloc] initWithObject:object];
+            query = [[MTQueryCacheAddColumn alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheAddRow:
-            self = [[MTQueryCacheAddRow alloc] initWithObject:object];
+            query = [[MTQueryCacheAddRow alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheDropTable:
-            self = [[MTQueryCacheDropTable alloc] initWithObject:object];
+            query = [[MTQueryCacheDropTable alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheDeleteAllFromTable:
-            self = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:object];
+            query = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheVacuum:
-            self = [[MTQueryCacheVacuum alloc] initWithObject:object];
+            query = [[MTQueryCacheVacuum alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheBeginTransaction:
-            self = [[MTQueryCacheBeginTransaction alloc] initWithObject:object];
+            query = [[MTQueryCacheBeginTransaction alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheEndTransaction:
-            self = [[MTQueryCacheEndTransaction alloc] initWithObject:object];
+            query = [[MTQueryCacheEndTransaction alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheSyncModeOff:
-            self = [[MTQueryCacheSyncOff alloc] initWithObject:object];
+            query = [[MTQueryCacheSyncOff alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheSyncModeDefault:
-            self = [[MTQueryCacheSyncDefault alloc] initWithObject:object];
+            query = [[MTQueryCacheSyncDefault alloc] initWithObject:parameters];
             break;
         
         case MADQueryTypeCacheJournalModeOverride:
-            self = [[MTQueryCacheJournalModeOverride alloc] initWithObject:object];
+            query = [[MTQueryCacheJournalModeOverride alloc] initWithObject:parameters];
             break;
 
         case MADQueryTypeCacheJournalModeDefault:
-            self = [[MTQueryCacheJournalModeDefault alloc] initWithObject:object];
+            query = [[MTQueryCacheJournalModeDefault alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheIndexCreateParameters:
-            self = [[MTQueryCacheIndexCreate alloc] initWithObject:object];
+            query = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheIndexDropParameters:
-            self = [[MTQueryCacheIndexDrop alloc] initWithObject:object];
+            query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
             break;
             
         case MADQueryTypeCacheSelectLimitOffset:
-            self = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:object];
+            query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:parameters];
             break;
             
         default:
             NSAssert(NO, @"Did you forget a constructor?");
             break;
     }
-    if (self) {
-        self.type = type;
-    }
-    return self;
+    return query;
+}
+
+- (void)update {
+
 }
 
 - (BOOL)returnsResults {

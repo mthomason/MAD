@@ -31,36 +31,54 @@ static NSString * const SqlDelimitorObject = @", %@";
 
 @interface MTQueryCacheAddRow ()
 
-    @property (nonatomic, weak, readwrite) MTDatabase *cacheDatabase;
-
-    @property (nonatomic, readwrite, copy) NSString *tableName;
-
-    @property (nonatomic, readwrite, strong) NSDictionary *columns;
-    @property (nonatomic, readwrite, strong) NSArray *columnKeys;
-    @property (nonatomic, readwrite, strong) NSString *sqlPreProcessColumnNames;
-
 @end
 
-@implementation MTQueryCacheAddRow
-
-@dynamic columns;
-
-- (void)setDatabase:(MTDatabase *)database {
-    super.database = database;
-    NSString *c = [self columnNames];
-    NSString *sqlColumnNames = [NSString stringWithString:c];
-    self.sqlPreProcessColumnNames = sqlColumnNames;
+@implementation MTQueryCacheAddRow {
+    NSString *_sql;
+    NSString *_sqlColumnPart;
 }
 
-- (NSString *)columnNames {
+- (void)update {
+
+    id <MADQueryParametersStandardProtocol,
+        MADQueryParametersColumnKeysProtocol,
+        MADQueryParametersColumnMetaProtocol,
+        MADQueryParametersColumnDataProtocol> delegate = _delegate;
+
+    NSArray <NSString *> *columnKeys = [delegate queryColumnKeys];
+    
+    if (_sqlColumnPart == nil) {
+        NSString *sqlColumnNames = [self columnNamesForKeys:columnKeys];
+        _sqlColumnPart = [[NSString alloc] initWithString:sqlColumnNames];
+    }
+
+    NSArray *rows = [delegate queryRowData];
+    if (rows == nil) return;
+    
+    [self.binaryBindings removeAllObjects];
+    NSUInteger columnKeysCount = columnKeys.count;
+    char buf[(count_digits_ul(columnKeysCount) + 3) * columnKeysCount + 1];
+    buf[0] = '?';
+    int buf_ptr = 1;
+    for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
+        if (columnCounter > 0) {
+            strcat(buf, ", ?");
+            buf_ptr += 3;
+        }
+        buf_ptr = buf_ptr + ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
+    }
+    char *ptr = buf;
+    _sql = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%s)", [delegate queryTableName], _sqlColumnPart, ptr];
+}
+
+- (NSString *)columnNamesForKeys:(NSArray <NSString *> *)columnKeys {
     NSMutableString *colmunNames = [[NSMutableString alloc] init];
-    NSArray *columnKeys = self.columnKeys;
     NSUInteger columnCount = columnKeys.count;
     NSString *fieldName;
     for (NSUInteger columnCounter=0; columnCounter<columnCount; columnCounter++) {
         fieldName = columnKeys[columnCounter];
         
-        MADSafeQueryField *safeFieldName = [self.cacheDatabase newSafeIdentifier:fieldName];
+        MADSafeQueryField *safeFieldName = [MTDatabaseSqlite3 newSafeIdentifier:fieldName];
         if (columnCounter > 0) {
             [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
         } else {
@@ -71,119 +89,23 @@ static NSString * const SqlDelimitorObject = @", %@";
     return colmunNames;
 }
 
-- (instancetype)initWithColumnKeys:(NSArray *)columnKeys
-                           columns:(NSDictionary *)columns
-                      andTableName:(NSString *)tableName
-                       forDatabase:(MTDatabase *)database {
-
-    if (self = [super initWithObject:nil]) {
-    
-        self.cacheDatabase = database;
-        
-        NSArray *keys = [[NSArray alloc] initWithArray:columnKeys];
-        self.columnKeys = keys;
-
-        NSString *sqlColumnNames = [self columnNames];
-        self.sqlPreProcessColumnNames = sqlColumnNames.copy;
-    
-        NSString *name = [[NSString alloc] initWithString:tableName];
-        self.tableName = name;
-        
-        NSDictionary *cols = [[NSDictionary alloc] initWithDictionary:columns];
-        self.columns = cols;
-        
-    }
-    
-    return self;
-
-}
-
-- (instancetype)initWithObject:(id)object {
-
+- (instancetype)initWithObject:(id <MADQueryParametersStandardProtocol,
+                                MADQueryParametersColumnKeysProtocol,
+                                MADQueryParametersColumnMetaProtocol,
+                                MADQueryParametersColumnDataProtocol>)object {
     if (self = [super initWithObject:object]) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddRow expects NSDictionary.");
-        
-        id keyAddRowData = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowData];
-        NSArray * __weak row = object[keyAddRowData];
-        self.rowData = row;
-        
-        id keyColumns = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumns];
-        NSDictionary * __weak columns = object[keyColumns];
-        self.columns = columns;
-        
-        id keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowColumnKeys];
-        NSArray * __unsafe_unretained columnKeys = object[keyColumnKeys];
-        self.columnKeys = [[NSArray alloc] initWithArray: columnKeys];
-
-        id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowTableName];
-        NSString * __unsafe_unretained tableName = object[keyTableName];
-        self.tableName = tableName.copy;
-        
-        id keyRowUrl = [[NSNumber alloc] initWithShort: MTQueryCacheAddRowUrl];
-        NSURL * __unsafe_unretained url = object[keyRowUrl];
-        
-        if (url != nil) {
-            id connection = [MADDatabaseConnection newDatabaseConnectionForUrl:url];
-            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
-            NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
-            self.cacheDatabase = db;
-        }
-        
-        self.queryObject = object;
-        
+        _delegate = object;
+        [self update];
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    [super getSqlWithError:error];
-    
-    NSMutableString *values = [[NSMutableString alloc] init];
-    
-    NSUInteger columnCounter = 0;
-
-    char buf[12];
-
-    NSArray *row = self.rowData;
-    
-    [self.binaryBindings removeAllObjects];
-    
-    for (id object in row) {
-        
-        @autoreleasepool {
-            
-            NSString * __weak fieldName = self.columnKeys[columnCounter];
-            MADDataColumn *  __weak column = self.columns[fieldName];
-            
-            if (columnCounter > 0) {
-                [values appendString:SqlDelimitor];
-            }
-            
-            id databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.type
-                                                                  fieldIndex: columnCounter
-                                                                       value: object];
-            [self.binaryBindings addObject:databinding];
-            buf[0] = '?';
-            ultoa((unsigned int)columnCounter + 1, &*(buf+1));
-            char *ptr = buf;
-
-            
-            NSString *columnValue = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-            [values appendString:columnValue];
-        }
-        
-        columnCounter++;
+    if (_sql == nil) {
+        [self update];
     }
-    
-    NSString *result = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)",
-                        self.tableName, self.sqlPreProcessColumnNames, values];
-    return result;
+    return _sql;
 }
-
-//- (NSArray *)fieldKeys {
-//    return self.columnKeys;
-//}
 
 - (BOOL)returnsResults {
     return NO;
@@ -191,6 +113,10 @@ static NSString * const SqlDelimitorObject = @", %@";
 
 - (BOOL)partOfTransactionSet {
     return YES;  //Can't use YES here, because insert is bound with different values on each run.
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheAddRow;
 }
 
 @end

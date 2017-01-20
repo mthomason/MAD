@@ -15,11 +15,18 @@
 #import <Foundation/NSDictionary.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "MADQueryCacheAddColumnParameters.h"
+#import "MADQueryParameters.h"
 
 @class MTDatabaseSqlite3;
 
 @interface MTQueryCacheAddColumn ()
+<MADQueryParametersStandardProtocol,
+    MADQueryParametersColumnKeysProtocol,
+    MADQueryParametersColumnMetaProtocol,
+    MADQueryParametersColumnDataProtocol>
+
     @property (nonatomic, strong) NSString *sql;
+
 @end
 
 @implementation MTQueryCacheAddColumn
@@ -100,8 +107,8 @@
     NSString *unique = uniqueColumnHack ? @"UNIQUE" : @"";
     if (isPrimaryKey) { unique = @"PRIMARY KEY"; }
     
-    static NSString * const CreateTable = @"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);";
-    static NSString * const AlterTable  = @"ALTER TABLE main.%@ ADD COLUMN %@;";
+    NSString *CreateTable = @"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);";
+    NSString *AlterTable  = @"ALTER TABLE main.%@ ADD COLUMN %@;";
     
     NSString *sql = createTable ?
             [NSString stringWithFormat:CreateTable, tableName, columnDefination, unique] :
@@ -112,6 +119,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheAddColumn;
 }
 
 @end

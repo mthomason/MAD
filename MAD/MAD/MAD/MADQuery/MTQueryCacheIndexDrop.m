@@ -19,35 +19,35 @@
 
 @interface MTQueryCacheIndexDrop ()
 
-@property (nonatomic, strong) NSString *indexName;
-
 @end
 
-@implementation MTQueryCacheIndexDrop
+@implementation MTQueryCacheIndexDrop {
+    NSString *_sql;
+}
 
 - (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
-        
-        NSNumber *keyIndexName = @(MTQueryCacheIndexDropIndexName);
-        
-        NSString *indexName = object[keyIndexName];
-        self.indexName = indexName;
-        
-        self.queryObject = object;
+        NSNumber *keyIndexName = [[NSNumber alloc] initWithUnsignedInteger: MTQueryCacheIndexDropIndexName];
+        NSString *result = [[NSString alloc] initWithFormat:@"DROP INDEX IF EXISTS main.%@", object[keyIndexName]];
+        _sql = result;
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    return [NSString stringWithFormat:@"DROP INDEX IF EXISTS main.%@", self.indexName];
+    return _sql;
 }
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheIndexDropParameters;
 }
 
 @end

@@ -22,6 +22,8 @@
 
     @property (nonatomic, assign, readonly) CGRect frame;
 
+    - (NSString *)label;
+
 @end
 
 #endif
