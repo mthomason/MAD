@@ -82,29 +82,33 @@
         
         case MADDatabaseTypeMySQL:
         case MADDatabaseTypeSqlite3:
-            result = self.mysql_database;
+            result = self.mysql_database.copy;
             break;
         
         case MADDatabaseTypeTDS:
-            result = self.tds_database;
+            result = self.tds_database.copy;
             break;
 
         case MADDatabaseTypeUnknown: {
             
             if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
-                result = self.mysql_database;
+                result = self.mysql_database.copy;
+                
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
             } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
-                result = self.tds_database;
+                result = self.tds_database.copy;
+                
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeTDS];
                 self.inDatabase.databaseDriverTypeEnum = type;
                 
             } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
-                result = self.mysql_database;
+                result = self.mysql_database.copy;
+                
                 NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
                 self.inDatabase.databaseDriverTypeEnum = type;
+                
             }
             
             break;

@@ -8,6 +8,16 @@
 
 #import "MADQueryViewDataSource.h"
 
+#import <Foundation/NSIndexPath.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UILabel.h>
+#import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSOrderedSet.h>
+
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
 #import "MADTableViewCellQueryPredicate.h"
@@ -16,9 +26,6 @@
 #import "NSAttributedString+QueryViewController.h"
 
 #import "MADQueryViewSectionDelegate.h"
-
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSManagedObjectID.h>
 
 #import <MAD/MADocument.h>
 
@@ -32,9 +39,6 @@
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqUserCredentals+Extras.h>
 
-#import <Foundation/NSIndexPath.h>
-#import <UIKit/UITableView.h>
-#import <UIKit/UILabel.h>
 
 static NSString * const TextFormatConnection = @"You are connecting to %1$@"
                                                @" datasource named %2$@.";
@@ -45,7 +49,6 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, readwrite, assign) short count;
-    @property (nonatomic, readwrite, assign) NSUInteger numberOfTables;
 
     @property (nonatomic, readwrite, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
@@ -55,6 +58,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 
 @implementation MADQueryViewDataSource {
     BOOL _reportingEnabled;
+    NSUInteger _numberOfTables;
 }
 
 - (void)dealloc {
@@ -86,9 +90,92 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     
 }*/
 
-- (instancetype)initWithDocument:(MADocument *)document
-                reportingEnabled:(BOOL)reportingEnabled
-             handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
+- (instancetype)initWithQueryID: (NSManagedObjectID *)queryID
+           managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+               reportingEnabled: (BOOL)reportingEnabled
+            handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
+    if (self = [super init]) {
+    
+            NSString *expressionDescriptionHasQueryTables = @"madQTC";
+
+        id result;
+        NSError * __autoreleasing *error = NULL;
+        NSFetchRequest *request;
+        NSComparisonPredicate *predicate;
+        NSExpression *expression[2];
+        NSExpressionDescription *descHasQueryTables;
+        NSExpression *keyPathHasQueryTables;
+        
+        NSExpressionDescription *descObjectID = [[NSExpressionDescription alloc] init];
+        descObjectID.name = NSStringFromSelector(@selector(objectID));
+        descObjectID.expression = [NSExpression expressionForEvaluatedObject];
+        descObjectID.expressionResultType = NSObjectIDAttributeType;
+        
+        NSArray *keyPathQueryTables;
+        
+        descHasQueryTables = [[NSExpressionDescription alloc] init];
+        descHasQueryTables.name = expressionDescriptionHasQueryTables.copy;
+        keyPathHasQueryTables = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(hasQueryTables))];
+        keyPathQueryTables = [[NSArray alloc] initWithObjects:keyPathHasQueryTables, nil];
+        descHasQueryTables.expression = [NSExpression expressionForFunction: @"count:"
+                                                                  arguments: keyPathQueryTables];
+        
+        expression[0] = [NSExpression expressionForEvaluatedObject];
+        expression[1] = [NSExpression expressionForConstantValue: queryID];
+        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
+                                                      rightExpression: expression[1]
+                                                             modifier: NSDirectPredicateModifier
+                                                                 type: NSEqualToPredicateOperatorType
+                                                              options: 0];
+        
+        NSEntityDescription *entityDescription;
+        NSArray *propertiesToFetch;
+
+        entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQuery class])
+                                                             inManagedObjectContext: managedObjectContext];
+        request = [[NSFetchRequest alloc] init];
+
+        propertiesToFetch = [[NSArray alloc] initWithObjects:descHasQueryTables,
+                                                             descObjectID, nil];
+        request.propertiesToFetch = propertiesToFetch;
+        request.entity = entityDescription;
+        request.fetchLimit = 1;
+        request.predicate = predicate;
+        request.resultType = NSDictionaryResultType;
+        request.includesSubentities = NO;
+        
+        result = [managedObjectContext executeFetchRequest:request error:error];
+        
+        int numberOfTables = 0;
+        if (((NSArray *)result).count > 0) {
+            id tableCount = result[0][@"madQTC"];
+            numberOfTables = [tableCount intValue];
+            tableCount = nil;
+        }
+        
+        switch (numberOfTables) {
+            case 0:
+                _count = reportingEnabled ? 3 : 2;
+                break;
+            case 1:
+                _count = reportingEnabled ? 5 : 4;
+                break;
+            default:
+                _count = reportingEnabled ? 6 : 5;
+                break;
+        }
+        
+        _reportingEnabled = reportingEnabled;
+        _numberOfTables = (unsigned long)numberOfTables;
+        _handleConfigureCell = handleConfigureCell;
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithDocument: (MADocument *)document
+                reportingEnabled: (BOOL)reportingEnabled
+             handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
     
     if (self = [super init]) {
         
@@ -300,15 +387,11 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 #pragma mark Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger count = (NSInteger)self.count;
-    //NSLog(@"Number of sections in table view: %ld", (long)count);
-    return count;
+    return (NSInteger)_count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows = [self numberOfRowsInSectionAtIndex:(short)section];
-    //NSLog(@"Section %ld has %ld rows.", section, rows);
-    return rows;
+    return [self numberOfRowsInSectionAtIndex:(short)section];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -18,6 +18,8 @@
 @class NSFetchedResultsController;
 @class NSIndexPath;
 @class NSIndexSet;
+@class NSManagedObjectID;
+@class NSManagedObjectContext;
 @class UITableViewCell;
 @class MADocument;
 @class MADQueryViewSectionDelegate;
@@ -39,7 +41,12 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 
 @interface MADQueryViewDataSource : NSObject
     <UITableViewDataSource>
-    
+
+    - (instancetype)initWithQueryID: (NSManagedObjectID *)queryID
+               managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+                   reportingEnabled: (BOOL)reportingEnabled
+                handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCel;
+
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                           reportingEnabled:(BOOL)reportingEnabled
                        handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
