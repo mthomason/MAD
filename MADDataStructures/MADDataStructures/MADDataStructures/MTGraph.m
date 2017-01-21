@@ -68,7 +68,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 // MARK: Add new vertex to adjacency list.
 - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object {
-    id obj = [object copyWithZone:NULL];
+    id obj = [object copy];
     MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject: obj];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
