@@ -632,6 +632,9 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query = database.hasQueries.anyObject;
         
+        NSManagedObjectID *queryObjectID;
+        queryObjectID = _document.documentObjectIDStore.databaseIDs.firstObject.queryIDs.firstObject.objectID.copy;
+        
         if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;

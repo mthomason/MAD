@@ -38,7 +38,9 @@
 
         NSError *error = nil;
         BOOL isDirectedAcyclicGraph;
-        MTLinkedList *tableIds = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
+        MTLinkedList *tableIds;
+        tableIds = [graph topologicalSortWithError:&error
+                            isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
         self.topologicallySortedTables = tableIds;
         
         NSMutableArray *startingPoints = [[NSMutableArray alloc] init];
