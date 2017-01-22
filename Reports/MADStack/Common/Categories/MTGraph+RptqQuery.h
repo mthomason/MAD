@@ -12,10 +12,14 @@
 #import <MADDataStructures/MTGraph.h>
 
 @class RptqQuery;
+@class NSManagedObjectID;
+@class NSManagedObjectContext;
 
 @interface MTGraph (RptqQuery)
 
     - (instancetype)initWithQuery:(RptqQuery *)query;
+    - (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
+               managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

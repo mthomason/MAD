@@ -9,9 +9,9 @@
 #ifndef Reports_CGGeometry_Extras_h
 #define Reports_CGGeometry_Extras_h
 
-#import <CoreGraphics/CGBase.h>
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSDate.h>
+#import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <stdlib.h>
 #import <math.h>
@@ -58,26 +58,26 @@ static inline MADReportPosition MADReportPositionMake(NSUInteger currentPage, NS
 
 /* Lines. */
 
-struct CGLine {
+struct MADLine {
     CGFloat m;
     CGFloat b;
 };
-typedef struct CGLine CGLine;
+typedef struct MADLine MADLine;
 
-struct MTCorners {
+struct MADCorners {
     CGPoint topLeft;
     CGPoint topRight;
     CGPoint bottomLeft;
     CGPoint bottomRight;
 };
-typedef struct MTCorners MTCorners;
+typedef struct MADCorners MADCorners;
 
-typedef NS_ENUM(NSUInteger, MADDirection) {
-    left = 1,
-    right,
-    up,
-    down,
-    noDirection
+typedef NS_ENUM(short, MADDirection) {
+    MADDirectionLeft = 1,
+    MADDirectionRight,
+    MADDirectionUp,
+    MADDirectionDown,
+    MADDirectionNoDirection
 };
 
 static inline CGSize MADSizeSquare(CGFloat length);
@@ -127,9 +127,9 @@ static inline CGRect CGRectFlushTop(CGRect rect) {
     return CGRectMake(rect.origin.x, CGPointZero.y, rect.size.width, rect.size.height);
 }
 
-CG_INLINE MTCorners
+CG_INLINE MADCorners
 MTCornersMake(CGRect rect) {
-    MTCorners corners;
+    MADCorners corners;
     corners.topLeft = rect.origin;
     corners.topRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
     corners.bottomLeft = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
@@ -145,22 +145,22 @@ CGFloatCompare(CGFloat x, CGFloat y) {
 
 CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2);
 CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2) {
-    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.x > p1.x ? left : right;
+    return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.x > p1.x ? MADDirectionLeft : MADDirectionRight;
 }
 
 CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2);
 CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2) {
-    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.y > p1.y ? down : up;
+    return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.y > p1.y ? MADDirectionDown : MADDirectionUp;
 }
 
 CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d);
 CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d) {
-    return d == left || d == right;
+    return d == MADDirectionLeft || d == MADDirectionRight;
 }
 
 CG_INLINE BOOL MADDirectionIsVertical(MADDirection d);
 CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
-    return d == up || d == down;
+    return d == MADDirectionUp || d == MADDirectionDown;
 }
 
 CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
@@ -198,10 +198,10 @@ CGSizeFingerDefault() {
     return CGSizeMake(MTDefaultFingerSizeWidth, MTDefaultFingerSizeHeight);
 }
 
-CG_INLINE CGLine CGLineMake(CGFloat m, CGFloat b);
-CG_INLINE CGLine
+CG_INLINE MADLine CGLineMake(CGFloat m, CGFloat b);
+CG_INLINE MADLine
 CGLineMake(CGFloat m, CGFloat b) {
-    CGLine line;
+    MADLine line;
     line.m = m;
     line.b = b;
     return line;

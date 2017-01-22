@@ -26,13 +26,15 @@
 @implementation MTVertex
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    MTVertex *copy = [[[self class] allocWithZone: zone] initWithID:self.uniqueIdForStructure
+    
+    MTVertex *copy = [[[self class] allocWithZone: zone] initWithID:_uniqueIdForStructure
                                                           andObject:self.object];
-    copy.edges = [self.edges copyWithZone:zone];
+    NSMutableArray *newEdges = [[NSMutableArray alloc] initWithCapacity:_edges.count];
+    copy.edges = newEdges;
 
-    NSArray *edges = self.edges;
-    for (MTEdge *edge in edges) {
-        MTEdge *edgeCopy = [edge copyWithZone:zone];
+    MTEdge *edge, *edgeCopy;
+    for (edge in _edges) {
+        edgeCopy = [edge copyWithZone:zone];
         [copy.edges addObject:edgeCopy];
     }
     

@@ -269,7 +269,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     
     for (MADSectionLayoutAttributes *layout in allItems) {
         @autoreleasepool {
-            MTCorners corners = MTCornersMake(layout.frame);
+            MADCorners corners = MTCornersMake(layout.frame);
             
             placement0Value = [[NSValue alloc] initWithBytes: &corners.topLeft
                                                     objCType: @encode(CGPoint)];

@@ -16,7 +16,7 @@
 #pragma mark Static Functions
 
 + (NSArray <NSValue *> *)newArrayOfDropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
-    MTCorners corners = MTCornersMake(item.frame);
+    MADCorners corners = MTCornersMake(item.frame);
     NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
     NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
     NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
@@ -24,7 +24,7 @@
 }
 
 + (NSArray <NSValue *> *)newArrayOfdropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
-    MTCorners corners = MTCornersMake(item.frame);
+    MADCorners corners = MTCornersMake(item.frame);
     
     NSValue *topLeft = [[NSValue alloc] initWithBytes: &corners.topLeft
                                              objCType: @encode(CGPoint)],

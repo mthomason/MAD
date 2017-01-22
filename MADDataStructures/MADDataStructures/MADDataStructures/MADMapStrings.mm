@@ -22,10 +22,36 @@ struct MADMapStringsImpl {
     std::map<T, std::string> _container;
 };
 
+template<typename Type>
+class MADMad {
+    
+    std::map<Type, std::string> _container;
+  public:
+    std::string::size_type count() {
+        return this->_container.size();
+    }
+    void setObject(NSString *obj, Type key) {
+        if (obj != nil) {
+            std::string cpp_str([obj UTF8String], [obj lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+            _container[key] = cpp_str;
+        } else {
+            _container.erase(key);
+        }
+    }
+    NSString *objectAtIndex(Type index) {
+        std::map<NSInteger, std::string>::const_iterator found = _container.find(index);
+        if (found == _container.end()) return nil;
+        
+        const char *c_str = found->second.c_str();
+        NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
+        return result;
+    }
+};
+
 @implementation MADMapStrings
 
 - (instancetype)initWithType:(MADDataType)t {
-    id map;
+    typeof(self) map;
     switch (t) {
     
         case MADDataTypeShort:
@@ -51,40 +77,30 @@ struct MADMapStringsImpl {
 @end
 
 @implementation MADMapStringsInteger {
-    struct MADMapStringsImpl <NSInteger> *impl;
+    MADMad<NSInteger> *impl;
 }
 
 - (instancetype)init {
     if (self = [super init]) {
-        impl = new MADMapStringsImpl<NSInteger>;
+        impl = new MADMad<NSInteger>();
     }
     return self;
 }
 
 - (NSString *)objectAtIndex:(NSInteger)i {
-    
-    std::map<NSInteger, std::string>::const_iterator found = impl->_container.find(i);
-    if (found == impl->_container.end()) return nil;
-    
-    const char *c_str = found->second.c_str();
-    NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
-    return result;
+    return impl->objectAtIndex(i);
 }
 
 - (void)setObject:(NSString *)str toKey:(NSInteger)key {
-    
-    if (str != nil) {
-        std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-        impl->_container[key] = cpp_str;
-        
-    } else {
-        impl->_container.erase(key);
-        
-    }
+    impl->setObject(str, key);
 }
 
 - (unsigned long)count {
-    return impl->_container.size();
+    return impl->count();
+}
+
+- (void)dealloc {
+    delete impl;
 }
 
 @end
@@ -120,6 +136,7 @@ struct MADMapStringsImpl {
     if (str != nil) {
         std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
         impl->_container[key] = cpp_str;
+        //cpp_str.erase();
         
     } else {
         impl->_container.erase(key);
@@ -160,6 +177,7 @@ struct MADMapStringsImpl {
     if (str != nil) {
         std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
         impl->_container[key] = cpp_str;
+        //cpp_str.erase();
         
     } else {
         impl->_container.erase(key);

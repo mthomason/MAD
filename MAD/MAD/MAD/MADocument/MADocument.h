@@ -14,10 +14,12 @@
 #import <UIKit/UIPrintInteractionController.h>
 #import <UIKit/UIManagedDocument.h>
 #import <MADFoundation/MADDataProtocol.h>
-#import "MADReportFormatterDataSourceProtocol.h"
 #import <MADFoundation/MTCacheProtocol.h>
+
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADPrintPageRendererDataSource.h>
+
+#import "MADReportFormatterDataSourceProtocol.h"
 
 @protocol MADActivityProtocol;
 @protocol MADocumentDelegate;
@@ -36,6 +38,13 @@
 @class MTPaper;
 @class MADDatabaseConnection;
 
+@class MADModelDocument;
+@class MADModelDatabase;
+@class MADModelQuery;
+@class MADModelQueryTable;
+@class MADModelQueryLink;
+@class MADModelQueryField;
+
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
 
@@ -43,42 +52,7 @@ extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
 @protocol MADDocumentStatusProtocol <NSObject>
-
     - (void)setStatusText:(NSString *)statusText;
-
-@end
-
-@class MADDocumentObjectID;
-@class MADDatabaseObjectID;
-@class MADQueryObjectID;
-
-typedef NS_ENUM(short, MADObjectType) {
-    MADObjectTypeDocument,
-    MADObjectTypeDatabase,
-    MADObjectTypeQueries,
-};
-
-@protocol MADObjectIDProtocol <NSObject>
-    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, readonly, copy)      NSManagedObjectID *objectID;
-@end
-
-@interface MADObjectID : NSObject
-    <MADObjectIDProtocol>
-@end
-
-@interface MADDocumentObjectID : MADObjectID
-    <MADObjectIDProtocol>
-    @property (nonatomic, readonly, copy)      NSOrderedSet <MADDatabaseObjectID *> *databaseIDs;
-@end
-
-@interface MADDatabaseObjectID : MADObjectID
-    <MADObjectIDProtocol>
-    @property (nonatomic, readonly, copy)      NSOrderedSet <MADQueryObjectID *> *queryIDs;
-@end
-
-@interface MADQueryObjectID : MADObjectID
-    <MADObjectIDProtocol>
 @end
 
 @interface MADocument : UIManagedDocument
@@ -90,7 +64,7 @@ typedef NS_ENUM(short, MADObjectType) {
 
     @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
 
-    @property (nonatomic, readonly, strong)     MADDocumentObjectID *documentObjectIDStore;
+    @property (nonatomic, readonly, strong)     MADModelDocument *documentObjectIDStore;
     //@property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
     @property (readonly)                        RptqDocument    *activeDocumentModel;

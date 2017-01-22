@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQuery;
+@class MADModelQuery;
 @class MTGraph;
 @class MTLinkedList;
 @class NSArray<__covariant ObjectType>;
@@ -19,7 +19,7 @@
 
 @interface MADQueryVisualizationDefination : NSObject
 
-    - (instancetype)initWithQuery:(RptqQuery *)query;
+    - (instancetype)initWithQuery:(MADModelQuery *)query;
 
     @property (nonatomic, strong, readonly) MTGraph *graphRepresentation;
     @property (nonatomic, strong, readonly) MTLinkedList *topologicallySortedTables;

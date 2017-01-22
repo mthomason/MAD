@@ -45,6 +45,7 @@
 #import <MAD/RptqUserCredentals+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/MADModel.h>
 
 #import "MADLabelTitle.h"
 #import "MADNavigationBarTitleView.h"

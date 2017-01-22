@@ -11,12 +11,17 @@
 #endif
 
 #import "MTReportFormatter.h"
+#import <UIKit/UIPrintInteractionController.h>
+#import <CoreData/NSManagedObjectID.h>
+
 #import "MADReportFormatterDataSourceProtocol.h"
 
 #import "MADSectionRepresentation.h"
 
 #import "MTReportFormatterState.h"
 #import "MADocument.h"
+#import "MADModel.h"
+
 #import "MTQueryFull.h"
 
 #import "RptqDocument+Extras.h"
@@ -41,9 +46,7 @@
 #import "MADSectionRepresentation.h"
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <CoreData/NSManagedObjectID.h>
 
-#import <UIKit/UIPrintInteractionController.h>
 
 NSString * const MTNullIdentifier = @"(null)";
 
