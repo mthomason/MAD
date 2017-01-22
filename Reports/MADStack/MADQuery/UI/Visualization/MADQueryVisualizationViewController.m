@@ -628,8 +628,11 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         NSString *path = self.localCacheFileUrl.path.copy;
         
         MADModelQuery *query;
-        query = _document.documentObjectIDStore.databaseIDs.firstObject.queryIDs.firstObject;
-        
+        query = _document.documentObjectIDStore.databases.firstObject.queries.firstObject;
+        MADModelQueryTable *table;
+        for (table in query.tables) {
+            NSLog(@"Table: %@", table);
+        }
         if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
@@ -677,7 +680,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
             }
         }
         
-        for (MADModelQueryLink *queryLink in queryID.linkIDs) {
+        for (MADModelQueryLink *queryLink in queryID.links) {
             [self addLinkViewControllerForQueryLinkModel:queryLink animated:YES];
         }
         
@@ -714,7 +717,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         }
     }
     
-    for (MADModelQueryLink *queryLink in query.linkIDs) {
+    for (MADModelQueryLink *queryLink in query.links) {
         [self addLinkViewControllerForQueryLinkModel:queryLink animated:animated];
     }
 }

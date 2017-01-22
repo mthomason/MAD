@@ -650,7 +650,7 @@ BOOL storeEnabled() {
         NSManagedObjectID *objectID;
 
         managedObjectContext = document.documentObjectIDStore.managedObjectContext;
-        objectID = document.documentObjectIDStore.databaseIDs.firstObject.queryIDs.firstObject.objectID.copy;
+        objectID = document.documentObjectIDStore.databases.firstObject.queries.firstObject.objectID.copy;
         
         
         BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
@@ -1157,7 +1157,7 @@ BOOL storeEnabled() {
         {
             //managedObjectContext = reportDocument.documentObjectIDStore.managedObjectContext;
             NSManagedObjectID *objectID;
-            objectID = reportDocument.documentObjectIDStore.databaseIDs.firstObject.queryIDs.firstObject.objectID.copy;
+            objectID = reportDocument.documentObjectIDStore.databases.firstObject.queries.firstObject.objectID.copy;
             
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
