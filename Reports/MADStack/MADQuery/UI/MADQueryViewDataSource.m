@@ -235,10 +235,12 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         return _sections;
     } else {
     
-        NSMutableArray <__kindof MADQueryViewSectionDelegate *> *sections = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)_count];
+        NSMutableArray <__kindof MADQueryViewSectionDelegate *> *sections;
+        sections = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)_count];
         for (short i = 0; i < _count; i++) {
-            MADQueryViewSectionDelegate *section = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables: _numberOfTables
-                                                                                                      position: i];
+            MADQueryViewSectionDelegate *section;
+            section = [[MADQueryViewSectionDelegate alloc] initWithNumberOfTables: _numberOfTables
+                                                                         position: i];
             [sections addObject:section];
         }
         _sections = sections;

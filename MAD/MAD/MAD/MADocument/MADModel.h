@@ -25,6 +25,11 @@
 @class MADModelQueryLink;
 @class MADModelQueryField;
 
+extern NSString * const MADNotificationDeleteQueryLink;
+extern NSString * const MADKeyQuery;
+extern NSString * const MADKeyQueryLink;
+
+
 typedef NS_ENUM(short, MADModelType) {
     MADModelTypeDocument,
     MADModelTypeDatabase,
@@ -58,7 +63,7 @@ typedef NS_ENUM(short, MADModelType) {
 
 @interface MADModelDocument : MADObjectID
     <MADModelDataProtocol>
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
     @property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
     @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
@@ -86,6 +91,8 @@ typedef NS_ENUM(short, MADModelType) {
     @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *tables;
     @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelTable *> *tableSchemas;
     @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
+    - (NSSet <NSManagedObjectID *> *)tablesInLinks;
+    - (NSSet <NSManagedObjectID *> *)orphanedQueryTables;
 @end
 
 @interface MADModelQueryTable : MADObjectID

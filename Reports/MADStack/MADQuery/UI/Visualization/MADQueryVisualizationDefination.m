@@ -65,43 +65,9 @@
                 NSManagedObjectID *tableID = tableIdVertext.object;
                 
                 BOOL topLevel = YES;
-                
-                /*
-                NSArray <NSManagedObjectID *> *fetchQueryLinksResults;
-                NSFetchRequest *fetchQueryLinks;
-                
-                NSExpression *expressionInQuery[2];
-                expressionInQuery[0] = [NSExpression expressionForKeyPath:@"inQuery"];
-                expressionInQuery[1] = [NSExpression expressionForConstantValue: queryID];
-                NSPredicate *predicateInQuery = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-                                                                                   rightExpression: expressionInQuery[1]
-                                                                                          modifier: NSDirectPredicateModifier
-                                                                                              type: NSEqualToPredicateOperatorType
-                                                                                           options: 0];
 
-                fetchQueryLinks = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
-                
-                NSExpressionDescription *expRightFieldHasQueryTable = [[NSExpressionDescription alloc] init];
-                expRightFieldHasQueryTable.name = @"RT";
-                expRightFieldHasQueryTable.expression = [NSExpression expressionForKeyPath:@"hasRightField.inQueryTable"];
-                expRightFieldHasQueryTable.expressionResultType = NSManagedObjectIDResultType;
-                
-                NSExpressionDescription *expSelf = [[NSExpressionDescription alloc] init];
-                expSelf.name = @"T1";
-                expSelf.expression = [NSExpression expressionForEvaluatedObject];
-                expSelf.expressionResultType = NSManagedObjectIDResultType;
-                
-                NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expSelf, expRightFieldHasQueryTable, nil];
-                fetchQueryLinks.propertiesToFetch = propertiesToFetch;
-                fetchQueryLinks.resultType = NSDictionaryResultType;
-                fetchQueryLinks.predicate = predicateInQuery;
-                error = NULL;
-                fetchQueryLinksResults = [managedObjectContext executeFetchRequest: fetchQueryLinks
-                                                                             error: error];
-                */
                 NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = queryID.links.objectEnumerator;
                 for (MADModelQueryLink *link in queryLinkEnumerator) {
-//                for (MADModelQueryLink *link in queryID.links) {
                     if ([link.rightFieldReference.tableID isEqual:tableID]) {
                         topLevel = NO;
                         break;
@@ -122,50 +88,5 @@
     }
     return self;
 }
-/*
-- (instancetype)initWithQuery:(RptqQuery *)query {
-    if (self = [super init]) {
-        
-        MTGraph *graph = [[MTGraph alloc] initWithQuery:query];
-        self.graphRepresentation = graph;
 
-        NSError *error = nil;
-        BOOL isDirectedAcyclicGraph;
-        MTLinkedList *tableIds;
-        tableIds = [graph topologicalSortWithError:&error
-                            isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
-        self.topologicallySortedTables = tableIds;
-        
-        NSMutableArray *startingPoints = [[NSMutableArray alloc] init];
-        for (MTPair *tableObjectIdContainer in tableIds) {
-            MTVertex *tableIdVertext = tableObjectIdContainer.former;
-            
-            if (tableIdVertext.object != nil) {
-                
-                RptqQueryTable *table = (RptqQueryTable *)[query.managedObjectContext objectWithID:tableIdVertext.object];
-                
-                BOOL topLevel = YES;
-                for (RptqQueryLinks *link in query.hasQueryLinks) {
-                    RptqQueryTable *rightQueryTable = link.hasRightField.inQueryTable;
-                    if ([rightQueryTable.objectID isEqual:table.objectID]) {
-                        topLevel = NO;
-                        break;
-                    }
-                }
-                
-                if (topLevel) {
-                    NSURL *url = table.objectID.URIRepresentation.copy;
-                    [startingPoints addObject:url];
-                }
-            }
-        }
-        
-        NSArray *points = [[NSArray alloc] initWithArray:startingPoints];
-        self.startingPoints = points;
-        self.directedAcyclicGraph = isDirectedAcyclicGraph;
-        
-    }
-    return self;
-}
-*/
 @end
