@@ -37,6 +37,8 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
                            atIndexPath:(NSIndexPath *)indexPath;
     - (void)reloadQueryViewData;
 
+    - (MADocument *)document;
+
 @end
 
 @interface MADQueryViewDataSource : NSObject
@@ -50,10 +52,6 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                           reportingEnabled:(BOOL)reportingEnabled
                        handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
-
-    - (instancetype)initWithDocument:(MADocument *)document
-                    reportingEnabled:(BOOL)reportingEnabled
-                 handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 

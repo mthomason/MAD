@@ -23,6 +23,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSMapTable.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryTable.h>
@@ -38,13 +39,15 @@
 - (instancetype)initWtthQueryID:(MADModelQuery *)query {
     if (self = [self init]) {
         
-        NSOrderedSet <MADModelQueryLink *> *hasLinks = query.links;
-        NSOrderedSet <MADModelQueryTable *> *hasTables = query.tables;
-        NSLog(@"%@", hasTables);
-        NSLog(@"%@", hasLinks);
+        //NSOrderedSet <MADModelQueryLink *> *hasLinks = query.links;
+        //NSOrderedSet <MADModelQueryTable *> *hasTables = query.tables;
+        //NSLog(@"%@", hasTables);
+        //NSLog(@"%@", hasLinks);
         
-        [query.tables enumerateObjectsUsingBlock:^(MADModelQueryTable * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self addVertexWithObject: obj.objectID];
+        //NSEnumerator *objectEnumerator = query.tables.objectEnumerator;
+        
+        [query.queryTableIDs  enumerateObjectsUsingBlock:^(NSManagedObjectID * _Nonnull tableID, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self addVertexWithObject: tableID];
         }];
         
         //Add a vertex to the graph for each table.
@@ -56,29 +59,23 @@
         
         //Create an edge in the graph for each query link.
         NSNumber *weight = @(1);
-        /*
         
-        [query.links enumerateObjectsUsingBlock:^(MADModelQueryLink * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-
-        }];
-        for (MADModelQueryLink *queryLink in query.links) {
-            
-            
-            MTVertex *vertexOrigin =        [self vertexForObject:queryLink.leftField .inQueryTable.objectID];
-            MTVertex *vertexDestination =   [self vertexForObject:queryLink.rightField.inQueryTable.objectID];
+        NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
+        for (MADModelQueryLink *link in queryLinkEnumerator) {
+            MTVertex *vertexOrigin =        [self vertexForObject:link.leftFieldReference.tableID];
+            MTVertex *vertexDestination =   [self vertexForObject:link.rightFieldReference.tableID];
             
             [self addEdgeWithOrigin: vertexOrigin
                         destination: vertexDestination
-                             object: queryLink.objectID
+                             object: link.objectID
                           andWeight: weight];
-            
-        }*/
+        }
     }
     return self;
 }
 
 - (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-         managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+           managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     if (self = [self init]) {
         

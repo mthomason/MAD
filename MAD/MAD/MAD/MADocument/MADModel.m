@@ -38,7 +38,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 
-struct MADTableFieldIndex {
+/*struct MADTableFieldIndex {
     NSUInteger table;
     NSUInteger field;
 };
@@ -50,21 +50,9 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
     tableFieldIndex.table = table;
     tableFieldIndex.field = field;
     return tableFieldIndex;
-}
+}*/
 
-@interface MADTableFieldReference : NSObject
-
-- (instancetype)initWithTableID:(NSManagedObjectID *)tableID
-                     andFieldID:(NSManagedObjectID *)fieldID NS_DESIGNATED_INITIALIZER;
-
-    @property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
-    @property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
-
-@end
-
-@implementation MADTableFieldReference {
-    
-}
+@implementation MADTableFieldReference
 
 - (instancetype)init {
     if (self = [self initWithTableID:nil andFieldID:nil]) {
@@ -756,6 +744,24 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
     return self;
 }
 
+- (NSOrderedSet <NSManagedObjectID *> *)queryTableIDs {
+    if (_queryTableIDs == nil) {
+        @autoreleasepool {
+            [self updateTables];
+        }
+    }
+    return _queryTableIDs;
+}
+
+- (NSOrderedSet <NSManagedObjectID *> *)queryLinkIDs {
+    if (_queryLinkIDs == nil) {
+        @autoreleasepool {
+            [self updateLinks];
+        }
+    }
+    return _queryLinkIDs;
+}
+
 - (NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *)tables {
     if (_tables == nil) {
         @autoreleasepool {
@@ -968,8 +974,8 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
     NSExpression *queryLinkPathKey = [NSExpression expressionForKeyPath:keyQL];
     
     NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
-    links = [[NSMapTable alloc] initWithKeyOptions: NSPointerFunctionsWeakMemory
-                                      valueOptions: NSPointerFunctionsStrongMemory
+    links = [[NSMapTable alloc] initWithKeyOptions: NSMapTableWeakMemory
+                                      valueOptions: NSMapTableStrongMemory
                                           capacity: queryLinkIDs.count];
     
     for (queryLinkID in queryLinkIDs) {
@@ -1248,8 +1254,8 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
 @end
 
 @implementation MADModelQueryLink {
-    NSManagedObjectID *rightTableID;
-    NSManagedObjectID *LeftTableID;
+    MADTableFieldReference *_leftFieldReference;
+    MADTableFieldReference *_rightFieldReference;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
@@ -1267,12 +1273,13 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
     
     if (self = [self initWithObjectID:objectID]) {
         
-        id leftField = [[MADModelQueryField alloc] initWithObjectID: leftFieldID];
-        _leftField = leftField;
-
-        id rightField = [[MADModelQueryField alloc] initWithObjectID: rightFieldID];
-        _rightField = rightField;
-
+        id leftFieldReference = [[MADTableFieldReference alloc] initWithTableID: leftTableID
+                                                                     andFieldID: leftFieldID];
+        _leftFieldReference = leftFieldReference;
+        
+        id rightFieldReference = [[MADTableFieldReference alloc] initWithTableID: rightTableID
+                                                                      andFieldID: rightFieldID];
+        _rightFieldReference = rightFieldReference;
     }
     return self;
 }
@@ -1281,12 +1288,11 @@ static inline MADTableFieldIndex MADTableFieldIndexMake(NSUInteger table, NSUInt
     NSString *debugDescription;
     debugDescription = _objectID.URIRepresentation.pathComponents.count == 3 ?
     [[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@ JOIN %@]",
-     NSStringFromClass([self class]),
-     _objectID.URIRepresentation.pathComponents[1],
-     _objectID.URIRepresentation.pathComponents[2],
-     _leftField.debugDescription,
-     _rightField.debugDescription] :
-    self.debugDescription;
+     NSStringFromClass([self class]), _objectID.URIRepresentation.pathComponents[1],
+                                      _objectID.URIRepresentation.pathComponents[2],
+                                      _leftFieldReference.debugDescription,
+                                      _rightFieldReference.debugDescription] :
+                                      self.debugDescription;
     return debugDescription;
 }
 

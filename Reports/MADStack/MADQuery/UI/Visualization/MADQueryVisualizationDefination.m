@@ -62,11 +62,11 @@
             
             if (tableIdVertext.object != nil) {
                 
-                NSManagedObjectID *table = [tableIdVertext.object copy];
+                NSManagedObjectID *tableID = tableIdVertext.object;
                 
                 BOOL topLevel = YES;
                 
-                
+                /*
                 NSArray <NSManagedObjectID *> *fetchQueryLinksResults;
                 NSFetchRequest *fetchQueryLinks;
                 
@@ -98,26 +98,25 @@
                 error = NULL;
                 fetchQueryLinksResults = [managedObjectContext executeFetchRequest: fetchQueryLinks
                                                                              error: error];
-                
-                /*
-                for (RptqQueryLinks *link in query.hasQueryLinks) {
-                    RptqQueryTable *rightQueryTable = link.hasRightField.inQueryTable;
-                    if ([rightQueryTable.objectID isEqual:table]) {
+                */
+                NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = queryID.links.objectEnumerator;
+                for (MADModelQueryLink *link in queryLinkEnumerator) {
+//                for (MADModelQueryLink *link in queryID.links) {
+                    if ([link.rightFieldReference.tableID isEqual:tableID]) {
                         topLevel = NO;
                         break;
                     }
                 }
                 
                 if (topLevel) {
-                    NSURL *url = table.objectID.URIRepresentation.copy;
+                    NSURL *url = tableID.URIRepresentation.copy;
                     [startingPoints addObject:url];
                 }
-                */
+                
             }
         }
         
-        NSArray *points = [[NSArray alloc] initWithArray:startingPoints];
-        self.startingPoints = points;
+        self.startingPoints = startingPoints;
         self.directedAcyclicGraph = isDirectedAcyclicGraph;
         
     }

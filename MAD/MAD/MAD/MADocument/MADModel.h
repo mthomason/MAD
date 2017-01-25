@@ -42,6 +42,16 @@ typedef NS_ENUM(short, MADModelType) {
     - (void)update;
 @end
 
+@interface MADTableFieldReference : NSObject
+
+- (instancetype)initWithTableID:(NSManagedObjectID *)tableID
+                     andFieldID:(NSManagedObjectID *)fieldID NS_DESIGNATED_INITIALIZER;
+
+    @property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
+    @property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
+
+@end
+
 @interface MADObjectID : NSObject
     <MADModelIDProtocol>
 @end
@@ -71,8 +81,11 @@ typedef NS_ENUM(short, MADModelType) {
 
 @interface MADModelQuery : MADObjectID
     <MADModelDataProtocol>
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQueryTable *> *tables;
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQueryLink *> *links;
+    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryTableIDs;
+    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryLinkIDs;
+    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *tables;
+    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelTable *> *tableSchemas;
+    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
 @end
 
 @interface MADModelQueryTable : MADObjectID
@@ -84,8 +97,8 @@ typedef NS_ENUM(short, MADModelType) {
 @end
 
 @interface MADModelQueryLink : MADObjectID
-    @property (nonatomic, readonly, strong)      MADModelQueryField *leftField;
-    @property (nonatomic, readonly, strong)      MADModelQueryField *rightField;
+    @property (nonatomic, readonly, strong)      MADTableFieldReference *leftFieldReference;
+    @property (nonatomic, readonly, strong)      MADTableFieldReference *rightFieldReference;
 @end
 
 #endif

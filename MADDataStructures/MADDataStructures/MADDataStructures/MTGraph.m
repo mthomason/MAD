@@ -74,7 +74,8 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 // MARK: Add new vertex to adjacency list.
 - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object {
     id obj = [object copy];
-    MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject: obj];
+    MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices
+                                          andObject: obj];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
     return vertex;
@@ -87,15 +88,19 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     BOOL result = NO;
     
     // MARK: Create new edge.
-    NSNumber *uniqueId = [[NSNumber alloc] initWithUnsignedInteger:self.idUniqueEdges];
-    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:uniqueId origin:origin destination:destination
-                                             object:object andWeight:weight];
-    self.idUniqueEdges = self.idUniqueEdges + 1;
+    NSNumber *uniqueId = [[NSNumber alloc] initWithUnsignedInteger:_idUniqueEdges];
+    MTEdge *edge = [[MTEdge alloc] initWithUniqueID: uniqueId
+                                             origin: origin
+                                        destination: destination
+                                             object: object
+                                          andWeight: weight];
+    _idUniqueEdges++;
 
     // MARK: Make sure edge does not exist.
     BOOL edgeExist = NO;
     NSSet *allEdges = [self allEdges];
-    for (MTEdge *existingEdge in allEdges) {
+    MTEdge *existingEdge;
+    for (existingEdge in allEdges) {
         if ([edge isEqualTo:existingEdge]) {
             edgeExist = YES;
             break;
@@ -105,8 +110,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     // MARK: Insert edge.
     if (!edgeExist) {
         NSArray *vertices = self.vertices;
-        for (MTVertex *vertex in vertices) {
-            MTVertex *edgeOrigin = edge.origin;
+        MTVertex *vertex, *edgeOrigin;
+        for (vertex in vertices) {
+            edgeOrigin = edge.origin;
             if ([vertex isEqualTo: edgeOrigin]) {
                 [vertex addEdge:edge];
                 result = YES;
@@ -270,9 +276,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     for (MTVertex *vertex in self.vertices) {
         if (vertex.properties.algorithmColor == MTColorWhite) {
-            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
-                                             listOfEdges:&resultEdges
-                                          listOfVertices:&resultVertices];
+            [self depthFirstSearchVisitWithCurrentVertex: vertex
+                                                 counter: &counter
+                                             listOfEdges: &resultEdges
+                                          listOfVertices: &resultVertices];
         }
     }
     

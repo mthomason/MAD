@@ -46,7 +46,7 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 @interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>
 
-    @property (nonatomic, weak) MADocument *document;
+    //@property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, readwrite, assign) short count;
 
@@ -84,11 +84,20 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     }
 }
 
-/*- (instancetype)initWithQueryObjectID:(NSManagedObjectID *)document
-                     reportingEnabled:(BOOL)reportingEnabled
-                  handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
-    
-}*/
+short numberOfSectionsForQueryTableCount(NSUInteger, BOOL);
+short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL reportingEnabled) {
+    switch (queryTableCount) {
+        case 0:
+            return reportingEnabled ? 3 : 2;
+            break;
+        case 1:
+            return reportingEnabled ? 5 : 4;
+            break;
+        default:
+            return reportingEnabled ? 6 : 5;
+            break;
+    }
+}
 
 - (instancetype)initWithQueryID: (NSManagedObjectID *)queryID
            managedObjectContext: (NSManagedObjectContext *)managedObjectContext
@@ -96,29 +105,33 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
     if (self = [super init]) {
     
-            NSString *expressionDescriptionHasQueryTables = @"madQTC";
-
+        NSString *keyHasQueryTables = @"madQTC";
+        
         id result;
         NSError * __autoreleasing *error = NULL;
         NSFetchRequest *request;
         NSComparisonPredicate *predicate;
         NSExpression *expression[2];
-        NSExpressionDescription *descHasQueryTables;
+        NSExpressionDescription *expressionDescriptionQueryTableCount;
+        NSExpressionDescription *expressionDescriptionQueryObjectID;
         NSExpression *keyPathHasQueryTables;
         
-        NSExpressionDescription *descObjectID = [[NSExpressionDescription alloc] init];
-        descObjectID.name = NSStringFromSelector(@selector(objectID));
-        descObjectID.expression = [NSExpression expressionForEvaluatedObject];
-        descObjectID.expressionResultType = NSObjectIDAttributeType;
+        expressionDescriptionQueryObjectID = [[NSExpressionDescription alloc] init];
+        expressionDescriptionQueryObjectID.name = NSStringFromSelector(@selector(objectID));
+        expressionDescriptionQueryObjectID.expression = [NSExpression expressionForEvaluatedObject];
+        expressionDescriptionQueryObjectID.expressionResultType = NSObjectIDAttributeType;
         
         NSArray *keyPathQueryTables;
         
-        descHasQueryTables = [[NSExpressionDescription alloc] init];
-        descHasQueryTables.name = expressionDescriptionHasQueryTables.copy;
+        expressionDescriptionQueryTableCount = [[NSExpressionDescription alloc] init];
+        expressionDescriptionQueryTableCount.name = keyHasQueryTables.copy;
+        expressionDescriptionQueryTableCount.expressionResultType = NSInteger32AttributeType;
+        
         keyPathHasQueryTables = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(hasQueryTables))];
         keyPathQueryTables = [[NSArray alloc] initWithObjects:keyPathHasQueryTables, nil];
-        descHasQueryTables.expression = [NSExpression expressionForFunction: @"count:"
-                                                                  arguments: keyPathQueryTables];
+        
+        expressionDescriptionQueryTableCount.expression = [NSExpression expressionForFunction: @"count:"
+                                                                                    arguments: keyPathQueryTables];
         
         expression[0] = [NSExpression expressionForEvaluatedObject];
         expression[1] = [NSExpression expressionForConstantValue: queryID];
@@ -132,39 +145,34 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
         NSArray *propertiesToFetch;
 
         entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQuery class])
-                                                             inManagedObjectContext: managedObjectContext];
+                                        inManagedObjectContext: managedObjectContext];
         request = [[NSFetchRequest alloc] init];
 
-        propertiesToFetch = [[NSArray alloc] initWithObjects:descHasQueryTables,
-                                                             descObjectID, nil];
+        propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescriptionQueryTableCount,
+                                                             expressionDescriptionQueryObjectID, nil];
         request.propertiesToFetch = propertiesToFetch;
         request.entity = entityDescription;
         request.fetchLimit = 1;
         request.predicate = predicate;
         request.resultType = NSDictionaryResultType;
         request.includesSubentities = NO;
-        
+
+        NSUInteger numberOfTables = 0;
+
         result = [managedObjectContext executeFetchRequest:request error:error];
-        
-        int numberOfTables = 0;
-        if (((NSArray *)result).count > 0) {
-            id tableCount = result[0][@"madQTC"];
-            numberOfTables = [tableCount intValue];
-            tableCount = nil;
+        if (result == nil) {
+            if (error) NSLog(@"Fetch error: %@", *error);
+            numberOfTables = 0;
+            
+        } else {
+            if (((NSArray *)result).count > 0) {
+                id tableCount = result[0][keyHasQueryTables];
+                numberOfTables = (NSUInteger)[tableCount integerValue];
+                tableCount = nil;
+            }
         }
         
-        switch (numberOfTables) {
-            case 0:
-                _count = reportingEnabled ? 3 : 2;
-                break;
-            case 1:
-                _count = reportingEnabled ? 5 : 4;
-                break;
-            default:
-                _count = reportingEnabled ? 6 : 5;
-                break;
-        }
-        
+        _count = numberOfSectionsForQueryTableCount(numberOfTables, reportingEnabled);
         _reportingEnabled = reportingEnabled;
         _numberOfTables = (unsigned long)numberOfTables;
         _handleConfigureCell = handleConfigureCell;
@@ -173,72 +181,15 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
     return self;
 }
 
-- (instancetype)initWithDocument: (MADocument *)document
-                reportingEnabled: (BOOL)reportingEnabled
-             handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
-    
-    if (self = [super init]) {
-        
-        NSUInteger numberOfTables;
-        NSSet *hasDatabaseSchemas, *hasQueries, *hasQueryTables;
-        RptqDocument *rptqDocument;
-        RptqDatabase *rptqDatabase;
-        RptqQuery *rptqQuery;
-        
-        rptqDocument = [document activeDocumentModel];
-        
-        hasDatabaseSchemas = rptqDocument.hasDatabaseSchemas;
-        rptqDatabase = hasDatabaseSchemas.anyObject;
-        hasQueries = rptqDatabase.hasQueries;
-        rptqQuery = hasQueries.anyObject;
-        hasQueryTables = rptqQuery.hasQueryTables;
-        numberOfTables = hasQueryTables.count;
-        
-        short count;
-        switch (numberOfTables) {
-            case 0:
-                count = reportingEnabled ? 3 : 2;
-                break;
-            case 1:
-                count = reportingEnabled ? 5 : 4;
-                break;
-            default:
-                count = reportingEnabled ? 6 : 5;
-                break;
-        }
-        
-        _reportingEnabled = reportingEnabled;
-        _numberOfTables = numberOfTables;
-        _count = count;
-        _handleConfigureCell = handleConfigureCell;
-        _document = document;
-    }
-    return self;
-    
-}
-
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
                       reportingEnabled:(BOOL)reportingEnabled
                    handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell {
 
     if (self = [super init]) {
         
-        short count;
-        switch (numberOfTables) {
-            case 0:
-                count = reportingEnabled ? 3 : 2;
-                break;
-            case 1:
-                count = reportingEnabled ? 5 : 4;
-                break;
-            default:
-                count = reportingEnabled ? 6 : 5;
-                break;
-        }
-        
+        _count = numberOfSectionsForQueryTableCount(numberOfTables, reportingEnabled);
         _reportingEnabled = reportingEnabled;
         _numberOfTables = numberOfTables;
-        _count = count;
         _handleConfigureCell = handleConfigureCell;
         
     }
@@ -246,21 +197,8 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
 }
 
 - (void)numberOfTablesChanged:(NSUInteger)numberOfTables {
-    short count;
-    switch (numberOfTables) {
-        case 0:
-            count = _reportingEnabled ? 3 : 2;
-            break;
-        case 1:
-            count = _reportingEnabled ? 5 : 4;
-            break;
-        default:
-            count = _reportingEnabled ? 6 : 5;
-            break;
-    }
-    
+    _count = numberOfSectionsForQueryTableCount(numberOfTables, _reportingEnabled);
     _numberOfTables = numberOfTables;
-    _count = count;
     _sections = nil;
 }
 
@@ -480,9 +418,9 @@ static NSString * const TextFormatConnection = @"You are connecting to %1$@"
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
             
             NSManagedObjectContext *managedObjectContext;
-            managedObjectContext = self.document.managedObjectContext;
+            managedObjectContext = self.datasoruce.document.managedObjectContext;
             RptqDocument *document;
-            document = [_document activeDocumentModel];
+            document = [self.datasoruce.document activeDocumentModel];
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
                 

@@ -16,12 +16,13 @@
 
 @interface MTLinkedList()
 
-@property (nonatomic, strong) NSMutableArray *list;
-@property (nonatomic, assign) NSUInteger location;
+    @property (nonatomic, strong) NSMutableArray *list;
 
 @end
 
-@implementation MTLinkedList
+@implementation MTLinkedList {
+    NSUInteger _location;
+}
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -31,29 +32,29 @@
     return self;
 }
 
-- (NSUInteger)count { return self.list.count; }
+- (NSUInteger)count { return _list.count; }
 
-- (BOOL)isNext { return (self.location + 1 < self.count); }
+- (BOOL)isNext { return (_location + 1 < self.count); }
 
-- (BOOL)isPrevious { return (self.location - 1 < self.count && self.location > 0); }
+- (BOOL)isPrevious { return (_location - 1 < self.count && _location > 0); }
 
 - (void)insert:(id)object {
     if (object != nil) {
-        [self.list insertObject:object atIndex:0];
+        [_list insertObject:object atIndex:0];
     }
 }
 
 - (void)add:(id)object {
     if (object != nil) {
-        [self.list addObject:object];
-        self.location = self.count - 1;
+        [_list addObject:object];
+        _location = self.count - 1;
     }
 }
 
 - (id)head {
     id result;
     @synchronized(self) {
-        result = (self.list)[0];
+        result = (_list)[0];
     }
     return result;
 }
@@ -62,8 +63,8 @@
     id result;
     @synchronized(self) {
         if ([self isNext]) {
-            self.location++;
-            result = (self.list)[self.location];
+            _location++;
+            result = (_list)[_location];
         } else {
             result = nil;
         }
@@ -75,8 +76,8 @@
     id result;
     @synchronized(self) {
         if ([self isPrevious]) {
-            self.location--;
-            result = (self.list)[self.location];
+            _location--;
+            result = (_list)[_location];
         } else {
             result = nil;
         }
@@ -85,26 +86,26 @@
 }
 
 - (id)getTop {
-    return (self.count > 0) ? (self.list).lastObject : nil;
+    return (self.count > 0) ? (_list).lastObject : nil;
 }
 
 - (id)getBottom {
-    return (self.count > 0) ? (self.list)[0] : nil;
+    return (self.count > 0) ? (_list)[0] : nil;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    return (self.list)[index];
+    return (_list)[index];
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
                                   objects:(id __unsafe_unretained [])stackbuf
                                     count:(NSUInteger)len {
-    return [self.list countByEnumeratingWithState:state objects:stackbuf count:len];
+    return [_list countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
 - (NSString *)toStringHumanReadable {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@"*<->"];
-    for (id object in self.list) {
+    for (id object in _list) {
         if ([object conformsToProtocol:@protocol(MTProtocolLog)]) {
             [result appendFormat:@"%@<->", [object toStringHumanReadable]];
         } else {
@@ -124,12 +125,12 @@
 }
 
 - (void)reverse {
-    NSMutableArray *reverse = self.list.reverseObjectEnumerator.allObjects.mutableCopy;
-    self.list = reverse;
+    NSMutableArray *reverse = _list.reverseObjectEnumerator.allObjects.mutableCopy;
+    _list = reverse;
 }
 
 - (NSArray *)toArray {
-    return self.list;
+    return _list;
 }
 
 @end

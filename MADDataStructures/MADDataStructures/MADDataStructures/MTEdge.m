@@ -47,7 +47,11 @@
     return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 object:nil andWeight:one];
 }
 
-- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
+- (instancetype)initWithUniqueID:(NSNumber *)uniqueID
+                          origin:(MTVertex *)vertex1
+                     destination:(MTVertex *)vertex2
+                          object:(id <NSCopying>)object
+                       andWeight:(NSNumber *)weight {
     if (self = [super initWithObject:object]) {
 
         _directed = YES;
