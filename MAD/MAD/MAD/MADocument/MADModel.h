@@ -13,7 +13,7 @@
 
 @class NSManagedObjectID;
 @class NSManagedObjectContext;
-
+@class NSMapTable <KeyType, ObjectType>;
 @class NSOrderedSet <__covariant ObjectType>;
 
 @class MADModelDocument;
@@ -31,17 +31,23 @@ typedef NS_ENUM(short, MADModelType) {
     MADModelTypeQueries,
 };
 
-@protocol MADObjectIDProtocol <NSObject>
-    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
+@protocol MADModelIDProtocol <NSObject>
     @property (nonatomic, readonly, copy)      NSManagedObjectID *objectID;
 @end
 
+@protocol MADModelDataProtocol <NSObject>
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
+    - (void)update;
+@end
+
 @interface MADObjectID : NSObject
-    <MADObjectIDProtocol>
+    <MADModelIDProtocol>
 @end
 
 @interface MADModelDocument : MADObjectID
-    <MADObjectIDProtocol>
+    <MADModelDataProtocol>
     - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
     @property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
@@ -49,40 +55,37 @@ typedef NS_ENUM(short, MADModelType) {
 @end
 
 @interface MADModelDatabase : MADObjectID
-    <MADObjectIDProtocol>
+    <MADModelDataProtocol>
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQuery *> *queries;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelTable *> *tables;
     @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
 @end
 
 @interface MADModelTable : MADObjectID
-    <MADObjectIDProtocol>
+    @property (nonatomic, readonly, strong)     NSString *name;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelField *> *fields;
 @end
 
 @interface MADModelField : MADObjectID
-    <MADObjectIDProtocol>
 @end
 
 @interface MADModelQuery : MADObjectID
-    <MADObjectIDProtocol>
+    <MADModelDataProtocol>
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQueryTable *> *tables;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQueryLink *> *links;
 @end
 
 @interface MADModelQueryTable : MADObjectID
-    <MADObjectIDProtocol>
-@end
-
-@interface MADModelQueryLink : MADObjectID
-    <MADObjectIDProtocol>
-    @property (nonatomic, readonly, strong)      MADModelQueryField *leftField;
-    @property (nonatomic, readonly, strong)      MADModelQueryField *rightField;
+    @property (nonatomic, readonly, strong)     NSMapTable <NSManagedObjectID *, MADModelQueryField *> *fields;
 @end
 
 @interface MADModelQueryField : MADObjectID
-    <MADObjectIDProtocol>
-    @property (nonatomic, readonly, strong)        MADModelQueryTable *table;
+
+@end
+
+@interface MADModelQueryLink : MADObjectID
+    @property (nonatomic, readonly, strong)      MADModelQueryField *leftField;
+    @property (nonatomic, readonly, strong)      MADModelQueryField *rightField;
 @end
 
 #endif

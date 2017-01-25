@@ -40,6 +40,17 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     return newResult;
 }
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    }
+    return self;
+}
+
 - (NSError *)error {
     if (!_isSucceed){
         return _error;

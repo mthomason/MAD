@@ -55,10 +55,9 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
         @autoreleasepool {
             
             id classes;
-            id controlClass = [MFMailComposeViewController class];
             UINavigationBar *navigationBarMailAppearance;
             
-            classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+            classes = [[NSArray alloc] initWithObjects:[MFMailComposeViewController class], nil];
             
             navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
             

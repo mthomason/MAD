@@ -56,7 +56,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @interface MADArrayCachingEnumerator : NSEnumerator
     <NSFastEnumeration>
 
-    - (id)initWithURL:(NSURL *)url;
+    - (instancetype)initWithURL:(NSURL *)url;
     @property (nonatomic, retain) NSURL *url;
 
 @end

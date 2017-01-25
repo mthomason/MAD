@@ -31,11 +31,12 @@ static NSString * const MADOperatorSelectorState        = @"state";
 @implementation MADOperation
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
     if (self = [super init]) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     
     }
     return self;

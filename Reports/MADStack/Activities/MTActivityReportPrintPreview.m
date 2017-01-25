@@ -62,7 +62,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
     controller.delegate = self;
     self.activityController = controller;
     
-    UIDocumentInteractionController * __unsafe_unretained weakController = self.activityController;
+    UIDocumentInteractionController * __weak weakController = self.activityController;
     [self.delegate prepareForInteractionController: weakController
                                         completion: ^(BOOL success) {
         if (success) {

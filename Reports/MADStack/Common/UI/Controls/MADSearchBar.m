@@ -74,7 +74,7 @@
     [super layoutSubviews];
     if (!self.isIconColorUpdated || !self.isClearButtonUpdated) {
         
-        UIImage * __unsafe_unretained image;
+        UIImage *image;
         UIColor *whiteColor =  [UIColor whiteColor];
         
         UIView *subview;
@@ -93,12 +93,14 @@
                     UIImage *imageRenderingTemplate = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     ((UIImageView *)((UITextField *)subview2).leftView).image = imageRenderingTemplate;
                     ((UIImageView *)((UITextField *)subview2).leftView).tintColor = whiteColor.copy;
+                    imageRenderingTemplate = nil;
                     
                 }
             }
         }
         self.updatedIconColor = YES;
         self.updatedClearButtonColor  = YES;
+        image = nil;
     }
 }
 

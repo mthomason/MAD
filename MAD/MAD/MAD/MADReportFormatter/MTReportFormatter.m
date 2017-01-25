@@ -604,25 +604,26 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 - (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow {
 
 
+    NSMutableArray *keyValues;
+    keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
+    
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
-        NSMutableArray *keyValues;
-        keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
 
+        id predicateValue;
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
-            NSString * __unsafe_unretained key = sortDesc.key;
+            NSString *key = sortDesc.key;
             if (key) {
-                id predicateValue = resultRow[key];
+                predicateValue = resultRow[key];
                 if (predicateValue != nil) {
                     [keyValues addObject:predicateValue];
                 } else {
                     [keyValues addObject:[NSNull null]];
                 }
+                predicateValue = nil;
             }
         }
-        return keyValues;
-    } else {
-        return @[];
     }
+    return keyValues;
 }
 
 // FIXME: Make sure paper rect is passed in to the software

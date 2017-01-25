@@ -96,7 +96,9 @@
     return (self.list)[index];
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained [])stackbuf
+                                    count:(NSUInteger)len {
     return [self.list countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 

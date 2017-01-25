@@ -67,7 +67,7 @@
 - (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
     
     // One or more keys changed.
-    NSNumber * __unsafe_unretained changeReason;
+    NSNumber *changeReason;
     changeReason = notification.userInfo[NSUbiquitousKeyValueStoreChangeReasonKey];
     
     switch (changeReason.integerValue) {

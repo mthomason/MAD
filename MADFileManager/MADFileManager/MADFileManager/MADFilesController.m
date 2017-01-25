@@ -264,7 +264,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     //NSLog(@"Requesting object at index: %d.", index);
 
     __block MADMetaData *fileInfo = nil;
-    __unsafe_unretained typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
 
     dispatch_sync(_fileMetaDataQueue, ^{
         fileInfo = weakSelf.fileMetaDatum[index];
@@ -322,13 +322,14 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
     dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
 
-    __unsafe_unretained typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     dispatch_async(fileMetaDataQueue, ^{
-
-        NSUInteger indexOfFileInfo = [weakSelf.fileMetaDatum indexOfObject:fileInfo];
-        weakSelf.fileMetaDatum[indexOfFileInfo] = fileInfo;
         
-        [weakSelf.delegateQueue addOperationWithBlock:^{
+        typeof(self) sself = weakSelf;
+        NSUInteger indexOfFileInfo = [sself.fileMetaDatum indexOfObject:fileInfo];
+        sself.fileMetaDatum[indexOfFileInfo] = fileInfo;
+        
+        [sself.delegateQueue addOperationWithBlock:^{
 
             //NSLog(@"%s", __PRETTY_FUNCTION__);
 

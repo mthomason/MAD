@@ -66,7 +66,9 @@
 }
 
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained [])stackbuf
+                                    count:(NSUInteger)len {
     return [self.stack countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 

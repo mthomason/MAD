@@ -249,10 +249,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             
             NSArray <Class <UIAppearanceContainer>> *classes;
             UINavigationBar *navigationBar;
-            Class controlClass;
 
-            controlClass = [QLPreviewController class];
-            classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+            classes = [[NSArray alloc] initWithObjects:[QLPreviewController class], nil];
             navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
             navigationBar.barTintColor  = madColor4.copy;
             navigationBar.tintColor     = redColor.copy;
@@ -261,8 +259,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
             navigationBar.tintColor     = whiteColor.copy;
             
-            controlClass = [UIToolbar class];
-            classes = [[NSArray alloc] initWithObjects:controlClass, nil];
+            classes = [[NSArray alloc] initWithObjects:[UIToolbar class], nil];
             barButtonItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses: classes];
             barButtonItem.tintColor = whiteColor.copy;
             
@@ -273,8 +270,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
             
             UILabel *labelInTableCell;
-            controlClass = [UITableViewCell class];
-            
             classes = [[NSArray alloc] initWithObjects:[UITableViewCell class], [UICollectionViewCell class], nil];
             labelInTableCell = [UILabel appearanceWhenContainedInInstancesOfClasses: classes];
             labelInTableCell.highlightedTextColor = orangeColor.copy;
@@ -407,7 +402,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark Initialize install operations
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
         MADOperationQueue *operationQueueBackground;
         NSOperation *getUserCloudPreferences;
@@ -455,7 +450,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                          object: NULL];
         [operationQueueBackground addOperation:getUserCloudPreferences];
         
-    }];
+    //}];
     
     NSString *hint;
     hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
@@ -687,6 +682,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         if (updates.count > 0) {
             [collectionView reloadItemsAtIndexPaths: updates];
         }
+        collectionView = nil;
     };
     
     batchCompletion = ^(BOOL finished) {
@@ -997,12 +993,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
-    MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
-    void (^handleSignout)(UIAlertAction *action) = ^(UIAlertAction *action) {
-        [fileExplorerDataSource updateCloudPreferences];
-    };
     
-    void (^ubiquityIdentityDidChange)(void) = ^ {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         
         UINavigationController *navController;
         navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
@@ -1010,12 +1002,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         UIAlertController *signedOutController;
         
-        signedOutController = [MADAlertController newAlertControllerNotifyCloudSignOut:handleSignout];
+        signedOutController = [MADAlertController newAlertControllerNotifyCloudSignOut:^(UIAlertAction *action) {
+            [self.fileExplorerDataSource updateCloudPreferences];
+        }];
         
         [self presentViewController:signedOutController animated:YES completion:nil];
-    };
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:ubiquityIdentityDidChange];
+    }];
     
 }
 
@@ -1253,7 +1245,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
         
         NSNotification *changeNotification = notification.copy;
-        MADocument * __unsafe_unretained document = changeNotification.object;
+        MADocument *document = changeNotification.object;
         UIDocumentState documentState = document.documentState;
         
         switch (documentState) {
@@ -2162,7 +2154,7 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
     UIViewController *fromViewController, *toViewController;
-    UIView *toView, *fromView;
+    UIView *toView;
     
     fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
@@ -2188,7 +2180,6 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
     }
     
     toView = [transitionContext viewForKey:UITransitionContextToViewKey];
-    fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
     
     [[transitionContext containerView] addSubview:toView];
     
@@ -2214,6 +2205,7 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
     
     toView.alpha = 0.0;
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+
         toView.alpha = 1.0;
         if (pushingFileExplorer) {
             toViewController.navigationController.toolbar.alpha = 1.0;
@@ -2221,9 +2213,12 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
             fromViewController.navigationController.toolbar.alpha = 0.0;
         }
         [toViewController.view setNeedsLayout];
+        
     } completion:^(BOOL finished) {
         if (finished) {
             BOOL canceled;
+            id fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
+
             if (!(canceled = [transitionContext transitionWasCancelled])) {
                 if (pushingFileExplorer) {
                     [toViewController.navigationController setToolbarHidden: NO animated:NO];

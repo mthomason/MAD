@@ -101,6 +101,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         for (NSUInteger i = 0; i < numberOfSections; i++) {
             indexSet = [[NSMutableIndexSet alloc] init];
             [array addObject:indexSet];
+            indexSet = nil;
         }
         self.selected = array;
         
@@ -108,6 +109,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         for (NSUInteger i = 0; i < numberOfSections; i++) {
             indexSet = [[NSMutableIndexSet alloc] init];
             [array addObject:indexSet];
+            indexSet = nil;
         }
         self.highlighted = array;
         
@@ -372,15 +374,15 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     sizeLabel[0] = [self heightForAttributedString: attributedString
-                                           contentScaleFactor: collectionView.contentScaleFactor
-                                                         font: font];
+                                contentScaleFactor: collectionView.contentScaleFactor
+                                              font: font];
     
     attributedStringSub = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption: size];
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     sizeLabel[1] = [self heightForAttributedString: attributedStringSub
-                                      contentScaleFactor: collectionView.contentScaleFactor
-                                                    font: font];
+                                contentScaleFactor: collectionView.contentScaleFactor
+                                              font: font];
     return CGSizeMake(140.0000f,
                       (CGFloat)(128.0 + ceil(sizeLabel[0]) + ceil(sizeLabel[1]) + 20.0));
 }

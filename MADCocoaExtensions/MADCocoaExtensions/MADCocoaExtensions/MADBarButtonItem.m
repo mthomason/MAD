@@ -21,16 +21,13 @@
 
 + (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action {
     id barButtonItemDuplicate = nil;
-    UIImage *imageDuplcate;
-    NSString *name;
-    
-    name = @"MADImageToolbarDuplicate";
-    imageDuplcate = [UIImage imageNamed: name];
-    
+
+    UIImage *imageDuplcate = [UIImage imageNamed: @"MADImageToolbarDuplicate"];
     barButtonItemDuplicate = [[self alloc] initWithImage: imageDuplcate
                                                    style: UIBarButtonItemStylePlain
                                                   target: target
                                                   action: action];
+    imageDuplcate = nil;
     [barButtonItemDuplicate setEnabled: NO];
     return barButtonItemDuplicate;
 }

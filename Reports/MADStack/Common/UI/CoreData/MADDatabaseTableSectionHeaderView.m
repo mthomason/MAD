@@ -68,12 +68,17 @@ static const CGFloat PaddingSize = 5.00000f;
         
         [button setImage: caratClosed   forState:UIControlStateNormal];
         [button setImage: caratOpen     forState:UIControlStateSelected];
-        [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget: self
+                   action: @selector(toggleOpen:)
+         forControlEvents: UIControlEventTouchUpInside];
         [self addSubview:button];
 
         // Set up the tap gesture recognizer.
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
+        UITapGestureRecognizer *tapGesture;
+        tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                             action: @selector(toggleOpen:)];
         [self addGestureRecognizer:tapGesture];
+        tapGesture = nil;
         
         self.disclosureButton = button;
         

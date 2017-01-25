@@ -12,16 +12,16 @@
 @interface MADObjectIdentifier ()
 
     @property (nonatomic, copy, readwrite) NSString *identifier;
-    @property (nonatomic, assign, readwrite) NSUInteger tag;
+    @property (nonatomic, assign, readwrite) NSUInteger serial;
 
 @end
 
 @implementation MADObjectIdentifier
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSUInteger)tag {
+- (instancetype)initWithIdentifier:(NSString *)identifier andSerial:(NSUInteger)serial {
     if (self = [super init]) {
-        self->_identifier = identifier.copy;
-        self->_tag = tag;
+        _identifier = identifier.copy;
+        _serial = serial;
     }
     return self;
 }

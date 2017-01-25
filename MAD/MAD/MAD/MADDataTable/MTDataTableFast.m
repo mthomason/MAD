@@ -366,8 +366,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (void)setupGroupKeyIndexes {
-    NSArray * __unsafe_unretained sortDescriptors = self.sortDescriptors;
-    NSArray * __weak columnKeys = self.columnKeys;
+    NSArray *sortDescriptors = self.sortDescriptors;
+    NSArray *columnKeys = self.columnKeys;
     
     [_groupKeyIndexes removeAllIndexes];
     

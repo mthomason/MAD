@@ -629,10 +629,10 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         
         MADModelQuery *query;
         query = _document.documentObjectIDStore.databases.firstObject.queries.firstObject;
-        MADModelQueryTable *table;
-        for (table in query.tables) {
-            NSLog(@"Table: %@", table);
-        }
+        //MADModelQueryTable *table;
+        //for (table in query.tables) {
+        //    NSLog(@"Table: %@", table);
+        //}
         if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
@@ -694,7 +694,8 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
 
 - (void)displayQuery:(MADModelQuery *)query animated:(BOOL)animated {
 
-    MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
+    MADQueryVisualizationDefination *queryDef;
+    queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
 
     NSManagedObjectID *tableObjectID;
@@ -770,7 +771,7 @@ static inline CGPoint PointInsertTable(CGFloat *viewHeight, NSUInteger *tableCou
         
     }
     
-    MADConnectorView * __unsafe_unretained connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
+    MADConnectorView *connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
     [connectorView removeFromSuperview];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];

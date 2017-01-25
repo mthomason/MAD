@@ -31,8 +31,51 @@
 
 #import <MADDataStructures/MTVertex.h>
 
+#import <MAD/MADModel.h>
 
 @implementation MTGraph (RptqQuery)
+
+- (instancetype)initWtthQueryID:(MADModelQuery *)query {
+    if (self = [self init]) {
+        
+        NSOrderedSet <MADModelQueryLink *> *hasLinks = query.links;
+        NSOrderedSet <MADModelQueryTable *> *hasTables = query.tables;
+        NSLog(@"%@", hasTables);
+        NSLog(@"%@", hasLinks);
+        
+        [query.tables enumerateObjectsUsingBlock:^(MADModelQueryTable * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self addVertexWithObject: obj.objectID];
+        }];
+        
+        //Add a vertex to the graph for each table.
+        /*NSManagedObjectID *objectID, *objectIDRight;
+        for (RptqDatabaseSchemaTable *table in hasTables) {
+            objectID = table.objectID.copy;
+            [self addVertexWithObject: objectID];
+        }*/
+        
+        //Create an edge in the graph for each query link.
+        NSNumber *weight = @(1);
+        /*
+        
+        [query.links enumerateObjectsUsingBlock:^(MADModelQueryLink * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        }];
+        for (MADModelQueryLink *queryLink in query.links) {
+            
+            
+            MTVertex *vertexOrigin =        [self vertexForObject:queryLink.leftField .inQueryTable.objectID];
+            MTVertex *vertexDestination =   [self vertexForObject:queryLink.rightField.inQueryTable.objectID];
+            
+            [self addEdgeWithOrigin: vertexOrigin
+                        destination: vertexDestination
+                             object: queryLink.objectID
+                          andWeight: weight];
+            
+        }*/
+    }
+    return self;
+}
 
 - (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
          managedObjectContext:(NSManagedObjectContext *)managedObjectContext {

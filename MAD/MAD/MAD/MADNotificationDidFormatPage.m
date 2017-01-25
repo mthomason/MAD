@@ -17,16 +17,11 @@
 NSString * const MADNotificationDidFormatPagesName = @"MADNotificationDidFormatPages";
 NSString * const MTDatabaseNumberOfPagesFormattedKey = @"MTDatabaseNumberOfPagesFormattedKey";
 
-static const NSInteger PageIntervalInital = 1;
-static const NSInteger PageIntervalInitalMax = 7;
-
-@interface MADNotificationDidFormatPage ()
-
-    @property (nonatomic, assign) NSUInteger pageInterval;
-
-@end
-
-@implementation MADNotificationDidFormatPage
+@implementation MADNotificationDidFormatPage {
+    NSUInteger _pageInterval;
+    NSUInteger _pageIntervalInital;
+    NSUInteger _pageIntervalInitalMax;
+}
 
 static MADNotificationDidFormatPage *_sharedSingleton = nil;
 
@@ -38,8 +33,16 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedSingleton = [[super allocWithZone:NULL] init];
-        [_sharedSingleton initializeRowInterval];
     });
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _pageIntervalInital = 1;
+        _pageIntervalInitalMax = 7;
+        _pageInterval = _pageIntervalInital;
+    }
+    return self;
 }
 
 + (MADNotificationDidFormatPage *)sharedObject {
@@ -54,10 +57,6 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
     return self;
 }
 
-- (void)initializeRowInterval {
-    self.pageInterval = PageIntervalInital;
-}
-
 - (NSDictionary *)parametersWithNumberOfPages:(NSUInteger)pages {
     NSNumber *pageCounterWrapper = [[NSNumber alloc] initWithUnsignedInteger: pages];
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -67,16 +66,16 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 
 
 - (void)reportFormatter:(MTReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
-    if (page % self.pageInterval == 0) {
-        if (page == 0) [self initializeRowInterval];
+    if (page % _pageInterval == 0) {
+        if (page == 0) _pageInterval = _pageIntervalInital;
         NSDictionary *parameters = [self parametersWithNumberOfPages:page];
         NSNotification *notification;
         notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
                                                      object:reportFormatter userInfo:parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-        if (self.pageInterval < PageIntervalInitalMax) {
-            if (page > self.pageInterval) {
-                self.pageInterval = (unsigned long)ceil(self.pageInterval * 1.1);
+        if (_pageInterval < _pageIntervalInitalMax) {
+            if (page > _pageInterval) {
+                _pageInterval = (unsigned long)ceil(_pageInterval * 1.1);
             }
         }
     }

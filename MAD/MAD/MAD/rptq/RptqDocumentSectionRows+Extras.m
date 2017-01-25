@@ -23,9 +23,11 @@
 
 + (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSectionRows class])
-                                                                        inManagedObjectContext: managedObjectContext];
-    id sectionRow = [[self alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
+    NSEntityDescription *entityDescription;
+    entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                   inManagedObjectContext: managedObjectContext];
+    id sectionRow = [[self alloc] initWithEntity: entityDescription
+                  insertIntoManagedObjectContext: managedObjectContext];
     return sectionRow;
 }
 

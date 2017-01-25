@@ -1177,7 +1177,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     if ([segue.identifier isEqualToString:MADIdentifierStoryboardSeguePushFontPicker]) {
         
-        MADFontSelectorViewController __unsafe_unretained *destination = segue.destinationViewController;
+        MADFontSelectorViewController *destination = segue.destinationViewController;
         destination.delegate = self;
         destination.clearsBackground = self.clearsBackground;
         NSString *fontname = nil;

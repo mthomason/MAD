@@ -7,7 +7,7 @@
 //
 
 #if __has_feature(objc_arc)
-#warning Compile this file with ARC using the -fno-objc-arc flag.
+    #warning Do not use ARC in this file.
 #endif
 
 #import "MADDefer.h"
@@ -15,12 +15,14 @@
 @implementation MADDefer
 
 + (instancetype)defer:(void (^)())block {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     MADDefer *defer =  [[MADDefer alloc] init];
     defer.block = block;
     return [defer autorelease];
 }
 
 - (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     if (_block)
         _block();
     [super dealloc];

@@ -20,14 +20,15 @@
 
 @end
 
+static id _sharedInstance;
+
 @implementation MADExclusivityController
 
 + (instancetype)sharedExclusivityController {
     
-    static id _sharedInstance;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[self alloc] initPrivate];
+        _sharedInstance = [[self alloc] init];
     });
     return _sharedInstance;
 }
@@ -36,18 +37,16 @@
     NSAssert(NO, @"Don't dealloc the singleton.");
 }
 
-- (instancetype)initPrivate {
-    if (self = [super init]) {
-        if (self = [super init]){
-            _serialQueue = dispatch_queue_create("Operations.ExclusivityController",DISPATCH_QUEUE_SERIAL);
-            _operations = [NSMutableDictionary dictionary];
-        }
+- (instancetype)init {
+    
+    if (_sharedInstance) return nil;
+    
+    if (self = [super init]){
+        _serialQueue = dispatch_queue_create("Operations.ExclusivityController",DISPATCH_QUEUE_SERIAL);
+        _operations = [NSMutableDictionary dictionary];
     }
     return self;
-}
 
-- (instancetype)init {
-    return [[self class] sharedExclusivityController];
 }
 
 /// Registers an operation as being mutually exclusive

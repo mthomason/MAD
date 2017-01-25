@@ -206,9 +206,10 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> __unsafe_unretained sectionInfo =
-                                _fetchedResultsControllerGroups.sections[(NSUInteger)section];
-    return (NSInteger)sectionInfo.numberOfObjects + 2;
+    id <NSFetchedResultsSectionInfo> sectionInfo;
+    sectionInfo = _fetchedResultsControllerGroups.sections[(NSUInteger)section];
+    NSInteger numberOfRows = ((NSInteger)sectionInfo.numberOfObjects) + 2;
+    return numberOfRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -253,9 +254,10 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> __unsafe_unretained sectionInfo =
+    id <NSFetchedResultsSectionInfo> sectionInfo =
                                 _fetchedResultsControllerGroups.sections[(NSUInteger)section];
-    return sectionInfo.name;
+    NSString *title = sectionInfo.name.copy;
+    return title;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {

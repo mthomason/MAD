@@ -76,6 +76,29 @@ static inline float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
+
+@interface MADActivityIndicatorViewExplorer : UIActivityIndicatorView
+    + (instancetype)newActivityIndicatorViewExplorer;
+@end
+
+@implementation MADActivityIndicatorViewExplorer
+
++ (instancetype)newActivityIndicatorViewExplorer {
+    
+    id activityIndicatorView;
+    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                             UIActivityIndicatorViewStyleGray];
+    [activityIndicatorView stopAnimating];
+    [activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
+                                                UIViewAutoresizingFlexibleRightMargin |
+                                                UIViewAutoresizingFlexibleTopMargin |
+                                                UIViewAutoresizingFlexibleBottomMargin];
+    [activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];
+    return activityIndicatorView;
+}
+
+@end
+
 @implementation MADStringFormatted
 
 + (NSString *)newStringFormattedSubtitle:(NSString *)status
@@ -117,20 +140,6 @@ static inline float wobbleFactor() {
     [_labelTitle setHighlighted: highlighted];
 }
 
-+ (UIActivityIndicatorView *)newActivityIndicatorView {
-    
-    UIActivityIndicatorView *activityIndicatorView;
-    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-                                                                UIActivityIndicatorViewStyleGray];
-    [activityIndicatorView stopAnimating];
-    activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-                                                UIViewAutoresizingFlexibleRightMargin |
-                                                UIViewAutoresizingFlexibleTopMargin |
-                                                UIViewAutoresizingFlexibleBottomMargin;
-    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = YES;
-    return activityIndicatorView;
-}
-
 - (void)dealloc {
     [self setSelectedBackgroundView:nil];
 }
@@ -155,7 +164,7 @@ static inline float wobbleFactor() {
 - (UIActivityIndicatorView *)activityIndicator {
     UIActivityIndicatorView *result = _activityIndicator;
     if (result == nil) {
-        result = [MADCollectionViewCellDocument newActivityIndicatorView];
+        result = [MADActivityIndicatorViewExplorer newActivityIndicatorViewExplorer];
         result.center = self.contentView.center;
         [self.contentView addSubview:result];
         _activityIndicator = result;
@@ -193,6 +202,7 @@ static inline float wobbleFactor() {
     UILabel *labelTitle = _labelTitle;
     labelTitle.attributedText = attributedString;
     labelTitle.text = text.copy;
+    attributedString = nil;
 }
 
 - (void)updateFont {

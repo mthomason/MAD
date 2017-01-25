@@ -89,31 +89,6 @@
             return sql;
         };
         
-        NSString *(^sqlOrderBy)(NSArray *, NSDictionary *);
-        sqlOrderBy = ^(NSArray *sortDesc, NSDictionary *columns) {
-            
-            if (sortDesc.count > 0) {
-                NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-                NSUInteger sortCounter = 0;
-                [sql appendString:@" ORDER BY "];
-                for (NSSortDescriptor *sortDescriptor in sortDesc) {
-                    if (sortCounter != 0) [sql appendString:@", "];
-                    
-                    MADDataColumn *dataColumn = nil;
-                    if (columns) { dataColumn = columns[sortDescriptor.key]; }
-                    MADSqlite3SortDescription *sortDescription;
-                    sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-                                                                                      ascending: sortDescriptor.ascending];
-                    [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
-                    sortCounter++;
-                }
-                return (NSString *)sql;
-            } else {
-                return @"";
-            }
-            
-        };
-        
         NSString *(^sqlWhere)(NSArray *);
         sqlWhere = ^(NSArray *whereClause) {
             if (whereClause.count > 0) {
@@ -173,7 +148,29 @@
 
         __block NSString *sqlOrderByText;
         dispatch_group_async(group, queueHigh, ^{
-            sqlOrderByText = sqlOrderBy(sortDesc, columns);
+            if (sortDesc.count > 0) {
+                NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+                NSUInteger sortCounter = 0;
+                [sql appendString:@" ORDER BY "];
+                for (NSSortDescriptor *sortDescriptor in sortDesc) {
+                    if (sortCounter != 0) [sql appendString:@", "];
+                    
+                    MADDataColumn *dataColumn = nil;
+                    if (columns) {
+                        NSString *key = sortDescriptor.key;
+                        dataColumn = columns[key];
+                        key = nil;
+                    }
+                    MADSqlite3SortDescription *sortDescription;
+                    sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
+                                                                                      ascending: sortDescriptor.ascending];
+                    [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
+                    sortCounter++;
+                }
+                sqlOrderByText = sql;
+            } else {
+                sqlOrderByText = @"";
+            }
         });
         
         __block NSString *sqlWhereText;

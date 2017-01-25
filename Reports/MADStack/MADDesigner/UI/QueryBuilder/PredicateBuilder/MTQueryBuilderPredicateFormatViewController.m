@@ -23,7 +23,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    MADocument __unsafe_unretained * document = _document;
+    MADocument *document = _document;
     if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
         
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {

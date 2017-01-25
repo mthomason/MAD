@@ -172,7 +172,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (BOOL)application:(UIApplication *)application
                             didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
     /*
     MADVectorBool *vectorBool = [[MADVectorBool alloc] init];
     [vectorBool addTrue];
@@ -281,8 +281,8 @@ static inline UIUserNotificationType MADUserNotificationType() {
   supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-        UIInterfaceOrientationMaskAllButUpsideDown :
-        UIInterfaceOrientationMaskAll;
+                                                            UIInterfaceOrientationMaskAllButUpsideDown :
+                                                            UIInterfaceOrientationMaskAll;
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {

@@ -241,7 +241,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [self updateFunctionType];
     [self updateGroupType];
     
-    id <MTViewControllerAggregateDelegate> __unsafe_unretained aggregateDelegate;
+    id <MTViewControllerAggregateDelegate> aggregateDelegate;
     aggregateDelegate = _aggregateDelegate;
     if (aggregateDelegate) {
 
@@ -301,19 +301,19 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    MADocument __unsafe_unretained *document = _document;
+    MADocument *document = _document;
     if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
 
     } else if ([segue.identifier isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
     
-        MTAggregateFunctionsViewController __unsafe_unretained *destinationViewController;
+        MTAggregateFunctionsViewController *destinationViewController;
         destinationViewController = segue.destinationViewController;
         destinationViewController.functionDelegate = self;
         destinationViewController.selectedFunctionType = self.aggregateFunctionType;
 
     } else if ([segue.identifier isEqualToString:@"MTSegueGroupByPush"]) {
     
-        MADGroupByViewController __unsafe_unretained *destinationViewController;
+        MADGroupByViewController *destinationViewController;
         destinationViewController = segue.destinationViewController;
         destinationViewController.delegate = self;
         destinationViewController.document = document;
@@ -322,7 +322,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         
     } else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
     
-        MTQueryBuilderChooseFieldViewController __unsafe_unretained *destinationViewController;
+        MTQueryBuilderChooseFieldViewController *destinationViewController;
         destinationViewController = segue.destinationViewController;
         destinationViewController.document = document;
         destinationViewController.delegate = self;

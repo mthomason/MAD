@@ -73,15 +73,14 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    MADocument __unsafe_unretained *document = _document;
+    MADocument*document = _document;
 
     if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
         [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
         
         self.currentlyEditingPart = MNSPredicateCenter;
         
-        Class tableType = [MADTableViewControllerOpperators class];
-        if ([segue.destinationViewController isKindOfClass: tableType]) {
+        if ([segue.destinationViewController isKindOfClass: [MADTableViewControllerOpperators class]]) {
             MADTableViewControllerOpperators *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.delegate = self;
@@ -92,10 +91,9 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         
         self.currentlyEditingPart = MNSPredicateLeft;
   
-        Class tableType = [MTQueryBuilderChooseFieldViewController class];
-        if ([segue.destinationViewController isKindOfClass: tableType]) {
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
 
-            MTQueryBuilderChooseFieldViewController __unsafe_unretained *destinationViewController;
+            MTQueryBuilderChooseFieldViewController *destinationViewController;
             NSArray *excludedTables = [[NSArray alloc] init];
             destinationViewController = segue.destinationViewController;
             destinationViewController.excludeTables = excludedTables;
@@ -109,20 +107,18 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         
         self.currentlyEditingPart = MNSPredicateRight;
         
-        Class tableTypeChooes = [MTQueryBuilderChooseFieldViewController class];
-        Class tableTypeField = [MADViewControllerValueBasedOnField class];
-        if ([segue.destinationViewController isKindOfClass: tableTypeChooes]) {
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             
             NSArray *excludedTables = [[NSArray alloc] init];
-            MTQueryBuilderChooseFieldViewController __unsafe_unretained *destinationViewController;
+            MTQueryBuilderChooseFieldViewController *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.excludeTables = excludedTables;
             destinationViewController.delegate = self;
             destinationViewController.document = document;
         
-        } else if ([segue.destinationViewController isKindOfClass: tableTypeField]) {
+        } else if ([segue.destinationViewController isKindOfClass: [MADViewControllerValueBasedOnField class]]) {
 
-            MADViewControllerValueBasedOnField __unsafe_unretained *destinationViewController;
+            MADViewControllerValueBasedOnField *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.enterStringDelegate = self;
             destinationViewController.document = document;

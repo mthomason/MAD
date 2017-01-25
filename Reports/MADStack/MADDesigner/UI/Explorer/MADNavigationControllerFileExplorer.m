@@ -43,8 +43,7 @@
         @autoreleasepool {
             
             NSArray <Class <UIAppearanceContainer>> *classes;
-            Class thisClas = [MADTransparentPresentationController class];
-            classes = [[NSArray alloc] initWithObjects: thisClas, nil];
+            classes = [[NSArray alloc] initWithObjects: [MADTransparentPresentationController class], nil];
 
             UINavigationBar *appearanceProxyNavigationBar;
             UIToolbar *appearanceProxyToolbar;

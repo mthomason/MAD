@@ -44,9 +44,9 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
     self.itemAttributesBySection = itemAttributesBySection;
     
-    Class class = [MTReportDesignerSectionDecorationView class];
-    NSString *decorationViewKind = NSStringFromClass(class);
-    [self registerClass: class forDecorationViewOfKind: decorationViewKind];
+    NSString *decorationViewKind = NSStringFromClass([MTReportDesignerSectionDecorationView class]);
+    [self registerClass: [MTReportDesignerSectionDecorationView class]
+forDecorationViewOfKind: decorationViewKind];
 
 
     return self;

@@ -276,8 +276,7 @@
 + (NSString *)reuseIdSupplement {
     static NSString * reuseIdSupplement;
     if (reuseIdSupplement == nil) {
-        __unsafe_unretained Class class = [self class];
-        reuseIdSupplement = [NSStringFromClass(class) stringByAppendingString:@"Sup"];
+        reuseIdSupplement = [NSStringFromClass([self class]) stringByAppendingString:@"Sup"];
     }
     return reuseIdSupplement;
 }

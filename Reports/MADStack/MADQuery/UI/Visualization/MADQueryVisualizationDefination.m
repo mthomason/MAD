@@ -25,6 +25,7 @@
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTGraph.h>
 #import "MTGraph+RptqQuery.h"
+//#import "MTGraph+RptqQuery.h"
 
 
 @interface MADQueryVisualizationDefination()
@@ -42,14 +43,17 @@
     if (self = [super init]) {
         
         NSManagedObjectContext *managedObjectContext = queryID.managedObjectContext;
-        MTGraph *graph = [[MTGraph alloc] initWithQueryID:queryID.objectID managedObjectContext:managedObjectContext];
+        
+        MTGraph *graph = [[MTGraph alloc] initWtthQueryID: queryID];
         self.graphRepresentation = graph;
         
         NSError * __autoreleasing *error = NULL;
         BOOL isDirectedAcyclicGraph;
         MTLinkedList *tableIds;
+
         tableIds = [graph topologicalSortWithError: error
                             isDirectedAcyclicGraph: &isDirectedAcyclicGraph];
+        
         self.topologicallySortedTables = tableIds;
         
         NSMutableArray *startingPoints = [[NSMutableArray alloc] init];
@@ -76,20 +80,24 @@
                                                                                            options: 0];
 
                 fetchQueryLinks = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
+                
                 NSExpressionDescription *expRightFieldHasQueryTable = [[NSExpressionDescription alloc] init];
                 expRightFieldHasQueryTable.name = @"RT";
                 expRightFieldHasQueryTable.expression = [NSExpression expressionForKeyPath:@"hasRightField.inQueryTable"];
                 expRightFieldHasQueryTable.expressionResultType = NSManagedObjectIDResultType;
+                
                 NSExpressionDescription *expSelf = [[NSExpressionDescription alloc] init];
                 expSelf.name = @"T1";
                 expSelf.expression = [NSExpression expressionForEvaluatedObject];
                 expSelf.expressionResultType = NSManagedObjectIDResultType;
+                
                 NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expSelf, expRightFieldHasQueryTable, nil];
                 fetchQueryLinks.propertiesToFetch = propertiesToFetch;
                 fetchQueryLinks.resultType = NSDictionaryResultType;
                 fetchQueryLinks.predicate = predicateInQuery;
                 error = NULL;
-                fetchQueryLinksResults = [managedObjectContext executeFetchRequest:fetchQueryLinks error:error];
+                fetchQueryLinksResults = [managedObjectContext executeFetchRequest: fetchQueryLinks
+                                                                             error: error];
                 
                 /*
                 for (RptqQueryLinks *link in query.hasQueryLinks) {

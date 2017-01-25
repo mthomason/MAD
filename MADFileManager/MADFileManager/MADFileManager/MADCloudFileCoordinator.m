@@ -44,8 +44,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)ubiquityIdentifier
-          firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPredicate: (NSPredicate *)predicate
+                       identifier: (NSString *)ubiquityIdentifier
+          firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
     
     if (self = [super init]) {
         
@@ -68,10 +69,12 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         [self addObserversToQuery:metadataQuery];
         self.metadataQuery = metadataQuery;
         
-        MADCloudFileCoordinator __unsafe_unretained * wself = self;
+        NSString *identifier = ubiquityIdentifier.copy;
+        MADCloudFileCoordinator __weak *wself = self;
         dispatch_barrier_async(self.documentsDirectoryQueue, ^{
-            wself->_documentsDirectory =
-                [MADURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
+            MADCloudFileCoordinator *sself = wself;
+            sself->_documentsDirectory =
+                [MADURL newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
         });
     }
     
@@ -121,8 +124,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.pathExtension = %@)",
                               NSMetadataItemURLKey, pathExtension];
     
-    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier
-           firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate: predicate
+                        identifier: ubiquityIdentifier
+           firstQueryUpdateHandler: firstQueryUpdateHandler];
     
     if (self) { }
 
@@ -138,8 +142,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.lastPathComponent = %@)",
                               NSMetadataItemURLKey, lastPathComponent];
     
-    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier
-           firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate: predicate
+                        identifier: ubiquityIdentifier
+           firstQueryUpdateHandler: firstQueryUpdateHandler];
     
     if (self) { }
     
@@ -159,9 +164,10 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (NSURL *)documentsDirectory {
     __block NSURL *documentsDirectory;
     
-    MADCloudFileCoordinator __unsafe_unretained * wself = self;
+    MADCloudFileCoordinator __weak *wself = self;
     dispatch_sync(self.documentsDirectoryQueue, ^{
-        documentsDirectory = wself->_documentsDirectory;
+        MADCloudFileCoordinator *sself = wself;
+        documentsDirectory = sself->_documentsDirectory;
     });
     
     return documentsDirectory;
@@ -238,9 +244,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
-    id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     void (^handleFileDuplicated)(NSURL *result, NSError *error);
     handleFileDuplicated = ^(NSURL *newURL, NSError *error) {
+
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
             [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
         } else {
@@ -258,10 +266,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
-    id <MADFileCoordinatorDelegate> __unsafe_unretained delegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     void (^handleRenameCompletion)(NSURL *sourceURL, NSURL *newURL, NSError *error);
     handleRenameCompletion = ^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
         
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
             [delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
         } else {

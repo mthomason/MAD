@@ -39,8 +39,11 @@
 + (instancetype)newQueryGroupQueryWithSortOrder:(MNSSortOrder)sortOrder
                         andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext: managedObjectContext];
-    RptqQueryGroup *queryGroup = [[self alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext: managedObjectContext];
+    NSEntityDescription *entityDescriptionQueryGroup;
+    entityDescriptionQueryGroup= [NSEntityDescription entityForName: NSStringFromClass([RptqQueryGroup class])
+                                             inManagedObjectContext: managedObjectContext];
+    RptqQueryGroup *queryGroup = [[self alloc] initWithEntity: entityDescriptionQueryGroup
+                               insertIntoManagedObjectContext: managedObjectContext];
     
     NSNumber *sort = [[NSNumber alloc] initWithUnsignedInteger:sortOrder];
     queryGroup.sort = sort;

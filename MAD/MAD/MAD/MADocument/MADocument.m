@@ -405,6 +405,7 @@ void madwarn(char *err,  const char*err2) { }
 
     UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
     strongDocument.thumbnail = thumbnail;
+    thumbnail = nil;
     
     if (strongDocument != nil) {
         //strongDocument.thumbnail = nil;
@@ -597,6 +598,7 @@ READFROMURL_END:;
     UIImage *thumbnail = self.thumbnail.copy;
     NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 thumbnail, NSThumbnail1024x1024SizeKey, nil];
+    thumbnail = nil;
     
     id fileAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                          thumbnails, NSURLThumbnailDictionaryKey, nil];
@@ -702,8 +704,9 @@ READFROMURL_END:;
                                     MADDocumentInfoKeyThumbnailRetna :
                                     MADDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
-
+            extraImage = nil;
         }
+        image = nil;
     }
     
     NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
@@ -1361,6 +1364,7 @@ READFROMURL_END:;
         free(compressedPNG);
         free((void *)pngSignature);
         fclose(fp);
+        thumbnail = nil;
     }
 }
 

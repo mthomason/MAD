@@ -21,7 +21,8 @@
     - (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
 
     - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object;
-    - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id <NSCopying>)object andWeight:(NSNumber *)weight;
+    - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination
+                           object:(id <NSCopying>)object andWeight:(NSNumber *)weight;
 
     - (void)removeVertex:(MTVertex *)vertex;
     - (void)removeEdge:(MTEdge *)edge;
@@ -38,7 +39,8 @@
 
     - (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
 
-    - (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
+    - (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
+                        isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
 
 @end
 

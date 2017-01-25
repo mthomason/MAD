@@ -79,7 +79,7 @@ static NSString * const MADIDUser                                   = @"MADIDUse
 }
 
 - (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
-    NSNumber * __unsafe_unretained changeReason;
+    NSNumber *changeReason;
     changeReason = notification.userInfo[NSUbiquitousKeyValueStoreChangeReasonKey];
     switch (changeReason.integerValue) {
         case NSUbiquitousKeyValueStoreServerChange:

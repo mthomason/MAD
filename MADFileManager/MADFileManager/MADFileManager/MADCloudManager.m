@@ -179,9 +179,10 @@ static const char * MADQueueCloudSerial
         case MADAppStorageNotSet:
         case MADAppStorageStateUnknown:
         default: {
-            MADCloudManager *__unsafe_unretained scaryself = self;
+            MADCloudManager * __weak scaryself = self;
             [self.delegate promptUserForCloudPreference:^(MADAppStorage preference) {
-                scaryself->_userPreference = preference;
+                MADCloudManager *sself = scaryself;
+                sself->_userPreference = preference;
                 if (completion) completion(YES);
             }];
             break;
@@ -200,22 +201,24 @@ static const char * MADQueueCloudSerial
                            repeats: NO];
     
     
-    MADCloudManager * __unsafe_unretained scarySelf = self;
+    MADCloudManager * __weak scarySelf = self;
     
     
     dispatch_async(_queue_background_serial, ^{
+        MADCloudManager *sself = scarySelf;
         NSURL *ubiquityContainer;
         ubiquityContainer = [MADCloudManager copyURLToCloudUbiquityContainerForUbiquityID:ubiquityIdentifier];
-        scarySelf->_ubiquityContainer = ubiquityContainer.copy;
-        if (completion) completion(scarySelf->_ubiquityContainer != nil);
+        sself->_ubiquityContainer = ubiquityContainer.copy;
+        if (completion) completion(sself->_ubiquityContainer != nil);
     });
     
     dispatch_async(_queue_background_serial, ^{
         
+        MADCloudManager *sself = scarySelf;
         [MADCloudManager createDirectory: @"Documents"
-                               atLoction: scarySelf->_ubiquityContainer];
+                               atLoction: sself->_ubiquityContainer];
         [MADCloudManager createDirectory: @"Data"
-                               atLoction: scarySelf->_ubiquityContainer];
+                               atLoction: sself->_ubiquityContainer];
         
         
     });
@@ -323,7 +326,7 @@ static const char * MADQueueCloudSerial
 - (void)addNotifications {
     SEL handler;
     handler = @selector(handleNotificationKeyValueStoreDidChange:);
-    NSString * __unsafe_unretained name;
+    NSString *name;
     name = NSUbiquitousKeyValueStoreDidChangeExternallyNotification;
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: handler
@@ -341,6 +344,7 @@ static const char * MADQueueCloudSerial
     dispatch_async(queue, ^{
         [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     });
+    name = nil;
 }
 
 

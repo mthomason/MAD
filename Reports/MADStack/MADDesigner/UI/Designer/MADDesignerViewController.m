@@ -1502,9 +1502,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                         viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
     
     UIViewController *result;
-    Class navigationClass = [UINavigationController class];
     id presented = controller.presentedViewController;
-    if (style != UIModalPresentationPopover && [presented isKindOfClass:navigationClass] == NO) {
+    if (style != UIModalPresentationPopover && [presented isKindOfClass:[UINavigationController class]] == NO) {
         
         UIBarButtonItem *cancelButton;
         cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
@@ -3025,6 +3024,7 @@ END_deselectElementView:;
             CGRect b = [strongself1.view convertRect:piece.frame fromView:sectionView];
             piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
             [strongself1.view addSubview: piece];
+            
             [UIView animateWithDuration:0.2 animations:^{
                 piece.alpha = 0.80000f;
             }];
@@ -3035,12 +3035,11 @@ END_deselectElementView:;
             MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
             MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[pieceObjectIDTag];
             
-            MADocument * __unsafe_unretained wdocument = document;
+            MADocument * __weak wdocument = document;
             MADDesignerViewController __weak *weakself2 = strongself1;
             [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
             
-                MADocument *sdocument = wdocument;
-                [sdocument removeDocumentObjectWithObjectID: pieceObjectIDTag];
+                [wdocument removeDocumentObjectWithObjectID: pieceObjectIDTag];
                 
             } animationComplete:^() {
 
@@ -3050,8 +3049,7 @@ END_deselectElementView:;
 
             } completion:^() {
 
-                MADDesignerViewController *strongself2 = weakself2;
-                [strongself2 redrawAllElementViewsInCollectionView:sectionView];
+                [weakself2 redrawAllElementViewsInCollectionView:sectionView];
                 completion();
 
             }];
@@ -3481,7 +3479,7 @@ END_deselectElementView:;
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
     NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
-    NSNumber __unsafe_unretained *borderAppliedToView = _borderAppliedToView[key];
+    NSNumber *borderAppliedToView = _borderAppliedToView[key];
     return borderAppliedToView.boolValue;
 }
 

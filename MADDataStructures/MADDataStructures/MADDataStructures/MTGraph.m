@@ -48,7 +48,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 #pragma mark - NSObject Overrides
 
 - (instancetype)init {
-    NSSet *set = [NSSet set];
+    NSSet *set = [[NSSet alloc] init];
     return [self initWithVertices:set];
 }
 
@@ -56,8 +56,13 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 - (instancetype)initWithVertices:(NSSet *)verticesSet {
     if (self = [super init]) {
-        NSArray *vertices = verticesSet.allObjects;
-        _vertices = [[NSMutableArray alloc] initWithArray:vertices];
+        if (verticesSet.count) {
+            NSArray *vertices = verticesSet.allObjects;
+            _vertices = [[NSMutableArray alloc] initWithArray:vertices];
+
+        } else {
+            _vertices = [[NSMutableArray alloc] init];
+        }
         _idUniqueEdges = 0;
         _idUniqueVertices = 0;
     }

@@ -31,8 +31,7 @@
     
     if (self = [super init]) {
 
-        Class rowControllerClassDocumentsLocal = [MADRowTypeDocumentsLocal class];
-        NSString *identifierRowTypeDocumentLocal = NSStringFromClass(rowControllerClassDocumentsLocal);
+        NSString *identifierRowTypeDocumentLocal = NSStringFromClass([MADRowTypeDocumentsLocal class]);
         NSArray *rowTypes = [[NSArray alloc] initWithObjects: identifierRowTypeDocumentLocal, nil];
         [self.tableMain setRowTypes:rowTypes];
 

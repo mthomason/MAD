@@ -78,26 +78,30 @@
 
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: document.managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+    NSEntityDescription *entityDescriptionDocumentObject;
+    entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                  inManagedObjectContext: managedObjectContext];
     
-    NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
-                                                                              inManagedObjectContext: document.managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentObjectSubtype;
+    entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
+                                                         inManagedObjectContext: managedObjectContext];
     
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: document.managedObjectContext];
+                                                 insertIntoManagedObjectContext: managedObjectContext];
 
     NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
     RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                               insertIntoManagedObjectContext: document.managedObjectContext];
+                                                                 insertIntoManagedObjectContext: managedObjectContext];
     
     dataObject.isFormula = reportObject;
     dataObject.isFormula.source = formulaText;
-    NSNumber *typeFormula = @(MTDocumentObjectTypeFormula);
+    NSNumber *typeFormula = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeFormula];
     dataObject.type = typeFormula;
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[document.hasDetailSection.hasRows[0] hasObjects]];
+    NSMutableOrderedSet *hasObjects;
+    hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[document.hasDetailSection.hasRows[0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     

@@ -118,14 +118,14 @@
 
 - (void)removeFileAtURL:(NSURL *)URL {
 
-    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     [MADFileUtilities removeFileAtURL:URL completion:^(NSError *error) {
+        
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailRemovingFileAtURL: URL
                                                     withError: error];
         } else {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             NSArray *inserts = [[NSArray alloc] init],
                     *removes = [[NSArray alloc] initWithObjects:URL, nil],
                     *updates = [[NSArray alloc] init];
@@ -133,18 +133,18 @@
                                                            removedURLs: updates
                                                            updatedURLs: removes];
         }
+        
     }];
 }
 
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
-    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     [MADFileUtilities duplicateFileAtURL:URL completion:^(NSURL *newURL, NSError *error) {
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
         } else {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
                     *removes = [[NSArray alloc] init],
                     *updates = [[NSArray alloc] init];
@@ -157,18 +157,17 @@
 
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
-    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     [MADFileUtilities renameFileAtURL:URL toName:name completion:^(NSURL *sourceURL,
                                                                               NSURL *newURL,
                                                                               NSError *error) {
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
         } else {
             NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
                     *removes = [[NSArray alloc] initWithObjects:sourceURL, nil],
                     *updates = [[NSArray alloc] init];
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
            [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:inserts
                                                           removedURLs:removes
                                                           updatedURLs:updates];
@@ -182,18 +181,17 @@
     NSURL *documentURL = [MADURL newURLLocalDocumentWithName:name extention:extention
                                                    fileGroup:fileGroup];
     
-    id <MADFileCoordinatorDelegate> __unsafe_unretained wdelegate = _delegate;
+    id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
 
+        id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
         }
         else {
             NSArray *inserts = [[NSArray alloc] initWithObjects:documentURL, nil],
                     *removes = [[NSArray alloc] init],
                     *updates = [[NSArray alloc] init];
-            id <MADFileCoordinatorDelegate> __weak delegate = wdelegate;
             [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
                                                            removedURLs: removes
                                                            updatedURLs: updates];

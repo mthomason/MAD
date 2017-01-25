@@ -17,7 +17,7 @@
 @implementation MADBlockOperation
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
 }
 
 /**
@@ -32,6 +32,7 @@
 
 - (instancetype)initWithBlock:(OperationBlock)block {
     if (self = [super init]){
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
         _block = block;
     }
     return self;
@@ -39,6 +40,7 @@
 
 - (instancetype)initWithMainQueueBlock:(dispatch_block_t)block {
     self = [self initWithBlock:^(void(^operationCompletionBlock)(void)) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
         block();
         if (operationCompletionBlock){
             operationCompletionBlock();

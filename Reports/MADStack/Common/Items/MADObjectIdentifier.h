@@ -14,9 +14,9 @@
 @interface MADObjectIdentifier : NSObject
 
     @property (nonatomic, copy, readonly) NSString *identifier;
-    @property (nonatomic, assign, readonly) NSUInteger tag;
+    @property (nonatomic, assign, readonly) NSUInteger serial;
 
-    - (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSUInteger)tag;
+    - (instancetype)initWithIdentifier:(NSString *)identifier andSerial:(NSUInteger)serial;
 
 @end
 

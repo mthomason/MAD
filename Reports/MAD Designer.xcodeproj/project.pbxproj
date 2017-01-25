@@ -175,7 +175,6 @@
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
 		4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */; };
 		4C26BA801BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */; };
-		4C26BA891BAF9B3000456DC8 /* MADObjectIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */; };
 		4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA871BAF9B3000456DC8 /* objcmad.c */; };
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
 		4C26BA981BAF9B9B00456DC8 /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8E1BAF9B9B00456DC8 /* MADViewController.m */; };
@@ -706,6 +705,7 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C780CE91BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */; };
+		4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
@@ -6086,6 +6086,7 @@
 				4C59BDC71C9AB5540031BC6C /* MADOperationConditionMissingResultString.m in Sources */,
 				4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */,
 				4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */,
+				4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */,
 				4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */,
 				4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
@@ -6338,7 +6339,6 @@
 				4CFEE8151BB7A29800AFAA0A /* MTQueryBuilderAddTableViewController.m in Sources */,
 				4C26BA9E1BAF9C6E00456DC8 /* MADBarButtonItem.m in Sources */,
 				4C401F7B1BAE7EB500BAE5FC /* MTBlurView.m in Sources */,
-				4C26BA891BAF9B3000456DC8 /* MADObjectIdentifier.m in Sources */,
 				4C26BA201BAF150F00456DC8 /* MADQueryVisualizationCacheData.m in Sources */,
 				4C26BA981BAF9B9B00456DC8 /* MADViewController.m in Sources */,
 				4C401ED91BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
@@ -6815,7 +6815,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",
@@ -6877,7 +6877,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",

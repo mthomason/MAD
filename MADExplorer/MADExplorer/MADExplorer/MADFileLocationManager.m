@@ -224,14 +224,13 @@ static NSString * const MADMessageChooseStorageOptions = @"Do you want to store 
         
         MADFileLocationManager *sself = weakself;
         MADAppStorage storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-        [self.class setStorageOption: storageOption];
+        [sself.class setStorageOption: storageOption];
         
         [sself configureFilesController: NO storageOptionChangeHandler: nil];
         
-        UIViewController <MADFileLocationManagerDelegate> * __weak wdelegate = sself.delegate;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
-            UIViewController <MADFileLocationManagerDelegate> * sdelegate = wdelegate;
+            UIViewController <MADFileLocationManagerDelegate> * sdelegate = weakDelegate;
             if (sdelegate) {
                 [sdelegate completedLongRunningActivity];
             }
