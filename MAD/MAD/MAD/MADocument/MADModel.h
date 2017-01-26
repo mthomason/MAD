@@ -25,9 +25,14 @@
 @class MADModelQueryLink;
 @class MADModelQueryField;
 
-extern NSString * const MADNotificationDeleteQueryLink;
+extern NSString * const MADNotificationQueryTableInsert;
+extern NSString * const MADNotificationQueryTableDelete;
+
+extern NSString * const MADNotificationQueryLinkInsert;
+extern NSString * const MADNotificationQueryLinkDelete;
+
 extern NSString * const MADKeyQuery;
-extern NSString * const MADKeyQueryLink;
+//extern NSString * const MADKeyQueryLink;
 
 
 typedef NS_ENUM(short, MADModelType) {

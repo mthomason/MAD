@@ -56,11 +56,11 @@
 
     @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
     @property (nonatomic, weak) IBOutlet UIView *containerView;
+
     @property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
     @property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
+
     @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
-    @property (nonatomic, strong) UIFont *titleFont;
-    @property (nonatomic, strong) UIFont *detailFont;
     @property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
 
 @end
@@ -81,6 +81,22 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierViewControllerQueryVisualizationSchema];
     return controller;
+}
+
++ (void)initialize {
+    [super initialize];
+    if (self == [MADQueryVisualizationSchemaViewController self]) {
+        @autoreleasepool {
+            UILabel <UIAppearance> *appearanceProxy;
+            NSArray <Class <UIAppearanceContainer>> *classes;
+            classes = [[NSArray alloc] initWithObjects: [MTTitleView class], nil];
+            appearanceProxy = [UILabel appearanceWhenContainedInInstancesOfClasses:classes];
+            appearanceProxy.textColor = [UIColor whiteColor];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            appearanceProxy.font = [font fontWithSize:12.0000f];
+            font = nil;
+        }
+    }
 }
 
 - (void)dealloc { }
@@ -120,7 +136,8 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     return self;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil
+                         bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self commonInit];
@@ -129,12 +146,6 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)commonInit {
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    UIFont *detalFont = [font fontWithSize:8.0000f];
-    UIFont *headLineFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-    UIFont *titleFont = [headLineFont fontWithSize:12.0000f];
-    self.detailFont = detalFont;
-    self.titleFont = titleFont;
     
     NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
     self.hasFieldsObjectIds = hasFieldsObjectIds;
@@ -159,17 +170,18 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
     
-    UIColor *color = [UIColor darkGrayColor];
-    self.toolbar.backgroundColor = color;
+    self.toolbar.backgroundColor = [UIColor darkGrayColor];
     
-    UIColor *darkBlue = [MADColorEverydayApps newColorBlueDark];
-    self.view.layer.shadowColor = darkBlue.CGColor;
+    self.view.layer.shadowColor = [MADColorEverydayApps newColorBlueDark].CGColor;
     self.view.layer.shadowOpacity = 1.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
     
-    NSLayoutConstraint *width = [NSLayoutConstraint newLayoutConstraintSchemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
-    NSLayoutConstraint *height = [NSLayoutConstraint newLayoutConstraintSchemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
+    NSLayoutConstraint *width, *height;
+    width = [NSLayoutConstraint newLayoutConstraintSchemaViewWidthForView: self.view
+                                                                 andWidth: MADSchemaViewDefaultWidth];
+    height = [NSLayoutConstraint newLayoutConstraintSchemaViewHeightForView: self.view
+                                                                  andHeight: MADSchemaViewDefaultHeight];
     NSArray *constraints = [[NSArray alloc] initWithObjects: width, height, nil];
     [self.view addConstraints:constraints];
 }
@@ -198,15 +210,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     NSString *tableAlias = table.alias.copy;
     self.titleView.label.text = tableAlias;
     
-    UIFont *titleFont = self.titleFont.copy;
-    self.titleView.label.font = titleFont;
-    
-    UIColor *color = [UIColor whiteColor];
-    self.titleView.label.textColor = color;
-    
     [self.hasFieldsObjectIds removeAllObjects];
 
-    NSArray <RptqQueryField *> *fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
+    NSArray <RptqQueryField *> *fields;
+    fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
+    
     for (RptqQueryField *field in fields) {
         NSManagedObjectID *fieldObjectID = field.objectID.copy;
         [self.hasFieldsObjectIds addObject:fieldObjectID];
@@ -247,16 +255,15 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 #pragma mark - Table view datasource
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
-    
     NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[(NSUInteger)indexPath.row];
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
-    NSString *name = field.databaseSchemaField.name.copy;
-    result.detailLabel.text = name;
-    result.detailLabel.font = self.detailFont.copy;
+    result.detailLabel.text = field.databaseSchemaField.name.copy;
     return result;
 }
 

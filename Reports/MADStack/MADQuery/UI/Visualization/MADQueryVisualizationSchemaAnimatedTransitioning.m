@@ -23,9 +23,8 @@
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     //UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     CGPoint center = viewControllerFrom.view.center;
-    NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
 
-    [UIView animateWithDuration:transitionDuration animations:^{
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         viewControllerFrom.view.bounds = CGRectZero;
         viewControllerFrom.view.center = center;
         viewControllerFrom.view.transform = CGAffineTransformSwing();

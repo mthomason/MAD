@@ -45,10 +45,9 @@ extern const CGFloat MADSchemaViewDefaultHeight;
 
     - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
 
-    - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
-
     - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
-    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
+    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
+                                inView:(UIView *)containerView;
 
 @end
 

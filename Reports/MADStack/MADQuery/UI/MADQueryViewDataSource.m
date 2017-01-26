@@ -39,14 +39,8 @@
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqUserCredentals+Extras.h>
 
-
-static NSString * const TextFormatConnection = @"You are connecting to %1$@"
-                                               @" datasource named %2$@.";
-
 @interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>
-
-    //@property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, readwrite, assign) short count;
 
@@ -428,7 +422,12 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 
                 id databaseType = database.ownedByUser.database_driver_type.copy;
                 id schemaName = [database.ownedByUser copyDatabaseSchemaName];
-                id localizedMessage = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                
+                
+                NSString *TextFormatConnection = @"You are connecting to %1$@"
+                                                 @" datasource named %2$@.";
+                id localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                id localizedMessage = [NSString stringWithFormat:localizedMessageFormat, databaseType, schemaName];
                 id message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
                                                                                         databaseType: databaseType
                                                                                           schemaName: schemaName];

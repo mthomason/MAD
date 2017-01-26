@@ -14,19 +14,13 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSComparisonPredicate.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryLinks.h>
-#import <MAD/MADocument.h>
+#import <Foundation/NSMapTable.h>
 #import <MAD/MADModel.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTLinkedList.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTGraph.h>
 #import "MTGraph+RptqQuery.h"
-//#import "MTGraph+RptqQuery.h"
-
 
 @interface MADQueryVisualizationDefination()
 
@@ -41,9 +35,7 @@
 
 - (instancetype)initWithQuery:(MADModelQuery *)queryID {
     if (self = [super init]) {
-        
-        NSManagedObjectContext *managedObjectContext = queryID.managedObjectContext;
-        
+                
         MTGraph *graph = [[MTGraph alloc] initWtthQueryID: queryID];
         self.graphRepresentation = graph;
         

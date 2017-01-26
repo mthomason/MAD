@@ -28,7 +28,7 @@
     - (instancetype)init;
     - (instancetype)initWithObject:(id <NSCopying>)object;
 
-    @property (readonly, atomic, strong) id object;
+    @property (readonly, nonatomic, strong) id object;
 
 @end
 

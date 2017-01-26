@@ -39,25 +39,10 @@
 - (instancetype)initWtthQueryID:(MADModelQuery *)query {
     if (self = [self init]) {
         
-        //NSOrderedSet <MADModelQueryLink *> *hasLinks = query.links;
-        //NSOrderedSet <MADModelQueryTable *> *hasTables = query.tables;
-        //NSLog(@"%@", hasTables);
-        //NSLog(@"%@", hasLinks);
-        
-        //NSEnumerator *objectEnumerator = query.tables.objectEnumerator;
-        
         [query.queryTableIDs  enumerateObjectsUsingBlock:^(NSManagedObjectID * _Nonnull tableID, NSUInteger idx, BOOL * _Nonnull stop) {
             [self addVertexWithObject: tableID];
         }];
         
-        //Add a vertex to the graph for each table.
-        /*NSManagedObjectID *objectID, *objectIDRight;
-        for (RptqDatabaseSchemaTable *table in hasTables) {
-            objectID = table.objectID.copy;
-            [self addVertexWithObject: objectID];
-        }*/
-        
-        //Create an edge in the graph for each query link.
         NSNumber *weight = @(1);
         
         NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;

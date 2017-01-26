@@ -19,11 +19,6 @@
 #import <Foundation/NSURL.h>
 #import <UIKit/UIGeometry.h>
 
-static NSString * const keyScrollViewContentOffset  = @"1";
-static NSString * const keyScrollViewZoomScale      = @"2";
-static NSString * const keyTables                   = @"3";
-static NSString * const CacheExt                    = @"qvvc";
-
 @interface MADQueryVisualizationCacheData ()
 
     @property (nonatomic, strong, readwrite) NSMutableDictionary *tableDefinations;
@@ -31,6 +26,11 @@ static NSString * const CacheExt                    = @"qvvc";
 @end
 
 @implementation MADQueryVisualizationCacheData
+
+static NSString *keyScrollViewContentOffset  = @"1";
+static NSString *keyScrollViewZoomScale      = @"2";
+static NSString *keyTables                   = @"3";
+static NSString *CacheExt                    = @"qvvc";
 
 - (void)dealloc { }
 
