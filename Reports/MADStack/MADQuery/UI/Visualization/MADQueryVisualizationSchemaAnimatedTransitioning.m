@@ -24,6 +24,8 @@
     //UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     CGPoint center = viewControllerFrom.view.center;
 
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGPoint(center));
+
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         viewControllerFrom.view.bounds = CGRectZero;
         viewControllerFrom.view.center = center;

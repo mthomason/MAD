@@ -62,6 +62,9 @@ static NSString *CacheExt                    = @"qvvc";
 
 - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination
                forObjectID:(NSManagedObjectID *)objectID {
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSURL *uriRepresentation = [objectID URIRepresentation];
     id stringRepresention = uriRepresentation.absoluteString;
     MADQueryVisualizationTableDefination *copyTableDefination = [tableDefination copyWithZone:nil];
@@ -69,6 +72,8 @@ static NSString *CacheExt                    = @"qvvc";
 }
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, objectID);
+
     NSURL *uriRepresentation = [objectID URIRepresentation];
     id stringRepresention = uriRepresentation.absoluteString;
     return self.tableDefinations[stringRepresention];
@@ -83,6 +88,8 @@ static NSString *CacheExt                    = @"qvvc";
 }
 
 - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSURL *objectIDURIRepresentation = objectID.URIRepresentation;
     NSString *absoluteString = objectIDURIRepresentation.absoluteString;
     [self.tableDefinations removeObjectForKey: absoluteString];

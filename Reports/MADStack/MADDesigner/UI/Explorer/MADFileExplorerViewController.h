@@ -10,31 +10,10 @@
 #define Reports_MADFileExplorerViewController_h
 
 #import <UIKit/UICollectionViewController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
-#import <UIKit/UINavigationController.h>
 
 @interface MADFileExplorerViewController : UICollectionViewController
 
-+ (instancetype)newFileExplorerViewController;
-
-@end
-
-@interface MADFileExplorerAnimated : NSObject
-    <UIViewControllerAnimatedTransitioning>
-
-    + (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing;
-
-@end
-
-@interface MADFileExplorerAnimatedCrossFadePush : MADFileExplorerAnimated
-
-    - (instancetype)initToolbar:(BOOL)showToolbar;
-
-@end
-
-@interface MADFileExplorerAnimatedCrossFadePop : MADFileExplorerAnimated
-
-    - (instancetype)initToolbar:(BOOL)showToolbar;
+    + (instancetype)newFileExplorerViewController;
 
 @end
 

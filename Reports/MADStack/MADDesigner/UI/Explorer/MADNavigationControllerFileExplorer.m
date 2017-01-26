@@ -27,6 +27,8 @@
 #import "MADFileExplorerToolbar.h"
 #import "MADFileExplorerViewController.h"
 
+#import "MADFileExplorerAnimated.h"
+
 @interface MADNavigationControllerFileExplorer ()
 
 @property (weak, nonatomic) IBOutlet MADFileExplorerNavigationBar *fileExplorerNavigationBar;
@@ -100,21 +102,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-//    super
-//}
-/*
-- (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
-                                                      presentingViewController:(UIViewController *)presenting
-                                                          sourceViewController:(UIViewController *)source {
-    UIPresentationController *result = nil;
-    if (presented == self || presenting == self) {
-        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented
-                                                                      presentingViewController:presenting];
-    }
-    return result;
-}
-*/
 - (MADNavigationControllerType)controllerType {
     return MADNavigationControllerTypeFileExplorer;
 }
@@ -133,20 +120,11 @@
 
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
-                    animated:(BOOL)animated {
-//    if ([viewController isKindOfClass:[MADFileExplorerViewController class]]) {
-//        [self setToolbarHidden:NO animated:animated];
-//    } else {
-//        [self setToolbarHidden:YES animated:animated];
-//    }
- //   [viewController viewWillAppear: animated];
-}
+                    animated:(BOOL)animated { }
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController
-                    animated:(BOOL)animated {
-  //  [viewController viewDidAppear:animated];
-}
+                    animated:(BOOL)animated { }
 
 - (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
                                    interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {

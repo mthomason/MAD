@@ -37,6 +37,7 @@ static const CGFloat contentViewHeight = 1024.0000f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGPoint(self.center));
 }
 
 - (void)commonInit {

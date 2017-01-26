@@ -10,7 +10,11 @@
 #import <Foundation/NSCoder.h>
 #import <UIKit/UIGeometry.h>
 
-@implementation MADQueryVisualizationTableDefination
+@implementation MADQueryVisualizationTableDefination {
+    
+}
+
+@synthesize center = _center;
 
 static NSString * const keyCenter = @"c";
 static NSString * const keyRoot = @"r";
@@ -46,6 +50,10 @@ static NSString * const keyRoot = @"r";
 + (instancetype)newTableDefination {
     MADQueryVisualizationTableDefination *tableDefination = [[self alloc] init];
     return tableDefination;
+}
+
+- (CGPoint)center {
+    return _center;
 }
 
 - (void)setCenter:(CGPoint)center {

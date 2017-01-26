@@ -29,6 +29,7 @@
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, self.objectID);
     return [self.delegatePresentation frameOfItemWithObjectID: self.objectID];
 }
 
