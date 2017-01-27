@@ -70,7 +70,6 @@
 
 #import "MUIViewControllerDelegate.h"
 
-#import "MADManagedObjectView.h"
 #import "MADViewControllerSQL.h"
 #import "MADConnectorView.h"
 
@@ -97,13 +96,9 @@
 #import "MADOperationQueue.h"
 
 #import "MADCacheManager.h"
+#import "MADQueryVisualizationSchemaView.h"
 
 typedef void(^MTBlockResultVoid)(void);
-
-static inline CGPoint PointInsertTable(CGFloat, NSUInteger);
-static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
-    return CGPointMake(CGPointZero.x + 500, viewHeight / (tableCount + 2) * (tableCount + 1));
-}
 
 @interface MADQueryVisualizationViewController ()
     <UIGestureRecognizerDelegate,
@@ -115,7 +110,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 
     @property (nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADQueryVisualizationSchemaViewController *> *controllersByObjectID;
     @property (nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADConnectorView *> *connectionViewsByObjectID;
-
+    @property (nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, NSDictionary <NSString *, NSLayoutConstraint *> *> *constraints;
     @property (nonatomic, strong) NSMutableSet <NSManagedObjectID *> *rootTables;
 
     @property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
@@ -129,6 +124,19 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 
 @synthesize document = _document;
 
+#pragma mark -
+#pragma mark Static functions and keys
+
+static NSString *keyCenterX = @"x";
+static NSString *keyCenterY = @"y";
+static NSString *keyWidth   = @"w";
+static NSString *keyHeight  = @"h";
+
+static inline CGPoint PointInsertTable(CGFloat, NSUInteger);
+static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
+    return CGPointMake(CGPointZero.x + 500, viewHeight / (tableCount + 2) * (tableCount + 1));
+}
+
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName: [self identifierStoryboard]
                                                          bundle: [NSBundle mainBundle]];
@@ -138,14 +146,15 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 }
 
 + (NSString *)identifierStoryboard {
-    return @"MADQueryVisualization";
+    return @"MADQuery";
 }
 
 + (NSString *)identifierController {
     return @"MADStoryboardIDQueryVisulization";
 }
 
-#pragma mark - NSObject
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -170,36 +179,42 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 
     if (self = [super initWithCoder:aDecoder]) {
         
-        NSMutableDictionary <NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary <NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID;
+        controllersByObjectID = [[NSMutableDictionary alloc] init];
         _controllersByObjectID = controllersByObjectID;
         
-        NSMutableDictionary <NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary <NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID;
+        connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
         _connectionViewsByObjectID = connectionViewsByObjectID;
         
         NSMutableSet <NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
         _rootTables = rootTables;
         
+        NSMutableDictionary <NSManagedObjectID *, NSDictionary <NSString *, NSLayoutConstraint *> *> *constraints;
+        constraints = [[NSMutableDictionary alloc] init];
+        _constraints = constraints;
+        
     }
     return self;
 }
 
-#pragma mark - UIContainerViewController Callbacks
+#pragma mark -
+#pragma mark UIContainerViewController Callbacks
 
-- (BOOL)shouldAutomaticallyForwardAppearanceMethods { return YES; }
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods {
+    return NO;
+}
 
 - (void)willMoveToParentViewController:(nullable UIViewController *)parent {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [super willMoveToParentViewController:parent];
 }
 
 - (void)didMoveToParentViewController:(nullable UIViewController *)parent {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [super didMoveToParentViewController:parent];
 }
 
-#pragma mark - UIContentContainer
+#pragma mark -
+#pragma mark UIContentContainer
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container
                withParentContainerSize:(CGSize)parentSize {
@@ -239,7 +254,8 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
-#pragma mark - MADQueryVisualizationSchemaPresentationDelegate
+#pragma mark -
+#pragma mark MADQueryVisualizationSchemaPresentationDelegate
 
 - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -265,17 +281,19 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
-#pragma mark - UIViewController
+#pragma mark -
+#pragma mark UIViewController
 
 - (void)viewDidLoad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
-    self.definesPresentationContext = NO;
+    self.definesPresentationContext = YES;
     
     self.backgroundContainer.layer.borderWidth = [UIScreen mainScreen].isRetnaDisplay ? 0.5000f : 1.0000f;
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
+    self.backgroundContainer.autoresizesSubviews = NO;
     self.view.opaque = YES;
     
     MADQueryVisualizationScrollView *scrollView;
@@ -283,7 +301,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     scrollView.delegate = self;
     scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
     scrollView.opaque = NO;
-
+    scrollView.autoresizesSubviews = NO;
     [self.backgroundContainer addSubview:scrollView];
     
     NSDictionary <NSString *, __kindof UIView *> *viewDictionary;
@@ -374,16 +392,17 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     [super viewDidAppear:animated];
     [self reloadDocument: animated];
     if (animated) [self.scrollView flashScrollIndicators];
-    [self.view setNeedsLayout];
+    //[self.view setNeedsLayout];
 }
 
-- (void)cleanup {
+- (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [super viewWillDisappear:animated];
+    
     [self archiveCache];
     [self clearScreen];
     
     MADocument *document = self.document;
-
     NSManagedObjectContext *managedObjectContext;
     managedObjectContext = document.documentObjectIDStore.managedObjectContext;
 
@@ -397,14 +416,6 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: didSave
                                                   object: managedObjectContext];
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [super viewWillDisappear:animated];
-    
-    [self cleanup];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -422,8 +433,8 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     self.scrollView.scrollIndicatorInsets =
         UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                          self.bottomLayoutGuide.length, CGSizeZero.height);
-    [self layoutQueryTables];
-    [self layoutQueryLinks];
+    //[self layoutQueryTables];
+    //[self layoutQueryLinks];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -432,6 +443,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 }
 
 - (void)didReceiveMemoryWarning {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super didReceiveMemoryWarning];
     [self archiveCache];
     [self clearScreen];
@@ -479,15 +491,16 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     for (MADModelQueryLink *link in queryLinkEnumerator) {
         [self layoutQueryLinkViewControllerWithModelObject:link];
     }
-//    [self.view setNeedsLayout];
+    [self.view setNeedsLayout];
 }
 
-#pragma mark - NSManagedObjectContext Observer
+#pragma mark -
+#pragma mark NSManagedObjectContext Observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
@@ -506,7 +519,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
         NSMutableArray *updatedTables;
         updatedTables = [[NSMutableArray alloc] initWithCapacity:updatedObjects.count];
 
-        for (const id updatedObject in updatedObjects) {
+        /*for (const id updatedObject in updatedObjects) {
             
             if ([updatedObject isKindOfClass:[RptqQueryTable class]]) {
                 [updatedTables addObject:updatedObject];
@@ -547,7 +560,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                     }
                 }
             }
-        }
+        }*/
     }
     
 #pragma mark Handle deleted objects
@@ -559,16 +572,19 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     //    }
     //}
 
-    [self.view layoutIfNeeded];
+    //[self.view layoutIfNeeded];
 }
 
-#pragma mark - MADViewControllerStandardProtocol
+#pragma mark -
+#pragma mark MADViewControllerStandardProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
-#pragma mark - Cache Operations
+#pragma mark -
+#pragma mark Cache Operations
 
 - (void)updateCache {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -585,18 +601,25 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
         cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
         cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
         
+        NSManagedObjectID *tableID;
+        MADQueryVisualizationSchemaViewController *schemaController;
+        MADQueryVisualizationTableDefination *tableModel;
+        NSArray <NSURL *> *startingPoints;
+
         for (MTPair *pair in queryDef.topologicallySortedTables) {
+
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 
-                MADQueryVisualizationSchemaViewController *viewController = self.controllersByObjectID[(NSManagedObjectID *)tableIdVertext.object];
+                tableID = (NSManagedObjectID *)tableIdVertext.object;
+                schemaController = self.controllersByObjectID[tableID];
                 
-                MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
-                tableDef.center = viewController.view.center;
+                tableModel = [[MADQueryVisualizationTableDefination alloc] init];
+                tableModel.center = schemaController.view.center;
                 
-                NSArray <NSURL *> *startingPoints = queryDef.startingPoints;
-                tableDef.root = [startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
-                [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
+                startingPoints = queryDef.startingPoints;
+                tableModel.root = [startingPoints containsObject: tableID.URIRepresentation];
+                [cacheData addTableDefination:tableModel forObjectID:tableIdVertext.object];
             }
         }
         self.cacheData = cacheData;
@@ -665,23 +688,43 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     return [MADQueryVisualizationCacheData cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
 }
 
-#pragma mark - Gesture recognizer actions
+#pragma mark -
+#pragma mark Gesture recognizer actions
 
-- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+- (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSManagedObjectID *tableID;
+    tableID = ((MADQueryVisualizationSchemaView *)gestureRecognizer.view).objectIdTag;
+    NSAssert(tableID != nil, @"We expect an ID");
+    if (!tableID) return;
+    
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     UIWindow *window = [UIApplication sharedApplication].windows[0];
-    gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
-                                                  toView: self.scrollView.contentView];
-    [self didMoveFieldRect:self.controllersByObjectID[((MADManagedObjectView *)gestureRecognizer.view).objectIdTag]
-                  animated:NO];
+    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
+    constraints = [_constraints objectForKey: tableID];
+    CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
+                                        toView: self.scrollView.contentView];
+    constraints[keyCenterX].constant = pointInView.x;
+    constraints[keyCenterY].constant = pointInView.y;
+    //gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
+    //                                              toView: self.scrollView.contentView];
+    [self didMoveFieldRect: self.controllersByObjectID[tableID]
+                  animated: NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        [self updateCache];
+        
+        if (!_cacheData) {
+            [self updateCache];
+        } else {
+            MADQueryVisualizationTableDefination *tableDefination;
+            tableDefination = [_cacheData tableDefinationForObjectID:tableID];
+            tableDefination.center = pointInView;
+        }
     }
 }
 
-#pragma mark - Change UI on IR Diagram
+#pragma mark -
+#pragma mark Change UI on IR Diagram
 
 - (void)clearScreen {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -693,11 +736,12 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
+#pragma mark -
 #pragma mark Reload document view controllers
 
-- (void)redraw {
+- (void)redraw:(BOOL)animated {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self reloadDocument: NO];
+    [self reloadDocument: animated];
 }
 
 - (void)reloadDocument:(BOOL)animated {
@@ -727,6 +771,20 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
+// MARK:   Auto increment row counter
+                     
+// MARK: asdf
+                     
+// TODO:  asdf
+                     
+                     // FIXME:adf
+                     
+                     // ???:adsf
+                     
+                     // !!!:adf
+
+                     // MARK: Bring all link views to top
+
 - (void)displayQuery:(MADModelQuery *)queryID
      withSchemaHints:(MADQueryVisualizationCacheData *)cacheData
             animated:(BOOL)animated {
@@ -742,6 +800,12 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
         MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
         
         NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+        
+        NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = queryID.links.objectEnumerator;
+        for (MADModelQueryLink *link in queryLinkEnumerator) {
+            [self addLinkViewControllerForQueryLinkModel:link animated:YES];
+        }
+
         for (MTPair *pair in topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
@@ -749,23 +813,38 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                 RptqQueryTable *table = (RptqQueryTable *)[managedObjectContext objectWithID:tableIdVertext.object];
                 
                 NSManagedObjectID *objectID = table.objectID.copy;
-                NSURL *uriRepresentation = [objectID URIRepresentation];
-                BOOL topLevel = [queryDef.startingPoints containsObject: uriRepresentation];
+                BOOL topLevel = [queryDef.startingPoints containsObject: objectID.URIRepresentation];
                 if (topLevel) {
                     [self.rootTables addObject: objectID];
                 }
 
-                MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:objectID];
-                [self addSchemaViewControllerForTableID:objectID center:tableDef.center
-                                                   root:topLevel animated:animated];
+                MADQueryVisualizationTableDefination *tableDef;
+                tableDef = [cacheData tableDefinationForObjectID:objectID];
+                typeof(self) __weak wself = self;
+                [self addSchemaViewControllerForTableID: objectID
+                                                 center: tableDef.center
+                                                   root: topLevel
+                                               animated: animated
+                 completion:^{
+                     
+                     //Layout Query View if Related to Table
+                     typeof(self) sself = wself;
+                     NSEnumerator <MADModelQueryLink *> *queryLinks = queryID.links.objectEnumerator;
+                     for (MADModelQueryLink *link in queryLinks) {
+                         if (link.leftFieldReference.tableID == objectID ||
+                             link.rightFieldReference.tableID == objectID) {
+                             [sself layoutQueryLinkViewControllerWithModelObject:link];
+                         }
+                     }
+                     
+                     NSEnumerator <__kindof UIView *> *views = sself.connectionViewsByObjectID.objectEnumerator;
+                     for (UIView *view in views) {
+                         [sself.scrollView.contentView bringSubviewToFront:view];
+                     }
+                 }];
 
             }
         }
-        NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = queryID.links.objectEnumerator;
-        for (MADModelQueryLink *link in queryLinkEnumerator) {
-            [self addLinkViewControllerForQueryLinkModel:link animated:YES];
-        }
-        
     } else {
         [self displayQuery:queryID animated:animated];
     }
@@ -793,7 +872,10 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
             [self addSchemaViewControllerForTableID: tableObjectID
                                              center: self.scrollView.contentView.center
                                                root: topLevel
-                                           animated: animated];
+                                           animated: animated
+             completion:^{
+                 
+             }];
             if (topLevel) {
                 NSManagedObjectID *objectID = tableObjectID.copy;
                 [self.rootTables addObject: objectID];
@@ -826,7 +908,9 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                                          center: PointInsertTable(self.scrollView.contentView.bounds.size.height,
                                                                   self.rootTables.count)
                                            root: YES
-                                       animated: YES];
+                                       animated: YES completion:^{
+                                           
+                                       }];
     }
     
 }
@@ -874,10 +958,10 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
             [viewController removeFromParentViewController];
             [viewController didMoveToParentViewController:nil];
             [self.controllersByObjectID removeObjectForKey:deletedTable.objectID];
-            [self.view setNeedsLayout];
+            //[self.view setNeedsLayout];
         }
     }
-    [self.view layoutIfNeeded];
+    //[self.view layoutIfNeeded];
 }
 
 - (void)deleteQueryLink:(NSNotification *)note {
@@ -909,26 +993,31 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                 objectID = orphanedTableIDs.copy;
                 MADQueryVisualizationTableDefination *tableDefination;
                 tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
+                if (tableDefination == nil) {
+                    NSLog(@"Break\n\n");
+                }
                 tableDefination.root = YES;
                 [self.rootTables addObject: objectID];
                 objectID = nil;
             }
         }
         
-        MADConnectorView *connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
+        MADConnectorView *connectorView;
+        connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
+        [self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
         [connectorView removeFromSuperview];
         NSLog(@"Deleted %@", deletedLink.objectID);
-        [self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
+        //[self.view setNeedsLayout];
+        //[self.view layoutIfNeeded];
+//UILayoutConstraintAxisVertical
         //[self.view setNeedsLayout];
     }
+    
     //[self.view layoutIfNeeded];
 }
 
-- (void)removeFromParentViewController {
-    [super removeFromParentViewController];
-}
-
-#pragma mark - View Controller Container Data
+#pragma mark -
+#pragma mark View Controller Container Data
 
 - (void)removeViewController:(UIViewController *)viewController {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -944,9 +1033,10 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 - (void)addSchemaViewControllerForTableID:(NSManagedObjectID *)tableID
                                    center:(CGPoint)center
                                      root:(BOOL)root
-                                 animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+                                 animated:(BOOL)animated
 
+                               completion:(void(^)(void))completion {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADQueryVisualizationSchemaViewController *viewController;
     viewController = [MADQueryVisualizationSchemaViewController newQueryVisualizationSchemaViewController];
     viewController.document = self.document;
@@ -954,20 +1044,62 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     viewController.tableObjectId = tableID.copy;
     viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     
+    NSLayoutConstraint *width, *height;
+    width = [NSLayoutConstraint newLayoutConstraintWidthForView: viewController.view
+                                                       andWidth: MADSchemaViewDefaultWidth];
+    height = [NSLayoutConstraint newLayoutConstraintHeightForView: viewController.view
+                                                        andHeight: MADSchemaViewDefaultHeight];
+    
+    NSLayoutConstraint *centerX, *centerY;
+    centerX = [NSLayoutConstraint constraintWithItem: viewController.view
+                                           attribute: NSLayoutAttributeCenterX
+                                           relatedBy: NSLayoutRelationEqual
+                                              toItem: self.scrollView.contentView
+                                           attribute: NSLayoutAttributeLeftMargin
+                                          multiplier: 1.0000f
+                                            constant: center.x];
+    centerY = [NSLayoutConstraint constraintWithItem: viewController.view
+                                           attribute: NSLayoutAttributeCenterY
+                                           relatedBy: NSLayoutRelationEqual
+                                              toItem: self.scrollView.contentView
+                                           attribute: NSLayoutAttributeTopMargin
+                                          multiplier: 1.0000f
+                                            constant: center.y];
+    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
+    constraints = [[NSDictionary alloc] initWithObjectsAndKeys:
+                   centerX, keyCenterX, centerY, keyCenterY,
+                   width, keyWidth, height, keyHeight, nil];
+    
+    [_constraints setObject:constraints forKey:tableID];
     if (root) viewController.toolbar.backgroundColor = [UIColor blueColor];
     self.controllersByObjectID[tableID] = viewController;
 
     UIPanGestureRecognizer *panGesture;
     panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
-                                                         action: @selector(panPiece:)];
+                                                         action: @selector(handlePanPiece:)];
     panGesture.delegate = self;
     [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
     [viewController.view addGestureRecognizer:panGesture];
     
     [viewController willMoveToParentViewController:self];
     [self addChildViewController:viewController];
+
+    [viewController beginAppearanceTransition:YES animated:YES];
+    
     viewController.view.center = center;
-    [self.scrollView.contentView addSubview:viewController.view];
+    viewController.view.alpha = 0.00000f;
+    [self.scrollView.contentView addSubview: viewController.view];
+    [self.scrollView.contentView addConstraints: constraints.allValues];
+
+    [UIView animateWithDuration:.5 animations: ^{
+        [viewController.view setAlpha:1.0];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [viewController endAppearanceTransition];
+            [viewController didMoveToParentViewController:self];
+            completion();
+        }
+    }];
     [viewController didMoveToParentViewController:self];
 }
 
@@ -975,35 +1107,16 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                                       animated:(BOOL)animated {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    __weak typeof(self) weakself = self;
-    [self addLinkViewControllerForQueryLinkID:link.objectID animated:animated layoutHandler:^{
-        [weakself layoutQueryLinkViewControllerWithModelObject:link];
-    }];
-}
-
-- (void)addLinkViewControllerForQueryLinkObject:(RptqQueryLinks *)link
-                                       animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    __weak typeof(self) weakself = self;
-    [self addLinkViewControllerForQueryLinkID:link.objectID animated:animated layoutHandler:^{
-        [weakself layoutQueryLinkViewControllerWithManagedObject:link];
-    }];
-
-}
-- (void)addLinkViewControllerForQueryLinkID:(NSManagedObjectID *)linkID
-                                   animated:(BOOL)animated
-                              layoutHandler:(void(^)(void))layoutHandler {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADConnectorView *connectorView = [[MADConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
-    connectorView.objectIdTag = linkID.copy;
+    connectorView.objectIdTag = link.objectID.copy;
+    connectorView.autoresizesSubviews = NO;
+    connectorView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    self.connectionViewsByObjectID[linkID] = connectorView;
+    self.connectionViewsByObjectID[link.objectID] = connectorView;
     
     if (animated == NO) {
-        layoutHandler();
+        [self layoutQueryLinkViewControllerWithModelObject:link];
     }
     
     CGRect desiredFrame = connectorView.frame;
@@ -1013,12 +1126,11 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     connectorView.bounds = CGRectZero;
     connectorView.center = desiredCenter;
     if (animated) {
-        connectorView.transform = animated ? CGAffineTransformIdentity : CGAffineTransformSwing();
+        connectorView.transform = animated ? CGAffineTransformIdentity : MADAffineTransformSwing();
     }
     
-    
     [self.scrollView.contentView addSubview:connectorView];
-
+    
     MTBlockResultVoid animateTwo = ^() {
         connectorView.frame = desiredFrame;
         connectorView.transform = desiredTransform;
@@ -1031,13 +1143,15 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                               delay: 0.0000f
                             options: UIViewAnimationOptionCurveEaseInOut
                          animations: animateTwo
-                         completion:^(BOOL finished) { }];
+                         completion: ^(BOOL finished) {
+                         
+                         }];
     } else {
         animateTwo();
     }
     
     if (animated) {
-        layoutHandler();
+        [self layoutQueryLinkViewControllerWithModelObject:link];
     }
 }
 
@@ -1062,90 +1176,11 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
-- (void)layoutQueryLinkViewControllerWithManagedObject:(RptqQueryLinks *)queryLink {
-    
-}
 - (void)layoutQueryLinkViewControllerWithModelObject:(MADModelQueryLink *)link {
-    [self layoutQueryLinkViewControllerWithQueryLinkID: link.objectID
-                                           leftFieldID: link.leftFieldReference.fieldID
-                                           leftTableID: link.leftFieldReference.tableID
-                                          rightFieldID: link.rightFieldReference.fieldID
-                                          rightTableID: link.rightFieldReference.tableID];
-}
-
-- (void)layoutQueryLinkViewControllerWithQueryLinkID:(NSManagedObjectID *)queryLinkID
-                                         leftFieldID:(NSManagedObjectID *)leftFieldID
-                                         leftTableID:(NSManagedObjectID *)leftTableID
-                                        rightFieldID:(NSManagedObjectID *)rightFieldID
-                                        rightTableID:(NSManagedObjectID *)rightTableID {
-    NSLog(@"%s <%@>", __PRETTY_FUNCTION__, queryLinkID);
-
-    MADConnectorView *connectorView = self.connectionViewsByObjectID[queryLinkID];
-    const CGFloat paddingLeft = 44.0000f;
-    
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersByObjectID[leftTableID];
-    CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:leftFieldID inView:leftTableViewController.view];
-    CGFloat leftTableBottomY = leftTableViewController.schemaTableViewController.frame.origin.y + leftTableViewController.schemaTableViewController.frame.size.height;
-    
-    if (leftCellFrameInTable.origin.y + leftCellFrameInTable.size.height > leftTableBottomY) {
-        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableBottomY - leftCellFrameInTable.size.height, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
-    } else if (leftCellFrameInTable.origin.y < leftTableViewController.schemaTableViewController.frame.origin.y) {
-        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableViewController.schemaTableViewController.frame.origin.y, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
-    }
-    CGRect leftCellFrameInView = [self.scrollView.contentView convertRect:leftCellFrameInTable fromView:leftTableViewController.view];
-    CGPoint leftCellAnchorPoint = CGCenterOfRect(leftCellFrameInView);
-    leftCellAnchorPoint.x += paddingLeft;
-    leftCellAnchorPoint.y += 0.0000f;
-    
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersByObjectID[rightTableID];
-    CGRect rightCellFrameInTable = [rightTableViewController rectForFieldWithObjectId:rightFieldID
-                                                                               inView:rightTableViewController.view];
-    CGFloat rightTableBottomY = rightTableViewController.schemaTableViewController.frame.origin.y + rightTableViewController.schemaTableViewController.frame.size.height;
-    
-    if (rightCellFrameInTable.origin.y + rightCellFrameInTable.size.height > rightTableBottomY) {
-        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableBottomY - rightCellFrameInTable.size.height, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
-    } else if (rightCellFrameInTable.origin.y < rightTableViewController.schemaTableViewController.frame.origin.y) {
-        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableViewController.schemaTableViewController.frame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
-    }
-    
-    CGRect rightCellFrameInView = [self.scrollView.contentView convertRect:rightCellFrameInTable fromView:rightTableViewController.view];
-    CGPoint rightCellAnchorPoint = CGCenterOfRect(rightCellFrameInView);
-    rightCellAnchorPoint.x -= paddingLeft;
-    rightCellAnchorPoint.y += -2.0000f;
-    
-    BOOL topLeftToBottomRight;
-    CGFloat extraInset = 0.0000f;
-    if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
-        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = YES;
-        } else {
-            topLeftToBottomRight = NO;
-            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
-            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
-        }
-        connectorView.leftViewIsInital = YES;
-    } else {
-        extraInset = -20.0000f;
-        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = NO;
-        } else {
-            topLeftToBottomRight = YES;
-            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
-            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
-        }
-        connectorView.leftViewIsInital = NO;
-    }
-    connectorView.topLeftToBottomRight = topLeftToBottomRight;
-    
-    connectorView.frame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset, leftCellAnchorPoint.y - 10.0000f,
-                                     rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
-                                     rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);;
-    
-    [connectorView setNeedsDisplay];
- /*
+ 
     MADConnectorView *connectorView;
     //if (!(connectorView = self.connectionViewsByObjectID[queryLinkID])) return;
-    connectorView = self.connectionViewsByObjectID[queryLinkID];
+    connectorView = self.connectionViewsByObjectID[link.objectID];
     
     const CGFloat paddingLeft = 44.0000f;
 
@@ -1206,11 +1241,13 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     
     MADQueryVisualizationSchemaViewController *leftTVC, *rightTVC;
     
-    rightTVC = self.controllersByObjectID[rightTableID];
-    leftTVC = self.controllersByObjectID[leftTableID];
+    rightTVC = self.controllersByObjectID[link.rightFieldReference.tableID];
+    leftTVC = self.controllersByObjectID[link.leftFieldReference.tableID];
     
-    leftCellFrameInTable = [leftTVC rectForFieldWithObjectId:leftFieldID inView:leftTVC.view];
-    rightCellFrameInTable = [rightTVC rectForFieldWithObjectId:rightFieldID inView:rightTVC.view];
+    leftCellFrameInTable = [leftTVC rectForFieldWithObjectId: link.leftFieldReference.fieldID
+                                                      inView: leftTVC.view];
+    rightCellFrameInTable = [rightTVC rectForFieldWithObjectId: link.rightFieldReference.fieldID
+                                                        inView: rightTVC.view];
 
     leftTableBottomY = bottomLeftY(leftTVC.schemaTableViewController.frame);
     
@@ -1239,13 +1276,11 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                                                             &rightCellAnchorPoint,
                                                             rightCellFrameInTable.size.height,
                                                             &extraInset);
-    if (direction == MADDirectionLeft) {
-        connectorView.leftViewIsInital = YES;
-    } else {
-        connectorView.leftViewIsInital = NO;
-    }
-    connectorView.frame = mainFrame(leftCellAnchorPoint, rightCellAnchorPoint, extraInset, 10.0000f);
-    [connectorView setNeedsDisplay];*/
+    connectorView.leftViewIsInital = direction == MADDirectionLeft;
+    connectorView.frame = mainFrame(leftCellAnchorPoint,
+                                    rightCellAnchorPoint,
+                                    extraInset, 10.0000f);
+    [connectorView setNeedsDisplay];
 }
 
 #pragma mark -
@@ -1256,7 +1291,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    [self updateCache];
+    //[self updateCache];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }

@@ -15,8 +15,7 @@
 @interface MADQueryVisualizationViewController : UIViewController
     <MADViewControllerDocumentProtocol>
 
-    - (void)redraw;
-    - (void)cleanup;
+    - (void)redraw:(BOOL)animated;
     
 @end
 

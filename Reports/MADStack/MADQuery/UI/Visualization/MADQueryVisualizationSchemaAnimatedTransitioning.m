@@ -7,7 +7,42 @@
 //
 
 #import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
+#import <UIKit/UIPresentationController.h>
 #import "CGAffineTransform+Common.h"
+#import "MADQueryVisualizationSchemaPresentationController.h"
+
+@implementation MADQueryVisualizationSchemaAnimatedTransitioningDelegate
+
+- (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
+                                                      presentingViewController:(UIViewController *)presenting
+                                                          sourceViewController:(UIViewController *)source {
+    // Provide our Cool presentation controller
+    return [[MADQueryVisualizationSchemaPresentationController alloc] initWithPresentedViewController:presented presentingViewController:presenting];
+}
+
+- (MADQueryVisualizationSchemaAnimatedTransitioning *)animationController {
+    MADQueryVisualizationSchemaAnimatedTransitioning *animationController;
+    animationController = [[MADQueryVisualizationSchemaAnimatedTransitioning alloc] init];
+    return animationController;
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                   presentingController:(UIViewController *)presenting
+                                                                       sourceController:(UIViewController *)source {
+    MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
+//    [animationController setIsPresentation:YES];
+    
+    return animationController;
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
+//    [animationController setIsPresentation:NO];
+    
+    return animationController;
+}
+
+@end
 
 @implementation MADQueryVisualizationSchemaAnimatedTransitioning
 
@@ -29,7 +64,7 @@
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         viewControllerFrom.view.bounds = CGRectZero;
         viewControllerFrom.view.center = center;
-        viewControllerFrom.view.transform = CGAffineTransformSwing();
+        viewControllerFrom.view.transform = MADAffineTransformSwing();
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];

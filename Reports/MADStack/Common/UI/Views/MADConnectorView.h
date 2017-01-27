@@ -9,14 +9,14 @@
 #ifndef Reports_MTConnectorView_h
 #define Reports_MTConnectorView_h
 
-#import "MADManagedObjectView.h"
+#import <UIKit/UIView.h>
+#import "MADManagedObjectViewProtocol.h"
 
-@interface MADConnectorView : MADManagedObjectView
+@interface MADConnectorView : UIView
+    <MADManagedObjectViewProtocol>
 
     @property (nonatomic, assign) BOOL topLeftToBottomRight;
     @property (nonatomic, assign) BOOL leftViewIsInital;
-
-    - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
 @end
 

@@ -7,42 +7,30 @@
 //
 
 #import "MADNavigationControllerQueryVisualization.h"
+#import <UIKit/UIViewControllerTransitionCoordinator.h>
 
 @implementation MADNavigationControllerQueryVisualization
 
 @synthesize document = _document;
 
-- (void)dealloc {
-/*    for (UIViewController *controller in self.viewControllers) {
-        if ([controller isKindOfClass:[UISplitViewController class]]) {
-            for (UIViewController *childViewController in ((UISplitViewController *) controller).childViewControllers) {
-                [childViewController willMoveToParentViewController:nil];
-                [childViewController.view removeFromSuperview];
-                [childViewController removeFromParentViewController];
-                [childViewController didMoveToParentViewController:nil];
-            }
-            
-        }
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
+            [self.view setNeedsDisplay];
+        };
+    } else {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
     }
-    [self popViewControllerAnimated:NO];*/
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { }
-    return self;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    //for (UIViewController *viewController in self.viewControllers) {
-    //    if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-    //        MADocument * __unsafe_unretained document = self.document;
-    //        NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-    //        ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = document;
-    //    }
-    //}
-
+    //UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        //[toView setNeedsDisplay];
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

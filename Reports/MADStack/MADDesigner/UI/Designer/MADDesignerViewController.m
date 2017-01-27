@@ -68,7 +68,6 @@
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADTabBarController.h"
-#import "MADManagedObjectView.h"
 
 #import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
@@ -2426,7 +2425,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             
         case UIGestureRecognizerStateBegan: {
             
-            [self beginPanPiece:(MADManagedObjectView *)gestureRecognizer.view transition:^{
+            [self beginPanPiece:(MADDesignerElementView *)gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
             } completion:^{
                 [self translatePanGesture:gestureRecognizer];
@@ -2984,7 +2983,7 @@ END_deselectElementView:;
     [gestureRecognizer setTranslation:CGPointZero inView:self.view];
 }
 
-- (void)beginPanPiece: (MADManagedObjectView *)piece transition: (void (^)(void))transition
+- (void)beginPanPiece: (MADDesignerElementView *)piece transition: (void (^)(void))transition
            completion: (void (^)(void))completion {
     
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];

@@ -17,4 +17,10 @@
 
 @end
 
+@interface MADQueryVisualizationSchemaAnimatedTransitioningDelegate : NSObject
+    <UIViewControllerTransitioningDelegate>
+
+@end
+
+
 #endif

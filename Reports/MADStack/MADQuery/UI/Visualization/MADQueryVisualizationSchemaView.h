@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADQueryVisualizationSchemaView_h
+#define Reports_MADQueryVisualizationSchemaView_h
+
+#import <UIKit/UIView.h>
+#import "MADManagedObjectViewProtocol.h"
 
 @interface MADQueryVisualizationSchemaView : UIView
+    <MADManagedObjectViewProtocol>
 
 @end
+
+#endif

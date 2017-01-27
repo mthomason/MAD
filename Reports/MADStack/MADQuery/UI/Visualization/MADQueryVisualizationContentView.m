@@ -10,7 +10,7 @@
 
 @implementation MADQueryVisualizationContentView
 
-+ (void)initialize {
+/*+ (void)initialize {
     [super initialize];
     if (self == [MADQueryVisualizationContentView self]) {
         @autoreleasepool {
@@ -30,20 +30,18 @@
             
         }
     }
-}
+}*/
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        //self.contentMode = UIViewContentModeScaleAspectFit;
-        //self.autoresizesSubviews = NO;
-        //self.translatesAutoresizingMaskIntoConstraints = NO;
-        //self.opaque = NO;
-        //self.backgroundColor = [UIColor clearColor];
-        NSLog(@"Mode: %ld", (long)self.contentMode);
-        NSLog(@"AR %@", self.autoresizesSubviews ? @"YES" : @"NO");
-        NSLog(@"TR %@", self.translatesAutoresizingMaskIntoConstraints ? @"YES" : @"NO");
-        NSLog(@"OP %@", self.opaque ? @"YES" : @"NO");
-        NSLog(@"BG %@", self.backgroundColor);
+        self.opaque = NO;
+        //self.backgroundColor = [UIColor redColor];
+        //self.alpha = 0.3000f;
+        [self setAutoresizingMask: UIViewAutoresizingNone];
+        [self setTranslatesAutoresizingMaskIntoConstraints: NO];
+        
+        self.autoresizesSubviews = NO;
+        self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
 }

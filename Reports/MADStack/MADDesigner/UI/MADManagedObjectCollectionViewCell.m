@@ -9,4 +9,7 @@
 #import "MADManagedObjectCollectionViewCell.h"
 
 @implementation MADManagedObjectCollectionViewCell
+
+@synthesize objectIdTag = _objectIdTag;
+
 @end

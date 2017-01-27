@@ -15,15 +15,16 @@
 
 @interface MADConnectorView ()
 
-    @property (nonatomic, strong) UIView *anchorViewLeft;
-    @property (nonatomic, strong) UIView *anchorViewRight;
     @property (nonatomic, strong) MADColor *forgroundColor;
-    @property (nonatomic, assign) CGSize shadowSize;
-    @property (nonatomic, assign) CGSize smallCircleSize;
 
 @end
 
-@implementation MADConnectorView
+@implementation MADConnectorView {
+    CGSize _shadowSize;
+    CGSize _smallCircleSize;
+}
+
+@synthesize objectIdTag = _objectIdTag;
 
 - (instancetype)init {
     return [self initWithFrame:CGRectZero];
@@ -34,192 +35,125 @@
     if (self = [super initWithFrame:frame]) {
 
         self.backgroundColor = [UIColor clearColor];
-
-        CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);
-        self.shadowSize = shadowSize;
-
-        CGSize smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
-        self.smallCircleSize = smallCircleSize;
+        self.clipsToBounds = NO;
+        self.layer.masksToBounds = NO;
+        self.contentMode = UIViewContentModeScaleAspectFit;
         
-        UIView *anchorLeft = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 1.0000f, 1.0000f)];
-        UIView *anchorRight = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height, 1.0000f, 1.0000f)];
-        
-        anchorLeft.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-        anchorRight.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+        _shadowSize = CGSizeMake(2.0000f, 2.0000f);
+        _smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
         
         UIColor *color = [MADColorEverydayApps newColorRed];
         MADColor *foregroundColor = [[MADColor alloc] initWithColor:color];
         self.forgroundColor = foregroundColor;
         
-
-        [self addSubview:self.anchorViewLeft];
-        [self addSubview:self.anchorViewRight];
-        
-        self.anchorViewLeft = anchorLeft;
-        self.anchorViewRight = anchorRight;
-        
-        self.clipsToBounds = NO;
-        self.layer.masksToBounds = NO;
-        self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
-}
-
-- (instancetype)initWithOriginView:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
-    self = [super initWithFrame:CGRectZero];
-    if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        [self setOriginPoint:originPoint andDestinationPoint:destinationPoint];
-        self.contentMode = UIViewContentModeScaleAspectFit;
-    }
-    return self;
-}
-
-- (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
-    CGRect frame = [self rectForOriginPoint:originPoint andDestinationPoint:destinationPoint];
-    self.frame = frame;
-}
-
-- (CGRect)rectForOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
-
-    CGFloat originX, originY, sizeWidth, sizeHeight;
-    BOOL topLeftToBottomRight;
-
-    if (originPoint.x < destinationPoint.x && originPoint.y < destinationPoint.y) {
-        topLeftToBottomRight = YES;
-        originX = originPoint.x;
-        originY = originPoint.y;
-        sizeWidth = destinationPoint.x - originPoint.x;
-        sizeHeight = destinationPoint.y - originPoint.y;
-    } else if (originPoint.x > destinationPoint.x && originPoint.y > destinationPoint.y) {
-        topLeftToBottomRight = YES;
-        originX = destinationPoint.x;
-        originY = destinationPoint.y;
-        sizeWidth = originPoint.x - destinationPoint.x;
-        sizeHeight = originPoint.y - destinationPoint.y;
-    } else {
-        topLeftToBottomRight = NO;
-        if (originPoint.x < destinationPoint.x) {
-            originX = originPoint.x;
-            originY = destinationPoint.y;
-            sizeWidth = destinationPoint.x - originPoint.x;
-            sizeHeight = originPoint.y - destinationPoint.y;
-        } else {
-            originX = destinationPoint.x;
-            originY = originPoint.y;
-            sizeWidth = originPoint.x - destinationPoint.x;
-            sizeHeight = destinationPoint.y - originPoint.y;
-        }
-    }
-
-    self.topLeftToBottomRight = topLeftToBottomRight;
-    
-    [self setNeedsDisplay];
-    
-    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
-}
-
-- (void)setFrame:(CGRect)frame {
-    super.frame = frame;
 }
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
 
-    if (rect.size.width != CGSizeZero.width && rect.size.height != CGSizeZero.height) {
-        rect = CGRectInset(rect, 10.0000f, 10.0000f);
+    if (rect.size.width == CGSizeZero.width && rect.size.height == CGSizeZero.height) return;
         
-        CGContextRef currentContext = UIGraphicsGetCurrentContext();
-        CGContextSetShadow(currentContext, self.shadowSize, 5.0000f);
-        CGContextSetLineWidth(currentContext, 3.0000f);
+    rect = CGRectInset(rect, 10.0000f, 10.0000f);
+    
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSetShadow(currentContext, _shadowSize, 5.0000f);
+    CGContextSetLineWidth(currentContext, 3.0000f);
+    
+    CGRect connectorNobRect[2];
+    CGPoint origin, destination;
+    CGPoint tangent[2];
+    
+    [self.forgroundColor.color set];
+    
+    CGPoint (^originPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+        return leftToRight ? r.origin : CGPointMake(r.origin.x + r.size.width, r.origin.y);
+    };
+    CGPoint (^destinationPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+        return leftToRight ? CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height) :
+        CGPointMake(r.origin.x, r.origin.y + r.size.height);
+    };
+    CGPoint (^originTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+        return leftToRight ? CGPointMake(rect.origin.x, rect.origin.y + rect.size.height) :
+        CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+    };
+    CGPoint (^destinationTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+        return leftToRight ? CGPointMake(rect.origin.x + rect.size.width,
+                                         rect.origin.y + rect.size.height) :
+        rect.origin;
+    };
+    
+    CGRect (^nobSize)(CGPoint, CGSize) = ^(CGPoint p, CGSize s) {
+        return CGRectMake(p.x - (s.width / 2.0000f) + 1.0000f,
+                          p.y - (s.height / 2.0000f) + 1.0000f,
+                          s.width, s.height);
+    };
+    CGPoint (^getOriginPoint)(BOOL, CGPoint, CGPoint) = ^CGPoint(BOOL leftInital, CGPoint p1, CGPoint p2) {
+        return leftInital ? p1 : p2;
+    };
+
+    origin = originPoint(_topLeftToBottomRight, rect);
+    destination = destinationPoint(_topLeftToBottomRight, rect);
+    
+    tangent[0] = originTangentPoint(_topLeftToBottomRight, rect);
+    tangent[1] = destinationTangentPoint(_topLeftToBottomRight, rect);
+    
+    connectorNobRect[0] = nobSize(getOriginPoint(_leftViewIsInital, origin, destination), _smallCircleSize);
+    connectorNobRect[1] = nobSize(getOriginPoint(!_leftViewIsInital, origin, destination), _smallCircleSize);
+    
+    CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
+    CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);
+    
+    if (fpclassify(tangent[0].x) >= FP_ZERO &&
+        fpclassify(tangent[0].y) >= FP_ZERO &&
+        fpclassify(tangent[1].x) >= FP_ZERO &&
+        fpclassify(tangent[1].y) >= FP_ZERO) {
         
-        CGRect connectorNobRectOrigin;
-        CGRect connectorNobRectDestination;
+        CGContextMoveToPoint(currentContext, origin.x, origin.y);
+        CGContextAddCurveToPoint(currentContext,
+                                 tangent[0].x,
+                                 tangent[0].y,
+                                 tangent[1].x,
+                                 tangent[1].y,
+                                 destination.x,
+                                 destination.y);
         
-        CGFloat largeCircleRadius = 3.0000f;
-        CGSize smallCircleSize = self.smallCircleSize;
-        CGFloat smallCircleRadius = 2.0000f;
+        static CGFloat arrowRadius = 5.0000f;
         
-        CGPoint origin, destination;
-        CGPoint tangent[2];
+        connectorNobRect[1].origin.y += 3.0000f;
         
-        [self.forgroundColor.color set];
-        
-        if (self.topLeftToBottomRight) {
-            
-            
-            origin = CGPointMake(rect.origin.x, rect.origin.y);
-            destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
-            
-            if (self.leftViewIsInital) {   //origin is the back point of the arrow
-                connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-                connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            } else {
-                connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-                connectorNobRectDestination = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            }
-            tangent[0] = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
-            tangent[1] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
-            
-        } else {
-            
-            origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
-            destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
-            
-            if (self.leftViewIsInital) {   //Origin is the front part of the arrow
-                connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, smallCircleSize.width, smallCircleSize.height);
-                connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            } else {
-                connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-                connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            }
-            tangent[0] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
-            tangent[1] = CGPointMake(rect.origin.x, rect.origin.y);
-        }
-        
-        CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
-        CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
-        
-        if (fpclassify(tangent[0].x) == FP_NORMAL &&
-            fpclassify(tangent[0].y) == FP_NORMAL &&
-            fpclassify(tangent[1].x) == FP_NORMAL &&
-            fpclassify(tangent[1].y) == FP_NORMAL) {
-            
-            CGContextMoveToPoint(currentContext, origin.x, origin.y);
-            CGContextAddCurveToPoint(currentContext, tangent[0].x, tangent[0].y, tangent[1].x, tangent[1].y, destination.x, destination.y);
-            
-            CGFloat arrowRadius = 5.0000f;
+        void(^drawLines)(CGPoint, CGPoint, CGPoint) =
+        ^void(CGPoint startingPoint, CGPoint firstEndPoint, CGPoint endPoint) {
             UIBezierPath *path = [UIBezierPath bezierPath];
-            CGPoint pathOrigin = connectorNobRectDestination.origin;
-            pathOrigin.y += 3.0000f;
-            if (self.topLeftToBottomRight) {
-                if (self.leftViewIsInital) {
-                    pathOrigin.x -= 5.0000f;
-                    [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
-                } else {
-                    pathOrigin.x += 10.0000f;
-                    [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
-                }
-            } else {
-                if (self.leftViewIsInital) {
-                    pathOrigin.x -= 5.0000f;
-                    [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
-                } else {
-                    pathOrigin.x += 10.0000f;
-                    [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-                    [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
-                }
-            }
+            [path moveToPoint:startingPoint];
+            [path addLineToPoint:firstEndPoint];
+            [path addLineToPoint:endPoint];
             path.lineWidth = 3.0000f;
             [path stroke];
-        }
+        };
+        
+        CGFloat (^offsetX)(BOOL, CGFloat) = ^CGFloat(BOOL leftInital, CGFloat radius) {
+            return leftInital ? -5.0000f - radius : 10.0000f + radius;
+        };
+        
+        CGPoint(^startingPoint)(BOOL, CGFloat, CGPoint) =
+        ^(BOOL leftInital, CGFloat radius, CGPoint start) {
+            return CGPointMake(start.x + offsetX(leftInital, radius), start.y - radius);
+        };
+        
+        CGPoint(^centerPoint)(BOOL, CGPoint) = ^CGPoint(BOOL leftInital, CGPoint start) {
+            return CGPointMake(start.x + offsetX(leftInital, CGSizeZero.width), start.y);
+        };
+        
+        CGPoint(^finalPoint)(BOOL, CGFloat, CGPoint) =
+        ^CGPoint(BOOL leftInital, CGFloat radius, CGPoint start) {
+            return CGPointMake(start.x + offsetX(leftInital, radius), start.y + radius);
+        };
+        
+        drawLines(startingPoint(_leftViewIsInital, arrowRadius, connectorNobRect[1].origin),
+                  centerPoint(_leftViewIsInital, connectorNobRect[1].origin),
+                  finalPoint(_leftViewIsInital, arrowRadius, connectorNobRect[1].origin));
     }
 }
 

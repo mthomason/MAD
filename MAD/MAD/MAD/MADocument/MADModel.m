@@ -312,13 +312,13 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                                                           object:managedObjectContext
                                                            queue:_objectContextQueue
                                                       usingBlock:^(NSNotification * _Nonnull note) {
-                                                          NSLog(@"%@: %@", NSStringFromClass(note.class), note);
+                                                          //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
                                                       }];
         [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
                                                           object:managedObjectContext
                                                            queue:_objectContextQueue
                                                       usingBlock:^(NSNotification * _Nonnull note) {
-                                                          NSLog(@"%@: %@", NSStringFromClass(note.class), note);
+                                                          //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
                                                       }];
         
         _objectContextQueue = objectContextQueue;

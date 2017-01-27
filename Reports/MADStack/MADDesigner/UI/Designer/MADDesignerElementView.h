@@ -9,7 +9,8 @@
 #ifndef Reports_MTElementView_h
 #define Reports_MTElementView_h
 
-#import "MADManagedObjectView.h"
+#import <UIKit/UIView.h>
+#import "MADManagedObjectViewProtocol.h"
 
 @protocol UIGestureRecognizerDelegate;
 
@@ -22,7 +23,8 @@
 
 typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
 
-@interface MADDesignerElementView : MADManagedObjectView
+@interface MADDesignerElementView : UIView
+    <MADManagedObjectViewProtocol>
 
     @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;

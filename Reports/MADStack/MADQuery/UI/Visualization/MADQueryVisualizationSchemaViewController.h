@@ -18,7 +18,7 @@
     - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
-@class MADocument, MADManagedObjectView, MTSchemaFieldCell, NSManagedObjectID;
+@class MADocument, MTSchemaFieldCell, NSManagedObjectID;
 
 extern const CGFloat MADSchemaViewDefaultWidth;
 extern const CGFloat MADSchemaViewDefaultHeight;

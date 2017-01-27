@@ -10,9 +10,7 @@
 #import <Foundation/NSCoder.h>
 #import <UIKit/UIGeometry.h>
 
-@implementation MADQueryVisualizationTableDefination {
-    
-}
+@implementation MADQueryVisualizationTableDefination
 
 @synthesize center = _center;
 
@@ -52,19 +50,11 @@ static NSString * const keyRoot = @"r";
     return tableDefination;
 }
 
-- (CGPoint)center {
-    return _center;
-}
-
-- (void)setCenter:(CGPoint)center {
-    //NSLog(@"Old Center: %@", NSStringFromCGPoint(_center));
-    _center = center;
-    //NSLog(@"New Center: %@", NSStringFromCGPoint(center));
-}
-
 - (NSString *)debugDescription {
-    NSString *debugDescription = [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
-                                  NSStringFromClass([self class]), NSStringFromCGPoint(_center), _root ? @"Root" : @"Leaf"];
+    NSString *debugDescription;
+    debugDescription= [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
+                            NSStringFromClass([self class]),
+                            NSStringFromCGPoint(_center), _root ? @"Root" : @"Leaf"];
     return debugDescription;
 }
 

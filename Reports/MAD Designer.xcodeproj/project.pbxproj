@@ -280,7 +280,6 @@
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
-		4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */; };
 		4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */; };
 		4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */; };
 		4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */; };
@@ -368,7 +367,6 @@
 		4C4020421BAE92F200BAE5FC /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FED1BAE92F200BAE5FC /* NSDate+Extras.m */; };
 		4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FEF1BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m */; };
 		4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF11BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m */; };
-		4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF31BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m */; };
 		4C4020461BAE92F200BAE5FC /* NSLayoutConstraint+QueryVisualization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF51BAE92F200BAE5FC /* NSLayoutConstraint+QueryVisualization.m */; };
 		4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF71BAE92F200BAE5FC /* NSMetadataItem+Description.m */; };
 		4C4020481BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF91BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m */; };
@@ -730,7 +728,6 @@
 		4C8DE2851BAFB11800AD1111 /* MADStoryboardDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADStoryboardDesigner.storyboard */; };
 		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; };
 		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; };
-		4C8DE28F1BAFB26700AD1111 /* MADQueryVisualization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */; };
 		4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; };
 		4C8F99AE1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99AD1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m */; };
@@ -758,6 +755,7 @@
 		4CA0C6C31CA55F0100222B8D /* MADOperationCreateDocumentAddConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C21CA55F0100222B8D /* MADOperationCreateDocumentAddConnection.m */; };
 		4CA0C6D01CA68F1400222B8D /* MADOperationCreateDocumentImportSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CF1CA68F1400222B8D /* MADOperationCreateDocumentImportSchema.m */; };
 		4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */; };
+		4CA1AAAE1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */; };
 		4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */; };
 		4CA4D6231D17C5F000A1240C /* MADFileExplorerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
@@ -1031,7 +1029,6 @@
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */; };
-		4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */; };
 		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
 		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
 		4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186A1DA14AC70093B166 /* libclientlib.a */; };
@@ -1523,8 +1520,6 @@
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainGetCredentials.h; sourceTree = "<group>"; };
 		4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainGetCredentials.m; sourceTree = "<group>"; };
-		4C3C16031BC6D7AE0056A77C /* MADViewDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewDebugging.h; sourceTree = "<group>"; };
-		4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewDebugging.m; sourceTree = "<group>"; };
 		4C3DCBAE1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationPresentationController.h; sourceTree = "<group>"; };
 		4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationPresentationController.m; sourceTree = "<group>"; };
 		4C3DCBC51BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaAnimatedTransitioning.h; sourceTree = "<group>"; };
@@ -1970,6 +1965,8 @@
 		4CA0C6CF1CA68F1400222B8D /* MADOperationCreateDocumentImportSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentImportSchema.m; sourceTree = "<group>"; };
 		4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationUniqueUrlForFilename.h; sourceTree = "<group>"; };
 		4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
+		4CA1AAAC1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaView.h; sourceTree = "<group>"; };
+		4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaView.m; sourceTree = "<group>"; };
 		4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerFileExplorer.h; path = ../MADDesigner/UI/Explorer/MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerFileExplorer.m; path = ../MADDesigner/UI/Explorer/MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
@@ -2897,8 +2894,6 @@
 				4C26BA191BAF150F00456DC8 /* MADQueryVisualizationTableDefination.m */,
 				4C26BA1C1BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.h */,
 				4C26BA1D1BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.m */,
-				4C3C16031BC6D7AE0056A77C /* MADViewDebugging.h */,
-				4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */,
 				4C3DCBAE1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.h */,
 				4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */,
 				4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */,
@@ -2909,6 +2904,8 @@
 				4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */,
 				4C3DCBCB1BC9E40100ABE231 /* MADQueryVisualizationScrollView.h */,
 				4C3DCBCC1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m */,
+				4CA1AAAC1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.h */,
+				4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */,
 			);
 			path = Visualization;
 			sourceTree = "<group>";
@@ -5370,7 +5367,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DE28F1BAFB26700AD1111 /* MADQueryVisualization.storyboard in Resources */,
 				4CC3D7BB1BCB6D9500BDA5D3 /* UIImagePatternKraftPaperWaffle.png in Resources */,
 				4CC3D75A1BCB6D9500BDA5D3 /* Icon-76-Viewer-Modern@2x.png in Resources */,
 				4CC3D7B31BCB6D9500BDA5D3 /* UIImagePatternGreyVellum.png in Resources */,
@@ -6094,7 +6090,6 @@
 				4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */,
 				4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */,
 				4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */,
-				4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
 				4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */,
@@ -6125,6 +6120,7 @@
 				4C3DCBCD1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m in Sources */,
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C5B560A1C998B1D005C19D9 /* MADOperationDatabaseTestConnection.m in Sources */,
+				4CA1AAAE1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m in Sources */,
 				4C26B9CE1BAF123A00456DC8 /* MADToolboxStyleStyleViewController.m in Sources */,
 				4C04EE781CAD6F1900582422 /* MADOperationCreateDocumentFirstTimeSetup.m in Sources */,
 				4C4021001BAE98C300BAE5FC /* MTReportViewerReportPageView.m in Sources */,
@@ -6189,7 +6185,6 @@
 				4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */,
 				4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */,
 				4CFEE8181BB7A2E600AFAA0A /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
-				4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C8DE2521BAFA92C00AD1111 /* MADNavigationBarFixedSize.m in Sources */,
 				4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */,
@@ -6273,7 +6268,6 @@
 				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4C26B9C21BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m in Sources */,
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
-				4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */,
 				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */,
@@ -6821,7 +6815,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",
@@ -6883,7 +6877,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",

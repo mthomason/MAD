@@ -21,7 +21,7 @@
 
 @interface MADQueryVisualizationCacheData ()
 
-    @property (nonatomic, strong, readwrite) NSMutableDictionary *tableDefinations;
+    @property (nonatomic, strong, readwrite) NSMutableDictionary <NSURL *, MADQueryVisualizationTableDefination *> *tableDefinations;
 
 @end
 
@@ -55,49 +55,43 @@ static NSString *CacheExt                    = @"qvvc";
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeCGPoint:_scrollViewContentOffset forKey:keyScrollViewContentOffset];
     [aCoder encodeDouble:_scrollViewZoomScale forKey:keyScrollViewZoomScale];
-
-    NSDictionary *tableDefinations = self.tableDefinations.copy;
-    [aCoder encodeObject:tableDefinations forKey:keyTables];
+    [aCoder encodeObject:_tableDefinations forKey:keyTables];
 }
 
 - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination
                forObjectID:(NSManagedObjectID *)objectID {
-    
     NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    NSURL *uriRepresentation = [objectID URIRepresentation];
-    id stringRepresention = uriRepresentation.absoluteString;
     MADQueryVisualizationTableDefination *copyTableDefination = [tableDefination copyWithZone:nil];
-    self.tableDefinations[stringRepresention] = copyTableDefination;
+    self.tableDefinations[objectID.URIRepresentation] = copyTableDefination;
 }
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
     NSLog(@"%s [%@]", __PRETTY_FUNCTION__, objectID);
-
-    NSURL *uriRepresentation = [objectID URIRepresentation];
-    id stringRepresention = uriRepresentation.absoluteString;
-    return self.tableDefinations[stringRepresention];
+    return self.tableDefinations[objectID.URIRepresentation];
 }
 
 - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID {
-    NSURL *uriRepresentation = [objectID URIRepresentation];
-    id stringRepresention = uriRepresentation.absoluteString;
-    MADQueryVisualizationTableDefination *tableDefination = self.tableDefinations[stringRepresention];
+
+    MADQueryVisualizationTableDefination *tableDefination;
+    tableDefination = [self.tableDefinations objectForKey:objectID.URIRepresentation];
     id copyTableDefination = [tableDefination copyWithZone:nil];
     return copyTableDefination;
 }
 
 - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    NSURL *objectIDURIRepresentation = objectID.URIRepresentation;
-    NSString *absoluteString = objectIDURIRepresentation.absoluteString;
-    [self.tableDefinations removeObjectForKey: absoluteString];
+    [self.tableDefinations removeObjectForKey: objectID.URIRepresentation];
 }
 
 + (NSString *)cacheFileNameForFileName:(NSString *)filename {
     NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
     return [fileName stringByAppendingPathExtension:CacheExt];
+}
+
+- (NSString *)debugDescription {
+    NSString *debugDescription = [[NSString alloc] initWithFormat:@"%@ <%@>",
+                                  NSStringFromClass(self.class),  _tableDefinations];
+    return debugDescription;
 }
 
 @end

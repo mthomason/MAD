@@ -9,9 +9,11 @@
 #ifndef Reports_MADQueryNavigationController_h
 #define Reports_MADQueryNavigationController_h
 
-#import "MADNavigationController.h"
+#import <UIKit/UINavigationController.h>
+#import "MADViewControllerDocumentProtocol.h"
 
-@interface MADNavigationControllerQueryVisualization : MADNavigationController
+@interface MADNavigationControllerQueryVisualization : UINavigationController
+    <MADViewControllerDocumentProtocol>
 
 @end
 

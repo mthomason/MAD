@@ -36,6 +36,7 @@
 + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
                      sideMargin:(CGFloat)sideMargin {
 
+    NSArray *constraints;
     NSLayoutConstraint *constraint3,
                        *constraint4;
     constraint3 = [NSLayoutConstraint constraintWithItem: ruler
@@ -53,7 +54,8 @@
                                                attribute: NSLayoutAttributeRight
                                               multiplier: 1.0000f
                                                 constant: -sideMargin];
-    return @[constraint3, constraint4];
+    constraints = [[NSArray alloc] initWithObjects:constraint3, constraint4, nil];
+    return constraints;
 }
 
 + (instancetype)newLayoutConstraintToolBoxView:(id)toolbox height:(CGFloat)height {

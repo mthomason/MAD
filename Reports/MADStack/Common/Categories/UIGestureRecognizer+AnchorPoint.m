@@ -21,7 +21,8 @@
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
         CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
         
-        CGPoint anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        CGPoint anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width,
+                                          locationInView.y / piece.bounds.size.height);
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
             piece.layer.anchorPoint = anchorPoint;
             piece.center = locationInSuperview;
@@ -31,7 +32,8 @@
     return result;
 }
 
-+ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer inView:(UIView *)containerView {
++ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+                                          inView:(UIView *)containerView {
     CGPoint result = CGPointZero;
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateEnded) {

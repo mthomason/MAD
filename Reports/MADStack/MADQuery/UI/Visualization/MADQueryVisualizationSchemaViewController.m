@@ -12,6 +12,7 @@
 
 #import "MADQueryVisualizationSchemaViewController.h"
 
+#import <UIKit/UIView.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIManagedDocument.h>
 #import <UIKit/UITableView.h>
@@ -32,7 +33,6 @@
 #import "MTTitleView.h"
 #import "MTSchemaFieldCell.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
-#import "MADManagedObjectView.h"
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -49,6 +49,11 @@
 
 #import "MADIdentifiersStoryboards.h"
 
+#import "MADManagedObjectViewProtocol.h"
+
+#import "MADQueryVisualizationSchemaView.h"
+
+
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource,
         UITableViewDelegate,
@@ -61,7 +66,6 @@
     @property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
 
     @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
-    @property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
 
 @end
 
@@ -73,7 +77,6 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 @implementation MADQueryVisualizationSchemaViewController
 
 @synthesize document = _document;
-@dynamic view;
 
 + (instancetype)newQueryVisualizationSchemaViewController {
     UIStoryboard *storyboard;
@@ -102,16 +105,19 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 - (void)dealloc { }
 
 - (void)setCenter:(CGPoint)center {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGPoint(center));
     self.view.center = center;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setBounds:(CGRect)bounds {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGRect(bounds));
     self.view.bounds = bounds;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.view.transform = transform;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
@@ -129,8 +135,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
     return self;
@@ -138,8 +143,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil
                          bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self commonInit];
     }
     return self;
@@ -178,10 +182,10 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
     
     NSLayoutConstraint *width, *height;
-    width = [NSLayoutConstraint newLayoutConstraintSchemaViewWidthForView: self.view
-                                                                 andWidth: MADSchemaViewDefaultWidth];
-    height = [NSLayoutConstraint newLayoutConstraintSchemaViewHeightForView: self.view
-                                                                  andHeight: MADSchemaViewDefaultHeight];
+    width = [NSLayoutConstraint newLayoutConstraintWidthForView: self.view
+                                                       andWidth: MADSchemaViewDefaultWidth];
+    height = [NSLayoutConstraint newLayoutConstraintHeightForView: self.view
+                                                        andHeight: MADSchemaViewDefaultHeight];
     NSArray *constraints = [[NSArray alloc] initWithObjects: width, height, nil];
     [self.view addConstraints:constraints];
 }
@@ -201,8 +205,9 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, tableObjectId);
 
-    self.view.objectIdTag = tableObjectId.copy;
+    ((MADQueryVisualizationSchemaView *)self.view).objectIdTag = tableObjectId.copy;
     self.cachedTableObjectId = tableObjectId.copy;
 
     RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableObjectId];
@@ -278,19 +283,23 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 #pragma mark - Methods
 
 - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, managedObjectID);
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
     return (MTSchemaFieldCell *)[self.schemaTableViewController cellForRowAtIndexPath:cellIndexPath];
 }
 
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, managedObjectID);
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
     CGRect rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
     return [self.schemaTableViewController convertRect:rectForRow toView:self.view];
 }
 
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView {
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
+                            inView:(UIView *)containerView {
+    NSLog(@"%s [%@::%@]", __PRETTY_FUNCTION__, containerView, managedObjectID);
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     CGRect rectForRow;
     if (row == NSNotFound) {
@@ -305,6 +314,8 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, scrollView);
+
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 

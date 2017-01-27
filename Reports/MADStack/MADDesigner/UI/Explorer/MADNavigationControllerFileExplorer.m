@@ -112,7 +112,12 @@
                              options:(UIViewAnimationOptions)options
                           animations:(void (^)(void))animations
                           completion:(void (^)(BOOL))completion {
-    [super transitionFromViewController:fromViewController toViewController:toViewController duration:duration options:options animations:animations completion:completion];
+    [super transitionFromViewController: fromViewController
+                       toViewController: toViewController
+                               duration: duration
+                                options: options
+                             animations: animations
+                             completion: completion];
 }
 
 #pragma mark -

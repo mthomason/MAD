@@ -17,8 +17,6 @@
 @interface MADManagedObjectCollectionViewCell : UICollectionViewCell
     <MADManagedObjectViewProtocol>
 
-    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
-
 @end
 
 #endif /* MADManagedObjectViewCell_h */

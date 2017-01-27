@@ -54,6 +54,10 @@ static const CGFloat contentViewHeight = 1024.0000f;
     self.bouncesZoom = NO;
     self.delaysContentTouches = YES;
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.backgroundColor = [UIColor blueColor];
+    self.alpha = 0.3000f;
+    
     self.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
 
     MADQueryVisualizationContentView *contentView = [[MADQueryVisualizationContentView alloc] initWithFrame:CGRectZero];
@@ -84,7 +88,7 @@ static const CGFloat contentViewHeight = 1024.0000f;
     containerViewConstraints = [containerViewConstraints arrayByAddingObjectsFromArray:layoutConstraintCenterY];
     
     [self addConstraints:containerViewConstraints];
-
+    contentView.autoresizesSubviews = NO;
     self.contentView = contentView;
     
 }

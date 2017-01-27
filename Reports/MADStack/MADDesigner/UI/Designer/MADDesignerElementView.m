@@ -54,6 +54,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 @implementation MADDesignerElementView
 
+@synthesize objectIdTag = _objectIdTag;
+
 - (void)dealloc {
     [_canvasView removeFromSuperview];
     if (_resizeHandles) {

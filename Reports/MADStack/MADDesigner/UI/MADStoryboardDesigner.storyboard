@@ -201,7 +201,7 @@
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr" customClass="MADManagedObjectView">
+                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr" customClass="MADQueryVisualizationSchemaView">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -236,7 +236,7 @@
                                                 <rect key="frame" x="0.0" y="22" width="520" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dBI-d3-jvF" id="UZi-dw-D1s">
-                                                    <rect key="frame" x="0.0" y="0.0" width="520" height="21"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="520" height="21.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2W-9c-j0G">

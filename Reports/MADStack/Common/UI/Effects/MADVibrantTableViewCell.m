@@ -47,6 +47,7 @@
             [self.contentView removeConstraints:self.layoutConstraints];
         }
         
+        NSArray *constraints;
         NSLayoutConstraint *cellHeight, *effectsHeight, *layoutConstraint0, *layoutConstraint2,
                            *layoutConstraint4, *layoutConstraint6,
                            *labelLeadingMargin, *labelTrailingMargin,
@@ -147,10 +148,10 @@
                                                                               self.marginStyle == MADTableViewCellMarginStyleMiddle ? -4.0000f : 0.000f];
         layoutConstraintLabelBottom.priority = UILayoutPriorityDefaultHigh;
         
-        NSArray *constraints = @[cellHeight, effectsHeight, layoutConstraint0, layoutConstraint2,
-                                 layoutConstraint4, layoutConstraintLabelTop,
-                                 layoutConstraint6, layoutConstraintLabelBottom,
-                                 labelLeadingMargin, labelTrailingMargin];
+        constraints = [[NSArray alloc] initWithObjects: cellHeight, effectsHeight,
+                       layoutConstraint0, layoutConstraint2, layoutConstraint4,
+                       layoutConstraintLabelTop, layoutConstraint6,
+                       layoutConstraintLabelBottom, labelLeadingMargin, labelTrailingMargin, nil];
         
         self.layoutConstraints = constraints;
         [self.contentView addConstraints:constraints];
