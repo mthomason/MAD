@@ -23,7 +23,7 @@
     [super viewDidLoad];
     id rootViewController = [MADViewerController newViewerController: _document];
     self.viewerController = rootViewController;
-    self.viewerController.viewControllerDelegate = self.viewControllerDelegate;
+    //self.viewerController.viewControllerDelegate = self.viewControllerDelegate;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

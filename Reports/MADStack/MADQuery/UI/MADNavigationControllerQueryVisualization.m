@@ -17,6 +17,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
+    
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
             [self.view setNeedsDisplay];

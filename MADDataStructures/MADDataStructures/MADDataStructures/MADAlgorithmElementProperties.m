@@ -23,7 +23,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    id copy = [[self.class allocWithZone:zone] initWithColor: self.algorithmColor];
+    id copy = [[self.class allocWithZone:zone] initWithColor: _algorithmColor];
     return copy;
 }
 

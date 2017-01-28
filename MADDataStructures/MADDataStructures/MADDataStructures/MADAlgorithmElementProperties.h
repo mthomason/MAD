@@ -16,7 +16,7 @@
     <NSCopying>
 
     - (instancetype)initWithColor:(MADAlgorithmColor)algorithmColor NS_DESIGNATED_INITIALIZER;
-    @property (atomic, assign) MADAlgorithmColor algorithmColor;
+    @property (nonatomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

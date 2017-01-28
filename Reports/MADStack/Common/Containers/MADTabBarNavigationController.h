@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADNavigationController.h"
+#ifndef Reports_MADTabBarNavigationController_h
+#define Reports_MADTabBarNavigationController_h
 
-@interface MADTabBarNavigationController : MADNavigationController
+#import <UIKit/UINavigationController.h>
+#import "MADViewControllerDocumentProtocol.h"
+
+@interface MADTabBarNavigationController : UINavigationController
+    <MADViewControllerDocumentProtocol>
 
 @end
+
+#endif

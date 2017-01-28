@@ -470,6 +470,7 @@ void sqliteLog(void *foo, const char* statement) {
     if (statement == NULL) {
         int prepare_result;
         prepare_result = sqlite3_prepare_v2(_database, csql, -1, &statement, NULL);
+        NSLog(@"\n\n%s\n\n", csql);
         NSAssert(prepare_result == SQLITE_OK, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
         success = prepare_result == SQLITE_OK;
         if (binaryBindings.count > 0) {

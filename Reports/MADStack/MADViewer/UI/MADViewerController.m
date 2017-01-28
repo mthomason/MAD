@@ -90,6 +90,8 @@
 #import "MADIdentifiersStoryboards.h"
 #import "MADDocumentScroller.h"
 
+#import <UIKit/UIResponder.h>
+
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
 static NSString * const MADTextNoCache = @"No Cache";
@@ -176,6 +178,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, strong) NSOperationQueue *loadDocumentViewerQueue;
 
 @end
+
+@implementation UIResponder (MADViewerController)
+- (void)done:(id)someItem {
+    [[self nextResponder] done:nil];
+}
+@end
+
 
 @implementation MADViewerController {
     MADReportPosition _currentLocation;
@@ -266,7 +275,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        //NSLog(@"%s", __PRETTY_FUNCTION__);
         _isFirstAppearance = YES;
         _firstTimeViewWillLayoutSubviews = YES;
         _activityExporting = NO;
@@ -329,11 +337,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.view.backgroundColor = [UIColor lightGrayColor];
 
     UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-    self.navigationController.toolbar.tintColor = whiteColor;
-    
-    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-    titleView.text = self.title;
-    self.navigationItem.titleView = titleView;
+    self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+    self.navigationController.toolbar.tintColor    = [MADColorEverydayApps newColorWhite];
 
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -512,7 +517,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     UIBarButtonItem *barButtonItemDone;
     barButtonItemDone= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                        target: self
+                                                                        target: nil
                                                                         action: @selector(done:)];
     barButtonItemDone.enabled = YES;
     [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
@@ -887,7 +892,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
+/*- (IBAction)done:(id)sender {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSError *error = nil;
@@ -900,7 +905,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     viewControllerDelegate = self.viewControllerDelegate;
     [viewControllerDelegate viewControllerDidFinish: self];
     viewControllerDelegate = nil;
-}
+}*/
 
 - (IBAction)activity:(id)sender {
     //NSLog(@"%s", __PRETTY_FUNCTION__);

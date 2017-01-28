@@ -75,6 +75,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+/*    UIColor *white, *blue;
+    white = [MADColorEverydayApps newColorWhite];
+    blue = [MADColorEverydayApps newColorBlue];
+    self.toolbar.tintColor = white;
+    self.toolbar.barTintColor = blue;
+    self.toolbar.barStyle = UIBarStyleBlack;
+    self.toolbar.translucent = YES;
+    self.navigationBar.translucent = YES;
+    
+    NSMutableDictionary *titleTextAttributes;
+    titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];*/
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -96,6 +109,17 @@
         NSArray *viewControllers = [[NSArray alloc] init];
         [self setViewControllers:viewControllers animated:animated];
     }
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(done:)) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)done:(id)sender {
+    [self.viewControllers[1] done:sender];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -150,11 +174,13 @@
         
         switch (operation) {
             case UINavigationControllerOperationPush:
-                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController pushing:YES];
+                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+                                                                                          pushing:YES];
                 break;
 
             case UINavigationControllerOperationPop:
-                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController pushing:NO];
+                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+                                                                                          pushing:NO];
                 break;
 
             case UINavigationControllerOperationNone:

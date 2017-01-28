@@ -203,18 +203,18 @@ static NSString * const TextRedraw = @"Redraw";
     UINavigationItem *navigationItem = [super navigationItem];
     if (navigationItem.titleView == nil) {
         
-        MADLabelTitle *titleView;
+        //MADLabelTitle *titleView;
         UIBarButtonItem *editButton, *doneButton;
         NSString *title;
 
         title = self.title;
-        titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-        titleView.text = title.copy;
+        //titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
+        //titleView.text = title.copy;
         
         navigationItem.leftItemsSupplementBackButton = YES;
         navigationItem.hidesBackButton = NO;
 
-        navigationItem.titleView = titleView;
+        //navigationItem.titleView = titleView;
 
         doneButton = _barButtonItemDone;
         navigationItem.leftBarButtonItem = doneButton;

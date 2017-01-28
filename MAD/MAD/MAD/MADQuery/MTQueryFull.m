@@ -162,6 +162,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     [result appendString:selectPart];
     
     //Use a graph to represent the query: verticies are tables and edges are links.
+
     MTGraph *graph = [[MTGraph alloc] init];
     NSSet *hasTables = queryObject.hasQueryTables;
     
@@ -196,7 +197,8 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                                              isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
     
     // MARK: Error on circuts or other bad query.
-    if (error == nil) {
+    NSAssert(*error == nil, @"Got an error %@", *error);
+    if (*error != nil) {
         [result setString:@""];
     } else {
         

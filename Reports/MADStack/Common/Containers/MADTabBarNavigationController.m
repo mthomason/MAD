@@ -48,18 +48,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    UIColor *white, *blue;
-    white = [MADColorEverydayApps newColorWhite];
-    blue = [MADColorEverydayApps newColorBlue];
-    self.toolbar.tintColor = white;
-    self.toolbar.barTintColor = blue;
-    self.toolbar.barStyle = UIBarStyleBlack;
-    self.toolbar.translucent = YES;
-    self.navigationBar.translucent = YES;
-    
-    NSMutableDictionary *titleTextAttributes;
-    titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+
     
 }
 

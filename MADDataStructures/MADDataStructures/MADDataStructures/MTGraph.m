@@ -25,13 +25,15 @@
 #import "MADBfsProperties.h"
 #import "MADDfsProperties.h"
 #import "MADSortProperties.h"
+#import "MADAlgorithmColor.h"
+#import "MADAlgorithmElementProperties.h"
 
 NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 @interface MTGraph ()
 
     // MARK: The graph is defined as an adjacency list.
-    @property (nonatomic, strong) NSMutableArray *vertices;
+    @property (nonatomic, strong) NSMutableArray <MTVertex *> *vertices;
 
     // MARK: Counters to give edges and verties unique ids.
     @property (atomic, assign) NSUInteger idUniqueVertices;
@@ -82,8 +84,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 }
 
 // MARK: Add new edge to the graph.
-- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination
-                       object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
+- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin
+                  destination:(MTVertex *)destination
+                       object:(id <NSCopying>)object
+                    andWeight:(NSNumber *)weight {
     
     BOOL result = NO;
     
@@ -191,18 +195,18 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     MTQueue *greyVertices = [[MTQueue alloc] init];
     
     for (MTVertex *vertex in self.vertices) {
-        @autoreleasepool {
-            MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
-            bfsp.algorithmColor = MTColorWhite;
-            vertex.properties = bfsp;
-        }
+        vertex.properties.algorithmColor = MTColorWhite;
     }
     
-    MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
-    bfsp.bfsDistance = @(0);
-    bfsp.algorithmColor = MTColorGray;
-    bfsp.bfsPredecessor = nil;
-    root.properties = bfsp;
+    //MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
+    //bfsp.bfsDistance = @(0);
+    //bfsp.algorithmColor = MTColorGray;
+    //bfsp.bfsPredecessor = nil;
+    //root.properties = bfsp;
+
+    root.bfsProperties.bfsPredecessor = nil;
+    root.properties.algorithmColor = MTColorGray;
+    root.bfsProperties.bfsDistance = @(0);
     
     [greyVertices enqueue:root];
     
@@ -234,9 +238,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
     
     for (MTVertex *vertex in self.vertices) {
-        MADDfsProperties *bfsp = [[MADDfsProperties alloc] init];
-        bfsp.algorithmColor = MTColorWhite;
-        vertex.properties = bfsp;
+        vertex.properties.algorithmColor = MTColorWhite;
     }
     
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
@@ -261,11 +263,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     NSArray *vertices = self.vertices;
     for (MTVertex *vertex in vertices) {
-        @autoreleasepool {
-            MADDfsProperties *properties = [[MADDfsProperties alloc] init];
-            properties.algorithmColor = MTColorWhite;
-            vertex.properties = properties;
-        }
+        vertex.properties.algorithmColor = MTColorWhite;
     }
     
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
@@ -287,16 +285,17 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     //BOOL isDirectedAcyclicGraph = YES;
     
     for (MTPair *pair in resultEdges) {
-        if ((MTEdgeType)((NSNumber *)pair.latter).unsignedIntegerValue == MTEdgeTypeBackEdge) {
+        if ((MTEdgeType)((NSNumber *)pair.latter).shortValue == MTEdgeTypeBackEdge) {
             *isDirectedAcyclicGraph = NO;
             
-            if (anError != NULL) {
+            /*if (anError != NULL) {
                 NSString *t = NSLocalizedString(TextCycleEncountered, TextCycleEncountered);
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t};
+                NSDictionary *userInfo;
+                userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:t, NSLocalizedDescriptionKey, nil];
                 *anError = [NSError errorWithDomain: @"MTDataStructures"
                                                code: 1
                                            userInfo: userInfo];
-            }
+            }*/
             break;
         }
     }
@@ -341,8 +340,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         
         if (neighborVertex.properties.algorithmColor == MTColorWhite) {
             neighborVertex.dfsProperties.dfsPredecessor = vertex;
-            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter
-                                             listOfEdges:listOfEdges listOfVertices:listOfVertices];
+            [self depthFirstSearchVisitWithCurrentVertex: neighborVertex
+                                                 counter: counter
+                                             listOfEdges: listOfEdges
+                                          listOfVertices: listOfVertices];
         }
     }
     

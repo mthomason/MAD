@@ -9,9 +9,12 @@
 #ifndef MAD_MADNavigationControllerQueryBuilder_h
 #define MAD_MADNavigationControllerQueryBuilder_h
 
-#import "MADNavigationController.h"
+#import <UIKit/UINavigationController.h>
+#import "MADViewControllerDocumentProtocol.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MADNavigationControllerQueryBuilder : MADNavigationController
+@interface MADNavigationControllerQueryBuilder : UINavigationController
+    <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
 
 @end
 

@@ -17,9 +17,7 @@
 @implementation MTPair
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    typeof(self) copy = [[[self class] alloc] init];
-    copy.former = [_former copyWithZone:zone];
-    copy.latter = [_latter copyWithZone:zone];
+    id copy = [[[self class] alloc] initWithFormer:self.former andLatter:self.latter];
     return copy;
 }
 
@@ -27,8 +25,7 @@
     return [self initWithFormer:nil andLatter:nil];
 }
 
-- (instancetype)initWithFormer:(NSObject <NSCopying> *)former
-                     andLatter:(NSObject <NSCopying> *)latter {
+- (instancetype)initWithFormer:(id)former andLatter:(id)latter {
     
     if (self = [super init]) {
         
@@ -43,8 +40,7 @@
     return self;
 }
 
-- (instancetype)initWithLeft:(NSObject <NSCopying> *)left
-                    andRight:(NSObject <NSCopying> *)right {
+- (instancetype)initWithLeft:(id)left andRight:(id)right {
     
     if (self = [super init]) {
         
@@ -57,8 +53,7 @@
     return self;
 }
 
-+ (instancetype)newPairWithFormer:(NSObject <NSCopying> *)former
-                        andLatter:(NSObject <NSCopying> *)latter {
++ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
     return result;
 }

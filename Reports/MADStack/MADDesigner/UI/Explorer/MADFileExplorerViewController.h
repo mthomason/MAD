@@ -14,6 +14,7 @@
 @interface MADFileExplorerViewController : UICollectionViewController
 
     + (instancetype)newFileExplorerViewController;
+    - (void)done:(id)sender;
 
 @end
 

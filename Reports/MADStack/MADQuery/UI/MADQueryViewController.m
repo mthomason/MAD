@@ -1603,11 +1603,11 @@ BOOL storeEnabled() {
     
     NSIndexPath *indexPathUpdate;
     MADTableController *tableController;
-    MADLabelTitle *titleView;
+    //MADLabelTitle *titleView;
     RptqQueryTable *table, *tableWrapped;
     MTQuery *rquery;
     RptqDatabaseSchemaTable *schemaTable;
-    NSString *name;
+    //NSString *name;
     NSFetchedResultsController *queryTablesResultsController;
     MADQueryViewDataSource *queryViewDataSource;
     
@@ -1623,13 +1623,13 @@ BOOL storeEnabled() {
     rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
     tableController = [[MADTableController alloc] initWithQuery:rquery];
     
-    titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
+    //titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
     
-    name = schemaTable.name;
-    titleView.text = name.copy;
+    //name = schemaTable.name;
+    //titleView.text = name.copy;
     
-    tableController.navigationItem.title = name.copy;
-    tableController.navigationItem.titleView = titleView;
+    //tableController.navigationItem.title = name.copy;
+    //tableController.navigationItem.titleView = titleView;
     
     [self.navigationController pushViewController: tableController animated: YES];
     

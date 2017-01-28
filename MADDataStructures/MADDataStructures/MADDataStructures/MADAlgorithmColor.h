@@ -10,7 +10,7 @@
 #define MADAlgorithmColor_h
 
 typedef NS_ENUM(short, MADAlgorithmColor) {
-    MTColorBlack,
+    MTColorBlack = 1,
     MTColorWhite,
     MTColorGray
 };

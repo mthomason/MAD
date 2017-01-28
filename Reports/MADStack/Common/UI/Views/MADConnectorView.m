@@ -101,8 +101,10 @@
         origin = originPoint(_topLeftToBottomRight, rect);
         destination = destinationPoint(_topLeftToBottomRight, rect);
         
-        connectorNobRect[0] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
-        connectorNobRect[1] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, destination, origin), CGSizeMake(4.0000f, 4.0000f));
+        connectorNobRect[0] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, origin, destination),
+                                      CGSizeMake(4.0000f, 4.0000f));
+        connectorNobRect[1] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, destination, origin),
+                                      CGSizeMake(4.0000f, 4.0000f));
         
         CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
         CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);
@@ -115,8 +117,6 @@
                                  tangent[1].y,
                                  destination.x,
                                  destination.y);
-        
-        static CGFloat arrowRadius = 5.0000f;
         
         connectorNobRect[1].origin.y += 3.0000f;
         
@@ -148,9 +148,9 @@
             return CGPointMake(start.x + offsetX(leftInital, radius), start.y + radius);
         };
         
-        drawLines(startingPoint(_leftViewIsInital, arrowRadius, connectorNobRect[1].origin),
+        drawLines(startingPoint(_leftViewIsInital, 5.0000f, connectorNobRect[1].origin),
                   centerPoint(_leftViewIsInital, connectorNobRect[1].origin),
-                  finalPoint(_leftViewIsInital, arrowRadius, connectorNobRect[1].origin));
+                  finalPoint(_leftViewIsInital, 5.0000f, connectorNobRect[1].origin));
     }
 }
 

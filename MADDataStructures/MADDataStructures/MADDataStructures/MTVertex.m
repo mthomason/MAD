@@ -15,17 +15,25 @@
 #import <Foundation/NSString.h>
 #import "MTEdge.h"
 #import "MADAlgorithmElementProperties.h"
+#import "MADBfsProperties.h"
+#import "MADDfsProperties.h"
+#import "MADSortProperties.h"
 
 @interface MTVertex()
 
     @property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
     @property (nonatomic, assign, readwrite) NSUInteger uniqueIdForStructure;
 
+    @property (nonatomic, strong, readwrite) MADAlgorithmElementProperties *properties;
+    @property (nonatomic, strong, readwrite) MADBfsProperties *bfsProperties;
+    @property (nonatomic, strong, readwrite) MADDfsProperties *dfsProperties;
+    @property (nonatomic, strong, readwrite) MADSortProperties *sortProperties;
+
 @end
 
 @implementation MTVertex
 
-- (id)copyWithZone:(nullable NSZone *)zone {
+/*- (id)copyWithZone:(nullable NSZone *)zone {
     
     MTVertex *copy = [[[self class] allocWithZone: zone] initWithID:_uniqueIdForStructure
                                                           andObject:self.object];
@@ -37,13 +45,14 @@
         edgeCopy = [edge copyWithZone:zone];
         [copy.edges addObject:edgeCopy];
     }
-    
-    id properties = [_properties copyWithZone:zone];
-    copy.properties = properties;
+    copy.bfsProperties = [_bfsProperties copyWithZone:zone];
+    copy.dfsProperties = [_dfsProperties copyWithZone:zone];
+    copy.sortProperties = [_sortProperties copyWithZone:zone];
+    copy.properties = [_properties copyWithZone:zone];
     copy.uniqueIdForStructure = _uniqueIdForStructure;
     
     return copy;
-}
+}*/
 
 - (instancetype)init {
     return [self initWithID:0];
@@ -54,9 +63,10 @@
 }
 
 - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
-    if (self = [super initWithObject:object]) {
+    if (self = [super init]) {
         
         _uniqueIdForStructure = idnumber;
+        _object = [object copyWithZone:nil];
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
         self.edges = array;
@@ -145,16 +155,40 @@
     return [NSString stringWithFormat:@"%@", self];
 }
 
+- (MADAlgorithmElementProperties *)properties {
+    if (!_properties) {
+        MADAlgorithmElementProperties *properties;
+        properties = [[MADAlgorithmElementProperties alloc] init];
+        _properties = properties;
+    }
+    return _properties;
+}
+
 - (MADBfsProperties *)bfsProperties {
-    return (MADBfsProperties *)self.properties;
+    if (!_bfsProperties) {
+        MADBfsProperties *bfsProperties;
+        bfsProperties = [[MADBfsProperties alloc] init];
+        _bfsProperties = bfsProperties;
+    }
+    return _bfsProperties;
 }
 
 - (MADDfsProperties *)dfsProperties {
-    return (MADDfsProperties *)self.properties;
+    if (!_dfsProperties) {
+        MADDfsProperties *dfsProperties;
+        dfsProperties = [[MADDfsProperties alloc] init];
+        _dfsProperties = dfsProperties;
+    }
+    return _dfsProperties;
 }
 
 - (MADSortProperties *)sortProperties {
-    return (MADSortProperties *)self.properties;
+    if (!_sortProperties) {
+        MADSortProperties *sortProperties;
+        sortProperties = [[MADSortProperties alloc] init];
+        _sortProperties = sortProperties;
+    }
+    return _sortProperties;
 }
 
 @end

@@ -103,18 +103,19 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 }
 
 - (void)updateDisplay {
-    [self.display replaceCharactersInRange: NSMakeRange(0, self.display.length)
-                      withAttributedString: self.statusMessage1];
-    if (self.statusMessage2.length > 0) {
-        [self.display appendAttributedString:self.statusMessage2];
-    }
-    
-    if (self.statusMessage3.length > 0) {
-        [self.display appendAttributedString:self.statusMessage3];
-    }
-    
-    NSAttributedString *display = self.display.copy;
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.display replaceCharactersInRange: NSMakeRange(0, self.display.length)
+                          withAttributedString: self.statusMessage1];
+        if (self.statusMessage2.length > 0) {
+            [self.display appendAttributedString:self.statusMessage2];
+        }
+        
+        if (self.statusMessage3.length > 0) {
+            [self.display appendAttributedString:self.statusMessage3];
+        }
+        
+        NSAttributedString *display = self.display.copy;
         self.attributedText = display;
     }];
 }

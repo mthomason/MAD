@@ -171,7 +171,6 @@
 		4C26BA641BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA541BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */; };
 		4C26BA6A1BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */; };
-		4C26BA6F1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
 		4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */; };
 		4C26BA801BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */; };
@@ -687,7 +686,6 @@
 		4C67FFDB1BA133AB001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
-		4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B391E1D1E1700DC2CB0 /* MADTabBarNavigationController.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
 		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
 		4C692B481E1F13F000DC2CB0 /* MADLabelTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */; };
@@ -1451,8 +1449,6 @@
 		4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4C26BA681BAF9A2B00456DC8 /* MADToolboxDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxDisplayProtocol.h; sourceTree = "<group>"; };
 		4C26BA691BAF9A2B00456DC8 /* MTToolboxViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTToolboxViewControllerProtocol.h; sourceTree = "<group>"; };
-		4C26BA6B1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNavigationControllerHideBottomBarUnlicensed.h; path = ../MADQuery/UI/MTNavigationControllerHideBottomBarUnlicensed.h; sourceTree = "<group>"; };
-		4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTNavigationControllerHideBottomBarUnlicensed.m; path = ../MADQuery/UI/MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
 		4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
 		4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTConnectionViewController.h; path = Visualization/MTConnectionViewController.h; sourceTree = "<group>"; };
@@ -4403,8 +4399,6 @@
 				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */,
 				4C4020771BAE966000BAE5FC /* MADNavigationControllerQueryVisualization.h */,
 				4C4020781BAE966000BAE5FC /* MADNavigationControllerQueryVisualization.m */,
-				4C26BA6B1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
-				4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */,
 				4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */,
 				4C692B381E1D1E1700DC2CB0 /* MADTabBarNavigationController.h */,
@@ -6151,7 +6145,6 @@
 				4C26B9F81BAF14A500456DC8 /* MADDesignerElementPickerViewController.m in Sources */,
 				4C994F4E1BE47EC10058627A /* MADTextInputController.m in Sources */,
 				4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */,
-				4C26BA6F1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C401F291BAE703200BAE5FC /* MADTableViewCellQueryInput.m in Sources */,
 				4C4754401CF362AE00BC9E02 /* MADTableViewController.m in Sources */,
 				4C26B9CD1BAF123A00456DC8 /* MADToolboxStyleLayoutViewController.m in Sources */,
@@ -6167,7 +6160,6 @@
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */,
-				4C692B3A1E1D1E1700DC2CB0 /* MADTabBarNavigationController.m in Sources */,
 				4C59BDC11C9AA7C10031BC6C /* MADGroupOperation.m in Sources */,
 				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
 				4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */,

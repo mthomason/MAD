@@ -9,14 +9,17 @@
 #ifndef MAD_DataStructures_MADBfsProperties_h
 #define MAD_DataStructures_MADBfsProperties_h
 
-#import "MADAlgorithmElementProperties.h"
+#import <Foundation/NSObject.h>
+#import "MADAlgorithmColor.h"
 
 @class MTVertex;
 
-@interface MADBfsProperties : MADAlgorithmElementProperties
+@interface MADBfsProperties : NSObject
+    <NSCopying>
 
     @property (nonatomic, weak)   MTVertex         *bfsPredecessor;
     @property (nonatomic, strong) NSNumber         *bfsDistance;
+    @property (nonatomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

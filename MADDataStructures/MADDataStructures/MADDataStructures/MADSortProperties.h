@@ -9,9 +9,13 @@
 #ifndef MAD_DataStructures_MADSortProperties_h
 #define MAD_DataStructures_MADSortProperties_h
 
-#import "MADAlgorithmElementProperties.h"
+#import <Foundation/NSObject.h>
+#import "MADAlgorithmColor.h"
 
-@interface MADSortProperties : MADAlgorithmElementProperties
+@interface MADSortProperties : NSObject
+    <NSCopying>
+
+    @property (atomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

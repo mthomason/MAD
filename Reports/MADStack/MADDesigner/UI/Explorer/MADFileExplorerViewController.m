@@ -69,7 +69,6 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "MADNavigationController.h"
-#import "MADTabBarNavigationController.h"
 
 #import "MADQueryVisualizationViewController.h"
 
@@ -1190,7 +1189,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 // This is where we are unloading the view controller, in a sane, and stable way.
 
-- (void)viewControllerDidFinish:(id)sender {
+- (void)done:(id)sender {
     _shouldShowAddDocumentPopover = YES;
 
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -1314,18 +1313,12 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     MADTabBarController *tabBarController;
     tabBarController = [MADTabBarController newTabBarController:document prompt:title];
     
-    MADNavigationController *navigationController;
-    navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
-    
     tabBarController.document = document;
     tabBarController.viewControllerDelegate = self;
     self.tabController = tabBarController;
-    UINavigationController *onController = self.navigationController;
+    
     [self.navigationController pushViewController:tabBarController animated:YES];
 
-    //[self presentViewController:navigationController animated:YES completion:^{
-        
-    //}];
 }
 
 - (void)openDocumentAtURL:(NSURL *)url {

@@ -122,6 +122,8 @@ typedef NSMutableDictionary <NSManagedObjectID *,
     @property (nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
+    @property (nonatomic, copy) NSURL *localCacheFileURL;
+
 @end
 
 @implementation MADQueryVisualizationViewController
@@ -612,7 +614,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (void)archiveCache {
     [self updateCache];
     MADOperationArchiveData *operation;
-    operation = [[MADOperationArchiveData alloc] initWithURL: self.localCacheFileUrl
+    operation = [[MADOperationArchiveData alloc] initWithURL: self.localCacheFileURL
                                                    andObject: self.cacheData];
     [[MADCacheManager sharedManager] addOperation:operation];
 }
@@ -622,11 +624,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     MADHierarchicalDisplayModel *result;
     NSError * _Nullable __autoreleasing * _Nullable error = nil;
     NSData *data;
-    data = [[NSData alloc] initWithContentsOfURL: self.localCacheFileUrl
+    data = [[NSData alloc] initWithContentsOfURL: self.localCacheFileURL
                                          options: NSDataReadingUncached error:error];
     if (error != nil) {
     
-        [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
+        [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:error];
         result = nil;
 
     } else {
@@ -639,14 +641,14 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         } @catch (NSException *exception) {
 
             NSError *cleanup = nil;
-            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:&cleanup];
+            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:&cleanup];
         
         } @finally {
             
             if ([resultFromTryBlock isKindOfClass:[MADHierarchicalDisplayModel class]]) {
                 result = resultFromTryBlock;
             } else {
-                [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
+                [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:error];
                 result = nil;
             }
             
@@ -659,17 +661,18 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     return [MADQueryVisualizationViewController cacheFileNameForDocument:self.document];
 }
 
-- (NSURL *)localCacheFileUrl {
-    
-    MADAppDelegate delegate = [MADApplication AppDelegate];
-    NSString *groupIdentifier = [delegate groupIdentifier].copy;
-    
-    NSURL *cachedFilesDirectories;
-    cachedFilesDirectories = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-    
-    NSString *cacheFileName = [self cacheFileName];
-    return [cachedFilesDirectories URLByAppendingPathComponent: cacheFileName
-                                                   isDirectory: NO];
+- (NSURL *)localCacheFileURL {
+    if (_localCacheFileURL == nil) {
+        MADAppDelegate delegate = [MADApplication AppDelegate];
+        NSString *groupIdentifier = [delegate groupIdentifier].copy;
+        NSURL *url;
+        NSString *cacheFileName = [self cacheFileName];
+        url = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+        url = [url URLByAppendingPathComponent: cacheFileName
+                                   isDirectory: NO];
+        _localCacheFileURL = url.copy;
+    }
+    return _localCacheFileURL;
 }
 
 + (NSString *)cacheFileNameForDocument:(MADocument *)document {
@@ -749,7 +752,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     document = _document.documentObjectIDStore;
     query = document.databases.firstObject.queries.firstObject;
     
-    path = self.localCacheFileUrl.path;
+    path = self.localCacheFileURL.filePathURL.path;
     if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
         cacheData = [self loadCache];
     }
