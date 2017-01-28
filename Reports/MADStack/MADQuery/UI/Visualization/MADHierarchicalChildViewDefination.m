@@ -6,11 +6,11 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryVisualizationTableDefination.h"
+#import "MADHierarchicalChildViewDefination.h"
 #import <Foundation/NSCoder.h>
 #import <UIKit/UIGeometry.h>
 
-@implementation MADQueryVisualizationTableDefination
+@implementation MADHierarchicalChildViewDefination
 
 @synthesize center = _center;
 
@@ -39,14 +39,14 @@ static NSString * const keyRoot = @"r";
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MADQueryVisualizationTableDefination *copy = [[[self class] allocWithZone:zone] init];
+    MADHierarchicalChildViewDefination *copy = [[[self class] allocWithZone:zone] init];
     copy.center = _center;
     copy.root = _root;
     return copy;
 }
 
 + (instancetype)newTableDefination {
-    MADQueryVisualizationTableDefination *tableDefination = [[self alloc] init];
+    MADHierarchicalChildViewDefination *tableDefination = [[self alloc] init];
     return tableDefination;
 }
 

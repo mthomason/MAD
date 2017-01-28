@@ -12,11 +12,10 @@
 #import <UIKit/UIPresentationController.h>
 
 @class NSManagedObjectID;
-@class MADQueryVisualizationTableDefination;
+@class MADHierarchicalChildViewDefination;
 
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
 
-    - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID;
     - (CGRect)frameOfItemWithObjectID:(NSManagedObjectID *)objectID;
 
 @end

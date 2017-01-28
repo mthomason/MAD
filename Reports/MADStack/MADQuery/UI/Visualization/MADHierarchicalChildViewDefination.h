@@ -6,13 +6,13 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADQueryVisualizationTableDefination_h
-#define MAD_Designer_MADQueryVisualizationTableDefination_h
+#ifndef MAD_Designer_MADHierarchicalChildViewDefination_h
+#define MAD_Designer_MADHierarchicalChildViewDefination_h
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@interface MADQueryVisualizationTableDefination : NSObject
+@interface MADHierarchicalChildViewDefination : NSObject
     <NSCoding, NSCopying>
 
     + (instancetype)newTableDefination;

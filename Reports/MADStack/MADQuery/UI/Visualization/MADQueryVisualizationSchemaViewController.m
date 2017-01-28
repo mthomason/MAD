@@ -61,22 +61,23 @@
 
     @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
     @property (nonatomic, weak) IBOutlet UIView *containerView;
+    @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 
     @property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
     @property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
 
     @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
 
+
 @end
-
-static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"MADIdentifierViewControllerQueryVisualizationSchema";
-
-const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
-const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @implementation MADQueryVisualizationSchemaViewController
 
 @synthesize document = _document;
+@synthesize objectIdTag = _objectIdTag;
+@synthesize root = _root;
+
+static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"MADIdentifierViewControllerQueryVisualizationSchema";
 
 + (instancetype)newQueryVisualizationSchemaViewController {
     UIStoryboard *storyboard;
@@ -104,73 +105,35 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 - (void)dealloc { }
 
-- (void)setCenter:(CGPoint)center {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGPoint(center));
-    self.view.center = center;
-    [self.delegate didMoveFieldRect:self animated:NO];
-}
-
-- (void)setBounds:(CGRect)bounds {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGRect(bounds));
-    self.view.bounds = bounds;
-    [self.delegate didMoveFieldRect:self animated:NO];
-}
-
-- (void)setTransform:(CGAffineTransform)transform {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    self.view.transform = transform;
-    [self.delegate didMoveFieldRect:self animated:NO];
-}
-
-- (CGPoint)center {
-    return self.view.center;
-}
-
-- (CGRect)bounds {
-    return self.view.bounds;
-}
-
-- (CGAffineTransform)transform {
-    return self.view.transform;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self commonInit];
+        NSMutableArray *hasFieldsObjectIds;
+        NSSortDescriptor *namesAccending;
+        NSArray <NSSortDescriptor *> *fieldsSortDescriptors;
+        NSString *key;
+        
+        hasFieldsObjectIds = [[NSMutableArray alloc] init];
+        self.hasFieldsObjectIds = hasFieldsObjectIds;
+        
+        key = [NSStringFromSelector(@selector(databaseSchemaField)) stringByAppendingString: @"."];
+        key = [key stringByAppendingString:NSStringFromSelector(@selector(name))];
+        
+        namesAccending = [[NSSortDescriptor alloc] initWithKey: key
+                                                     ascending: YES];
+        
+        fieldsSortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
+        self.sortDescriptorsFields = fieldsSortDescriptors;
     }
     return self;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil
-                         bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit {
-    
-    NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
-    self.hasFieldsObjectIds = hasFieldsObjectIds;
-    
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
-                                                                   ascending: YES];
-    NSArray <NSSortDescriptor *> *fieldsSortDescriptors =
-                    [[NSArray <NSSortDescriptor *> alloc] initWithObjects:namesAccending, nil];
-    self.sortDescriptorsFields = fieldsSortDescriptors;
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-}
-
-- (BOOL)shouldPresentInFullscreen { return YES; }
+#pragma mark -
+#pragma mark UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.schemaTableViewController.dataSource = self;
-    self.schemaTableViewController.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
     
@@ -180,51 +143,74 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.view.layer.shadowOpacity = 1.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
-    
-    NSLayoutConstraint *width, *height;
-    width = [NSLayoutConstraint newLayoutConstraintWidthForView: self.view
-                                                       andWidth: MADSchemaViewDefaultWidth];
-    height = [NSLayoutConstraint newLayoutConstraintHeightForView: self.view
-                                                        andHeight: MADSchemaViewDefaultHeight];
-    NSArray *constraints = [[NSArray alloc] initWithObjects: width, height, nil];
-    [self.view addConstraints:constraints];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.schemaTableViewController reloadData];
+    [self.tableView reloadData];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [super prepareForSegue:segue sender:sender];
-    
-}
+#pragma mark -
+#pragma mark MADManagedObjectViewProtocol
 
-- (NSManagedObjectID *)tableObjectId {
-    return self.cachedTableObjectId;
-}
+- (void)setObjectIdTag:(NSManagedObjectID *)objectIdTag {
 
-- (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, tableObjectId);
-
-    ((MADQueryVisualizationSchemaView *)self.view).objectIdTag = tableObjectId.copy;
-    self.cachedTableObjectId = tableObjectId.copy;
-
-    RptqQueryTable *table = [self.document.managedObjectContext objectWithID: tableObjectId];
-   
-    NSString *tableAlias = table.alias.copy;
-    self.titleView.label.text = tableAlias;
-    
-    [self.hasFieldsObjectIds removeAllObjects];
-
-    NSArray <RptqQueryField *> *fields;
-    fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
-    
-    for (RptqQueryField *field in fields) {
-        NSManagedObjectID *fieldObjectID = field.objectID.copy;
-        [self.hasFieldsObjectIds addObject:fieldObjectID];
+    if (_objectIdTag != objectIdTag) {
+        
+        ((MADQueryVisualizationSchemaView *)self.view).objectIdTag = objectIdTag.copy;
+        self.cachedTableObjectId = objectIdTag.copy;
+        
+        RptqQueryTable *table = [self.document.managedObjectContext objectWithID: objectIdTag];
+        
+        NSString *tableAlias = table.alias.copy;
+        self.titleView.label.text = tableAlias;
+        
+        [self.hasFieldsObjectIds removeAllObjects];
+        
+        NSArray <RptqQueryField *> *fields;
+        fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
+        
+        for (RptqQueryField *field in fields) {
+            NSManagedObjectID *fieldObjectID = field.objectID.copy;
+            [self.hasFieldsObjectIds addObject:fieldObjectID];
+        }
+        _objectIdTag = objectIdTag.copy;
     }
 }
+
+#pragma mark -
+#pragma mark MADHierarchicalGroupingNodeProtocol
+
+- (void)setRoot:(BOOL)root {
+    if ((_root = root)) self.toolbar.barTintColor = [UIColor blueColor];
+    else self.toolbar.barTintColor = [UIColor darkGrayColor];
+}
+
+- (CGRect)frame {
+    return self.tableView.frame;
+}
+
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
+                            inView:(UIView *)containerView {
+    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
+    CGRect rectForRow;
+    if (row == NSNotFound) {
+        rectForRow = CGRectZero;
+    } else {
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
+        rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
+    }
+    return [self.tableView convertRect:rectForRow toView:containerView];
+}
+
+#pragma mark -
+#pragma mark UIPresentationController
+
+- (BOOL)shouldPresentInFullscreen { return YES; }
+
+#pragma mark -
+#pragma mark UIContentContainer
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -264,8 +250,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
+    
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
+    
     NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[(NSUInteger)indexPath.row];
+    
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
     result.detailLabel.text = field.databaseSchemaField.name.copy;
@@ -282,33 +271,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 #pragma mark - Methods
 
-- (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, managedObjectID);
-    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
-    return (MTSchemaFieldCell *)[self.schemaTableViewController cellForRowAtIndexPath:cellIndexPath];
-}
-
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, managedObjectID);
     NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
-    CGRect rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
-    return [self.schemaTableViewController convertRect:rectForRow toView:self.view];
-}
-
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
-                            inView:(UIView *)containerView {
-    NSLog(@"%s [%@::%@]", __PRETTY_FUNCTION__, containerView, managedObjectID);
-    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
-    CGRect rectForRow;
-    if (row == NSNotFound) {
-        rectForRow = CGRectZero;
-    } else {
-        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
-        rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
-    }
-    return [self.schemaTableViewController convertRect:rectForRow toView:containerView];
+    CGRect rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
+    return [self.tableView convertRect:rectForRow toView:self.view];
 }
 
 #pragma mark - UIScrollViewDelegate

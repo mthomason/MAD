@@ -12,22 +12,24 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@class MADQueryVisualizationTableDefination;
+@class MADHierarchicalChildViewDefination;
 @class MADOperation;
 @class NSManagedObjectID;
 
-@interface MADQueryVisualizationCacheData : NSObject
+@interface MADHierarchicalDisplayModel : NSObject
     <NSCoding>
 
     @property (nonatomic, assign) CGPoint scrollViewContentOffset;
     @property (nonatomic, assign) CGFloat scrollViewZoomScale;
 
     - (instancetype)initWithNumberOfTables:(NSUInteger)countTables;
-    - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination
+
+    - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
                    forObjectID:(NSManagedObjectID *)objectID;
+
     - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
-    - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
-    - (MADQueryVisualizationTableDefination *)copyTableDefinationForObjectID:(NSManagedObjectID *)objectID;
+
+    - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
 
     + (NSString *)cacheFileNameForFileName:(NSString *)filename;
 

@@ -291,7 +291,7 @@
                     <size key="freeformSize" width="540" height="620"/>
                     <connections>
                         <outlet property="containerView" destination="KMv-5c-f7e" id="7U7-Fr-dpU"/>
-                        <outlet property="schemaTableViewController" destination="8TZ-dQ-78r" id="64D-ng-noZ"/>
+                        <outlet property="tableView" destination="8TZ-dQ-78r" id="Y1d-uC-B1u"/>
                         <outlet property="titleView" destination="OIP-Z8-kxy" id="lcb-2u-F5s"/>
                         <outlet property="toolbar" destination="mOi-BF-VzE" id="rpz-Gg-XYj"/>
                         <outlet property="view" destination="X8d-qj-glr" id="4pU-b3-alX"/>

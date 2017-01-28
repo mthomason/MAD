@@ -65,11 +65,37 @@
     NSLog(@"%@", fullMessage);
 }
 
+- (NSUInteger)math1:(NSUInteger)i offset:(NSUInteger)offset multiplier:(NSUInteger)multiplier {
+    return i * multiplier + offset;
+}
+
+NSUInteger math2(NSUInteger i, NSUInteger offset, NSUInteger multiplier) {
+    return i * multiplier + offset;
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{
         // Put the code you want to measure the time of here.
+        for (NSUInteger i = 0; i < 100000000; i++) {
+            [self math1:i offset:i^2 multiplier:i*2];
+        }
     }];
+     
 }
+- (void)testPerformanceExample2 {
+    
+    [self measureBlock:^{
+        // Put the code you want to measure the time of here.
+        for (NSUInteger i = 0; i < 100000000; i++) {
+            math2(i, i^2, i*2);
+        }
+        
+        
+    }];
+    
+}
+
+
 
 @end

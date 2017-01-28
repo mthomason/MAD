@@ -83,10 +83,12 @@
                           p.y - (s.height / 2.0000f) + 1.0000f,
                           s.width, s.height);
     };
-    CGPoint (^getOriginPoint)(BOOL, CGPoint, CGPoint) = ^CGPoint(BOOL leftInital, CGPoint p1, CGPoint p2) {
-        return leftInital ? p1 : p2;
+    CGPoint (^getOriginPoint2)(BOOL, BOOL, CGPoint, CGPoint) =
+        ^CGPoint(BOOL leftToRight, BOOL leftInital, CGPoint p1, CGPoint p2) {
+            return leftToRight ?
+                        (leftInital ? p1 : p2) :
+                        (leftInital ? p2 : p1);
     };
-
 
     tangent[0] = originTangentPoint(_topLeftToBottomRight, rect);
     tangent[1] = destinationTangentPoint(_topLeftToBottomRight, rect);
@@ -99,8 +101,8 @@
         origin = originPoint(_topLeftToBottomRight, rect);
         destination = destinationPoint(_topLeftToBottomRight, rect);
         
-        connectorNobRect[0] = nobSize(getOriginPoint(_leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
-        connectorNobRect[1] = nobSize(getOriginPoint(!_leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
+        connectorNobRect[0] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
+        connectorNobRect[1] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, destination, origin), CGSizeMake(4.0000f, 4.0000f));
         
         CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
         CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);

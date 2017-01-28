@@ -24,7 +24,8 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 
 @interface MTVertex : MTObject
     <MTProtocolCompare,
-        MTProtocolLog>
+        MTProtocolLog,
+        NSCopying>
 
     - (instancetype)init;
     - (instancetype)initWithID:(NSUInteger)idnumber;

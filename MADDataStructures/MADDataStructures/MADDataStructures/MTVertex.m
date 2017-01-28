@@ -18,8 +18,8 @@
 
 @interface MTVertex()
 
-@property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
-@property (nonatomic, assign, readwrite) NSUInteger uniqueIdForStructure;
+    @property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
+    @property (nonatomic, assign, readwrite) NSUInteger uniqueIdForStructure;
 
 @end
 
@@ -38,8 +38,10 @@
         [copy.edges addObject:edgeCopy];
     }
     
-    id properties = [self.properties copyWithZone:zone];
+    id properties = [_properties copyWithZone:zone];
     copy.properties = properties;
+    copy.uniqueIdForStructure = _uniqueIdForStructure;
+    
     return copy;
 }
 

@@ -11,6 +11,7 @@
 
 #import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
+#import "MADManagedObjectViewProtocol.h"
 
 @class UITableView;
 
@@ -18,36 +19,27 @@
     - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
+@protocol MADHierarchicalGroupingNodeProtocol <NSObject>
+    @property (nonatomic, assign) BOOL root;
+    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
+                                inView:(UIView *)containerView;
+    - (CGRect)frame;
+@end
+
 @class MADocument, MTSchemaFieldCell, NSManagedObjectID;
 
-extern const CGFloat MADSchemaViewDefaultWidth;
-extern const CGFloat MADSchemaViewDefaultHeight;
-
 @interface MADQueryVisualizationSchemaViewController : UIViewController
-    <MADViewControllerDocumentProtocol>
+    <MADViewControllerDocumentProtocol,
+        MADManagedObjectViewProtocol,
+        MADHierarchicalGroupingNodeProtocol>
 
     + (instancetype)newQueryVisualizationSchemaViewController;
 
-    @property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
-    @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
+    @property (nonatomic, weak) IBOutlet UITableView *tableView;
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
     @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-    - (void)setCenter:(CGPoint)center;
-    - (void)setBounds:(CGRect)bounds;
-    - (void)setTransform:(CGAffineTransform)transform;
-
-    - (CGPoint)center;
-    - (CGRect)bounds;
-    - (CGAffineTransform)transform;
-
-    - (NSManagedObjectID *)tableObjectId;
-
-    - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
-
     - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
-    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
-                                inView:(UIView *)containerView;
 
 @end
 
