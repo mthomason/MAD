@@ -15,7 +15,7 @@
 @class NSManagedObjectContext;
 @class NSMapTable <KeyType, ObjectType>;
 @class NSOrderedSet <__covariant ObjectType>;
-
+@class NSMutableDictionary <KeyType, ObjectType>;
 @class MADModelDocument;
 @class MADModelDatabase;
 @class MADModelTable;
@@ -93,15 +93,15 @@ typedef NS_ENUM(short, MADModelType) {
     <MADModelDataProtocol>
     @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryTableIDs;
     @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryLinkIDs;
-    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *tables;
-    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelTable *> *tableSchemas;
-    @property (nonatomic, readonly, strong) NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
+    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
+    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelTable *> *tableSchemas;
+    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
     - (NSSet <NSManagedObjectID *> *)tablesInLinks;
     - (NSSet <NSManagedObjectID *> *)orphanedQueryTables;
 @end
 
 @interface MADModelQueryTable : MADObjectID
-    @property (nonatomic, readonly, strong)     NSMapTable <NSManagedObjectID *, MADModelQueryField *> *fields;
+    @property (nonatomic, readonly, strong)     NSMutableDictionary <NSManagedObjectID *, MADModelQueryField *> *fields;
 @end
 
 @interface MADModelQueryField : MADObjectID

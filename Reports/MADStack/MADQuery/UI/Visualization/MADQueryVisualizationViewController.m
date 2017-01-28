@@ -642,24 +642,31 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     data = [[NSData alloc] initWithContentsOfURL: self.localCacheFileUrl
                                          options: NSDataReadingUncached error:error];
     if (error != nil) {
+    
         [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
         result = nil;
+
     } else {
+        
         id resultFromTryBlock = nil;
         @try {
+        
             resultFromTryBlock = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        }
-        @catch (NSException *exception) {
+        
+        } @catch (NSException *exception) {
+
             NSError *cleanup = nil;
             [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:&cleanup];
-        }
-        @finally {
+        
+        } @finally {
+            
             if ([resultFromTryBlock isKindOfClass:[MADQueryVisualizationCacheData class]]) {
                 result = resultFromTryBlock;
             } else {
                 [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
                 result = nil;
             }
+            
         }
     }
     return result;
@@ -771,20 +778,6 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
     }
 }
 
-// MARK:   Auto increment row counter
-                     
-// MARK: asdf
-                     
-// TODO:  asdf
-                     
-                     // FIXME:adf
-                     
-                     // ???:adsf
-                     
-                     // !!!:adf
-
-                     // MARK: Bring all link views to top
-
 - (void)displayQuery:(MADModelQuery *)queryID
      withSchemaHints:(MADQueryVisualizationCacheData *)cacheData
             animated:(BOOL)animated {
@@ -837,7 +830,7 @@ static inline CGPoint PointInsertTable(CGFloat viewHeight, NSUInteger tableCount
                          }
                      }
                      
-                     NSEnumerator <__kindof UIView *> *views = sself.connectionViewsByObjectID.objectEnumerator;
+                     NSEnumerator <MADConnectorView *> *views = sself.connectionViewsByObjectID.objectEnumerator;
                      for (UIView *view in views) {
                          [sself.scrollView.contentView bringSubviewToFront:view];
                      }

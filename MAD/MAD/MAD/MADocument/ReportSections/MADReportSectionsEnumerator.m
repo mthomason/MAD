@@ -36,9 +36,9 @@
 
     @property (nonatomic, readwrite, strong) MADReportSection *reportHeader;
     @property (nonatomic, readwrite, strong) MADReportSection *pageHeader;
-    @property (nonatomic, readwrite, strong) NSArray <MADReportSection *> *groupHeaders;
+    @property (nonatomic, readwrite, strong) NSMutableArray <MADReportSection *> *groupHeaders;
     @property (nonatomic, readwrite, strong) MADReportSection *detail;
-    @property (nonatomic, readwrite, strong) NSArray <MADReportSection *> *groupFooters;
+    @property (nonatomic, readwrite, strong) NSMutableArray <MADReportSection *> *groupFooters;
     @property (nonatomic, readwrite, strong) MADReportSection *pageFooter;
     @property (nonatomic, readwrite, strong) MADReportSection *reportFooter;
 
@@ -88,6 +88,31 @@
 }
 
 #pragma mark -
+#pragma mark KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    
+    NSString *pathToObserve = NSStringFromSelector(@selector(hasQueryGroups));
+    if ([keyPath isEqualToString: pathToObserve]) {
+        
+        //reset the group count and read remove the group objects so they will be read again
+        //  next time around.
+        _numberOfGroups = ((RptqQuery *)object).hasQueryGroups.count;
+        
+        [_groupHeaders removeAllObjects];
+        _groupHeaders = nil;
+        
+        [_groupFooters removeAllObjects];
+        _groupFooters = nil;
+        
+    }
+    
+}
+
+#pragma mark -
 #pragma mark Properties (Report Sections)
 
 - (MADReportSection *)reportHeader {
@@ -108,7 +133,7 @@
     return _pageHeader;
 }
 
-- (NSArray <MADReportSection *> *)groupHeaders {
+- (NSMutableArray <MADReportSection *> *)groupHeaders {
     if (_groupHeaders == nil) {
         NSMutableArray <MADReportSection *> *headers = [[NSMutableArray alloc] init];
         RptqQuery *mainQuery = self.mainQuery;
@@ -134,7 +159,7 @@
     return _detail;
 }
 
-- (NSArray <MADReportSection *> *)groupFooters {
+- (NSMutableArray <MADReportSection *> *)groupFooters {
     if (_groupFooters == nil) {
         NSMutableArray <MADReportSection *> *footers = [[NSMutableArray alloc] init];
         NSArray <RptqQueryGroup *> *sortedQueryGroups = [self.mainQuery sortedQueryGroups];

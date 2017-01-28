@@ -837,11 +837,10 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
   @protected
     NSMutableOrderedSet <NSManagedObjectID *> *_queryTableIDs;
     NSMutableOrderedSet <NSManagedObjectID *> *_queryLinkIDs;
-    NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *_tables;
-    NSMapTable <NSManagedObjectID *, MADModelTable *> *_tableSchemas;
-    NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *_links;
+    NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *_tables;
+    NSMutableDictionary <NSManagedObjectID *, MADModelTable *> *_tableSchemas;
+    NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *_links;
     MADModelDatabase __weak *_database;
-  @protected
     NSManagedObjectContext * __weak _managedObjectContext;
 }
     @synthesize managedObjectContext = _managedObjectContext;
@@ -872,10 +871,8 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         @autoreleasepool {
 
             if (_tables == nil) {
-                NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *tables;
-                tables = [[NSMapTable alloc] initWithKeyOptions: NSPointerFunctionsWeakMemory
-                                                   valueOptions: NSPointerFunctionsStrongMemory
-                                                       capacity: 0];
+                NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
+                tables = [[NSMutableDictionary alloc] init];
                 _tables = tables;
             }
             
@@ -893,10 +890,8 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     if (_queryLinkIDs == nil) {
         @autoreleasepool {
             
-            NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
-            links = [[NSMapTable alloc] initWithKeyOptions: NSMapTableWeakMemory
-                                              valueOptions: NSMapTableStrongMemory
-                                                  capacity: 0];
+            NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
+            links = [[NSMutableDictionary alloc] init];
             _links = links;
             
             NSMutableOrderedSet <NSManagedObjectID *> *queryLinkIDs;
@@ -909,13 +904,11 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     return _queryLinkIDs;
 }
 
-- (NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *)tables {
+- (NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *)tables {
     if (_tables == nil) {
         @autoreleasepool {
-            NSMapTable <NSManagedObjectID *, MADModelQueryTable *> *tables;
-            tables = [[NSMapTable alloc] initWithKeyOptions: NSPointerFunctionsWeakMemory
-                                               valueOptions: NSPointerFunctionsStrongMemory
-                                                   capacity: 0];
+            NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
+            tables = [[NSMutableDictionary alloc] init];
             _tables = tables;
             
             if (_queryTableIDs == nil) {
@@ -929,14 +922,12 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     return _tables;
 }
 
-- (NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *)links {
+- (NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *)links {
     if (_links == nil) {
         @autoreleasepool {
             
-            NSMapTable <NSManagedObjectID *, MADModelQueryLink *> *links;
-            links = [[NSMapTable alloc] initWithKeyOptions: NSMapTableWeakMemory
-                                              valueOptions: NSMapTableStrongMemory
-                                                  capacity: 0];
+            NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
+            links = [[NSMutableDictionary alloc] init];
             _links = links;
 
             NSMutableOrderedSet <NSManagedObjectID *> *queryLinkIDs;
@@ -1061,6 +1052,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                                                               schemaTable: filteredResult[MADKeySchemaTable]
                                                                  capacity: fresults.count];
                 
+//                id result
                 for (filteredResult in fresults) {
                     [queryTable addField: filteredResult[MADKeyQueryField]
                              schemaField: filteredResult[MADKeySchemaField]];
@@ -1372,7 +1364,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 @implementation MADModelQueryTable {
     NSManagedObjectID *_schemaTable;
     NSMutableOrderedSet <NSManagedObjectID *> *_fieldIDs;
-    NSMapTable <NSManagedObjectID *, MADModelQueryField *> *_fields;
+    NSMutableDictionary <NSManagedObjectID *, MADModelQueryField *> *_fields;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
@@ -1389,9 +1381,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         
         id fields;
         @autoreleasepool {
-            fields = [[NSMapTable alloc] initWithKeyOptions: NSPointerFunctionsWeakMemory
-                                               valueOptions: NSPointerFunctionsStrongMemory
-                                                   capacity: capacity];
+            fields = [[NSMutableDictionary alloc] init];
             _fields = fields;
             fields = nil;
         }
@@ -1484,10 +1474,12 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 - (void)addField:(NSManagedObjectID *)fieldID
      schemaField:(NSManagedObjectID *)schemaField {
     
-    MADModelQueryField *queryField = [[MADModelQueryField alloc] initWithObjectID:fieldID
-                                                                      schemaField:schemaField];
-    [_fieldIDs addObject:fieldID];
-    [_fields setObject:queryField forKey:fieldID];
+    NSManagedObjectID *_fieldID = fieldID, *_schemaField = schemaField;
+    
+    MADModelQueryField *queryField = [[MADModelQueryField alloc] initWithObjectID:_fieldID
+                                                                      schemaField:_schemaField];
+    [_fieldIDs addObject:_fieldID];
+    [_fields setObject:queryField forKey:_fieldID];
 
 }
 

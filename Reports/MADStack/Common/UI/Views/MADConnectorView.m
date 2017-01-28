@@ -19,10 +19,7 @@
 
 @end
 
-@implementation MADConnectorView {
-    CGSize _shadowSize;
-    CGSize _smallCircleSize;
-}
+@implementation MADConnectorView
 
 @synthesize objectIdTag = _objectIdTag;
 
@@ -38,9 +35,6 @@
         self.clipsToBounds = NO;
         self.layer.masksToBounds = NO;
         self.contentMode = UIViewContentModeScaleAspectFit;
-        
-        _shadowSize = CGSizeMake(2.0000f, 2.0000f);
-        _smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
         
         UIColor *color = [MADColorEverydayApps newColorRed];
         MADColor *foregroundColor = [[MADColor alloc] initWithColor:color];
@@ -58,7 +52,7 @@
     rect = CGRectInset(rect, 10.0000f, 10.0000f);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetShadow(currentContext, _shadowSize, 5.0000f);
+    CGContextSetShadow(currentContext, CGSizeMake(2.0000f, 2.0000f), 5.0000f);
     CGContextSetLineWidth(currentContext, 3.0000f);
     
     CGRect connectorNobRect[2];
@@ -93,23 +87,24 @@
         return leftInital ? p1 : p2;
     };
 
-    origin = originPoint(_topLeftToBottomRight, rect);
-    destination = destinationPoint(_topLeftToBottomRight, rect);
-    
+
     tangent[0] = originTangentPoint(_topLeftToBottomRight, rect);
     tangent[1] = destinationTangentPoint(_topLeftToBottomRight, rect);
-    
-    connectorNobRect[0] = nobSize(getOriginPoint(_leftViewIsInital, origin, destination), _smallCircleSize);
-    connectorNobRect[1] = nobSize(getOriginPoint(!_leftViewIsInital, origin, destination), _smallCircleSize);
-    
-    CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
-    CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);
     
     if (fpclassify(tangent[0].x) >= FP_ZERO &&
         fpclassify(tangent[0].y) >= FP_ZERO &&
         fpclassify(tangent[1].x) >= FP_ZERO &&
         fpclassify(tangent[1].y) >= FP_ZERO) {
+    
+        origin = originPoint(_topLeftToBottomRight, rect);
+        destination = destinationPoint(_topLeftToBottomRight, rect);
         
+        connectorNobRect[0] = nobSize(getOriginPoint(_leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
+        connectorNobRect[1] = nobSize(getOriginPoint(!_leftViewIsInital, origin, destination), CGSizeMake(4.0000f, 4.0000f));
+        
+        CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
+        CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);
+
         CGContextMoveToPoint(currentContext, origin.x, origin.y);
         CGContextAddCurveToPoint(currentContext,
                                  tangent[0].x,
