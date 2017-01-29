@@ -11,13 +11,15 @@
 
 #import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
+#import "MADViewControllerDocumentProtocol.h"
 
 @class MADocument;
 
 @interface MADToolboxViewController : MADViewController
-    <MADToolboxDisplayProtocol>
+    <MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) MADocument *document;
+    + (instancetype)newToolboxViewController;
+
     @property (nonatomic, copy) NSSet *selectedObjectIds;
 
     @property (nonatomic, assign) BOOL clearsBackground;

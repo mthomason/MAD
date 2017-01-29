@@ -53,6 +53,8 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
 @implementation MADToolboxViewController
 
+@synthesize document = _document;
+
 + (void)initialize {
     [super initialize];
     if (self == [MADToolboxViewController class]) {
@@ -66,16 +68,6 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     }
 }
 
-- (void)dealloc {
-
-    [self removeObserver: self
-              forKeyPath: [MADToolboxViewController keyPathDocument]];
-
-    [self removeObserver: self
-              forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]];
-    
-}
-
 + (NSString *)keyPathSelectedObjectIds {
     NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));
     return selectedObjectIds;
@@ -84,6 +76,26 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 + (NSString *)keyPathDocument {
     NSString *document = NSStringFromSelector(@selector(document));
     return document;
+}
+
++ (instancetype)newToolboxViewController {
+    UIStoryboard *storyboard;
+    id toolbox;
+    
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardToolbox"
+                                           bundle: [NSBundle mainBundle]];
+    toolbox = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
+    return toolbox;
+}
+
+- (void)dealloc {
+
+    [self removeObserver: self
+              forKeyPath: [MADToolboxViewController keyPathDocument]];
+
+    [self removeObserver: self
+              forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]];
+    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -158,7 +170,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.firstTimeViewWillLayoutSubviews) {
+    if (self.childViewControllers.count == 0) {
         [self showInitalChildViewController];
     }
 }

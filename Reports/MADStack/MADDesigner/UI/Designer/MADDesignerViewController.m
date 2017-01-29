@@ -3382,7 +3382,7 @@ END_deselectElementView:;
             }
         }
         
-        //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
+        NSAssert(quickHashWorks, @"Maybe not such a good idea.");
         if (quickHashWorks == NO) {     //Case when views are off screen.
             
             RptqDocumentSectionEnumerator *sectionEnumerator;

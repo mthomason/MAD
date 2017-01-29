@@ -14,7 +14,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MADIdentifierNavigationControllerFontPicker" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="lbo-P9-ezy" customClass="MADNavigationControllerFontPicker" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="GuT-1k-PhY">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GuT-1k-PhY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
