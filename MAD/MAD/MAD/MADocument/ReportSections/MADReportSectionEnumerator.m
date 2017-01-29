@@ -10,7 +10,7 @@
 #import "MADocumentSectionType.h"
 #import "MADReportSection.h"
 #import "RptqQuery+Extras.h"
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
 
 @interface MADReportSectionEnumerator ()

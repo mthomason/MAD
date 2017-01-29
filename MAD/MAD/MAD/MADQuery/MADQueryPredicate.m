@@ -11,11 +11,11 @@
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
+#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryPredicate+Extras.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 
 #import <MADFoundation/MADDataType.h>
 

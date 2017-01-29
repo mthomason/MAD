@@ -30,14 +30,14 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSMapTable.h>
 #import <Foundation/NSOperation.h>
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDocument+CoreDataClass.h>
+#import <MAD/RptqDatabase+CoreDataClass.h>
+#import <MAD/RptqQuery+CoreDataClass.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryLinks+CoreDataClass.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 
 /*struct MADTableFieldIndex {
     NSUInteger table;

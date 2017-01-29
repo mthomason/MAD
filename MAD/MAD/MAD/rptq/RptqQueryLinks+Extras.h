@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryLinks_Extras_h
 #define Reports_RptqQueryLinks_Extras_h
 
-#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+CoreDataClass.h"
 #import <MADDataStructures/MTProtocolLog.h>
 #import "MADQueryLinkType.h"
 

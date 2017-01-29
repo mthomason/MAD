@@ -11,9 +11,9 @@
 #import <Foundation/NSString.h>
 
 #import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryField.h"
-#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
 #import "RptqDocumentObject+Extras.h"
 #import "MTDatabase.h"
 #import "MTDataTableFast.h"

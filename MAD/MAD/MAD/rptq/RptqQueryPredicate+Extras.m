@@ -19,11 +19,11 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqDatabase+Extras.h"
-#import "RptqQuery.h"
+#import "RptqQuery+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 
@@ -33,9 +33,11 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

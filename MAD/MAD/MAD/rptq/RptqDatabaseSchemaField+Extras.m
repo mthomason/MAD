@@ -19,8 +19,8 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "MTDatabaseField.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 
@@ -30,8 +30,11 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

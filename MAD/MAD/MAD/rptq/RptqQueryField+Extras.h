@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryField_Extras_h
 #define Reports_RptqQueryField_Extras_h
 
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import <MADDataStructures/MTProtocolLog.h>
 
 @interface RptqQueryField (Extras) <MTProtocolLog>

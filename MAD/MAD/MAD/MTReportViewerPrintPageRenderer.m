@@ -25,22 +25,22 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentObject+Extras.h"
 
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 
-#import "RptqQueryField.h"
-#import "RptqUserCredentals.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 
-#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectLabel+CoreDataClass.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectImage+CoreDataClass.h"
 
 #import "MTPaper.h"
 

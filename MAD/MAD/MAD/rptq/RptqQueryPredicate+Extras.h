@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryPredicate_Extras_h
 #define Reports_RptqQueryPredicate_Extras_h
 
-#import "RptqQueryPredicate.h"
+#import "RptqQueryPredicate+CoreDataClass.h"
 #import "MADPredicateOperator.h"
 
 #define MADPredicateOperatorSymbols [NSArray arrayWithObjects: @"=", @"<>", @">", @">=", @"<", @"<=", nil]

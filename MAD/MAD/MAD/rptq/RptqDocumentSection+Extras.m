@@ -26,21 +26,21 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
 
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqDatabase+Extras.h"
 
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 
-#import "RptqQuery.h"
+#import "RptqQuery+CoreDataClass.h"
 #import "RptqQuery+Extras.h"
 
-#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+CoreDataClass.h"
 #import "RptqQueryGroup+Extras.h"
 
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentSectionRows+Extras.h"
 
-#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+CoreDataClass.h"
 #import "RptqDocumentObject+Extras.h"
 #import "NSManagedObject+Extras.h"
 

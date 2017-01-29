@@ -19,11 +19,11 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocument.h"
-#import "RptqDocumentObject.h"
+#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocumentObject+CoreDataClass.h"
 #import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 
@@ -35,8 +35,11 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -76,25 +79,21 @@
     entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
                                                          inManagedObjectContext: managedObjectContext];
     
-    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: managedObjectContext];
-
     NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
     RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                  insertIntoManagedObjectContext: managedObjectContext];
     
-    dataObject.isFormula = reportObject;
-    dataObject.isFormula.source = formulaText;
+    reportObject.source = formulaText;
     NSNumber *typeFormula = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeFormula];
-    dataObject.type = typeFormula;
+    reportObject.type = typeFormula;
     
-    NSMutableOrderedSet *hasObjects;
-    hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[document.hasDetailSection.hasRows[0] hasObjects]];
-    [hasObjects insertObject:dataObject atIndex:0];
+    NSMutableOrderedSet <RptqDocumentObject *> *hasObjects;
+    hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
+    [hasObjects insertObject:reportObject atIndex:0];
     [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     
-    return dataObject;
+    return reportObject;
 }
 
 #pragma mark - MTProtocolLog

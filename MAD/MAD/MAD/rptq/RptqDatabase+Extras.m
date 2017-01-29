@@ -11,9 +11,9 @@
 #endif
 
 #import "RptqDatabase+Extras.h"
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -30,8 +30,11 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

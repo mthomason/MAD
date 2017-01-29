@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentObjectLabelDataField_Extras_h
 #define Reports_RptqDocumentObjectLabelDataField_Extras_h
 
-#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
 #import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectLabelDataField (Extras)

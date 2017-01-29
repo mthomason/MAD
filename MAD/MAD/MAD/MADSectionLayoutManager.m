@@ -12,8 +12,8 @@
 #import "MADSectionLayoutAttributes.h"
 
 #import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 

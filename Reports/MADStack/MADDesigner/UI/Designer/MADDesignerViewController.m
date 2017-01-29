@@ -58,13 +58,13 @@
 #import <MAD/RptqDocumentObject+Extras.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
-#import <MAD/RptqDocumentObjectLabel.h>
-#import <MAD/RptqDocumentObjectLabelDataField.h>
+#import <MAD/RptqDocumentObjectLabel+CoreDataClass.h>
+#import <MAD/RptqDocumentObjectLabelDataField+CoreDataClass.h>
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqDocumentSection+Extras.h>
-#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentSectionRows+CoreDataClass.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADTabBarController.h"
@@ -1658,11 +1658,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                     }
                     
                     case MTDocumentObjectTypeBarcode: {
-                        RptqDocumentObjectBarcode *barcode = objectToEdit.isBarcode;
-                        NSManagedObjectID *objectID  = objectToEdit.objectID.copy,
-                                          *barcodeID = barcode.objectID.copy;
-                        [self editDocumentObjectBarcodeWithID: objectID
-                                                 andBarcodeID: barcodeID];
+                        NSManagedObjectID *objectID  = objectToEdit.objectID.copy;
+                        [self editDocumentObjectBarcodeWithID: objectID];
                         break;
                     }
                     
@@ -1748,10 +1745,9 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
 }
 
-- (void)editDocumentObjectBarcodeWithID:(NSManagedObjectID *)objectID
-                           andBarcodeID:(NSManagedObjectID *)barcodeID {
+- (void)editDocumentObjectBarcodeWithID:(NSManagedObjectID *)objectID {
     
-    self.barcodeToEditObjectID = barcodeID.copy;
+    self.barcodeToEditObjectID = objectID.copy;
     
     MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -1767,7 +1763,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         barcodeViewController.delegate = strongself;
         barcodeViewController.preferredContentSize = sizePopoverFonts();
         barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
-        barcodeViewController.bartcodeToEditObjectID = barcodeID;
+        barcodeViewController.bartcodeToEditObjectID = objectID.copy;
 
         UIPopoverPresentationController *popoverController;
         popoverController = barcodeViewController.popoverPresentationController;
@@ -1837,14 +1833,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     UIAlertController *alert;
     NSString *newText;
-    RptqDocumentObjectLabel *isLabel;
     
-    isLabel = object.isLabel;
-    newText = isLabel.text.copy;
+    newText = ((RptqDocumentObjectLabel *)object).text.copy;
     
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-    RptqDocumentObject *documentObject;
-    documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
+    //RptqDocumentObject *documentObject;
+    //documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
 
     void (^configureLabel)(UITextField *);
     configureLabel = ^(UITextField *textField) {
@@ -1854,10 +1848,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     void (^completion)(UIAlertAction *action, NSString *text);
     completion = ^(UIAlertAction *action, NSString *text) {
-        RptqDocumentObjectLabel *textLabel;
-        textLabel = documentObject.isLabel;
-        textLabel.text = text.copy;
-        [documentObject.managedObjectContext save:nil];
+        
+        ((RptqDocumentObjectLabel *)object).text = text.copy;
+        [object.managedObjectContext save:nil];
+        
     };
     
     alert = [MADAlertController newAlertControllerEditLabel: configureLabel
@@ -1914,8 +1908,9 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)field {
 
-    RptqDocumentObject *documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
-    documentObject.isLabelDataField.referencesQueryField = field;
+    RptqDocumentObjectLabelDataField *documentObject;
+    documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
+    documentObject.referencesQueryField = field;
     [field.managedObjectContext save:nil];
     
 }
@@ -2643,12 +2638,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         MTBarcode *barcode = viewController.barcode;
         
         NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
-        RptqDocumentObject *object;
-        object = (RptqDocumentObject *)[managedObjectContext objectWithID:_objectIdEditBarcode];
-        RptqDocumentObjectBarcode *barcodeObject = object.isBarcode;
-        [barcodeObject updateWithBarcode: barcode
-                                fieldOne: viewController.queryField1
-                                fieldTwo: viewController.queryField2];
+        RptqDocumentObjectBarcode *object;
+        object = (RptqDocumentObjectBarcode *)[managedObjectContext objectWithID:_objectIdEditBarcode];
+        [object updateWithBarcode: barcode
+                         fieldOne: viewController.queryField1
+                         fieldTwo: viewController.queryField2];
         _objectIdEditBarcode = nil;
         
     } else {
@@ -3309,7 +3303,7 @@ END_deselectElementView:;
     MADDesignerSectionView *documentSectionView;
     RptqDocumentSection *documentSection;
     for (documentSection in sectionEnumerator) {
-        documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
+        documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier];
 
         NSInteger numberOfItemsInSection,
                   numberOfSections = documentSectionView.numberOfSections,
@@ -3390,7 +3384,7 @@ END_deselectElementView:;
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView;
-                documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
+                documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier];
                 
                 for (NSInteger section = 0;
                      section < [documentSectionView numberOfSections];

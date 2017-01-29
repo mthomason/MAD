@@ -10,8 +10,8 @@
 #import "MTDatabase.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 #import "MTDataTableFast.h"
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqDocumentObject+Extras.h"
 #import "MTReportFormatter.h"
@@ -19,7 +19,7 @@
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+CoreDataClass.h"
 
 #import <MADBarcodes/MTBarcode.h>
 
@@ -30,7 +30,7 @@
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super init]) {
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        RptqDocumentObject *item;
+        RptqDocumentObjectBarcode *item;
         MTDatabase *database;
         
         datasource = definition.datasource;
@@ -38,23 +38,23 @@
         database = datasource.database;
         NSDictionary *rowData = [datasource.dataTable copyDataForCacheId:definition.detailRowId];
         
-        NSString *tableQueryAlias1 = [item.isBarcode.referencesField1.inQueryTable copyQueryAlias];
-        NSString *tableQueryAlias2 = [item.isBarcode.referencesField2.inQueryTable copyQueryAlias];
+        NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
+        NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable copyQueryAlias];
         
         MADSafeQueryField *tableFieldKey1, *tableFieldKey2;
-        tableFieldKey1 = [database newSafeQueryField: item.isBarcode.referencesField1.databaseSchemaField.name
+        tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name
                                             andTable: tableQueryAlias1];
-        tableFieldKey2 = [database newSafeQueryField: item.isBarcode.referencesField2.databaseSchemaField.name
+        tableFieldKey2 = [database newSafeQueryField: item.referencesField2.databaseSchemaField.name
                                             andTable: tableQueryAlias2];
         
-        NSString *input1 = [self inputForField: item.isBarcode.referencesField1
-                             forDocumentObject: item.isBarcode.parentObjectBarcode
+        NSString *input1 = [self inputForField: item.referencesField1
+                             forDocumentObject: item.parentObjectBarcode
                                          value: rowData[tableFieldKey1]];
-        NSString *input2 = [self inputForField: item.isBarcode.referencesField2
-                             forDocumentObject: item.isBarcode.parentObjectBarcode
+        NSString *input2 = [self inputForField: item.referencesField2
+                             forDocumentObject: item.parentObjectBarcode
                                          value: rowData[tableFieldKey2]];
         
-        MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:item.isBarcode
+        MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:item
                                                                               input1:input1
                                                                               input2:input2];
         _drawingObject = barcode;

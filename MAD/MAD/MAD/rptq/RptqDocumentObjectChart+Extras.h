@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 /*
-#import "RptqDocumentObjectChart.h"
-#import "RptqDocument.h"
+#import "RptqDocumentObjectChart+CoreDataClass.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocumentObjectFactory.h"
 #import "RptqDocumentObject+Extras.h"
 

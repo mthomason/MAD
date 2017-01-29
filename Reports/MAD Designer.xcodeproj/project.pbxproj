@@ -7564,7 +7564,7 @@
 				4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */,
 				4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */,
 			);
-			currentVersion = 4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */;
+			currentVersion = 4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */;
 			path = MAD.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

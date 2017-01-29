@@ -14,6 +14,8 @@
 #import <UIKit/UIPrintInteractionController.h>
 #import <CoreData/NSManagedObjectID.h>
 
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
 #import "MADReportFormatterDataSourceProtocol.h"
 
 #import "MADSectionRepresentation.h"
@@ -26,7 +28,7 @@
 
 #import "RptqDocument+Extras.h"
 
-#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+CoreDataClass.h"
 
 #import "RptqQuery+Extras.h"
 
@@ -45,7 +47,6 @@
 
 #import "MADSectionRepresentation.h"
 
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 
 NSString * const MTNullIdentifier = @"(null)";

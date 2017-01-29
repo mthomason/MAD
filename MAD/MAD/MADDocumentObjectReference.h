@@ -29,7 +29,7 @@
 
     @property (readonly, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *> *fontDescriptors;
-    @property (readwrite, nonatomic, weak) RptqDocumentObject *item;
+    @property (readwrite, nonatomic, weak) __kindof RptqDocumentObject *item;
 
     @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
     @property (readwrite, nonatomic, assign) NSUInteger detailRowId;

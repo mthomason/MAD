@@ -19,9 +19,9 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocumentObject+Extras.h"
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDataHelper.h"
@@ -40,9 +40,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

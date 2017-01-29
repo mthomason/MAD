@@ -28,7 +28,7 @@
 
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqQueryField+Extras.h>
-#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 
 #import "MADTableViewControllerOpperators.h"
 

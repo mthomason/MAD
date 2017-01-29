@@ -7,6 +7,7 @@
 //
 
 #import "MTGraph+RptqQuery.h"
+
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSEntityDescription.h>
@@ -15,6 +16,7 @@
 #import <CoreData/NSFetchedPropertyDescription.h>
 #import <CoreData/NSPropertyDescription.h>
 #import <CoreData/NSFetchRequest.h>
+
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSComparisonPredicate.h>
@@ -24,11 +26,12 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSMapTable.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryLinks.h>
+
+#import <MAD/RptqQuery+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqQueryLinks+CoreDataClass.h>
 
 #import <MADDataStructures/MTVertex.h>
 

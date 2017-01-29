@@ -19,11 +19,11 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
-#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+CoreDataClass.h>
 #import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/RptqDocumentObjectLabelDataField.h>
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqDocumentObjectLabelDataField+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MADToolboxFormatViewController ()
@@ -85,8 +85,8 @@
     
     for (NSManagedObjectID *objectId in objectIds) {
 
-        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-        MADDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
+        RptqDocumentObjectLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType.shortValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;

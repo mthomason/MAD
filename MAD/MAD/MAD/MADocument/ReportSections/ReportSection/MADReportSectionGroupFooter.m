@@ -8,7 +8,7 @@
 
 #import "MADReportSectionGroupFooter.h"
 #import <Foundation/NSBundle.h>
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+CoreDataProperties.h"
 #import "RptqQueryGroup+Extras.h"
 
 static NSString * const Format = @"Group Footer - (%@)";

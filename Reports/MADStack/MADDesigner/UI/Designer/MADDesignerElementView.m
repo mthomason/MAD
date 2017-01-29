@@ -17,10 +17,10 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+CoreDataClass.h>
 #import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/RptqDocumentObjectImage.h>
-#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectImage+CoreDataClass.h>
+#import <MAD/RptqDocumentObjectBarcode+CoreDataClass.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MAD/MADocumentObjectAttributesText.h>
@@ -315,11 +315,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         switch (documentObject.documentObjectType) {
                 
             case MTDocumentObjectTypeImage:
-                self.displayImage = documentObject.isImage.image;
+                self.displayImage = ((RptqDocumentObjectImage *)documentObject).image;
                 break;
                 
             case MTDocumentObjectTypeBarcode: {
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:documentObject.isBarcode];
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:documentObject];
                 self.displayBarcode = displayBarcode;
                 break;
             }

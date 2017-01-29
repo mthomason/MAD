@@ -80,7 +80,7 @@
 #import "RptqQueryGroup+Extras.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
 

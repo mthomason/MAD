@@ -9,7 +9,7 @@
 #import "MADQueryFullTableEnumerator.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 
 @interface MADQueryFullTableEnumerator ()
 

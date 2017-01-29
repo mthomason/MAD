@@ -7,13 +7,15 @@
 //
 
 #import "MADDocumentObjectImage.h"
-#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectImage+CoreDataClass.h"
 #import "MADDocumentObjectCachedDataReferenceItem.h"
 #import "MADDocumentObjectReference.h"
-#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentObjectImage+CoreDataProperties.h"
+#import <UIKit/UIImage.h>
 
 @interface MADDocumentObjectImage ()
-    @property (nonatomic, weak) RptqDocumentObject *item;
+    @property (nonatomic, weak) RptqDocumentObjectImage *item;
 @end
 
 @implementation MADDocumentObjectImage
@@ -26,7 +28,7 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
-    [self.item.isImage.image drawInRect:rect];
+    [(UIImage *)self.item.image drawInRect:rect];
 }
 
 @end

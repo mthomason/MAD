@@ -48,22 +48,22 @@
 
 #import <MAD/MADocument.h>
 
-#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+CoreDataClass.h>
 #import <MAD/RptqDocument+Extras.h>
 
-#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+CoreDataClass.h>
 #import <MAD/RptqDatabase+Extras.h>
 
-#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+CoreDataClass.h>
 #import <MAD/RptqQuery+Extras.h>
 
-#import <MAD/RptqQueryLinks.h>
+#import <MAD/RptqQueryLinks+CoreDataClass.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqQueryField+Extras.h>
 
-#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
 #import <MAD/RptqQueryTable+Extras.h>
 
 #import <MAD/MADModel.h>

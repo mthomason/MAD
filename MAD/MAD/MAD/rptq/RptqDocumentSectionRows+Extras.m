@@ -11,7 +11,8 @@
 #endif
 
 #import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows+CoreDataProperties.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -37,9 +38,6 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
@@ -74,7 +72,7 @@
 
     } else {
 
-        NSMutableOrderedSet* tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.hasObjects];
+        NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
         [tempSet addObject:value];
         self.hasObjects = tempSet;
 
@@ -99,7 +97,6 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"********* RptqDocumentSectionRows *********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
     [description appendFormat:@"Row:                    %li\n", (long)self.rowNumber.integerValue];
     [description appendFormat:@"Height:                 %f\n", self.layoutHeight.floatValue];
     [description appendFormat:@"********* RptqDocumentSectionRows *********"];

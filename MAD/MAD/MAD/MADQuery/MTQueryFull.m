@@ -38,27 +38,27 @@
 #import "MADQueryCacheFullParameters.h"
 
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryLinks+Extras.h"
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryPredicate+Extras.h"
-#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+CoreDataClass.h"
 
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectBarcode+CoreDataClass.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
+#import "RptqDocumentObjectAggregate+CoreDataClass.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 #import "MADQueryPredicate.h"
 #import "MADQueryLimitClause.h"
 
-#import "RptqQuerySort.h"
+#import "RptqQuerySort+CoreDataClass.h"
 
 #import "MADQueryActiveQueryFields.h"
 #import "MADQuerySelectExpression.h"

@@ -11,11 +11,11 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSString.h>
 
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocumentSectionEnumerator.h"
-#import "RptqQueryGroup.h"
-#import "RptqQuery.h"
-#import "RptqDatabase.h"
+#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQuery+CoreDataClass.h"
+#import "RptqDatabase+CoreDataClass.h"
 
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocument+Extras.h"

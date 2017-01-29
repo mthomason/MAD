@@ -18,7 +18,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqQueryField+Extras.h>
 
 #import "MTQueryBuilderSortTypeViewController.h"

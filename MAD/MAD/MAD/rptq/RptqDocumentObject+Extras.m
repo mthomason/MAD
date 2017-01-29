@@ -25,19 +25,23 @@
 
 #import "MTAlignment.h"
 #import "MADFont.h"
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectGroupKey+CoreDataClass.h"
+#import "RptqDocumentObjectGroupKey+CoreDataProperties.h"
+#import "RptqDocumentObjectAggregate+CoreDataClass.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectFormula.h"
-#import "RptqDocumentObjectGroupKey.h"
-#import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectImage.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentSection.h"
+#import "RptqDocumentObjectFormula+CoreDataClass.h"
+#import "RptqDocumentObjectFormula+CoreDataProperties.h"
+#import "RptqDocumentObjectGroupKey+CoreDataClass.h"
+#import "RptqDocumentObjectLabel+CoreDataClass.h"
+#import "RptqDocumentObjectImage+CoreDataClass.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataProperties.h"
+#import "RptqDocumentObjectBarcode+CoreDataClass.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+CoreDataClass.h"
 
 #import "MADSectionLayoutManager.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
@@ -141,7 +145,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
     NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: documentObject.inSectionRow.hasObjects];
+    NSMutableOrderedSet *hasObjects = documentObject.inSectionRow.hasObjects.mutableCopy;
     [hasObjects removeObjectAtIndex:deleteIndex];
     
     [layoutManager removeItemWithID:documentObject.objectID];
@@ -331,7 +335,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     switch (self.type.integerValue) {
     
         case MTDocumentObjectTypeAggregate: {
-            result = [self.isAggregate copyDesignerRepresentationText];
+            result = [self copyDesignerRepresentationText];
             break;
         }
 
@@ -340,11 +344,12 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
             break;
 
         case MTDocumentObjectTypeFormula:
-            result = self.isFormula.source;
+            result = [(RptqDocumentObjectFormula *)self source];
             break;
         
         case MTDocumentObjectTypeGroupKey: {
-            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: self.isGroupKey.groupNumber
+            NSNumber *groupNumber = [((RptqDocumentObjectGroupKey *)self) groupNumber];
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
             result = [[NSString alloc] initWithFormat:gorupFormatString, groupNumberText.uppercaseString];
@@ -356,19 +361,18 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
             break;
         
         case MTDocumentObjectTypeLabelDynamic:
-            result = self.isLabelDataField.referencesQueryField.toStringReverse;
+            result = [((RptqDocumentObjectLabelDataField *)self) referencesQueryField].toStringReverse;
             break;
         
         case MTDocumentObjectTypeLabelStatic:
-            result = self.isLabel.text;
+            result = ((RptqDocumentObjectLabel *)self).text;
             break;
         case MTDocumentObjectTypeWhtiespace:
             result = @"Whitespace";
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            NSString *barcodeName = [self.isBarcode copyBarcodeTypeName];
-            // [MTBarcode newBarcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
+            NSString *barcodeName = [(RptqDocumentObjectBarcode *)self copyBarcodeTypeName];
             result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }

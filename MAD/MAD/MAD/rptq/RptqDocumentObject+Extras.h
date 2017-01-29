@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentObject_Extras_h
 #define Reports_RptqDocumentObject_Extras_h
 
-#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+CoreDataClass.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <MADDataStructures/MTProtocolLog.h>
 #import <MAD/RptqDocumentObjectFactory.h>

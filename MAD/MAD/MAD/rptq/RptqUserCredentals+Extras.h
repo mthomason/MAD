@@ -9,7 +9,7 @@
 #ifndef Reports_RptqUserCredentals_Extras_h
 #define Reports_RptqUserCredentals_Extras_h
 
-#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
 @interface RptqUserCredentals (Extras)
 

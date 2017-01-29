@@ -16,9 +16,9 @@
 #import <MADDataStructures/MTVertex.h>
 
 #import "MADQueryActiveQueryFields.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "MTDatabase.h"
 
 @implementation MADQuerySelectExpression

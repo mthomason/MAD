@@ -22,7 +22,7 @@
 
 @implementation RptqDataHelper
 
-+ (NSNumber *)nextIdentifierForClass:(Class)class
++ (int64_t)nextIdentifierForClass:(Class)class
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSString *keyEDIdentifer = @"ID";
@@ -60,8 +60,7 @@
     int64_t identifier64;
     CFNumberGetValue(identifier, kCFNumberSInt64Type, &identifier64);
     identifier64++;
-    identifier = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier64);
-    return CFBridgingRelease(identifier);
+    return identifier64;
 }
 
 - (void)identifier {

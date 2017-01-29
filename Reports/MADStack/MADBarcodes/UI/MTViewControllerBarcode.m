@@ -29,13 +29,13 @@
 #import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADDatabaseConnection.h>
 
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqQueryField+Extras.h>
 
-#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectBarcode+CoreDataClass.h>
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>

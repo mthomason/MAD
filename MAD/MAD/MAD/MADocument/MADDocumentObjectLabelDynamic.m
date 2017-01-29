@@ -9,13 +9,13 @@
 #import "MADDocumentObjectLabelDynamic.h"
 #import <Foundation/NSString.h>
 #import "MTDataTable.h"
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqQueryField.h"
-#import "RptqQueryTable.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "MTDatabase.h"
 #import "MTReportFormatter.h"
 
@@ -33,20 +33,20 @@
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        RptqDocumentObject *item;
+        RptqDocumentObjectLabelDataField *item;
         
         datasource = definition.datasource;
         item = definition.item;
-        NSString *qa = [item.isLabelDataField.referencesQueryField.inQueryTable copyQueryAlias];
-        NSString *tableFieldKey = [datasource.database newSafeQueryField: item.isLabelDataField.referencesQueryField.databaseSchemaField.name
+        NSString *qa = [item.referencesQueryField.inQueryTable copyQueryAlias];
+        NSString *tableFieldKey = [datasource.database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                                 andTable: qa];
 
         NSDictionary *rowData = [datasource.dataTable copyDataForCacheId: definition.detailRowId
                                                      andColumnIdentifier: tableFieldKey];
         if (rowData != nil) {
             
-            NSString *text = [item.isLabelDataField formattedString: item.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.shortValue
-                                                           forValue: rowData[tableFieldKey]];
+            NSString *text = [item formattedString: item.referencesQueryField.databaseSchemaField.dataType.shortValue
+                                          forValue: rowData[tableFieldKey]];
             self.text = text.copy;
             if ([self.text isEqualToString:MTNullIdentifier]) {
                 self.text = @"";

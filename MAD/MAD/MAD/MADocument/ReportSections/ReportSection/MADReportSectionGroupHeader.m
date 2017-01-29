@@ -8,7 +8,7 @@
 
 #import "MADReportSectionGroupHeader.h"
 #import <Foundation/NSBundle.h>
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqQueryGroup+Extras.h"
 
 static NSString * const Format = @"Group Header (%@)";

@@ -13,7 +13,7 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
-#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
 #import <MADFoundation/MADURL.h>
 

@@ -24,33 +24,33 @@
 #import "MTDatabaseField.h"
 #import "MTDatabase.h"
 
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
 
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
 
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqDatabase+Extras.h"
 
-#import "RptqQuery.h"
+#import "RptqQuery+CoreDataClass.h"
 
-#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+CoreDataClass.h"
 
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryField+Extras.h"
 
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+CoreDataClass.h"
 #import "RptqQueryLinks+Extras.h"
 
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 
-#import "RptqQueryTable.h"
+#import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "MADSortOrder.h"
@@ -82,10 +82,11 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-    
-
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

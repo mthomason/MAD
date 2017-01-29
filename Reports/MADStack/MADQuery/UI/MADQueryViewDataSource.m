@@ -32,7 +32,7 @@
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>

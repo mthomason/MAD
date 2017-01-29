@@ -10,6 +10,9 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import "RptqDocumentSection+Extras.h"
+#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocumentSection+CoreDataProperties.h"
+
 #import "MADReportSectionReportHeader.h"
 #import "MADReportSectionPageHeader.h"
 #import "MADReportSectionGroupHeader.h"
@@ -108,7 +111,7 @@
 }
 
 - (NSInteger)identifier {
-    return self.documentSection.identifier.integerValue;
+    return self.documentSection.identifier;
 }
 
 @end

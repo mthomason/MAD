@@ -25,7 +25,7 @@
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 #import "RptqDataHelper.h"
 
 @implementation RptqQueryTable (Extras)
@@ -35,10 +35,11 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-    
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID

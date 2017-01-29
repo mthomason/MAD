@@ -13,13 +13,13 @@
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
 
-#import "RptqDocument.h"
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQuery.h"
-#import "RptqQueryField.h"
-#import "RptqQueryTable.h"
+#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "MADSQLJoinType.h"
@@ -47,9 +47,11 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[RptqQueryLinks class]
-                                        managedObjectContext:self.managedObjectContext];
+    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                           managedObjectContext:self.managedObjectContext];
+    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
+    self.identifier = (__bridge NSNumber * _Nullable)(n);
+    CFRelease(n);
 }
 
 - (void)awakeFromFetch {

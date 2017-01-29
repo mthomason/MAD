@@ -44,14 +44,14 @@
 #import "MTQuery.h"
 #import "MTKeyChain.h"
 
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 
-#import "RptqQueryTable.H"
+#import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 
 #import "MTDatabaseProcessSqlServer.h"
 

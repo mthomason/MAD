@@ -10,7 +10,7 @@
 
 #import <Foundation/NSString.h>
 
-#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
 #import "MADDatabaseConnection.h"
 

@@ -37,14 +37,14 @@
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 #import <MAD/RptqUserCredentals+Extras.h>
-#import <MAD/RptqDocumentSection.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDocumentSection+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
 #import <MAD/MADModel.h>
 
 #import "MADLabelTitle.h"

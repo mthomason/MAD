@@ -14,7 +14,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 
-#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
 @implementation MTDatabaseConnectionSqlServer
 

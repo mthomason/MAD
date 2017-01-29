@@ -12,7 +12,7 @@
 
 #import "MTDatabaseConnectionMySql.h"
 #import <Foundation/NSCharacterSet.h>
-#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+CoreDataClass.h"
 
 @implementation MTDatabaseConnectionMySql
 

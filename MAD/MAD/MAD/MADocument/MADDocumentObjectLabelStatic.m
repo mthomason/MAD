@@ -8,8 +8,8 @@
 
 #import "MADDocumentObjectLabelStatic.h"
 #import <UIKit/NSStringDrawing.h>
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentObjectLabel+CoreDataClass.h"
 #import "MADocumentObjectAttributesText.h"
 #import "MADDocumentObjectReference.h"
 
@@ -17,7 +17,7 @@
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
-        self.text = definition.item.isLabel.text.copy;
+        self.text = ((RptqDocumentObjectLabel *)definition.item).text.copy;
     }
     return self;
 }

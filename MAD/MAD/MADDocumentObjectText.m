@@ -9,7 +9,7 @@
 #import "MADDocumentObjectText.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
-#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+CoreDataClass.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADocumentObjectAttributesText.h"

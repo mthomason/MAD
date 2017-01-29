@@ -9,16 +9,16 @@
 #import "MADQuerySelectExpressionAllFields.h"
 
 #import <CoreData/NSManagedObjectContext.h>
+#import <Foundation/NSString.h>
 
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 
 #import "MADQueryActiveQueryFields.h"
-#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqQueryField.h"
+#import "RptqQueryField+CoreDataClass.h"
 #import "MTDatabase.h"
-#import <Foundation/NSString.h>
 
 @implementation MADQuerySelectExpressionAllFields
 

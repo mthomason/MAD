@@ -14,9 +14,9 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
-#import "RptqDatabase.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 #import "MTDatabase.h"
 #import "MTDataTable.h"
 #import "MADDatabaseConnection.h"

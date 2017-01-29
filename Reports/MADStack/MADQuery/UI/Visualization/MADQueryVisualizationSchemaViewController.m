@@ -38,13 +38,13 @@
 
 #import <MAD/MADocument.h>
 
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqQueryField+Extras.h>
 
-#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryTable+CoreDataClass.h>
 #import <MAD/RptqQueryTable+Extras.h>
 
-#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import "MADIdentifiersStoryboards.h"

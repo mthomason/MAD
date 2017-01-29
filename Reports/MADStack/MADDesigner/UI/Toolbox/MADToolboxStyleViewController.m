@@ -25,7 +25,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
-#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+CoreDataClass.h>
 #import <MAD/RptqDocumentObject+Extras.h>
 #import "MADReportDesignerFontSelectorDelegateProtocol.h"
 

@@ -15,8 +15,8 @@
 
 @interface RptqDataHelper : NSObject
 
-    + (NSNumber *)nextIdentifierForClass:(Class)class
-            managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (int64_t)nextIdentifierForClass:(Class)class
+        managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 
