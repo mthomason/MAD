@@ -48,10 +48,10 @@
                                             andTable: tableQueryAlias2];
         
         NSString *input1 = [self inputForField: item.referencesField1
-                             forDocumentObject: item.parentObjectBarcode
+                             forDocumentObject: item
                                          value: rowData[tableFieldKey1]];
         NSString *input2 = [self inputForField: item.referencesField2
-                             forDocumentObject: item.parentObjectBarcode
+                             forDocumentObject: item
                                          value: rowData[tableFieldKey2]];
         
         MTBarcode *barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:item

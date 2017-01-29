@@ -30,7 +30,7 @@
 @implementation RptqDocumentElementFormula (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self.parentObjectFormula formattedString:dataType forValue:value];
+    return [self formattedString:dataType forValue:value];
 }
 
 - (void)awakeFromInsert {

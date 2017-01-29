@@ -121,16 +121,16 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
         result = (RptqDocumentElement *)managedObject;
         
     } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
-        result = ((RptqDocumentElementGroupKey *)managedObject).parentObject;
+        result = ((RptqDocumentElementGroupKey *)managedObject);
         
     } else if ([managedObject isKindOfClass:[RptqDocumentElementLabel class]]) {
-        result = ((RptqDocumentElementLabel *)managedObject).parentObjectLabel;
+        result = ((RptqDocumentElementLabel *)managedObject);
         
     } else if ([managedObject isKindOfClass:[RptqDocumentElementBarcode class]]) {
-        result = ((RptqDocumentElementBarcode *)managedObject).parentObjectBarcode;
+        result = ((RptqDocumentElementBarcode *)managedObject);
         
     } else if ([managedObject isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
-        result = ((RptqDocumentElementLabelDataField *)managedObject).parentObjectLabelDataField;
+        result = ((RptqDocumentElementLabelDataField *)managedObject);
         
     }
     return result;

@@ -11,6 +11,8 @@
 #endif
 
 #import "RptqDocumentElementLabel+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement+CoreDataProperties.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -25,19 +27,13 @@
 @implementation RptqDocumentElementLabel (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self.parentObjectLabel formattedString:dataType forValue:value];
+    return [self formattedString:dataType forValue:value];
 }
 
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
-    
 }
 
 - (void)awakeFromFetch {

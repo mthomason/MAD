@@ -8,7 +8,7 @@
 
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentElement+CoreDataClass.h"
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 @implementation RptqDocumentSectionRows
 
 @end

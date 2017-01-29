@@ -8,7 +8,7 @@
 //
 
 #import "RptqQueryGroup+CoreDataClass.h"
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqQuery+CoreDataClass.h"
 #import "RptqQueryField+CoreDataClass.h"
 @implementation RptqQueryGroup
