@@ -11,11 +11,15 @@
 #endif
 
 #import "RptqQueryCache+Extras.h"
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
+#import "RptqDataHelper.h"
 
 @implementation RptqQueryCache (Extras)
 
@@ -23,23 +27,10 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
     
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryCache class])];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqQueryCache *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
+
 }
 
 - (void)awakeFromFetch {

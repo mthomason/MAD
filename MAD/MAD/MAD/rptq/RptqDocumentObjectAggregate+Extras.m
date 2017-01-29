@@ -12,15 +12,19 @@
 
 #import "RptqDocumentObjectAggregate+Extras.h"
 
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSBundle.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSBundle.h>
+
+#import "RptqDataHelper.h"
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";
@@ -37,28 +41,8 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSString *entityName = NSStringFromClass([RptqDocumentObjectAggregate class]);
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
-                                                                   ascending: NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    
-    NSError *error = nil;
-    NSArray *fetchResults;
-    fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqDocumentObjectAggregate *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {

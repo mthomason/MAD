@@ -46,6 +46,8 @@
 
 #import "NSManagedObjectID+Extras.h"
 
+#import "RptqDataHelper.h"
+
 @interface RptqDocumentSection ()
 
 @end
@@ -56,38 +58,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    // MARK: Auto increment row counter.
-    NSString *queryField = NSStringFromSelector(@selector(identifier)),
-             *entityName = NSStringFromClass([RptqDocumentSection class]);
-    
-    NSFetchRequest *request;
-    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
-                                                                   ascending: NO];
-    
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqDocumentSection *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    NSNumber *identiferNumber = @(identifier);
-    self.identifier = identiferNumber;
-    
-    NSNumber *height = [RptqDocumentSection defaultHeight];
-    NSNumber *layoutHeight = @(0.0000f);
-    NSNumber *numberOfRows = @(1);
-    NSNumber *wrapperStyle = @(RptqDocumentSectionWrappingStyleStandard);
-    self.height = height;
-    self.layoutHeight = layoutHeight;
-    self.numberOfRows = numberOfRows;
-    self.wrappingStyle = wrapperStyle;
-    
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {

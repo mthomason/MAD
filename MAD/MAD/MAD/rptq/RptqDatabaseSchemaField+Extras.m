@@ -10,14 +10,19 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseField.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+
+#import <Foundation/NSBundle.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSBundle.h>
+
+#import "MTDatabaseField.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqDataHelper.h"
 
 @implementation RptqDatabaseSchemaField (Extras)
 
@@ -25,16 +30,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-
-    // MARK: Auto increment row counter
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-    request.resultType = NSCountResultType;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = [fetchResults.firstObject unsignedIntegerValue] + 1;
-
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {

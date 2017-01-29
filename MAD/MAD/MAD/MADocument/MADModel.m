@@ -303,19 +303,6 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                                                                      }];
                                                                      updatedObjects = [note.userInfo objectForKey:NSUpdatedObjectsKey];
                                                                      invalidatedObjects = [note.userInfo objectForKey:NSInvalidatedObjectsKey];
-                                                                     //for (id key in keys) {
-                                                                     //    NSLog(@"[%@] %@", NSStringFromClass([key class]), key);
-                                                                     
-                                                                     //}
-                                                                     //for (id object in objects) {
-                                                                     //    NSLog(@"[%@] %@", NSStringFromClass([object class]), object);
-                                                                     //}
-                                                                     //NSLog(@"%@", NSInsertedObjectsKey);
-                                                                     //NSLog(@"%@", NSUpdatedObjectsKey);
-                                                                     //NSLog(@"%@", NSRefreshedObjectsKey);
-                                                                     //NSLog(@"%@", NSDeletedObjectsKey);
-                                                                     //NSLog(@"%@", NSInvalidatedObjectsKey);
-                                                                     //NSLog(@"%@", NSManagedObjectContextQueryGenerationKey);
                                                                      
                                                                  }];
 
@@ -1148,7 +1135,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 - (void)insertQueryTableID:(NSManagedObjectID *)queryTableID {
     MADModelQueryTable *table;
-    if (!(table = [_tables objectForKey:queryTableID])) return;
+    if ((table = [_tables objectForKey:queryTableID])) return;
 
     NSExpression *expressionInQuery[2];
     NSArray <NSDictionary *> *results;
@@ -1182,7 +1169,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 - (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID {
     MADModelQueryLink *link;
-    if (!(link = [_links objectForKey:queryLinkID])) return;
+    if ((link = [_links objectForKey:queryLinkID])) return;
     
     NSExpression *expressionInQuery[2];
     NSArray <NSDictionary *> *results;

@@ -11,10 +11,14 @@
 #endif
 
 #import "RptqQuerySort+Extras.h"
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
+
+#import "RptqDataHelper.h"
 
 @implementation RptqQuerySort (Extras)
 
@@ -22,23 +26,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQuerySort class])];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqQuerySort *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    NSNumber *identifierObj = @(identifier);
-    self.identifier = identifierObj;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {

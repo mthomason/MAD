@@ -22,6 +22,8 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
+#import "RptqDataHelper.h"
+
 @implementation RptqDocumentObjectLabelLink (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
@@ -32,23 +34,9 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocumentObjectLabelLink class])];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField ascending:NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqDocumentObjectLabelLink *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;}
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
+}
 
 - (void)awakeFromFetch {
     [super awakeFromFetch];

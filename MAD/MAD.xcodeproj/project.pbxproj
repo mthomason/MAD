@@ -509,6 +509,8 @@
 		4CCE18721DA14B0B0093B166 /* libbz2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18711DA14B0B0093B166 /* libbz2.a */; };
 		4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18731DA14B400093B166 /* libsybdb.a */; };
 		4CCE18761DA14B400093B166 /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18741DA14B400093B166 /* libct.a */; };
+		4CD87BA91E3E4ADD00F562B4 /* RptqDataHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD87BA71E3E4ADD00F562B4 /* RptqDataHelper.h */; };
+		4CD87BAA1E3E4ADD00F562B4 /* RptqDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD87BA81E3E4ADD00F562B4 /* RptqDataHelper.m */; };
 		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; };
 		4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD90DC31CE6C47A00B56B90 /* miniz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CE233B01D8F7E1300949451 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233AF1D8F7E1300949451 /* MADDataStructures.framework */; };
@@ -1070,6 +1072,8 @@
 		4CCE18711DA14B0B0093B166 /* libbz2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbz2.a; path = ../opt/lib/bzip2/libbz2.a; sourceTree = "<group>"; };
 		4CCE18731DA14B400093B166 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../opt/lib/freetds/libsybdb.a; sourceTree = "<group>"; };
 		4CCE18741DA14B400093B166 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../opt/lib/freetds/libct.a; sourceTree = "<group>"; };
+		4CD87BA71E3E4ADD00F562B4 /* RptqDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDataHelper.h; path = MAD/rptq/RptqDataHelper.h; sourceTree = "<group>"; };
+		4CD87BA81E3E4ADD00F562B4 /* RptqDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDataHelper.m; path = MAD/rptq/RptqDataHelper.m; sourceTree = "<group>"; };
 		4CD90DC21CE6C47A00B56B90 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniz.c; path = ../../Reports/MADStack/Packages/miniz.c; sourceTree = "<group>"; };
 		4CD90DC31CE6C47A00B56B90 /* miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniz.h; path = ../../Reports/MADStack/Packages/miniz.h; sourceTree = "<group>"; };
 		4CE233AF1D8F7E1300949451 /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../DerivedData/Build/Products/Debug-iphoneos/MADDataStructures.framework"; sourceTree = "<group>"; };
@@ -1767,6 +1771,8 @@
 				4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */,
 				4C41238B1E275F8100DF891B /* RptqUserCredentals+MADDatabaseConnection.h */,
 				4C41238C1E275F8100DF891B /* RptqUserCredentals+MADDatabaseConnection.m */,
+				4CD87BA71E3E4ADD00F562B4 /* RptqDataHelper.h */,
+				4CD87BA81E3E4ADD00F562B4 /* RptqDataHelper.m */,
 			);
 			name = rptq;
 			sourceTree = "<group>";
@@ -2199,6 +2205,7 @@
 				4C401DC51BAE3BD600BAE5FC /* MTQueryCacheEndTransaction.h in Headers */,
 				4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */,
 				4C4F12801D0A95810002294E /* MADQuerySelectExpressionActiveFields.h in Headers */,
+				4CD87BA91E3E4ADD00F562B4 /* RptqDataHelper.h in Headers */,
 				4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */,
@@ -2458,6 +2465,7 @@
 				4CA3549E1D228DB50072BD38 /* MADReportSectionPageFooter.m in Sources */,
 				4CC1C6FF1CFDED57006F1546 /* MADAppLaunchContext.m in Sources */,
 				4CC284981BADE9E700775B72 /* RptqQueryLinks+Extras.m in Sources */,
+				4CD87BAA1E3E4ADD00F562B4 /* RptqDataHelper.m in Sources */,
 				4C401D511BAE3AF800BAE5FC /* MTPaperB10.m in Sources */,
 				4C994F4B1BE33F300058627A /* MADReportSectionRowsRepresentation.m in Sources */,
 				4CC284791BADE9A900775B72 /* RptqDocumentObjectBarcode+Extras.m in Sources */,

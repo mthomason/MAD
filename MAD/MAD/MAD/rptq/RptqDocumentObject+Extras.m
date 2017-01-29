@@ -78,19 +78,37 @@ static NSNumberFormatter *currencyNumberFormatter;
 //
 //
 
+@implementation RptqDocumentObject (Extras)
+
+#pragma mark -
+#pragma mark Static Helpers
+
+
 static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight);
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
+
 static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight) {
     return paddingTop.floatValue + paddingBottom.floatValue + sizeHeight.floatValue;
 }
 
-static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
 static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth) {
     return paddingLeft.floatValue + paddingRight.floatValue + sizeWidth.floatValue;
 }
 
-@implementation RptqDocumentObject (Extras)
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
+    return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight + paddingRight;
+}
 
-#pragma mark - Static Helpers
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop, CGFloat borderHeightTop, CGFloat marginTop, CGFloat sizeheight, CGFloat marginBottom, CGFloat borderHeightBottom, CGFloat paddingBottom) {
+    return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom + borderHeightBottom + paddingBottom;
+}
+
+static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
+    return CGRectMake(x + sx, y + sy, w + sw, h + wh);
+}
 
 + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
     RptqDocumentObject *result = nil;
@@ -140,7 +158,8 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     
 }
 
-#pragma mark - Overrides
+#pragma mark -
+#pragma mark Overrides
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
@@ -172,18 +191,6 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     NSString *fontname = [[NSString alloc] initWithString:[MADFont defaultFamily]];
     self.fontname = fontname;
 
-    NSNumber *bold = @NO;
-    self.bold = bold;
-
-    NSNumber *italic = @NO;
-    self.italic = italic;
-
-    NSNumber *underline = @NO;
-    self.underline = underline;
-
-    NSNumber *strike = @NO;
-    self.strike = strike;
-
     double fontPointSize = [MADFont defaultSize];
     CFNumberRef fontSize = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &fontPointSize);
     self.fontsize = (__bridge NSNumber *)(fontSize);
@@ -192,71 +199,10 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
     NSNumber *identifier = [[NSNumber alloc] initWithUnsignedInteger: idNumber];
     self.identifier = identifier;
 
-    CFNumberRef marginBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.marginBottom = (__bridge NSNumber *)(marginBottom);
-    CFRelease(marginBottom);
-
-    CFNumberRef marginTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.marginTop = (__bridge NSNumber *)(marginTop);
-    CFRelease(marginTop);
-
-    CFNumberRef marginLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.marginLeft = (__bridge NSNumber *)(marginLeft);
-    CFRelease(marginLeft);
-
-    CFNumberRef marginRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.marginRight = (__bridge NSNumber *)(marginRight);
-    CFRelease(marginRight);
-
-    CFNumberRef paddingBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.paddingBottom = (__bridge NSNumber *)(paddingBottom);
-    CFRelease(paddingBottom);
-
-    CFNumberRef paddingTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.paddingTop = (__bridge NSNumber *)(paddingTop);
-    CFRelease(paddingTop);
-
-    CFNumberRef paddingLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.paddingLeft = (__bridge NSNumber *)(paddingLeft);
-    CFRelease(paddingLeft);
-
-    CFNumberRef paddingRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.paddingRight = (__bridge NSNumber *)(paddingRight);
-    CFRelease(paddingRight);
-
-    CFNumberRef borderHeightBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.borderHeightBottom = (__bridge NSNumber *)(borderHeightBottom);
-    CFRelease(borderHeightBottom);
-    
-    CFNumberRef borderHeightTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
-    self.borderHeightTop = (__bridge NSNumber *)(borderHeightTop);
-    CFRelease(borderHeightTop);
-    
-    CFNumberRef borderWidthLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.borderWidthLeft = (__bridge NSNumber *)(borderWidthLeft);
-    CFRelease(borderWidthLeft);
-    
-    CFNumberRef borderWidthRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
-    self.borderWidthRight = (__bridge NSNumber *)(borderWidthRight);
-    CFRelease(borderWidthRight);
-    
-    NSNumber *verticalAlignment = [[NSNumber alloc] initWithUnsignedInteger:MTVerticalAlignmentTop];
-    self.verticalAlignment = verticalAlignment;
-    
-    NSNumber *horizontalAlignment = [[NSNumber alloc] initWithUnsignedInteger:MTHorizontalAlignmentLeft];
-    self.horizontalAlignment = horizontalAlignment;
-
-    NSNumber *sectionRowNumber = [[NSNumber alloc] initWithUnsignedInteger: 1];
-    self.sectionRowNumber = sectionRowNumber;
-
     NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger: lastDropIndex];
     self.dropIndex = dropIndex;
     
 }
-
-//- (void)awakeFromFetch {
-//    [super awakeFromFetch];
-//}
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
@@ -299,22 +245,6 @@ static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber
 
 - (CGFloat)spacingBottom {
     return self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
-}
-
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
-    return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight + paddingRight;
-}
-
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop, CGFloat borderHeightTop, CGFloat marginTop, CGFloat sizeheight, CGFloat marginBottom, CGFloat borderHeightBottom, CGFloat paddingBottom) {
-    return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom + borderHeightBottom + paddingBottom;
-}
-
-static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
-    return CGRectMake(x + sx, y + sy, w + sw, h + wh);
 }
 
 - (CGFloat)sizeWidthCalculated {

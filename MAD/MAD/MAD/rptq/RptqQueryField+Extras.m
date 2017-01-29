@@ -16,36 +16,27 @@
     #import <objc/runtime.h>
 #endif
 
-#import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSString.h>
+
+#import "RptqQueryTable+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqDataHelper.h"
 
 @implementation RptqQueryField (Extras)
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
-    // MARK: Auto increment row counter
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: NSStringFromSelector(@selector(identifier))
-                                                                   ascending: NO];
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryField class])];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
     
-    if (error == nil) {
-        RptqQueryField *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
+
 }
 
 - (void)awakeFromFetch {

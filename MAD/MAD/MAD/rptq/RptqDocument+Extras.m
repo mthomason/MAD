@@ -10,6 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqDocument+Extras.h"
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
@@ -23,7 +25,6 @@
 
 #import <UIKit/UIImage.h>
 
-#import "RptqDocument+Extras.h"
 #import "MADDatabaseConnection.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
@@ -58,6 +59,8 @@
 
 #import "MADDatabaseConnection.h"
 
+#import "RptqDataHelper.h"
+
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides
@@ -77,23 +80,9 @@
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
-                                                                   ascending: NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        identifier = ((RptqDocument *)fetchResults.lastObject).identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
+
 }
 
 - (void)awakeFromFetch {

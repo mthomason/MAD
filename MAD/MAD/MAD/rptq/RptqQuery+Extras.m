@@ -10,8 +10,16 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-
 #import "RptqQuery+Extras.h"
+
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSPredicate.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 #import "MTDatabaseField.h"
 #import "MTDatabase.h"
@@ -47,15 +55,9 @@
 
 #import "MADSortOrder.h"
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSPredicate.h>
-
 #import "MADReportSectionsEnumerator.h"
+
+#import "RptqDataHelper.h"
 
 //#import "MAD"
 
@@ -80,24 +82,10 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
     
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    request.sortDescriptors =  sortDescriptors;
-    request.fetchLimit = 1;
 
-    NSError * __autoreleasing *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqQuery *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    id identifierObj = [[NSNumber alloc] initWithUnsignedInteger: identifier];
-    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {

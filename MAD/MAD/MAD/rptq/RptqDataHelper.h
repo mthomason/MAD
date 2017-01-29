@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_RptqUserCredentals_MADDatabaseConnection_h
+#define Reports_RptqUserCredentals_MADDatabaseConnection_h
+
+#import <Foundation/NSObject.h>
+
+@class NSManagedObjectContext;
 
 @interface RptqDataHelper : NSObject
 
+    + (NSNumber *)nextIdentifierForClass:(Class)class
+            managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 @end
+
+#endif

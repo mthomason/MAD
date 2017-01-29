@@ -23,6 +23,7 @@
 #import "RptqQueryTable+Extras.h"
 
 #import "MADSQLJoinType.h"
+#import "RptqDataHelper.h"
 
 NSString * const MTLinkTypeNameInnerJoin        = @"Inner-Join";
 NSString * const MTLinkTypeNameEquiJoin         = @"Equi-Join";
@@ -46,41 +47,9 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: queryField
-                                                                   ascending: NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqQueryLinks *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    
-    NSNumber *identifierWrapper = @(identifier);
-    self.identifier = identifierWrapper;
-    
-    NSNumber *designerOriginX = @(CGPointZero.x);
-    self.designerOriginX = designerOriginX;
-    
-    NSNumber *designerOriginY = @(CGPointZero.y);
-    self.designerOriginY = designerOriginY;
-    
-    NSNumber *designerSizeHeight = @(CGSizeZero.height);
-    self.designerSizeHeight = designerSizeHeight;
 
-    NSNumber *designerSizeWidth = @(CGSizeZero.width);
-    self.designerSizeWidth = designerSizeWidth;
-    
-    NSNumber *designerInitalLayout = @(YES);
-    self.designerInitalLayout = designerInitalLayout;
-    
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[RptqQueryLinks class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {

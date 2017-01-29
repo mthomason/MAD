@@ -26,6 +26,7 @@
 #import "RptqQuery+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqDataHelper.h"
 
 @implementation RptqQueryTable (Extras)
 
@@ -35,38 +36,8 @@
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
-    // MARK: Auto increment row counter
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
-                                                                     ascending: NO];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    
-    if (error == nil) {
-        RptqQueryTable *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    NSNumber *n = [[NSNumber alloc] initWithUnsignedInteger:identifier];
-    self.identifier = n;
-    
-    n = [[NSNumber alloc] initWithDouble:CGPointZero.x];
-    self.designerOriginX = n;
-
-    n = [[NSNumber alloc] initWithDouble:CGPointZero.y];
-    self.designerOriginY = n;
-
-    n = [[NSNumber alloc] initWithDouble:CGSizeZero.width];
-    self.designerSizeWidth = n;
-
-    n = [[NSNumber alloc] initWithDouble:CGSizeZero.height];
-    self.designerSizeHeight = n;
-
-    n = [[NSNumber alloc] initWithBool:YES];
-    self.designerInitalLayout = n;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
     
 }
 

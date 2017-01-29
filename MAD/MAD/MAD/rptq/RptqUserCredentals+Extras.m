@@ -11,12 +11,13 @@
 #endif
 
 #import "RptqUserCredentals+Extras.h"
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 #import "RptqDatabase+Extras.h"
 #import "MTDatabaseSqlite3.h"
@@ -24,6 +25,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
 #import "MADDatabaseType.h"
+#import "RptqDataHelper.h"
 
 @implementation RptqUserCredentals (Extras)
 
@@ -31,24 +33,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
-    // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqUserCredentals class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField
-                                                                     ascending: NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-    request.sortDescriptors = sortDescriptors;
-    request.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqUserCredentals *lastObject = fetchResults.lastObject;
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
-    }
-    NSNumber *identifierObj = @(identifier);
-    self.identifier = identifierObj;
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
