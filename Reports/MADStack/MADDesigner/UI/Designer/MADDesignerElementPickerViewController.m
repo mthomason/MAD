@@ -186,7 +186,8 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
     [self presentViewController:imagePicker animated:YES completion:NULL];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *MADIdentiferDocumentObjectCell = @"MADIdentiferDocumentObjectCell";
     
