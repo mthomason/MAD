@@ -123,15 +123,16 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeNone = 4,
 };
 
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionView *> MADMutableMapSectionViews;
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionLabel *> MADMutableMapSectionLabels;
+typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionView *> MADMutableMapSectionViews;
+typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionLabel *> MADMutableMapSectionLabels;
+typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerElementView *> MADMutableMapElementViews;
 
 typedef NSMutableDictionary <NSNumber *, NSNumber *> MADMutableMapNumbersByNumber;
 
-typedef NSMutableArray  <__kindof MADDesignerSectionView *> MADMutableSectionViews;
-typedef NSMutableSet    <__kindof MADDesignerSectionView *> MADMutableSetSectionViews;
+typedef NSMutableArray  <MADDesignerSectionView *> MADMutableSectionViews;
+typedef NSMutableSet    <MADDesignerSectionView *> MADMutableSetSectionViews;
 
-typedef NSMutableSet    <__kindof MADDesignerElementView *> MADMutableSetElementViews;
+typedef NSMutableSet    <MADDesignerElementView *> MADMutableSetElementViews;
 
 typedef NSMutableArray  <NSLayoutConstraint *>              MADMutableLayoutConstraints;
 typedef NSArray         <NSLayoutConstraint *>              MADLayoutConstraints;
@@ -214,6 +215,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     @property (nonatomic, strong) MADMutableMapSectionViews         *sectionViewsDictionary;
     @property (nonatomic, strong) MADMutableMapSectionLabels        *sectionControlViewsDictionary;
+    @property (nonatomic, strong) MADMutableMapElementViews         *elementViewsDictionary;
 
     @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerScrollViewConstraints;
     @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerContentViewConstraints;
@@ -378,6 +380,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
         toolboxTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
         self.toolboxTransitioningDelegate = toolboxTransitioningDelegate;
+        
+        MADMutableMapElementViews *elementViewsDictionary;
+        elementViewsDictionary = [[MADMutableMapElementViews alloc] init];
+        _elementViewsDictionary = elementViewsDictionary;
         
         UINavigationController *navigationControllerToolbox;
         navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
@@ -844,6 +850,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
     [self.scroller.container removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
     
+    [self.elementViewsDictionary removeAllObjects];
     [self.visibleElementViews removeAllObjects];
     [self.viewDidAppearDesignerContentViewConstraints removeAllObjects];
     [self.viewDidAppearDesignerScrollViewConstraints removeAllObjects];
@@ -1969,6 +1976,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
+            [self.elementViewsDictionary setObject:elementView forKey:documentObject.objectID];
             
             UIGestureRecognizer *panGesture, *pinchGesture;
             panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
@@ -1990,7 +1998,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             cell.userInteractionEnabled = YES;
             
             if ([self.selectedObjectIds containsObject:documentObject.objectID]) {
-                [self applyBorderToView:elementView];
+                [self applyBorderToElementView: elementView];
             }
             
             [cell addElementView:elementView];
@@ -2167,7 +2175,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
                                                       inCollectionView: collectionView];
-    [self applyBorderToView:elementView];
+    [self applyBorderToElementView:elementView];
     self.lastElementViewToShowMenu = elementView;
     return YES;
 }
@@ -2674,8 +2682,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (NSUInteger)removeBorderFromAllSectionViews {
     NSUInteger deselectedSectionViewCounter = 0;
-    for (id view in self.sectionControlViewsDictionary.allValues) {
-        deselectedSectionViewCounter += [self removeBorderFromView: view] ? 1 : 0;
+    NSEnumerator <MADDesignerSectionLabel *> *labels;
+    labels = self.sectionControlViewsDictionary.objectEnumerator;
+    for (MADDesignerSectionLabel *label in labels) {
+        deselectedSectionViewCounter += [self removeBorderFromSectionLabel: label] ? 1 : 0;
     }
     return deselectedSectionViewCounter;
 }
@@ -2749,7 +2759,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     if (numberOfViewsDeselected == 0) {
         NSManagedObjectID *objectID = elementView.objectIdTag.copy;
         [self.selectedObjectIds addObject: objectID];
-        [self applyBorderToView: elementView];
+        [self applyBorderToElementView: elementView];
         
         self.viewControllerToolbox.document = self.document;
         self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds.copy;
@@ -2913,7 +2923,17 @@ END_deselectElementView:;
 }
 
 - (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
-    return [self.scroller.container viewWithTag: (NSInteger)objectID.hash];
+
+    id result = [self.elementViewsDictionary objectForKey:objectID];
+    if (result != nil) return result;
+    
+    result = [self.sectionControlViewsDictionary objectForKey:objectID];
+    if (result != nil) return result;
+
+    result = [self.sectionViewsDictionary objectForKey:objectID];
+
+    return result;
+    //return [self.scroller.container viewWithTag: (NSInteger)objectID.hash];
 }
 
 - (void)adjustContextOffsetForOpenPopover {
@@ -3446,11 +3466,22 @@ END_deselectElementView:;
     
 }
 
-- (void)applyBorderToView:(MADDesignerElementView *)view {
+- (void)applyBorderToSectionLabel:(MADDesignerSectionLabel *)view {
+    
+    NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
+    self.borderAppliedToView[key] = @YES;
+    
+    UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
+    view.layer.borderColor = tintColor.CGColor;
+    view.layer.borderWidth = [UIView borderWidthThin];
+}
+
+
+- (void)applyBorderToElementView:(MADDesignerElementView *)view {
     
     view.enableResizing = YES;
     
-    NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
+    NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
     self.borderAppliedToView[key] = @YES;
     
     UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
@@ -3459,11 +3490,27 @@ END_deselectElementView:;
     
 }
 
+- (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
+    BOOL result;
+    if ([self isBorderAppliedToView:label]) {
+        
+        NSNumber *key = [[NSNumber alloc] initWithInteger: label.tag];
+        self.borderAppliedToView[key] = @NO;
+        result = YES;
+        UIColor *color = [UIColor blackColor];
+        label.layer.borderColor = color.CGColor;
+        label.layer.borderWidth = 0;
+    } else {
+        result = NO;
+    }
+    return result;
+}
+
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
 
-        NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
+        NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
         self.borderAppliedToView[key] = @NO;
         result = YES;
         UIColor *color = [UIColor blackColor];
@@ -3479,7 +3526,7 @@ END_deselectElementView:;
 - (BOOL)isBorderAppliedToView:(UIView *)view {
     NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
     NSNumber *borderAppliedToView = _borderAppliedToView[key];
-    return borderAppliedToView.boolValue;
+    return borderAppliedToView == nil ? NO : borderAppliedToView.boolValue;
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {

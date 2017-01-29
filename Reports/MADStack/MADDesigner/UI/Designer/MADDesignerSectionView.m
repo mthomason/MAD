@@ -228,14 +228,14 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 
 #pragma mark - UIView
 
-/*- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     UIColor *bgcolor = backgroundColor(self.selected, self.visible);
     CGContextSetFillColorWithColor(context, bgcolor.CGColor);
     CGContextFillRect(context, rect);
-}*/
+}
 
 #pragma mark - Overrides
 
@@ -243,8 +243,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     if (_visible != visible) {
         _visible = visible;
         [self setBorderState:borderState(_selected, _visible)];
-        UIColor *bgcolor = backgroundColor(_selected, _visible);
-        self.backgroundColor = bgcolor;
+        [self setNeedsDisplay];
     }
 }
 
@@ -252,8 +251,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     if (_selected != selected) {
         _selected = selected;
         [self setBorderState:borderState(_selected, _visible)];
-        UIColor *bgcolor = backgroundColor(_selected, _visible);
-        self.backgroundColor = bgcolor;
+        [self setNeedsDisplay];
     }
 }
 
