@@ -10,6 +10,7 @@
 #import <UIKit/UIGraphics.h>
 
 #import <MADCocoaExtensions/MADColor.h>
+#import <MADBarcodes/MTBarcode.h>
 
 @implementation MTElementCanvas
 

@@ -7,7 +7,7 @@
 //
 
 #import "MTDataTypeMySQL.h"
-#import <MADFoundation/MADFoundation.h>
+#import <MADFoundation/MADDataType.h>
 #import <mysql.h>
 
 @implementation MADDataTypeMySQL

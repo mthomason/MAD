@@ -153,14 +153,14 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     style = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
-
+    [self showInitalChildViewController];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.firstTimeViewWillLayoutSubviews) {
-        [self showInitalChildViewController];
-    }
+    //if (self.firstTimeViewWillLayoutSubviews) {
+    //    [self showInitalChildViewController];
+    //}
 }
 
 - (void)showInitalChildViewController {

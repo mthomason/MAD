@@ -9,7 +9,8 @@
 #ifndef MAD_Designer_MTElementCanvas_h
 #define MAD_Designer_MTElementCanvas_h
 
-#import <MADBarcodes/MADBarcodes.h>
+//#import <MADBarcodes/MADBarcodes.h>
+#import <UIKit/UIView.h>
 #import <UIKit/NSStringDrawing.h>
 
 @protocol MTElementCanvasDelegate <NSObject>

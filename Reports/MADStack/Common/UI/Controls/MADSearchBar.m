@@ -30,7 +30,7 @@
             MADSearchBar <UIAppearance> *appearanceProxySearchBar;
             UIButton <UIAppearance> *appearanceProxyButton;
             UITextField <UIAppearance> *appearanceProxyTextField;
-            UIImageView <UIAppearance> *appearanceProxyImageView;
+            //UIImageView <UIAppearance> *appearanceProxyImageView;
             NSArray <Class <UIAppearanceContainer>> *classes;
 
             classes = [[NSArray alloc] initWithObjects: [UISearchBar class], nil];
@@ -41,7 +41,7 @@
             appearanceProxyTextField.tintColor = [UIColor whiteColor];
             appearanceProxyTextField.textColor = [UIColor whiteColor];
 
-            appearanceProxyImageView = [UIImageView appearanceWhenContainedInInstancesOfClasses:classes];;
+            //appearanceProxyImageView = [UIImageView appearanceWhenContainedInInstancesOfClasses:classes];;
             
             appearanceProxySearchBar = [MADSearchBar appearance];
             UIImage *closeImage = [UIImage imageNamed: @"MADImageClear"];

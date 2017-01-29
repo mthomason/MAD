@@ -9,7 +9,7 @@
 #ifndef Reports_MADDesignerElementPIckerViewController_h
 #define Reports_MADDesignerElementPIckerViewController_h
 
-#import "MADCollectionViewController.h"
+#import <UIKit/UICollectionViewController.h>
 #import "MUIViewControllerDelegate.h"
 
 #import <MAD/MADAggregateFunctionType.h>
@@ -39,7 +39,7 @@ extern const NSInteger MTViewTagFieldOrFormulaSelector;
 
 @end
 
-@interface MADDesignerElementPickerViewController : MADCollectionViewController
+@interface MADDesignerElementPickerViewController : UICollectionViewController
 
     @property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
     @property (nonatomic, weak) MADocument *document;

@@ -328,8 +328,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
     if (self = [super initWithCoder:aDecoder]) {
         
-        const char *MADQueueFileViewController;
-        MADQueueFileViewController = "com.everydayapps.mad.designer.file.explorer.controller";
+        //const char *MADQueueFileViewController;
+        //MADQueueFileViewController = "com.everydayapps.mad.designer.file.explorer.controller";
         
         _shouldShowAddDocumentPopover = YES;
         _getUserCloudPrefsFirstCall = YES;
@@ -339,10 +339,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         _cloudActivityRunningDisplay = NO;
         _activityIndicatorRightVisible = NO;
 
-        void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
-        handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
-            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
-        };
+        //void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
+        //handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
+        //    if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+        //};
 
         MADOpenDocumentManager *openFileManager;
         openFileManager = [[MADOpenDocumentManager alloc] init];

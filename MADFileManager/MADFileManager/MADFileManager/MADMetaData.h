@@ -10,9 +10,10 @@
 #define MAD_MADMetaData_h
 
 #import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
 
 @class NSMetadataItem;
+@class NSArray<ObjectType>;
+@class NSMutableArray<ObjectType>;
 @class MADMetaData;
 
 typedef NSArray <MADMetaData *> MADMetaDatum;

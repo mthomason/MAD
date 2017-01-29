@@ -413,8 +413,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
             
-            NSManagedObjectContext *managedObjectContext;
-            managedObjectContext = self.datasoruce.document.managedObjectContext;
+            //NSManagedObjectContext *managedObjectContext;
+            //managedObjectContext = self.datasoruce.document.managedObjectContext;
             RptqDocument *document;
             document = [self.datasoruce.document activeDocumentModel];
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;

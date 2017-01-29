@@ -38,6 +38,7 @@
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/MADDatabaseType.h>
 
 /*struct MADTableFieldIndex {
     NSUInteger table;
@@ -107,6 +108,10 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
                              queryID:(NSManagedObjectID *)queryID
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readwrite, strong)     NSString *driverType;
+    @property (nonatomic, readwrite, strong)     NSString *name;
+    @property (nonatomic, readwrite, strong)     NSNumber *databaseDriverTypeEnum;
+
 @end
 
 @interface MADModelTable ()
@@ -375,14 +380,14 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSArray <NSManagedObjectID *> *result;
     NSFetchRequest *request;
     
-    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *) =
-    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression) {
+    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
+    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
         expressionDescription.name = name.copy;
         expressionDescription.expression = expression;
-        expressionDescription.expressionResultType = NSManagedObjectIDResultType;
+        expressionDescription.expressionResultType = type;
     };
     
-    int expressionCount = 3;
+    int expressionCount = 6;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSManagedObjectContext *managedObjectContext;
     managedObjectContext = _managedObjectContext;
@@ -394,26 +399,45 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     
     NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO";
-    
+    NSString *keyOwneByUser = @"OU", *keyDriver = @"DR", *keyDatabaseEnum = @"DE";
+
     NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
     NSString *inDocument = NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
+    NSString *ownedByUser = [inDatabase stringByAppendingString:@"."];
+    ownedByUser = [ownedByUser stringByAppendingString:NSStringFromSelector(@selector(ownedByUser))];
+    
+    NSString *databaseDriverType = [inDatabase stringByAppendingString:@"."];
+    databaseDriverType = [databaseDriverType stringByAppendingString: NSStringFromSelector(@selector(databaseDriverType))];
+    
     NSString *inDatabaseInDocumentKeyPath = [NSString stringWithFormat:@"%@.%@", inDatabase, inDocument];
+    NSString *databaseDriverTypeEnum  = [inDatabase stringByAppendingString:@"."];
+    databaseDriverTypeEnum = [databaseDriverTypeEnum stringByAppendingString: NSStringFromSelector(@selector(databaseDriverTypeEnum))];
     
     NSExpression *databaseExpression = [NSExpression expressionForKeyPath:inDatabase];
     NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDatabaseInDocumentKeyPath];
+    NSExpression *ownedByUserExpression = [NSExpression expressionForKeyPath:ownedByUser];
+    NSExpression *databaseDriverTypeExpression = [NSExpression expressionForKeyPath:databaseDriverType];
+    NSExpression *databaseDriverTypeEnumExpression = [NSExpression expressionForKeyPath:databaseDriverTypeEnum];
     NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
     
-    setupExpression(expressionDescription[0], keyDatabase, databaseExpression);
-    setupExpression(expressionDescription[1], keyDocument, databaseInDocumentExpression);
-    setupExpression(expressionDescription[2], keyQuery, selfExpresssion);
+    setupExpression(expressionDescription[0], keyDatabase, databaseExpression, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[1], keyDocument, databaseInDocumentExpression, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[3], keyOwneByUser, ownedByUserExpression, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[4], keyDriver, databaseDriverTypeExpression, NSStringAttributeType);
+    setupExpression(expressionDescription[5], keyDatabaseEnum, databaseDriverTypeEnumExpression, NSInteger32AttributeType);
     
     request.resultType = NSDictionaryResultType;
     NSError * __autoreleasing *error = NULL;
     
-    NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:
-                                                            expressionDescription[0],
-                                                            expressionDescription[1],
-                                                            expressionDescription[2], nil];
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects:
+                                                    expressionDescription[0],
+                                                    expressionDescription[1],
+                                                    expressionDescription[2],
+                                                    expressionDescription[3],
+                                                    expressionDescription[4],
+                                                    expressionDescription[5], nil];
     request.propertiesToFetch = propertiesToFetch;
     result = [managedObjectContext executeFetchRequest:request error:error];
     
@@ -495,6 +519,53 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         _queries = queries;
     }
     return self;
+}
+
+- (void)setDatabaseDriverTypeEnum:(NSNumber *)databaseType {
+    
+    NSString *result;
+    /*switch (databaseType.shortValue) {
+            
+        case MADDatabaseTypeMySQL:
+        case MADDatabaseTypeSqlite3:
+            result = self.mysql_database.copy;
+            break;
+            
+        case MADDatabaseTypeTDS:
+            result = self.tds_database.copy;
+            break;
+            
+        case MADDatabaseTypeUnknown: {
+            
+            if ([self.database_driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
+                result = self.mysql_database.copy;
+                
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
+                self.inDatabase.databaseDriverTypeEnum = type;
+                
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
+                result = self.tds_database.copy;
+                
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeTDS];
+                self.inDatabase.databaseDriverTypeEnum = type;
+                
+            } else if ([self.database_driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
+                result = self.mysql_database.copy;
+                
+                NSNumber *type = [[NSNumber alloc] initWithShort:MADDatabaseTypeSqlite3];
+                self.inDatabase.databaseDriverTypeEnum = type;
+                
+            }
+            
+            break;
+        }
+        default:
+            result = @"unknown";
+            break;
+    }*/
+    //NSString *resultNoPathExtension = result.stringByDeletingPathExtension;
+    //NSString *capitalized = resultNoPathExtension.capitalizedString;
+    //return capitalized;
 }
 
 - (NSOrderedSet <MADModelTable *> *)tables {

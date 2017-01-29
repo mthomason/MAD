@@ -11,12 +11,16 @@
 #endif
 
 #import "RptqDocumentObjectBarcode+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqQueryField+Extras.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <UIKit/UIColor.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
-#import <MADBarcodes/MADBarcodes.h>
+#import <MADBarcodes/MTBarcode.h>
+
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQueryField+Extras.h"
 
 @implementation RptqDocumentObjectBarcode (Extras)
 

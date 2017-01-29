@@ -123,8 +123,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeNone = 4,
 };
 
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionView *> MADMutableMapSectionViews;
-typedef NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADDesignerSectionLabel *> MADMutableMapSectionLabels;
+typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionView *> MADMutableMapSectionViews;
+typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionLabel *> MADMutableMapSectionLabels;
 
 typedef NSMutableDictionary <NSNumber *, NSNumber *> MADMutableMapNumbersByNumber;
 
@@ -287,6 +287,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 + (NSString *)MADDesigner {
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+}
+
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
+    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
 }
 
 #pragma mark MTTabBarImageProtocol
@@ -2674,8 +2679,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (NSUInteger)removeBorderFromAllSectionViews {
     NSUInteger deselectedSectionViewCounter = 0;
-    for (id view in self.sectionControlViewsDictionary.allValues) {
-        deselectedSectionViewCounter += [self removeBorderFromView: view] ? 1 : 0;
+    NSEnumerator <MADDesignerSectionLabel *> *labels;
+    labels = self.sectionControlViewsDictionary.objectEnumerator;
+    for (MADDesignerSectionLabel *label in labels) {
+        deselectedSectionViewCounter += [self removeBorderFromSectionLabel: label] ? 1 : 0;
     }
     return deselectedSectionViewCounter;
 }
@@ -2724,11 +2731,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                                                         adjustment: self.topLayoutGuide.length];
         [self repositionSectionViews:position];
     }
-}
-
-static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
-static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
-    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
 }
 
 - (void)repositionSectionViews:(CGRect)presentedRect {
@@ -3457,6 +3459,22 @@ END_deselectElementView:;
     view.layer.borderColor = tintColor.CGColor;
     view.layer.borderWidth = [UIView borderWidthThin];
     
+}
+
+- (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
+    BOOL result;
+    if ([self isBorderAppliedToView:label]) {
+        
+        NSNumber *key = [[NSNumber alloc] initWithInteger: label.tag];
+        self.borderAppliedToView[key] = @NO;
+        result = YES;
+        UIColor *color = [UIColor blackColor];
+        label.layer.borderColor = color.CGColor;
+        label.layer.borderWidth = 0;
+    } else {
+        result = NO;
+    }
+    return result;
 }
 
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {

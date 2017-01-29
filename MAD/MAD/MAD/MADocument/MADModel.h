@@ -79,6 +79,8 @@ typedef NS_ENUM(short, MADModelType) {
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQuery *> *queries;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelTable *> *tables;
     @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
+    @property (nonatomic, readonly, strong)     NSString * databaseDriverType;
+    @property (nonatomic, readonly, strong)     NSNumber * databaseDriverTypeEnum;
 @end
 
 @interface MADModelTable : MADObjectID

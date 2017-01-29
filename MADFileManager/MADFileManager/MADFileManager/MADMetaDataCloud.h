@@ -9,7 +9,7 @@
 #ifndef MAD_MADMetaDataCloud_h
 #define MAD_MADMetaDataCloud_h
 
-#import <MADFileManager/MADFileManager.h>
+#import <MADFileManager/MADMetaData.h>
 
 @interface MADMetaDataCloud : MADMetaData
 

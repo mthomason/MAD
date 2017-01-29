@@ -395,17 +395,11 @@ static NSString * const TextRedraw = @"Redraw";
     }];
     _viewControllerDelegate = nil;
 }
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
-            //[self.view setNeedsDisplay];
-        };
-    } else {
-        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
-    }
     //UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         //[toView setNeedsDisplay];
