@@ -2767,11 +2767,11 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     }
 }
 
-- (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
+- (void)deselectElementView:(MADDesignerElementView *)elementView
+                   animated:(BOOL)animated {
     
     [self removeBorderFromView: elementView];
     
-
     NSArray <UIView *> *passThroughViewsArray;
     NSMutableSet <UIView *>  * _Nullable passThroughViewsSet;
     passThroughViewsArray = self.popoverToolbox.passthroughViews;
