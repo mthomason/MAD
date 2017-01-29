@@ -252,13 +252,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
-    @property (nonatomic, assign) BOOL editAggregate;
-    @property (nonatomic, assign) BOOL toolboxVisible;
-    @property (nonatomic, assign) BOOL sectionSettingsVisible;
-    @property (nonatomic, assign) BOOL insetsSetup;
-    @property (nonatomic, assign) BOOL shownAndHidden;
-    @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
-
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
@@ -276,7 +269,15 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 @end
 
-@implementation MADDesignerViewController
+@implementation MADDesignerViewController {
+    BOOL _editAggregate;
+    BOOL _toolboxVisible;
+    BOOL _sectionSettingsVisible;
+    BOOL _insetsSetup;
+    BOOL _shownAndHidden;
+    BOOL _lastMenuItemSelectRequiresElementView;
+    
+}
 
 @synthesize document = _document;
 @synthesize title = _title;
@@ -379,14 +380,6 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         MADDesignerStatusLabel *detailDisplay;
         detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
-        
-        MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
-        toolboxTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-        self.toolboxTransitioningDelegate = toolboxTransitioningDelegate;
-        
-        UINavigationController *navigationControllerToolbox;
-        navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
-        self.navigationControllerToolbox = navigationControllerToolbox;
 
 
     }
@@ -432,45 +425,43 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [super loadView];
     NSLog(@"%@", self.view);
 
-    void (^initalizeScroller)(MADBackgroundScrollView *) = ^(MADBackgroundScrollView *scroller) {
-        scroller.scrollsToTop              = YES;
-        scroller.scrollEnabled             = YES;
-        scroller.userInteractionEnabled    = YES;
-        scroller.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
-        scroller.maximumZoomScale          = 4.0000f;
-        scroller.minimumZoomScale          = 0.3000f;
-        scroller.bouncesZoom               = NO;
-        scroller.opaque = NO;
-        scroller.backgroundColor = [UIColor clearColor];
-        scroller.container.opaque = NO;
-        scroller.container.backgroundColor = [UIColor clearColor];
-    };
-
-    void (^initalizeSelf)(MADDesignerViewController *) = ^(MADDesignerViewController *designer) {
-        designer.boundsOnDisappear = CGRectZero;
-        designer.zoomScaleRestore = -1.0000f;
-        designer.shownAndHidden = NO;
-        designer.editAggregate = NO;
-        
-        designer.insetsSetup = NO;
-        designer.toolboxVisible = NO;
-        designer.sectionSettingsVisible = NO;
-    };
-
-    void (^initalizeNavigationToolbox)(UINavigationController *) = ^(UINavigationController *nav) {
-        nav.transitioningDelegate = self.toolboxTransitioningDelegate;
-        nav.modalPresentationStyle = UIModalPresentationCustom;
-        nav.preferredContentSize = sizePopoverDefault();
-        
-    };
-    initalizeScroller(self.scroller);
-    initalizeSelf(self);
-    initalizeNavigationToolbox(self.navigationControllerToolbox);
-
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.scroller.scrollsToTop              = YES;
+    self.scroller.scrollEnabled             = YES;
+    self.scroller.userInteractionEnabled    = YES;
+    self.scroller.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
+    self.scroller.maximumZoomScale          = 4.0000f;
+    self.scroller.minimumZoomScale          = 0.3000f;
+    self.scroller.bouncesZoom               = NO;
+    self.scroller.opaque = NO;
+    self.scroller.backgroundColor = [UIColor clearColor];
+    self.scroller.container.opaque = NO;
+    self.scroller.container.backgroundColor = [UIColor clearColor];
+    
+    self.boundsOnDisappear = CGRectZero;
+    self.zoomScaleRestore = -1.0000f;
+    _shownAndHidden = NO;
+    _editAggregate = NO;
+    
+    _insetsSetup = NO;
+    _toolboxVisible = NO;
+    _sectionSettingsVisible = NO;
+    
+    self.navigationControllerToolbox.transitioningDelegate = self.toolboxTransitioningDelegate;
+    self.navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
+    self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
+
+    MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
+    toolboxTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+    self.toolboxTransitioningDelegate = toolboxTransitioningDelegate;
+    
+    UINavigationController *navigationControllerToolbox;
+    navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
+    self.navigationControllerToolbox = navigationControllerToolbox;
     
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
@@ -814,11 +805,11 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.insetsSetup == NO) self.insetsSetup = YES;
+    if (_insetsSetup == NO) _insetsSetup = YES;
     
     [self setScrollersEnabled:YES];
     
-    if (self.shownAndHidden && self.zoomScaleRestore > 1.0001) {
+    if (_shownAndHidden && self.zoomScaleRestore > 1.0001) {
         [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
         [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
@@ -856,7 +847,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     [self.layoutConstraintsReportSectionHeight removeAllObjects];
     
-    self.shownAndHidden = YES;
+    _shownAndHidden = YES;
     [self.document saveContext];
 }
 
@@ -1436,7 +1427,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    if (self.lastMenuItemSelectRequiresElementView == NO) {
+    if (_lastMenuItemSelectRequiresElementView == NO) {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
@@ -1445,7 +1436,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         }
         self.lastElementViewToShowMenu = nil;
     }
-    self.lastMenuItemSelectRequiresElementView = NO;
+    _lastMenuItemSelectRequiresElementView = NO;
 }
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
@@ -1697,7 +1688,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
     
     self.aggregateToEditObjectID = objectID.copy;
-    self.editAggregate = YES;
+    _editAggregate = YES;
 
     MADDesignerViewController * __weak weakself = self;
     
@@ -2920,12 +2911,12 @@ END_deselectElementView:;
 
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
-        if (self.sectionSettingsVisible &&
+        if (_sectionSettingsVisible &&
             self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
             
             [self adjustSettingsLocation];
             
-        } else if (self.toolboxVisible &&
+        } else if (_toolboxVisible &&
                    self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
             
             [self adjustToolboxLocation];
@@ -2936,11 +2927,11 @@ END_deselectElementView:;
 
 - (void)adjustPassthroughViews {
     
-    if (self.sectionSettingsVisible) {
+    if (_sectionSettingsVisible) {
         self.settingsTransitioningDelegate.passthroughContainers =  self.passthroughContainers;
         self.settingsTransitioningDelegate.passthroughViews =       [self passthroughViews];
         self.settingsTransitioningDelegate.passthroughContainer =   self.scroller;
-    } else if (self.toolboxVisible) {
+    } else if (_toolboxVisible) {
         self.toolboxTransitioningDelegate.passthroughContainers =   self.passthroughContainers;
         self.toolboxTransitioningDelegate.passthroughViews =        [self passthroughViews];
         self.toolboxTransitioningDelegate.passthroughContainer =    self.scroller;
@@ -2950,10 +2941,10 @@ END_deselectElementView:;
 
 - (void)dismissSectionPresentationIfOpen {
     
-    if (self.sectionSettingsVisible &&
+    if (_sectionSettingsVisible &&
         self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.sectionSettingsVisible = NO;
+        _sectionSettingsVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self removeBorderFromAllSectionViews];
         [self.document.managedObjectContext save:nil];
@@ -2964,10 +2955,10 @@ END_deselectElementView:;
 
 - (void)dismissToolboxPresentationIfOpen {
     
-    if (self.toolboxVisible &&
+    if (_toolboxVisible &&
         self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.toolboxVisible = NO;
+        _toolboxVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
@@ -3223,8 +3214,8 @@ END_deselectElementView:;
 
 - (void)setDisplayActive {
     [self setHidesStatusBar: NO];
-    self.sectionSettingsVisible = NO;
-    self.toolboxVisible = NO;
+    _sectionSettingsVisible = NO;
+    _toolboxVisible = NO;
     
 /*    MADTabBarController *tabBarController = self.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
@@ -3748,8 +3739,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)showToolbox {
     
-    self.toolboxVisible = YES;
-    self.sectionSettingsVisible = NO;
+    _toolboxVisible = YES;
+    _sectionSettingsVisible = NO;
     
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3777,7 +3768,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    self.toolboxVisible = NO;
+    _toolboxVisible = NO;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3787,8 +3778,8 @@ static const inline CGSize sizePopoverFonts() {
     self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
-    if (self.sectionSettingsVisible == NO) {
-        self.sectionSettingsVisible = YES;
+    if (_sectionSettingsVisible == NO) {
+        _sectionSettingsVisible = YES;
         [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
             [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
         }];

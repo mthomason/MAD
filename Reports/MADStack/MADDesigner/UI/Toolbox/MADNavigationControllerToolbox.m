@@ -9,6 +9,7 @@
 #import "MADNavigationControllerToolbox.h"
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarCommon.h>
+#import "MADTransparentPresentationController.h"
 
 @interface MADNavigationControllerToolbox ()
     <UINavigationBarDelegate, UIBarPositioningDelegate>
@@ -43,6 +44,17 @@
         NSArray *viewControllers = [[NSArray alloc] init];
         [self setViewControllers:viewControllers animated:animated];
     }
+}
+
+- (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
+                                                      presentingViewController:(UIViewController *)presenting
+                                                          sourceViewController:(UIViewController *)source {
+    UIPresentationController *result = nil;
+    if (presented == self || presenting == self) {
+        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented
+                                                                      presentingViewController:presenting];
+    }
+    return result;
 }
 
 @end

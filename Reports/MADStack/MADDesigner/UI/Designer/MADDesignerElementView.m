@@ -150,8 +150,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         [self addSubview:canvasView];
         self.canvasView = canvasView;
         
-        NSManagedObjectID *objectIdTag = documentObject.objectID.copy;
-        self.objectIdTag = objectIdTag;
+        //NSManagedObjectID *objectIdTag = documentObject.objectID.copy;
+        self.objectIdTag = documentObject.objectID.copy;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
