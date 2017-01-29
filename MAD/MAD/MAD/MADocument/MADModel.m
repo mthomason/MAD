@@ -216,8 +216,18 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
   @protected
     NSOperationQueue *_objectContextQueue;
     NSManagedObjectContext * __weak _managedObjectContext;
+    id <NSObject> _observeChangeNotification;
+    id <NSObject> _observeWillSaveNotification;
+    id <NSObject> _observeDidSaveNotification;
 }
     @synthesize managedObjectContext = _managedObjectContext;
+
+- (void)dealloc {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:_observeChangeNotification];
+    [notificationCenter removeObserver:_observeWillSaveNotification];
+    [notificationCenter removeObserver:_observeDidSaveNotification];
+}
 
 - (instancetype)init {
     if (self = [self initWithObjectID: nil
@@ -243,83 +253,84 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         objectContextQueue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
         
         __typeof(self) __weak wself = self;
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
-                                                          object:managedObjectContext
-                                                           queue:_objectContextQueue
-                                                      usingBlock:^(NSNotification * _Nonnull note) {
-                                                          
-                                                          //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-                                                          id keys = note.userInfo.keyEnumerator;
-                                                          id objects = note.userInfo.objectEnumerator;
-                                                          
-                                                          NSSet *deletedObjects;
-                                                          NSSet *updatedObjects;
-                                                          NSSet *insertedObjects;
-                                                          NSSet *invalidatedObjects;
-                                                          
-                                                          deletedObjects = [note.userInfo objectForKey:NSDeletedObjectsKey];
-                                                          [deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
-                                                              
-                                                              if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-                                                                  typeof(self) sself = wself;
-                                                                  MADModelQuery *query = sself.firstQuery;
-                                                                  [query deleteQueryLinkID:((NSManagedObject *)obj).objectID];
-                                                              }
-                                                              
-                                                              if ([obj isKindOfClass:[RptqQueryTable class]]) {
-                                                                  typeof(self) sself = wself;
-                                                                  MADModelQuery *query = sself.firstQuery;
-                                                                  [query deleteQueryTableID:((NSManagedObject *)obj).objectID];
-                                                              }
-                                                              
-                                                          }];
-                                                          
-                                                          insertedObjects = [note.userInfo objectForKey:NSInsertedObjectsKey];
-                                                          [insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
-                                                              
-                                                              if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-                                                                  typeof(self) sself = wself;
-                                                                  MADModelQuery *query = sself.firstQuery;
-                                                                  [query insertQueryLinkID:((NSManagedObject *)obj).objectID];
-                                                              }
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        _observeChangeNotification = [notificationCenter addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
+                                                                     object:managedObjectContext
+                                                                      queue:_objectContextQueue
+                                                                 usingBlock:^(NSNotification * _Nonnull note) {
+                                                                     
+                                                                     //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
+                                                                     id keys = note.userInfo.keyEnumerator;
+                                                                     id objects = note.userInfo.objectEnumerator;
+                                                                     
+                                                                     NSSet *deletedObjects;
+                                                                     NSSet *updatedObjects;
+                                                                     NSSet *insertedObjects;
+                                                                     NSSet *invalidatedObjects;
+                                                                     
+                                                                     deletedObjects = [note.userInfo objectForKey:NSDeletedObjectsKey];
+                                                                     [deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+                                                                         
+                                                                         if ([obj isKindOfClass:[RptqQueryLinks class]]) {
+                                                                             typeof(self) sself = wself;
+                                                                             MADModelQuery *query = sself.firstQuery;
+                                                                             [query deleteQueryLinkID:((NSManagedObject *)obj).objectID];
+                                                                         }
+                                                                         
+                                                                         if ([obj isKindOfClass:[RptqQueryTable class]]) {
+                                                                             typeof(self) sself = wself;
+                                                                             MADModelQuery *query = sself.firstQuery;
+                                                                             [query deleteQueryTableID:((NSManagedObject *)obj).objectID];
+                                                                         }
+                                                                         
+                                                                     }];
+                                                                     
+                                                                     insertedObjects = [note.userInfo objectForKey:NSInsertedObjectsKey];
+                                                                     [insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+                                                                         
+                                                                         if ([obj isKindOfClass:[RptqQueryLinks class]]) {
+                                                                             typeof(self) sself = wself;
+                                                                             MADModelQuery *query = sself.firstQuery;
+                                                                             [query insertQueryLinkID:((NSManagedObject *)obj).objectID];
+                                                                         }
+                                                                         
+                                                                         if ([obj isKindOfClass:[RptqQueryTable class]]) {
+                                                                             typeof(self) sself = wself;
+                                                                             MADModelQuery *query = sself.firstQuery;
+                                                                             [query insertQueryTableID:((NSManagedObject *)obj).objectID];
+                                                                         }
+                                                                         
+                                                                     }];
+                                                                     updatedObjects = [note.userInfo objectForKey:NSUpdatedObjectsKey];
+                                                                     invalidatedObjects = [note.userInfo objectForKey:NSInvalidatedObjectsKey];
+                                                                     //for (id key in keys) {
+                                                                     //    NSLog(@"[%@] %@", NSStringFromClass([key class]), key);
+                                                                     
+                                                                     //}
+                                                                     //for (id object in objects) {
+                                                                     //    NSLog(@"[%@] %@", NSStringFromClass([object class]), object);
+                                                                     //}
+                                                                     //NSLog(@"%@", NSInsertedObjectsKey);
+                                                                     //NSLog(@"%@", NSUpdatedObjectsKey);
+                                                                     //NSLog(@"%@", NSRefreshedObjectsKey);
+                                                                     //NSLog(@"%@", NSDeletedObjectsKey);
+                                                                     //NSLog(@"%@", NSInvalidatedObjectsKey);
+                                                                     //NSLog(@"%@", NSManagedObjectContextQueryGenerationKey);
+                                                                     
+                                                                 }];
 
-                                                              if ([obj isKindOfClass:[RptqQueryTable class]]) {
-                                                                  typeof(self) sself = wself;
-                                                                  MADModelQuery *query = sself.firstQuery;
-                                                                  [query insertQueryTableID:((NSManagedObject *)obj).objectID];
-                                                              }
-
-                                                          }];
-                                                          updatedObjects = [note.userInfo objectForKey:NSUpdatedObjectsKey];
-                                                          invalidatedObjects = [note.userInfo objectForKey:NSInvalidatedObjectsKey];
-                                                          //for (id key in keys) {
-                                                          //    NSLog(@"[%@] %@", NSStringFromClass([key class]), key);
-                                                              
-                                                          //}
-                                                          //for (id object in objects) {
-                                                          //    NSLog(@"[%@] %@", NSStringFromClass([object class]), object);
-                                                          //}
-                                                          //NSLog(@"%@", NSInsertedObjectsKey);
-                                                          //NSLog(@"%@", NSUpdatedObjectsKey);
-                                                          //NSLog(@"%@", NSRefreshedObjectsKey);
-                                                          //NSLog(@"%@", NSDeletedObjectsKey);
-                                                          //NSLog(@"%@", NSInvalidatedObjectsKey);
-                                                          //NSLog(@"%@", NSManagedObjectContextQueryGenerationKey);
-                                                          
-                                                      }];
-
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextWillSaveNotification
-                                                          object:managedObjectContext
-                                                           queue:_objectContextQueue
-                                                      usingBlock:^(NSNotification * _Nonnull note) {
-                                                          //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-                                                      }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
-                                                          object:managedObjectContext
-                                                           queue:_objectContextQueue
-                                                      usingBlock:^(NSNotification * _Nonnull note) {
-                                                          //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-                                                      }];
+        _observeWillSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextWillSaveNotification
+                                                                       object:managedObjectContext
+                                                                        queue:_objectContextQueue
+                                                                   usingBlock:^(NSNotification * _Nonnull note) {
+                                                                       //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
+                                                                   }];
+        _observeDidSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextDidSaveNotification
+                                                                      object:managedObjectContext
+                                                                       queue:_objectContextQueue
+                                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                                      //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
+                                                                  }];
         
         _objectContextQueue = objectContextQueue;
         _managedObjectContext = managedObjectContext;
