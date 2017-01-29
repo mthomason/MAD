@@ -3492,7 +3492,7 @@ END_deselectElementView:;
 
 - (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
     BOOL result;
-    if ([self isBorderAppliedToView:label]) {
+    if ([self isBorderAppliedToSectionLabel:label]) {
         
         NSNumber *key = [[NSNumber alloc] initWithInteger: label.tag];
         self.borderAppliedToView[key] = @NO;
@@ -3508,7 +3508,7 @@ END_deselectElementView:;
 
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
-    if ([self isBorderAppliedToView:view]) {
+    if ([self isBorderAppliedToElementView:view]) {
 
         NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
         self.borderAppliedToView[key] = @NO;
@@ -3523,8 +3523,14 @@ END_deselectElementView:;
     return result;
 }
 
-- (BOOL)isBorderAppliedToView:(UIView *)view {
+- (BOOL)isBorderAppliedToSectionLabel:(MADDesignerSectionLabel *)view {
     NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
+    NSNumber *borderAppliedToView = _borderAppliedToView[key];
+    return borderAppliedToView == nil ? NO : borderAppliedToView.boolValue;
+}
+
+- (BOOL)isBorderAppliedToElementView:(MADDesignerElementView *)view {
+    NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
     NSNumber *borderAppliedToView = _borderAppliedToView[key];
     return borderAppliedToView == nil ? NO : borderAppliedToView.boolValue;
 }
