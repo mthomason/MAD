@@ -8,13 +8,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "RptqDocumentElement+CoreDataClass.h"
 
 @class UIImage;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocumentElementImage : NSManagedObject
+@interface RptqDocumentElementImage : RptqDocumentElement
 
 @end
 

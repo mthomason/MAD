@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqDocumentSection *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSNumber *height;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSNumber *layoutHeight;
 @property (nullable, nonatomic, copy) NSNumber *marginBottom;
 @property (nullable, nonatomic, copy) NSNumber *marginLeft;
@@ -30,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *type;
 @property (nullable, nonatomic, copy) NSNumber *visibility;
 @property (nullable, nonatomic, copy) NSNumber *wrappingStyle;
-@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentSectionRows *> *hasRows;
 @property (nullable, nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nullable, nonatomic, retain) RptqDocument *inReport;

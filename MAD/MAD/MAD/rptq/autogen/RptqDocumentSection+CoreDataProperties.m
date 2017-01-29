@@ -15,6 +15,7 @@
 }
 
 @dynamic height;
+@dynamic identifier;
 @dynamic layoutHeight;
 @dynamic marginBottom;
 @dynamic marginLeft;
@@ -29,7 +30,6 @@
 @dynamic type;
 @dynamic visibility;
 @dynamic wrappingStyle;
-@dynamic identifier;
 @dynamic hasRows;
 @dynamic inGroup;
 @dynamic inReport;

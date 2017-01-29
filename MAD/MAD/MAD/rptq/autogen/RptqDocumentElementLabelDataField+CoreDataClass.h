@@ -8,13 +8,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "RptqDocumentElement+CoreDataClass.h"
 
 @class RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocumentElementLabelDataField : NSManagedObject
+@interface RptqDocumentElementLabelDataField : RptqDocumentElement
 
 @end
 

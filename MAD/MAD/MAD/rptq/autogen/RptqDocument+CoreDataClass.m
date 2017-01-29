@@ -9,7 +9,7 @@
 
 #import "RptqDocument+CoreDataClass.h"
 #import "RptqDatabase+CoreDataClass.h"
-#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSection.h"
 @implementation RptqDocument
 
 @end
