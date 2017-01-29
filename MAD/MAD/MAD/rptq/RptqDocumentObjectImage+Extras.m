@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectImage+Extras.m
+//  RptqDocumentElementImage+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 3/17/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectImage+Extras.h"
+#import "RptqDocumentElementImage+Extras.h"
 
 #import <Foundation/NSSortDescriptor.h>
 
@@ -19,11 +19,11 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 
 #import "RptqDataHelper.h"
 
-@implementation RptqDocumentObjectImage (Extras)
+@implementation RptqDocumentElementImage (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [self.parentObject formattedString:dataType forValue:value];
@@ -64,12 +64,12 @@
     }
 }
 
-#pragma mark - RptqDocumentObjectFactory
+#pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
                     fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentObjectImage *)result;
+    return (RptqDocumentElementImage *)result;
 }
 
 - (id)debugQuickLookObject {

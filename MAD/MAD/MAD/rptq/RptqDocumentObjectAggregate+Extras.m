@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectAggregate+Extras.m
+//  RptqDocumentElementAggregate+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 3/17/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentElementAggregate+Extras.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
@@ -20,7 +20,7 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryField+Extras.h"
 
@@ -30,7 +30,7 @@ NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";
 NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber";
 
-@implementation RptqDocumentObjectAggregate (Extras)
+@implementation RptqDocumentElementAggregate (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [self.parentObject formattedString:dataType forValue:value];
@@ -74,7 +74,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 + (instancetype)getElementForObjectID: (NSManagedObjectID *)objectId
                     fromObjectContext: (NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentObjectAggregate *)result;
+    return (RptqDocumentElementAggregate *)result;
 }
 
 - (NSString *)copyDesignerRepresentationText {
@@ -86,11 +86,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentObjectAggregate newStringDisplayForType: self.function.shortValue];
+    return [RptqDocumentElementAggregate newStringDisplayForType: self.function.shortValue];
 }
 
 - (NSString *)functionNameShort {
-    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.shortValue];
+    return [RptqDocumentElementAggregate shortDisplayStringForType: self.function.shortValue];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
@@ -213,7 +213,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
         }
         case MTAggregateFunctionInputTypeFormula: {
             self.aggregateField = nil;
-            self.aggregateFunction = (RptqDocumentObjectFormula *)aggregateObject;
+            self.aggregateFunction = (RptqDocumentElementFormula *)aggregateObject;
             break;
         }
         default:

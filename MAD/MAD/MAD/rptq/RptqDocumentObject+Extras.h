@@ -1,18 +1,18 @@
 //
-//  RptqDocumentObject+Extras.h
+//  RptqDocumentElement+Extras.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/22/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqDocumentObject_Extras_h
-#define Reports_RptqDocumentObject_Extras_h
+#ifndef Reports_RptqDocumentElement_Extras_h
+#define Reports_RptqDocumentElement_Extras_h
 
-#import <MAD/RptqDocumentObject+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+CoreDataClass.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <MADDataStructures/MTProtocolLog.h>
-#import <MAD/RptqDocumentObjectFactory.h>
+#import <MAD/RptqDocumentElementFactory.h>
 #import <MADFoundation/MADDataType.h>
 #import <MAD/MADDocumentObjectType.h>
 
@@ -31,12 +31,12 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @class UIFontDescriptor;
 @class RptqDocumentSection;
 
-@interface RptqDocumentObject (Extras)
-    <MTProtocolLog, RptqDocumentObjectFactory>
+@interface RptqDocumentElement (Extras)
+    <MTProtocolLog, RptqDocumentElementFactory>
 
     + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
 
-    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject
+    + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
                fromParentSection:(RptqDocumentSection *)section
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;
 

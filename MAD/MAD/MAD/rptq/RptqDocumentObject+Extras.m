@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObject+Extras.m
+//  RptqDocumentElement+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/22/12.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -27,24 +27,24 @@
 #import "MADFont.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDocumentObjectGroupKey+CoreDataClass.h"
-#import "RptqDocumentObjectGroupKey+CoreDataProperties.h"
-#import "RptqDocumentObjectAggregate+CoreDataClass.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectFormula+CoreDataClass.h"
-#import "RptqDocumentObjectFormula+CoreDataProperties.h"
-#import "RptqDocumentObjectGroupKey+CoreDataClass.h"
-#import "RptqDocumentObjectLabel+CoreDataClass.h"
-#import "RptqDocumentObjectImage+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataProperties.h"
-#import "RptqDocumentObjectBarcode+CoreDataClass.h"
+#import "RptqDocumentElementGroupKey+CoreDataClass.h"
+#import "RptqDocumentElementGroupKey+CoreDataProperties.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+Extras.h"
+#import "RptqDocumentElementFormula+CoreDataClass.h"
+#import "RptqDocumentElementFormula+CoreDataProperties.h"
+#import "RptqDocumentElementGroupKey+CoreDataClass.h"
+#import "RptqDocumentElementLabel+CoreDataClass.h"
+#import "RptqDocumentElementImage+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
+#import "RptqDocumentElementBarcode+CoreDataClass.h"
 #import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 
 #import "MADSectionLayoutManager.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
 
 #import <math.h>
 
@@ -82,7 +82,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 //
 //
 
-@implementation RptqDocumentObject (Extras)
+@implementation RptqDocumentElement (Extras)
 
 #pragma mark -
 #pragma mark Static Helpers
@@ -115,28 +115,28 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
-    RptqDocumentObject *result = nil;
+    RptqDocumentElement *result = nil;
     
-    if ([managedObject isKindOfClass:[RptqDocumentObject class]]) {
-        result = (RptqDocumentObject *)managedObject;
+    if ([managedObject isKindOfClass:[RptqDocumentElement class]]) {
+        result = (RptqDocumentElement *)managedObject;
         
     } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
-        result = ((RptqDocumentObjectGroupKey *)managedObject).parentObject;
+        result = ((RptqDocumentElementGroupKey *)managedObject).parentObject;
         
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
-        result = ((RptqDocumentObjectLabel *)managedObject).parentObjectLabel;
+    } else if ([managedObject isKindOfClass:[RptqDocumentElementLabel class]]) {
+        result = ((RptqDocumentElementLabel *)managedObject).parentObjectLabel;
         
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
-        result = ((RptqDocumentObjectBarcode *)managedObject).parentObjectBarcode;
+    } else if ([managedObject isKindOfClass:[RptqDocumentElementBarcode class]]) {
+        result = ((RptqDocumentElementBarcode *)managedObject).parentObjectBarcode;
         
-    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
-        result = ((RptqDocumentObjectLabelDataField *)managedObject).parentObjectLabelDataField;
+    } else if ([managedObject isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
+        result = ((RptqDocumentElementLabelDataField *)managedObject).parentObjectLabelDataField;
         
     }
     return result;
 }
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject
++ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
            fromParentSection:(RptqDocumentSection *)section
            withLayoutManager:(MADSectionLayoutManager *)layoutManager {
     
@@ -170,7 +170,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     
     // MARK: Auto increment row counter
     NSFetchRequest *request;
-    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSString *key = NSStringFromSelector(@selector(identifier));
     
     request = [[NSFetchRequest alloc] initWithEntityName: entityName];
@@ -187,7 +187,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSUInteger idNumber = 0;
     NSUInteger lastDropIndex = 0;
     if (error == nil) {
-        RptqDocumentObject *lastObject = fetchResults.lastObject;
+        RptqDocumentElement *lastObject = fetchResults.lastObject;
         idNumber = lastObject.identifier.unsignedIntegerValue + 1;
         lastDropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
     }
@@ -344,11 +344,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
             break;
 
         case MTDocumentObjectTypeFormula:
-            result = [(RptqDocumentObjectFormula *)self source];
+            result = [(RptqDocumentElementFormula *)self source];
             break;
         
         case MTDocumentObjectTypeGroupKey: {
-            NSNumber *groupNumber = [((RptqDocumentObjectGroupKey *)self) groupNumber];
+            NSNumber *groupNumber = [((RptqDocumentElementGroupKey *)self) groupNumber];
             NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
@@ -361,18 +361,18 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
             break;
         
         case MTDocumentObjectTypeLabelDynamic:
-            result = [((RptqDocumentObjectLabelDataField *)self) referencesQueryField].toStringReverse;
+            result = [((RptqDocumentElementLabelDataField *)self) referencesQueryField].toStringReverse;
             break;
         
         case MTDocumentObjectTypeLabelStatic:
-            result = ((RptqDocumentObjectLabel *)self).text;
+            result = ((RptqDocumentElementLabel *)self).text;
             break;
         case MTDocumentObjectTypeWhtiespace:
             result = @"Whitespace";
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            NSString *barcodeName = [(RptqDocumentObjectBarcode *)self copyBarcodeTypeName];
+            NSString *barcodeName = [(RptqDocumentElementBarcode *)self copyBarcodeTypeName];
             result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }

@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectFormula+Extras.m
+//  RptqDocumentElementFormula+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 3/18/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentElementFormula+Extras.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -20,14 +20,14 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument+CoreDataClass.h"
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 
-@implementation RptqDocumentObjectFormula (Extras)
+@implementation RptqDocumentElementFormula (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [self.parentObjectFormula formattedString:dataType forValue:value];
@@ -66,29 +66,29 @@
     }
 }
 
-#pragma mark - RptqDocumentObjectFactory
+#pragma mark - RptqDocumentElementFactory
 
-+ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
++ (RptqDocumentElement *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
     NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
     NSEntityDescription *entityDescriptionDocumentObject;
-    entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+    entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElement class])
                                                   inManagedObjectContext: managedObjectContext];
     
     NSEntityDescription *entityDescriptionDocumentObjectSubtype;
-    entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
+    entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementFormula class])
                                                          inManagedObjectContext: managedObjectContext];
     
     NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
-    RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+    RptqDocumentElementFormula *reportObject = [[RptqDocumentElementFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                  insertIntoManagedObjectContext: managedObjectContext];
     
     reportObject.source = formulaText;
     NSNumber *typeFormula = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeFormula];
     reportObject.type = typeFormula;
     
-    NSMutableOrderedSet <RptqDocumentObject *> *hasObjects;
+    NSMutableOrderedSet <RptqDocumentElement *> *hasObjects;
     hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
     [hasObjects insertObject:reportObject atIndex:0];
     [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];

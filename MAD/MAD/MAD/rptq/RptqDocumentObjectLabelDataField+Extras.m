@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectLabelDataField+Extras.m
+//  RptqDocumentElementLabelDataField+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/29/12.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocumentElementLabelDataField+Extras.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -20,13 +20,13 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
 
 #import "RptqDataHelper.h"
 
-@implementation RptqDocumentObjectLabelDataField (Extras)
+@implementation RptqDocumentElementLabelDataField (Extras)
 
 #pragma mark - Overrides
 
@@ -67,12 +67,12 @@
     return [self.parentObjectLabelDataField formattedString:dataType forValue:value];
 }
 
-#pragma mark - RptqDocumentObjectFactory
+#pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
                     fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentObjectLabelDataField *)result;
+    return (RptqDocumentElementLabelDataField *)result;
 }
 
 - (id)debugQuickLookObject {

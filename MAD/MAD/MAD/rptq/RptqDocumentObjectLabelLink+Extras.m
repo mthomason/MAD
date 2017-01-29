@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectLabelLink+Extras.m
+//  RptqDocumentElementLabelLink+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 12/15/12.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectLabelLink+Extras.h"
+#import "RptqDocumentElementLabelLink+Extras.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -19,12 +19,12 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
 
 #import "RptqDataHelper.h"
 
-@implementation RptqDocumentObjectLabelLink (Extras)
+@implementation RptqDocumentElementLabelLink (Extras)
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
     return [self.parentObjectLinkLabel formattedString:dataType forValue:value];

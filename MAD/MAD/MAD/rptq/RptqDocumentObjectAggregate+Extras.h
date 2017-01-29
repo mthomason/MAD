@@ -1,15 +1,15 @@
 //
-//  RptqDocumentObjectAggregate+Extras.h
+//  RptqDocumentElementAggregate+Extras.h
 //  Reports
 //
 //  Created by Michael Thomason on 3/17/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqDocumentObjectAggregate_Extras_h
-#define Reports_RptqDocumentObjectAggregate_Extras_h
+#ifndef Reports_RptqDocumentElementAggregate_Extras_h
+#define Reports_RptqDocumentElementAggregate_Extras_h
 
-#import <MAD/RptqDocumentObjectAggregate+CoreDataClass.h>
+#import <MAD/RptqDocumentElementAggregate+CoreDataClass.h>
 
 #import <MAD/MADAggregateFunctionType.h>
 #import <MAD/MADAggregateFunctionInputType.h>
@@ -21,7 +21,7 @@ extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;
 
-@interface RptqDocumentObjectAggregate (Extras)
+@interface RptqDocumentElementAggregate (Extras)
 
     + (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType;
     + (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType;

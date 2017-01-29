@@ -1,21 +1,21 @@
 //
-//  RptqDocumentObjectFormula+Extras.h
+//  RptqDocumentElementFormula+Extras.h
 //  Reports
 //
 //  Created by Michael Thomason on 3/18/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqDocumentObjectFormula_Extras_h
-#define Reports_RptqDocumentObjectFormula_Extras_h
+#ifndef Reports_RptqDocumentElementFormula_Extras_h
+#define Reports_RptqDocumentElementFormula_Extras_h
 
-#import "RptqDocumentObjectFormula+CoreDataClass.h"
-#import "RptqDocumentObjectFactory.h"
+#import "RptqDocumentElementFormula+CoreDataClass.h"
+#import "RptqDocumentElementFactory.h"
 #import <MADDataStructures/MTProtocolLog.h>
 #import <MADFoundation/MADDataType.h>
 
-@interface RptqDocumentObjectFormula (Extras)
-        <RptqDocumentObjectFactory, MTProtocolLog>
+@interface RptqDocumentElementFormula (Extras)
+        <RptqDocumentElementFactory, MTProtocolLog>
 
     - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 

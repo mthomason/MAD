@@ -1,5 +1,5 @@
 //
-//  RptqDocumentObjectBarcode+Extras.m
+//  RptqDocumentElementBarcode+Extras.m
 //  MAD
 //
 //  Created by Michael Thomason on 11/16/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import <CoreData/NSFetchRequest.h>
@@ -19,7 +19,7 @@
 #import <MADBarcodes/MADBarcodes.h>
 #import "RptqDataHelper.h"
 
-@implementation RptqDocumentObjectBarcode (Extras)
+@implementation RptqDocumentElementBarcode (Extras)
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
@@ -78,7 +78,7 @@
     [self.managedObjectContext save:nil];
 }
 
-+ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {
++ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject {
     
     MTBarcodeType type = documentObject.type.unsignedIntegerValue;
     MTBarcode *barcode = [MTBarcode newBarcodeWithType:type];
@@ -99,7 +99,7 @@
     return barcode;
 }
 
-+ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject
++ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject
                                      input1:(NSString *)input1
                                      input2:(NSString *)input2 {
     MTBarcode *barcode = [self newBarcodeWithDocumentObject:documentObject];
@@ -112,17 +112,17 @@
                        queryFieldOne:(RptqQueryField *)queryFieldOne
                        queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED {
     
-    RptqDocumentObjectBarcode *reportObject = nil;
+    RptqDocumentElementBarcode *reportObject = nil;
     
     if (queryFieldOne != nil) {
     
-        NSString *className = NSStringFromClass([RptqDocumentObjectBarcode class]);
+        NSString *className = NSStringFromClass([RptqDocumentElementBarcode class]);
         NSEntityDescription *entityDescription;
         NSManagedObjectContext *objectContext = queryFieldOne.managedObjectContext;
         entityDescription = [NSEntityDescription entityForName: className
                                         inManagedObjectContext: objectContext];
         
-        reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescription
+        reportObject = [[RptqDocumentElementBarcode alloc] initWithEntity: entityDescription
                                           insertIntoManagedObjectContext: objectContext];
         
         
