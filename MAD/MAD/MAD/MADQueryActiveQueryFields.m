@@ -13,9 +13,9 @@
 
 #import "MADDocumentObjectType.h"
 
-#import "RptqDocumentObjectBarcode+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObjectAggregate+CoreDataClass.h"
+#import "RptqDocumentElementBarcode+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
 #import "RptqQueryLinks+CoreDataClass.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryGroup+CoreDataClass.h"
@@ -30,11 +30,11 @@
         NSArray *objects;
         
         // Barcodes
-        objects = [self objectOfType: [RptqDocumentObjectBarcode class]
+        objects = [self objectOfType: [RptqDocumentElementBarcode class]
                            inContext: context];
         
         NSMutableSet *queryFields = [[NSMutableSet alloc] init];
-        for (RptqDocumentObjectBarcode *dataField in objects) {
+        for (RptqDocumentElementBarcode *dataField in objects) {
             RptqQueryField *queryField = dataField.referencesField1;
             if (queryField != nil) {
                 [queryFields addObject:queryField];
@@ -46,10 +46,10 @@
         }
 
         // Data labels
-        objects = [self objectOfType: [RptqDocumentObjectLabelDataField class]
+        objects = [self objectOfType: [RptqDocumentElementLabelDataField class]
                            inContext: context];
 
-        for (RptqDocumentObjectLabelDataField *dataField in objects) {
+        for (RptqDocumentElementLabelDataField *dataField in objects) {
             RptqQueryField *queryField = dataField.referencesQueryField;
             if (queryField != nil) {
                 [queryFields addObject:queryField];
@@ -57,10 +57,10 @@
         }
         
         // Aggregate
-        objects = [self objectOfType: [RptqDocumentObjectAggregate class]
+        objects = [self objectOfType: [RptqDocumentElementAggregate class]
                            inContext: context];
         
-        for (RptqDocumentObjectAggregate *dataField in objects) {
+        for (RptqDocumentElementAggregate *dataField in objects) {
             RptqQueryField *queryField = dataField.aggregateField;
             if (queryField != nil) {
                 [queryFields addObject:queryField];

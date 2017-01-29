@@ -64,7 +64,7 @@
     }
 }
 
-- (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value {
+- (void)addHasObjectsObjectFixed:(RptqDocumentElement *)value {
 
     if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
 
@@ -79,7 +79,7 @@
     }
 }
 
-- (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value {
+- (void)removeHasObjectsObjectFixed:(RptqDocumentElement *)value {
 
     if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
         

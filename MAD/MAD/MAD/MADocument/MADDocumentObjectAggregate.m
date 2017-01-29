@@ -8,13 +8,13 @@
 
 #import "MADDocumentObjectAggregate.h"
 #import <Foundation/NSString.h>
-#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentElementAggregate+Extras.h"
 #import "MTDatabase.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
-#import "RptqDocumentObjectAggregate+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
 #import "MTDataTableFast.h"
 #import "MTReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
@@ -36,11 +36,11 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
         
-        RptqDocumentObject *item;
+        RptqDocumentElement *item;
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
         datasource = datasource;
         item = item;
-        RptqDocumentObjectAggregate *isAggregate = (RptqDocumentObjectAggregate *)item;
+        RptqDocumentElementAggregate *isAggregate = (RptqDocumentElementAggregate *)item;
         RptqQueryField *aggregateField = isAggregate.aggregateField;
         RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
         

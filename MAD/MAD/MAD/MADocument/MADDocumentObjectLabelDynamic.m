@@ -9,9 +9,9 @@
 #import "MADDocumentObjectLabelDynamic.h"
 #import <Foundation/NSString.h>
 #import "MTDataTable.h"
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
@@ -33,7 +33,7 @@
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        RptqDocumentObjectLabelDataField *item;
+        RptqDocumentElementLabelDataField *item;
         
         datasource = definition.datasource;
         item = definition.item;

@@ -13,8 +13,8 @@
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqQueryField+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
 #import "MTDatabase.h"
 #import "MTDataTableFast.h"
 #import <MADFoundation/MADDataType.h>
@@ -41,13 +41,13 @@
 }
 
 - (instancetype)initWithDatabase:(MTDatabase *)database
-            referencesQueryField:(RptqDocumentObject *)documentObject {
+            referencesQueryField:(RptqDocumentElement *)documentObject {
 
     if (self = [super init]) {
         
         NSString *tableName;
         MADSafeQueryField *fieldName;
-        RptqDocumentObjectLabelDataField *isLabelDataField;
+        RptqDocumentElementLabelDataField *isLabelDataField;
         RptqQueryField *referencesQueryField;
         RptqDatabaseSchemaField *databaseSchemaField;
         RptqQueryTable *inQueryTable;

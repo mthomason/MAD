@@ -8,18 +8,18 @@
 
 #import "MADDocumentObjectBarcode.h"
 #import "MTDatabase.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
 #import "MTDataTableFast.h"
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "MTReportFormatter.h"
 #import <Foundation/NSString.h>
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentElement+CoreDataClass.h"
 
 #import <MADBarcodes/MTBarcode.h>
 
@@ -30,7 +30,7 @@
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super init]) {
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        RptqDocumentObjectBarcode *item;
+        RptqDocumentElementBarcode *item;
         MTDatabase *database;
         
         datasource = definition.datasource;
@@ -54,7 +54,7 @@
                              forDocumentObject: item.parentObjectBarcode
                                          value: rowData[tableFieldKey2]];
         
-        MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:item
+        MTBarcode *barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:item
                                                                               input1:input1
                                                                               input2:input2];
         _drawingObject = barcode;
@@ -63,7 +63,7 @@
 }
 
 - (NSString *)inputForField:(RptqQueryField *)field
-          forDocumentObject:(RptqDocumentObject *)item
+          forDocumentObject:(RptqDocumentElement *)item
                       value:(id)value {
     
     NSString *input1 = [item formattedString: field.databaseSchemaField.dataType.shortValue

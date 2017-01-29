@@ -40,17 +40,17 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 
-#import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentObjectChart+CoreDataClass.h"
-#import "RptqDocumentObjectGroupKey+CoreDataClass.h"
-#import "RptqDocumentObjectImage+CoreDataClass.h"
-#import "RptqDocumentObjectLabel+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObjectLabelLink+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
+#import "RptqDocumentElementChart+CoreDataClass.h"
+#import "RptqDocumentElementGroupKey+CoreDataClass.h"
+#import "RptqDocumentElementImage+CoreDataClass.h"
+#import "RptqDocumentElementLabel+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementLabelLink+CoreDataClass.h"
 
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-#import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentElementAggregate+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
+#import "RptqDocumentElementFormula+Extras.h"
 
 #import "MADErrorContainer.h"
 #import "MTDatabaseTable.h"
@@ -662,24 +662,24 @@
     
 }
 
-- (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination {
+- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination {
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
     MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;
     
-    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: entityName
                                                                        inManagedObjectContext: managedObjectContext];
     
-    RptqDocumentObject *reportObject;
+    RptqDocumentElement *reportObject;
     
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
-            entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+            entityName = NSStringFromClass([RptqDocumentElementLabelDataField class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
@@ -687,12 +687,12 @@
             RptqQueryField *field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectId];
             
             
-            reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+            reportObject = [[RptqDocumentElementLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                      insertIntoManagedObjectContext: managedObjectContext];
             
-            ((RptqDocumentObjectLabelDataField *)reportObject).referencesQueryField = field;
+            ((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
 
-            ((RptqDocumentObjectLabelDataField *)reportObject).referencesQueryField = field;
+            ((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
             
             id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
             reportObject.type = type;
@@ -701,16 +701,16 @@
         }
         case MTDocumentObjectTypeLabelStatic: {
             
-            entityName = NSStringFromClass([RptqDocumentObjectLabel class]);
+            entityName = NSStringFromClass([RptqDocumentElementLabel class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
             NSString *labelText = defination[MTDocumentObjectDefinationObject];
             
-            reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+            reportObject = [[RptqDocumentElementLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                      insertIntoManagedObjectContext: managedObjectContext];
             
-            ((RptqDocumentObjectLabel *)reportObject).text = labelText;
+            ((RptqDocumentElementLabel *)reportObject).text = labelText;
 
             id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
             reportObject.type = type;
@@ -719,18 +719,18 @@
         }
         case MTDocumentObjectTypeAggregate: {
             
-            entityName = NSStringFromClass([RptqDocumentObjectAggregate class]);
+            entityName = NSStringFromClass([RptqDocumentElementAggregate class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
             NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
-            reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+            reportObject = [[RptqDocumentElementAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                              insertIntoManagedObjectContext: self.managedObjectContext];
             
             NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
-            ((RptqDocumentObjectAggregate *)reportObject).groupNumber = aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber];
-            ((RptqDocumentObjectAggregate *)reportObject).groupType = aggregateOptions[MTDocumentObjectDefinationAggregatePivotType];
-            ((RptqDocumentObjectAggregate *)reportObject).function = aggregateOptions[MTDocumentObjectDefinationAggregateType];
+            ((RptqDocumentElementAggregate *)reportObject).groupNumber = aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber];
+            ((RptqDocumentElementAggregate *)reportObject).groupType = aggregateOptions[MTDocumentObjectDefinationAggregatePivotType];
+            ((RptqDocumentElementAggregate *)reportObject).function = aggregateOptions[MTDocumentObjectDefinationAggregateType];
             
             NSManagedObjectID *objectId = aggregateOptions[MTDocumentObjectDefinationAggregateObjectId];
             
@@ -738,14 +738,14 @@
                 case MTAggregateFunctionInputTypeField: {
                     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: objectId
                                                              managedObjectContext: managedObjectContext];
-                    ((RptqDocumentObjectAggregate *)reportObject).aggregateField = field;
-                    [((RptqDocumentObjectAggregate *)reportObject) setAggregateFunction:nil];
+                    ((RptqDocumentElementAggregate *)reportObject).aggregateField = field;
+                    [((RptqDocumentElementAggregate *)reportObject) setAggregateFunction:nil];
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
-                    RptqDocumentObjectFormula *formula =  [managedObjectContext objectWithID: objectId];
-                    [((RptqDocumentObjectAggregate *)reportObject) setAggregateField:nil];
-                    ((RptqDocumentObjectAggregate *)reportObject).aggregateFunction = formula;
+                    RptqDocumentElementFormula *formula =  [managedObjectContext objectWithID: objectId];
+                    [((RptqDocumentElementAggregate *)reportObject) setAggregateField:nil];
+                    ((RptqDocumentElementAggregate *)reportObject).aggregateFunction = formula;
                     break;
                 }
                 default:
@@ -759,24 +759,24 @@
         }
         case MTDocumentObjectTypeImage: {
             
-            entityName = NSStringFromClass([RptqDocumentObjectImage class]);
+            entityName = NSStringFromClass([RptqDocumentElementImage class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
             UIImage *image = defination[MTDocumentObjectDefinationObject];
             
-            reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+            reportObject = [[RptqDocumentElementImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                             insertIntoManagedObjectContext: managedObjectContext];
-            ((RptqDocumentObjectImage *)reportObject).image = image;
+            ((RptqDocumentElementImage *)reportObject).image = image;
 
             id number = [[NSNumber alloc] initWithDouble:image.size.height];
-            ((RptqDocumentObjectImage *)reportObject).sizeheight = number;
+            ((RptqDocumentElementImage *)reportObject).sizeheight = number;
             
             number = [[NSNumber alloc] initWithDouble:image.size.width];
-            ((RptqDocumentObjectImage *)reportObject).sizewidth = number;
+            ((RptqDocumentElementImage *)reportObject).sizewidth = number;
             
             number = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
-            ((RptqDocumentObjectImage *)reportObject).type = number;
+            ((RptqDocumentElementImage *)reportObject).type = number;
             
             image = nil;
             
@@ -798,7 +798,7 @@
                                                       managedObjectContext: managedObjectContext];
             RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID: field2ObjectId
                                                       managedObjectContext: managedObjectContext];
-            reportObject = [RptqDocumentObjectBarcode barcodeWithMtBarcode: barcode
+            reportObject = [RptqDocumentElementBarcode barcodeWithMtBarcode: barcode
                                                              queryFieldOne: field1
                                                              queryFieldTwo: field2];
             id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeBarcode];
@@ -824,7 +824,7 @@
     return reportObject;
 }
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject
++ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
     fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     [managedObjectContext deleteObject: documentObject];

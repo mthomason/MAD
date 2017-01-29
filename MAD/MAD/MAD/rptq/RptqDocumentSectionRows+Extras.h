@@ -15,8 +15,8 @@
 
     + (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
-    - (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value;
+    - (void)addHasObjectsObjectFixed:(RptqDocumentElement *)value;
+    - (void)removeHasObjectsObjectFixed:(RptqDocumentElement *)value;
 
 @end
 

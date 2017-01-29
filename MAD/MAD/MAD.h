@@ -44,7 +44,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
 #import <MAD/RptqDatabaseSchemaTable+Extras.h>
 
-#import <MAD/RptqDocumentObjectFactory.h>
+#import <MAD/RptqDocumentElementFactory.h>
 #import <MAD/RptqRelationship.h>
 
 #import <MAD/RptqQuery+CoreDataClass.h>
@@ -68,33 +68,33 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqQuerySort+CoreDataClass.h>
 #import <MAD/RptqQueryCache+CoreDataClass.h>
 
-#import <MAD/RptqDocumentObject+CoreDataClass.h>
-#import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+Extras.h>
 
-#import <MAD/RptqDocumentObjectAggregate+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementAggregate+CoreDataClass.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
-#import <MAD/RptqDocumentObjectBarcode+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+#import <MAD/RptqDocumentElementBarcode+CoreDataClass.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
 
-#import <MAD/RptqDocumentObjectChart+CoreDataClass.h>
+#import <MAD/RptqDocumentElementChart+CoreDataClass.h>
 
-#import <MAD/RptqDocumentObjectFormula+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectFormula+Extras.h>
+#import <MAD/RptqDocumentElementFormula+CoreDataClass.h>
+#import <MAD/RptqDocumentElementFormula+Extras.h>
 
-#import <MAD/RptqDocumentObjectGroupKey+CoreDataClass.h>
+#import <MAD/RptqDocumentElementGroupKey+CoreDataClass.h>
 
-#import <MAD/RptqDocumentObjectImage+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectImage+Extras.h>
+#import <MAD/RptqDocumentElementImage+CoreDataClass.h>
+#import <MAD/RptqDocumentElementImage+Extras.h>
 
-#import <MAD/RptqDocumentObjectLabel+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectLabel+Extras.h>
+#import <MAD/RptqDocumentElementLabel+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabel+Extras.h>
 
-#import <MAD/RptqDocumentObjectLabelDataField+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectLabelDataField+Extras.h>
+#import <MAD/RptqDocumentElementLabelDataField+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabelDataField+Extras.h>
 
-#import <MAD/RptqDocumentObjectLabelLink+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectLabelLink+Extras.h>
+#import <MAD/RptqDocumentElementLabelLink+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabelLink+Extras.h>
 
 #import <MAD/RptqFieldSelectorManager.h>
 

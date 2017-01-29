@@ -15,7 +15,7 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <MADFoundation/MADDataColumn.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 @interface MTDataTableVirtual ()
 

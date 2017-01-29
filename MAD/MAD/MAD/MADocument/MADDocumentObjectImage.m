@@ -7,15 +7,15 @@
 //
 
 #import "MADDocumentObjectImage.h"
-#import "RptqDocumentObjectImage+CoreDataClass.h"
+#import "RptqDocumentElementImage+CoreDataClass.h"
 #import "MADDocumentObjectCachedDataReferenceItem.h"
 #import "MADDocumentObjectReference.h"
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObjectImage+CoreDataProperties.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElementImage+CoreDataProperties.h"
 #import <UIKit/UIImage.h>
 
 @interface MADDocumentObjectImage ()
-    @property (nonatomic, weak) RptqDocumentObjectImage *item;
+    @property (nonatomic, weak) RptqDocumentElementImage *item;
 @end
 
 @implementation MADDocumentObjectImage

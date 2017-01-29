@@ -9,7 +9,7 @@
 #import "MADDocumentObjectText.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
-#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentElement+CoreDataClass.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADocumentObjectAttributesText.h"
@@ -31,7 +31,7 @@
     MADocumentObjectAttributesText *attt;
     MADDocumentObjectDataReference *definition;
 
-    RptqDocumentObject *item;
+    RptqDocumentElement *item;
     definition = self.definition;
     item = definition.item;
     

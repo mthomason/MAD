@@ -9,9 +9,9 @@
 
 #import "RptqQueryField+CoreDataClass.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
-#import "RptqDocumentObjectAggregate+CoreDataClass.h"
-#import "RptqDocumentObjectBarcode+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
+#import "RptqDocumentElementBarcode+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
 #import "RptqQueryGroup+CoreDataClass.h"
 #import "RptqQueryLinks+CoreDataClass.h"
 #import "RptqQueryPredicate+CoreDataClass.h"

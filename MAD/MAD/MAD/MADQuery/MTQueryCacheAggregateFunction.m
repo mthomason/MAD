@@ -8,7 +8,7 @@
 
 #import "MTQueryCacheAggregateFunction.h"
 #import <Foundation/NSException.h>
-#import <RptqDocumentObjectAggregate+Extras.h>
+#import <RptqDocumentElementAggregate+Extras.h>
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
 static inline const char *functionName(MTAggregateFunctionType functionType);

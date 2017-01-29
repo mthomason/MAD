@@ -11,7 +11,7 @@
 
 #import "MADDocumentObject.h"
 
-@class RptqDocumentObjectImage;
+@class RptqDocumentElementImage;
 
 @interface MADDocumentObjectImage : MADDocumentObject
 

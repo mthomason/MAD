@@ -24,7 +24,7 @@
 @class MADocument;
 
 @class RptqQueryField;
-@class RptqDocumentObjectAggregate;
+@class RptqDocumentElementAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 
@@ -54,7 +54,7 @@
 
     @property (nonatomic, assign) BOOL editmode;
 
-    - (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject;
+    - (void)setAggregateObjectToEdit:(RptqDocumentElementAggregate *)aggregateDocumentObject;
 
 @end
 

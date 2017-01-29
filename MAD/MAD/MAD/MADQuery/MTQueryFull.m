@@ -49,9 +49,9 @@
 #import "RptqDatabaseSchemaTable+CoreDataClass.h"
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 
-#import "RptqDocumentObjectBarcode+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+CoreDataClass.h"
-#import "RptqDocumentObjectAggregate+CoreDataClass.h"
+#import "RptqDocumentElementBarcode+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"

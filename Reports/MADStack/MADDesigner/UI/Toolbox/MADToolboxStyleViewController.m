@@ -25,8 +25,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
-#import <MAD/RptqDocumentObject+CoreDataClass.h>
-#import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+Extras.h>
 #import "MADReportDesignerFontSelectorDelegateProtocol.h"
 
 static const CGFloat CornerRadius = 6.6666f;
@@ -571,7 +571,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         NSManagedObjectID *objectId;
         NSSet *userSelectedObjectIDs = _userSelectedObjectIds;
-        RptqDocumentObject *documentObject;
+        RptqDocumentElement *documentObject;
         for (objectId in userSelectedObjectIDs) {
             
             documentObject = [self.document.managedObjectContext objectWithID:objectId];
@@ -827,7 +827,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
     NSManagedObjectID *objectId;
     NSSet *userSelectedObjectIDs = _userSelectedObjectIds;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     for (objectId in userSelectedObjectIDs) {
         documentObject = [doc.managedObjectContext objectWithID:objectId];
         documentObject.fontname = familyName;
@@ -855,7 +855,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *boldWrapper = @(ControlStateIsOn(self.controlStateBold));
         documentObject.bold = boldWrapper;
     }
@@ -881,7 +881,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *italic = @(ControlStateIsOn(self.controlStateItalic));
         documentObject.italic = italic;
     }
@@ -907,7 +907,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *strike = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateStrike)];
         documentObject.strike = strike;
     }
@@ -934,7 +934,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *underline = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateUnderline)];
         documentObject.underline = underline;
     }
@@ -951,7 +951,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     labelFontSize.attributedText = attributedString;
     NSNumber *value = [[NSNumber alloc] initWithDouble: pointSize];
     MADocument *document = _document;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.fontsize = value.copy;
@@ -964,7 +964,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:value];
     self.labelSizeHeight.attributedText = displayHeight;
     MADocument *document = _document;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.sizeheight = value.copy;
@@ -976,7 +976,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     NSNumber *value = [[NSNumber alloc] initWithDouble: width];
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:value];
     self.labelSizeWidth.attributedText = displayWidth;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
@@ -991,7 +991,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.horizontalAlignment = value.copy;
     }
     [document.managedObjectContext save:nil];
@@ -1003,7 +1003,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                     barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.verticalAlignment = value.copy;
     }
     [document.managedObjectContext save:nil];
@@ -1015,7 +1015,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelPaddingTop.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingTop = value.copy;
     }
     [document.managedObjectContext save:nil];
@@ -1027,7 +1027,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelPaddingBottom.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingBottom = value.copy;
     }
     [document.managedObjectContext save:nil];
@@ -1039,7 +1039,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelPaddingLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingLeft = value;
     }
     [document.managedObjectContext save:nil];
@@ -1051,7 +1051,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelPaddingRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.paddingRight = value.copy;
     }
     [document.managedObjectContext save:nil];
@@ -1063,7 +1063,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelMarginTop.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginTop = value.copy;
         [document.managedObjectContext save:nil];
     }
@@ -1075,7 +1075,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelMarginBottom.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginBottom = value.copy;
         [document.managedObjectContext save:nil];
     }
@@ -1087,7 +1087,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelMarginLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginLeft = value.copy;
         [document.managedObjectContext save:nil];
     }
@@ -1099,7 +1099,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.labelMarginRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
         documentObject.marginRight = value.copy;
         [document.managedObjectContext save:nil];
     }
@@ -1182,7 +1182,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         destination.clearsBackground = self.clearsBackground;
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             fontname = documentObject.fontname.copy;
             break;
         }

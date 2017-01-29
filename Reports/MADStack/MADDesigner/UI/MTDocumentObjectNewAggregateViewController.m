@@ -20,7 +20,7 @@
 #import <UIKit/UILabel.h>
 
 #import <MAD/RptqQueryField+Extras.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 #import "MADAggregateFunctionsViewControllerDelegate.h"
 #import "MADGroupByViewControllerDelegate.h"
@@ -53,7 +53,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         MADGroupByViewControllerDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-    @property(nonatomic, strong) RptqDocumentObjectAggregate *aggregateDocumentObject;
+    @property(nonatomic, strong) RptqDocumentElementAggregate *aggregateDocumentObject;
 
 @end
 
@@ -78,7 +78,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 #pragma mark - MADGroupByViewControllerDelegate
 
 - (void)didSelectGroupByPage {
-    NSString *detail = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+    NSString *detail = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
     self.groupTypeSectionNumber = 0;
     self.aggregateGroupByType = MTAggregateGroupByTypePage;
     self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
@@ -88,7 +88,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)didSelectGroupByReport {
-    NSString *detail = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+    NSString *detail = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
     self.groupTypeSectionNumber = 0;
     self.aggregateGroupByType = MTAggregateGroupByTypeReport;
     self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
@@ -98,7 +98,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
-    NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
+    NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
     NSString *detail = [NSString stringWithFormat:format, groupNumber];
     self.groupTypeSectionNumber = (NSInteger)groupNumber;
     self.aggregateGroupByType = MTAggregateGroupByTypeSection;
@@ -113,7 +113,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 - (void)didSelectFunction:(MTAggregateFunctionType)aggregateFunctionType {
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
         self.aggregateFunctionType = aggregateFunctionType;
-        NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:aggregateFunctionType];
+        NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType];
         NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
         self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
     }
@@ -168,7 +168,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
             case MTAggregateGroupByTypeSection: {
                 
                 NSUInteger group = self.groupTypeSectionNumber;
-                NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
+                NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
                 self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
                 break;
@@ -176,14 +176,14 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
             }
             case MTAggregateGroupByTypeReport: {
                 
-                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+                NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
                 self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
                 
-                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+                NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
                 self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
                 break;
                 
@@ -210,7 +210,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
         self.aggregateFunctionType = aggregateFunctionType;
-        NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:aggregateFunctionType];
+        NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType];
         NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
         self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
     }
@@ -263,7 +263,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)updateFunctionType {
-    NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:self.aggregateFunctionType];
+    NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:self.aggregateFunctionType];
     NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
     self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
 }
@@ -273,7 +273,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         case MTAggregateGroupByTypeSection: {
             
             NSInteger group = self.groupTypeSectionNumber;
-            NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
+            NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
             NSString *detail = [[NSString alloc] initWithFormat:format, group];
             self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
             break;
@@ -281,14 +281,14 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         }
         case MTAggregateGroupByTypeReport: {
             
-            NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+            NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
             self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
             break;
             
         }
         case MTAggregateGroupByTypePage: {
             
-            NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+            NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
             self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
             break;
             
@@ -342,7 +342,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [super didReceiveMemoryWarning];
 }
 
-- (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject {
+- (void)setAggregateObjectToEdit:(RptqDocumentElementAggregate *)aggregateDocumentObject {
     self.aggregateFunctionType = aggregateDocumentObject.function.shortValue;
     self.aggregateGroupByType = aggregateDocumentObject.groupType.shortValue;
     self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber.integerValue;

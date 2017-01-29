@@ -23,7 +23,7 @@
 #import "MTDatabaseField.h"
 
 #import "RptqDocument+Extras.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 
 #import "RptqDatabase+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
@@ -33,14 +33,14 @@
 
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentElementAggregate+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
 
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 
-#import "RptqDocumentObjectLabel+CoreDataClass.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocumentObjectImage+CoreDataClass.h"
+#import "RptqDocumentElementLabel+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+Extras.h"
+#import "RptqDocumentElementImage+CoreDataClass.h"
 
 #import "MTPaper.h"
 
@@ -475,7 +475,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     MADReportLineRepresentation * _Nonnull line;
 
     RptqDocumentSectionRows *row;
-    RptqDocumentObject *item;
+    RptqDocumentElement *item;
 
     id drawingObject;
 
@@ -686,7 +686,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                 
                 NSMutableArray *accessibilityLinesInSection = [[NSMutableArray alloc] init];
                 for (RptqDocumentSectionRows *row in documentSection.hasRows) {
-                    for (RptqDocumentObject *item in row.hasObjects) {
+                    for (RptqDocumentElement *item in row.hasObjects) {
                         @autoreleasepool {
                             id drawingObject = [self newDrawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
                             MADAccessibilityLine *line = [[MADAccessibilityLine alloc] initWithValue:drawingObject

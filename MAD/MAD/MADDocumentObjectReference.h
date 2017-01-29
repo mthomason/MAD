@@ -15,7 +15,7 @@
 
 @class MTDatabase;
 @class MTDataTable;
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 @class MTReportFormatter;
 
 @class NSManagedObjectID;
@@ -29,7 +29,7 @@
 
     @property (readonly, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *> *fontDescriptors;
-    @property (readwrite, nonatomic, weak) __kindof RptqDocumentObject *item;
+    @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
 
     @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
     @property (readwrite, nonatomic, assign) NSUInteger detailRowId;

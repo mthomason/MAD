@@ -11,7 +11,7 @@
 
 #import "MADSectionLayoutAttributes.h"
 
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 
@@ -51,7 +51,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         NSUInteger ips[2],
                    itemCounter = 0;
         ips[MADIndexPathOffsetSection] = 0;
-        for (RptqDocumentObject *object in rows.hasObjects) {
+        for (RptqDocumentElement *object in rows.hasObjects) {
             @autoreleasepool {
                 ips[MADIndexPathOffsetItem] = itemCounter;
                 path = [[NSIndexPath alloc] initWithIndexes:ips length:2];

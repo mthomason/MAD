@@ -19,9 +19,9 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
-#import <MAD/RptqDocumentObject+CoreDataClass.h>
-#import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/RptqDocumentObjectLabelDataField+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentElementLabelDataField+CoreDataClass.h>
 #import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 #import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MADFoundation/MADDataType.h>
@@ -85,7 +85,7 @@
     
     for (NSManagedObjectID *objectId in objectIds) {
 
-        RptqDocumentObjectLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        RptqDocumentElementLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType.shortValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
@@ -125,7 +125,7 @@
         MADocument *document = _document;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
         
-            RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+            RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
             
             if (documentObject.formatNumericCurrency.boolValue) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
@@ -137,7 +137,7 @@
         if ((self.userSelectedObjectIds).count == 1) {
 
             NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
-            RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+            RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
             NSInteger numberOfDec = documentObject.formatNumericDecimals.integerValue;
             (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:numberOfDec];
             (self.stepperNumberOfDecimals).value = numberOfDec;
@@ -148,7 +148,7 @@
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
             for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-                RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:objectId];
+                RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
                 NSInteger currentInteger = documentObject.formatNumericDecimals.integerValue;
                 if (counter > 0) {
                     if (lastInteger == currentInteger && allTheSame) {
@@ -186,7 +186,7 @@
             [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             documentObject.formatNumericDecimals = valueThatChanged;
             [documentObject.managedObjectContext save:nil];
         }
@@ -231,7 +231,7 @@
     if (indexPath.row == 1 && indexPath.section == 0) {
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             BOOL isCurrency = (documentObject.formatNumericCurrency).boolValue;
             BOOL isCurrencyNow = !isCurrency;
             documentObject.formatNumericCurrency = @(isCurrencyNow);

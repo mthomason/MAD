@@ -22,7 +22,7 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 #import "MADNavigationBarTitleView.h"
 
@@ -252,7 +252,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
     if (self.aggregateViewController) {
-        NSString *functionName = [RptqDocumentObjectAggregate newStringDisplayForType:functionType];
+        NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:functionType];
         NSString *detailText = [[NSString alloc] initWithFormat:@"%@(x)", functionName];
         (self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel).text = detailText;
     }
@@ -339,7 +339,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             case MTAggregateGroupByTypeSection: {
 
                 NSUInteger group = self.aggregateGroupBySectionNumber;
-                NSString *format = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
+                NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [[NSString alloc] initWithFormat:format, group];
                 cell.detailTextLabel.text = detail;
                 break;
@@ -348,14 +348,14 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             
             case MTAggregateGroupByTypeReport: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+                NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
                 cell.detailTextLabel.text = detailText;
                 break;
                 
             }
             case MTAggregateGroupByTypePage: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+                NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
                 cell.detailTextLabel.text = detailText;
                 break;
                 

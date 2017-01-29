@@ -17,7 +17,7 @@
 
 // This class should return all query fields used inside the report and query.  That is to
 //      say, this class should get all RptqQueryField objects that are both inside
-//      RptqDocumentObject's and the given RptqQuery object.
+//      RptqDocumentElement's and the given RptqQuery object.
 
 // FIXME: Right now the software only handles one query object.
 

@@ -17,7 +17,7 @@
 @class MTDatabase;
 @class MADErrorContainer;
 @class RptqDocumentSection;
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 @class RptqQuery;
 @class RptqQueryPredicate;
 @class RptqQueryLinks;
@@ -31,7 +31,7 @@
     + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
     + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject
+    + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
         fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
@@ -56,7 +56,7 @@
 
     - (void)addQueryLink:(RptqQueryLinks *)queryLink;
     - (void)addPredicate:(RptqQueryPredicate *)predicate;
-    - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination;
+    - (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination;
     - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
     - (MTPaperType)paperType;

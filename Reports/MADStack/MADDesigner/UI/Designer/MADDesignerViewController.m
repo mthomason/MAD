@@ -55,12 +55,12 @@
 
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
-#import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
 
-#import <MAD/RptqDocumentObjectLabel+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectLabelDataField+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementLabel+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabelDataField+CoreDataClass.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
 #import <MAD/RptqQueryField+CoreDataClass.h>
 #import <MAD/RptqDocumentSection+Extras.h>
@@ -268,7 +268,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     @property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
     @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
-    @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
+    @property (nonatomic, strong) RptqDocumentElementAggregate *aggregateToEdit;
 
     @property (nonatomic, assign) CGFloat zoomScaleRestore;
     @property (nonatomic, assign) CGRect boundsOnDisappear;
@@ -1367,8 +1367,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     for (id updatedObject in updatedObjects) {
         
-        if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
-            RptqDocumentObject *documentObject = updatedObject;
+        if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
+            RptqDocumentElement *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             
             MADocument *doc = self.document;
@@ -1591,7 +1591,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 #pragma mark MTCollectionViewCellElement Delegate
 
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     documentObject = [self.document.managedObjectContext objectWithID:cell.objectIdTag];
     return documentObject.type.shortValue;
 }
@@ -1617,7 +1617,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     [private performBlock:^{
     
-        RptqDocumentObject *documentObject;
+        RptqDocumentElement *documentObject;
         RptqDocumentSection *section;
         MADDesignerSectionView *designerSectionView;
         NSManagedObjectID *designerSectionViewTag;
@@ -1637,7 +1637,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
             NSUInteger i = 0;
             
-            for (RptqDocumentObject *object in hasObjects) {
+            for (RptqDocumentElement *object in hasObjects) {
                 if ([object.objectID isEqual: elementViewId]) {
                     found = YES;
                     break;
@@ -1647,7 +1647,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             
             if (found) {
                 
-                RptqDocumentObject *objectToEdit = hasObjects[i];
+                RptqDocumentElement *objectToEdit = hasObjects[i];
                 
                 switch (objectToEdit.type.shortValue) {
                         
@@ -1778,7 +1778,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
 }
 
-- (void)editDocumentObjectBarcode:(RptqDocumentObject *)object {
+- (void)editDocumentObjectBarcode:(RptqDocumentElement *)object {
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
@@ -1800,11 +1800,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self setDisplayInactive];
 }
 
-- (void)editDocumentObjectImage:(RptqDocumentObject *)object {
+- (void)editDocumentObjectImage:(RptqDocumentElement *)object {
     self.objectIdEditImage = object.objectID.copy;
 }
 
-- (void)editDocumentObjectLabelDynamic:(RptqDocumentObject *)object {
+- (void)editDocumentObjectLabelDynamic:(RptqDocumentElement *)object {
     
     self.objectIdEditDynamicLabel = object.objectID.copy;
     
@@ -1829,16 +1829,16 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self setDisplayInactive];
 }
 
-- (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
+- (void)editDocumentObjectLabelStatic:(RptqDocumentElement *)object {
     
     UIAlertController *alert;
     NSString *newText;
     
-    newText = ((RptqDocumentObjectLabel *)object).text.copy;
+    newText = ((RptqDocumentElementLabel *)object).text.copy;
     
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-    //RptqDocumentObject *documentObject;
-    //documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
+    //RptqDocumentElement *documentObject;
+    //documentObject = (RptqDocumentElement *)[managedObjectContext objectWithID:object.objectID];
 
     void (^configureLabel)(UITextField *);
     configureLabel = ^(UITextField *textField) {
@@ -1849,7 +1849,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     void (^completion)(UIAlertAction *action, NSString *text);
     completion = ^(UIAlertAction *action, NSString *text) {
         
-        ((RptqDocumentObjectLabel *)object).text = text.copy;
+        ((RptqDocumentElementLabel *)object).text = text.copy;
         [object.managedObjectContext save:nil];
         
     };
@@ -1876,7 +1876,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
     [private performBlock:^{
     
-        RptqDocumentObjectBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
+        RptqDocumentElementBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
         [barcodeToEdit updateWithBarcode: barcode fieldOne: fieldOne fieldTwo: fieldTwo];
 
         NSError * __autoreleasing *error = NULL;
@@ -1908,7 +1908,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)field {
 
-    RptqDocumentObjectLabelDataField *documentObject;
+    RptqDocumentElementLabelDataField *documentObject;
     documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
     documentObject.referencesQueryField = field;
     [field.managedObjectContext save:nil];
@@ -1942,7 +1942,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     }];
     
 
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     documentObject = [document.managedObjectContext objectWithID:attributes.objectID];
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
     NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
@@ -2149,7 +2149,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     NSOrderedSet *objects = [section.hasRows[(NSUInteger)indexPath.section] hasObjects];
     
     if ((NSInteger)objects.count > row) {
-        RptqDocumentObject *documentObject = objects[(NSUInteger)row];
+        RptqDocumentElement *documentObject = objects[(NSUInteger)row];
         
         if (action == @selector(delete:)) {
             [self delete:documentObject];
@@ -2314,11 +2314,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADSectionLayoutManager *layoutManager;
     layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
     NSManagedObjectContext *objectContext = document.managedObjectContext;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
 
-        documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+        documentObject = (RptqDocumentElement *)[objectContext objectWithID:attributes.objectID];
 
         NSNumber *n = [[NSNumber alloc] initWithFloat: attributes.frame.origin.x];
         documentObject.originx = n;
@@ -2378,7 +2378,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     
     MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
-    RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:piece.objectIdTag];
+    RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:piece.objectIdTag];
 
     if (gestureRecognizer.numberOfTouches > 1) {
         NSNumber *length;
@@ -2638,8 +2638,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         MTBarcode *barcode = viewController.barcode;
         
         NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
-        RptqDocumentObjectBarcode *object;
-        object = (RptqDocumentObjectBarcode *)[managedObjectContext objectWithID:_objectIdEditBarcode];
+        RptqDocumentElementBarcode *object;
+        object = (RptqDocumentElementBarcode *)[managedObjectContext objectWithID:_objectIdEditBarcode];
         [object updateWithBarcode: barcode
                          fieldOne: viewController.queryField1
                          fieldTwo: viewController.queryField2];
@@ -2840,7 +2840,7 @@ END_deselectElementView:;
         NSIndexPath *path;
         NSArray *indexPathsInserted;
         MADSectionLayoutAttributes *la;
-        RptqDocumentObject *documentObject = [rptqDocument addDocumentObject:documentObjectDefination];
+        RptqDocumentElement *documentObject = [rptqDocument addDocumentObject:documentObjectDefination];
 
         NSArray *objects = [[NSArray alloc] initWithObjects:documentObject, nil];
 
@@ -2878,7 +2878,7 @@ END_deselectElementView:;
     NSManagedObjectID *objectId = cell.objectIdTag;
     
     MADocument *document;
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
     MADDesignerSectionView *sectionView;
     MADSectionLayoutManager *layoutManager;
     MADSectionLayoutAttributes *itemToRemove;
@@ -2902,7 +2902,7 @@ END_deselectElementView:;
     } completion:^() {
 
         [self redrawAllElementViewsInCollectionView:sectionView];
-        RptqDocumentObject *documentObjectFinished;
+        RptqDocumentElement *documentObjectFinished;
         documentObjectFinished = [document.managedObjectContext objectWithID:objectId];
         [RptqDocument removeDocumentObject: documentObjectFinished
                   fromManagedObjectContext: document.managedObjectContext];
@@ -3024,7 +3024,7 @@ END_deselectElementView:;
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        RptqDocumentObject *documentObject = [private objectWithID:pieceObjectIDTag];
+        RptqDocumentElement *documentObject = [private objectWithID:pieceObjectIDTag];
         NSManagedObjectID *documentObjectSectionKey;
         documentObjectSectionKey = [documentObject.inSectionRow.inSection copySectionKey];
 
@@ -3148,7 +3148,7 @@ END_deselectElementView:;
                     
                     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
                     RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
-                    RptqDocumentObject *documentObject = [managedObjectContext objectWithID:pieceObjectIdTag];
+                    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:pieceObjectIdTag];
                     
                     CGSize documentObjectSize = documentObject.size;
                     
@@ -3533,12 +3533,12 @@ END_deselectElementView:;
 
     id elementView;
 
-    RptqDocumentObject *documentObject;
+    RptqDocumentElement *documentObject;
 
     elementView = [self viewForObjectID:managedObject.objectID];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
     
-    documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
+    documentObject = [RptqDocumentElement documentObjectForObject:managedObject];
     if (!documentObject) goto ElementViewForManagedObjectShortCircut;
 
     elementView = [self viewForObjectID:documentObject.objectID];

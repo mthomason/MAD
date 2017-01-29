@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObject, RptqDocumentSection;
+@class RptqDocumentElement, RptqDocumentSection;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -10,8 +10,8 @@
 #import <Foundation/NSException.h>
 #import "MADDocumentObjectReference.h"
 
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
 
 #import "MADDocumentObjectAggregate.h"
 #import "MADDocumentObjectLabelDynamic.h"

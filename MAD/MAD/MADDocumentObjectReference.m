@@ -7,7 +7,7 @@
 //
 
 #import "MADDocumentObjectReference.h"
-#import "RptqDocumentObject+CoreDataClass.h"
+#import "RptqDocumentElement+CoreDataClass.h"
 #import <Foundation/NSDictionary.h>
 
 @interface MADDocumentObjectDataReference ()

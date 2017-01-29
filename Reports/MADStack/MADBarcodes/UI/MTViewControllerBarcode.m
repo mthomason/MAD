@@ -35,8 +35,8 @@
 #import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import <MAD/RptqDocumentObjectBarcode+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+#import <MAD/RptqDocumentElementBarcode+CoreDataClass.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -317,9 +317,9 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     return self.queryField2;
 }
 
-- (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
+- (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject {
 
-    MTBarcode *barcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:barcodeDocumentObject];
+    MTBarcode *barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:barcodeDocumentObject];
     self.barcode = barcode;
     
     self.queryField1 = barcodeDocumentObject.referencesField1;

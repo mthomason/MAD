@@ -81,7 +81,7 @@
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDocumentSectionRows+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
 
 #import "MADSectionLayoutManager.h"
@@ -1126,10 +1126,10 @@ READFROMURL_END:;
     private.parentContext = self.managedObjectContext;
     [private performBlockAndWait: ^{
 
-        RptqDocumentObject *documentObject = [private objectWithID:objectID];
+        RptqDocumentElement *documentObject = [private objectWithID:objectID];
         RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
         MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-        [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
+        [RptqDocumentElement removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
 
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -1139,18 +1139,18 @@ READFROMURL_END:;
 
 - (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
                                  inContent: (NSManagedObjectContext *)managedObjectContext {
-    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
     fetchReqest.predicate = documentObjectsPredicate;
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
-        for (RptqDocumentObject *documentObject in objectsToDelete) {
+        for (RptqDocumentElement *documentObject in objectsToDelete) {
         
             RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
             MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-            [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
+            [RptqDocumentElement removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
             [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:managedObjectContext];
         }
     }
@@ -1159,7 +1159,7 @@ READFROMURL_END:;
 - (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
                              inContent: (NSManagedObjectContext *)managedObjectContext {
     
-    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
+    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentElement class])];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
     fetchReqest.predicate = documentObjectsPredicate;
     
@@ -1167,11 +1167,11 @@ READFROMURL_END:;
     NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
         
-        for (RptqDocumentObject *documentObject in objectsToDelete) {
+        for (RptqDocumentElement *documentObject in objectsToDelete) {
             RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
             
             MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-            [RptqDocumentObject removeDocumentObject: documentObject
+            [RptqDocumentElement removeDocumentObject: documentObject
                                    fromParentSection: parentSection
                                    withLayoutManager: layoutManager];
             [RptqDocument removeDocumentObject: documentObject

@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabaseSchemaField, RptqDocumentObjectAggregate, RptqDocumentObjectBarcode, RptqDocumentObjectLabelDataField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
+@class RptqDatabaseSchemaField, RptqDocumentElementAggregate, RptqDocumentElementBarcode, RptqDocumentElementLabelDataField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 

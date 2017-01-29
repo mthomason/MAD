@@ -13,7 +13,7 @@
 #import <UIKit/NSText.h>
 
 @class UIFontDescriptor;
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 @class NSString;
 @class NSNumber;
 

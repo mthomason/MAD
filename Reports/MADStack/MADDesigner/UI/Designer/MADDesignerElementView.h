@@ -19,7 +19,7 @@
 @class NSManagedObjectContext;
 @class MADDesignerElementView;
 @class MTBarcode;
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 
 typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
 
@@ -35,9 +35,9 @@ typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
     @property (nonatomic, readwrite, strong) MTBarcode *displayBarcode;
 
 
-    - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
+    - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject;
 
-    + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
+    + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                          tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                                 tapSelector:(SEL)selector;
 

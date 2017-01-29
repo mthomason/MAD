@@ -18,7 +18,7 @@
 
 @protocol MTViewControllerBarcodeDelegate;
 
-@class RptqDocumentObjectBarcode;
+@class RptqDocumentElementBarcode;
 @class NSManagedObjectID;
 
 @interface MTViewControllerBarcode : MADViewController
@@ -39,7 +39,7 @@
 
     - (void)updateBarcode;
 
-    - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject;
+    - (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject;
 
     @property (nonatomic, copy) NSManagedObjectID *bartcodeToEditObjectID;
     @property (nonatomic, copy) NSManagedObjectID *queryField1ObjectID;

@@ -24,7 +24,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryGroup+Extras.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 #import "MADNavigationBarTitleView.h"
 
@@ -220,14 +220,14 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
     switch (indexPath.row) {
 
         case 0:
-            (cell.textLabel).text = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
+            (cell.textLabel).text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
             if (self.aggregateGroupType == MTAggregateGroupByTypePage) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             break;
         
         case 1:
-            (cell.textLabel).text = [RptqDocumentObjectAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
+            (cell.textLabel).text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
             if (self.aggregateGroupType == MTAggregateGroupByTypeReport) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }

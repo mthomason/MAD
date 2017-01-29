@@ -18,23 +18,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSNumber *layoutHeight;
 @property (nullable, nonatomic, copy) NSNumber *rowNumber;
-@property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentObject *> *hasObjects;
+@property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentElement *> *hasObjects;
 @property (nullable, nonatomic, retain) RptqDocumentSection *inSection;
 
 @end
 
 @interface RptqDocumentSectionRows (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(RptqDocumentObject *)value inHasObjectsAtIndex:(NSUInteger)idx;
+- (void)insertObject:(RptqDocumentElement *)value inHasObjectsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromHasObjectsAtIndex:(NSUInteger)idx;
-- (void)insertHasObjects:(NSArray<RptqDocumentObject *> *)value atIndexes:(NSIndexSet *)indexes;
+- (void)insertHasObjects:(NSArray<RptqDocumentElement *> *)value atIndexes:(NSIndexSet *)indexes;
 - (void)removeHasObjectsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInHasObjectsAtIndex:(NSUInteger)idx withObject:(RptqDocumentObject *)value;
-- (void)replaceHasObjectsAtIndexes:(NSIndexSet *)indexes withHasObjects:(NSArray<RptqDocumentObject *> *)values;
-- (void)addHasObjectsObject:(RptqDocumentObject *)value;
-- (void)removeHasObjectsObject:(RptqDocumentObject *)value;
-- (void)addHasObjects:(NSOrderedSet<RptqDocumentObject *> *)values;
-- (void)removeHasObjects:(NSOrderedSet<RptqDocumentObject *> *)values;
+- (void)replaceObjectInHasObjectsAtIndex:(NSUInteger)idx withObject:(RptqDocumentElement *)value;
+- (void)replaceHasObjectsAtIndexes:(NSIndexSet *)indexes withHasObjects:(NSArray<RptqDocumentElement *> *)values;
+- (void)addHasObjectsObject:(RptqDocumentElement *)value;
+- (void)removeHasObjectsObject:(RptqDocumentElement *)value;
+- (void)addHasObjects:(NSOrderedSet<RptqDocumentElement *> *)values;
+- (void)removeHasObjects:(NSOrderedSet<RptqDocumentElement *> *)values;
 
 @end
 

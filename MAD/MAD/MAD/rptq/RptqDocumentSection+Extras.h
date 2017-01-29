@@ -19,7 +19,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
 };
 
 @class RptqQuery;
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 @class RptqDocumentSectionRows;
 @class NSIndexPath;
 
@@ -52,7 +52,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
     - (BOOL)producesFormFeed;
     - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
     - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
-    - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin
+    - (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (void)setInterfaceHeight:(CGFloat)height;

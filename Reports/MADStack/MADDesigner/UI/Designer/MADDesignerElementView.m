@@ -17,11 +17,11 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/RptqDocumentObject+CoreDataClass.h>
-#import <MAD/RptqDocumentObject+Extras.h>
-#import <MAD/RptqDocumentObjectImage+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectBarcode+CoreDataClass.h>
-#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentElementImage+CoreDataClass.h>
+#import <MAD/RptqDocumentElementBarcode+CoreDataClass.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MAD/MADocumentObjectAttributesText.h>
 
@@ -66,7 +66,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     }
 }
 
-+ (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentObject *)documentObject
++ (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                      tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                             tapSelector:(SEL)selector {
 
@@ -138,7 +138,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     self.backgroundColor = labelBackgroundColor;
 }
 
-- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject {
+- (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject {
     
     if (self = [self initWithFrame: MADRectOfSize(documentObject.size)]) {
         
@@ -236,7 +236,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 - (void)resize:(CGSize)size {
 
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    RptqDocumentObject *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
+    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
 
     NSNumber *n = [[NSNumber alloc] initWithDouble:size.width];
     documentObject.sizewidth = n;
@@ -299,7 +299,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
     
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[context objectWithID:self.objectIdTag];
+    RptqDocumentElement *documentObject = (RptqDocumentElement *)[context objectWithID:self.objectIdTag];
     if (documentObject != nil) {
         
         CGRect marginViewFrame = [documentObject boundsContentView];
@@ -315,11 +315,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         switch (documentObject.documentObjectType) {
                 
             case MTDocumentObjectTypeImage:
-                self.displayImage = ((RptqDocumentObjectImage *)documentObject).image;
+                self.displayImage = ((RptqDocumentElementImage *)documentObject).image;
                 break;
                 
             case MTDocumentObjectTypeBarcode: {
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode newBarcodeWithDocumentObject:documentObject];
+                MTBarcode *displayBarcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:documentObject];
                 self.displayBarcode = displayBarcode;
                 break;
             }

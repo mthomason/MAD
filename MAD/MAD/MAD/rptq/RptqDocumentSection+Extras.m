@@ -40,8 +40,8 @@
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 #import "RptqDocumentSectionRows+Extras.h"
 
-#import "RptqDocumentObject+CoreDataClass.h"
-#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement+Extras.h"
 #import "NSManagedObject+Extras.h"
 
 #import "NSManagedObjectID+Extras.h"
@@ -131,7 +131,7 @@
 
 - (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentElement class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO];
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
@@ -142,7 +142,7 @@
                                                                 error: &error];
     NSUInteger dropIndex = 0;
     if (error == nil) {
-        RptqDocumentObject *lastObject = fetchResults.lastObject;
+        RptqDocumentElement *lastObject = fetchResults.lastObject;
         if (lastObject.objectID.isTemporaryID == NO) {
             dropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
         }
@@ -150,7 +150,7 @@
     return dropIndex;
 }
 
-- (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin
+- (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
      managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     [documentObject setOrigin: origin];
@@ -239,7 +239,7 @@
     CGFloat resultHeight = CGSizeZero.height;
     if (self.visibility.boolValue) {
         for (RptqDocumentSectionRows *row in self.hasRows) {
-            for (RptqDocumentObject *element in row.hasObjects) {
+            for (RptqDocumentElement *element in row.hasObjects) {
                 
                 CGFloat originPointX        = (element.dropPointX).floatValue;
                 CGFloat originPointY        = (element.dropPointY).floatValue;

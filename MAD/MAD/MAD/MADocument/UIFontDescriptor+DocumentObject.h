@@ -11,7 +11,7 @@
 
 #import <UIKit/UIFontDescriptor.h>
 
-@class RptqDocumentObject;
+@class RptqDocumentElement;
 
 @interface MADFontDescriptor : UIFontDescriptor
 

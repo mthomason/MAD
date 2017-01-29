@@ -18,10 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSNumber *identifier;
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
-@property (nullable, nonatomic, retain) NSSet<RptqDocumentObjectAggregate *> *inAggregateObject;
-@property (nullable, nonatomic, retain) NSSet<RptqDocumentObjectBarcode *> *inBarcodeField1;
-@property (nullable, nonatomic, retain) NSSet<RptqDocumentObjectBarcode *> *inBarcodeField2;
-@property (nullable, nonatomic, retain) NSSet<RptqDocumentObjectLabelDataField *> *inDataObject;
+@property (nullable, nonatomic, retain) NSSet<RptqDocumentElementAggregate *> *inAggregateObject;
+@property (nullable, nonatomic, retain) NSSet<RptqDocumentElementBarcode *> *inBarcodeField1;
+@property (nullable, nonatomic, retain) NSSet<RptqDocumentElementBarcode *> *inBarcodeField2;
+@property (nullable, nonatomic, retain) NSSet<RptqDocumentElementLabelDataField *> *inDataObject;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryGroup *> *inQueryGroup;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryLinks *> *inQueryLinkLeft;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryLinks *> *inQueryLinkRight;
@@ -34,25 +34,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqQueryField (CoreDataGeneratedAccessors)
 
-- (void)addInAggregateObjectObject:(RptqDocumentObjectAggregate *)value;
-- (void)removeInAggregateObjectObject:(RptqDocumentObjectAggregate *)value;
-- (void)addInAggregateObject:(NSSet<RptqDocumentObjectAggregate *> *)values;
-- (void)removeInAggregateObject:(NSSet<RptqDocumentObjectAggregate *> *)values;
+- (void)addInAggregateObjectObject:(RptqDocumentElementAggregate *)value;
+- (void)removeInAggregateObjectObject:(RptqDocumentElementAggregate *)value;
+- (void)addInAggregateObject:(NSSet<RptqDocumentElementAggregate *> *)values;
+- (void)removeInAggregateObject:(NSSet<RptqDocumentElementAggregate *> *)values;
 
-- (void)addInBarcodeField1Object:(RptqDocumentObjectBarcode *)value;
-- (void)removeInBarcodeField1Object:(RptqDocumentObjectBarcode *)value;
-- (void)addInBarcodeField1:(NSSet<RptqDocumentObjectBarcode *> *)values;
-- (void)removeInBarcodeField1:(NSSet<RptqDocumentObjectBarcode *> *)values;
+- (void)addInBarcodeField1Object:(RptqDocumentElementBarcode *)value;
+- (void)removeInBarcodeField1Object:(RptqDocumentElementBarcode *)value;
+- (void)addInBarcodeField1:(NSSet<RptqDocumentElementBarcode *> *)values;
+- (void)removeInBarcodeField1:(NSSet<RptqDocumentElementBarcode *> *)values;
 
-- (void)addInBarcodeField2Object:(RptqDocumentObjectBarcode *)value;
-- (void)removeInBarcodeField2Object:(RptqDocumentObjectBarcode *)value;
-- (void)addInBarcodeField2:(NSSet<RptqDocumentObjectBarcode *> *)values;
-- (void)removeInBarcodeField2:(NSSet<RptqDocumentObjectBarcode *> *)values;
+- (void)addInBarcodeField2Object:(RptqDocumentElementBarcode *)value;
+- (void)removeInBarcodeField2Object:(RptqDocumentElementBarcode *)value;
+- (void)addInBarcodeField2:(NSSet<RptqDocumentElementBarcode *> *)values;
+- (void)removeInBarcodeField2:(NSSet<RptqDocumentElementBarcode *> *)values;
 
-- (void)addInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
-- (void)removeInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
-- (void)addInDataObject:(NSSet<RptqDocumentObjectLabelDataField *> *)values;
-- (void)removeInDataObject:(NSSet<RptqDocumentObjectLabelDataField *> *)values;
+- (void)addInDataObjectObject:(RptqDocumentElementLabelDataField *)value;
+- (void)removeInDataObjectObject:(RptqDocumentElementLabelDataField *)value;
+- (void)addInDataObject:(NSSet<RptqDocumentElementLabelDataField *> *)values;
+- (void)removeInDataObject:(NSSet<RptqDocumentElementLabelDataField *> *)values;
 
 - (void)addInQueryGroupObject:(RptqQueryGroup *)value;
 - (void)removeInQueryGroupObject:(RptqQueryGroup *)value;
