@@ -21,7 +21,8 @@ typedef CF_ENUM(short, MTDocumentObjectType) {
     MTDocumentObjectTypeGroupKey = 6,
     MTDocumentObjectTypeAggregateFunctionList = 7,
     MTDocumentObjectTypeWhtiespace = 8,
-    MTDocumentObjectTypeBarcode = 9
+    MTDocumentObjectTypeBarcode = 9,
+    MTDocumentObjectTypeLabelLink = 10
 };
 
 #endif

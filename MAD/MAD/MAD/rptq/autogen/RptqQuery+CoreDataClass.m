@@ -7,14 +7,14 @@
 //
 
 #import "RptqQuery+CoreDataClass.h"
-#import "RptqDatabase.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryCache.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryPredicate.h"
-#import "RptqQuerySort.h"
-#import "RptqQueryTable.h"
+#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqQueryCache+CoreDataClass.h"
+#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryLinks+CoreDataClass.h"
+#import "RptqQueryPredicate+CoreDataClass.h"
+#import "RptqQuerySort+CoreDataClass.h"
+#import "RptqQueryTable+CoreDataClass.h"
 @implementation RptqQuery
 
 @end

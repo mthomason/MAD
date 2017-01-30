@@ -7,7 +7,7 @@
 //
 
 #import "RptqDocumentElementFormula+CoreDataClass.h"
-#import "RptqDocumentElementAggregate.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
 @implementation RptqDocumentElementFormula
 
 @end

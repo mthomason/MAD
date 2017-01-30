@@ -7,7 +7,7 @@
 //
 
 #import "RptqQueryCache+CoreDataClass.h"
-#import "RptqQuery.h"
+#import "RptqQuery+CoreDataClass.h"
 @implementation RptqQueryCache
 
 @end

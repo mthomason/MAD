@@ -53,7 +53,7 @@
 
 
     RptqQuery *query = database.defaultQuery;
-    NSSet *queryTables = query.hasQueryTables;
+    NSSet <RptqQueryTable *> *queryTables = query.hasQueryTables;
     NSInteger dupeCtr = 0;
     RptqQueryTable *queryTable;
     for (queryTable in queryTables) {
@@ -62,9 +62,11 @@
         }
     }
     
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
-                                                   inManagedObjectContext: managedObjectContext];
-    queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
+    NSEntityDescription *tableEntity;
+    tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
+                              inManagedObjectContext: managedObjectContext];
+    queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity
+                         insertIntoManagedObjectContext: managedObjectContext];
 
     queryTable.databaseSchemaTable = databaseSchemaTable;
     queryTable.inQuery = query;

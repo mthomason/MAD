@@ -761,6 +761,7 @@
 		4CAB0FD41D9025F800676BCE /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* NSString+Encryption.m */; };
 		4CB074D41E22006700643F32 /* MADFileExplorerToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */; };
 		4CB074D71E22010900643F32 /* MADFileExplorerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */; };
+		4CB302C81E3ED2180013643F /* MADModel2-3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4CB302C71E3ED2180013643F /* MADModel2-3.xcmappingmodel */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
@@ -1986,6 +1987,7 @@
 		4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerToolbar.m; sourceTree = "<group>"; };
 		4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerNavigationBar.h; sourceTree = "<group>"; };
 		4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerNavigationBar.m; sourceTree = "<group>"; };
+		4CB302C71E3ED2180013643F /* MADModel2-3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "MADModel2-3.xcmappingmodel"; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -4108,6 +4110,7 @@
 			isa = PBXGroup;
 			children = (
 				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
+				4CB302C71E3ED2180013643F /* MADModel2-3.xcmappingmodel */,
 			);
 			name = Rptq;
 			sourceTree = "<group>";
@@ -6126,6 +6129,7 @@
 				4C8DE2641BAFA96300AD1111 /* UILabelStrikethrough.m in Sources */,
 				4C4020EF1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C26B9CC1BAF123A00456DC8 /* MADToolboxPresentationController.m in Sources */,
+				4CB302C81E3ED2180013643F /* MADModel2-3.xcmappingmodel in Sources */,
 				4C8DE26C1BAFA98B00AD1111 /* MADConnectorView.m in Sources */,
 				4C8DE2631BAFA96300AD1111 /* MTBarButtonItemTitle.m in Sources */,
 				4C4020421BAE92F200BAE5FC /* NSDate+Extras.m in Sources */,

@@ -7,8 +7,8 @@
 //
 
 #import "RptqDocumentElementAggregate+CoreDataClass.h"
-#import "RptqDocumentElementFormula.h"
-#import "RptqQueryField.h"
+#import "RptqDocumentElementFormula+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
 @implementation RptqDocumentElementAggregate
 
 @end

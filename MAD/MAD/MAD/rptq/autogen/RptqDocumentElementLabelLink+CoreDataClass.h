@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RptqDocumentElement.h"
+#import "RptqDocumentElement+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

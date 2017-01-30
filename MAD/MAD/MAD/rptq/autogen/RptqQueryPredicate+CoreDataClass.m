@@ -7,8 +7,8 @@
 //
 
 #import "RptqQueryPredicate+CoreDataClass.h"
-#import "RptqQuery.h"
-#import "RptqQueryField.h"
+#import "RptqQuery+CoreDataClass.h"
+#import "RptqQueryField+CoreDataClass.h"
 @implementation RptqQueryPredicate
 
 @end

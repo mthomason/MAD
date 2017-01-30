@@ -7,9 +7,9 @@
 //
 
 #import "RptqDatabaseSchemaTable+CoreDataClass.h"
-#import "RptqDatabase.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryTable.h"
+#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqQueryTable+CoreDataClass.h"
 @implementation RptqDatabaseSchemaTable
 
 @end

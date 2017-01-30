@@ -7,15 +7,15 @@
 //
 
 #import "RptqQueryField+CoreDataClass.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocumentElementAggregate.h"
-#import "RptqDocumentElementBarcode.h"
-#import "RptqDocumentElementLabelDataField.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryPredicate.h"
-#import "RptqQuerySort.h"
-#import "RptqQueryTable.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDocumentElementAggregate+CoreDataClass.h"
+#import "RptqDocumentElementBarcode+CoreDataClass.h"
+#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryLinks+CoreDataClass.h"
+#import "RptqQueryPredicate+CoreDataClass.h"
+#import "RptqQuerySort+CoreDataClass.h"
+#import "RptqQueryTable+CoreDataClass.h"
 @implementation RptqQueryField
 
 @end

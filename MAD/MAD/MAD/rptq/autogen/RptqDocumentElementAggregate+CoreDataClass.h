@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RptqDocumentElement.h"
+#import "RptqDocumentElement+CoreDataClass.h"
 
 @class RptqDocumentElementFormula, RptqQueryField;
 

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MAD.RptqQuery+CoreDataClass.h"
+#import "RptqQuery+CoreDataClass.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
