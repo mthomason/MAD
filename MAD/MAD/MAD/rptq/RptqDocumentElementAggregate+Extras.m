@@ -34,10 +34,6 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 @implementation RptqDocumentElementAggregate (Extras)
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self formattedString:dataType forValue:value];
-}
-
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
@@ -85,6 +81,10 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     id result = [[NSString alloc] initWithFormat:@"%@(%@)",
                                                  functionNameShort, toStringHumanReadable];
     return result;
+}
+
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
+    return [super formattedString:dataType forValue:value];
 }
 
 - (NSString *)functionName {

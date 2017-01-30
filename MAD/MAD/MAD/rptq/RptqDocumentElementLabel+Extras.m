@@ -26,10 +26,6 @@
 
 @implementation RptqDocumentElementLabel (Extras)
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self formattedString:dataType forValue:value];
-}
-
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
@@ -58,6 +54,16 @@
         default:
             break;
     }
+}
+
+- (NSString *)copyDesignerRepresentationText {
+    NSString *result = nil;
+    result = ((RptqDocumentElementLabel *)self).text;
+    return result;
+}
+
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
+    return [super formattedString:dataType forValue:value];
 }
 
 #pragma mark - RptqDocumentElementFactory

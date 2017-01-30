@@ -674,8 +674,6 @@
     MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;
     
     NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: entityName
-                                                                       inManagedObjectContext: managedObjectContext];
     
     RptqDocumentElement *reportObject;
     
@@ -684,12 +682,15 @@
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
+            NSManagedObjectID *fieldObjectId;
+            RptqQueryField *field;
+            
             entityName = NSStringFromClass([RptqDocumentElementLabelDataField class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
-            NSManagedObjectID *fieldObjectId = defination[MTDocumentObjectDefinationObject];
-            RptqQueryField *field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectId];
+            fieldObjectId = defination[MTDocumentObjectDefinationObject];
+            field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectId];
             
             
             reportObject = [[RptqDocumentElementLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
@@ -713,7 +714,7 @@
             NSString *labelText = defination[MTDocumentObjectDefinationObject];
             
             reportObject = [[RptqDocumentElementLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                     insertIntoManagedObjectContext: managedObjectContext];
+                                             insertIntoManagedObjectContext: managedObjectContext];
             
             ((RptqDocumentElementLabel *)reportObject).text = labelText;
 

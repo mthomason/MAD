@@ -77,4 +77,10 @@
     return description;
 }
 
+- (NSString *)copyDesignerRepresentationText {
+    NSString *result = nil;
+    result = @"";
+    return result;
+}
+
 @end

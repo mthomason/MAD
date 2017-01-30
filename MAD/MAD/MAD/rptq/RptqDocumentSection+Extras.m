@@ -168,7 +168,7 @@
     NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger:[self nextDropIndexForSectionWithManagedObjectContext:managedObjectContext]];
     documentObject.dropIndex = dropIndex;
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:sectionRow.hasObjects];
+    NSMutableOrderedSet *hasObjects = sectionRow.hasObjects.mutableCopy;
     [hasObjects insertObject: documentObject atIndex: (NSUInteger)indexPathForInsert.item];
     sectionRow.hasObjects = hasObjects;
 }
@@ -435,7 +435,7 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"********** RptqDocumentSection **********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Type:                   %@\n", self.type];
     [description appendFormat:@"********** RptqDocumentSection **********"];
     return description;

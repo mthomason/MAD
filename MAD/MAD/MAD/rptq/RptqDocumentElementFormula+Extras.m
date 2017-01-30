@@ -31,10 +31,6 @@
 
 @implementation RptqDocumentElementFormula (Extras)
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self formattedString:dataType forValue:value];
-}
-
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
@@ -66,6 +62,16 @@
         default:
             break;
     }
+}
+
+- (NSString *)copyDesignerRepresentationText {
+    NSString *result = nil;
+    result = [(RptqDocumentElementFormula *)self source];
+    return result;
+}
+
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
+    return [super formattedString:dataType forValue:value];
 }
 
 #pragma mark - RptqDocumentElementFactory

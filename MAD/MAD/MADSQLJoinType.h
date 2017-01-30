@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADSQLJoinType_h
-#define MADSQLJoinType_h
+#ifndef MAD_MADSQLJoinType_h
+#define MAD_MADSQLJoinType_h
 
 @class NSString;
 

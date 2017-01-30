@@ -10,11 +10,14 @@
 #define Reports_RptqDocumentElement_Extras_h
 
 #import <MAD/RptqDocumentElement+CoreDataClass.h>
+
 #import <CoreGraphics/CGGeometry.h>
 
 #import <MADDataStructures/MTProtocolLog.h>
-#import <MAD/RptqDocumentElementFactory.h>
+
 #import <MADFoundation/MADDataType.h>
+
+#import <MAD/RptqDocumentElementFactory.h>
 #import <MAD/MADDocumentObjectType.h>
 
 extern NSString * const MTDocumentObjectDefinationType;

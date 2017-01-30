@@ -11,12 +11,18 @@
 #endif
 
 #import "RptqDocumentElementBarcode+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqQueryField+Extras.h"
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
+#import <MADFoundation/MADDataType.h>
+
 #import <MADBarcodes/MADBarcodes.h>
+
+#import "RptqDocumentElement+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQueryField+Extras.h"
 #import "RptqDataHelper.h"
 
 @implementation RptqDocumentElementBarcode (Extras)
@@ -52,6 +58,16 @@
         default:
             break;
     }
+}
+
+- (NSString *)copyDesignerRepresentationText {
+    NSString *barcodeName = [(RptqDocumentElementBarcode *)self copyBarcodeTypeName];
+    id result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
+    return result;
+}
+
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
+    return [super formattedString:dataType forValue:value];
 }
 
 - (NSString *)copyBarcodeTypeName {

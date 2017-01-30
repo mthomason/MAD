@@ -19,10 +19,11 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocumentElement+Extras.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDocument+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 
@@ -85,5 +86,12 @@
     [description appendFormat:@"*********"];
     return description;
 }
+
+- (NSString *)copyDesignerRepresentationText {
+    NSString *result = nil;
+    result = [self referencesQueryField].toStringReverse;
+    return result;
+}
+
 
 @end
