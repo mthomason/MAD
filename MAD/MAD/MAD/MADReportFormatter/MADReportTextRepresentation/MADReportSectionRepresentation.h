@@ -10,8 +10,8 @@
 #define MAD_MADReportSectionRepresentation_h
 
 #import <Foundation/NSObject.h>
-#import "MADDocumentTextRepresentationProtocol.h"
-#import "MADocumentSectionType.h"
+#import <MAD/MADDocumentTextRepresentationProtocol.h>
+#import <MAD/MADocumentSectionType.h>
 
 @class MADReportSectionRowsRepresentation;
 

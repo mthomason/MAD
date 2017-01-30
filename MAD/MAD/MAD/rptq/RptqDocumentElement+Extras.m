@@ -12,6 +12,8 @@
 
 #import "RptqDocumentElement+Extras.h"
 
+#import <UIKit/UIFontDescriptor.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
@@ -32,12 +34,10 @@
 #import "RptqDocumentElementAggregate+CoreDataClass.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementFormula+CoreDataClass.h"
-#import "RptqDocumentElementFormula+CoreDataProperties.h"
 #import "RptqDocumentElementGroupKey+CoreDataClass.h"
 #import "RptqDocumentElementLabel+CoreDataClass.h"
 #import "RptqDocumentElementImage+CoreDataClass.h"
 #import "RptqDocumentElementLabelDataField+CoreDataClass.h"
-#import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
 #import "RptqDocumentElementBarcode+CoreDataClass.h"
 #import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
@@ -47,8 +47,6 @@
 #import "RptqDocumentElementBarcode+Extras.h"
 
 #import <math.h>
-
-#import <UIKit/UIFontDescriptor.h>
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";

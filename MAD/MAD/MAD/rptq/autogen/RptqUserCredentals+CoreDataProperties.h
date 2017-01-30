@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqUserCredentals_CoreDataProperties_h
+#define Reports_RptqUserCredentals_CoreDataProperties_h
+
 #import "RptqUserCredentals+CoreDataClass.h"
 
 
@@ -41,3 +44,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

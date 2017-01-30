@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqQueryTable_CoreDataProperties_h
+#define Reports_RptqQueryTable_CoreDataProperties_h
+
 #import "RptqQueryTable+CoreDataClass.h"
 
 
@@ -40,3 +43,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

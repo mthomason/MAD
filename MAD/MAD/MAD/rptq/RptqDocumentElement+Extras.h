@@ -11,6 +11,7 @@
 
 #import <MAD/RptqDocumentElement+CoreDataClass.h>
 #import <CoreGraphics/CGGeometry.h>
+
 #import <MADDataStructures/MTProtocolLog.h>
 #import <MAD/RptqDocumentElementFactory.h>
 #import <MADFoundation/MADDataType.h>

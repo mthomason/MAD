@@ -11,15 +11,16 @@
 #endif
 
 #import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDocumentSectionRows+CoreDataProperties.h"
-#import "RptqDocumentSection+CoreDataClass.h"
-
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
+
+#import "RptqDocumentSection+CoreDataClass.h"
+//#import "RptqDocumentSection+CoreDataProperties.h"
+//#import "RptqDocumentSectionRows+CoreDataProperties.h"
 
 #import "MADReportSectionRepresentation.h"
 #import "RptqDataHelper.h"

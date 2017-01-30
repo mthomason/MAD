@@ -7,8 +7,10 @@
 //  This file was automatically generated and should not be edited.
 //
 
-#import "RptqDocumentElementChart+CoreDataClass.h"
+#ifndef Reports_RptqDocumentElementChart_CoreDataProperties_h
+#define Reports_RptqDocumentElementChart_CoreDataProperties_h
 
+#import "RptqDocumentElementChart+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,3 +22,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

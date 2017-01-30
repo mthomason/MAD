@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqQueryCache_CoreDataProperties_h
+#define Reports_RptqQueryCache_CoreDataProperties_h
+
 #import "RptqQueryCache+CoreDataClass.h"
 
 
@@ -25,3 +28,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

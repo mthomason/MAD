@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqDocumentElementLabel_CoreDataProperties_h
+#define Reports_RptqDocumentElementLabel_CoreDataProperties_h
+
 #import "RptqDocumentElementLabel+CoreDataClass.h"
 
 
@@ -21,3 +24,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

@@ -32,3 +32,4 @@ FOUNDATION_EXPORT const unsigned char MADDataStructuresVersionString[];
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MADAlgorithmColor.h>
 #import <MADDataStructures/MADMapStrings.h>
+#import <MADDataStructures/MADVectorBool.h>

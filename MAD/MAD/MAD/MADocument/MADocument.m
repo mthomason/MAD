@@ -69,19 +69,44 @@
 
 #import "MADNotificationDidFormatPage.h"
 
+#import "RptqDocument+CoreDataClass.h"
 #import "RptqDocument+Extras.h"
+
+#import "RptqDatabase+CoreDataClass.h"
 #import "RptqDatabase+Extras.h"
+
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqUserCredentals+Extras.h"
-#import "RptqQuery+Extras.h"
-#import "RptqQueryGroup+Extras.h"
-#import "RptqQueryTable+Extras.h"
-#import "RptqQueryField+Extras.h"
+
 #import "RptqDocumentSectionRows+CoreDataClass.h"
+#import "RptqDocumentSectionRows+Extras.h"
+
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqUserCredentals+CoreDataClass.h"
+#import "RptqUserCredentals+Extras.h"
+
+#import "RptqQuery+CoreDataClass.h"
+#import "RptqQuery+Extras.h"
+
+#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup+Extras.h"
+
+#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable+Extras.h"
+
+#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqDocumentSectionRows+CoreDataClass.h"
+
+#import "RptqDocumentElement+CoreDataClass.h"
 #import "RptqDocumentElement+Extras.h"
+
 #import "RptqDocumentSectionEnumerator.h"
 
 #import "MADSectionLayoutManager.h"

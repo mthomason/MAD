@@ -10,7 +10,7 @@
 #define Reports_RptqUserCredentals_MADDatabaseConnection_h
 
 #import <RptqUserCredentals+CoreDataClass.h>
-#import <MAD/MADDatabaseConnection.h>
+#import <MAD/MADDatabaseType.h>
 
 @interface RptqUserCredentals (MADDatabaseConnection)
 

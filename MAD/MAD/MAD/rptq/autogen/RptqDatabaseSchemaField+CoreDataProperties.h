@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqDatabaseSchemaField_CoreDataProperties_h
+#define Reports_RptqDatabaseSchemaField_CoreDataProperties_h
+
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 
 
@@ -46,3 +49,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

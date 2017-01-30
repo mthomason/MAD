@@ -162,7 +162,7 @@
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="RptqDocumentSection" representedClassName="RptqDocumentSection" syncable="YES">
+    <entity name="RptqDocumentSection" representedClassName="RptqDocumentSection" syncable="YES" codeGenerationType="class">
         <attribute name="height" optional="YES" attributeType="Float" defaultValueString="44" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
@@ -187,7 +187,7 @@
         <relationship name="inReportReportFooter" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasReportFooterSection" inverseEntity="RptqDocument" syncable="YES"/>
         <relationship name="inReportReportHeader" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasReportHeaderSection" inverseEntity="RptqDocument" syncable="YES"/>
     </entity>
-    <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES">
+    <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES" codeGenerationType="class">
         <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentElement" inverseName="inSectionRow" inverseEntity="RptqDocumentElement" syncable="YES"/>
@@ -311,8 +311,18 @@
         <element name="RptqDatabaseSchemaField" positionX="-405" positionY="324" width="171" height="223"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="163"/>
         <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="283"/>
-        <element name="RptqDocumentSection" positionX="-1451" positionY="-648" width="182" height="388"/>
-        <element name="RptqDocumentSectionRows" positionX="-1143" positionY="-504" width="191" height="103"/>
+        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="778"/>
+        <element name="RptqDocumentElementAggregate" positionX="-1314" positionY="-1461" width="128" height="118"/>
+        <element name="RptqDocumentElementBarcode" positionX="-929" positionY="-2076" width="128" height="373"/>
+        <element name="RptqDocumentElementChart" positionX="-1719" positionY="-1854" width="128" height="45"/>
+        <element name="RptqDocumentElementFormula" positionX="-1287" positionY="-1644" width="128" height="148"/>
+        <element name="RptqDocumentElementGroupKey" positionX="-1701" positionY="-1746" width="128" height="58"/>
+        <element name="RptqDocumentElementImage" positionX="-1730" positionY="-1494" width="128" height="58"/>
+        <element name="RptqDocumentElementLabel" positionX="-1737" positionY="-1575" width="128" height="58"/>
+        <element name="RptqDocumentElementLabelDataField" positionX="-1181" positionY="-1773" width="128" height="103"/>
+        <element name="RptqDocumentElementLabelLink" positionX="-1721" positionY="-1674" width="128" height="73"/>
+        <element name="RptqDocumentSection" positionX="-1451" positionY="-648" width="182" height="390"/>
+        <element name="RptqDocumentSectionRows" positionX="-1143" positionY="-504" width="191" height="105"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="387" positionY="1176" width="128" height="118"/>
         <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="238"/>
@@ -322,15 +332,5 @@
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="118"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="210"/>
         <element name="RptqUserCredentals" positionX="-1125" positionY="-882" width="128" height="358"/>
-        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="778"/>
-        <element name="RptqDocumentElementAggregate" positionX="-1314" positionY="-1461" width="128" height="118"/>
-        <element name="RptqDocumentElementBarcode" positionX="-929" positionY="-2076" width="128" height="373"/>
-        <element name="RptqDocumentElementChart" positionX="-1719" positionY="-1854" width="128" height="43"/>
-        <element name="RptqDocumentElementFormula" positionX="-1287" positionY="-1644" width="128" height="148"/>
-        <element name="RptqDocumentElementGroupKey" positionX="-1701" positionY="-1746" width="128" height="58"/>
-        <element name="RptqDocumentElementImage" positionX="-1730" positionY="-1494" width="128" height="58"/>
-        <element name="RptqDocumentElementLabel" positionX="-1737" positionY="-1575" width="128" height="58"/>
-        <element name="RptqDocumentElementLabelDataField" positionX="-1181" positionY="-1773" width="128" height="103"/>
-        <element name="RptqDocumentElementLabelLink" positionX="-1721" positionY="-1674" width="128" height="73"/>
     </elements>
 </model>

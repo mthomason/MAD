@@ -23,16 +23,25 @@
 #import "MTDatabaseField.h"
 
 #import "RptqDocument+Extras.h"
+#import "RptqDocument+Extras.h"
+
+#import "RptqDocumentElement+CoreDataClass.h"
 #import "RptqDocumentElement+Extras.h"
 
 #import "RptqDatabase+CoreDataClass.h"
+
+#import "RptqQueryTable+CoreDataClass.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "RptqQueryField+CoreDataClass.h"
+
 #import "RptqUserCredentals+CoreDataClass.h"
 
 #import "RptqDocumentSectionRows+CoreDataClass.h"
+
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
+
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementBarcode+Extras.h"
 

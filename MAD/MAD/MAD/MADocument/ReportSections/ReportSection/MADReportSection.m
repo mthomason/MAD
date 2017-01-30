@@ -9,9 +9,12 @@
 #import "MADReportSection.h"
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
+
+#import "RptqDocumentSection+CoreDataClass.h"
 #import "RptqDocumentSection+Extras.h"
+
 #import "RptqDocument+CoreDataClass.h"
-#import "RptqDocumentSection+CoreDataProperties.h"
+
 
 #import "MADReportSectionReportHeader.h"
 #import "MADReportSectionPageHeader.h"

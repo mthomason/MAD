@@ -7,6 +7,9 @@
 //  This file was automatically generated and should not be edited.
 //
 
+#ifndef Reports_RptqDocumentElementBarcode_CoreDataProperties_h
+#define Reports_RptqDocumentElementBarcode_CoreDataProperties_h
+
 #import "RptqDocumentElementBarcode+CoreDataClass.h"
 
 
@@ -42,3 +45,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

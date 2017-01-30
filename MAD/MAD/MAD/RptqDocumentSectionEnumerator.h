@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_SectionEnumerator_h
-#define Reports_SectionEnumerator_h
+#ifndef Reports_RptqDocumentSectionEnumerator_h
+#define Reports_RptqDocumentSectionEnumerator_h
 
 #import <Foundation/NSEnumerator.h>
 
