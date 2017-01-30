@@ -93,9 +93,17 @@
 }
 
 - (BOOL)isEqualTo:(RptqQueryTable *)sender {
-    return [sender isEqual:sender] ?
-        YES :
-        ([sender isKindOfClass:self.class] && [self.identifier isEqualToNumber:sender.identifier]);
+    
+    if ([sender isEqual:sender])
+        return YES;
+
+    if ([sender isKindOfClass:self.class]) {
+        NSNumber *i1;
+        NSNumber *i2;
+        return [i1 isEqualToNumber:i2];
+    }
+    
+    return NO;
 }
 
 - (id)debugQuickLookObject {

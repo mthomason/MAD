@@ -207,10 +207,12 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 // MARK: MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    NSMutableString *result = [[NSMutableString alloc] initWithString:self.hasLeftField.databaseSchemaField.name];
+    NSString *name = self.hasLeftField.databaseSchemaField.name;
+    NSString *nameRight = self.hasRightField.databaseSchemaField.name;
+    NSMutableString *result = name.mutableCopy;
     NSString *linkDescription = [self copyLinkDescription];
     [result appendFormat:@" %@ ", linkDescription];
-    [result appendString:self.hasRightField.databaseSchemaField.name];
+    [result appendString:nameRight];
     return result;
 }
 

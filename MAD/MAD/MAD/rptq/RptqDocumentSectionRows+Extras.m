@@ -88,7 +88,7 @@
         
     } else {
     
-        NSMutableOrderedSet* tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.hasObjects];
+        NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
         [tempSet removeObject:value];
         self.hasObjects = tempSet;
         

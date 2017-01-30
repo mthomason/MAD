@@ -852,8 +852,9 @@ READFROMURL_END:;
                                                             forManagedObjectContext: private];
         newQueryTable.inQuery = query;
         
-        NSMutableSet *tablesInQuery, *newQueryFields;
-        tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables];
+        NSMutableSet <RptqQueryTable *> *tablesInQuery;
+        NSMutableSet <RptqQueryField *> *newQueryFields;
+        tablesInQuery = query.hasQueryTables.mutableCopy;
         newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
         
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
@@ -877,9 +878,13 @@ READFROMURL_END:;
         [private refreshObject:newQueryTable mergeChanges:NO];
         
         for (RptqQueryField *field in newQueryFields) {
-            [private refreshObject:field.inQueryTable           mergeChanges:NO];
-            [private refreshObject:field.databaseSchemaField    mergeChanges:NO];
-            [private refreshObject:field                        mergeChanges:NO];
+            RptqQueryTable *table = field.inQueryTable;
+            if (field.inQueryTable != nil) {
+                [private refreshObject: table mergeChanges:NO];
+            }
+            RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
+            [private refreshObject: schemaField    mergeChanges:NO];
+            [private refreshObject: field                        mergeChanges:NO];
         }
 
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
@@ -916,8 +921,9 @@ READFROMURL_END:;
         
         
         //Create group header (contains a retain cycle)
-        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
-                                                                   forManagedObjectContext: private];
+        RptqDocumentSection *headerSection;
+        headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
+                                              forManagedObjectContext: private];
                                                                    
         RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
         headerSectionRow.inSection = headerSection;
@@ -928,12 +934,15 @@ READFROMURL_END:;
         [queryGroup addHasSectionObject:headerSection];
         
         //Create group footer (contains a retain cycle)
-        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter
-                                                                   forManagedObjectContext: private];
-        RptqDocumentSectionRows *footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: private];
+        RptqDocumentSection *footerSection;
+        footerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter
+                                              forManagedObjectContext: private];
+        RptqDocumentSectionRows *footerSectionRow;
+        footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: private];
         footerSectionRow.inSection = footerSection;
         
-        NSMutableOrderedSet *footerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: footerSectionRow];
+        NSMutableOrderedSet *footerSectionRows;
+        footerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: footerSectionRow];
         footerSection.hasRows = footerSectionRows;
         
         [queryGroup addHasSectionObject:footerSection];
@@ -953,10 +962,22 @@ READFROMURL_END:;
         NSError * __autoreleasing *error = NULL;
         [private save:error];
         
-        [private refreshObject:queryGroup.hasField mergeChanges:NO];
+        RptqQueryField *groupByField = queryGroup.hasField;
+        if (groupByField) {
+            [private refreshObject:groupByField mergeChanges:NO];
+        }
         [private refreshObject:queryGroup mergeChanges:NO];
-        [private refreshObject:headerSectionRow.inSection mergeChanges:NO];
-        [private refreshObject:footerSectionRow.inSection mergeChanges:NO];
+        
+        RptqDocumentSection *header;
+        if ((header = headerSectionRow.inSection)) {
+            [private refreshObject:header mergeChanges:NO];
+        }
+        
+        RptqDocumentSection *footer;
+        if ((footer = footerSectionRow.inSection)) {
+            [private refreshObject:footer mergeChanges:NO];
+        }
+        
         [private refreshObject:headerSectionRow mergeChanges:NO];
         [private refreshObject:footerSectionRow mergeChanges:NO];
         [private refreshObject:headerSection mergeChanges:NO];

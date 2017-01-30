@@ -305,7 +305,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         CGRect marginViewFrame = [documentObject boundsContentView];
         
         self.frame = marginViewFrame;
-        self.displayImage = nil;
         self.displayBarcode = nil;
         self.displayImage = nil;
         
@@ -319,8 +318,9 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 break;
                 
             case MTDocumentObjectTypeBarcode: {
-                MTBarcode *displayBarcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:documentObject];
-                self.displayBarcode = displayBarcode;
+                MTBarcode *barcode;
+                barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject];
+                self.displayBarcode = barcode;
                 break;
             }
                 

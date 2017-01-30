@@ -118,7 +118,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     if ([managedObject isKindOfClass:[RptqDocumentElement class]]) {
         result = (RptqDocumentElement *)managedObject;
         
-    } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
+    } else if ([managedObject isKindOfClass:[RptqDocumentElementGroupKey class]]) {
         result = ((RptqDocumentElementGroupKey *)managedObject);
         
     } else if ([managedObject isKindOfClass:[RptqDocumentElementLabel class]]) {

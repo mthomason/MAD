@@ -109,7 +109,9 @@
     if ([self.hasRows isKindOfClass:[NSMutableOrderedSet class]]) {
         [(NSMutableOrderedSet *)self.hasRows addObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
+        NSOrderedSet<RptqDocumentSectionRows *> *hasRows = self.hasRows;
+        NSMutableOrderedSet *tempSet = hasRows != nil ? [NSMutableOrderedSet orderedSetWithOrderedSet: hasRows] :
+                                                        [[NSMutableOrderedSet alloc] init];
         [tempSet addObject:value];
         self.hasRows = tempSet;
     }
@@ -119,7 +121,9 @@
     if ([self.hasRows isKindOfClass:[NSMutableOrderedSet class]]) {
         [(NSMutableOrderedSet *)self.hasRows removeObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
+        NSOrderedSet<RptqDocumentSectionRows *> *hasRows = self.hasRows;
+        NSMutableOrderedSet *tempSet = hasRows != nil ? [NSMutableOrderedSet orderedSetWithOrderedSet: hasRows] :
+                                                        [[NSMutableOrderedSet alloc] init];
         [tempSet removeObject:value];
         self.hasRows = tempSet;
     }

@@ -1319,7 +1319,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         RptqDocumentSectionRows *newRowToAppend;
         newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                        inManagedObjectContext: doc.managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:section.hasRows.array];
+        NSArray *hasRowsArray = section.hasRows.array;
+        NSMutableOrderedSet *hasRows;
+        hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+                                        [[NSMutableOrderedSet alloc] init];
         newRowToAppend.inSection = section;
         [hasRows addObject:newRowToAppend];
         section.hasRows = hasRows;
@@ -1328,12 +1331,16 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:section.hasRows.array];
-        [hasRows.lastObject setInSection:nil];
-        [hasRows removeObjectAtIndex:hasRows.count - 1];
-        section.hasRows = hasRows;
-        [rowToDelete setInSection:nil];
-        
+        NSArray *hasRowsArray = section.hasRows.array;
+        NSMutableOrderedSet *hasRows;
+        hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+                                        [[NSMutableOrderedSet alloc] init];
+        if ([hasRows count] > 0) {
+            [hasRows.lastObject setInSection:nil];
+            [hasRows removeObjectAtIndex:hasRows.count - 1];
+            section.hasRows = hasRows;
+            [rowToDelete setInSection:nil];
+        }
     }
     
     NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];

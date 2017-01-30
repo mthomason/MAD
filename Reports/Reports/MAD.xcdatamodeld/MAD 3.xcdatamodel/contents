@@ -100,14 +100,14 @@
         <attribute name="underline" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
+        <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementAggregate" representedClassName="RptqDocumentElementAggregate" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class">
         <attribute name="function" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="groupType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="RptqQueryField" inverseName="inAggregateObject" inverseEntity="RptqQueryField" syncable="YES"/>
-        <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="RptqDocumentElementFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentElementFormula" syncable="YES"/>
+        <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inAggregateObject" inverseEntity="RptqQueryField" syncable="YES"/>
+        <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentElementFormula" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementBarcode" representedClassName="RptqDocumentElementBarcode" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class">
         <attribute name="add2dComponent" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
@@ -130,8 +130,8 @@
         <attribute name="useStaticInput1" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="useStaticInput2" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="whitespaceWidth" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="referencesField1" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="RptqQueryField" inverseName="inBarcodeField1" inverseEntity="RptqQueryField" syncable="YES"/>
-        <relationship name="referencesField2" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="RptqQueryField" inverseName="inBarcodeField2" inverseEntity="RptqQueryField" syncable="YES"/>
+        <relationship name="referencesField1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inBarcodeField1" inverseEntity="RptqQueryField" syncable="YES"/>
+        <relationship name="referencesField2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inBarcodeField2" inverseEntity="RptqQueryField" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementChart" representedClassName="RptqDocumentElementChart" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class"/>
     <entity name="RptqDocumentElementFormula" representedClassName="RptqDocumentElementFormula" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class">
@@ -141,7 +141,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="resultType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentElementAggregate" syncable="YES"/>
+        <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentElementAggregate" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementGroupKey" representedClassName="RptqDocumentElementGroupKey" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class">
         <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -156,7 +156,7 @@
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="referencesQueryField" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="RptqQueryField" inverseName="inDataObject" inverseEntity="RptqQueryField" syncable="YES"/>
+        <relationship name="referencesQueryField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inDataObject" inverseEntity="RptqQueryField" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementLabelLink" representedClassName="RptqDocumentElementLabelLink" parentEntity="RptqDocumentElement" syncable="YES" codeGenerationType="class">
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
@@ -307,22 +307,22 @@
         <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RptqDatabase" positionX="-1395" positionY="-1041" width="198" height="148"/>
+        <element name="RptqDatabase" positionX="-1692" positionY="-1201" width="198" height="148"/>
         <element name="RptqDatabaseSchemaField" positionX="-405" positionY="324" width="171" height="223"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="163"/>
         <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="283"/>
         <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="778"/>
-        <element name="RptqDocumentElementAggregate" positionX="-1314" positionY="-1461" width="128" height="118"/>
-        <element name="RptqDocumentElementBarcode" positionX="-929" positionY="-2076" width="128" height="373"/>
+        <element name="RptqDocumentElementAggregate" positionX="-1350" positionY="-1461" width="207" height="118"/>
+        <element name="RptqDocumentElementBarcode" positionX="-1260" positionY="-2241" width="189" height="373"/>
         <element name="RptqDocumentElementChart" positionX="-1719" positionY="-1854" width="128" height="45"/>
-        <element name="RptqDocumentElementFormula" positionX="-1287" positionY="-1644" width="128" height="148"/>
+        <element name="RptqDocumentElementFormula" positionX="-1287" positionY="-1644" width="198" height="148"/>
         <element name="RptqDocumentElementGroupKey" positionX="-1701" positionY="-1746" width="128" height="58"/>
         <element name="RptqDocumentElementImage" positionX="-1730" positionY="-1494" width="128" height="58"/>
         <element name="RptqDocumentElementLabel" positionX="-1737" positionY="-1575" width="128" height="58"/>
         <element name="RptqDocumentElementLabelDataField" positionX="-1181" positionY="-1773" width="128" height="103"/>
         <element name="RptqDocumentElementLabelLink" positionX="-1721" positionY="-1674" width="128" height="73"/>
-        <element name="RptqDocumentSection" positionX="-1451" positionY="-648" width="182" height="390"/>
-        <element name="RptqDocumentSectionRows" positionX="-1143" positionY="-504" width="191" height="105"/>
+        <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="390"/>
+        <element name="RptqDocumentSectionRows" positionX="-1442" positionY="-681" width="191" height="105"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="387" positionY="1176" width="128" height="118"/>
         <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="238"/>
@@ -331,6 +331,6 @@
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="148"/>
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="118"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="210"/>
-        <element name="RptqUserCredentals" positionX="-1125" positionY="-882" width="128" height="358"/>
+        <element name="RptqUserCredentals" positionX="-1091" positionY="-1062" width="128" height="358"/>
     </elements>
 </model>

@@ -348,7 +348,7 @@
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
-    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
+    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:(float)height];
     section.layoutHeight = layoutHeight;
 }
 
@@ -368,7 +368,10 @@
         RptqDocumentSectionRows *newRowToAppend;
         newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                        inManagedObjectContext: managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
+        NSArray *hasRowsArray = section.hasRows.array;
+        NSMutableOrderedSet *hasRows;
+        hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+                                        [[NSMutableOrderedSet alloc] init];
         newRowToAppend.inSection = section;
         [hasRows addObject:newRowToAppend];
         section.hasRows = hasRows;
@@ -377,7 +380,10 @@
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
+        NSArray *hasRowsArray = section.hasRows.array;
+        NSMutableOrderedSet *hasRows;
+        hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+                                        [[NSMutableOrderedSet alloc] init];
         [hasRows.lastObject setInSection:nil];
         [hasRows removeObjectAtIndex: hasRows.count - 1];
         section.hasRows = hasRows;
@@ -392,7 +398,7 @@
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
-    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:height];
+    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat: (float)height];
     section.layoutHeight = layoutHeight;
 }
 
