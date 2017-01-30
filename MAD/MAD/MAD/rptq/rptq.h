@@ -34,6 +34,6 @@
 #import "RptqQuerySort+CoreDataClass.h"
 #import "RptqQueryTable+CoreDataClass.h"
 #import "RptqRelationship.h"
-#import "RptqUserCredentals+CoreDataClass.h"
+#import "RptqUserCredentals.h"
 
 #endif

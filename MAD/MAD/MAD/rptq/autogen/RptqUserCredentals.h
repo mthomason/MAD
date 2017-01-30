@@ -1,5 +1,5 @@
 //
-//  RptqUserCredentals+CoreDataClass.h
+//  RptqUserCredentals.h
 //  MAD
 //
 //  Created by Michael on 1/29/17.

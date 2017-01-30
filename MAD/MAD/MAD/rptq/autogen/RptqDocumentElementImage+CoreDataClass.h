@@ -9,7 +9,6 @@
 #ifndef MAD_RptqDocumentElementImage_h
 #define MAD_RptqDocumentElementImage_h
 
-#import <Foundation/Foundation.h>
 #import "RptqDocumentElement+CoreDataClass.h"
 
 @class UIImage;

@@ -35,7 +35,7 @@
 
 #import "RptqQueryField+CoreDataClass.h"
 
-#import "RptqUserCredentals+CoreDataClass.h"
+#import "RptqUserCredentals.h"
 
 #import "RptqDocumentSectionRows+CoreDataClass.h"
 

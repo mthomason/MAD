@@ -11,12 +11,6 @@
 #endif
 
 #import "MADQueryViewController.h"
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSFetchRequestExpression.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOrderedSet.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/NSAttributedString.h>
@@ -27,9 +21,17 @@
 #import <UIKit/UIImage.h>
 #import <UIKit/UIStoryboard.h>
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSOrderedSet.h>
 
-#import "MADQueryViewSectionDelegate.h"
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSFetchRequestExpression.h>
+#import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSPersistentStoreResult.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
@@ -47,6 +49,7 @@
 #import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
 #import <MAD/MADModel.h>
 
+#import "MADQueryViewSectionDelegate.h"
 #import "MADLabelTitle.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADTabBarController.h"
@@ -92,9 +95,6 @@
 
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
-
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSPersistentStoreResult.h>
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";

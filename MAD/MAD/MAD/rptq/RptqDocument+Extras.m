@@ -41,6 +41,7 @@
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDocumentElement+Extras.h"
+
 #import "RptqDocumentElementChart+CoreDataClass.h"
 #import "RptqDocumentElementGroupKey+CoreDataClass.h"
 #import "RptqDocumentElementImage+CoreDataClass.h"
@@ -56,8 +57,6 @@
 #import "MTDatabaseTable.h"
 
 #import "MADReportSectionsEnumerator.h"
-
-#import "MADDatabaseConnection.h"
 
 #import "RptqDataHelper.h"
 

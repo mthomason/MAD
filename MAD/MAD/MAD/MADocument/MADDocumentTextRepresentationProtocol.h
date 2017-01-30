@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDocumentTextRepresentationProtocol_h
-#define MADDocumentTextRepresentationProtocol_h
+#ifndef MAD_MADDocumentTextRepresentationProtocol_h
+#define MAD_MADDocumentTextRepresentationProtocol_h
 
 @protocol MADTextRepresentationProtocol <NSObject>
 

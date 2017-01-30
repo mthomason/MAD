@@ -9,7 +9,6 @@
 #ifndef MAD_RptqDocumentElementLabelDataField_h
 #define MAD_RptqDocumentElementLabelDataField_h
 
-#import <Foundation/Foundation.h>
 #import "RptqDocumentElement+CoreDataClass.h"
 
 @class RptqQueryField;

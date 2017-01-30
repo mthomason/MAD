@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDocumentProtocol_h
-#define MADDocumentProtocol_h
+#ifndef MAD_MADDocumentProtocol_h
+#define MAD_MADDocumentProtocol_h
 
 @class MADCredential;
 @class NSString;

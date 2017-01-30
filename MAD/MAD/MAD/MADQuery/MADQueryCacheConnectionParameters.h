@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADQueryCacheConnectionParameters_h
-#define MADQueryCacheConnectionParameters_h
+#ifndef MAD_MADQueryCacheConnectionParameters_h
+#define MAD_MADQueryCacheConnectionParameters_h
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheConnectionParameters) {
     MTQueryCacheConnection,

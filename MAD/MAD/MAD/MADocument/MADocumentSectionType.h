@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADocumentSectionType_h
-#define MADocumentSectionType_h
+#ifndef MAD_MADocumentSectionType_h
+#define MAD_MADocumentSectionType_h
 
 #import <Foundation/NSObjCRuntime.h>
 

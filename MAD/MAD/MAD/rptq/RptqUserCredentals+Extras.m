@@ -28,9 +28,14 @@
 #import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
 #import "MADDatabaseType.h"
+
 #import "RptqDataHelper.h"
 
 @implementation RptqUserCredentals (Extras)
+
++ (NSFetchRequest<RptqUserCredentals *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqUserCredentals"];
+}
 
 #pragma mark - Overrides
 

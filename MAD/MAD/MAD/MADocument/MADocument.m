@@ -19,6 +19,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSPersistentStoreCoordinator.h>
 #import <CoreData/CoreDataErrors.h>
+#import <CoreData/NSManagedObjectID.h>
 
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIImage.h>
@@ -34,14 +35,13 @@
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADFilename.h>
+#import <MADFoundation/NSURL+Document.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-
-#import <MADFoundation/NSURL+Document.h>
 
 #import <MADBarcodes/png.h>
 
@@ -53,6 +53,9 @@
 
 #import "MADErrorUserInfo.h"
 
+#import "MTDataTable.h"
+
+#import "MTQuery.h"
 #import "MTQueryFull.h"
 
 #import "MADConstants.h"
@@ -61,9 +64,6 @@
 #import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 
-#import "MTDataTable.h"
-
-#import "MTQuery.h"
 #import "MTReportFormatter.h"
 #import "MADDatabaseConnection.h"
 
@@ -87,7 +87,7 @@
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "RptqUserCredentals+CoreDataClass.h"
+#import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
 
 #import "RptqQuery+CoreDataClass.h"

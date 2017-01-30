@@ -9,14 +9,29 @@
 #import "MADQueryViewDataSource.h"
 
 #import <Foundation/NSIndexPath.h>
-#import <UIKit/UITableView.h>
-#import <UIKit/UILabel.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSOrderedSet.h>
+
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchedResultsController.h>
 #import <CoreData/NSManagedObjectID.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOrderedSet.h>
+
+#import <UIKit/UILabel.h>
+
+#import <MAD/MADocument.h>
+
+#import <MAD/RptqUserCredentals.h>
+#import <MAD/RptqUserCredentals+Extras.h>
+
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqQueryGroup+Extras.h>
+#import <MAD/RptqQueryLinks+Extras.h>
+#import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/RptqQueryTable+Extras.h>
 
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
@@ -26,20 +41,6 @@
 #import "NSAttributedString+QueryViewController.h"
 
 #import "MADQueryViewSectionDelegate.h"
-
-#import <MAD/MADocument.h>
-
-#import <MAD/RptqDocument+Extras.h>
-#import <MAD/RptqDatabase+Extras.h>
-#import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryTable+CoreDataClass.h>
-#import <MAD/RptqQueryField+Extras.h>
-#import <MAD/RptqQueryGroup+Extras.h>
-#import <MAD/RptqQueryLinks+Extras.h>
-#import <MAD/RptqQueryPredicate+Extras.h>
-
-#import <MAD/RptqUserCredentals+CoreDataClass.h>
-#import <MAD/RptqUserCredentals+Extras.h>
 
 @interface MADQueryViewDataSource ()
     <NSFetchedResultsControllerDelegate>

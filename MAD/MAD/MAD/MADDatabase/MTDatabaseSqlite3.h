@@ -10,9 +10,11 @@
 #define Reports_MADDatabaseSqlite3_h
 
 #import "MTDatabase.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseCache.h"
 #import <Foundation/NSString.h>
+
+#import <MADFoundation/MADDataType.h>
+
+#import "MTDatabaseCache.h"
 
 BOOL Sqlite3StepResultOK(int result);
 

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqUserCredentals_MADDatabaseConnection_h
-#define Reports_RptqUserCredentals_MADDatabaseConnection_h
+#ifndef Reports_RptqDataHelper_h
+#define Reports_RptqDataHelper_h
 
 #import <Foundation/NSObject.h>
 

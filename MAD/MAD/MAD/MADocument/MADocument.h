@@ -11,8 +11,9 @@
 #ifndef Reports_MADocument_h
 #define Reports_MADocument_h
 
-#import <UIKit/UIPrintInteractionController.h>
 #import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIPrintInteractionController.h>
+
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MTCacheProtocol.h>
 

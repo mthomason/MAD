@@ -10,11 +10,10 @@
 #define Reports_MADDatabaseCacheProtocol_h
 
 #import "MTDatabase.h"
-#import <MADFoundation/MADDataType.h>
+
+@protocol MADDatabaseProtocol;
 
 @protocol MADDatabaseCacheProtocol <NSObject>
-  //@public
-
 
     - (id <MTDatabaseProtocol>)delegate;
     - (BOOL)tableExist:(NSString *)tablename;
@@ -23,17 +22,5 @@
     - (void)endBulkInsert;
 
 @end
-
-//@interface MTDatabaseSqlite3 : MTDatabase {
-//  @public
-//    void * /* sqlite3 * */ _database;
-//}
-//
-//    - (id <MTDatabaseProtocol>)delegate;
-//    - (BOOL)tableExist:(NSString *)tablename;
-//    - (void)beginBulkInsert;
-//    - (void)endBulkInsert;
-//
-//@end
 
 #endif
