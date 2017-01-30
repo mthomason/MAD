@@ -1,22 +1,21 @@
 //
-//  RptqUserCredentals+CoreDataProperties.h
+//  RptqUserCredentals+CoreDataClass.h
 //  MAD
 //
 //  Created by Michael on 1/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqUserCredentals_CoreDataProperties_h
-#define MAD_RptqUserCredentals_CoreDataProperties_h
+#ifndef MAD_RptqUserCredentals_NSManagedObject_h
+#define MAD_RptqUserCredentals_NSManagedObject_h
 
-#import "RptqUserCredentals+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObject.h>
+
+@class RptqDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqUserCredentals (CoreDataProperties)
-
-+ (NSFetchRequest<RptqUserCredentals *> *)fetchRequest;
+@interface RptqUserCredentals : NSManagedObject
 
 @property (nullable, nonatomic, copy) NSString *database_driver_type;
 @property (nullable, nonatomic, copy) NSNumber *identifier;

@@ -1,18 +1,14 @@
 //
-//  RptqUserCredentals+CoreDataProperties.m
+//  RptqUserCredentals+CoreDataClass.m
 //  MAD
 //
 //  Created by Michael on 1/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqUserCredentals+CoreDataProperties.h"
-
-@implementation RptqUserCredentals (CoreDataProperties)
-
-+ (NSFetchRequest<RptqUserCredentals *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"RptqUserCredentals"];
-}
+#import "RptqUserCredentals+CoreDataClass.h"
+#import "RptqDatabase+CoreDataClass.h"
+@implementation RptqUserCredentals
 
 @dynamic database_driver_type;
 @dynamic identifier;
