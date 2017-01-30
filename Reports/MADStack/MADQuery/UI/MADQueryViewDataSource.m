@@ -37,6 +37,8 @@
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
+
+#import <MAD/RptqUserCredentals+CoreDataClass.h>
 #import <MAD/RptqUserCredentals+Extras.h>
 
 @interface MADQueryViewDataSource ()
@@ -414,14 +416,16 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
             
             NSManagedObjectContext *managedObjectContext;
-            managedObjectContext = self.datasoruce.document.managedObjectContext;
+            MADocument *madDocument = self.datasoruce.document;
+            managedObjectContext = madDocument.managedObjectContext;
             RptqDocument *document;
-            document = [self.datasoruce.document activeDocumentModel];
+            document = [madDocument activeDocumentModel];
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
                 
-                id databaseType = database.ownedByUser.database_driver_type.copy;
-                id schemaName = [database.ownedByUser copyDatabaseSchemaName];
+                NSString *databaseType = database.ownedByUser.database_driver_type.copy;
+                RptqUserCredentals *user = database.ownedByUser;
+                id schemaName = [user copyDatabaseSchemaName];
                 
                 
                 NSString *TextFormatConnection = @"You are connecting to %1$@"

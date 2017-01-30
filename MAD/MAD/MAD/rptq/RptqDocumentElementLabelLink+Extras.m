@@ -12,6 +12,8 @@
 
 #import "RptqDocumentElementLabelLink+Extras.h"
 
+#import <CoreFoundation/CFNumber.h>
+
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
 

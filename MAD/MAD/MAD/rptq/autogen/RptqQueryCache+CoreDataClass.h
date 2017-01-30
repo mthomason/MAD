@@ -6,8 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_RptqQueryCache_NSManagedObject_h
+#define MAD_RptqQueryCache_NSManagedObject_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class NSObject, RptqQuery;
 
@@ -20,3 +22,5 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #import "RptqQueryCache+CoreDataProperties.h"
+
+#endif

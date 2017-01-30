@@ -663,14 +663,14 @@ READFROMURL_END:;
 
 #pragma mark Lazy Loading
 
-- (NSManagedObjectModel *)madManagedObjectModel {
+/*- (NSManagedObjectModel *)madManagedObjectModel {
     @synchronized (self) {
         if (!_madManagedObjectModel) {
             NSURL *modelURL;
             NSManagedObjectModel *managedObjectModel;
             modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
                                                withExtension: MADManagedObjectModelExtention];
-            /*if (modelURL == nil) {
+            if (modelURL == nil) {
                 for (NSBundle *bundle in [NSBundle allBundles]) {
                     if (bundle.isLoaded) {
                         
@@ -681,7 +681,7 @@ READFROMURL_END:;
                         if (modelURL) break;
                     }
                 }
-            }*/
+            }
             managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
             _madManagedObjectModel = managedObjectModel;;
             managedObjectModel = nil;
@@ -689,7 +689,7 @@ READFROMURL_END:;
         
     }
     return _madManagedObjectModel;
-}
+}*/
 
 #pragma mark -
 #pragma mark UIManagedDocument Overrides
@@ -699,9 +699,9 @@ READFROMURL_END:;
     return managedObjectContext;
 }
 
-- (NSManagedObjectModel *)managedObjectModel {
+/*- (NSManagedObjectModel *)managedObjectModel {
     return self.madManagedObjectModel;
-}
+}*/
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL
                                error:(NSError * __autoreleasing *)error {

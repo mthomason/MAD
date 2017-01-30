@@ -6,6 +6,9 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_RptqDocumentElementLabelDataField_h
+#define MAD_RptqDocumentElementLabelDataField_h
+
 #import <Foundation/Foundation.h>
 #import "RptqDocumentElement+CoreDataClass.h"
 
@@ -20,3 +23,5 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
+
+#endif

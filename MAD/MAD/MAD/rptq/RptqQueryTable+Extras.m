@@ -12,13 +12,18 @@
 
 #import "RptqQueryTable+Extras.h"
 
+#import <CoreFoundation/CFNumber.h>
+
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+
 #import <stdio.h>
+
 #import "madlib.h"
 
 #import "RptqDocument+Extras.h"

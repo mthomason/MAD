@@ -11,6 +11,9 @@
 #endif
 
 #import "RptqUserCredentals+Extras.h"
+
+#import <CoreFoundation/CFNumber.h>
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>

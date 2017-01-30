@@ -12,6 +12,8 @@
 
 #import "RptqDocumentElementAggregate+Extras.h"
 
+#import <CoreFoundation/CFNumber.h>
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
 

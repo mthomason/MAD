@@ -11,9 +11,8 @@
 #endif
 
 #import "RptqDatabase+Extras.h"
-#import "RptqDocument+CoreDataClass.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+
+#import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -21,6 +20,10 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
+#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabaseSchemaTable+CoreDataClass.h"
 
 #import "RptqDataHelper.h"
 

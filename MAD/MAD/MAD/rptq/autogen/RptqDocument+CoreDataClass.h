@@ -6,8 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_RptqDocument_h
+#define MAD_RptqDocument_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabase, RptqDocumentSection;
 
@@ -20,3 +22,5 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #import "RptqDocument+CoreDataProperties.h"
+
+#endif

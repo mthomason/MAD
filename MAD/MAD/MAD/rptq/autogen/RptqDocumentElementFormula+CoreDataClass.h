@@ -6,7 +6,9 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_RptqDocumentElementFormula_RptqDocumentElement_h
+#define MAD_RptqDocumentElementFormula_RptqDocumentElement_h
+
 #import "RptqDocumentElement+CoreDataClass.h"
 
 @class RptqDocumentElementAggregate;
@@ -20,3 +22,5 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #import "RptqDocumentElementFormula+CoreDataProperties.h"
+
+#endif

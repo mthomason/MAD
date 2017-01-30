@@ -6,6 +6,9 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_RptqDocumentElementBarcode_CoreDataProperties_h
+#define MAD_RptqDocumentElementBarcode_CoreDataProperties_h
+
 #import "RptqDocumentElementBarcode+CoreDataClass.h"
 
 
@@ -41,3 +44,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

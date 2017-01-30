@@ -7,6 +7,7 @@
 //
 
 #import "RptqQueryTable+CoreDataProperties.h"
+#import <CoreData/NSFetchRequest.h>
 
 @implementation RptqQueryTable (CoreDataProperties)
 
