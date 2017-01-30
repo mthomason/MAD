@@ -4,13 +4,9 @@
 //
 //  Created by Michael on 1/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
-//  This file was automatically generated and should not be edited.
 //
 
-#ifndef Reports_RptqDocumentElementLabelDataField_CoreDataProperties_h
-#define Reports_RptqDocumentElementLabelDataField_CoreDataProperties_h
-
-#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "MAD.RptqDocumentElementLabelDataField+CoreDataClass.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,5 +23,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

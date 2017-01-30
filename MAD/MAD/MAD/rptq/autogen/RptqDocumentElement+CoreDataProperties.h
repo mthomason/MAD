@@ -4,13 +4,9 @@
 //
 //  Created by Michael on 1/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
-//  This file was automatically generated and should not be edited.
 //
 
-#ifndef Reports_RptqDocumentElement_CoreDataProperties_h
-#define Reports_RptqDocumentElement_CoreDataProperties_h
-
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "MAD.RptqDocumentElement+CoreDataClass.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -72,5 +68,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif
