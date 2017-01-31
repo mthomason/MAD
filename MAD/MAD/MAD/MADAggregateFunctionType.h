@@ -11,7 +11,7 @@
 
 #import <CoreFoundation/CFAvailability.h>
 
-typedef CF_ENUM(short, MTAggregateFunctionType) {
+typedef CF_ENUM(int64_t, MTAggregateFunctionType) {
     MTAggregateFunctionTypeSum = 2,
     MTAggregateFunctionTypeMean = 3,
     MTAggregateFunctionTypeFirst = 5,

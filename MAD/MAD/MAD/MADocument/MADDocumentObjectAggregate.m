@@ -60,9 +60,8 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
         RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
         MADDataType aggregateType = databaseSchemaField.dataType.shortValue;
         
-        NSNumber *function = isAggregate.function;
-        BOOL calculateInMemory = function.unsignedIntegerValue == MTAggregateFunctionTypeFirst ||
-        function.unsignedIntegerValue == MTAggregateFunctionTypeLast;
+        BOOL calculateInMemory = isAggregate.functionType == MTAggregateFunctionTypeFirst ||
+                                 isAggregate.functionType == MTAggregateFunctionTypeLast;
         
         id aggregateResult;
         
@@ -71,7 +70,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             NSNumber *groupType = isAggregate.groupType;
             MADIndexArray *rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
             aggregateResult = [[self class] newResultsForAggregateType: groupType.shortValue
-                                                              function: function.shortValue
+                                                              function: isAggregate.functionType
                                                               fieldKey: fieldKey
                                                              groupKeys: groupKeys
                                                                 rowids: rowIdsForPage
@@ -88,7 +87,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                                                                      groupLevelKeys: groupLevelKeys
                                                                           dataTable: datasource.dataTable];
                     
-                    switch (isAggregate.function.unsignedIntegerValue) {
+                    switch (isAggregate.functionType) {
                         case MTAggregateFunctionTypeFirst:
                             dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup[0] :
                             [[self class] newDictionaryEmptyStringForKey: fieldKey];
@@ -104,7 +103,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                     break;
                 }
                 case MTAggregateGroupByTypePage: {
-                    switch (isAggregate.function.unsignedIntegerValue) {
+                    switch (isAggregate.functionType) {
                         case MTAggregateFunctionTypeFirst: {
                             
                             //don't get data from report formattter
@@ -144,7 +143,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
                     break;
                 }
                 case MTAggregateGroupByTypeReport: {
-                    switch (isAggregate.function.unsignedIntegerValue) {
+                    switch (isAggregate.functionType) {
                         case MTAggregateFunctionTypeFirst: {
                             
                             NSUInteger firstRowid = NSUIntegerMax;

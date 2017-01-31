@@ -7,7 +7,7 @@
 //
 
 #import "RptqDatabaseCredentals+CoreDataClass.h"
-#import "RptqDatabase.h"
+#import "RptqDatabase+CoreDataClass.h"
 @implementation RptqDatabaseCredentals
 
 @end

@@ -10,7 +10,7 @@
 #import "RptqDatabaseSchemaTable+CoreDataClass.h"
 #import "RptqDocument+CoreDataClass.h"
 #import "RptqQuery+CoreDataClass.h"
-#import "RptqUserCredentals.h"
+#import "RptqDatabaseCredentals+CoreDataClass.h"
 @implementation RptqDatabase
 
 @end

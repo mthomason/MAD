@@ -77,20 +77,20 @@
 
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
-    self.add2dComponent = @(barcode.has2dComponent);
-    self.borderStyle =       @(barcode.borderStyle);
-    self.borderWidth =        @(barcode.borderWidth);
-    self.type = @(barcode.barcodeType);
-    self.height = @(barcode.height);
-    self.humanReadable = @(barcode.humanReadable);
-    self.option1 = @(barcode.option1);
-    self.option2 = @(barcode.option2);
-    self.option3 = @(barcode.option3);
-    self.showErrorMessage = @(barcode.showErrorMessages);
-    self.whitespaceWidth = @(barcode.whitespaceWidth);
-    self.scale = @(barcode.scale);
-    self.referencesField1 = fieldOne;
-    self.referencesField2 = fieldTwo;
+    self.add2dComponent =       @(barcode.has2dComponent);
+    self.barcodeBorderStyle =   @(barcode.borderStyle);
+    self.barcodeBorderWidth =   @(barcode.borderWidth);
+    self.type =                 @(barcode.barcodeType);
+    self.barcodeHeight =        @(barcode.height);
+    self.humanReadable =        @(barcode.humanReadable);
+    self.option1 =              @(barcode.option1);
+    self.option2 =              @(barcode.option2);
+    self.option3 =              @(barcode.option3);
+    self.showErrorMessage =     @(barcode.showErrorMessages);
+    self.whitespaceWidth =      @(barcode.whitespaceWidth);
+    self.scale =                @(barcode.scale);
+    self.referencesField1 =     fieldOne;
+    self.referencesField2 =     fieldTwo;
     [self.managedObjectContext save:nil];
 }
 
@@ -100,9 +100,9 @@
     MTBarcode *barcode = [MTBarcode newBarcodeWithType:type];
 
     barcode.has2dComponentEnabled =     documentObject.add2dComponent.boolValue;
-    barcode.borderStyle =               documentObject.borderStyle.unsignedCharValue;
-    barcode.borderWidth =               documentObject.borderWidth.integerValue;
-    barcode.height =                    documentObject.height.integerValue;
+    barcode.borderStyle =               documentObject.barcodeBorderWidth.unsignedCharValue;
+    barcode.borderWidth =               documentObject.barcodeBorderWidth.integerValue;
+    barcode.height =                    documentObject.barcodeHeight.integerValue;
     barcode.humanReadable =             documentObject.humanReadable.boolValue;
     barcode.option1 =                   documentObject.option1.integerValue;
     barcode.option2 =                   documentObject.option2.integerValue;
@@ -146,19 +146,16 @@
         reportObject.add2dComponent = componentEnabled;
         
         NSNumber *borderStyle = [[NSNumber alloc] initWithInteger: barcode.borderStyle];
-        reportObject.borderStyle = borderStyle;
+        reportObject.barcodeBorderStyle = borderStyle;
         
         NSNumber *borderWidth = [[NSNumber alloc] initWithInteger: barcode.borderWidth];
-        reportObject.borderWidth = borderWidth;
+        reportObject.barcodeBorderWidth = borderWidth;
 
-        NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
-        reportObject.colorBackground = colorBackground;
-
-        NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
-        reportObject.colorForeground = colorForeground;
+        reportObject.backgroundColor = [UIColor whiteColor];
+        reportObject.foregroundColor = [UIColor blackColor];
         
         NSNumber *height = [[NSNumber alloc] initWithInteger: barcode.height];
-        reportObject.height = height;
+        reportObject.barcodeHeight = height;
         
         NSNumber *humanReadable = [[NSNumber alloc] initWithBool: barcode.humanReadable];
         reportObject.humanReadable = humanReadable;

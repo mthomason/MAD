@@ -13,6 +13,7 @@
 #import "RptqDocumentElement+Extras.h"
 
 #import <UIKit/UIFontDescriptor.h>
+#import <UIKit/UIGeometry.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -227,10 +228,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (void)setOrigin:(CGPoint)origin {
-    NSNumber *x = [[NSNumber alloc] initWithUnsignedLong:(unsigned long) origin.x];
-    NSNumber *y = [[NSNumber alloc] initWithUnsignedLong:(unsigned long) origin.y];
-    self.originx = x;
-    self.originy = y;
+    self.origin = [NSValue valueWithCGPoint:origin];
 }
 
 - (CGFloat)spacingLeft {

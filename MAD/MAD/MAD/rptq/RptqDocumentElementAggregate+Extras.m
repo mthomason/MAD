@@ -88,11 +88,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentElementAggregate newStringDisplayForType: self.function.shortValue];
+    return [RptqDocumentElementAggregate newStringDisplayForType: self.functionType];
 }
 
 - (NSString *)functionNameShort {
-    return [RptqDocumentElementAggregate shortDisplayStringForType: self.function.shortValue];
+    return [RptqDocumentElementAggregate shortDisplayStringForType: self.functionType];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
@@ -198,8 +198,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                     groupNumber:(NSUInteger)groupNumber {
     
     id value;
-    value = [[NSNumber alloc] initWithUnsignedInteger: functionType];
-    self.function = value;
+    self.functionType = functionType;
     
     value = [[NSNumber alloc] initWithUnsignedInteger: groupNumber];
     self.groupNumber = value;
@@ -231,7 +230,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Identifier:             %@\n", self.identifier];
-    [description appendFormat:@"Function:               %@\n", self.function];
+    [description appendFormat:@"Function:               %lld\n", self.functionType];
     [description appendFormat:@"Group number:           %@\n", self.groupNumber];
     [description appendFormat:@"Group type:             %@\n", self.groupType];
     [description appendFormat:@"*********"];
