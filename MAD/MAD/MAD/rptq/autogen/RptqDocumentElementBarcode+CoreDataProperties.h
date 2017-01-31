@@ -6,9 +6,6 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDocumentElementBarcode_CoreDataProperties_h
-#define MAD_RptqDocumentElementBarcode_CoreDataProperties_h
-
 #import "RptqDocumentElementBarcode+CoreDataClass.h"
 
 
@@ -18,31 +15,29 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElementBarcode *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *add2dComponent;
-@property (nullable, nonatomic, copy) NSNumber *barcodeType;
-@property (nullable, nonatomic, copy) NSNumber *barcodeBorderStyle;
-@property (nullable, nonatomic, copy) NSNumber *barcodeBorderType;
-@property (nullable, nonatomic, copy) NSNumber *barcodeBorderWidth;
-@property (nullable, nonatomic, copy) NSNumber *barcodeHeight;
-@property (nullable, nonatomic, copy) NSNumber *humanReadable;
+@property (nonatomic) BOOL add2dComponent;
+@property (nonatomic) int16_t barcodeType;
+@property (nonatomic) int16_t barcodeBorderStyle;
+@property (nonatomic) int16_t barcodeBorderType;
+@property (nonatomic) int16_t barcodeBorderWidth;
+@property (nonatomic) int16_t barcodeHeight;
+@property (nonatomic) BOOL humanReadable;
 @property (nullable, nonatomic, copy) NSString *inputField1;
 @property (nullable, nonatomic, copy) NSString *inputField2;
-@property (nullable, nonatomic, copy) NSNumber *inputMode;
+@property (nonatomic) int16_t inputMode;
 @property (nullable, nonatomic, copy) NSString *inputStatic1;
 @property (nullable, nonatomic, copy) NSString *inputStatic2;
-@property (nullable, nonatomic, copy) NSNumber *option1;
-@property (nullable, nonatomic, copy) NSNumber *option2;
-@property (nullable, nonatomic, copy) NSNumber *option3;
-@property (nullable, nonatomic, copy) NSNumber *scale;
-@property (nullable, nonatomic, copy) NSNumber *showErrorMessage;
-@property (nullable, nonatomic, copy) NSNumber *useStaticInput1;
-@property (nullable, nonatomic, copy) NSNumber *useStaticInput2;
-@property (nullable, nonatomic, copy) NSNumber *whitespaceWidth;
+@property (nonatomic) int64_t option1;
+@property (nonatomic) int64_t option2;
+@property (nonatomic) int64_t option3;
+@property (nonatomic) float scale;
+@property (nonatomic) BOOL showErrorMessage;
+@property (nonatomic) BOOL useStaticInput1;
+@property (nonatomic) BOOL useStaticInput2;
+@property (nonatomic) int16_t whitespaceWidth;
 @property (nullable, nonatomic, retain) RptqQueryField *referencesField1;
 @property (nullable, nonatomic, retain) RptqQueryField *referencesField2;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

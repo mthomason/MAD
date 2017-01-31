@@ -2,15 +2,12 @@
 //  RptqQueryLinks+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqQueryLinks_CoreDataProperties_h
-#define MAD_RptqQueryLinks_CoreDataProperties_h
-
 #import "RptqQueryLinks+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,16 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQueryLinks *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *designerInitalLayout;
-@property (nullable, nonatomic, copy) NSNumber *designerOriginX;
-@property (nullable, nonatomic, copy) NSNumber *designerOriginY;
-@property (nullable, nonatomic, copy) NSNumber *designerSizeHeight;
-@property (nullable, nonatomic, copy) NSNumber *designerSizeWidth;
 @property (nullable, nonatomic, copy) NSString *fieldleft;
 @property (nullable, nonatomic, copy) NSString *fieldright;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
-@property (nullable, nonatomic, copy) NSString *jointype;
-@property (nullable, nonatomic, copy) NSNumber *jointypeenum;
+@property (nonatomic) int64_t identifier;
+@property (nonatomic) int16_t jointypeenum;
 @property (nullable, nonatomic, copy) NSString *tableleft;
 @property (nullable, nonatomic, copy) NSString *tableright;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
@@ -37,5 +28,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

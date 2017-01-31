@@ -6,9 +6,6 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDocumentElementFormula_CoreDataProperties_h
-#define MAD_RptqDocumentElementFormula_CoreDataProperties_h
-
 #import "RptqDocumentElementFormula+CoreDataClass.h"
 
 
@@ -18,16 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElementFormula *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *functionScope;
-@property (nullable, nonatomic, copy) NSNumber *functionType;
-@property (nullable, nonatomic, copy) NSNumber *inputType;
+@property (nonatomic) int16_t functionScope;
+@property (nonatomic) int16_t functionType;
+@property (nonatomic) int16_t inputType;
 @property (nullable, nonatomic, copy) NSString *name;
-@property (nullable, nonatomic, copy) NSNumber *resultType;
+@property (nonatomic) int16_t resultType;
 @property (nullable, nonatomic, copy) NSString *source;
 @property (nullable, nonatomic, retain) RptqDocumentElementAggregate *includedInAggregateObject;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

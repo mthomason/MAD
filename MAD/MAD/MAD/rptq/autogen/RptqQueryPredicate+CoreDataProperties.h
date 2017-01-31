@@ -2,15 +2,12 @@
 //  RptqQueryPredicate+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqQueryPredicate_CoreDataProperties_h
-#define MAD_RptqQueryPredicate_CoreDataProperties_h
-
 #import "RptqQueryPredicate+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQueryPredicate *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *comparson;
+@property (nonatomic) int16_t comparson;
 @property (nullable, nonatomic, copy) NSString *fieldleftpred;
 @property (nullable, nonatomic, copy) NSString *fieldrightpred;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
 @property (nullable, nonatomic, retain) RptqQueryField *hasRightField;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;
@@ -29,5 +26,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

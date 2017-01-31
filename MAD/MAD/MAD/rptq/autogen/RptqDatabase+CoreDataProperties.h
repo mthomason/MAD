@@ -2,15 +2,12 @@
 //  RptqDatabase+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDatabase_CoreDataProperties_h
-#define MAD_RptqDatabase_CoreDataProperties_h
-
 #import "RptqDatabase+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,12 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqDatabase *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *databaseDriverType;
-@property (nullable, nonatomic, copy) NSNumber *databaseDriverTypeEnum;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int16_t databaseDriverTypeEnum;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) NSSet<RptqQuery *> *hasQueries;
 @property (nullable, nonatomic, retain) NSSet<RptqDatabaseSchemaTable *> *hasTables;
 @property (nullable, nonatomic, retain) RptqDocument *ownedByQueryAsStaticResource;
-@property (nullable, nonatomic, retain) RptqUserCredentals *ownedByUser;
+@property (nullable, nonatomic, retain) RptqDatabaseCredentals *ownedByUser;
 
 @end
 
@@ -43,5 +40,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

@@ -2,7 +2,7 @@
 //  RptqDocument+CoreDataProperties.m
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
@@ -23,7 +23,6 @@
 @dynamic override;
 @dynamic overrideText;
 @dynamic papersize;
-@dynamic thumbnailpreview;
 @dynamic hasDatabaseSchemas;
 @dynamic hasDetailSection;
 @dynamic hasPageFooterSection;

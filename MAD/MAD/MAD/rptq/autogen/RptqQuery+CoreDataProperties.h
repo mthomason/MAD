@@ -2,15 +2,12 @@
 //  RptqQuery+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqQuery_CoreDataProperties_h
-#define MAD_RptqQuery_CoreDataProperties_h
-
 #import "RptqQuery+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,8 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqQuery *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *cachedText;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
-@property (nullable, nonatomic, copy) NSNumber *override;
+@property (nonatomic) int64_t identifier;
+@property (nonatomic) BOOL override;
 @property (nullable, nonatomic, copy) NSString *overrideText;
 @property (nullable, nonatomic, retain) NSSet<RptqDatabaseSchemaField *> *hasFields;
 @property (nullable, nonatomic, retain) RptqQueryCache *hasQueryCache;
@@ -63,5 +60,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

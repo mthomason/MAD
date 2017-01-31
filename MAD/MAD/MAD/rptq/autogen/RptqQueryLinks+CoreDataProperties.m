@@ -2,7 +2,7 @@
 //  RptqQueryLinks+CoreDataProperties.m
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,15 +14,9 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryLinks"];
 }
 
-@dynamic designerInitalLayout;
-@dynamic designerOriginX;
-@dynamic designerOriginY;
-@dynamic designerSizeHeight;
-@dynamic designerSizeWidth;
 @dynamic fieldleft;
 @dynamic fieldright;
 @dynamic identifier;
-@dynamic jointype;
 @dynamic jointypeenum;
 @dynamic tableleft;
 @dynamic tableright;

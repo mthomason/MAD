@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *driver_type;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSNumber *inUse;
 @property (nullable, nonatomic, copy) NSString *database;
 @property (nullable, nonatomic, copy) NSString *host;

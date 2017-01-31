@@ -2,12 +2,9 @@
 //  RptqDatabaseSchemaField+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
-
-#ifndef MAD_RptqDatabaseSchemaField_CoreDataProperties_h
-#define MAD_RptqDatabaseSchemaField_CoreDataProperties_h
 
 #import "RptqDatabaseSchemaField+CoreDataClass.h"
 
@@ -18,15 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDatabaseSchemaField *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *dataType;
-@property (nullable, nonatomic, copy) NSNumber *dataTypeNative;
+@property (nonatomic) int16_t dataType;
+@property (nonatomic) int16_t dataTypeNative;
 @property (nullable, nonatomic, copy) NSString *dataTypeNativeDescription;
-@property (nullable, nonatomic, copy) NSNumber *decimals;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int16_t decimals;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSString *label;
 @property (nullable, nonatomic, copy) NSString *name;
-@property (nullable, nonatomic, copy) NSNumber *primaryKey;
-@property (nullable, nonatomic, copy) NSNumber *width;
+@property (nonatomic) BOOL primaryKey;
+@property (nonatomic) int64_t width;
 @property (nullable, nonatomic, retain) NSSet<RptqQuery *> *inQuery;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryField *> *inQueryField;
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaTable *inTable;
@@ -48,5 +45,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

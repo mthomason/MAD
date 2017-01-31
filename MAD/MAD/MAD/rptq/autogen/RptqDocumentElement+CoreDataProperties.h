@@ -6,11 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDocumentElement_CoreDataProperties_h
-#define MAD_RptqDocumentElement_CoreDataProperties_h
-
 #import "RptqDocumentElement+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElement *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *dropIndex;
+@property (nonatomic) int64_t dropIndex;
 @property (nullable, nonatomic, copy) NSString *fontname;
-@property (nullable, nonatomic, copy) NSNumber *fontsize;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
-@property (nullable, nonatomic, copy) NSNumber *type;
+@property (nonatomic) float fontsize;
+@property (nonatomic) int64_t identifier;
+@property (nonatomic) int64_t type;
 @property (nullable, nonatomic, retain) NSObject *origin;
 @property (nullable, nonatomic, retain) NSObject *dropPoint;
 @property (nullable, nonatomic, retain) NSObject *margin;
@@ -39,5 +36,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

@@ -2,15 +2,12 @@
 //  RptqDocumentSectionRows+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDocumentSectionRows_CoreDataProperties_h
-#define MAD_RptqDocumentSectionRows_CoreDataProperties_h
-
 #import "RptqDocumentSectionRows+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentSectionRows *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *layoutHeight;
-@property (nullable, nonatomic, copy) NSNumber *rowNumber;
+@property (nonatomic) float layoutHeight;
+@property (nonatomic) int64_t rowNumber;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentElement *> *hasObjects;
 @property (nullable, nonatomic, retain) RptqDocumentSection *inSection;
 
@@ -41,5 +38,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

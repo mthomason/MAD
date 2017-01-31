@@ -1,0 +1,26 @@
+//
+//  RptqDatabaseCredentals.h
+//  MAD
+//
+//  Created by Michael on 1/31/17.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//
+
+#ifndef MAD_RptqDatabaseCredentals_h
+#define MAD_RptqDatabaseCredentals_h
+
+#import <CoreData/NSManagedObject.h>
+
+@class RptqDatabase;
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface RptqDatabaseCredentals : NSManagedObject
+
+@end
+
+NS_ASSUME_NONNULL_END
+
+#import "RptqDatabaseCredentals+CoreDataProperties.h"
+
+#endif

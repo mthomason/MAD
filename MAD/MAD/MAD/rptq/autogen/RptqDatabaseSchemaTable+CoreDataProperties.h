@@ -2,15 +2,12 @@
 //  RptqDatabaseSchemaTable+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqDatabaseSchemaTable_CoreDataProperties_h
-#define MAD_RptqDatabaseSchemaTable_CoreDataProperties_h
-
 #import "RptqDatabaseSchemaTable+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSString *label;
 @property (nullable, nonatomic, copy) NSString *label_plural;
 @property (nullable, nonatomic, copy) NSString *name;
-@property (nullable, nonatomic, copy) NSNumber *queryable;
+@property (nonatomic) BOOL queryable;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDatabaseSchemaField *> *hasFields;
 @property (nullable, nonatomic, retain) RptqDatabase *inDatabase;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqQueryTable *> *inQueryTable;
@@ -56,5 +53,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

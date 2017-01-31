@@ -2,15 +2,12 @@
 //  RptqQueryGroup+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqQueryGroup_CoreDataProperties_h
-#define MAD_RptqQueryGroup_CoreDataProperties_h
-
 #import "RptqQueryGroup+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQueryGroup *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *identifier;
-@property (nullable, nonatomic, copy) NSNumber *sort;
-@property (nullable, nonatomic, copy) NSNumber *weight;
+@property (nonatomic) int64_t identifier;
+@property (nonatomic) int32_t sort;
+@property (nonatomic) int64_t weight;
 @property (nullable, nonatomic, retain) RptqQueryField *hasField;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentSection *> *hasSection;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;
@@ -37,5 +34,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

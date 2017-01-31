@@ -2,15 +2,12 @@
 //  RptqQueryField+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_RptqQueryField_CoreDataProperties_h
-#define MAD_RptqQueryField_CoreDataProperties_h
-
 #import "RptqQueryField+CoreDataClass.h"
-#import <CoreData/NSFetchRequest.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQueryField *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentElementAggregate *> *inAggregateObject;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentElementBarcode *> *inBarcodeField1;
@@ -89,5 +86,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif
