@@ -470,7 +470,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 - (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.shortValue == MADDocumentSectionTypeGroupHeader) {
+            if (documentSection.type == MADDocumentSectionTypeGroupHeader) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;
@@ -483,7 +483,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 - (void)addHeightFromGroupFooterWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in queryGroup.hasSection.allObjects) {
         @autoreleasepool {
-            if (documentSection.type.shortValue == MADDocumentSectionTypeGroupFooter) {
+            if (documentSection.type == MADDocumentSectionTypeGroupFooter) {
                 [self addHeightFromDocumentSectionToReportLayout:documentSection.objectID
                                                 producesFormFeed:documentSection.producesFormFeed];
                 break;

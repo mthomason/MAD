@@ -12,9 +12,6 @@
 #import "RptqQueryPredicate.h"
 #import "MADPredicateOperator.h"
 
-#define MADPredicateOperatorSymbols [NSArray arrayWithObjects: @"=", @"<>", @">", @">=", @"<", @"<=", nil]
-#define MADPredicateOperatorSymbolsDisplay [NSArray arrayWithObjects: @"==", @"!=", @">", @">=", @"<", @"<=", nil]
-
 @class RptqDocument;
 
 @interface RptqQueryPredicate (Extras)

@@ -11,7 +11,7 @@
 
 #import "zint.h"
 
-typedef NS_ENUM(NSInteger, MTBarcodeBorderStyle) {
+typedef NS_ENUM(int16_t, MTBarcodeBorderStyle) {
     MTBarcodeBorderStyleNone    = 0,
     MTBarcodeBorderStyleBind    = BARCODE_BIND,
     MTBarcodeBorderStyleBox     = BARCODE_BOX

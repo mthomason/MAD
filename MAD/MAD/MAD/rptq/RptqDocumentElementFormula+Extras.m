@@ -33,11 +33,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
@@ -93,8 +90,7 @@
                                                                  insertIntoManagedObjectContext: managedObjectContext];
     
     reportObject.source = formulaText;
-    NSNumber *typeFormula = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeFormula];
-    reportObject.type = typeFormula;
+    reportObject.type = MTDocumentObjectTypeFormula;
     
     NSMutableOrderedSet <RptqDocumentElement *> *hasObjects;
     hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
@@ -121,13 +117,13 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
-    [description appendFormat:@"Name:                   %@\n", self.name];
-    [description appendFormat:@"Source:                 %@\n", self.source];
-    [description appendFormat:@"Result type:            %@\n", self.resultType];
-    [description appendFormat:@"Function scope:         %@\n", self.functionScope];
-    [description appendFormat:@"Function type:          %@\n", self.functionType];
-    [description appendFormat:@"Input type:             %@\n", self.inputType];
+    [description appendFormat:@"Identifier:             %lld\n",    self.identifier];
+    [description appendFormat:@"Name:                   %@\n",      self.name];
+    [description appendFormat:@"Source:                 %@\n",      self.source];
+    [description appendFormat:@"Result type:            %hd\n",     self.resultType];
+    [description appendFormat:@"Function scope:         %hd\n",     self.functionScope];
+    [description appendFormat:@"Function type:          %hd\n",     self.functionType];
+    [description appendFormat:@"Input type:             %hd\n",     self.inputType];
     [description appendFormat:@"*********"];
     return description;
 }

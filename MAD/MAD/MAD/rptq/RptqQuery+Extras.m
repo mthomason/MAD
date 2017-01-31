@@ -82,11 +82,8 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
@@ -167,7 +164,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
         @autoreleasepool {
-            BOOL sortAscending = (queryGroup.sort.integerValue == MNSSortOrderAccending);
+            BOOL sortAscending = (queryGroup.sort == MNSSortOrderAccending);
             RptqQueryField *groupField = queryGroup.hasField;
             
             NSString *queryTable = [groupField.inQueryTable copyQueryAlias];
@@ -178,7 +175,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
             MADSafeQueryField *safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType.shortValue);
+            SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: sortAscending selector: sel];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
         }
@@ -189,9 +186,9 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:         %@\n", self.identifier];
+    [description appendFormat:@"Identifier:         %lld\n", self.identifier];
     [description appendFormat:@"Sort:               %@\n", self.cachedText];
-    [description appendFormat:@"Override:           %@\n", self.override];
+    [description appendFormat:@"Override:           %@\n", self.override ? @"YES" : @"NO"];
     [description appendFormat:@"Override text:      %@\n", self.overrideText];
     [description appendFormat:@"Fields:             %@\n", self.hasFields];
     [description appendFormat:@"Query cache:        %@\n", self.hasQueryCache];

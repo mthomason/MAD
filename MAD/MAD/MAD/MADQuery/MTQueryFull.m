@@ -338,7 +338,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                                 [result appendString:Tab];
                             }
                             
-                            NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:queryLink.jointypeenum.shortValue];
+                            NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:queryLink.jointypeenum];
                             [result appendFormat:@" %@ ", sqlForLink];
                             
                             RptqQueryField *rightField = queryLink.hasRightField;

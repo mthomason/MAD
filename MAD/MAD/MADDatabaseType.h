@@ -9,7 +9,7 @@
 #ifndef MADDatabaseType_h
 #define MADDatabaseType_h
 
-typedef NS_ENUM(short, MADDatabaseType) {
+typedef NS_ENUM(int16_t, MADDatabaseType) {
     MADDatabaseTypeUnknown              = 0,
     MADDatabaseTypeDatabaseCom          = 1,
     MADDatabaseTypeMySQL                = 2,

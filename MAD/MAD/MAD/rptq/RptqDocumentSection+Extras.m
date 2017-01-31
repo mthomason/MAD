@@ -87,14 +87,13 @@
 }
 
 - (BOOL)producesFormFeed {
-    return (self.wrappingStyle).integerValue == RptqDocumentSectionWrappingStyleNewPageAfter;
+    return (self.wrappingStyle) == RptqDocumentSectionWrappingStyleNewPageAfter;
 }
 
 - (void)setProducesFormFeed:(BOOL)producesFormFeed {
-    NSNumber *wrappingStyle = [[NSNumber alloc] initWithShort: producesFormFeed ?
-                                                    RptqDocumentSectionWrappingStyleNewPageAfter :
-                                                    RptqDocumentSectionWrappingStyleStandard];
-    self.wrappingStyle = wrappingStyle;
+    self.wrappingStyle = producesFormFeed ?
+                                RptqDocumentSectionWrappingStyleNewPageAfter :
+                                RptqDocumentSectionWrappingStyleStandard;
 }
 
 - (NSManagedObjectID *)copySectionKey {
@@ -133,7 +132,7 @@
     return self.objectID.copy;
 }
 
-- (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (int64_t)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentElement class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO];
@@ -144,11 +143,11 @@
     NSError *error = nil;
     NSArray *fetchResults = [managedObjectContext executeFetchRequest: request
                                                                 error: &error];
-    NSUInteger dropIndex = 0;
+    int64_t dropIndex = 0;
     if (error == nil) {
         RptqDocumentElement *lastObject = fetchResults.lastObject;
         if (lastObject.objectID.isTemporaryID == NO) {
-            dropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
+            dropIndex = lastObject.dropIndex + 1;
         }
     }
     return dropIndex;
@@ -157,7 +156,7 @@
 - (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
      managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    [documentObject setOrigin: origin];
+    [documentObject setOriginPoint: origin];
     
     NSUInteger sectionZero = 0;
     RptqDocumentSectionRows *sectionRow = self.hasRows.firstObject;
@@ -165,19 +164,16 @@
     NSIndexPath *indexPathForInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count
                                                           inSection:(NSInteger)sectionZero];
     
-    NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger:[self nextDropIndexForSectionWithManagedObjectContext:managedObjectContext]];
-    documentObject.dropIndex = dropIndex;
+    documentObject.dropIndex = [self nextDropIndexForSectionWithManagedObjectContext:managedObjectContext];
     
     NSMutableOrderedSet *hasObjects = sectionRow.hasObjects.mutableCopy;
     [hasObjects insertObject: documentObject atIndex: (NSUInteger)indexPathForInsert.item];
     sectionRow.hasObjects = hasObjects;
 }
 
-- (void)setInterfaceHeight:(CGFloat)height {
-    NSNumber *layoutHeightWrapper = [[NSNumber alloc] initWithDouble: height];
-    NSNumber *heightWrapper =       [[NSNumber alloc] initWithDouble: height + 44.0000f];
-    self.layoutHeight = layoutHeightWrapper;
-    self.height = heightWrapper;
+- (void)setInterfaceHeight:(float)height {
+    self.layoutHeight = height;
+    self.height = height + 44.0000f;
 }
 
 #pragma mark - Static
@@ -241,18 +237,16 @@
 // This is the layout height for page rendering... the designer section height is stored in the db
 - (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
-    if (self.visibility.boolValue) {
+    CGPoint dropPoint; CGSize marginSize; CGRect elementCanvasRect; CGFloat totalHeight;
+    if (self.visibility) {
         for (RptqDocumentSectionRows *row in self.hasRows) {
             for (RptqDocumentElement *element in row.hasObjects) {
+                [(NSValue *)element.dropPoint getValue:&dropPoint];
+                marginSize           = [element sizeCalculated];
+                elementCanvasRect    = CGRectMake(dropPoint.x, dropPoint.y,
+                                                  marginSize.width, marginSize.height);
                 
-                CGFloat originPointX        = (element.dropPointX).floatValue;
-                CGFloat originPointY        = (element.dropPointY).floatValue;
-                
-                CGSize marginSize           = [element size];
-                CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY,
-                                                         marginSize.width, marginSize.height);
-                
-                CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
+                totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
                 if (totalHeight > resultHeight) {
                     resultHeight = totalHeight;
                 }
@@ -285,12 +279,12 @@
 }
 
 - (MADDocumentSectionType)getDocumentSectionType {
-    return self.type.shortValue;
+    return self.type;
 }
 
 - (NSString *)localizedDisplayName {
     NSString *result = nil;
-    switch (self.type.shortValue) {
+    switch (self.type) {
     
         case MADDocumentSectionTypeReportHeader:
             result = NSLocalizedString(@"Report Header",
@@ -414,7 +408,7 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
 
 + (RptqDocumentSection *)footerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
-        if (section.type.shortValue == MADDocumentSectionTypeGroupFooter) {
+        if (section.type == MADDocumentSectionTypeGroupFooter) {
             return section;
             break;
         }
@@ -424,7 +418,7 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
 
 + (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections {
     for (RptqDocumentSection *section in sections) {
-        if (section.type.shortValue == MADDocumentSectionTypeGroupHeader) {
+        if (section.type == MADDocumentSectionTypeGroupHeader) {
             return section;
             break;
         }

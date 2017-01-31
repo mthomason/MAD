@@ -47,7 +47,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     @property (readonly) MTDocumentObjectType documentObjectType;
     @property (readonly) CGRect frame;
     
-    - (CGSize)size;
+    - (CGSize)sizeCalculated;
     - (NSString *)copyDesignerRepresentationText;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
@@ -57,13 +57,16 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
     - (CGSize)sizeContentView;
-    - (void)setOrigin:(CGPoint)origin;
+    - (void)setOriginPoint:(CGPoint)origin;
+    - (void)setSizeValue:(CGSize)size;
+    - (void)setSizeWidth:(float)w height:(float)h;
+
     - (void)dropAtRect:(CGRect)rect;
 
-    - (CGFloat)spacingLeft;
-    - (CGFloat)spacingTop;
-    - (CGFloat)spacingBottom;
-    - (CGFloat)spacingRight;
+    - (double)spacingLeft;
+    - (double)spacingTop;
+    - (double)spacingBottom;
+    - (double)spacingRight;
 
 @end
 

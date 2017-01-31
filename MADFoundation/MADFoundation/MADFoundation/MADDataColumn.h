@@ -22,7 +22,7 @@
     @property (nonatomic, readwrite, strong) NSObject <NSCopying> *defaultValue;
 
     @property (nonatomic, assign)   MADDataType  type;
-    @property (nonatomic, assign)   NSInteger   nativeType;
+    @property (nonatomic, assign)   int16_t     nativeType;
     @property (nonatomic, assign)   NSInteger   dataLength;
     @property (nonatomic, assign)   NSInteger   dataPercision;
     

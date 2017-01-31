@@ -9,7 +9,7 @@
 #ifndef MAD_MADSortOrder_h
 #define MAD_MADSortOrder_h
 
-typedef NS_ENUM(NSUInteger, MNSSortOrder) {
+typedef NS_ENUM(int32_t, MNSSortOrder) {
     MNSSortOrderAccending = 0,
     MNSSortOrderDecending
 };

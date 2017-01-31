@@ -20,7 +20,7 @@
 @interface MADocumentObjectAttributesText : NSObject
 
     - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
-                                     fontSize:(NSNumber * _Nullable) fontsize
+                                     fontSize:(float) fontsize
                                          bold:(BOOL)bold
                                        italic:(BOOL)italic
                                     underline:(BOOL)underline

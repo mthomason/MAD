@@ -37,17 +37,17 @@
     @property (nonatomic, assign, readonly) BOOL has2dComponent;
     @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
 
-    @property (nonatomic, assign) NSInteger option1;
-    @property (nonatomic, assign) NSInteger option2;
-    @property (nonatomic, assign) NSInteger option3;
+    @property (nonatomic, assign) int64_t option1;
+    @property (nonatomic, assign) int64_t option2;
+    @property (nonatomic, assign) int64_t option3;
 
     @property (nonatomic, assign) BOOL center;
 
     @property (nonatomic, retain) NSString *input;
-    @property (nonatomic, assign) NSInteger height;
+    @property (nonatomic, assign) int16_t height;
     @property (nonatomic, assign) NSInteger width;
-    @property (nonatomic, assign) NSInteger borderWidth;
-    @property (nonatomic, assign) NSInteger whitespaceWidth;
+    @property (nonatomic, assign) int16_t borderWidth;
+    @property (nonatomic, assign) int16_t whitespaceWidth;
     @property (nonatomic, assign) BOOL humanReadable;
     @property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
     @property (nonatomic, assign) BOOL showErrorMessages;

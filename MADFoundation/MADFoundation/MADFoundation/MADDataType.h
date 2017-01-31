@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-typedef NS_ENUM(short, MADDataType) {
+typedef NS_ENUM(int16_t, MADDataType) {
     MADDataTypeBit           = 0,
     MADDataTypeBlob          = 1,
     MADDataTypeDate          = 2,

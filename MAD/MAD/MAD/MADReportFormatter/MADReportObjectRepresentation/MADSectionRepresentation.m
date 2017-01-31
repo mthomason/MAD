@@ -79,7 +79,7 @@
     [debugString appendString:@"MADReportplist\n"];
     [debugString appendString:@"-----------------------------\n"];
     [debugString appendFormat:@"Row ID:       %lu\n", self.detailRowId];
-    [debugString appendFormat:@"Section type: %lu\n", self.sectionType];
+    [debugString appendFormat:@"Section type: %lld\n", self.sectionType];
     [debugString appendFormat:@"Group level:  %lu\n", self.groupLevel];
     [debugString appendString:@"-----------------------------\n"];
     [debugString appendString:@"\n"];

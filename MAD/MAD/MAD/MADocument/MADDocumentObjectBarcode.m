@@ -66,7 +66,7 @@
           forDocumentObject:(RptqDocumentElement *)item
                       value:(id)value {
     
-    NSString *input1 = [item formattedString: field.databaseSchemaField.dataType.shortValue
+    NSString *input1 = [item formattedString: field.databaseSchemaField.dataType
                                     forValue: value];
     if ([input1 isEqualToString:MTNullIdentifier]) {
         return @"";

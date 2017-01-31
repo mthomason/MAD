@@ -40,11 +40,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
@@ -59,7 +56,7 @@
 
     RptqQuery *query = database.defaultQuery;
     NSSet <RptqQueryTable *> *queryTables = query.hasQueryTables;
-    NSInteger dupeCtr = 0;
+    int64_t dupeCtr = 0;
     RptqQueryTable *queryTable;
     for (queryTable in queryTables) {
         if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
@@ -76,8 +73,7 @@
     queryTable.databaseSchemaTable = databaseSchemaTable;
     queryTable.inQuery = query;
 
-    NSNumber *dropIndex = [[NSNumber alloc] initWithInteger: dupeCtr];
-    queryTable.dropIndex = dropIndex;
+    queryTable.dropIndex = dupeCtr;
     
     NSString *alias = [[NSString alloc] initWithString:queryTable.tableAlias];
     queryTable.alias = alias;
@@ -86,12 +82,12 @@
 }
 
 - (NSString *)tableAlias {
-    return self.dropIndex.unsignedIntegerValue == 0 ? self.databaseSchemaTable.name : [self copyQueryAlias];
+    return self.dropIndex == 0 ? self.databaseSchemaTable.name : [self copyQueryAlias];
 }
 
 - (NSString *)copyQueryAlias {
     char buf[12]; char *ptr;
-    ltoa(self.dropIndex.integerValue, buf);
+    ltoa(self.dropIndex, buf);
     ptr = buf;
     NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
     NSString *databaseName = self.databaseSchemaTable.name.copy;
@@ -116,10 +112,8 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQueryTable  ***********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Alias:                  %@\n", self.alias];
-    [description appendFormat:@"Inital layout:          %@\n", self.designerInitalLayout];
-    [description appendFormat:@"Frame:                  (%f, %f, %f, %f)\n", self.designerOriginX.floatValue, self.designerOriginY.floatValue, self.designerSizeWidth.floatValue, self.designerSizeHeight.floatValue];
     [description appendFormat:@"***********   RptqQueryTable  ***********"];
     return description;
 }

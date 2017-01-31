@@ -38,11 +38,8 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -195,16 +192,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                       inputType:(MTAggregateFunctionInputType)inputType
                                       groupType:(MTAggregateGroupByType)groupType
                                 aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
-                                    groupNumber:(NSUInteger)groupNumber {
+                                    groupNumber:(int64_t)groupNumber {
     
-    id value;
     self.functionType = functionType;
-    
-    value = [[NSNumber alloc] initWithUnsignedInteger: groupNumber];
-    self.groupNumber = value;
-    
-    value = [[NSNumber alloc] initWithUnsignedInteger: groupType];
-    self.groupType = value;
+    self.groupNumber = groupNumber;
+    self.groupType = groupType;
     
     switch (inputType) {
         case MTAggregateFunctionInputTypeField: {
@@ -229,10 +221,10 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Function:               %lld\n", self.functionType];
-    [description appendFormat:@"Group number:           %@\n", self.groupNumber];
-    [description appendFormat:@"Group type:             %@\n", self.groupType];
+    [description appendFormat:@"Group number:           %lld\n", self.groupNumber];
+    [description appendFormat:@"Group type:             %lld\n", self.groupType];
     [description appendFormat:@"*********"];
     return description;
 }

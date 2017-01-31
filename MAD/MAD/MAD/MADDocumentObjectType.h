@@ -11,7 +11,7 @@
 
 #import <CoreFoundation/CFAvailability.h>
 
-typedef CF_ENUM(short, MTDocumentObjectType) {
+typedef CF_ENUM(int64_t, MTDocumentObjectType) {
     MTDocumentObjectTypeLabelDynamic = 0,
     MTDocumentObjectTypeLabelStatic = 1,
     MTDocumentObjectTypeImage = 2,

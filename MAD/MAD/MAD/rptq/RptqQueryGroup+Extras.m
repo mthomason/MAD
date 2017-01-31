@@ -63,11 +63,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -122,7 +119,7 @@
     NSInteger weight = 0;
     if (queryGroupLast.count > 0) {
         RptqQueryGroup *lastGroup = queryGroupLast[0];
-        weight = lastGroup.weight.integerValue;
+        weight = lastGroup.weight;
     }
     return weight;
 }
@@ -136,7 +133,7 @@
 }
 
 - (NSString *)sortDisplayNice {
-    switch (self.sort.integerValue) {
+    switch (self.sort) {
 
         case MNSSortOrderAccending:
             return @"accending";

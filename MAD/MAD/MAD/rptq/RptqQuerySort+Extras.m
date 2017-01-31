@@ -28,11 +28,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
@@ -63,7 +60,7 @@
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQuerySort   ***********\n"];
     [description appendFormat:@"Identifier:             %@\n", self.identifier];
-    [description appendFormat:@"ASC:                    %@\n", self.ascending.boolValue ? @"YES" : @"NO"];
+    [description appendFormat:@"ASC:                    %@\n", self.ascending ? @"YES" : @"NO"];
     [description appendFormat:@"Fields:                 %@\n", self.fields];
     [description appendFormat:@"***********   RptqQuerySort   ***********"];
     return description;

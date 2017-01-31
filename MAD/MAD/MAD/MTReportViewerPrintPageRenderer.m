@@ -404,8 +404,8 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                                                   andLevel: pageSection.groupLevel];
         
         rect = sectionBounds(pageRect,
-                             heightWithVisibility([reportFormatter heightForSectionWithObjectID:documentSection.objectID], documentSection.visibility.boolValue),
-                             documentSection.visibility.boolValue,
+                             heightWithVisibility([reportFormatter heightForSectionWithObjectID:documentSection.objectID], documentSection.visibility),
+                             documentSection.visibility,
                              pageSection.sectionType,
                              reportFormatter.numberOfPages,
                              pageIndex,
@@ -496,7 +496,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     
     NSEnumerator *documentObjectEnumerator;
     if (!((sectionRepresentation.visibility =
-           documentSection.visibility.boolValue))) goto END_DrawSection;
+           documentSection.visibility))) goto END_DrawSection;
     
     MADDocumentSectionType type = [documentSection getDocumentSectionType];
     [self setBackgroundColorForSectionType: type

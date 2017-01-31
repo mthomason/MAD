@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSObject *cacheDate;
 @property (nullable, nonatomic, retain) NSData *data;
 @property (nullable, nonatomic, copy) NSString *filename;
-@property (nullable, nonatomic, copy) NSNumber *identifier;
+@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqQuery *hasQuery;
 
 @end

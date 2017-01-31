@@ -16,7 +16,7 @@
 
 - (NSString *)copyDesignerRepresentationText {
     NSString *result = nil;
-    NSNumber *groupNumber = [((RptqDocumentElementGroupKey *)self) groupNumber];
+    NSNumber *groupNumber = [NSNumber numberWithLongLong:self.groupNumber];
     NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
                                                                  numberStyle: NSNumberFormatterSpellOutStyle];
     NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");

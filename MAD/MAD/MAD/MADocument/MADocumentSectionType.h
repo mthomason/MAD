@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-typedef NS_ENUM(NSInteger, MADDocumentSectionType) {
+typedef NS_ENUM(int64_t, MADDocumentSectionType) {
     MADDocumentSectionTypeReportHeader = 1,
     MADDocumentSectionTypeReportFooter = 2,
     MADDocumentSectionTypePageHeader = 3,

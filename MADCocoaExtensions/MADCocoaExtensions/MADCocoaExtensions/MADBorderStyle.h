@@ -9,6 +9,13 @@
 #ifndef MAD_MADBorderStyle_h
 #define MAD_MADBorderStyle_h
 
+typedef NS_ENUM(short, MADBorderStyle) {
+    MADBorderStyleNone    = 1,
+    MADBorderStyleDash    = 2,
+    MADBorderStyleDot     = 3,
+    MADBorderStyleLine    = 4
+};
+
 struct MADLayoutBorderStyle {
     float left;
     float right;
@@ -20,13 +27,6 @@ struct MADLayoutBorderStyle {
     MADBorderStyle bottomStyle;
 };
 typedef struct MADLayoutBorderStyle MADLayoutBorderStyle;
-
-typedef NS_ENUM(short, MADBorderStyle) {
-    MADBorderStyleNone    = 1,
-    MADBorderStyleDash    = 2,
-    MADBorderStyleDot     = 3,
-    MADBorderStyleLine    = 4
-};
 
 static inline MADLayoutBorderStyle MADLayoutBorderStyleMake(float, float, float, float, MADBorderStyle, MADBorderStyle, MADBorderStyle, MADBorderStyle);
 static inline MADLayoutBorderStyle MADLayoutBorderStyleMake(float l, float r, float t, float b, MADBorderStyle ls, MADBorderStyle rs, MADBorderStyle ts, MADBorderStyle bs) {

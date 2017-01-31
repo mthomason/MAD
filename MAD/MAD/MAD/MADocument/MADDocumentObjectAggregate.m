@@ -26,9 +26,9 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-static inline NSRange MADRangeToGroup(NSNumber *groupNumber);
-static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
-    return NSMakeRange(0, groupNumber.unsignedIntegerValue + 1);
+static inline NSRange MADRangeToGroup(int64_t groupNumber);
+static inline NSRange MADRangeToGroup(int64_t groupNumber) {
+    return NSMakeRange(0, (NSUInteger)groupNumber + 1);
 }
 
 @implementation MADDocumentObjectAggregate
@@ -51,14 +51,14 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
         
         NSArray *groupKeys;
         
-        NSNumber *groupNumber = isAggregate.groupNumber;
+        int64_t groupNumber = isAggregate.groupNumber;
         NSArray *groupLevelKeys = [datasource groupLevelKeys:definition.detailRowId];
-        if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+        if (groupNumber < (int64_t)groupLevelKeys.count) {
             groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
         }
         
         RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
-        MADDataType aggregateType = databaseSchemaField.dataType.shortValue;
+        MADDataType aggregateType = databaseSchemaField.dataType;
         
         BOOL calculateInMemory = isAggregate.functionType == MTAggregateFunctionTypeFirst ||
                                  isAggregate.functionType == MTAggregateFunctionTypeLast;
@@ -67,9 +67,9 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
         
         if (calculateInMemory == NO) {
             
-            NSNumber *groupType = isAggregate.groupType;
+            int64_t groupType = isAggregate.groupType;
             MADIndexArray *rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
-            aggregateResult = [[self class] newResultsForAggregateType: groupType.shortValue
+            aggregateResult = [[self class] newResultsForAggregateType: groupType
                                                               function: isAggregate.functionType
                                                               fieldKey: fieldKey
                                                              groupKeys: groupKeys
@@ -80,7 +80,7 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
             
             NSArray <__kindof NSDictionary *> *dataForGroup = nil;
             NSDictionary *dataOfInterest = nil;
-            switch (isAggregate.groupType.unsignedIntegerValue) {
+            switch (isAggregate.groupType) {
                 case MTAggregateGroupByTypeSection: {
                     
                     dataForGroup = [[self class] dataForAggregateGroupByTypeSection: groupNumber
@@ -205,11 +205,11 @@ static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
     return dictionary;
 }
 
-+ (NSArray *)dataForAggregateGroupByTypeSection:(NSNumber *)groupNumber
++ (NSArray *)dataForAggregateGroupByTypeSection:(int64_t)groupNumber
                                  groupLevelKeys:(NSArray *)groupLevelKeys
                                       dataTable:(MTDataTable *)dataTable {
     NSArray <__kindof NSDictionary *> *dataForGroup;
-    if (groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+    if (groupNumber < (int64_t)groupLevelKeys.count) {
         NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
         dataForGroup = [dataTable objectsForGroupKeys:groupKeys];
     } else {

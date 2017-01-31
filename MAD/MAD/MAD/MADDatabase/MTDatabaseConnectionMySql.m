@@ -28,9 +28,9 @@
 + (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
     
     id dbConnection;
-    dbConnection = [[self alloc] initWithHost: credentals.mysql_host
-                                     database: credentals.mysql_database
-                                      andPort: credentals.mysql_port.integerValue];
+    dbConnection = [[self alloc] initWithHost: credentals.host
+                                     database: credentals.database
+                                      andPort: credentals.port];
     
     return dbConnection;
     

@@ -78,12 +78,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
-
 }
 
 - (void)awakeFromFetch {
@@ -121,7 +117,7 @@
 }
 
 - (MTPaperType)paperType {
-    return self.papersize.unsignedShortValue;
+    return self.papersize;
 }
 
 - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
@@ -343,24 +339,23 @@
     return document;
 }
 
-- (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
+- (void)setLayoutHeight:(float)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
-    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat:(float)height];
-    section.layoutHeight = layoutHeight;
+    section.layoutHeight = height;
 }
 
-- (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
+- (void)setNumberOfRows:(int64_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
     
-    if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
+    if (section.numberOfRows == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > section.numberOfRows.unsignedIntegerValue) {
+    } else if (numberOfRows > section.numberOfRows) {
         
         //Add row
         NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
@@ -375,7 +370,7 @@
         [hasRows addObject:newRowToAppend];
         section.hasRows = hasRows;
         
-    } else if (numberOfRows < section.numberOfRows.unsignedIntegerValue) {
+    } else if (numberOfRows < section.numberOfRows) {
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
@@ -389,16 +384,14 @@
         [rowToDelete setInSection:nil];
         
     }
-    NSNumber *numberOfRowsObj = [NSNumber numberWithUnsignedInteger:numberOfRows];
-    section.numberOfRows = numberOfRowsObj;
+    section.numberOfRows = numberOfRows;
 }
 
-- (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
+- (void)setHeight:(float)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
-    NSNumber *layoutHeight = [[NSNumber alloc] initWithFloat: (float)height];
-    section.layoutHeight = layoutHeight;
+    section.layoutHeight = height;
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
@@ -424,15 +417,16 @@
 }
 
 - (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSNumber *connectionId = @(self.hasDatabaseSchemas.count + 1);
+
+    int64_t cid = (int64_t)self.hasDatabaseSchemas.count + 1;
     RptqDatabase *rptqDatabase = [RptqDatabase newDatabaseFactoryForManagedObjectContext: managedObjectContext
                                                                               driverType: database.identifier
-                                                                            connectionId: connectionId];
+                                                                            connectionId: cid];
     
     RptqDatabaseCredentals *userCredentals = [RptqDatabaseCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
-    userCredentals.database_driver_type = databaseIdentifier;
+    userCredentals.driver_type = databaseIdentifier;
 
     if (database.databaseConnection != nil) {
         
@@ -440,48 +434,29 @@
             case MADDatabaseTypeMySQL: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
-                NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
-                userCredentals.mysql_port = port;
-                
-                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort:MADDatabaseTypeMySQL];
-                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
-                
-                NSString *server = [[NSString alloc] initWithString:databaseConnection.server];
-                userCredentals.mysql_host = server;
-                
-                NSString *db = [[NSString alloc] initWithString:databaseConnection.database];
-                userCredentals.mysql_database = db;
+                userCredentals.port = databaseConnection.port;
+                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
+                userCredentals.host = databaseConnection.server.copy;
+                userCredentals.database = databaseConnection.database.copy;
                 break;
             }
 
             case MADDatabaseTypeSqlite3: {
                 MADDatabaseConnection *databaseConnection;
                 databaseConnection = database.databaseConnection;
-                userCredentals.mysql_database = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
-                
-                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeSqlite3];
-                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
-
+                userCredentals.database = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
+                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
                 break;
             }
 
             case MADDatabaseTypeTDS: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
-                NSNumber *port = [[NSNumber alloc] initWithInteger:databaseConnection.port];
-                userCredentals.tds_port = port;
-                
-                NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithShort: MADDatabaseTypeTDS];
-                userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
-                
-                NSString *server = [[NSString alloc] initWithString: databaseConnection.server];
-                userCredentals.tds_server = server;
-                
-                NSString *host = [[NSString alloc] initWithString: databaseConnection.server];
-                userCredentals.tds_host = host;
-                
-                NSString *db  = [[NSString alloc] initWithString: databaseConnection.database];
-                userCredentals.tds_database = db;
+                userCredentals.port = databaseConnection.port;
+                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
+                userCredentals.server = databaseConnection.server.copy;
+                userCredentals.host = databaseConnection.server.copy;
+                userCredentals.database = databaseConnection.database.copy;
                 break;
             }
                 
@@ -700,8 +675,7 @@
 
             ((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
             
-            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
-            reportObject.type = type;
+            reportObject.type = MTDocumentObjectTypeLabelDynamic;
             
             break;
         }
@@ -718,8 +692,7 @@
             
             ((RptqDocumentElementLabel *)reportObject).text = labelText;
 
-            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
-            reportObject.type = type;
+            reportObject.type = MTDocumentObjectTypeLabelStatic;
             
             break;
         }
@@ -734,9 +707,9 @@
                                                                              insertIntoManagedObjectContext: self.managedObjectContext];
             
             NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
-            ((RptqDocumentElementAggregate *)reportObject).groupNumber = aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber];
-            ((RptqDocumentElementAggregate *)reportObject).groupType = aggregateOptions[MTDocumentObjectDefinationAggregatePivotType];
-            ((RptqDocumentElementAggregate *)reportObject).function = aggregateOptions[MTDocumentObjectDefinationAggregateType];
+            ((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] integerValue];
+            ((RptqDocumentElementAggregate *)reportObject).groupType = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotType] integerValue];
+            ((RptqDocumentElementAggregate *)reportObject).functionType = [aggregateOptions[MTDocumentObjectDefinationAggregateType] integerValue];
             
             NSManagedObjectID *objectId = aggregateOptions[MTDocumentObjectDefinationAggregateObjectId];
             
@@ -758,8 +731,7 @@
                     break;
             }
             
-            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeAggregate];
-            reportObject.type = type;
+            reportObject.type = MTDocumentObjectTypeAggregate;
             
             break;
         }
@@ -775,23 +747,15 @@
                                             insertIntoManagedObjectContext: managedObjectContext];
             ((RptqDocumentElementImage *)reportObject).image = image;
 
-            id number = [[NSNumber alloc] initWithDouble:image.size.height];
-            ((RptqDocumentElementImage *)reportObject).sizeheight = number;
-            
-            number = [[NSNumber alloc] initWithDouble:image.size.width];
-            ((RptqDocumentElementImage *)reportObject).sizewidth = number;
-            
-            number = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
-            ((RptqDocumentElementImage *)reportObject).type = number;
+            [((RptqDocumentElementImage *)reportObject) setSizeValue: image.size];
+            ((RptqDocumentElementImage *)reportObject).type = MTDocumentObjectTypeImage;
             
             image = nil;
             
             break;
         }
         case MTDocumentObjectTypeWhtiespace: {
-            
-            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeWhtiespace];
-            reportObject.type = type;
+            reportObject.type = MTDocumentObjectTypeWhtiespace;
             
             break;
         }
@@ -807,22 +771,15 @@
             reportObject = [RptqDocumentElementBarcode barcodeWithMtBarcode: barcode
                                                              queryFieldOne: field1
                                                              queryFieldTwo: field2];
-            id type = [[NSNumber alloc] initWithShort:MTDocumentObjectTypeBarcode];
-            reportObject.type = type;
+            reportObject.type = MTDocumentObjectTypeBarcode;
             
             break;
         }
         default:
             break;
     }
-    
-    reportObject.origin = CGPointZero;
-    
-    id size = [[NSNumber alloc] initWithFloat:75.0000f];
-    reportObject.sizewidth = size;
-    
-    size = [[NSNumber alloc] initWithFloat:22.0000f];
-    reportObject.sizeheight = size;
+    [reportObject setOriginPoint:CGPointZero];
+    [reportObject setSizeWidth:75.0000f height:22.0000f];
     
     NSMutableOrderedSet *hasObjects = [self.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
     [hasObjects insertObject:reportObject atIndex:0];

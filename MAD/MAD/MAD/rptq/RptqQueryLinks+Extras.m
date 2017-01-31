@@ -47,11 +47,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -95,16 +92,13 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     queryLinks.fieldleft        = fieldLeft.databaseSchemaField.name;
     queryLinks.tableright       = fieldRight.inQueryTable.alias;
     queryLinks.fieldright       = fieldRight.databaseSchemaField.name;
-    queryLinks.jointype         = [RptqQueryLinks ReuseIdForLinkType:joinType];
-
-    NSNumber *jointypeenum      = [[NSNumber alloc] initWithShort: joinType];
-    queryLinks.jointypeenum     = jointypeenum;
+    queryLinks.jointypeenum     = joinType;
 
     return queryLinks;
 }
 
 - (NSString *)copyLinkDescription {
-    NSString *localizedName = [RptqQueryLinks newLocalizedNameForLinkType:self.jointypeenum.shortValue];
+    NSString *localizedName = [RptqQueryLinks newLocalizedNameForLinkType:self.jointypeenum];
     return localizedName;
 }
 
@@ -228,14 +222,11 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQueryLinks  ***********\n"];
     [description appendFormat:@"Identifier:             %@\n", self.identifier];
-    [description appendFormat:@"Inital layout:          %@\n", self.designerInitalLayout];
     [description appendFormat:@"Field left:             %@\n", self.fieldleft];
     [description appendFormat:@"Field right:            %@\n", self.fieldright];
     [description appendFormat:@"Table left:             %@\n", self.tableleft];
     [description appendFormat:@"Table right:            %@\n", self.tableright];
-    [description appendFormat:@"Join type:              %@\n", self.jointype];
-    [description appendFormat:@"Join type enum:         %@\n", self.jointypeenum];
-    [description appendFormat:@"Frame:                  (%f, %f, %f, %f)\n", self.designerOriginX.floatValue, self.designerOriginY.floatValue, self.designerSizeWidth.floatValue, self.designerSizeHeight.floatValue];
+    [description appendFormat:@"Join type enum:         %hd\n", self.jointypeenum];
     [description appendFormat:@"***********   RptqQueryLinks  ***********"];
     return description;
 }

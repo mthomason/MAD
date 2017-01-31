@@ -35,22 +35,10 @@
     [encoder encodeObject: self.column                      forKey: [MADDataColumn keyColumn]];
     [encoder encodeObject: self.defaultValue                forKey: [MADDataColumn keyDefaultValue]];
     [encoder encodeObject: self.caption                     forKey: [MADDataColumn keyCaption]];
-    
-    NSNumber *type;
-    [encoder encodeObject: type                             forKey: [MADDataColumn keyColumnType]];
-    self.type = type.shortValue;
-    
-    NSNumber *nativeType;
-    [encoder encodeObject: nativeType                       forKey: [MADDataColumn keyNativeColumnType]];
-    self.nativeType = nativeType.integerValue;
-    
-    NSNumber *dataLength;
-    [encoder encodeObject: dataLength                  forKey: [MADDataColumn keyDataLength]];
-    self.dataLength = dataLength.integerValue;
-    
-    NSNumber *dataPercision;
-    [encoder encodeObject: dataPercision               forKey: [MADDataColumn keyDataPercision]];
-    self.dataPercision = dataPercision.integerValue;
+    [encoder encodeInt64:   self.type                       forKey: [MADDataColumn keyColumnType]];
+    [encoder encodeInt:     self.nativeType                 forKey: [MADDataColumn keyNativeColumnType]];
+    [encoder encodeInteger: self.dataLength                 forKey: [MADDataColumn keyDataLength]];
+    [encoder encodeInteger: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
     
     
     [encoder encodeBool: _primaryKey       forKey: [MADDataColumn keyIsPrimaryKey]];
@@ -68,19 +56,10 @@
         self.column =               [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
         self.defaultValue =         [decoder decodeObjectForKey: [MADDataColumn keyDefaultValue]];
         self.caption =              [decoder decodeObjectForKey: [MADDataColumn keyCaption]];
-        
-        NSNumber *type =            [decoder decodeObjectForKey: [MADDataColumn keyColumnType]];
-        self.type =                 type.shortValue;
-        
-        NSNumber *nativeType =      [decoder decodeObjectForKey: [MADDataColumn keyNativeColumnType]];
-        self.nativeType =           nativeType.integerValue;
-        
-        NSNumber *dataLength =      [decoder decodeObjectForKey: [MADDataColumn keyDataLength]];
-        self.dataLength =           dataLength.integerValue;
-
-        NSNumber *dataPercision =   [decoder decodeObjectForKey: [MADDataColumn keyDataPercision]];
-        self.dataPercision =        dataPercision.integerValue;
-        
+        self.type =                 (int16_t)[decoder decodeIntForKey:  [MADDataColumn keyColumnType]];
+        self.nativeType =           (int16_t)[decoder decodeIntForKey: [MADDataColumn keyNativeColumnType]];
+        self.dataLength =           [decoder decodeIntegerForKey: [MADDataColumn keyDataLength]];
+        self.dataPercision =        [decoder decodeIntegerForKey: [MADDataColumn keyDataPercision]];
         self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]];
 
     }

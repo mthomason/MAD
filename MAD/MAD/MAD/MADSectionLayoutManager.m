@@ -43,7 +43,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         NSMutableDictionary *items = [[NSMutableDictionary alloc] init];
         self.items = items;
         
-        self.visibility = section.visibility.boolValue;
+        self.visibility = section.visibility;
         
         RptqDocumentSectionRows *rows = section.hasRows.firstObject;
 

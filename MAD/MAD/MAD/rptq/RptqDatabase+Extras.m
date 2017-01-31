@@ -33,11 +33,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -78,17 +75,17 @@
 }
 
 - (MADDatabaseType)databaseType {
-    return self.databaseDriverTypeEnum.shortValue;
+    return self.databaseDriverTypeEnum;
 }
 
 #pragma mark - Static
 
 + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
-                      andConnecitonId:(NSNumber *)connectionId {
+                      andConnecitonId:(int64_t)connectionId {
     
     RptqDatabase *currentDatabase = nil;
     for (RptqDatabase *db in document.hasDatabaseSchemas) {
-        if (db.identifier.integerValue == connectionId.integerValue) {
+        if (db.identifier == connectionId) {
             currentDatabase = db;
             break;
         }
@@ -98,8 +95,8 @@
 }
 
 + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                              driverType:(NSString *)driverIdentifier
-                                            connectionId:(NSNumber *)connectionID NS_RETURNS_RETAINED {
+                                               driverType:(NSString *)driverIdentifier
+                                             connectionId:(int64_t)identifier NS_RETURNS_RETAINED {
 
     NSString *entityName = NSStringFromClass([self class]);
     NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: entityName
@@ -111,7 +108,6 @@
     NSString *databaseDriverType = [[NSString alloc] initWithString: driverIdentifier];
     database.databaseDriverType = databaseDriverType;
     
-    NSNumber *identifier = connectionID.copy;
     database.identifier = identifier;
     
     return database;
@@ -121,8 +117,8 @@
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Driver type:        %@\n", self.databaseDriverType];
-    [description appendFormat:@"Driver type id:     %@\n", self.databaseDriverTypeEnum];
-    [description appendFormat:@"Identifier:         %@\n", self.identifier];
+    [description appendFormat:@"Driver type id:     %hd\n", self.databaseDriverTypeEnum];
+    [description appendFormat:@"Identifier:         %lld\n", self.identifier];
     [description appendFormat:@"Tables:             %@\n", self.hasTables];
     [description appendFormat:@"Queries:            %@\n", self.hasQueries];
     [description appendFormat:@"Owned by query:     %@\n", self.ownedByQueryAsStaticResource];

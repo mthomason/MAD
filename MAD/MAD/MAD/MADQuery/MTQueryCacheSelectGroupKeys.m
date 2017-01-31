@@ -68,7 +68,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         
         NSNumber *keyColumns = @(MADQuerySelectColumns);
         NSDictionary * __weak columns = object[keyColumns];
-        MADDataColumn * __weak dataColumn = columns[columnName];
+        MADDataColumn *dataColumn = columns[columnName];
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 

@@ -30,7 +30,7 @@ static inline CGSize CGSizePaperA8();
 static inline CGSize CGSizePaperA9();
 static inline CGSize CGSizePaperA10();
 
-typedef NS_ENUM(unsigned short, MTPaperType) {
+typedef NS_ENUM(int16_t, MTPaperType) {
     MTPaperTypeLetter = 2,
     MTPaperTypeGovernmentLetter = 3,
     MTPaperTypeGovernmentLegal = 5,

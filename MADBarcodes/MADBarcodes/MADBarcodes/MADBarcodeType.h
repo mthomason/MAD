@@ -11,7 +11,7 @@
 
 #import "zint.h"
 
-typedef NS_ENUM(NSUInteger, MTBarcodeType) {
+typedef NS_ENUM(int16_t, MTBarcodeType) {
     MTBarcodeTypeCode11         = BARCODE_CODE11,
     MTBarcodeTypeC25MATRIX      = BARCODE_C25MATRIX,
     MTBarcodeTypeC25INTER       = BARCODE_C25INTER,

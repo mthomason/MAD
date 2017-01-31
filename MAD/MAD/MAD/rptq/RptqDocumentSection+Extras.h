@@ -13,7 +13,7 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "MADocumentSectionType.h"
 
-typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
+typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,
     RptqDocumentSectionWrappingStyleNewPageAfter = 2,
 };
@@ -55,7 +55,7 @@ typedef NS_ENUM(short, RptqDocumentSectionWrappingStyle) {
     - (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (void)setInterfaceHeight:(CGFloat)height;
+    - (void)setInterfaceHeight:(float)height;
     - (void)setProducesFormFeed:(BOOL)producesFormFeed;
 
 @end

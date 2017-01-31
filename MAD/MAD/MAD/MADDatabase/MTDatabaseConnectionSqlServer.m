@@ -31,10 +31,10 @@
     
     id dbConnection = nil;
     
-    dbConnection = [[self alloc] initWithHost: credentals.tds_host
-                                       server: credentals.tds_server
-                                     database: credentals.tds_database
-                                      andPort: credentals.tds_port.integerValue];
+    dbConnection = [[self alloc] initWithHost: credentals.host
+                                       server: credentals.server
+                                     database: credentals.database
+                                      andPort: credentals.port];
     
     return dbConnection;
     

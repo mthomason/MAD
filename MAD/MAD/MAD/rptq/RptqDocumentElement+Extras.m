@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqDocumentElement+Extras.h"
+#import "RptqDocumentElement+CoreDataProperties.h"
 
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>
@@ -24,7 +25,13 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSDateFormatter.h>
 #import <Foundation/NSLocale.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSData.h>
+
+#import <MADCocoaExtensions/MADMargin.h>
+#import <MADCocoaExtensions/MADPadding.h>
+#import <MADCocoaExtensions/MADBorderStyle.h>
+#import <MADCocoaExtensions/MADTextStyle.h>
 
 #import "MTAlignment.h"
 #import "MADFont.h"
@@ -46,6 +53,8 @@
 
 #import "MADSectionLayoutManager.h"
 #import "RptqDocumentElementBarcode+Extras.h"
+
+#import "MADCurrencyFormatter.h"
 
 #import <math.h>
 
@@ -87,18 +96,18 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark Static Helpers
 
 
-static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight);
 static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
 static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
 static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth);
+static inline double paddingViewBoundsSizeHeight(double, double, double);
+static inline double paddingViewBoundsSizeWidth(double, double, double);
 
-static inline CGFloat paddingViewBoundsSizeHeight(NSNumber *paddingTop, NSNumber *paddingBottom, NSNumber *sizeHeight) {
-    return paddingTop.floatValue + paddingBottom.floatValue + sizeHeight.floatValue;
+static inline double paddingViewBoundsSizeHeight(double paddingTop, double paddingBottom, double sizeHeight) {
+    return paddingTop + paddingBottom + sizeHeight;
 }
 
-static inline CGFloat paddingViewBoundsSizeWidth(NSNumber *paddingLeft, NSNumber *paddingRight, NSNumber *sizeWidth) {
-    return paddingLeft.floatValue + paddingRight.floatValue + sizeWidth.floatValue;
+static inline double paddingViewBoundsSizeWidth(double paddingLeft, double paddingRight, double sizeWidth) {
+    return paddingLeft + paddingRight + sizeWidth;
 }
 
 static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
@@ -152,13 +161,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     
     sectionRow.hasObjects = hasObjects;
     documentObject.inSectionRow = nil;
-    
-    CGFloat h = layoutManager.size.height;
-    
-    CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
-    section.height = (__bridge NSNumber *)(height);
-    CFRelease(height);
-    
+    section.height = (float)layoutManager.size.height;
 }
 
 #pragma mark -
@@ -183,27 +186,20 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     
     NSError *error = nil;
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSUInteger idNumber = 0;
-    NSUInteger lastDropIndex = 0;
+    int64_t idNumber = 0;
+    int64_t lastDropIndex = 0;
     if (error == nil) {
         RptqDocumentElement *lastObject = fetchResults.lastObject;
-        idNumber = lastObject.identifier.unsignedIntegerValue + 1;
-        lastDropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
+        idNumber = lastObject.identifier + 1;
+        lastDropIndex = lastObject.dropIndex + 1;
     }
     
     NSString *fontname = [[NSString alloc] initWithString:[MADFont defaultFamily]];
     self.fontname = fontname;
 
-    double fontPointSize = [MADFont defaultSize];
-    CFNumberRef fontSize = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &fontPointSize);
-    self.fontsize = (__bridge NSNumber *)(fontSize);
-    CFRelease(fontSize);
-
-    NSNumber *identifier = [[NSNumber alloc] initWithUnsignedInteger: idNumber];
-    self.identifier = identifier;
-
-    NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger: lastDropIndex];
-    self.dropIndex = dropIndex;
+    self.fontsize = [MADFont defaultSize];
+    self.identifier = idNumber;
+    self.dropIndex = lastDropIndex;
     
 }
 
@@ -227,101 +223,178 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     }
 }
 
-- (void)setOrigin:(CGPoint)origin {
-    self.origin = [NSValue valueWithCGPoint:origin];
+- (CGPoint)placementPoint {
+    CGPoint placementPoint = [(NSValue *)self.dropPoint CGPointValue];
+    return placementPoint;
 }
 
-- (CGFloat)spacingLeft {
-    return self.marginLeft.floatValue + self.borderWidthLeft.floatValue + self.paddingLeft.floatValue;
+- (void)setSizeWidth:(float)w height:(float)h {
+    CGSize s = CGSizeMake(w, h);
+    self.size = [NSValue valueWithCGSize:s];
 }
 
-- (CGFloat)spacingRight {
-    return self.marginRight.floatValue + self.borderWidthRight.floatValue + self.paddingRight.floatValue;
+- (void)setSizeValue:(CGSize)size {
+    self.size = [NSValue valueWithCGSize:size];
 }
 
-- (CGFloat)spacingTop {
-    return self.marginTop.floatValue + self.borderHeightTop.floatValue + self.paddingTop.floatValue;
+- (void)setOriginPoint:(CGPoint)or {
+    self.origin = [NSValue valueWithCGPoint:or];
 }
 
-- (CGFloat)spacingBottom {
-    return self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
+- (MADLayoutMargin)layoutMargin {
+    MADLayoutMargin layoutMargin;
+    [(NSValue *)self.margin getValue:&layoutMargin];
+    return layoutMargin;
+}
+
+- (MADPadding)layoutPadding {
+    MADPadding padding;
+    [(NSValue *)self.padding getValue:&padding];
+    return padding;
+}
+
+- (MADLayoutBorderStyle)layoutBorderStyle {
+    MADLayoutBorderStyle borderStyle;
+    [(NSValue *)self.border getValue:&borderStyle];
+    return borderStyle;
+}
+
+- (double)spacingLeft {
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return margin.left + border.left + padding.left;
+}
+
+- (double)spacingRight {
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return margin.right + border.right + padding.right;
+}
+
+- (double)spacingTop {
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return margin.top + border.top + padding.top;
+}
+
+- (double)spacingBottom {
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return margin.bottom + border.bottom + padding.bottom;
 }
 
 - (CGFloat)sizeWidthCalculated {
-    return MADDocObjSizeWidthCalculated(self.paddingLeft.floatValue,
-                                         self.borderWidthLeft.floatValue,
-                                         self.marginLeft.floatValue,
-                                         self.sizewidth.floatValue,
-                                         self.marginRight.floatValue,
-                                         self.borderWidthRight.floatValue,
-                                         self.paddingRight.floatValue);
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return MADDocObjSizeWidthCalculated(padding.left,
+                                         border.left,
+                                         margin.left,
+                                         s.width,
+                                         margin.right,
+                                         border.right,
+                                         padding.right);
 }
 
 - (CGFloat)sizeHeightCalculated {
-    return MADDocObjSizeHeightCalculated(self.paddingTop.floatValue,
-                                         self.borderHeightTop.floatValue,
-                                         self.marginTop.floatValue,
-                                         self.sizeheight.floatValue,
-                                         self.marginBottom.floatValue,
-                                         self.borderHeightBottom.floatValue,
-                                         self.paddingBottom.floatValue);
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    MADLayoutMargin margin = [self layoutMargin];
+    MADPadding padding = [self layoutPadding];
+    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    return MADDocObjSizeHeightCalculated(padding.top,
+                                         border.top,
+                                         margin.top,
+                                         s.height,
+                                         margin.bottom,
+                                         border.bottom,
+                                         padding.bottom);
 }
 
-- (CGSize)size { return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]); }
+- (CGSize)innerSize {
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    return s;
+}
+
+- (CGSize)sizeCalculated {
+    return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]);
+}
 
 - (CGSize)sizeContentView {
-    return CGSizeMake(self.sizewidth.floatValue, self.sizeheight.floatValue);
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    return s;
 }
 
 - (CGRect)boundsContentView {
-    CGSize size = [self size];
-    return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, s.width, s.height);
 }
 
 - (CGRect)paddingViewBounds {
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    MADPadding padding = [self layoutPadding];
     return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      paddingViewBoundsSizeWidth(self.paddingLeft,
-                                                 self.paddingRight,
-                                                 self.sizewidth),
-                      paddingViewBoundsSizeHeight(self.paddingTop,
-                                                  self.paddingBottom,
-                                                  self.sizeheight));
+                      paddingViewBoundsSizeWidth(padding.left,
+                                                 padding.right,
+                                                 s.width),
+                      paddingViewBoundsSizeHeight(padding.top,
+                                                  padding.bottom,
+                                                  s.height));
 }
 
 - (CGRect)paddingViewFrame {
     CGRect paddingViewBounds = [self paddingViewBounds];
-    return CGRectMake(CGPointZero.x + self.marginLeft.floatValue,
-                      CGPointZero.y + self.marginTop.floatValue,
+    MADLayoutMargin margin = [self layoutMargin];
+    return CGRectMake(CGPointZero.x + margin.left,
+                      CGPointZero.y + margin.top,
                       paddingViewBounds.size.width, paddingViewBounds.size.height);
 }
 
 - (CGRect)elementViewBounds {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, self.sizewidth.floatValue, self.sizeheight.floatValue);
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, s.width, s.height);
 }
 
 - (CGRect)elementViewFrameDesigner {
-    return CGRectMake(self.originx.floatValue, self.originy.floatValue,
-                      self.size.width, self.size.height);
+    CGPoint o; CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    [(NSValue *)self.origin getValue:&o];
+    return CGRectMake(o.x, o.y, s.width, s.height);
 }
 
 - (CGRect)elementViewFrame {
     CGRect elementViewBounds = [self elementViewBounds];
-    return CGRectMake(CGPointZero.x + self.paddingLeft.floatValue,
-                      CGPointZero.y + self.paddingTop.floatValue,
+    MADPadding p = [self layoutPadding];
+    return CGRectMake(CGPointZero.x + p.left,
+                      CGPointZero.y + p.top,
                       elementViewBounds.size.width, elementViewBounds.size.height);
 }
 
 - (CGRect)frame {
-    return MADDocObjFrameCalculated(self.originx.floatValue, self.spacingLeft,
-                                    self.originy.floatValue, self.spacingTop,
-                                    self.sizewidth.floatValue, self.spacingRight,
-                                    self.sizeheight.floatValue, self.spacingBottom);
+    CGPoint o; CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    [(NSValue *)self.origin getValue:&o];
+    return MADDocObjFrameCalculated(o.x, self.spacingLeft,
+                                    o.y, self.spacingTop,
+                                    s.width, self.spacingRight,
+                                    s.height, self.spacingBottom);
 }
 
 #pragma mark - Member
 
 - (MTDocumentObjectType)documentObjectType {
-    return self.type.shortValue;
+    return self.type;
 }
 
 - (NSString *)copyDesignerRepresentationText {
@@ -329,11 +402,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (void)dropAtRect:(CGRect)rect {
-    id size = [[NSNumber alloc] initWithDouble: nearbyint(rect.size.width)];
-    self.sizewidth = size;
-
-    size = [[NSNumber alloc] initWithDouble: nearbyint(rect.size.height)];
-    self.sizeheight = size;
+    rect.size.width = nearbyint(rect.size.width);
+    rect.size.height = nearbyint(rect.size.height);
+    self.size = [NSValue value:&rect.size withObjCType:@encode(CGSize)];
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
@@ -440,7 +511,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
         case MADDataTypeNumber:
         {
             if ([value isKindOfClass:[NSNumber class]]) {
-                if (self.formatNumericCurrency.boolValue) {
+                
+                if (((MADCurrencyFormatter *)self.numericFormat).enabled) {
                     if (!currencyNumberFormatter) {
                         currencyNumberFormatter = [[NSNumberFormatter alloc] init];
                         currencyNumberFormatter.locale = [NSLocale currentLocale];
@@ -449,7 +521,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
                     result = [currencyNumberFormatter stringFromNumber:value];
                 } else {
                     NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
-                    [formatString appendFormat:@"%ld", (long)self.formatNumericDecimals.integerValue];
+                    [formatString appendFormat:@"%ld", ((MADCurrencyFormatter *)self.numericFormat).decimalCount];
                     [formatString appendString:@"f"];
                     result = [[NSString alloc] initWithFormat:formatString, [value floatValue]];
                 }
@@ -491,7 +563,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)debugDescriptionType {
-    switch (self.type.integerValue) {
+    switch (self.type) {
         case MTDocumentObjectTypeAggregate:
             return @"Aggregate";
             break;
@@ -536,31 +608,30 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (UIFontDescriptor *)fontDescriptor {
     
+    MADTextStyle textStyle;
+    [(NSValue *)self.style getValue:&textStyle];
     NSString *fontname;
-    NSNumber *fontsize, *italic, *bold;
-    italic = self.italic;
-    bold = self.bold;
     
     UIFontDescriptorSymbolicTraits traits = 0;
-    if (italic.boolValue) traits     |= UIFontDescriptorTraitItalic;
-    if (bold.boolValue)   traits     |= UIFontDescriptorTraitBold;
+    if (textStyle.italic) traits     |= UIFontDescriptorTraitItalic;
+    if (textStyle.bold)   traits     |= UIFontDescriptorTraitBold;
     
     NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
     
     NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     traitsWrapper, UIFontSymbolicTrait, nil];
     
-    fontname = self.fontname.copy;
-    fontsize = self.fontsize.copy;
-    
+    fontname = self.fontname;
+
     NSDictionary *fontAttributes;
     fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                       fontname,       UIFontDescriptorFamilyAttribute,
-                      fontsize,       UIFontDescriptorSizeAttribute,
+                      self.fontsize,  UIFontDescriptorSizeAttribute,
                       symbolicTraits, UIFontDescriptorTraitsAttribute, nil];
     
     UIFontDescriptor *fontDescriptor;
     fontDescriptor = [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
+    fontAttributes = nil;
     return fontDescriptor;
 }
 
@@ -568,21 +639,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %@ (%@)\n", self.identifier, self.debugDescriptionType];
+    [description appendFormat:@"Identifier:             %lld (%@)\n", self.identifier, self.debugDescriptionType];
     [description appendFormat:@"Section:                %@\n", [self.inSectionRow.inSection localizedDisplayName]];
-    [description appendFormat:@"Font:                   %@ (%f)\n", self.fontname, self.fontsize.floatValue];
-    [description appendFormat:@"Currency:               %@-%@\n", self.formatNumericCurrencyLocal, self.formatNumericCurrency.boolValue ? @"YES" : @"NO"];
-    [description appendFormat:@"Numeric:                %@\n", self.formatNumericDecimals.boolValue ? @"YES" : @"NO"];
-    [description appendFormat:@"Horizontal alignment:   %@\n", self.horizontalAlignment];
-    [description appendFormat:@"B: %@ I: %@ S: %@ U: %@\n", self.bold.boolValue ? @"YES" : @"NO ", self.italic.boolValue ? @"YES" : @"NO ", self.strike.boolValue ? @"YES" : @"NO ", self.underline.boolValue ? @"YES" : @"NO "];
-    //[description appendFormat:@"Label:                  %@\n", self.label];
-    [description appendFormat:@"Drop point:             (%f, %f)\n", self.dropPointX.floatValue, self.dropPointY.floatValue];
-    [description appendFormat:@"Drop index:             %ld\n", (long)self.dropIndex.integerValue];
-    [description appendFormat:@"Origin:                 (%f, %f)\n", self.originx.floatValue, self.originy.floatValue];
-    [description appendFormat:@"Size:                   (%f, %f)\n", self.sizewidth.floatValue, self.sizeheight.floatValue];
-    [description appendFormat:@"Padding:                (%f, %f, %f, %f)\n", self.paddingLeft.floatValue, self.paddingTop.floatValue, self.paddingRight.floatValue, self.paddingBottom.floatValue];
-    [description appendFormat:@"Margin:                 (%f, %f, %f, %f)\n", self.marginLeft.floatValue, self.marginTop.floatValue, self.marginRight.floatValue, self.marginBottom.floatValue];
-    [description appendFormat:@"Border:                 (%f, %f, %f, %f)\n", self.borderWidthLeft.floatValue, self.borderHeightTop.floatValue, self.borderWidthRight.floatValue, self.borderHeightBottom.floatValue];
+    [description appendFormat:@"Font:                   %@ (%f)\n", self.fontname, self.fontsize];
     [description appendFormat:@"*********"];
     return description;
 }

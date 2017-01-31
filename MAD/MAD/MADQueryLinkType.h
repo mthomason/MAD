@@ -9,7 +9,7 @@
 #ifndef MAD_MADQueryLinkType_h
 #define MAD_MADQueryLinkType_h
 
-typedef NS_ENUM(short, MNSLinkType) {
+typedef NS_ENUM(int16_t, MNSLinkType) {
     MNSLinkTypeInnerJoin = 0,
     MNSLinkTypeEquiJoin = 1,
     MNSLinkTypeNaturalJoin = 2,

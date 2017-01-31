@@ -19,11 +19,11 @@
 @interface RptqDatabase (Extras)
 
     + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
-                          andConnecitonId:(NSNumber *)connectionId;
+                          andConnecitonId:(int64_t)connectionId;
 
     + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                    driverType:(NSString *)driverIdentifier
-                                                 connectionId:(NSNumber *)connectionId NS_RETURNS_RETAINED;
+                                                 connectionId:(int64_t)connectionId NS_RETURNS_RETAINED;
 
     @property (readonly) RptqQuery *defaultQuery;
 

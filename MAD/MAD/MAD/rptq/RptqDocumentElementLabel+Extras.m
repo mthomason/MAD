@@ -76,7 +76,7 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lldld\n", self.identifier];
     [description appendFormat:@"Text:                   %@\n", self.text];
     [description appendFormat:@"*********"];
     return description;

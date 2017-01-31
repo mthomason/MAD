@@ -12,7 +12,7 @@
 @implementation MADFontDescriptor
 
 + (instancetype)newFontDescriptorForFontName:(NSString *) fontname
-                                    fontSize:(NSNumber *) fontSize
+                                    fontSize:(float) fontSize
                                         bold:(BOOL)bold
                                       italic:(BOOL)italic {
 
@@ -20,7 +20,7 @@
     NSNumber *size;;
     
     name = fontname.copy;
-    size = fontSize.copy;
+    size = @(fontSize);
 
     UIFontDescriptorSymbolicTraits traits = 0;
     if (italic) traits     |= UIFontDescriptorTraitItalic;

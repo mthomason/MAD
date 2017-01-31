@@ -9,7 +9,7 @@
 #ifndef MADAggregateFunctionGroupByType_h
 #define MADAggregateFunctionGroupByType_h
 
-typedef CF_ENUM(short, MTAggregateGroupByType) {
+typedef CF_ENUM(int64_t, MTAggregateGroupByType) {
     MTAggregateGroupByTypePage = 2,
     MTAggregateGroupByTypeReport = 3,
     MTAggregateGroupByTypeSection = 5,

@@ -16,7 +16,7 @@
 @interface MADFontDescriptor : UIFontDescriptor
 
     + (instancetype)newFontDescriptorForFontName:(NSString *) fontname
-                                        fontSize:(NSNumber *) fontSize
+                                        fontSize:(float) fontSize
                                             bold:(BOOL)bold
                                           italic:(BOOL)italic;
 

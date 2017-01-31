@@ -29,11 +29,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -71,24 +68,24 @@
 }
 
 - (NSString *)copyBarcodeTypeName {
-    NSString *result = [MTBarcode newBarcodeNameForType:self.type.unsignedIntegerValue];
+    NSString *result = [MTBarcode newBarcodeNameForType:self.barcodeType];
     return result;
 }
 
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
     self.add2dComponent =       @(barcode.has2dComponent);
-    self.barcodeBorderStyle =   @(barcode.borderStyle);
-    self.barcodeBorderWidth =   @(barcode.borderWidth);
-    self.type =                 @(barcode.barcodeType);
-    self.barcodeHeight =        @(barcode.height);
-    self.humanReadable =        @(barcode.humanReadable);
-    self.option1 =              @(barcode.option1);
-    self.option2 =              @(barcode.option2);
-    self.option3 =              @(barcode.option3);
-    self.showErrorMessage =     @(barcode.showErrorMessages);
-    self.whitespaceWidth =      @(barcode.whitespaceWidth);
-    self.scale =                @(barcode.scale);
+    self.barcodeBorderStyle =   barcode.borderStyle;
+    self.barcodeBorderWidth =   barcode.borderWidth;
+    self.type =                 barcode.barcodeType;
+    self.barcodeHeight =        barcode.height;
+    self.humanReadable =        barcode.humanReadable;
+    self.option1 =              barcode.option1;
+    self.option2 =              barcode.option2;
+    self.option3 =              barcode.option3;
+    self.showErrorMessage =     barcode.showErrorMessages;
+    self.whitespaceWidth =      barcode.whitespaceWidth;
+    self.scale =                barcode.scale;
     self.referencesField1 =     fieldOne;
     self.referencesField2 =     fieldTwo;
     [self.managedObjectContext save:nil];
@@ -96,20 +93,18 @@
 
 + (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject {
     
-    MTBarcodeType type = documentObject.type.unsignedIntegerValue;
-    MTBarcode *barcode = [MTBarcode newBarcodeWithType:type];
-
-    barcode.has2dComponentEnabled =     documentObject.add2dComponent.boolValue;
-    barcode.borderStyle =               documentObject.barcodeBorderWidth.unsignedCharValue;
-    barcode.borderWidth =               documentObject.barcodeBorderWidth.integerValue;
-    barcode.height =                    documentObject.barcodeHeight.integerValue;
-    barcode.humanReadable =             documentObject.humanReadable.boolValue;
-    barcode.option1 =                   documentObject.option1.integerValue;
-    barcode.option2 =                   documentObject.option2.integerValue;
-    barcode.option3 =                   documentObject.option3.integerValue;
-    barcode.showErrorMessages =         documentObject.showErrorMessage.boolValue;
-    barcode.whitespaceWidth =           documentObject.whitespaceWidth.boolValue;
-    barcode.scale =                     documentObject.scale.floatValue;
+    MTBarcode *barcode = [MTBarcode newBarcodeWithType:documentObject.barcodeType];
+    barcode.has2dComponentEnabled =     documentObject.add2dComponent;
+    barcode.borderStyle =               documentObject.barcodeBorderWidth;
+    barcode.borderWidth =               documentObject.barcodeBorderWidth;
+    barcode.height =                    documentObject.barcodeHeight;
+    barcode.humanReadable =             documentObject.humanReadable;
+    barcode.option1 =                   documentObject.option1;
+    barcode.option2 =                   documentObject.option2;
+    barcode.option3 =                   documentObject.option3;
+    barcode.showErrorMessages =         documentObject.showErrorMessage;
+    barcode.whitespaceWidth =           documentObject.whitespaceWidth;
+    barcode.scale =                     documentObject.scale;
     barcode.input =                     @"Sample data";
     barcode.primaryData =               @"";
     return barcode;
@@ -140,52 +135,22 @@
         
         reportObject = [[RptqDocumentElementBarcode alloc] initWithEntity: entityDescription
                                           insertIntoManagedObjectContext: objectContext];
-        
-        
-        NSNumber *componentEnabled = [[NSNumber alloc] initWithBool: barcode.has2dComponentEnabled];
-        reportObject.add2dComponent = componentEnabled;
-        
-        NSNumber *borderStyle = [[NSNumber alloc] initWithInteger: barcode.borderStyle];
-        reportObject.barcodeBorderStyle = borderStyle;
-        
-        NSNumber *borderWidth = [[NSNumber alloc] initWithInteger: barcode.borderWidth];
-        reportObject.barcodeBorderWidth = borderWidth;
-
+        reportObject.add2dComponent = barcode.has2dComponentEnabled;
+        reportObject.barcodeBorderStyle = barcode.borderStyle;
+        reportObject.barcodeBorderWidth = barcode.borderWidth;
         reportObject.backgroundColor = [UIColor whiteColor];
         reportObject.foregroundColor = [UIColor blackColor];
-        
-        NSNumber *height = [[NSNumber alloc] initWithInteger: barcode.height];
-        reportObject.barcodeHeight = height;
-        
-        NSNumber *humanReadable = [[NSNumber alloc] initWithBool: barcode.humanReadable];
-        reportObject.humanReadable = humanReadable;
-        
-        NSNumber *option1 = [[NSNumber alloc] initWithInteger: barcode.option1];
-        reportObject.option1 = option1;
-        
-        NSNumber *option2 = [[NSNumber alloc] initWithInteger: barcode.option2];
-        reportObject.option2 = option2;
-        
-        NSNumber *option3 = [[NSNumber alloc] initWithInteger: barcode.option3];
-        reportObject.option3 = option3;
-        
-        NSNumber *showErrorMessage = [[NSNumber alloc] initWithBool:barcode.showErrorMessages];
-        reportObject.showErrorMessage = showErrorMessage;
-        
-        NSNumber *barcodeType = [[NSNumber alloc] initWithInteger: barcode.barcodeType];
-        reportObject.type = barcodeType;
-        
-        NSNumber *whitespaceWidth = [[NSNumber alloc] initWithInteger: barcode.whitespaceWidth];
-        reportObject.whitespaceWidth = whitespaceWidth;
-        
-        NSNumber *useStaticInput1 = [[NSNumber alloc] initWithBool: NO];
-        reportObject.useStaticInput1 = useStaticInput1;
-        
-        NSNumber *useStaticInput2 = [[NSNumber alloc] initWithBool: NO];
-        reportObject.useStaticInput2 = useStaticInput2;
-        
-        NSNumber *scale = [[NSNumber alloc] initWithFloat: barcode.scale];
-        reportObject.scale = scale;
+        reportObject.barcodeHeight = barcode.height;
+        reportObject.humanReadable = barcode.humanReadable;
+        reportObject.option1 = barcode.option1;
+        reportObject.option2 = barcode.option2;
+        reportObject.option3 = barcode.option3;
+        reportObject.showErrorMessage = barcode.showErrorMessages;
+        reportObject.type = barcode.barcodeType;
+        reportObject.whitespaceWidth = barcode.whitespaceWidth;
+        reportObject.useStaticInput1 = NO;
+        reportObject.useStaticInput2 = NO;
+        reportObject.scale = barcode.scale;
         
         reportObject.referencesField1 = queryFieldOne;
         reportObject.referencesField2 = queryFieldTwo;
@@ -198,8 +163,8 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
-    [description appendFormat:@"Encoded text:           %@\n", self.humanReadable];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
+    [description appendFormat:@"Encoded text:           %@\n", self.toStringHumanReadable];
     [description appendFormat:@"*********"];
     return description;
 }

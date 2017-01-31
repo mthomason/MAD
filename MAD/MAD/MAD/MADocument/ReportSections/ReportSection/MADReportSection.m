@@ -43,7 +43,7 @@
 - (instancetype)initWithReportSection:(RptqDocumentSection *)reportSection {
 
     MADReportSection *instance;
-    switch (reportSection.type.shortValue) {
+    switch (reportSection.type) {
         case MADDocumentSectionTypeReportHeader:
             instance = [[MADReportSectionReportHeader alloc] init];
             break;
@@ -102,15 +102,15 @@
 }
 
 - (MADDocumentSectionType)type {
-    return self.documentSection.type.shortValue;
+    return self.documentSection.type;
 }
 
 - (CGFloat)height {
-    return self.documentSection.height.floatValue;
+    return self.documentSection.height;
 }
 
 - (BOOL)isVisible {
-    return self.documentSection.visibility.boolValue;
+    return self.documentSection.visibility;
 }
 
 - (NSInteger)identifier {

@@ -30,11 +30,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                            managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
 }
 
 - (void)awakeFromFetch {
@@ -98,10 +95,10 @@
 - (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
     result.name = self.name;
-    result.fieldType = (MADDataType)self.dataType.integerValue;
-    result.fieldTypeNative = self.dataTypeNative.integerValue;
-    result.decimals = self.decimals.unsignedIntegerValue;
-    result.primaryKey = self.primaryKey.boolValue;
+    result.fieldType = (MADDataType)self.dataType;
+    result.fieldTypeNative = self.dataTypeNative;
+    result.decimals = self.decimals;
+    result.primaryKey = self.primaryKey;
     return result;
 }
 
@@ -116,7 +113,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return MADDataTypeSelectorForSorting(self.dataType.shortValue);
+    return MADDataTypeSelectorForSorting(self.dataType);
 }
 
 #pragma mark - MTProtocolLog
@@ -136,7 +133,7 @@
 - (NSString *)fieldTypeDisplay {
 
     NSString *result = nil;
-    switch (self.dataType.integerValue) {
+    switch (self.dataType) {
         case MADDataTypeBit:
             result = NSLocalizedString(@"Bit", @"Bit data type.");
             break;
@@ -208,7 +205,7 @@
             break;
         default:
             result = [[NSString alloc] initWithFormat:@"Type %hd",
-                                                      self.dataType.shortValue];
+                                                      self.dataType];
             break;
     }
     return result;
@@ -218,15 +215,15 @@
     NSMutableString *document = [[NSMutableString alloc] init];
     [document appendFormat:@"********* RptqDatabaseSchemaField *********\n"];
     [document appendFormat:@"Name:              %@\n", self.name];
-    [document appendFormat:@"Data type:         %@\n", self.dataType];
-    [document appendFormat:@"Data type native:  %@\n", self.dataTypeNative];
+    [document appendFormat:@"Data type:         %hd\n", self.dataType];
+    [document appendFormat:@"Data type native:  %hd\n", self.dataTypeNative];
     [document appendFormat:@"Data type desc:    %@\n", self.dataTypeNativeDescription];
-    [document appendFormat:@"Decimals:          %@\n", self.decimals];
-    [document appendFormat:@"Identifier:        %@\n", self.identifier];
+    [document appendFormat:@"Decimals:          %hd\n", self.decimals];
+    [document appendFormat:@"Identifier:        %lld\n", self.identifier];
     [document appendFormat:@"Label:             %@\n", self.label];
     [document appendFormat:@"Name:              %@\n", self.name];
-    [document appendFormat:@"Primary key:       %@\n", self.primaryKey];
-    [document appendFormat:@"Width:             %@\n", self.width];
+    [document appendFormat:@"Primary key:       %@\n", self.primaryKey ? @"YES" : @"NO"];
+    [document appendFormat:@"Width:             %lld\n", self.width];
     [document appendFormat:@"********* RptqDatabaseSchemaField *********"];
     return document;
 }

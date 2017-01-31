@@ -9,10 +9,12 @@
 #import "MADDocumentObjectText.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
+#import <MADCocoaExtensions/MADTextStyle.h>
 #import "RptqDocumentElement.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADocumentObjectAttributesText.h"
+#import "MTAlignment.h"
 
 @interface MADDocumentObjectText()
     @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;
@@ -38,13 +40,16 @@
     attt = definition.fontDescriptors[item.objectID];
     
     if (attt == nil) {
+        MADTextStyle style; MADAlignment alignment;
+        [(NSValue *)item.style getValue:&style];
+        [(NSValue *)item.alignment getValue:&alignment];
         attt = [[MADocumentObjectAttributesText alloc] initWithFontName: item.fontname
                                                                fontSize: item.fontsize
-                                                                   bold: item.bold.boolValue
-                                                                 italic: item.italic.boolValue
-                                                              underline: item.underline.boolValue
-                                                                 strike: item.strike.boolValue
-                                                    horizontalAlignment: item.horizontalAlignment.integerValue];
+                                                                   bold: style.bold
+                                                                 italic: style.italic
+                                                              underline: style.underline
+                                                                 strike: style.strikethrough
+                                                    horizontalAlignment: alignment.horizontal];
         
         definition.fontDescriptors[item.objectID] = attt;
     }

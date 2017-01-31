@@ -35,11 +35,8 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    int64_t identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-    CFNumberRef n = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &identifier);
-    self.identifier = (__bridge NSNumber * _Nullable)(n);
-    CFRelease(n);
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromFetch {
@@ -78,8 +75,7 @@
     queryPredicate.hasLeftField     = leftField;
     queryPredicate.fieldrightpred   = nil;
     queryPredicate.fieldleftpred    = nil;
-    NSNumber *comparson             = @(comparsonOperator);
-    queryPredicate.comparson        = comparson;
+    queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
@@ -93,8 +89,7 @@
     queryPredicate.hasLeftField     = leftField;
     queryPredicate.fieldrightpred   = rightUserValue;
     queryPredicate.fieldleftpred    = nil;
-    NSNumber *comparson             = @(comparsonOperator);
-    queryPredicate.comparson        = comparson;
+    queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
@@ -108,8 +103,7 @@
     queryPredicate.hasLeftField     = nil;
     queryPredicate.fieldrightpred   = rightUserValue;
     queryPredicate.fieldleftpred    = leftUserValue;
-    NSNumber *comparson             = @(comparsonOperator);
-    queryPredicate.comparson        = comparson;
+    queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
@@ -123,8 +117,7 @@
     queryPredicate.hasLeftField     = nil;
     queryPredicate.fieldrightpred   = nil;
     queryPredicate.fieldleftpred    = leftUserValue;
-    NSNumber *comparson             = @(comparsonOperator);
-    queryPredicate.comparson        = comparson;
+    queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
@@ -141,18 +134,62 @@
 #pragma mark Public
 
 - (NSString *)symbolForDisplay {
-    return MADPredicateOperatorSymbolsDisplay[self.comparson.unsignedIntegerValue];
+    switch (self.comparson) {
+        case 0:
+            return @"==";
+            break;
+        case 1:
+            return @"!=";
+            break;
+        case 2:
+            return @">";
+            break;
+        case 3:
+            return @">=";
+            break;
+        case 4:
+            return @"<";
+            break;
+        case 5:
+            return @"<=";
+            break;
+        default:
+            return @"==";
+            break;
+    }
 }
 
 - (NSString *)symbolForComparson {
-    return MADPredicateOperatorSymbols[self.comparson.unsignedIntegerValue];
+    switch (self.comparson) {
+        case 0:
+            return @"=";
+            break;
+        case 1:
+            return @"<>";
+            break;
+        case 2:
+            return @">";
+            break;
+        case 3:
+            return @">=";
+            break;
+        case 4:
+            return @"<";
+            break;
+        case 5:
+            return @"<=";
+            break;
+        default:
+            return @"==";
+            break;
+    }
 }
 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:         %@\n", self.identifier];
-    [description appendFormat:@"Sort:               %@\n", self.comparson];
+    [description appendFormat:@"Identifier:         %lld\n", self.identifier];
+    [description appendFormat:@"Sort:               %hd\n", self.comparson];
     [description appendFormat:@"Right field:        %@\n", self.hasRightField];
     [description appendFormat:@"Right pred:         %@\n", self.fieldrightpred];
     [description appendFormat:@"Left field:         %@\n", self.hasLeftField];

@@ -45,7 +45,7 @@
                                                      andColumnIdentifier: tableFieldKey];
         if (rowData != nil) {
             
-            NSString *text = [item formattedString: item.referencesQueryField.databaseSchemaField.dataType.shortValue
+            NSString *text = [item formattedString: item.referencesQueryField.databaseSchemaField.dataType
                                           forValue: rowData[tableFieldKey]];
             self.text = text.copy;
             if ([self.text isEqualToString:MTNullIdentifier]) {
