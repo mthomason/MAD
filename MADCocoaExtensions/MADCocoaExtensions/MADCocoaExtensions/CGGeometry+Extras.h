@@ -38,7 +38,6 @@ extern const CGFloat MADFloat_320;
 extern const CGFloat MADFloat_1024;
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
-
 static inline double square (double x);
 static inline double square (double x) {
     return ( (x) * (x) );
@@ -77,7 +76,7 @@ typedef NS_ENUM(short, MADDirection) {
     MADDirectionRight,
     MADDirectionUp,
     MADDirectionDown,
-    MADDirectionNoDirection
+    MADDirectionNoDirection,
 };
 
 static inline CGSize MADSizeSquare(CGFloat length);

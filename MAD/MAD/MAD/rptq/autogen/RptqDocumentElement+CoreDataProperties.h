@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *horizontalAlignment;
 @property (nullable, nonatomic, copy) NSNumber *identifier;
 @property (nullable, nonatomic, copy) NSNumber *italic;
-@property (nullable, nonatomic, copy) NSString *label;
+//@property (nullable, nonatomic, copy) NSString *label;
 @property (nullable, nonatomic, copy) NSNumber *marginBottom;
 @property (nullable, nonatomic, copy) NSNumber *marginLeft;
 @property (nullable, nonatomic, copy) NSNumber *marginRight;

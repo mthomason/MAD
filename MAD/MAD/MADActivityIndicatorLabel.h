@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADActivityIndicatorLabel_h
+#define MAD_MADActivityIndicatorLabel_h
+
+#import <UIKit/UILabel.h>
 
 @interface MADActivityIndicatorLabel : UILabel
 
 @end
+
+#endif

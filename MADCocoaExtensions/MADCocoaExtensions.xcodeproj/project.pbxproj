@@ -50,6 +50,10 @@
 		4C5767441E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5767471E1CB68500611F37 /* MADTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5767451E1CB68500611F37 /* MADTextField.m */; };
 		4C5767481E1CB68500611F37 /* MADTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5767461E1CB68500611F37 /* MADTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35101E40C1C100F4744F /* MADBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6F35131E40D3E800F4744F /* MADMargin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35121E40D3AA00F4744F /* MADMargin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35141E40D6D400F4744F /* MADPadding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35161E40D8D200F4744F /* MADTextStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */; };
 		4CB9AAE71C8C244B00420CFF /* MADThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE51C8C244B00420CFF /* MADThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAE61C8C244B00420CFF /* MADThread.m */; };
@@ -115,6 +119,10 @@
 		4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlertControllerAlertRemovedProtocol.h; path = MADCocoaExtensions/MADAlertControllerAlertRemovedProtocol.h; sourceTree = "<group>"; };
 		4C5767451E1CB68500611F37 /* MADTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTextField.m; path = MADCocoaExtensions/MADTextField.m; sourceTree = "<group>"; };
 		4C5767461E1CB68500611F37 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextField.h; path = MADCocoaExtensions/MADTextField.h; sourceTree = "<group>"; };
+		4C6F35101E40C1C100F4744F /* MADBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBorderStyle.h; path = MADCocoaExtensions/MADBorderStyle.h; sourceTree = "<group>"; };
+		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
+		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
+		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextStyle.h; path = MADCocoaExtensions/MADTextStyle.h; sourceTree = "<group>"; };
 		4CB9AAE51C8C244B00420CFF /* MADThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADThread.h; path = MADCocoaExtensions/MADThread.h; sourceTree = "<group>"; };
 		4CB9AAE61C8C244B00420CFF /* MADThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADThread.m; path = MADCocoaExtensions/MADThread.m; sourceTree = "<group>"; };
 		4CE645871CE86B76000368BD /* MADNumericConstants.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MADNumericConstants.c; path = MADCocoaExtensions/MADNumericConstants.c; sourceTree = "<group>"; };
@@ -226,6 +234,10 @@
 				4C3622BA1CF34B9C002B8649 /* MAD2dDirection.h */,
 				4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */,
 				4C3622C21CF351AB002B8649 /* MADLineSegment.h */,
+				4C6F35101E40C1C100F4744F /* MADBorderStyle.h */,
+				4C6F35121E40D3AA00F4744F /* MADMargin.h */,
+				4C6F35141E40D6D400F4744F /* MADPadding.h */,
+				4C6F35161E40D8D200F4744F /* MADTextStyle.h */,
 			);
 			name = MADCocoaExtensions;
 			sourceTree = "<group>";
@@ -260,6 +272,7 @@
 				4C3622C11CF350E9002B8649 /* MADMathAlgebra.h in Headers */,
 				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
 				4C5767441E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h in Headers */,
+				4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */,
 				4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */,
 				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
@@ -267,15 +280,18 @@
 				4C3622B91CF34AB8002B8649 /* MADAspectRatio.h in Headers */,
 				4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */,
 				4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */,
+				4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */,
 				4C5205B41BA7E2A2000E6A59 /* MADAlertController.h in Headers */,
 				4C5205B61BA7E2A2000E6A59 /* UIView+Animations.h in Headers */,
 				4C3622BB1CF34B9C002B8649 /* MAD2dDirection.h in Headers */,
 				4C5205B21BA7E2A2000E6A59 /* MADMailComposeViewController.h in Headers */,
+				4C6F35131E40D3E800F4744F /* MADMargin.h in Headers */,
 				4C5767481E1CB68500611F37 /* MADTextField.h in Headers */,
 				4C5205AE1BA7E2A2000E6A59 /* MADBarButtonItem.h in Headers */,
 				4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */,
 				4CB9AAE71C8C244B00420CFF /* MADThread.h in Headers */,
 				4C3622C31CF351AB002B8649 /* MADLineSegment.h in Headers */,
+				4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */,
 				4C5205AA1BA7E2A2000E6A59 /* MADColorSocial.h in Headers */,
 				4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */,
 				4C3622B71CF34A8B002B8649 /* MADResizeAspect.h in Headers */,

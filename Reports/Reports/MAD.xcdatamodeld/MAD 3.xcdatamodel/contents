@@ -7,7 +7,20 @@
         <relationship name="hasQueries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="inDatabase" inverseEntity="RptqQuery" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inDatabase" inverseEntity="RptqDatabaseSchemaTable" syncable="YES"/>
         <relationship name="ownedByQueryAsStaticResource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDatabaseSchemas" inverseEntity="RptqDocument" syncable="YES"/>
-        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqUserCredentals" inverseName="inDatabase" inverseEntity="RptqUserCredentals" syncable="YES"/>
+        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseCredentals" inverseName="inDatabase" inverseEntity="RptqDatabaseCredentals" syncable="YES"/>
+    </entity>
+    <entity name="RptqDatabaseCredentals" representedClassName="RptqDatabaseCredentals" syncable="YES" codeGenerationType="class">
+        <attribute name="database" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="domain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="server" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="inDatabase" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <entity name="RptqDatabaseSchemaField" representedClassName="RptqDatabaseSchemaField" syncable="YES">
         <attribute name="dataType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -52,58 +65,26 @@
         <relationship name="hasReportHeaderSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReportReportHeader" inverseEntity="RptqDocumentSection" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElement" representedClassName="RptqDocumentElement" isAbstract="YES" syncable="YES">
-        <attribute name="binary" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="bold" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderHeightBottom" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderHeightTop" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderStyleBottom" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderStyleLeft" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderStyleRight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderStyleTop" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderWidthLeft" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderWidthRight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="colorBackground" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="colorBorder" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="colorForeground" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="alignment" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="backgroundColor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="border" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="dropPointX" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="dropPointY" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dropPoint" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fontname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fontsize" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="formatNumericCurrency" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="formatNumericCurrencyLocal" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="formatNumericDecimals" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="horizontalAlignment" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="foregroundColor" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="italic" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="marginBottom" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="marginLeft" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="marginRight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="marginTop" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="originx" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="originy" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="paddingBottom" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="paddingLeft" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="paddingRight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="paddingTop" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="sectionIndexItem" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="sectionIndexRow" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="1" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="sectionRowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="sizeheight" attributeType="Float" defaultValueString="44" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="sizewidth" attributeType="Float" defaultValueString="100" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="strike" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="touchPointX" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="touchPointY" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="margin" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="numericFormat" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="origin" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="padding" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="style" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="underline" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementAggregate" representedClassName="RptqDocumentElementAggregate" parentEntity="RptqDocumentElement" syncable="YES">
-        <attribute name="function" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="functionType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="groupType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inAggregateObject" inverseEntity="RptqQueryField" syncable="YES"/>
@@ -111,11 +92,11 @@
     </entity>
     <entity name="RptqDocumentElementBarcode" representedClassName="RptqDocumentElementBarcode" parentEntity="RptqDocumentElement" syncable="YES">
         <attribute name="add2dComponent" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="barcodeBorderStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="barcodeBorderType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" elementID="type" syncable="YES"/>
+        <attribute name="barcodeBorderWidth" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="barcodeHeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="barcodeType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="borderType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" elementID="type" syncable="YES"/>
-        <attribute name="borderWidth" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="humanReadable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="inputField1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="inputField2" optional="YES" attributeType="String" syncable="YES"/>
@@ -283,35 +264,12 @@
         <relationship name="hasQueryFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryTable" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryTables" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
-    <entity name="RptqUserCredentals" representedClassName="RptqUserCredentals" syncable="YES">
-        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="mysql_username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_domain" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_key" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_redirect_uri" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_database" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_host" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="tds_server" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
-    </entity>
     <elements>
-        <element name="RptqDatabase" positionX="-1692" positionY="-1201" width="198" height="150"/>
+        <element name="RptqDatabase" positionX="-1692" positionY="-1201" width="198" height="148"/>
         <element name="RptqDatabaseSchemaField" positionX="-405" positionY="324" width="171" height="225"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="165"/>
         <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="285"/>
-        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="780"/>
+        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="300"/>
         <element name="RptqDocumentElementAggregate" positionX="-1350" positionY="-1461" width="207" height="120"/>
         <element name="RptqDocumentElementBarcode" positionX="-1260" positionY="-2241" width="189" height="375"/>
         <element name="RptqDocumentElementChart" positionX="-1719" positionY="-1854" width="128" height="45"/>
@@ -331,6 +289,6 @@
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="150"/>
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="120"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="210"/>
-        <element name="RptqUserCredentals" positionX="-1091" positionY="-1062" width="128" height="360"/>
+        <element name="RptqDatabaseCredentals" positionX="-1710" positionY="-2097" width="128" height="208"/>
     </elements>
 </model>

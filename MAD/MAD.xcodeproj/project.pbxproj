@@ -389,6 +389,8 @@
 		4C5EBD021CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C692B411E1EAF9500DC2CB0 /* madmalloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B3F1E1EAF9500DC2CB0 /* madmalloc.c */; };
 		4C692B421E1EAF9500DC2CB0 /* madmalloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C692B401E1EAF9500DC2CB0 /* madmalloc.h */; };
+		4C6F35021E409DE900F4744F /* MADCurrencyFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6F35031E409DE900F4744F /* MADCurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */; };
 		4C7044F61E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7044F41E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h */; };
 		4C7044F71E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7044F51E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m */; };
 		4C7281C81E27484D00C58DBE /* MADQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7281C61E27484D00C58DBE /* MADQuery.h */; };
@@ -993,6 +995,8 @@
 		4C5EBD011CF44D0200C98F95 /* MADReportFormatterDataSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportFormatterDataSourceProtocol.h; path = MAD/MADReportFormatter/MADReportFormatterDataSourceProtocol.h; sourceTree = "<group>"; };
 		4C692B3F1E1EAF9500DC2CB0 /* madmalloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = madmalloc.c; sourceTree = "<group>"; };
 		4C692B401E1EAF9500DC2CB0 /* madmalloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = madmalloc.h; sourceTree = "<group>"; };
+		4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCurrencyFormatter.h; path = MAD/MADCurrencyFormatter.h; sourceTree = "<group>"; };
+		4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCurrencyFormatter.m; path = MAD/MADCurrencyFormatter.m; sourceTree = "<group>"; };
 		4C7044F41E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreateTemplate.h; sourceTree = "<group>"; };
 		4C7044F51E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreateTemplate.m; sourceTree = "<group>"; };
 		4C7281C61E27484D00C58DBE /* MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuery.h; path = MAD/MADQuery/MADQuery.h; sourceTree = "<group>"; };
@@ -1759,6 +1763,8 @@
 				4C47543A1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.m */,
 				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
 				4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */,
+				4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */,
+				4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */,
 			);
 			name = MAD;
 			sourceTree = "<group>";
@@ -2350,6 +2356,7 @@
 				4CC2848D1BADE9D000775B72 /* RptqFieldSelectorManager.h in Headers */,
 				4C401DDD1BAE3BD700BAE5FC /* MTQueryCacheVacuum.h in Headers */,
 				4C401DE91BAE3BD800BAE5FC /* MTQueryDefinitionSort.h in Headers */,
+				4C6F35021E409DE900F4744F /* MADCurrencyFormatter.h in Headers */,
 				4C59398F1E3EF7E400582271 /* RptqDocumentElement+CoreDataClass.h in Headers */,
 				4C401DB71BAE3BD600BAE5FC /* MTQueryCache.h in Headers */,
 				4C3080E91D05507E00A7D597 /* MADDocumentObjectAggregate.h in Headers */,
@@ -2652,6 +2659,7 @@
 				4C994F2B1BDD96E40058627A /* MADReportTextRepresentation.m in Sources */,
 				4CA354A21D228E170072BD38 /* MADReportSectionGroupHeader.m in Sources */,
 				4C3080EE1D05509900A7D597 /* MADDocumentObjectImage.m in Sources */,
+				4C6F35031E409DE900F4744F /* MADCurrencyFormatter.m in Sources */,
 				4CA3549E1D228DB50072BD38 /* MADReportSectionPageFooter.m in Sources */,
 				4CC1C6FF1CFDED57006F1546 /* MADAppLaunchContext.m in Sources */,
 				4CC284981BADE9E700775B72 /* RptqQueryLinks+Extras.m in Sources */,

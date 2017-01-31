@@ -577,7 +577,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     [description appendFormat:@"Numeric:                %@\n", self.formatNumericDecimals.boolValue ? @"YES" : @"NO"];
     [description appendFormat:@"Horizontal alignment:   %@\n", self.horizontalAlignment];
     [description appendFormat:@"B: %@ I: %@ S: %@ U: %@\n", self.bold.boolValue ? @"YES" : @"NO ", self.italic.boolValue ? @"YES" : @"NO ", self.strike.boolValue ? @"YES" : @"NO ", self.underline.boolValue ? @"YES" : @"NO "];
-    [description appendFormat:@"Label:                  %@\n", self.label];
+    //[description appendFormat:@"Label:                  %@\n", self.label];
     [description appendFormat:@"Drop point:             (%f, %f)\n", self.dropPointX.floatValue, self.dropPointY.floatValue];
     [description appendFormat:@"Drop index:             %ld\n", (long)self.dropIndex.integerValue];
     [description appendFormat:@"Origin:                 (%f, %f)\n", self.originx.floatValue, self.originy.floatValue];

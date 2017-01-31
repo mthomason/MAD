@@ -39,7 +39,7 @@
 @dynamic horizontalAlignment;
 @dynamic identifier;
 @dynamic italic;
-@dynamic label;
+//@dynamic label;
 @dynamic marginBottom;
 @dynamic marginLeft;
 @dynamic marginRight;

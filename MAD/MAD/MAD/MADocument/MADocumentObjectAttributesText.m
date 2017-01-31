@@ -58,19 +58,19 @@
         paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
         
         switch (horizontalAlignment) {
-            case MTHorizontalAlignmentLeft:
+            case MADHorizontalAlignmentLeft:
                 paragraphStyle.alignment = NSTextAlignmentLeft;
                 break;
-            case MTHorizontalAlignmentRight:
+            case MADHorizontalAlignmentRight:
                 paragraphStyle.alignment = NSTextAlignmentRight;
                 break;
-            case MTHorizontalAlignmentCenter:
+            case MADHorizontalAlignmentCenter:
                 paragraphStyle.alignment = NSTextAlignmentCenter;
                 break;
-            case MTHorizontalAlignmentJustified:
+            case MADHorizontalAlignmentJustified:
                 paragraphStyle.alignment = NSTextAlignmentJustified;
                 break;
-            case MTHorizontalAlignmentNatrual:
+            case MADHorizontalAlignmentNatrual:
                 paragraphStyle.alignment = NSTextAlignmentNatural;
                 break;
             default:
