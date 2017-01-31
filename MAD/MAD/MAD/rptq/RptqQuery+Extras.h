@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQuery_Extras_h
 #define Reports_RptqQuery_Extras_h
 
-#import "RptqQuery+CoreDataClass.h"
+#import "RptqQuery.h"
 
 @class RptqDocument;
 @class MTDatabase;

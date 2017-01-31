@@ -14,7 +14,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 
-#import "RptqUserCredentals.h"
+#import "RptqDatabaseCredentals.h"
 
 @implementation MTDatabaseConnectionSqlServer
 
@@ -27,7 +27,7 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
     
     id dbConnection = nil;
     

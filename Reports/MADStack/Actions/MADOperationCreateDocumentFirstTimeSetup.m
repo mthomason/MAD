@@ -13,7 +13,7 @@
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery+extras.h>
-#import <MAD/RptqDocumentSection+CoreDataClass.h>
+#import <MAD/RptqDocumentSection.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()

@@ -9,13 +9,13 @@
 #import "MADDocumentObjectLabelDynamic.h"
 #import <Foundation/NSString.h>
 #import "MTDataTable.h"
-#import "RptqDocumentElement+CoreDataClass.h"
-#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryField.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MTDatabase.h"
 #import "MTReportFormatter.h"
 

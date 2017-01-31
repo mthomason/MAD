@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementLabelLink_Extras_h
 #define Reports_RptqDocumentElementLabelLink_Extras_h
 
-#import "RptqDocumentElementLabelLink+CoreDataClass.h"
+#import "RptqDocumentElementLabelLink.h"
 #import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentElementLabelLink (Extras)

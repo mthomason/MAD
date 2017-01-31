@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElement_Extras_h
 #define Reports_RptqDocumentElement_Extras_h
 
-#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement.h>
 
 #import <CoreGraphics/CGGeometry.h>
 

@@ -22,8 +22,8 @@
 #import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
-#import "RptqDocument+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDocument.h"
 
 #import "RptqDataHelper.h"
 

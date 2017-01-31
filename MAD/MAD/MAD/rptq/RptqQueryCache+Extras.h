@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryCache_Extras_h
 #define Reports_RptqQueryCache_Extras_h
 
-#import "RptqQueryCache+CoreDataClass.h"
+#import "RptqQueryCache.h"
 
 @interface RptqQueryCache (Extras)
 

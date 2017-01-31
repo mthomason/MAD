@@ -15,7 +15,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 #import "MTAlignment.h"
 
 @interface MADocumentObjectAttributesText ()

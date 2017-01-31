@@ -8,8 +8,8 @@
 
 #import "MADDocumentObjectLabelStatic.h"
 #import <UIKit/NSStringDrawing.h>
-#import "RptqDocumentElement+CoreDataClass.h"
-#import "RptqDocumentElementLabel+CoreDataClass.h"
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementLabel.h"
 #import "MADocumentObjectAttributesText.h"
 #import "MADDocumentObjectReference.h"
 

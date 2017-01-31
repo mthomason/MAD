@@ -40,7 +40,7 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
 
 #import "MADLabelTitle.h"

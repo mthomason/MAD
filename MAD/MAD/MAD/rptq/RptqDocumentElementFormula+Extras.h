@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementFormula_Extras_h
 #define Reports_RptqDocumentElementFormula_Extras_h
 
-#import "RptqDocumentElementFormula+CoreDataClass.h"
+#import "RptqDocumentElementFormula.h"
 #import "RptqDocumentElementFactory.h"
 #import <MADDataStructures/MTProtocolLog.h>
 #import <MADFoundation/MADDataType.h>

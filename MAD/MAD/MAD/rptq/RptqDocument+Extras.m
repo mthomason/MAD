@@ -31,23 +31,23 @@
 #import "MTDatabaseSqlite3.h"
 
 #import "RptqQueryGroup+Extras.h"
-#import "RptqDocumentSectionRows+CoreDataClass.h"
+#import "RptqDocumentSectionRows.h"
 #import "RptqQuery+Extras.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDatabase+Extras.h"
-#import "RptqUserCredentals+Extras.h"
+#import "RptqDatabaseCredentals+Extras.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDocumentElement+Extras.h"
 
-#import "RptqDocumentElementChart+CoreDataClass.h"
-#import "RptqDocumentElementGroupKey+CoreDataClass.h"
-#import "RptqDocumentElementImage+CoreDataClass.h"
-#import "RptqDocumentElementLabel+CoreDataClass.h"
-#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
-#import "RptqDocumentElementLabelLink+CoreDataClass.h"
+#import "RptqDocumentElementChart.h"
+#import "RptqDocumentElementGroupKey.h"
+#import "RptqDocumentElementImage.h"
+#import "RptqDocumentElementLabel.h"
+#import "RptqDocumentElementLabelDataField.h"
+#import "RptqDocumentElementLabelLink.h"
 
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementBarcode+Extras.h"
@@ -429,7 +429,7 @@
                                                                               driverType: database.identifier
                                                                             connectionId: connectionId];
     
-    RptqUserCredentals *userCredentals = [RptqUserCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
+    RptqDatabaseCredentals *userCredentals = [RptqDatabaseCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
     userCredentals.database_driver_type = databaseIdentifier;

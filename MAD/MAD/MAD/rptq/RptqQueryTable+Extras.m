@@ -30,7 +30,7 @@
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDataHelper.h"
 
 @implementation RptqQueryTable (Extras)

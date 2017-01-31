@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementGroupKey_Extras_h
 #define Reports_RptqDocumentElementGroupKey_Extras_h
 
-#import <MAD/RptqDocumentElementGroupKey+CoreDataClass.h>
+#import <MAD/RptqDocumentElementGroupKey.h>
 
 @interface RptqDocumentElementGroupKey (Extras)
 

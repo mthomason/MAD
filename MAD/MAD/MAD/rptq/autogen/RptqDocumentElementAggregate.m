@@ -6,9 +6,9 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDocumentElementAggregate+CoreDataClass.h"
-#import "RptqDocumentElementFormula+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqDocumentElementAggregate.h"
+#import "RptqDocumentElementFormula.h"
+#import "RptqQueryField.h"
 @implementation RptqDocumentElementAggregate
 
 @end

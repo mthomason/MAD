@@ -14,9 +14,9 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
 
-#import "RptqUserCredentals+MADDatabaseConnection.h"
+#import "RptqDatabaseCredentals+MADDatabaseConnection.h"
 
-@class RptqUserCredentals;
+@class RptqDatabaseCredentals;
 
 @implementation MADDatabaseConnection
 
@@ -65,7 +65,7 @@
     
     id resultCredentals = nil;
     
-    if ([connectionObject isKindOfClass:[RptqUserCredentals class]]) {
+    if ([connectionObject isKindOfClass:[RptqDatabaseCredentals class]]) {
         resultCredentals = [self newDatabaseConnectionWithCredentals:connectionObject];
         
     } else if ([connectionObject isKindOfClass:[NSURL class]]) {
@@ -79,7 +79,7 @@
     return dbConnection;
 }
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
 
     id dbConnection = nil;
     switch (credentals.databaseType) {

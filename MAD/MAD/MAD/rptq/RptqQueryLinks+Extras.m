@@ -13,13 +13,13 @@
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
 
-#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase+CoreDataClass.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqDatabase.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "MADSQLJoinType.h"

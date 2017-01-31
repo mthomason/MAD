@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementBarcode_Extras_h
 #define Reports_RptqDocumentElementBarcode_Extras_h
 
-#import "RptqDocumentElementBarcode+CoreDataClass.h"
+#import "RptqDocumentElementBarcode.h"
 
 @class RptqQueryField;
 @class MTBarcode;

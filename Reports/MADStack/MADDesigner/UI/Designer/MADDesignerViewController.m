@@ -58,13 +58,13 @@
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
-#import <MAD/RptqDocumentElementLabel+CoreDataClass.h>
-#import <MAD/RptqDocumentElementLabelDataField+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabel.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqQueryField.h>
 #import <MAD/RptqDocumentSection+Extras.h>
-#import <MAD/RptqDocumentSectionRows+CoreDataClass.h>
+#import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADTabBarController.h"

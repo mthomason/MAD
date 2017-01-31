@@ -22,14 +22,14 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
-#import "RptqDocument+CoreDataClass.h"
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqQuery+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQuery.h"
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "MTDatabaseTable.h"
 

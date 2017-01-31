@@ -7,7 +7,7 @@
 //
 
 #import "UIFontDescriptor+DocumentObject.h"
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 
 @implementation MADFontDescriptor
 

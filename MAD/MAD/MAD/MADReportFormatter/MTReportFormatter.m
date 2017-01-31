@@ -28,7 +28,7 @@
 
 #import "RptqDocument+Extras.h"
 
-#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup.h"
 
 #import "RptqQuery+Extras.h"
 

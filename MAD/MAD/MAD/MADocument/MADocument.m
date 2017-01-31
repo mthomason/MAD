@@ -69,42 +69,42 @@
 
 #import "MADNotificationDidFormatPage.h"
 
-#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 
-#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
-#import "RptqDocumentSectionRows+CoreDataClass.h"
+#import "RptqDocumentSectionRows.h"
 #import "RptqDocumentSectionRows+Extras.h"
 
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "RptqUserCredentals.h"
-#import "RptqUserCredentals+Extras.h"
+#import "RptqDatabaseCredentals.h"
+#import "RptqDatabaseCredentals+Extras.h"
 
-#import "RptqQuery+CoreDataClass.h"
+#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
-#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
 
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
-#import "RptqDocumentSectionRows+CoreDataClass.h"
+#import "RptqDocumentSectionRows.h"
 
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"
 
 #import "RptqDocumentSectionEnumerator.h"
@@ -1333,7 +1333,7 @@ READFROMURL_END:;
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     MADDatabaseConnection *connection;
-    RptqUserCredentals *ownedByUser = database.ownedByUser;
+    RptqDatabaseCredentals *ownedByUser = database.ownedByUser;
     connection = [MADDatabaseConnection newDatabaseConnectionForObject: ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;

@@ -23,16 +23,16 @@
 
 #import <MAD/RptqFieldSelectorManager.h>
 
-#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryTable.h>
 
-#import <MAD/RptqDocument+CoreDataClass.h>
+#import <MAD/RptqDocument.h>
 
-#import <MAD/RptqDatabase+CoreDataClass.h>
+#import <MAD/RptqDatabase.h>
 
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import <MAD/RptqQuery+CoreDataClass.h>
-#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQueryField.h>
 
 #import <MAD/MADocument.h>
 

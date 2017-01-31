@@ -12,7 +12,7 @@
 
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
 #import <UIKit/UILabel.h>
-#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryTable.h>
 #import <CoreData/NSFetchedResultsController.h>
 
 @implementation MTQueryBuilderAddLinkSecondTableViewController

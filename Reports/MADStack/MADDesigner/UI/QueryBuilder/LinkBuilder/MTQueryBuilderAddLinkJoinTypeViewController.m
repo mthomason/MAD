@@ -17,7 +17,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/RptqUserCredentals+Extras.h>
+#import <MAD/RptqDatabaseCredentals+Extras.h>
 
 #import <MAD/MADSQLJoinType.h>
 
@@ -43,9 +43,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSArray <RptqUserCredentals *> *connections;
-    connections = [RptqUserCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
-    RptqUserCredentals *userCredentals = connections[0];
+    NSArray <RptqDatabaseCredentals *> *connections;
+    connections = [RptqDatabaseCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
+    RptqDatabaseCredentals *userCredentals = connections[0];
     NSString *databaseDriverType = userCredentals.database_driver_type;
 
     UITableViewCell *tableViewCell;

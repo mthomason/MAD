@@ -21,8 +21,8 @@
 
 #import <MAD/MADocument.h>
 
-#import <MAD/RptqUserCredentals.h>
-#import <MAD/RptqUserCredentals+Extras.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MAD/RptqDatabaseCredentals+Extras.h>
 
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
@@ -425,7 +425,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             if (database.ownedByUser) {
                 
                 NSString *databaseType = database.ownedByUser.database_driver_type.copy;
-                RptqUserCredentals *user = database.ownedByUser;
+                RptqDatabaseCredentals *user = database.ownedByUser;
                 id schemaName = [user copyDatabaseSchemaName];
                 
                 

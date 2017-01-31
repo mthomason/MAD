@@ -15,7 +15,7 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>
-#import <MAD/RptqDocument+CoreDataClass.h>
+#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/MADDatabaseConnection.h>
 

@@ -7,7 +7,7 @@
 //
 
 #import "RptqDocumentElementBarcode.h"
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField.h"
 @implementation RptqDocumentElementBarcode
 
 @end

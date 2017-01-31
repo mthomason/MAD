@@ -7,11 +7,11 @@
 //
 
 #import "MADDocumentObjectImage.h"
-#import "RptqDocumentElementImage+CoreDataClass.h"
+#import "RptqDocumentElementImage.h"
 #import "MADDocumentObjectCachedDataReferenceItem.h"
 #import "MADDocumentObjectReference.h"
-#import "RptqDocumentElement+CoreDataClass.h"
-#import "RptqDocumentElementImage+CoreDataClass.h"
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementImage.h"
 #import <UIKit/UIImage.h>
 
 @interface MADDocumentObjectImage ()

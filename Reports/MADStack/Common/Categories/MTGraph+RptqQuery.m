@@ -27,11 +27,11 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSMapTable.h>
 
-#import <MAD/RptqQuery+CoreDataClass.h>
-#import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
-#import <MAD/RptqQueryTable+CoreDataClass.h>
-#import <MAD/RptqQueryField+CoreDataClass.h>
-#import <MAD/RptqQueryLinks+CoreDataClass.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryLinks.h>
 
 #import <MADDataStructures/MTVertex.h>
 

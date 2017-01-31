@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementAggregate_Extras_h
 #define Reports_RptqDocumentElementAggregate_Extras_h
 
-#import <MAD/RptqDocumentElementAggregate+CoreDataClass.h>
+#import <MAD/RptqDocumentElementAggregate.h>
 
 #import <MAD/MADAggregateFunctionType.h>
 #import <MAD/MADAggregateFunctionInputType.h>

@@ -6,8 +6,11 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDatabaseCredentals+CoreDataClass.h"
+#ifndef MAD_RptqDatabaseCredentals_CoreDataProperties_h
+#define MAD_RptqDatabaseCredentals_CoreDataProperties_h
 
+#import "RptqDatabaseCredentals.h"
+#import <CoreData/NSFetchRequest.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,3 +33,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

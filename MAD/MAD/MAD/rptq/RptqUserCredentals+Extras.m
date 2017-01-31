@@ -1,5 +1,5 @@
 //
-//  RptqUserCredentals+Extras.m
+//  RptqDatabaseCredentals+Extras.m
 //  Reports
 //
 //  Created by Michael Thomason on 11/12/12.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqUserCredentals+Extras.h"
+#import "RptqDatabaseCredentals+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
 
@@ -31,10 +31,10 @@
 
 #import "RptqDataHelper.h"
 
-@implementation RptqUserCredentals (Extras)
+@implementation RptqDatabaseCredentals (Extras)
 
-+ (NSFetchRequest<RptqUserCredentals *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqUserCredentals"];
++ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseCredentals"];
 }
 
 #pragma mark - Overrides
@@ -128,21 +128,21 @@
     return userCredentals;
 }
 
-+ (NSArray <RptqUserCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
++ (NSArray <RptqDatabaseCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
-    NSArray <RptqUserCredentals *> *results;
-    results = [[NSArray <RptqUserCredentals *> alloc] initWithArray:fetchResults];
+    NSArray <RptqDatabaseCredentals *> *results;
+    results = [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
     return results;
 }
 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"*********   RptqUserCredentals  *********\n"];
+    [description appendFormat:@"*********   RptqDatabaseCredentals  *********\n"];
     [description appendFormat:@"Identifier:             %@\n", self.identifier];
     [description appendFormat:@"Type:                   %@\n", self.database_driver_type];
     [description appendFormat:@"MySQL host:             %@\n", self.mysql_host];
@@ -157,7 +157,7 @@
     [description appendFormat:@"SF Login Identifier:    %@\n", self.sf_login_identifier];
     [description appendFormat:@"SF Login Key:           %@\n", self.sf_login_key];
     [description appendFormat:@"SF Login Redirect URL:  %@\n", self.sf_login_redirect_uri];
-    [description appendFormat:@"*********   RptqUserCredentals  *********"];
+    [description appendFormat:@"*********   RptqDatabaseCredentals  *********"];
     return description;
 }
 

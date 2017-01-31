@@ -18,7 +18,7 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 
-#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSection.h"
 //#import "RptqDocumentSection+CoreDataProperties.h"
 //#import "RptqDocumentSectionRows+CoreDataProperties.h"
 

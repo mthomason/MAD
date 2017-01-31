@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentSection_Extras_h
 #define Reports_RptqDocumentSection_Extras_h
 
-#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSection.h"
 #import <CoreGraphics/CGGeometry.h>
 #import "MADocumentSectionType.h"
 

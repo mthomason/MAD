@@ -18,8 +18,8 @@
 #import "MTDatabase.h"
 #import "MADDatabaseConnection.h"
 
-#import "RptqDatabase+CoreDataClass.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabase.h"
+#import "RptqDatabaseSchemaField.h"
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
@@ -39,7 +39,7 @@
         self.queryObject = array;
         RptqDatabaseSchemaField *field = array.firstObject;
 
-        RptqUserCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
+        RptqDatabaseCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
         id databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:userCredentals];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;

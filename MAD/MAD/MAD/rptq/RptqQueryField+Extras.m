@@ -24,7 +24,7 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
 
 #import "RptqDataHelper.h"
 

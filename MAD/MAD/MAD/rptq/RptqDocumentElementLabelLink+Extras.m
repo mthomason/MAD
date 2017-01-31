@@ -21,7 +21,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"
 
 #import "RptqDataHelper.h"

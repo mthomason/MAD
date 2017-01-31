@@ -13,7 +13,7 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
-#import "RptqUserCredentals.h"
+#import "RptqDatabaseCredentals.h"
 
 #import <MADFoundation/MADURL.h>
 
@@ -29,7 +29,7 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqUserCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
 
     id dbConnection;
     //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];

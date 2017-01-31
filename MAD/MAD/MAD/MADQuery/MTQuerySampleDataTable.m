@@ -21,7 +21,7 @@
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"

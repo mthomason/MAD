@@ -10,8 +10,8 @@
 #import "MTDatabase.h"
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "MTDataTableFast.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqQueryField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqDocumentElement+Extras.h"
 #import "MTReportFormatter.h"
@@ -19,7 +19,7 @@
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 
 #import <MADBarcodes/MTBarcode.h>
 

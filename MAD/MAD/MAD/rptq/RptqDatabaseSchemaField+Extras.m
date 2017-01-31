@@ -19,8 +19,8 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "MTDatabaseField.h"
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 
 #import "RptqDataHelper.h"
 

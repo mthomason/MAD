@@ -19,7 +19,7 @@
 
 #import <MAD/MADocument.h>
 
-#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 

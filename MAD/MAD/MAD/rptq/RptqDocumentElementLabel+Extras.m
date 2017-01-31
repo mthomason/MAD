@@ -11,7 +11,7 @@
 #endif
 
 #import "RptqDocumentElementLabel+Extras.h"
-#import "RptqDocumentElement+CoreDataClass.h"
+#import "RptqDocumentElement.h"
 #import "RptqDocumentElement+CoreDataProperties.h"
 
 #import <Foundation/NSSortDescriptor.h>

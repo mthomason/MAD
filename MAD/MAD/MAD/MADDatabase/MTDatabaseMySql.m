@@ -33,16 +33,16 @@
 
 #import "MTDatabaseField.h"
 
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
 #import "MTKeyChain.h"

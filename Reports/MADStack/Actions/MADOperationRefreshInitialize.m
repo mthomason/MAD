@@ -23,13 +23,13 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQueryFull.h>
 
-#import <MAD/RptqDocument+CoreDataClass.h>
+#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
-#import <MAD/RptqDatabase+CoreDataClass.h>
+#import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+extras.h>
-#import <MAD/RptqQuery+CoreDataClass.h>
+#import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+extras.h>
-#import <MAD/RptqDocumentSection+CoreDataClass.h>
+#import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
@@ -91,7 +91,7 @@
         
         //Initialize main database
         if (document.database == nil) {
-            RptqUserCredentals *rptqUser;
+            RptqDatabaseCredentals *rptqUser;
             MADDatabaseConnection *databaseConnection;
             MTDatabase *database;
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;

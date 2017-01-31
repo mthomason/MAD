@@ -19,11 +19,11 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
-#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/RptqDocumentElementLabelDataField+CoreDataClass.h>
-#import <MAD/RptqDatabaseSchemaField+CoreDataClass.h>
-#import <MAD/RptqQueryField+CoreDataClass.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqQueryField.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MADToolboxFormatViewController ()

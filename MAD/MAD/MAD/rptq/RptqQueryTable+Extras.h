@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryTable_Extras_h
 #define Reports_RptqQueryTable_Extras_h
 
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
 #import <MADDataStructures/MTProtocolCompare.h>
 
 @class NSManagedObjectID;

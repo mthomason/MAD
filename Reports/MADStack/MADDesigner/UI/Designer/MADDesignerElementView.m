@@ -17,10 +17,10 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/RptqDocumentElement+CoreDataClass.h>
+#import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/RptqDocumentElementImage+CoreDataClass.h>
-#import <MAD/RptqDocumentElementBarcode+CoreDataClass.h>
+#import <MAD/RptqDocumentElementImage.h>
+#import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MAD/MADocumentObjectAttributesText.h>

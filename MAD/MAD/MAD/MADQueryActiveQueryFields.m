@@ -13,13 +13,13 @@
 
 #import "MADDocumentObjectType.h"
 
-#import "RptqDocumentElementBarcode+CoreDataClass.h"
-#import "RptqDocumentElementLabelDataField+CoreDataClass.h"
-#import "RptqDocumentElementAggregate+CoreDataClass.h"
-#import "RptqQueryLinks+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqQueryGroup+CoreDataClass.h"
-#import "RptqQuery+CoreDataClass.h"
+#import "RptqDocumentElementBarcode.h"
+#import "RptqDocumentElementLabelDataField.h"
+#import "RptqDocumentElementAggregate.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryField.h"
+#import "RptqQueryGroup.h"
+#import "RptqQuery.h"
 
 @implementation MADQueryActiveQueryFields
 

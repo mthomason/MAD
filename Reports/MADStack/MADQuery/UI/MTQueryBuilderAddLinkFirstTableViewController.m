@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
-#import <MAD/RptqQueryTable+CoreDataClass.h>
+#import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryTable+Extras.h>
 #import <UIKit/UILabel.h>
 #import <CoreData/NSFetchedResultsController.h>

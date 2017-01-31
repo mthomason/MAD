@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQueryGroup_Extras_h
 #define Reports_RptqQueryGroup_Extras_h
 
-#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup.h"
 #import "MADSortOrder.h"
 
 @class RptqQueryField;

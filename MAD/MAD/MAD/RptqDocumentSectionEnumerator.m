@@ -12,9 +12,9 @@
 
 #import "RptqDocumentSectionEnumerator.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 #import "RptqQuery+Extras.h"
-#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup.h"
 #import "RptqDocumentSection+Extras.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>

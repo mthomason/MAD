@@ -6,8 +6,11 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#ifndef MAD_RptqDatabaseSchemaField_CoreDataProperties_h
+#define MAD_RptqDatabaseSchemaField_CoreDataProperties_h
 
+#import "RptqDatabaseSchemaField.h"
+#import <CoreData/NSFetchRequest.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,3 +48,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

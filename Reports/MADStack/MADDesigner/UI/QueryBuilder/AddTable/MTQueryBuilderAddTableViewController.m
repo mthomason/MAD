@@ -13,7 +13,7 @@
 #import "MTQueryBuilderAddTableViewController.h"
 #import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UILabel.h>
-#import <MAD/RptqDatabaseSchemaTable+CoreDataClass.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
 
 @implementation MTQueryBuilderAddTableViewController
 

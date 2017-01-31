@@ -24,33 +24,33 @@
 #import "MTDatabaseField.h"
 #import "MTDatabase.h"
 
-#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
-#import "RptqDocumentSection+CoreDataClass.h"
+#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 
-#import "RptqQuery+CoreDataClass.h"
+#import "RptqQuery.h"
 
-#import "RptqQueryGroup+CoreDataClass.h"
+#import "RptqQueryGroup.h"
 
-#import "RptqQueryField+CoreDataClass.h"
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqDatabaseSchemaTable.h"
 
-#import "RptqDatabaseSchemaField+CoreDataClass.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "RptqQueryLinks+CoreDataClass.h"
+#import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
 
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 
-#import "RptqQueryTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "MADSortOrder.h"

@@ -21,11 +21,11 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "RptqDocument+CoreDataClass.h"
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase+CoreDataClass.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
-#import "RptqQuery+CoreDataClass.h"
+#import "RptqQuery.h"
 
 #import "RptqDataHelper.h"
 

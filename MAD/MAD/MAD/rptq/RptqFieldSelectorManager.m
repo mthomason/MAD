@@ -14,9 +14,9 @@
 
 #import <Foundation/NSSortDescriptor.h>
 
-#import "RptqQueryTable+CoreDataClass.h"
-#import "RptqQueryField+CoreDataClass.h"
-#import "RptqDatabaseSchemaTable+CoreDataClass.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryField.h"
+#import "RptqDatabaseSchemaTable.h"
 
 static NSString * const MADKeyDBSchemaFieldName = @"databaseSchemaField.name";
 
