@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>B5D410B4-4CB3-49FC-8B4E-3C7D500C7DAB</UUID>
-        <nextObjectID>776</nextObjectID>
+        <nextObjectID>778</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -2298,7 +2298,7 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <attribute name="destinationname" type="string">RptqDocumentElementFormula</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z137"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z719 z455 z400 z253 z522 z180 z267 z584 z398 z218 z256 z730 z514 z373 z316 z568 z714 z549 z437 z279 z581 z296 z429 z224 z647 z242 z718 z591 z606 z329 z658 z486 z365 z704 z499 z456 z223 z214 z115 z335 z614 z342 z480 z295 z452 z600 z216 z157 z601 z392 z487 z571 z375 z249"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z614 z606 z486 z480 z591 z600 z718 z296 z242 z279 z429 z329 z253 z295 z487 z400 z647 z398 z455 z499 z316 z216 z437 z249 z223 z571 z719 z522 z335 z267 z549 z157 z568 z714 z581 z514 z456 z452 z375 z584 z658 z365 z704 z115 z373 z256 z180 z218 z730 z342 z214 z392 z224 z601"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z172 z575"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z594">
@@ -3122,6 +3122,12 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z315"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z776">
+        <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING"></relationship>
+    </object>
+    <object type="XDDEVATTRIBUTEMAPPING" id="z777">
+        <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING"></relationship>
+    </object>
+    <object type="XDDEVATTRIBUTEMAPPING" id="z778">
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING"></relationship>
     </object>
 </database>
