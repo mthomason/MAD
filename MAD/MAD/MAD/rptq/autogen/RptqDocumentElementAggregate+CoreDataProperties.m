@@ -2,7 +2,7 @@
 //  RptqDocumentElementAggregate+CoreDataProperties.m
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,9 +14,9 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementAggregate"];
 }
 
-@dynamic function;
 @dynamic groupNumber;
 @dynamic groupType;
+@dynamic functionType;
 @dynamic aggregateField;
 @dynamic aggregateFunction;
 

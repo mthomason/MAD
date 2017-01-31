@@ -2,12 +2,9 @@
 //  RptqDocumentElementBarcode+CoreDataProperties.h
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
-
-#ifndef MAD_RptqDocumentElementBarcode_CoreDataProperties_h
-#define MAD_RptqDocumentElementBarcode_CoreDataProperties_h
 
 #import "RptqDocumentElementBarcode+CoreDataClass.h"
 
@@ -20,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSNumber *add2dComponent;
 @property (nullable, nonatomic, copy) NSNumber *barcodeType;
-@property (nullable, nonatomic, copy) NSNumber *borderStyle;
-@property (nullable, nonatomic, copy) NSNumber *borderType;
-@property (nullable, nonatomic, copy) NSNumber *borderWidth;
-@property (nullable, nonatomic, copy) NSNumber *height;
+@property (nullable, nonatomic, copy) NSNumber *barcodeBorderStyle;
+@property (nullable, nonatomic, copy) NSNumber *barcodeBorderType;
+@property (nullable, nonatomic, copy) NSNumber *barcodeBorderWidth;
+@property (nullable, nonatomic, copy) NSNumber *barcodeHeight;
 @property (nullable, nonatomic, copy) NSNumber *humanReadable;
 @property (nullable, nonatomic, copy) NSString *inputField1;
 @property (nullable, nonatomic, copy) NSString *inputField2;
@@ -44,5 +41,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

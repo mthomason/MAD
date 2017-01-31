@@ -2,7 +2,7 @@
 //  RptqDocumentElementBarcode+CoreDataProperties.m
 //  MAD
 //
-//  Created by Michael on 1/29/17.
+//  Created by Michael on 1/31/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,10 +16,10 @@
 
 @dynamic add2dComponent;
 @dynamic barcodeType;
-@dynamic borderStyle;
-@dynamic borderType;
-@dynamic borderWidth;
-@dynamic height;
+@dynamic barcodeBorderStyle;
+@dynamic barcodeBorderType;
+@dynamic barcodeBorderWidth;
+@dynamic barcodeHeight;
 @dynamic humanReadable;
 @dynamic inputField1;
 @dynamic inputField2;
