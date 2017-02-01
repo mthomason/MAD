@@ -334,58 +334,102 @@
 
     RptqDocumentSection *section = [[self alloc] initWithEntity: entity
                                  insertIntoManagedObjectContext: managedObjectContext];
-    NSNumber *sectionType = [[NSNumber alloc] initWithShort:type];
-    section.visibility = @YES;
-    section.type = sectionType;
+    section.visibility = YES;
+    section.type = type;
     
     return section;
 }
 
 #pragma mark - Handling Rows
 
-static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger body);
-static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger body) {
+static inline NSUInteger MADDocumentSectionIndexLevel(NSUInteger, NSUInteger);
+static inline NSUInteger MADDocumentSectionIndexLevel(NSUInteger row, NSUInteger body) {
     return (row <= body) ? row : body - (row - body);
 }
 
-+ (NSString *)getDocumentSectionNameForRow: (NSInteger)row
-                        withNumberOfGroups: (NSInteger)numberOfGroups {
-    
-    NSInteger documentHeader    = 0;
-    NSInteger pageHeader        = 1;
-    NSInteger body              = 2 + numberOfGroups;       //6
-    NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
-    NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
+/*
+ typedef NS_ENUM(int64_t, MADDocumentSectionType) {
+ MADDocumentSectionTypeReportHeader = 1,
+ MADDocumentSectionTypeReportFooter = 2,
+ MADDocumentSectionTypePageHeader = 3,
+ MADDocumentSectionTypePageFooter = 4,
+ MADDocumentSectionTypeBody = 5,
+ MADDocumentSectionTypeGroupHeader = 6,
+ MADDocumentSectionTypeGroupFooter = 7,
+ };
+ */
 
-    NSString *groupText = nil;
-    if (row == documentHeader) {
-        groupText = NSLocalizedString(@"Report Header", @"Report Header");
-        
-    } else if (row == pageHeader) {
-        groupText = NSLocalizedString(@"Page Header", @"Page Header");
-        
-    } else if (row == body) {
-        groupText = NSLocalizedString(@"Report Detail", @"Report Detail");
-        
-    } else if (row == pageFooter) {
-        groupText = NSLocalizedString(@"Page Footer", @"Page Footer");
-        
-    } else if (row == documentFooter) {
-        groupText = NSLocalizedString(@"Report Footer", @"Report Footer");
-        
-    } else {
+static inline BOOL MADDocumentSectionIndexIsBody(NSUInteger, NSUInteger);
+static inline BOOL MADDocumentSectionIndexIsBody(NSUInteger row, NSUInteger total) {
+    return row == (2 + total);
+}
 
-        NSInteger locationRelitaveToGroup = row - pageHeader;
-        BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
+static inline BOOL MADDocumentSectionIndexIsPageFooter(NSUInteger, NSUInteger);
+static inline BOOL MADDocumentSectionIndexIsPageFooter(NSUInteger row, NSUInteger total) {
+    return row == 3 + (2 * total);
+}
 
-        NSString *format = isGroupHeader ? NSLocalizedString(@"Group Header %d", @"") :
-                                           NSLocalizedString(@"Group Footer %d", @"");
-        groupText = [[NSString alloc] initWithFormat:format,
-                                                     MADDocumentSectionIndexLevel(row, body) - 1];
-        
+static inline BOOL MADDocumentSectionIndexIsReportFooter(NSUInteger, NSUInteger);
+static inline BOOL MADDocumentSectionIndexIsReportFooter(NSUInteger row, NSUInteger total) {
+    return row == (2 * total) + 4;
+}
 
+static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger, NSUInteger);
+static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInteger total) {
+    switch (row) {
+        case 0:
+            return MADDocumentSectionTypeReportHeader;
+            break;
+        case 1:
+            return MADDocumentSectionTypePageHeader;
+            break;
+        default:
+            return MADDocumentSectionIndexIsBody(row, total) ?
+                        MADDocumentSectionTypeBody :
+                        MADDocumentSectionIndexIsPageFooter(row, total) ?
+                            MADDocumentSectionTypePageFooter :
+                            MADDocumentSectionIndexIsReportFooter(row, total) ?
+                                MADDocumentSectionTypeReportFooter :
+                                    (row - 1) <= total ? MADDocumentSectionTypeGroupHeader :
+                                                         MADDocumentSectionTypeGroupFooter;
+            break;
     }
-    return groupText;
+}
+
++ (NSString *)getDocumentSectionNameForRow: (NSUInteger)row
+                        withNumberOfGroups: (NSUInteger)numberOfGroups {
+    
+    switch (MADSectionTypeForRow(row, numberOfGroups)) {
+        case MADDocumentSectionTypeReportHeader:
+            return NSLocalizedString(@"Report Header", @"Report Header");
+            break;
+        case MADDocumentSectionTypePageHeader:
+            return NSLocalizedString(@"Page Header", @"Page Header");
+            break;
+        case MADDocumentSectionTypeGroupHeader: {
+            return [NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @"Group Header #"),
+                                              MADDocumentSectionIndexLevel(row, 2+numberOfGroups) - 1];
+            break;
+        }
+        case MADDocumentSectionTypeBody:
+            return NSLocalizedString(@"Report Detail", @"Report Detail");
+            break;
+        case MADDocumentSectionTypeGroupFooter: {
+            return [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @"Group Footer #"),
+                                              MADDocumentSectionIndexLevel(row, 2+numberOfGroups) - 1];
+            break;
+        }
+        case MADDocumentSectionTypePageFooter:
+            return NSLocalizedString(@"Page Footer", @"Page Footer");
+            break;
+        case MADDocumentSectionTypeReportFooter:
+            return NSLocalizedString(@"Report Footer", @"Report Footer");
+            break;
+        default:
+            NSAssert(NO, @"Expect a value here.");
+            return @"";
+            break;
+    }
 }
 
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row

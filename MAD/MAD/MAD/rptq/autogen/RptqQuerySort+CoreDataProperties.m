@@ -15,7 +15,6 @@
 }
 
 @dynamic ascending;
-@dynamic fields;
 @dynamic identifier;
 @dynamic hasField;
 @dynamic inQuery;

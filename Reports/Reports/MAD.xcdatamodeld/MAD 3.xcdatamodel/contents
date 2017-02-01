@@ -79,7 +79,7 @@
         <attribute name="padding" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="size" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="style" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementAggregate" representedClassName="RptqDocumentElementAggregate" parentEntity="RptqDocumentElement" syncable="YES">
@@ -221,8 +221,8 @@
         <attribute name="fieldLeftID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fieldRightID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
-        <attribute name="tableleft" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tableright" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tableLeftID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tableRightID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="hasLeftField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryLinkLeft" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="hasRightField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryLinkRight" inverseEntity="RptqQueryField" syncable="YES"/>
@@ -239,7 +239,6 @@
     </entity>
     <entity name="RptqQuerySort" representedClassName="RptqQuerySort" syncable="YES">
         <attribute name="ascending" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="fields" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="hasField" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQuerySort" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQuerySort" inverseEntity="RptqQuery" syncable="YES"/>
@@ -276,7 +275,7 @@
         <element name="RptqQueryGroup" positionX="-126" positionY="1152" width="128" height="135"/>
         <element name="RptqQueryLinks" positionX="43" positionY="1854" width="128" height="180"/>
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="150"/>
-        <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="118"/>
+        <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="105"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="133"/>
     </elements>
 </model>

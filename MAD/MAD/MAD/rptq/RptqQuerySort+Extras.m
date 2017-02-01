@@ -61,7 +61,6 @@
     [description appendFormat:@"***********   RptqQuerySort   ***********\n"];
     [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"ASC:                    %@\n", self.ascending ? @"YES" : @"NO"];
-    [description appendFormat:@"Fields:                 %@\n", self.fields];
     [description appendFormat:@"***********   RptqQuerySort   ***********"];
     return description;
 }

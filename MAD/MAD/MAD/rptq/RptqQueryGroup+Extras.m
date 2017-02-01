@@ -50,11 +50,8 @@
     RptqQueryGroup *queryGroup = [[self alloc] initWithEntity: entityDescriptionQueryGroup
                                insertIntoManagedObjectContext: managedObjectContext];
     
-    NSNumber *sort = [[NSNumber alloc] initWithUnsignedInteger:sortOrder];
-    queryGroup.sort = sort;
-    
-    NSNumber *weight = [[NSNumber alloc] initWithInteger: ([queryGroup lastWeightWithManagedObjectContext:managedObjectContext] + 1)];
-    queryGroup.weight = weight;
+    queryGroup.sort = sortOrder;
+    queryGroup.weight = [queryGroup lastWeightWithManagedObjectContext:managedObjectContext] + 1;
 
     return queryGroup;
 }
@@ -104,7 +101,7 @@
 
 #pragma mark - Member functions
 
-- (NSInteger)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (int16_t)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
@@ -116,7 +113,7 @@
     NSError *error = nil;
     NSArray *queryGroupLast = [managedObjectContext executeFetchRequest: request error: &error];
 
-    NSInteger weight = 0;
+    int16_t weight = 0;
     if (queryGroupLast.count > 0) {
         RptqQueryGroup *lastGroup = queryGroupLast[0];
         weight = lastGroup.weight;

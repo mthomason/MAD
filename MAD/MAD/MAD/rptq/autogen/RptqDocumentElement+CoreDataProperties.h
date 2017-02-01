@@ -18,11 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElement *> *)fetchRequest;
 
-@property (nonatomic) int64_t dropIndex;
-@property (nullable, nonatomic, copy) NSString *fontname;
-@property (nonatomic) double fontsize;
 @property (nonatomic) int64_t identifier;
-@property (nonatomic) int64_t type;
+@property (nonatomic) int16_t type;
+@property (nonatomic) int64_t dropIndex;
+@property (nonatomic) double fontsize;
+@property (nullable, nonatomic, copy) NSString *fontname;
 @property (nullable, nonatomic, retain) NSObject *origin;
 @property (nullable, nonatomic, retain) NSObject *dropPoint;
 @property (nullable, nonatomic, retain) NSObject *margin;

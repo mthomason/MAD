@@ -18,9 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQuerySort *> *)fetchRequest;
 
-@property (nonatomic) BOOL ascending;
-@property (nullable, nonatomic, copy) NSString *fields;
 @property (nonatomic) int64_t identifier;
+@property (nonatomic) BOOL ascending;
 @property (nullable, nonatomic, retain) RptqQueryField *hasField;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;
 

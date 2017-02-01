@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *fieldRightID;
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int16_t type;
-@property (nullable, nonatomic, copy) NSString *tableleft;
-@property (nullable, nonatomic, copy) NSString *tableright;
+@property (nullable, nonatomic, copy) NSString *tableLeftID;
+@property (nullable, nonatomic, copy) NSString *tableRightID;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
 @property (nullable, nonatomic, retain) RptqQueryField *hasRightField;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;

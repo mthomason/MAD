@@ -24,7 +24,7 @@
     - (NSString *)fieldNameNice;
     - (NSString *)fieldNameQuery;
     - (NSString *)sortDisplayNice;
-    - (NSInteger)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (int16_t)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (NSInteger)location;
 
 @end

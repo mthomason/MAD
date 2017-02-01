@@ -1201,11 +1201,11 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return rsuccess;
 }
 
-static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary *counters);
-static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary *counters) {
+static inline NSUInteger numberOfItemsOfType(int, NSMutableDictionary <NSNumber *, NSNumber *> *);
+static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNumber *, NSNumber *> *counters) {
     NSNumber *key = @(type);
     NSNumber *counter = counters[key];
-    return counter ? counter.integerValue : 0;
+    return counter ? counters[key].unsignedIntegerValue : 0;
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
@@ -1614,7 +1614,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                 
                 char *nameBind;
                 int typeBind, lengthBind, percisionBind, scaleBind;
-                
                 DBINT nameBindNull, typeBindNull, lengthBindNull, percisionBindNull, scaleBindNull;
                 NSInteger nameSize = ( nameLenght + 1 );
                 nameBind = malloc( sizeof(char) * (unsigned long)nameSize );
@@ -1650,8 +1649,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                         MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
                         databaseField.fieldTypeNative = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
                         databaseField.fieldType = databaseField.fieldTypeNative;
-                        databaseField.width = (NSUInteger)lengthBind;
-                        databaseField.decimals = (NSUInteger)scaleBind;
+                        databaseField.width = (int64_t)lengthBind;
+                        databaseField.decimals = (int16_t)scaleBind;
                         databaseField.primaryKey = 0;
                         
                         [results addObject:databaseField];

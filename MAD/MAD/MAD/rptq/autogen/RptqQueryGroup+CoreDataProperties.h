@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqQueryGroup *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
-@property (nonatomic) int32_t sort;
+@property (nonatomic) int16_t sort;
 @property (nonatomic) int16_t weight;
 @property (nullable, nonatomic, retain) RptqQueryField *hasField;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentSection *> *hasSection;

@@ -411,8 +411,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             // MARK: Display and identify the data source and data sources
         case MADIdentifierQueryViewSectionsDatasource: {
             
-            static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
-            cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
+            static NSString *MADIdentifierCellDataSource = @"MADIdentifierCellDataSource";
+            cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierCellDataSource];
             
             NSManagedObjectContext *managedObjectContext;
             MADocument *madDocument = self.datasoruce.document;
@@ -445,7 +445,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             // MARK: Display the table names that are used in the query
         case MADIdentifierQueryViewSectionsTables: {
             
-            static NSString *MyIdentifierUITableViewCellTableName = @"MADTableCellSchemaName";
+            static NSString *MyIdentifierUITableViewCellTableName = @"MADIdentifierCellSchemaName";
             cell = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
@@ -459,16 +459,16 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             // MARK: Display the table links or joins that are used in the query.
         case MADIdentifierQueryViewSectionsLinks: {
             
-            static NSString *MADIDCellInstruction = @"UITableViewCellQueryLink";
+            static NSString *MADIDCellInstruction = @"MADIdentifierCellQueryLink";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
             
             NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryLinks *links = [self.queryLinksController objectAtIndexPath: indexPathLinks];
             
-            NSString *leftString = [NSString newStringFieldDisplayWithTable: links.tableleft
+            NSString *leftString = [NSString newStringFieldDisplayWithTable: links.tableLeftID
                                                                    andField: links.fieldLeftID];
             
-            NSString *rightString = [NSString newStringFieldDisplayWithTable: links.tableright
+            NSString *rightString = [NSString newStringFieldDisplayWithTable: links.tableRightID
                                                                     andField: links.fieldRightID];
             
             NSString *linksDescription = [links copyLinkDescription];

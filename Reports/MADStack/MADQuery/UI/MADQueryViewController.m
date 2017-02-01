@@ -327,7 +327,7 @@ BOOL storeEnabled() {
     NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory.copy;
     [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
-    static NSString *MADIdentifierTableViewCellTableName = @"MADTableCellSchemaName";
+    static NSString *MADIdentifierTableViewCellTableName = @"MADIdentifierCellSchemaName";
     [self.tableView registerClass: [MADTableViewCellQueryTableName class] forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
     
     self.tableView.estimatedRowHeight = 44.0000f;
@@ -1130,13 +1130,17 @@ BOOL storeEnabled() {
     NSAssert(reportDocument != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     if (reportDocument) {
         
-        NSManagedObjectContext *managedObjectContext = reportDocument.documentObjectIDStore.managedObjectContext;;
         
-        NSFetchedResultsController * (^newFetchedResultsController)(NSString *, NSPredicate *, NSSortDescriptor *, id <NSFetchedResultsControllerDelegate>);
+        NSFetchedResultsController * (^newFetchedResultsController)(NSString *,
+                                                                    NSPredicate *,
+                                                                    NSSortDescriptor *,
+                                                                    id <NSFetchedResultsControllerDelegate>,
+                                                                    NSManagedObjectContext *);
         newFetchedResultsController = ^NSFetchedResultsController *(NSString *entityName,
                                                                     NSPredicate *predicate,
                                                                     NSSortDescriptor *sortDescriptor,
-                                                                    id <NSFetchedResultsControllerDelegate> delegate) {
+                                                                    id <NSFetchedResultsControllerDelegate> delegate,
+                                                                    NSManagedObjectContext *managedObjectContext) {
 
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
             request.predicate = predicate;
@@ -1150,7 +1154,8 @@ BOOL storeEnabled() {
             frc.delegate = delegate;
             return frc;
         };
-        
+        NSManagedObjectContext *context;
+        context = reportDocument.documentObjectIDStore.managedObjectContext;
         MADQueryViewDataSource *queryViewDataSource = self.queryViewDataSource;
         
         {
@@ -1161,11 +1166,15 @@ BOOL storeEnabled() {
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             
-            id predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", objectID];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"alias"
-                                                                           ascending: YES];
+            NSString *key = NSStringFromSelector(@selector(alias));
+            NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
+            NSString *format = [keyInQuery stringByAppendingString:@" == %@"];
+            id predicate = [NSPredicate predicateWithFormat:format, objectID];
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                         ascending: YES];
             NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, predicate, sortDescriptor, self);
+            frc = newFetchedResultsController(entityName, predicate, sortDescriptor, self, context);
             
             queryViewDataSource.queryTablesController = frc;
             [queryViewDataSource performFetchTables];
@@ -1173,24 +1182,28 @@ BOOL storeEnabled() {
         }
         
         {
+            NSString *key = NSStringFromSelector(@selector(tableLeftID));
             NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"tableleft"
-                                                                           ascending: YES];
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                         ascending: YES];
 
             NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
             queryViewDataSource.queryLinksController = frc;
             [queryViewDataSource performFetchLinks];
             frc = nil;
         }
         
         {
+            NSString *key = NSStringFromSelector(@selector(weight));
             NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
-                                                                           ascending: YES];
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                         ascending: YES];
 
             NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
             queryViewDataSource.queryGroupsController = frc;
             [queryViewDataSource performFetchGroups];
             frc = nil;
@@ -1198,11 +1211,12 @@ BOOL storeEnabled() {
         }
         
         {
+            NSString *key = NSStringFromSelector(@selector(leftFieldID));
             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"leftFieldID"
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: YES];
             NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);
+            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
             queryViewDataSource.queryPredicatesController = frc;
             [queryViewDataSource performFetchPredicate];
             frc = nil;
@@ -1214,7 +1228,7 @@ BOOL storeEnabled() {
 - (NSArray <NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
                                                         table:(NSManagedObjectID *)deleatedTableObjectId
                                                   inTableView:(UITableView *)tableView
-                                                    inContext:(NSManagedObjectContext *)managedObjectContext {
+                                                    inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     
@@ -1229,7 +1243,7 @@ BOOL storeEnabled() {
         MADTableViewCellQueryLink *tableViewCellLink;
         tableViewCellLink = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
         if (tableViewCellLink) {
-            object = [managedObjectContext existingObjectWithID:tableViewCellLink.tableID error:&error];
+            object = [context existingObjectWithID:tableViewCellLink.tableID error:&error];
         } else {
             
             id <NSFetchedResultsSectionInfo> sectionInfo = fetchedLinkes.sections[0];
@@ -1243,7 +1257,7 @@ BOOL storeEnabled() {
             RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
             if ([queryLink.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId] ||
                 [queryLink.hasRightField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
-                [managedObjectContext deleteObject:queryLink];
+                [context deleteObject:queryLink];
                 
                 [cellsToDelete addObject:linkIndexPath];
                 
@@ -1256,7 +1270,7 @@ BOOL storeEnabled() {
 - (NSArray <NSIndexPath *> *)deleteGroupsRelatedToSectionIndex:(NSInteger)section
                                                          table:(NSManagedObjectID *)deleatedTableObjectId
                                                    inTableView:(UITableView *)tableView
-                                                     inContext:(NSManagedObjectContext *)managedObjectContext {
+                                                     inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray <__kindof NSIndexPath *> *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1278,7 +1292,7 @@ BOOL storeEnabled() {
                 RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
                 if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
                     [self.document removeGroupWitObjectID: groupToRemove.objectID
-                                 fromManagedObjectContext: managedObjectContext];
+                                 fromManagedObjectContext: context];
                     [cellsToDelete addObject:groupIndexPath];
                 }
                 
@@ -1292,7 +1306,7 @@ BOOL storeEnabled() {
 - (NSArray <NSIndexPath *> *)deletePredicateRelatedToSectionIndex: (NSInteger)section
                                                             table: (NSManagedObjectID *)deleatedTableObjectId
                                                       inTableView: (UITableView *)tableView
-                                                        inContext: (NSManagedObjectContext *)managedObjectContext {
+                                                        inContext: (NSManagedObjectContext *)context {
 
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray <__kindof NSIndexPath *> *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1307,7 +1321,7 @@ BOOL storeEnabled() {
         NSManagedObject *object = nil;
         
         if (tableViewCellPredicate) {
-            object = [managedObjectContext existingObjectWithID: tableViewCellPredicate.tableID
+            object = [context existingObjectWithID: tableViewCellPredicate.tableID
                                                           error: &error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row
@@ -1322,7 +1336,7 @@ BOOL storeEnabled() {
             BOOL deleted = NO;
             if ([predicateToRemove.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
 
-                [managedObjectContext deleteObject:predicateToRemove];
+                [context deleteObject:predicateToRemove];
                 
                 NSIndexPath *deleteCellAtIndex = predicateIndexPath.copy;
                 [cellsToDelete addObject:deleteCellAtIndex];
@@ -1332,7 +1346,7 @@ BOOL storeEnabled() {
             if (!deleted) {
                 if ([predicateToRemove.hasRightField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
                 
-                    [managedObjectContext deleteObject:predicateToRemove];
+                    [context deleteObject:predicateToRemove];
 
                     NSIndexPath *deleteCellAtIndex = predicateIndexPath.copy;
                     [cellsToDelete addObject:deleteCellAtIndex];
@@ -1393,15 +1407,15 @@ BOOL storeEnabled() {
     //NSManagedObjectContext *private;
     //private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     
-    NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+    NSManagedObjectContext *context = self.document.managedObjectContext;
     //[self observeManagedObjectContextChanges: managedObjectContext];
-    [self ingnoreManagedObjectContextChanges:managedObjectContext];
+    [self ingnoreManagedObjectContextChanges:context];
     
     //private.parentContext = managedObjectContext;
 
     //[private performBlockAndWait:^{
         
-        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: managedObjectContext];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: context];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
@@ -1454,8 +1468,8 @@ BOOL storeEnabled() {
         [self.tableView beginUpdates];
         
         MADocument *document =  self.document;
-        [document deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:managedObjectContext];
-        [document deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:managedObjectContext];
+        [document deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:context];
+        [document deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:context];
         
         NSMutableArray <NSIndexPath *> *cellsToDelete = [[NSMutableArray alloc] init];
         
@@ -1470,21 +1484,21 @@ BOOL storeEnabled() {
                     cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section
                                                              table: deleatedTableObjectId
                                                        inTableView: tableView
-                                                         inContext: managedObjectContext];
+                                                         inContext: context];
                     break;
                     
                 case MADIdentifierQueryViewSectionsGroups:
                     cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section
                                                               table: deleatedTableObjectId
                                                         inTableView: tableView
-                                                          inContext: managedObjectContext];
+                                                          inContext: context];
                     break;
                     
                 case MADIdentifierQueryViewSectionsPredicate:
                     cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section
                                                                  table: deleatedTableObjectId
                                                            inTableView: tableView
-                                                             inContext: managedObjectContext];
+                                                             inContext: context];
                     break;
                     
                 default:
@@ -1498,7 +1512,7 @@ BOOL storeEnabled() {
         }
         
     NSError * __autoreleasing *error = nil;
-    BOOL success = [managedObjectContext save:error];
+    BOOL success = [context save:error];
     //success = [private.parentContext save:error];
     if (success) {
         [self.queryViewDataSource numberOfTablesChanged: numberOfTables];
@@ -1529,7 +1543,7 @@ BOOL storeEnabled() {
         [self.tableView endUpdates];
         
         //[self observeManagedObjectContextChanges:self.document.managedObjectContext];
-        [self observeManagedObjectContextChanges:managedObjectContext];
+        [self observeManagedObjectContextChanges:context];
         
         self.suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
         
@@ -1679,17 +1693,17 @@ BOOL storeEnabled() {
     }
 }
 
-- (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+- (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)context {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: managedObjectContext];
+                                                  object: context];
 }
 
-- (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+- (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)context {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextDidChange:)
                                                  name: NSManagedObjectContextObjectsDidChangeNotification
-                                               object: managedObjectContext];
+                                               object: context];
 }
 
 #pragma mark NSNotificationCenter

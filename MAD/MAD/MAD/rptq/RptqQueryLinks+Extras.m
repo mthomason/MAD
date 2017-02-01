@@ -88,11 +88,11 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     
     queryLinks.hasLeftField     = fieldLeft;
     queryLinks.hasRightField    = fieldRight;
-    queryLinks.tableleft        = fieldLeft.inQueryTable.alias;
+    queryLinks.tableLeftID      = fieldLeft.inQueryTable.alias.copy;
     queryLinks.fieldLeftID      = fieldLeft.databaseSchemaField.name.copy;
-    queryLinks.tableright       = fieldRight.inQueryTable.alias;
+    queryLinks.tableRightID     = fieldRight.inQueryTable.alias.copy;
     queryLinks.fieldRightID     = fieldRight.databaseSchemaField.name.copy;
-    queryLinks.type     = joinType;
+    queryLinks.type             = joinType;
 
     return queryLinks;
 }
@@ -221,11 +221,11 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQueryLinks  ***********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Field left:             %@\n", self.fieldLeftID];
     [description appendFormat:@"Field right:            %@\n", self.fieldRightID];
-    [description appendFormat:@"Table left:             %@\n", self.tableleft];
-    [description appendFormat:@"Table right:            %@\n", self.tableright];
+    [description appendFormat:@"Table left:             %@\n", self.tableLeftID];
+    [description appendFormat:@"Table right:            %@\n", self.tableRightID];
     [description appendFormat:@"Join type enum:         %hd\n", self.type];
     [description appendFormat:@"***********   RptqQueryLinks  ***********"];
     return description;
