@@ -1905,7 +1905,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                                                         inputType: MTAggregateFunctionInputTypeField
                                                         groupType: groupType
                                                   aggregateObject: (RptqQueryField *)inputObject
-                                                      groupNumber: (NSUInteger)labs(groupNumber.longValue)];
+                                                      groupNumber: (int64_t)labs(groupNumber.longValue)];
 }
 
 #pragma mark -
