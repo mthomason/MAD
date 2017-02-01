@@ -6,26 +6,26 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTReportDesignerSectionLayoutSettingsViewController_h
-#define Reports_MTReportDesignerSectionLayoutSettingsViewController_h
+#ifndef Reports_MADReportDesignerSectionLayoutSettingsViewController_h
+#define Reports_MADReportDesignerSectionLayoutSettingsViewController_h
 
 #import <UIKit/UITableViewController.h>
 
-extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier;
+extern NSString * const MADReportDesignerSectionLayoutSettingsViewControllerIdentifier;
 
-@class MTReportDesignerSectionLayoutSettingsViewController;
+@class MADReportDesignerSectionLayoutSettingsViewController;
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
 
     - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter;
+    - (void)layoutSettings:(MADReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter;
 @optional
     - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
     - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
-    - (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller;
+    - (void)sectionLayoutSettingsDidFinish:(MADReportDesignerSectionLayoutSettingsViewController *)controller;
 @end
 
-@interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
+@interface MADReportDesignerSectionLayoutSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
     + (instancetype)newReportDesignerSectionLayoutSettingsViewController;
@@ -35,7 +35,7 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
     @property (nonatomic, assign) double initalHeightValue;
     @property (nonatomic, assign) BOOL initalVisibility;
     @property (nonatomic, assign) BOOL initalFormFeedEnabled;
-    @property (nonatomic, assign) NSUInteger initalNumberOfRows;
+    @property (nonatomic, assign) int32_t initalNumberOfRows;
 
     - (void)updateDisplay;
 
