@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G1217" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="2.0">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G1217" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="2.0">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
         <attribute name="databaseDriverType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="databaseDriverTypeEnum" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -7,30 +7,7 @@
         <relationship name="hasQueries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="inDatabase" inverseEntity="RptqQuery" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inDatabase" inverseEntity="RptqDatabaseSchemaTable" syncable="YES"/>
         <relationship name="ownedByQueryAsStaticResource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDatabaseSchemas" inverseEntity="RptqDocument" syncable="YES"/>
-        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseCredentals" inverseName="inDatabase" inverseEntity="RptqDatabaseCredentals" syncable="YES"/>
-    </entity>
-    <entity name="RptqDatabaseCredentals" representedClassName="RptqDatabaseCredentals" syncable="YES">
-        <attribute name="driver_type" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="mysql_username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_domain" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_key" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_login_redirect_uri" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sf_username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_database" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_host" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="tds_server" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tds_username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
+        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqUserCredentals" inverseName="inDatabase" inverseEntity="RptqUserCredentals" syncable="YES"/>
     </entity>
     <entity name="RptqDatabaseSchemaField" representedClassName="RptqDatabaseSchemaField" syncable="YES">
         <attribute name="dataType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -337,31 +314,54 @@
         <relationship name="hasQueryFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryTable" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryTables" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
+    <entity name="RptqUserCredentals" representedClassName="RptqUserCredentals" syncable="YES">
+        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="mysql_username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_domain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_redirect_uri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tds_database" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tds_host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tds_password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tds_port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="tds_server" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tds_username" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="RptqDatabase" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDatabaseCredentals" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDatabaseSchemaField" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDatabaseSchemaTable" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocument" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObject" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectAggregate" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectBarcode" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectChart" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectGroupKey" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectImage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentSection" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDocumentSectionRows" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQuery" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryCache" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryField" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryGroup" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryLinks" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryPredicate" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQuerySort" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqQueryTable" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDatabase" positionX="-1395" positionY="-1041" width="198" height="150"/>
+        <element name="RptqDatabaseSchemaField" positionX="-135" positionY="405" width="171" height="225"/>
+        <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="165"/>
+        <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="285"/>
+        <element name="RptqDocumentObject" positionX="-765" positionY="-1995" width="128" height="915"/>
+        <element name="RptqDocumentObjectAggregate" positionX="-686" positionY="1566" width="209" height="150"/>
+        <element name="RptqDocumentObjectBarcode" positionX="-1233" positionY="1068" width="207" height="435"/>
+        <element name="RptqDocumentObjectChart" positionX="387" positionY="1593" width="128" height="75"/>
+        <element name="RptqDocumentObjectFormula" positionX="-639" positionY="1170" width="198" height="180"/>
+        <element name="RptqDocumentObjectGroupKey" positionX="-387" positionY="-99" width="182" height="90"/>
+        <element name="RptqDocumentObjectImage" positionX="-1152" positionY="558" width="128" height="90"/>
+        <element name="RptqDocumentObjectLabel" positionX="-1154" positionY="657" width="128" height="90"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="-1161" positionY="756" width="128" height="135"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="-1161" positionY="912" width="128" height="105"/>
+        <element name="RptqDocumentSection" positionX="-1451" positionY="-648" width="182" height="390"/>
+        <element name="RptqDocumentSectionRows" positionX="-1143" positionY="-504" width="191" height="120"/>
+        <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="225"/>
+        <element name="RptqQueryCache" positionX="387" positionY="1176" width="128" height="120"/>
+        <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="240"/>
+        <element name="RptqQueryGroup" positionX="-126" positionY="1152" width="128" height="135"/>
+        <element name="RptqQueryLinks" positionX="43" positionY="1854" width="128" height="270"/>
+        <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="150"/>
+        <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="120"/>
+        <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="210"/>
+        <element name="RptqUserCredentals" positionX="-1125" positionY="-882" width="128" height="360"/>
     </elements>
 </model>
