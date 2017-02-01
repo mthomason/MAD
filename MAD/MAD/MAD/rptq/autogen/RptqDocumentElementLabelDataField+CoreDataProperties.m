@@ -14,8 +14,8 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementLabelDataField"];
 }
 
-@dynamic field;
-@dynamic table;
+@dynamic fieldID;
+@dynamic tableID;
 @dynamic text;
 @dynamic referencesQueryField;
 

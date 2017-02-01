@@ -23,8 +23,8 @@
 
     @property (nonatomic, assign)   MADDataType  type;
     @property (nonatomic, assign)   int16_t     nativeType;
-    @property (nonatomic, assign)   NSInteger   dataLength;
-    @property (nonatomic, assign)   NSInteger   dataPercision;
+    @property (nonatomic, assign)   int64_t     dataLength;
+    @property (nonatomic, assign)   int16_t     dataPercision;
     
     @property (nonatomic, copy)     NSString    *caption;
     @property (nonatomic, copy)     NSString    *fieldName;

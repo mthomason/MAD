@@ -193,17 +193,23 @@
     return objectForField;
 }
 
+// WTF: What is happening here.
 - (id)objectAtIndex:(NSUInteger)index {
     NSUInteger sortedIndex = [self sortedIndexForIndex:index];
     
     NSMutableDictionary *data;
     data = [[NSMutableDictionary alloc] initWithCapacity:(self.columnKeys).count];
-    for (NSString *fieldKey in self.columnKeys) {
-        NSArray *dataInColumn = self.columns[fieldKey];
-// FIXME: what is this?
-        NSAssert(NO, @"Remove after testing this warning.");
-        id objectForField = dataInColumn[sortedIndex];
-        data[fieldKey] = objectForField;
+    NSArray *dataInColumn;
+    NSString *fieldKey, *key;
+    for (fieldKey in self.columnKeys) {
+        key = fieldKey;
+        if (key.length > 0) {
+            dataInColumn = self.columns[key];
+            // FIXME: what is this?
+            NSAssert(NO, @"Remove after testing this warning.");
+            id objectForField = dataInColumn[sortedIndex];
+            data[key] = objectForField;
+        }
     }
     return data;
 }

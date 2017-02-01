@@ -22,9 +22,9 @@
     - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
     - (BOOL)didToggleHumanReadable;
     - (BOOL)didToggleShowErrorMessages;
-    - (void)didChangeSymbolHeight:(NSInteger)symbolHeight;
+    - (void)didChangeSymbolHeight:(int16_t)symbolHeight;
     - (void)setInput:(NSString *)input;
-    - (void)setBorderWidth:(NSInteger)borderWidth;
+    - (void)setBorderWidth:(int16_t)borderWidth;
     - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle;
     - (void)setSampleData:(NSArray *)sampleData;
 

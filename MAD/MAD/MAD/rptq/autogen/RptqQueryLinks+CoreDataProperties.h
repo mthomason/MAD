@@ -18,10 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqQueryLinks *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *fieldleft;
-@property (nullable, nonatomic, copy) NSString *fieldright;
+@property (nullable, nonatomic, copy) NSString *fieldLeftID;
+@property (nullable, nonatomic, copy) NSString *fieldRightID;
 @property (nonatomic) int64_t identifier;
-@property (nonatomic) int16_t jointypeenum;
+@property (nonatomic) int16_t type;
 @property (nullable, nonatomic, copy) NSString *tableleft;
 @property (nullable, nonatomic, copy) NSString *tableright;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;

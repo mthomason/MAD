@@ -76,25 +76,25 @@
         
         case MADDatabaseTypeMySQL:
         case MADDatabaseTypeSqlite3:
-            result = self.database.copy;
+            result = self.dbname.copy;
             break;
         
         case MADDatabaseTypeTDS:
-            result = self.database.copy;
+            result = self.dbname.copy;
             break;
 
         case MADDatabaseTypeUnknown: {
             
-            if ([self.driver_type isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
-                result = self.database.copy;
+            if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
+                result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
                 
-            } else if ([self.driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
-                result = self.database.copy;
+            } else if ([self.driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
+                result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
                 
-            } else if ([self.driver_type isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
-                result = self.database.copy;
+            } else if ([self.driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
+                result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
                 
             }
@@ -122,7 +122,7 @@
 + (NSArray <RptqDatabaseCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
     NSSortDescriptor *sort;
-    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driver_type))
+    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))
                                          ascending: YES];
     NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
     request.sortDescriptors = sortDescriptors;
@@ -137,10 +137,10 @@
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********   RptqDatabaseCredentals  *********\n"];
     [description appendFormat:@"Identifier:             %lld\n",    self.identifier];
-    [description appendFormat:@"Type:                   %@\n",      self.driver_type];
-    [description appendFormat:@"MySQL host:             %@\n",      self.host];
-    [description appendFormat:@"MySQL database:         %@\n",      self.database];
-    [description appendFormat:@"MySQL Port:             %lld\n",    self.port];
+    [description appendFormat:@"Type:                   %@\n",      self.driverID];
+    [description appendFormat:@"Host:                   %@\n",      self.host];
+    [description appendFormat:@"Database:               %@\n",      self.dbname];
+    [description appendFormat:@"Port:                   %lld\n",    self.port];
     [description appendFormat:@"*********   RptqDatabaseCredentals  *********"];
     return description;
 }

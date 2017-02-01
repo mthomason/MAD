@@ -54,9 +54,9 @@
                 leftValue = [database newSafeQueryField: leftField.databaseSchemaField.name
                                                andTable: leftTableName];
                 
-            } else if (queryPredicate.fieldleftpred != nil) {
+            } else if (queryPredicate.leftFieldID != nil) {
                 
-                leftValue = queryPredicate.fieldleftpred;
+                leftValue = queryPredicate.leftFieldID;
                 
             }
             
@@ -69,14 +69,14 @@
                 rightValue = [database newSafeQueryField: rightField.databaseSchemaField.name
                                                 andTable: rightTableName];
                 
-            } else if (queryPredicate.fieldrightpred != nil) {
+            } else if (queryPredicate.rightFieldID != nil) {
                 
                 RptqQueryField *leftField = queryPredicate.hasLeftField;
                 MADDataType dataType = leftField.databaseSchemaField.dataType;
                 
-                NSString *fieldrightpred = queryPredicate.fieldrightpred;
-                rightValue = [MTDatabaseField isNumeric:dataType] ? fieldrightpred :
-                [[NSString alloc] initWithFormat: @"\"%@\"", fieldrightpred];
+                NSString *rightFieldID = queryPredicate.rightFieldID;
+                rightValue = [MTDatabaseField isNumeric:dataType] ? rightFieldID :
+                [[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID];
             }
             NSString *symbolForComparson = [queryPredicate symbolForComparson];
             [result appendFormat:@"\t(%@ %@ %@)", leftValue, symbolForComparson, rightValue];

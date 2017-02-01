@@ -364,8 +364,8 @@
                 
                 MADDataType fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
                 databaseField.fieldType = fieldType;
-                databaseField.width = (NSUInteger)dataColumn.dataLength;
-                databaseField.decimals = (NSUInteger)dataColumn.dataPercision;
+                databaseField.width = dataColumn.dataLength;
+                databaseField.decimals = dataColumn.dataPercision;
                 databaseField.primaryKey = dataColumn.isPrimaryKey;
             }
         }

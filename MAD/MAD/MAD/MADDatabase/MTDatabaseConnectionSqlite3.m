@@ -34,7 +34,7 @@
     id dbConnection;
     //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
     
-    NSString *databaseFilename = credentals.database.copy;
+    NSString *databaseFilename = credentals.dbname.copy;
     
     // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
     //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.

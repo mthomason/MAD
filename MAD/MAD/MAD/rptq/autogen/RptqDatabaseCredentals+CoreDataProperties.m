@@ -14,10 +14,10 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseCredentals"];
 }
 
-@dynamic driver_type;
+@dynamic driverID;
 @dynamic identifier;
 @dynamic inUse;
-@dynamic database;
+@dynamic dbname;
 @dynamic host;
 @dynamic port;
 @dynamic server;

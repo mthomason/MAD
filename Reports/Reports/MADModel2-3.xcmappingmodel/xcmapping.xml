@@ -126,14 +126,15 @@ EwcIExQZGiInLC0wMTU6Oz5CRkhVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5h
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z223"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z117">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 3</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">4</attribute>
+        <attribute name="mappingnumber" type="int16">6</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementChart</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z299 z414 z230 z260 z247 z127 z463 z337 z358 z309 z214 z426 z444 z427 z298 z418"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z247 z463 z309 z214 z427 z298 z418 z260 z358 z230 z414 z444 z426 z299 z127 z337"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z327"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z118">
@@ -284,22 +285,22 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
     <object type="XDDEVENTITYMAPPING" id="z143">
         <attribute name="sourcename" type="string">RptqDocument</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">16</attribute>
+        <attribute name="mappingnumber" type="int16">1</attribute>
         <attribute name="destinationname" type="string">RptqDocument</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z136 z194 z119 z201 z422 z367 z257 z459 z216 z274"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z331 z312 z339 z105 z278 z103"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z422 z367 z119 z459 z257 z274 z201 z136 z216 z194"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z105 z103 z331 z278 z312 z339"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z144">
         <attribute name="sourcename" type="string">RptqDocumentSection</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">15</attribute>
+        <attribute name="mappingnumber" type="int16">16</attribute>
         <attribute name="destinationname" type="string">RptqDocumentSection</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z114 z464 z360 z392 z369 z162 z448 z328 z303 z107 z272 z126 z147 z344 z289 z156"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z391 z437 z377 z209 z449 z210 z409"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z464 z147 z289 z360 z448 z114 z369 z162 z272 z107 z303 z392 z328 z126 z156 z344"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z437 z377 z391 z409 z210 z209 z449"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z145">
         <attribute name="name" type="string">designerSizeWidth</attribute>
@@ -329,14 +330,15 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z285"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z150">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 10</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">10</attribute>
+        <attribute name="mappingnumber" type="int16">12</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementLabelLink</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z354 z335 z152 z351 z432 z222 z137 z202 z294 z297 z307 z171 z462 z226 z224 z279 z206 z372"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z137 z351 z171 z372 z307 z279 z354 z297 z224 z335 z294 z222 z462 z206 z432 z226 z202 z152"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z350"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z151">
@@ -446,12 +448,12 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
     <object type="XDDEVENTITYMAPPING" id="z170">
         <attribute name="sourcename" type="string">RptqDocumentSectionRows</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">13</attribute>
+        <attribute name="mappingnumber" type="int16">14</attribute>
         <attribute name="destinationname" type="string">RptqDocumentSectionRows</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z446 z366"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z193 z141"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z366 z446"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z141 z193"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z171">
         <attribute name="name" type="string">fontname</attribute>
@@ -495,14 +497,15 @@ NgcIExQZGiIuMzQ3ODxBQkVJTVJVWVxdYmVpbG1ydXl8fYKFiYyNkpWZnJ2ipamsrbK1uby9v1UkbnVs
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z315"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z179">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 4</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">5</attribute>
+        <attribute name="mappingnumber" type="int16">7</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementFormula</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z457 z349 z388 z258 z474 z399 z476 z398 z451 z458 z324 z146 z284 z334 z165 z382 z169 z396 z306 z450 z246 z182"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z284 z388 z399 z334 z476 z165 z349 z398 z146 z182 z382 z396 z258 z451 z458 z169 z246 z474 z450 z324 z457 z306"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z322 z373"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z180">
@@ -531,8 +534,8 @@ IgcIExQZGiIqLzAzNDg9PkFFSU5RVVhZXmFlaGlucXV4eXtVJG51bGzVCQoLDA0ODxAREllOU09wZXJh
         <attribute name="destinationname" type="string">RptqDatabaseSchemaTable</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z455 z270 z290 z353 z219"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z402 z347 z177"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z290 z219 z455 z270 z353"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z177 z347 z402"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z184">
         <attribute name="name" type="string">weight</attribute>
@@ -643,15 +646,16 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z340"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z204">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 9</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">3</attribute>
+        <attribute name="mappingnumber" type="int16">5</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementBarcode</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z256 z155 z231 z280 z282 z428 z371 z291 z342 z138 z269 z313 z174 z470 z343 z287 z417 z346 z408 z363 z172 z292 z259 z125 z192 z187 z469 z364 z438 z419 z121 z424 z403 z225 z213 z243"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z111 z416 z255"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z174 z428 z342 z280 z125 z371 z313 z438 z192 z121 z231 z346 z363 z225 z282 z403 z343 z424 z469 z419 z243 z138 z213 z155 z292 z187 z269 z417 z364 z256 z408 z291 z470 z287 z172 z259"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z255 z111 z416"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z205">
         <attribute name="autogenerateexpression" type="bool">1</attribute>
@@ -746,14 +750,15 @@ HQcIExQZGiIpLi8yMzc8PUBESE1QVFdYXWBkZ2hqVSRudWxs1QkKCwwNDg8QERJZTlNPcGVyYW5kXk5T
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z150"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z223">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 6</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">6</attribute>
+        <attribute name="mappingnumber" type="int16">8</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementGroupKey</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z386 z242 z116 z381 z233 z196 z308 z237 z397 z167 z245 z361 z244 z318 z330 z181 z325"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z381 z237 z167 z318 z330 z242 z181 z361 z386 z196 z233 z245 z244 z116 z397 z325 z308"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z161"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z224">
@@ -782,15 +787,16 @@ NgcIExQZGiIuMzQ3ODxBQkVJTVJVWVxdYmVpbG1ydXl8fYKFiYyNkpWZnJ2ipamsrbK1uby9v1UkbnVs
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z441"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z228">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 5</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">2</attribute>
+        <attribute name="mappingnumber" type="int16">4</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementAggregate</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z293 z120 z378 z197 z198 z132 z133 z215 z261 z461 z218 z348 z276 z443 z229 z423 z118 z271 z130"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z273 z445 z135"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z276 z443 z261 z229 z218 z378 z118 z423 z271 z133 z197 z130 z461 z215 z198 z120 z293 z132 z348"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z445 z135 z273"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z229">
         <attribute name="valueexpressiondata" type="binary">YnBsaXN0MDDUAQIDBAUGSktYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8Q
@@ -1113,12 +1119,12 @@ IgcIExQZGiIqLzAzNDg9PkFFSU5RVVhZXmFlaGlucXV4eXtVJG51bGzVCQoLDA0ODxAREllOU09wZXJh
     <object type="XDDEVENTITYMAPPING" id="z285">
         <attribute name="sourcename" type="string">RptqQuery</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">14</attribute>
+        <attribute name="mappingnumber" type="int16">15</attribute>
         <attribute name="destinationname" type="string">RptqQuery</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z151 z332 z163 z389"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z380 z333 z142 z249 z288 z180 z149 z134"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z163 z389 z332 z151"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z142 z180 z134 z249 z288 z380 z149 z333"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z286">
         <attribute name="name" type="string">fieldleft</attribute>
@@ -1293,12 +1299,12 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
     <object type="XDDEVENTITYMAPPING" id="z315">
         <attribute name="sourcename" type="string">RptqQueryField</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">12</attribute>
+        <attribute name="mappingnumber" type="int16">13</attribute>
         <attribute name="destinationname" type="string">RptqQueryField</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
         <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z178"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z316 z175 z304 z102 z326 z166 z302 z195 z128 z185 z173 z440"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z326 z166 z304 z128 z185 z173 z316 z302 z102 z195 z175 z440"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z316">
         <attribute name="autogenerateexpression" type="bool">1</attribute>
@@ -1308,12 +1314,12 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
     <object type="XDDEVENTITYMAPPING" id="z317">
         <attribute name="sourcename" type="string">RptqDatabase</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">11</attribute>
+        <attribute name="mappingnumber" type="int16">2</attribute>
         <attribute name="destinationname" type="string">RptqDatabase</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z468 z412 z220"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z473 z239 z406 z456"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z412 z220 z468"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z473 z456 z239 z406"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z318">
         <attribute name="valueexpressiondata" type="binary">YnBsaXN0MDDUAQIDBAUGW1xYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8Q
@@ -1329,8 +1335,8 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
         <attribute name="destinationname" type="string">RptqQueryGroup</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z433 z184 z385"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z420 z205 z375"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z433 z385 z184"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z375 z420 z205"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z320">
         <attribute name="name" type="string">width</attribute>
@@ -1355,8 +1361,8 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
         <attribute name="destinationname" type="string">RptqDatabaseSchemaField</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z235 z355 z251 z200 z311 z320 z387 z104 z305"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z158 z356 z217"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z305 z235 z104 z200 z251 z311 z387 z320 z355"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z356 z158 z217"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z324">
         <attribute name="name" type="string">dropIndex</attribute>
@@ -1390,7 +1396,7 @@ EwcIExQZGiInLC0wMTU6Oz5CRkhVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5h
         <attribute name="destinationname" type="string">RptqQuerySort</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z379 z221 z265"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z265 z379 z221"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z248 z191"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z330">
@@ -1445,15 +1451,16 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z143"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z340">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 0</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">9</attribute>
+        <attribute name="mappingnumber" type="int16">11</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementLabelDataField</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z359 z199 z393 z240 z253 z368 z176 z352 z407 z405 z154 z370 z236 z189 z252 z383 z203 z266 z188"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z129 z442"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z368 z253 z393 z383 z266 z154 z199 z407 z176 z188 z203 z370 z236 z240 z359 z189 z252 z352 z405"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z442 z129"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z341">
         <attribute name="name" type="string">fontname</attribute>
@@ -1748,14 +1755,15 @@ EwcIExQZGiInLC0wMTU6Oz5CRkhVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5h
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z395"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z395">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 2</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">7</attribute>
+        <attribute name="mappingnumber" type="int16">9</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementImage</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z295 z122 z108 z431 z234 z263 z453 z190 z454 z394 z296 z241 z345 z112 z467 z436 z211"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z431 z394 z241 z345 z108 z211 z454 z263 z467 z453 z296 z112 z234 z436 z295 z122 z190"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z390"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z396">
@@ -1788,13 +1796,14 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z404"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z401">
+        <attribute name="migrationpolicyclassname" type="string"></attribute>
         <attribute name="sourcename" type="string">RptqUserCredentals</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">1</attribute>
+        <attribute name="mappingnumber" type="int16">3</attribute>
         <attribute name="destinationname" type="string">RptqDatabaseCredentals</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z384 z452 z267 z321 z148 z439 z153"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z384 z452 z153 z439 z267 z148 z321"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z140"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z402">
@@ -1813,8 +1822,8 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <attribute name="destinationname" type="string">RptqQueryTable</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z365 z400 z275 z157 z477 z186 z411 z109"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z115 z314 z168"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z477 z400 z157 z365 z411 z109 z186 z275"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z314 z168 z115"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z405">
         <attribute name="valueexpressiondata" type="binary">YnBsaXN0MDDUAQIDBAUGfX5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8Q
@@ -1854,7 +1863,7 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <attribute name="destinationname" type="string">RptqQueryPredicate</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z110 z281 z106 z160"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z110 z106 z281 z160"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z413 z336 z164"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z411">
@@ -2028,8 +2037,8 @@ CBMUGRoiJywtMDRVJG51bGzVCQoLDA0ODxAREllOU09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBOU0V4
         <attribute name="destinationname" type="string">RptqQueryLinks</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z208 z283 z123 z475 z435 z145 z212 z286 z227 z124 z264 z376"></relationship>
-        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z207 z139 z338"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z212 z475 z227 z145 z376 z283 z286 z208 z435 z124 z264 z123"></relationship>
+        <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z139 z338 z207"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z442">
         <attribute name="autogenerateexpression" type="bool">1</attribute>
@@ -2173,7 +2182,7 @@ HQcIExQZGiIpLi8yMzc8PUBESE1QVFdYXWBkZ2hqVSRudWxs1QkKCwwNDg8QERJZTlNPcGVyYW5kXk5T
         <attribute name="destinationname" type="string">RptqQueryCache</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z425 z113 z238 z434"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z113 z434 z238 z425"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z374"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z466">
@@ -2206,14 +2215,15 @@ GAcIExQZGiIoLS4xMjY7PD9DR0xPU1ZXWVUkbnVsbNUJCgsMDQ4PEBESWU5TT3BlcmFuZF5OU1NlbGVj
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z204"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z471">
+        <attribute name="migrationpolicyclassname" type="string">MADElementMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">RptqDocumentObject</attribute>
         <attribute name="sourcefilterpredicatestring" type="string">type == 1</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">8</attribute>
+        <attribute name="mappingnumber" type="int16">10</attribute>
         <attribute name="destinationname" type="string">RptqDocumentElementLabel</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z254"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z429 z460 z466 z232 z362 z262 z310 z447 z421 z415 z300 z430 z268 z341 z250 z301 z131"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z341 z232 z310 z300 z262 z460 z447 z466 z429 z301 z131 z250 z362 z430 z415 z268 z421"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z159"></relationship>
     </object>
     <object type="XDDEVATTRIBUTEMAPPING" id="z472">

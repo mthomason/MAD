@@ -18,22 +18,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentSection *> *)fetchRequest;
 
-@property (nonatomic) double height;
 @property (nonatomic) int64_t identifier;
+@property (nonatomic) int32_t numberOfRows;
+@property (nonatomic) int16_t type;
+@property (nonatomic) int16_t wrappingStyle;
+@property (nonatomic) BOOL visibility;
+@property (nonatomic) double height;
 @property (nonatomic) double layoutHeight;
-@property (nonatomic) double marginBottom;
 @property (nonatomic) double marginLeft;
 @property (nonatomic) double marginRight;
 @property (nonatomic) double marginTop;
-@property (nullable, nonatomic, copy) NSString *name;
-@property (nonatomic) int32_t numberOfRows;
-@property (nonatomic) double paddingBottom;
+@property (nonatomic) double marginBottom;
 @property (nonatomic) double paddingLeft;
 @property (nonatomic) double paddingRight;
 @property (nonatomic) double paddingTop;
-@property (nonatomic) int16_t type;
-@property (nonatomic) BOOL visibility;
-@property (nonatomic) int16_t wrappingStyle;
+@property (nonatomic) double paddingBottom;
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentSectionRows *> *hasRows;
 @property (nullable, nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nullable, nonatomic, retain) RptqDocument *inReport;
@@ -46,12 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(RptqDocumentSectionRows *)value inHasRowsAtIndex:(NSUInteger)idx;
+- (void)insertObject:(RptqDocumentSectionRows *)value
+    inHasRowsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromHasRowsAtIndex:(NSUInteger)idx;
-- (void)insertHasRows:(NSArray<RptqDocumentSectionRows *> *)value atIndexes:(NSIndexSet *)indexes;
+- (void)insertHasRows:(NSArray<RptqDocumentSectionRows *> *)value
+            atIndexes:(NSIndexSet *)indexes;
 - (void)removeHasRowsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInHasRowsAtIndex:(NSUInteger)idx withObject:(RptqDocumentSectionRows *)value;
-- (void)replaceHasRowsAtIndexes:(NSIndexSet *)indexes withHasRows:(NSArray<RptqDocumentSectionRows *> *)values;
+- (void)replaceObjectInHasRowsAtIndex:(NSUInteger)idx
+                           withObject:(RptqDocumentSectionRows *)value;
+- (void)replaceHasRowsAtIndexes:(NSIndexSet *)indexes
+                    withHasRows:(NSArray<RptqDocumentSectionRows *> *)values;
 - (void)addHasRowsObject:(RptqDocumentSectionRows *)value;
 - (void)removeHasRowsObject:(RptqDocumentSectionRows *)value;
 - (void)addHasRows:(NSOrderedSet<RptqDocumentSectionRows *> *)values;

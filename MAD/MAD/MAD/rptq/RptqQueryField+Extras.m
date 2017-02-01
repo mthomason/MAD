@@ -104,7 +104,7 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQueryField  ***********\n"];
-    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Schema field:           %@\n", self.databaseSchemaField];
     [description appendFormat:@"***********   RptqQueryField  ***********"];
     return description;

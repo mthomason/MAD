@@ -33,7 +33,7 @@
     
     dbConnection = [[self alloc] initWithHost: credentals.host
                                        server: credentals.server
-                                     database: credentals.database
+                                     database: credentals.dbname
                                       andPort: credentals.port];
     
     return dbConnection;

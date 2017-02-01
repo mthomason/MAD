@@ -1199,7 +1199,7 @@ BOOL storeEnabled() {
         
         {
             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"fieldleftpred"
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"leftFieldID"
                                                                            ascending: YES];
             NSFetchedResultsController *frc;
             frc = newFetchedResultsController(entityName, nil, sortDescriptor, self);

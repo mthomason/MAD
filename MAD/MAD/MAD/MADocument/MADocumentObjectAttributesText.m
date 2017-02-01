@@ -32,7 +32,7 @@
 }
 
 - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
-                                 fontSize:(float) fontsize
+                                 fontSize:(double) fontsize
                                      bold:(BOOL)bold
                                    italic:(BOOL)italic
                                 underline:(BOOL)underline

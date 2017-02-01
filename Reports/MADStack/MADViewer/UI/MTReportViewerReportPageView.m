@@ -214,7 +214,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
         MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:lastCacheDate];
         timeSinceRefrehLabel.text = dateStringAndInterval.former;
-        MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
+        MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).shortValue;
         
         NSTimeInterval updateLabelInSeconds = [MADDateFromTimeFormatter timeIntervalForResolution:resolution];
         

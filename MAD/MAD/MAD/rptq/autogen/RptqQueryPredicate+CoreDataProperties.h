@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqQueryPredicate *> *)fetchRequest;
 
 @property (nonatomic) int16_t comparson;
-@property (nullable, nonatomic, copy) NSString *fieldleftpred;
-@property (nullable, nonatomic, copy) NSString *fieldrightpred;
+@property (nullable, nonatomic, copy) NSString *leftFieldID;
+@property (nullable, nonatomic, copy) NSString *rightFieldID;
 @property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
 @property (nullable, nonatomic, retain) RptqQueryField *hasRightField;

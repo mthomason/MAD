@@ -381,12 +381,12 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     return showErrorMessages;
 }
 
-- (void)didChangeSymbolHeight:(NSInteger)symbolHeight {
+- (void)didChangeSymbolHeight:(int16_t)symbolHeight {
     self.barcode.height = symbolHeight;
     [self updateBarcode];
 }
 
-- (void)setBorderWidth:(NSInteger)borderWidth {
+- (void)setBorderWidth:(int16_t)borderWidth {
     self.barcode.borderWidth = borderWidth;
     [self updateBarcode];
 }

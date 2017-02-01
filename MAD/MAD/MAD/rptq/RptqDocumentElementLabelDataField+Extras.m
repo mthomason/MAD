@@ -78,8 +78,8 @@
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Identifier:             %lld\n", self.identifier];
     [description appendFormat:@"Text:                   %@\n", self.text];
-    [description appendFormat:@"Table:                  %@\n", self.table];
-    [description appendFormat:@"Field:                  %@\n", self.field];
+    [description appendFormat:@"Table:                  %@\n", self.tableID];
+    [description appendFormat:@"Field:                  %@\n", self.fieldID];
     [description appendFormat:@"*********"];
     return description;
 }

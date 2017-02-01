@@ -406,11 +406,10 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                     UIStepper *stepper = [[UIStepper alloc] init];
                     [stepper setWraps:NO];
                     stepper.value = symbolHeight;
-                    CGFloat centerY = CGRectGetMidY(cell.contentView.bounds);
-                    CGFloat correctX = CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f;
+                    CGPoint newCenter = CGPointMake(CGRectGetMidY(cell.contentView.bounds),
+                                                  CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f);
                     [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
                     [cell.contentView addSubview:stepper];
-                    CGPoint newCenter = CGPointMake(correctX, centerY);
                     stepper.center = newCenter;
                     cell.tag = tagWithStepper;
                 }
@@ -556,7 +555,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
     cell.textLabel.attributedText = attributedString;
     
-    [self.delegate setBorderWidth: (NSUInteger)floor(sender.value)];
+    [self.delegate setBorderWidth: (int16_t)floor(sender.value)];
 }
 
 - (void)didChangeSymbolHeight:(UIStepper *)sender {
@@ -565,7 +564,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     NSIndexPath *path = [NSIndexPath indexPathForRow:2 inSection:1];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
     cell.textLabel.attributedText = attributedString;
-    [self.delegate didChangeSymbolHeight:(NSUInteger)floor(sender.value)];
+    [self.delegate didChangeSymbolHeight: (int16_t)floor(sender.value)];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

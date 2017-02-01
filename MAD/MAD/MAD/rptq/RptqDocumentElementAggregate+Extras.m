@@ -222,9 +222,9 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Identifier:             %lld\n", self.identifier];
-    [description appendFormat:@"Function:               %lld\n", self.functionType];
-    [description appendFormat:@"Group number:           %lld\n", self.groupNumber];
-    [description appendFormat:@"Group type:             %lld\n", self.groupType];
+    [description appendFormat:@"Function:               %hd\n", self.functionType];
+    [description appendFormat:@"Group number:           %d\n", self.groupNumber];
+    [description appendFormat:@"Group type:             %hd\n", self.groupType];
     [description appendFormat:@"*********"];
     return description;
 }

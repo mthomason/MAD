@@ -167,9 +167,9 @@
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:         %@\n", self.identifier];
-    [description appendFormat:@"Sort:               %@\n", self.sort];
-    [description appendFormat:@"Weight              %@\n", self.weight];
+    [description appendFormat:@"Identifier:         %lld\n", self.identifier];
+    [description appendFormat:@"Sort:               %d\n", self.sort];
+    [description appendFormat:@"Weight              %hd\n", self.weight];
     [description appendFormat:@"Field:              %@\n", self.hasField];
     [description appendFormat:@"Section:            %@\n", self.hasSection];
     [description appendFormat:@"Query:              %@\n", self.inQuery];

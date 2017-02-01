@@ -73,8 +73,8 @@
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = rightField;
     queryPredicate.hasLeftField     = leftField;
-    queryPredicate.fieldrightpred   = nil;
-    queryPredicate.fieldleftpred    = nil;
+    queryPredicate.rightFieldID   = nil;
+    queryPredicate.leftFieldID    = nil;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
@@ -87,8 +87,8 @@
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = nil;
     queryPredicate.hasLeftField     = leftField;
-    queryPredicate.fieldrightpred   = rightUserValue;
-    queryPredicate.fieldleftpred    = nil;
+    queryPredicate.rightFieldID   = rightUserValue;
+    queryPredicate.leftFieldID    = nil;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
@@ -101,8 +101,8 @@
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = nil;
     queryPredicate.hasLeftField     = nil;
-    queryPredicate.fieldrightpred   = rightUserValue;
-    queryPredicate.fieldleftpred    = leftUserValue;
+    queryPredicate.rightFieldID   = rightUserValue;
+    queryPredicate.leftFieldID    = leftUserValue;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
@@ -115,8 +115,8 @@
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = rightField;
     queryPredicate.hasLeftField     = nil;
-    queryPredicate.fieldrightpred   = nil;
-    queryPredicate.fieldleftpred    = leftUserValue;
+    queryPredicate.rightFieldID   = nil;
+    queryPredicate.leftFieldID    = leftUserValue;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
@@ -191,9 +191,9 @@
     [description appendFormat:@"Identifier:         %lld\n", self.identifier];
     [description appendFormat:@"Sort:               %hd\n", self.comparson];
     [description appendFormat:@"Right field:        %@\n", self.hasRightField];
-    [description appendFormat:@"Right pred:         %@\n", self.fieldrightpred];
+    [description appendFormat:@"Right pred:         %@\n", self.rightFieldID];
     [description appendFormat:@"Left field:         %@\n", self.hasLeftField];
-    [description appendFormat:@"Left pred:          %@\n", self.fieldleftpred];
+    [description appendFormat:@"Left pred:          %@\n", self.leftFieldID];
     [description appendFormat:@"Query:              %@\n", self.inQuery];
     [description appendFormat:@"*********"];
     return description;

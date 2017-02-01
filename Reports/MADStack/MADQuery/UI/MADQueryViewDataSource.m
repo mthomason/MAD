@@ -376,8 +376,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqQueryGroup *fromGroup = [_queryGroupsController objectAtIndexPath: fromIndex],
                            *toGroup =   [_queryGroupsController objectAtIndexPath: toIndex];
             
-            int64_t fromWeight   = toGroup.weight;
-            int64_t toWeight     = fromGroup.weight;
+            int16_t fromWeight   = toGroup.weight;
+            int16_t toWeight     = fromGroup.weight;
             
             fromGroup.weight = fromWeight;
             toGroup.weight = toWeight;
@@ -422,7 +422,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
                 
-                NSString *databaseType = database.ownedByUser.driver_type.copy;
+                NSString *databaseType = database.ownedByUser.driverID.copy;
                 RptqDatabaseCredentals *user = database.ownedByUser;
                 id schemaName = [user copyDatabaseSchemaName];
                 
@@ -466,10 +466,10 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqQueryLinks *links = [self.queryLinksController objectAtIndexPath: indexPathLinks];
             
             NSString *leftString = [NSString newStringFieldDisplayWithTable: links.tableleft
-                                                                   andField: links.fieldleft];
+                                                                   andField: links.fieldLeftID];
             
             NSString *rightString = [NSString newStringFieldDisplayWithTable: links.tableright
-                                                                    andField: links.fieldright];
+                                                                    andField: links.fieldRightID];
             
             NSString *linksDescription = [links copyLinkDescription];
             NSAttributedString *message;
@@ -512,14 +512,14 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqQueryPredicate *predicate = [self.queryPredicatesController objectAtIndexPath: indexPathPredicates];
 
             NSString *leftFieldDisplay, *rightFieldDisplay, *symbol = [predicate symbolForDisplay];
-            if (predicate.fieldleftpred != nil) {
-                leftFieldDisplay = predicate.fieldleftpred;
+            if (predicate.leftFieldID != nil) {
+                leftFieldDisplay = predicate.leftFieldID;
             } else {
                 leftFieldDisplay = [predicate.hasLeftField toString];
             }
             
-            if (predicate.fieldrightpred != nil) {
-                rightFieldDisplay = predicate.fieldrightpred;
+            if (predicate.rightFieldID != nil) {
+                rightFieldDisplay = predicate.rightFieldID;
             } else {
                 rightFieldDisplay = [predicate.hasRightField toString];
             }

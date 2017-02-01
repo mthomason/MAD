@@ -14,10 +14,10 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryLinks"];
 }
 
-@dynamic fieldleft;
-@dynamic fieldright;
+@dynamic fieldLeftID;
+@dynamic type;
 @dynamic identifier;
-@dynamic jointypeenum;
+@dynamic fieldRightID;
 @dynamic tableleft;
 @dynamic tableright;
 @dynamic hasLeftField;

@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElementLabelDataField *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *field;
-@property (nullable, nonatomic, copy) NSString *table;
+@property (nullable, nonatomic, copy) NSString *fieldID;
+@property (nullable, nonatomic, copy) NSString *tableID;
 @property (nullable, nonatomic, copy) NSString *text;
 @property (nullable, nonatomic, retain) RptqQueryField *referencesQueryField;
 

@@ -433,7 +433,7 @@ static inline NSInteger MADDocumentSectionIndexLevel(NSInteger row, NSInteger bo
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"********** RptqDocumentSection **********\n"];
     [description appendFormat:@"Identifier:             %lld\n", self.identifier];
-    [description appendFormat:@"Type:                   %@\n", self.type];
+    [description appendFormat:@"Type:                   %hd\n", self.type];
     [description appendFormat:@"********** RptqDocumentSection **********"];
     return description;
 }

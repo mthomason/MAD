@@ -288,20 +288,11 @@
     document.hasDetailSection.hasRows = hasRows5;
     detailSectionRow.inSection = document.hasDetailSection;
     
-    NSNumber *headerType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeReportHeader];
-    document.hasReportHeaderSection.type = headerType;
-    
-    NSNumber *footerType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeReportFooter];
-    document.hasReportFooterSection.type = footerType;
-
-    NSNumber *pageHeaderType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypePageHeader];
-    document.hasPageHeaderSection.type = pageHeaderType;
-    
-    NSNumber *pageFooterType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypePageFooter];
-    document.hasPageFooterSection.type = pageFooterType;
-    
-    NSNumber *bodyType = [[NSNumber alloc] initWithShort: MADDocumentSectionTypeBody];
-    document.hasDetailSection.type = bodyType;
+    document.hasReportHeaderSection.type = MADDocumentSectionTypeReportHeader;
+    document.hasReportFooterSection.type = MADDocumentSectionTypeReportFooter;
+    document.hasPageHeaderSection.type = MADDocumentSectionTypePageHeader;
+    document.hasPageFooterSection.type = MADDocumentSectionTypePageFooter;
+    document.hasDetailSection.type = MADDocumentSectionTypeBody;
 
     [document.hasReportHeaderSection    setInterfaceHeight: 44.0000f];
     [document.hasReportFooterSection    setInterfaceHeight: 44.0000f];
@@ -426,7 +417,7 @@
     RptqDatabaseCredentals *userCredentals = [RptqDatabaseCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
-    userCredentals.driver_type = databaseIdentifier;
+    userCredentals.driverID = databaseIdentifier;
 
     if (database.databaseConnection != nil) {
         
@@ -437,14 +428,14 @@
                 userCredentals.port = databaseConnection.port;
                 userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
                 userCredentals.host = databaseConnection.server.copy;
-                userCredentals.database = databaseConnection.database.copy;
+                userCredentals.dbname = databaseConnection.database.copy;
                 break;
             }
 
             case MADDatabaseTypeSqlite3: {
                 MADDatabaseConnection *databaseConnection;
                 databaseConnection = database.databaseConnection;
-                userCredentals.database = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
+                userCredentals.dbname = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
                 userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
                 break;
             }
@@ -456,7 +447,7 @@
                 userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
                 userCredentals.server = databaseConnection.server.copy;
                 userCredentals.host = databaseConnection.server.copy;
-                userCredentals.database = databaseConnection.database.copy;
+                userCredentals.dbname = databaseConnection.database.copy;
                 break;
             }
                 
