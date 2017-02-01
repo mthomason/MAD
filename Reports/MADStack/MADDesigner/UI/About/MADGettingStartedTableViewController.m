@@ -44,25 +44,33 @@
             break;
             
         case 1:
-            cell.label.text = @"MAD is the Mobile Analytics Document from Everyday Apps.  MAD Designer allows one to create and distribute MAD files or mobile analytics documents.";
+            cell.label.text = @"MAD is the Mobile Analytics Document from Everyday Apps.  "
+                              @"MAD Designer allows one to create and distribute MAD files or "
+                              @"mobile analytics documents.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 2:
-            cell.label.text = @"MAD Designer is for analyst to create and distribute analytics documents that reference their companies data.  To use MAD Designer, you will need to have access to your companies database.  MAD Designer requires the skills of a business analyst and understanding of your companies database.";
+            cell.label.text = @"MAD Designer is for analyst to create and distribute analytics "
+                              @"documents that reference their companies data.  To use "
+                              @"MAD Designer, you will need to have access to your companies "
+                              @"database.  MAD Designer requires the skills of a business analyst "
+                              @"and understanding of your companies database.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 3:
-            cell.label.text = @"MAD Viewer exist for users who do not design documents to view the MAD files with live data.  Get MAD Viewer from the App Store.";
+            cell.label.text = @"MAD Viewer exist for users who do not design documents to view the"
+                              @"MAD files with live data.  Get MAD Viewer from the App Store.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 4:
-            cell.label.text = @"MAD Designer currently supports MySQL and Microsoft SQL Server databases.  It does this using native database drivers.";
+            cell.label.text = @"MAD Designer currently supports MySQL and Microsoft SQL Server "
+                              @"databases.  It does this using native database drivers.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             break;
@@ -92,7 +100,11 @@
             break;
             
         case 9:
-            cell.label.text = @"Attach your datasource as you are creating a new document.  As the document is being created, you will be prompted for the datasource credentials.  If you choose, these credentials are stored in your keychain; they are never stored inside the MAD file.";
+            cell.label.text = @"Attach your datasource as you are creating a new document.  "
+                              @"As the document is being created, you will be prompted for the "
+                              @"datasource credentials.  If you choose, these credentials are "
+                              @"stored in your keychain; they are never stored inside the "
+                              @"MAD file.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
@@ -104,7 +116,11 @@
             break;
             
         case 11:
-            cell.label.text = @"Once a MAD file is created, you may design a query for it.  The query builder allows you to add tables, link those tables, group the tables, and add predicates.  This feature requires advanced database or data analysis skills.  The user is required to design queries that are sane and efficient.";
+            cell.label.text = @"Once a MAD file is created, you may design a query for it.  "
+                              @"The query builder allows you to add tables, link those tables, "
+                              @"group the tables, and add predicates.  This feature requires "
+                              @"advanced database or data analysis skills.  The user is required "
+                              @"to design queries that are sane and efficient.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
@@ -116,7 +132,8 @@
             break;
 
         case 13:
-            cell.label.text = @"The designer allows the user to layout and format fields from the database query.";
+            cell.label.text = @"The designer allows the user to layout and format fields from the"
+                              @"database query.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
@@ -128,7 +145,8 @@
             break;
 
         case 15:
-            cell.label.text = @"The viewer allows you to render and refresh your MAD file.  Once rendered, you may print and send to to PDF.";
+            cell.label.text = @"The viewer allows you to render and refresh your MAD file.  Once "
+                              @"rendered, you may print and send to to PDF.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             break;

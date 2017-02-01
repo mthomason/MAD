@@ -46,7 +46,7 @@
     NSArray <RptqDatabaseCredentals *> *connections;
     connections = [RptqDatabaseCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
     RptqDatabaseCredentals *userCredentals = connections[0];
-    NSString *databaseDriverType = userCredentals.database_driver_type;
+    NSString *databaseDriverType = userCredentals.driver_type;
 
     UITableViewCell *tableViewCell;
     if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {

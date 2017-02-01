@@ -37,7 +37,7 @@
                                    italic:(BOOL)italic
                                 underline:(BOOL)underline
                                    strike:(BOOL)strike
-                      horizontalAlignment:(NSTextAlignment)horizontalAlignment {
+                      horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment {
     
     if (self = [super init]) {
     

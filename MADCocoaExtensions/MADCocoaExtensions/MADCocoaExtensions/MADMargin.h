@@ -10,15 +10,15 @@
 #define MAD_MADMarginStyle_h
 
 struct MADLayoutMargin {
-    CGFloat left;
-    CGFloat right;
-    CGFloat top;
-    CGFloat bottom;
+    double left;
+    double right;
+    double top;
+    double bottom;
 };
 typedef struct MADLayoutMargin MADLayoutMargin;
 
-static inline MADLayoutMargin MADLayoutMarginMake(float, float, float, float);
-static inline MADLayoutMargin MADLayoutMarginMake(float l, float r, float t, float b) {
+static inline MADLayoutMargin MADLayoutMarginMake(double, double, double, double);
+static inline MADLayoutMargin MADLayoutMarginMake(double l, double r, double t, double b) {
     MADLayoutMargin m;
     m.left = l;
     m.right = r;

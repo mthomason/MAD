@@ -10,7 +10,7 @@
         <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseCredentals" inverseName="inDatabase" inverseEntity="RptqDatabaseCredentals" syncable="YES"/>
     </entity>
     <entity name="RptqDatabaseCredentals" representedClassName="RptqDatabaseCredentals" syncable="YES">
-        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="driver_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
@@ -293,6 +293,7 @@
     </entity>
     <elements>
         <element name="RptqDatabase" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDatabaseCredentals" positionX="0" positionY="0" width="0" height="0"/>
         <element name="RptqDatabaseSchemaField" positionX="0" positionY="0" width="0" height="0"/>
         <element name="RptqDatabaseSchemaTable" positionX="0" positionY="0" width="0" height="0"/>
         <element name="RptqDocument" positionX="0" positionY="0" width="0" height="0"/>
@@ -315,6 +316,5 @@
         <element name="RptqQueryPredicate" positionX="0" positionY="0" width="0" height="0"/>
         <element name="RptqQuerySort" positionX="0" positionY="0" width="0" height="0"/>
         <element name="RptqQueryTable" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="RptqDatabaseCredentals" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

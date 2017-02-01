@@ -52,7 +52,7 @@
         RptqDatabaseSchemaField *databaseSchemaField;
         RptqQueryTable *inQueryTable;
         
-        isLabelDataField = documentObject.isLabelDataField;
+        isLabelDataField = documentObject;
         referencesQueryField = isLabelDataField.referencesQueryField;
         databaseSchemaField = referencesQueryField.databaseSchemaField;
         
@@ -62,12 +62,12 @@
         tableName = [inQueryTable copyQueryAlias];
         
         NSString *fieldNameRaw;
-        fieldName = [database newSafeQueryField: documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.name
+        fieldName = [database newSafeQueryField: isLabelDataField.referencesQueryField.databaseSchemaField.name
                                        andTable: tableName];
         
         self.tableName = tableName;
         self.fieldName = fieldName;
-        _dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.shortValue;
+        _dataType = isLabelDataField.referencesQueryField.databaseSchemaField.dataType.shortValue;
         
     }
     return self;

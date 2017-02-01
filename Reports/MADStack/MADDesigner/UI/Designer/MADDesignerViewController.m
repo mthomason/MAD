@@ -1304,16 +1304,16 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
                                                           withNumberOfGroups: query.hasQueryGroups.count];
     
-    BOOL insertNewSection = numberOfRows > section.numberOfRows.unsignedIntegerValue;
-    BOOL deleteLastSection = numberOfRows < section.numberOfRows.unsignedIntegerValue;
+    BOOL insertNewSection = (int64_t)numberOfRows > section.numberOfRows;
+    BOOL deleteLastSection =(int64_t) numberOfRows < section.numberOfRows;
     
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: section];
     
-    if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
+    if (section.numberOfRows == (int64_t)numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > section.numberOfRows.unsignedIntegerValue) {
+    } else if ((int64_t)numberOfRows > section.numberOfRows) {
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend;
@@ -1327,7 +1327,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         [hasRows addObject:newRowToAppend];
         section.hasRows = hasRows;
         
-    } else if (numberOfRows < section.numberOfRows.unsignedIntegerValue) {
+    } else if ((int64_t)numberOfRows < section.numberOfRows) {
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
@@ -1343,8 +1343,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         }
     }
     
-    NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];
-    section.numberOfRows = numberOfRowsObject;
+    section.numberOfRows = numberOfRows;
     
     id sectionKey = [section copySectionKey];
     UICollectionView *collectionView = self.sectionViewsDictionary[sectionKey];
@@ -1600,7 +1599,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
     RptqDocumentElement *documentObject;
     documentObject = [self.document.managedObjectContext objectWithID:cell.objectIdTag];
-    return documentObject.type.shortValue;
+    return documentObject.type;
 }
 
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
@@ -1656,7 +1655,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                 
                 RptqDocumentElement *objectToEdit = hasObjects[i];
                 
-                switch (objectToEdit.type.shortValue) {
+                switch (objectToEdit.type) {
                         
                     case MTDocumentObjectTypeAggregate: {
                         NSManagedObjectID *objectID  = objectToEdit.objectID.copy;
@@ -1958,7 +1957,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
     cell.delegate = self;
     
-    CGSize documentObjectSize = [documentObject size];
+    CGSize documentObjectSize = [documentObject sizeCalculated];
     CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                   documentObjectSize.width, documentObjectSize.height);
     
@@ -2326,12 +2325,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
 
         documentObject = (RptqDocumentElement *)[objectContext objectWithID:attributes.objectID];
-
-        NSNumber *n = [[NSNumber alloc] initWithFloat: attributes.frame.origin.x];
-        documentObject.originx = n;
-
-        n = [[NSNumber alloc] initWithFloat: attributes.frame.origin.y];
-        documentObject.originy = n;
+        [documentObject setOriginPoint:attributes.frame.origin];
 
         //documentObject.sizewidth = @(attributes.frame.size.width);
         //documentObject.sizeheight = @(attributes.frame.size.height);
@@ -2397,25 +2391,19 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         switch (resizeAspect.direction) {
 
             case horizontal:
-                length = [[NSNumber alloc] initWithFloat:documentObject.sizewidth.floatValue *
-                                                            gestureRecognizer.scale];
-                documentObject.sizewidth = length;
+                [documentObject setSizeWidth:documentObject.sizeContentView.width * gestureRecognizer.scale];
                 break;
 
             case vertical:
-                length = [[NSNumber alloc] initWithFloat:documentObject.sizeheight.floatValue *
-                                                            gestureRecognizer.scale];
-                documentObject.sizeheight = length;
+                [documentObject setSizeHeight:documentObject.sizeContentView.height * gestureRecognizer.scale];
                 break;
                 
-            default:
-                length = [[NSNumber alloc] initWithFloat:documentObject.sizewidth.floatValue *
-                                                            gestureRecognizer.scale];
-                documentObject.sizewidth = length;
-                length = [[NSNumber alloc] initWithFloat:documentObject.sizeheight.floatValue *
-                                                            gestureRecognizer.scale];
-                documentObject.sizeheight = length;
+            default: {
+                CGSize s = documentObject.sizeContentView;
+                [documentObject setSizeWidth:s.width * gestureRecognizer.scale
+                                      height:s.height * gestureRecognizer.scale];
                 break;
+            }
         
         }
 
@@ -2506,10 +2494,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                 [label dimView];
                 
                 
-                _viewControllerSectionLayoutSettings.initalHeightValue = section.height.floatValue;
-                _viewControllerSectionLayoutSettings.initalVisibility = section.visibility.boolValue;
+                _viewControllerSectionLayoutSettings.initalHeightValue = section.height;
+                _viewControllerSectionLayoutSettings.initalVisibility = section.visibility;
                 _viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
-                _viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows.unsignedIntegerValue;
+                _viewControllerSectionLayoutSettings.initalNumberOfRows = (NSUInteger)section.numberOfRows;
                 [_viewControllerSectionLayoutSettings updateDisplay];
                 
                 UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
@@ -3134,7 +3122,7 @@ END_deselectElementView:;
 
             RptqDocumentSection *documentSection = [private objectWithID:sectionViewObjectIdTag];
             NSManagedObjectID *documentSectionKey = [documentSection copySectionKey];
-            CGFloat documentSectionHeight = documentSection.height.floatValue;
+            CGFloat documentSectionHeight = documentSection.height;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
@@ -3157,7 +3145,7 @@ END_deselectElementView:;
                     RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
                     RptqDocumentElement *documentObject = [managedObjectContext objectWithID:pieceObjectIdTag];
                     
-                    CGSize documentObjectSize = documentObject.size;
+                    CGSize documentObjectSize = [documentObject sizeCalculated];
                     
                     la.frame = CGRectMake(locationInSection.x, locationInSection.y,
                                           documentObjectSize.width, documentObjectSize.height);
@@ -3185,9 +3173,7 @@ END_deselectElementView:;
                     RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
 
                     CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
-                    CFNumberRef h = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &sectionViewIntrinsicContentSizeHeight);
-                    documentSectionBlock.height = (__bridge NSNumber *)(h);
-                    CFRelease(h);
+                    documentSectionBlock.height = sectionViewIntrinsicContentSizeHeight;
                     
                     NSError * __autoreleasing *error = nil;
                     [managedObjectContext save:error];
@@ -3232,7 +3218,7 @@ END_deselectElementView:;
         RptqDocumentSection *documentSection;
         documentSection = [private objectWithID:objectId];
         key = [documentSection copySectionKey];
-        height = documentSection.height.floatValue;
+        height = documentSection.height;
     }];
     
     NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];

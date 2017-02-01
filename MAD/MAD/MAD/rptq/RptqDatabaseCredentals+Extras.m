@@ -121,8 +121,10 @@
 
 + (NSArray <RptqDatabaseCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    NSSortDescriptor *sort;
+    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driver_type))
+                                         ascending: YES];
+    NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
     request.sortDescriptors = sortDescriptors;
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];

@@ -15,7 +15,7 @@
 
 @interface MTObject ()
 
-@property (readwrite, atomic, strong) id object;
+@property (readwrite, nonatomic, strong) id object;
 
 @end
 

@@ -16,6 +16,7 @@
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADTextStyle.h>
 
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
@@ -24,6 +25,7 @@
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MAD/MADocumentObjectAttributesText.h>
+#import <MAD/MTAlignment.h>
 
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
@@ -140,10 +142,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject {
     
-    if (self = [self initWithFrame: MADRectOfSize(documentObject.size)]) {
+    CGSize sizeCalculated = [documentObject sizeCalculated];
+    if (self = [self initWithFrame: MADRectOfSize(sizeCalculated)]) {
         
         MTElementCanvas *canvasView;
-        canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(documentObject.size)];
+        canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(sizeCalculated)];
         canvasView.autoresizingMask = MADViewAutoresizingFlexable();
         canvasView.backgroundColor = [UIColor clearColor];
         canvasView.canvasDelegate = self;
@@ -237,12 +240,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
-
-    NSNumber *n = [[NSNumber alloc] initWithDouble:size.width];
-    documentObject.sizewidth = n;
-    
-    n = [[NSNumber alloc] initWithDouble:size.height];
-    documentObject.sizeheight = n;
+    [documentObject setSizeValue:size];
 
     NSError * __autoreleasing *error = NULL;
     [managedObjectContext save:error];
@@ -329,13 +327,17 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         }
         
         MADocumentObjectAttributesText *attributesText;
+        MADTextStyle style; MADAlignment alignment;
+        [(NSValue *)documentObject.style getValue:&style];
+        [(NSValue *)documentObject.alignment getValue:&alignment];
+        
         attributesText = [[MADocumentObjectAttributesText alloc] initWithFontName:documentObject.fontname
                                                                          fontSize:documentObject.fontsize
-                                                                             bold:documentObject.bold.boolValue
-                                                                           italic:documentObject.italic.boolValue
-                                                                        underline:documentObject.underline.boolValue
-                                                                           strike:documentObject.strike.boolValue
-                                                              horizontalAlignment:documentObject.horizontalAlignment.integerValue];
+                                                                             bold:style.bold
+                                                                           italic:style.italic
+                                                                        underline:style.underline
+                                                                           strike:style.strikethrough
+                                                              horizontalAlignment:alignment.horizontal];
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
                                                                                 attributes: attributesText.fontAttributes];

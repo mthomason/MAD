@@ -468,17 +468,18 @@ BOOL storeEnabled() {
 
                     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    NSString *key = NSStringFromSelector(@selector(name));
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: key
-                                                                                     ascending: YES];
+                    NSSortDescriptor *sort;
+                    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(name))
+                                                         ascending: YES];
                     
-                    request.sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+                    request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
 
                     MADocument *document = self.document;
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: document.managedObjectContext
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
+                    NSFetchedResultsController *frc;
+                    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                              managedObjectContext: document.managedObjectContext
+                                                                sectionNameKeyPath: nil
+                                                                         cacheName: nil];
                     tvc.fetchedResultsController = frc;
                 }
             }
@@ -545,9 +546,9 @@ BOOL storeEnabled() {
                                                                                     withNumberOfGroups: query.hasQueryGroups.count];
 
                         
-                        tvc.initalHeightValue = section.height.floatValue;
-                        tvc.initalVisibility = section.visibility.boolValue;
-                        tvc.initalNumberOfRows = section.numberOfRows.unsignedIntegerValue;
+                        tvc.initalHeightValue = section.height;
+                        tvc.initalVisibility = section.visibility;
+                        tvc.initalNumberOfRows = section.numberOfRows;
                     }
                 }
     }
@@ -1435,7 +1436,7 @@ BOOL storeEnabled() {
         
         __block id objectToDelete = nil;
         [hasQueryTables enumerateObjectsUsingBlock:^(RptqQueryTable * _Nonnull hasTable, BOOL * _Nonnull stop) {
-            if (table.identifier.unsignedIntegerValue == hasTable.identifier.unsignedIntegerValue) {
+            if (table.identifier == hasTable.identifier) {
                 objectToDelete = hasTable;
             }
         }];

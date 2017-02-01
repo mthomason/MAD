@@ -14,6 +14,8 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIStepper.h>
 #import <UIKit/UISegmentedControl.h>
@@ -21,28 +23,24 @@
 #import <UIKit/UIButton.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import "MADControlState.h"
-#import <CoreData/NSManagedObjectContext.h>
+#import <MADCocoaExtensions/MADMargin.h>
+#import <MADCocoaExtensions/MADPadding.h>
+#import <MADCocoaExtensions/MADTextStyle.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/MTAlignment.h>
+
+#import "MADControlState.h"
+
 #import "MADReportDesignerFontSelectorDelegateProtocol.h"
 
 static const CGFloat CornerRadius = 6.6666f;
 static const CGFloat BorderWidth = 1.0000f;
 
 static NSString * const MADIdentifierStoryboardSeguePushFontPicker = @"MADIdentifierStoryboardSeguePushFontPicker";
-
-static NSString * const FormatPoints = @"%#.1f pt";
-static NSString * const CommentPoints = @"Like '5.2 points.'";
-static NSString * const DialogWidth = @"Width";
-static NSString * const DialogHeight = @"Height";
-static NSString * const DialogBottom = @"Bottom";
-static NSString * const DialogTop = @"Top";
-static NSString * const DialogLeft = @"Left";
-static NSString * const DialogRight = @"Right";
-static NSString * const DialogSpace = @"--";
 
 static inline BOOL ControlStateIsOn(MTControlState controlState);
 static inline BOOL ControlStateIsOn(MTControlState controlState) {
@@ -57,6 +55,11 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 @end
 
 @implementation MADToolboxStrings
+
+static NSString * const FormatPoints = @"%#.1f pt";
+static NSString * const CommentPoints = @"Like '5.2 points.'";
+static NSString * const DialogLeft = @"Left";
+static NSString * const DialogSpace = @"--";
 
 + (instancetype)newSystemString:(NSString *)string {
 
@@ -88,79 +91,84 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     return result;
 }
 
-+ (instancetype)newSizeWidthForValue:(NSNumber *)value {
++ (instancetype)newSizeWidthForValue:(double)value {
+    NSString *DialogWidth = @"Width";
     NSString *width = NSLocalizedString(DialogWidth, DialogWidth);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newSize = [MADToolboxStrings newStringForSubject:width value:stringValue];
     return newSize;
 }
 
-+ (instancetype)newSizeHeightForValue:(NSNumber *)value {
++ (instancetype)newSizeHeightForValue:(double)value {
+    NSString *DialogHeight = @"Height";
     NSString *height = NSLocalizedString(DialogHeight, DialogHeight);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newSize = [MADToolboxStrings newStringForSubject:height value:stringValue];
     return newSize;
 }
 
-+ (instancetype)newMarginTopForValue:(NSNumber *)value {
++ (instancetype)newMarginTopForValue:(double)value {
+    NSString *DialogTop = @"Top";
     NSString *top = NSLocalizedString(DialogTop, DialogTop);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newMargin = [MADToolboxStrings newStringForSubject:top value:stringValue];
     return newMargin;
 }
 
-+ (instancetype)newMarginBottomForValue:(NSNumber *)value {
++ (instancetype)newMarginBottomForValue:(double)value {
+    NSString *DialogBottom = @"Bottom";
     NSString *bottom = NSLocalizedString(DialogBottom, DialogBottom);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newMargin = [MADToolboxStrings newStringForSubject:bottom value:stringValue];
     return newMargin;
 }
 
-+ (instancetype)newMarginLeftForValue:(NSNumber *)value {
++ (instancetype)newMarginLeftForValue:(double)value {
     NSString *left = NSLocalizedString(DialogLeft, DialogLeft);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newMargin = [MADToolboxStrings newStringForSubject:left value:stringValue];
     return newMargin;
 }
 
-+ (instancetype)newMarginRightForValue:(NSNumber *)value {
++ (instancetype)newMarginRightForValue:(double)value {
+    NSString *DialogRight = @"Right";
     NSString *right = NSLocalizedString(DialogRight, DialogRight);
     NSString *stringValue;
-    if (value == nil) {
+    if (value <= 0) {
         stringValue = DialogSpace;
     } else {
         NSString *pointsFormat = NSLocalizedString(FormatPoints, CommentPoints);
-        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value.floatValue];
+        stringValue = [[NSString alloc] initWithFormat:pointsFormat, value];
     }
     id newMargin = [MADToolboxStrings newStringForSubject:right value:stringValue];
     return newMargin;
@@ -195,7 +203,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     @property (assign) MTControlState controlStateStrike;
     @property (assign) MTControlState controlStateUnderline;
 
-    @property (nonatomic, strong) NSSet *userSelectedObjectIds;
+    @property (nonatomic, strong) NSSet *userSelectedObjectIDs;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
     @property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
@@ -406,7 +414,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
-    self.userSelectedObjectIds = objectIds;
+    self.userSelectedObjectIDs = objectIds;
     [self updateDisplay];
 
 }
@@ -434,14 +442,40 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
     segmentedControlVerticalAlignment = _segmentedControlVerticalAlignment;
     
-    if (self.userSelectedObjectIds.count == 0) {
+    void(^updateControlsEnabled)(BOOL) = ^void(BOOL enabled) {
+        self.buttonItalic.      enabled = enabled;
+        self.buttonBold.        enabled = enabled;
+        self.buttonStrike.      enabled = enabled;
+        self.buttonUnderline.   enabled = enabled;
+        self.buttonBold.selected = enabled;
+        self.buttonBold.highlighted = enabled;
+        
+        self.buttonItalic.selected = enabled;
+        self.buttonItalic.highlighted = enabled;
+        
+        self.buttonStrike.selected = enabled;
+        self.buttonStrike.highlighted = enabled;
+        
+        self.buttonUnderline.selected = enabled;
+        self.buttonUnderline.highlighted = enabled;
+        
+        segmentedControlHorizontalAlignment.selected = NO;
+        segmentedControlHorizontalAlignment.highlighted = NO;
+        
+        segmentedControlHorizontalAlignment.selectedSegmentIndex =
+                                    !enabled ? UISegmentedControlNoSegment :
+                                               segmentedControlHorizontalAlignment.selectedSegmentIndex;
+        segmentedControlHorizontalAlignment.userInteractionEnabled = NO;
+        
+        self.fontLabelTableViewCell.userInteractionEnabled = NO;
+        self.stepperFontSize.userInteractionEnabled = NO;
+
+    };
+    
+    if (self.userSelectedObjectIDs.count == 0) {
+        updateControlsEnabled(NO);
         
         [self updateSegmentedControlVerticalAlignmentNotSelected];
-        
-        self.buttonItalic.      enabled = NO;
-        self.buttonBold.        enabled = NO;
-        self.buttonStrike.      enabled = NO;
-        self.buttonUnderline.   enabled = NO;
         
         self.controlStateBold = MTControlStateOff;
         self.controlStateItalic = MTControlStateOff;
@@ -457,73 +491,49 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         self.labelFontName.attributedText = attributedNothingSelected;
         self.labelFontSize.attributedText = attributedNothing;
         
-        self.buttonBold.selected = NO;
-        self.buttonBold.highlighted = NO;
-        
-        self.buttonItalic.selected = NO;
-        self.buttonItalic.highlighted = NO;
-        
-        self.buttonStrike.selected = NO;
-        self.buttonStrike.highlighted = NO;
-        
-        self.buttonUnderline.selected = NO;
-        self.buttonUnderline.highlighted = NO;
-
-        segmentedControlHorizontalAlignment.selected = NO;
-        segmentedControlHorizontalAlignment.highlighted = NO;
-        
-        segmentedControlHorizontalAlignment.selectedSegmentIndex = UISegmentedControlNoSegment;
-        segmentedControlHorizontalAlignment.userInteractionEnabled = NO;
-        
-        self.fontLabelTableViewCell.userInteractionEnabled = NO;
-        self.stepperFontSize.userInteractionEnabled = NO;
         
         NSArray *steppers = self.steppers;
         for (UIStepper *stepper in steppers) {
             stepper.userInteractionEnabled = NO;
         }
         
-        NSAttributedString *labelSizeHeightAttributedText = [MADToolboxStrings newSizeHeightForValue: nil];
+        NSAttributedString *labelSizeHeightAttributedText = [MADToolboxStrings newSizeHeightForValue: 0];
         self.labelSizeHeight.attributedText = labelSizeHeightAttributedText;
         
-        NSAttributedString *labelSizeWidthAttributedText = [MADToolboxStrings newSizeWidthForValue: nil];
+        NSAttributedString *labelSizeWidthAttributedText = [MADToolboxStrings newSizeWidthForValue: 0];
         self.labelSizeWidth.attributedText = labelSizeWidthAttributedText;
         
-        NSAttributedString *labelMarginTopAttributedText = [MADToolboxStrings newMarginTopForValue: nil];
+        NSAttributedString *labelMarginTopAttributedText = [MADToolboxStrings newMarginTopForValue: 0];
         self.labelMarginTop.attributedText = labelMarginTopAttributedText;
         
-        NSAttributedString *labelMarginBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: nil];
+        NSAttributedString *labelMarginBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: 0];
         self.labelMarginBottom.attributedText = labelMarginBottomAttributedText;
         
-        NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: nil];
+        NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: 0];
         self.labelMarginLeft.attributedText = labelMarginLeftAttributedText;
         
-        NSAttributedString *labelMarginRightAttributedText = [MADToolboxStrings newMarginRightForValue: nil];
+        NSAttributedString *labelMarginRightAttributedText = [MADToolboxStrings newMarginRightForValue: 0];
         self.labelMarginRight.attributedText = labelMarginRightAttributedText;
         
-        NSAttributedString *labelPaddingTopAttributedText = [MADToolboxStrings newMarginTopForValue: nil];
+        NSAttributedString *labelPaddingTopAttributedText = [MADToolboxStrings newMarginTopForValue: 0];
         self.labelPaddingTop.attributedText = labelPaddingTopAttributedText;
         
-        NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: nil];
+        NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: 0];
         self.labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
         
-        NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: nil];
+        NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: 0];
         self.labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
         
-        NSAttributedString *labelPaddingRightAttributedText = [MADToolboxStrings newMarginRightForValue: nil];
+        NSAttributedString *labelPaddingRightAttributedText = [MADToolboxStrings newMarginRightForValue: 0];
         self.labelPaddingRight.attributedText = labelPaddingRightAttributedText;
         
     } else {
-        
+        updateControlsEnabled(YES);
+
         NSArray *steppers = self.steppers;
         for (UIStepper *stepper in steppers) {
             [stepper setUserInteractionEnabled:YES];
         }
-        
-        self.buttonItalic.enabled = YES;
-        self.buttonBold.enabled = YES;
-        self.buttonStrike.enabled = YES;
-        self.buttonUnderline.enabled = YES;
         
         self.controlStateBold = MTControlStateOn;
         self.controlStateItalic = MTControlStateOn;
@@ -532,18 +542,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         NSString *fontDisplayName = nil;
         
-        NSNumber *marginTopHolder           = @CGFLOAT_MIN,
-                 *marginBottomHolder        = @CGFLOAT_MIN,
-                 *marginLeftHolder          = @CGFLOAT_MIN,
-                 *marginRightHolder         = @CGFLOAT_MIN,
-                 *paddingTopHolder          = @CGFLOAT_MIN,
-                 *paddingBottomHolder       = @CGFLOAT_MIN,
-                 *paddingLeftHolder         = @CGFLOAT_MIN,
-                 *paddingRightHolder        = @CGFLOAT_MIN,
-                 *verticalAlignmentHolder   = @-1,
-                 *horizontalAlignmentHolder = @-1,
-                 *sizeWidthHolder           = @CGFLOAT_MIN,
-                 *sizeHeightHolder          = @CGFLOAT_MIN;
+        MADLayoutMargin marginHolder = MADLayoutMarginMake(-1, -1, -1, -1);
+        MADPadding paddingHolder = MADPaddingMake(-1, -1, -1, -1);
+        MADAlignment alignmentHolder = MADAlignmentMake(MADHorizontalAlignmentUnknown, MADVerticalAlignmentUnknown);
+        CGSize sizeHolder = CGSizeZero;
         
         CGFloat fontSizeHolder = (CGFloat)[MADFont defaultSize];
         
@@ -570,8 +572,12 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                   numberNotUnderline            = 0;
         
         NSManagedObjectID *objectId;
-        NSSet *userSelectedObjectIDs = _userSelectedObjectIds;
+        NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
         RptqDocumentElement *documentObject;
+        
+        MADLayoutMargin margin; MADPadding padding; CGSize size; MADAlignment alignment;
+        MADTextStyle textStyle;
+        
         for (objectId in userSelectedObjectIDs) {
             
             documentObject = [self.document.managedObjectContext objectWithID:objectId];
@@ -583,134 +589,138 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                      ![documentObject.fontname isEqualToString:fontDisplayName])) {
                         
                         fontDisplayName = documentObject.fontname;
-                        fontSizeHolder = documentObject.fontsize.floatValue;
+                        fontSizeHolder = documentObject.fontsize;
                         numberFonts++;
                         
-                    }
+                }
                 
-                if (![documentObject.marginTop isEqualToNumber:marginTopHolder] ) {
-                    marginTopHolder = documentObject.marginTop;
+                [(NSValue *)documentObject.margin getValue:&margin];
+                [(NSValue *)documentObject.padding getValue:&padding];
+                [(NSValue *)documentObject.size getValue:&size];
+                [(NSValue *)documentObject.alignment getValue:&alignment];
+                [(NSValue *)documentObject.style getValue:&textStyle];
+
+                if (margin.top != marginHolder.top ) {
+                    marginHolder.top = margin.top;
                     numberOfMarginTop++;
                 }
-                
-                if (![documentObject.marginBottom isEqualToNumber:marginBottomHolder] ) {
-                    marginBottomHolder = documentObject.marginBottom;
+
+                if (margin.bottom != marginHolder.bottom ) {
+                    marginHolder.bottom = margin.bottom;
                     numberOfMarginBottom++;
                 }
-                
-                if (![documentObject.marginLeft isEqualToNumber:marginLeftHolder] ) {
-                    marginLeftHolder = documentObject.marginLeft;
+
+                if (margin.left != marginHolder.left ) {
+                    marginHolder.left = margin.left;
                     numberOfMarginLeft++;
                 }
                 
-                if (![documentObject.marginRight isEqualToNumber:marginRightHolder] ) {
-                    marginRightHolder = documentObject.marginRight;
+                if (margin.right != marginHolder.right ) {
+                    marginHolder.right = margin.right;
                     numberOfMarginRight++;
                 }
                 
-                if (![documentObject.paddingTop isEqualToNumber:paddingTopHolder] ) {
-                    paddingTopHolder = documentObject.paddingTop;
+                if (padding.top != paddingHolder.top ) {
+                    paddingHolder.top = padding.top;
                     numberOfPaddingTop++;
                 }
                 
-                if (![documentObject.paddingBottom isEqualToNumber:paddingBottomHolder] ) {
-                    paddingBottomHolder = documentObject.paddingBottom;
+                if (padding.bottom != paddingHolder.bottom ) {
+                    paddingHolder.bottom = padding.bottom;
                     numberOfPaddingBottom++;
                 }
                 
-                if (![documentObject.paddingLeft isEqualToNumber:paddingLeftHolder] ) {
-                    paddingLeftHolder = documentObject.paddingLeft;
+                if (padding.left != paddingHolder.left ) {
+                    paddingHolder.left = padding.left;
                     numberOfPaddingLeft++;
                 }
                 
-                if (![documentObject.paddingRight isEqualToNumber:paddingRightHolder] ) {
-                    paddingRightHolder = documentObject.paddingRight;
+                if (padding.right != paddingHolder.right ) {
+                    paddingHolder.right = padding.right;
                     numberOfPaddingRight++;
                 }
-                
-                if (![documentObject.sizewidth isEqualToNumber:sizeWidthHolder] ) {
-                    sizeWidthHolder = documentObject.sizewidth;
+
+                if (size.width != sizeHolder.width ) {
+                    sizeHolder.width = size.width;
                     numberOfSizeWidths++;
                 }
-                
-                if (![documentObject.sizeheight isEqualToNumber:sizeHeightHolder] ) {
-                    sizeHeightHolder = documentObject.sizeheight;
+
+                if (size.height != sizeHolder.height ) {
+                    sizeHolder.height = size.height;
                     numberOfSizeHeights++;
                 }
-                
-                if (![documentObject.verticalAlignment
-                      isEqualToNumber:verticalAlignmentHolder] ) {
-                    verticalAlignmentHolder = documentObject.verticalAlignment;
+
+                if (alignment.vertical != alignmentHolder.vertical) {
+                    alignmentHolder.vertical = alignment.vertical;
                     numberOfVerticalAlignments++;
                 }
-                if (![documentObject.horizontalAlignment
-                      isEqualToNumber:horizontalAlignmentHolder] ) {
-                    horizontalAlignmentHolder = documentObject.horizontalAlignment;
+                if (alignment.horizontal != alignmentHolder.horizontal) {
+                    alignmentHolder.horizontal = alignment.horizontal;
                     numberOfHorazontalAlignments++;
                 }
                 
-                documentObject.bold.boolValue ? numberBold++ : numberNotBold++;
-                documentObject.underline.boolValue ? numberUnderline++ : numberNotUnderline++;
-                documentObject.strike.boolValue ? numberStrike++ : numberNotStrike++;
-                documentObject.italic.boolValue ? numberItalic++ : numberNotItalic++;
+                textStyle.bold ? numberBold++ : numberNotBold++;
+                textStyle.underline ? numberUnderline++ : numberNotUnderline++;
+                textStyle.strikethrough ? numberStrike++ : numberNotStrike++;
+                textStyle.italic ? numberItalic++ : numberNotItalic++;
                 
             }
             
         }
         
-        segmentedControlHorizontalAlignment.selectedSegmentIndex = horizontalAlignmentHolder.integerValue;
-        [self updateSegmentedControlVerticalAlignmentWithChosenIndex:verticalAlignmentHolder.integerValue];
+        segmentedControlHorizontalAlignment.selectedSegmentIndex = alignment.horizontal;
+        [self updateSegmentedControlVerticalAlignmentWithChosenIndex:alignment.vertical];
         
-        NSNumber *displayNumber = numberOfMarginTop == 1 ? marginTopHolder : nil;
+        double displayNumber = numberOfMarginTop >= 1 ? marginHolder.top : 0;
         NSAttributedString *labelMarginTopAttributedText = [MADToolboxStrings newMarginTopForValue: displayNumber];
         _labelMarginTop.attributedText = labelMarginTopAttributedText;
-        _stepperMarginTop.value = marginTopHolder.doubleValue;
+        _stepperMarginTop.value = marginHolder.top;
         
-        displayNumber = numberOfMarginBottom == 1 ? marginBottomHolder : nil;
+        displayNumber = numberOfMarginBottom == 1 ? marginHolder.bottom : 0;
         
         NSAttributedString *labelMarginBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: displayNumber];
         _labelMarginBottom.attributedText = labelMarginBottomAttributedText;
-        _stepperMarginBottom.value = marginBottomHolder.doubleValue;
+        _stepperMarginBottom.value = marginHolder.bottom;
         
-        displayNumber = numberOfMarginLeft == 1 ? marginLeftHolder : nil;
+        displayNumber = numberOfMarginLeft == 1 ? marginHolder.left : 0;
         NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: displayNumber];
         _labelMarginLeft.attributedText = labelMarginLeftAttributedText;
-        _stepperMarginLeft.value = marginLeftHolder.doubleValue;
+        _stepperMarginLeft.value = marginHolder.left;
         
-        displayNumber = numberOfMarginRight == 1 ? marginRightHolder : nil;
+        displayNumber = numberOfMarginRight == 1 ? marginHolder.right : 0;
         NSAttributedString *labelMarginRightAttributedText = [MADToolboxStrings newMarginRightForValue: displayNumber];
         _labelMarginRight.attributedText = labelMarginRightAttributedText;
-        _stepperMarginRight.value = marginRightHolder.doubleValue;
+        _stepperMarginRight.value = marginHolder.right;
         
-        displayNumber = numberOfPaddingTop == 1 ? paddingTopHolder : nil;
+        displayNumber = numberOfPaddingTop == 1 ? paddingHolder.top : 0;
         NSAttributedString *labelPaddingTopAttributedText = [MADToolboxStrings newMarginTopForValue: displayNumber];
         _labelPaddingTop.attributedText = labelPaddingTopAttributedText;
-        _stepperPaddingTop.value = paddingTopHolder.doubleValue;
+        _stepperPaddingTop.value = paddingHolder.top;
         
-        displayNumber = numberOfPaddingBottom == 1 ? paddingBottomHolder : nil;
+        displayNumber = numberOfPaddingBottom == 1 ? paddingHolder.bottom : 0;
         NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: displayNumber];
         _labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
-        _stepperPaddingBottom.value = paddingBottomHolder.doubleValue;
+        _stepperPaddingBottom.value = paddingHolder.bottom;
         
-        displayNumber = numberOfPaddingLeft == 1 ? paddingLeftHolder : nil;
+        displayNumber = numberOfPaddingLeft == 1 ? paddingHolder.left : 0;
         NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: displayNumber];
         _labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
-        _stepperPaddingLeft.value = paddingLeftHolder.doubleValue;
+        _stepperPaddingLeft.value = padding.left;
         
-        displayNumber = numberOfPaddingRight == 1 ? paddingRightHolder : nil;
+        displayNumber = numberOfPaddingRight == 1 ? paddingHolder.right : 0;
         NSAttributedString *labelPaddingRightAttributedText = [MADToolboxStrings newMarginRightForValue: displayNumber];
         _labelPaddingRight.attributedText = labelPaddingRightAttributedText;
-        _stepperPaddingRight.value = paddingRightHolder.doubleValue;
+        _stepperPaddingRight.value = padding.right;
         
-        displayNumber = numberOfSizeHeights == 1 ? sizeHeightHolder : nil;
+        displayNumber = numberOfSizeHeights == 1 ? sizeHolder.height : 0;
         NSAttributedString *labelSizeHeightAttributedText = [MADToolboxStrings newSizeHeightForValue: displayNumber];
         _labelSizeHeight.attributedText = labelSizeHeightAttributedText;
-        _stepperSizeHeight.value = sizeHeightHolder.doubleValue;
+        _stepperSizeHeight.value = size.height;
         
-        displayNumber = numberOfSizeWidths == 1 ? sizeWidthHolder : nil;
+        displayNumber = numberOfSizeWidths == 1 ? sizeHolder.width : 0;
         NSAttributedString *labelSizeWidthAttributedText = [MADToolboxStrings newSizeWidthForValue: displayNumber];
         _labelSizeWidth.attributedText = labelSizeWidthAttributedText;
-        _stepperSizeWidth.value = sizeWidthHolder.doubleValue;
+        _stepperSizeWidth.value = size.width;
         
         
         UILabel *labelFontName = _labelFontName, *labelFontSize = _labelFontSize;
@@ -826,7 +836,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     labelFontName.text = familyName;
 
     NSManagedObjectID *objectId;
-    NSSet *userSelectedObjectIDs = _userSelectedObjectIds;
+    NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
     RptqDocumentElement *documentObject;
     for (objectId in userSelectedObjectIDs) {
         documentObject = [doc.managedObjectContext objectWithID:objectId];
@@ -854,10 +864,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
     MADocument *doc = self.document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        NSNumber *boldWrapper = @(ControlStateIsOn(self.controlStateBold));
-        documentObject.bold = boldWrapper;
+        documentObject.bold = self.controlStateBold;
     }
     [doc.managedObjectContext save:nil];
 }
@@ -880,10 +889,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
 
     MADocument *doc = self.document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        NSNumber *italic = @(ControlStateIsOn(self.controlStateItalic));
-        documentObject.italic = italic;
+        documentObject.italic = self.controlStateItalic;
     }
     [doc.managedObjectContext save:nil];
 }
@@ -906,10 +914,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonStrike forState:self.controlStateStrike];
     
     MADocument *doc = self.document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        NSNumber *strike = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateStrike)];
-        documentObject.strike = strike;
+    NSManagedObjectID *objectID;
+    for (objectID in self.userSelectedObjectIDs) {
+        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectID];
+        [documentObject setStrikethrough: ControlStateIsOn(_controlStateStrike)];
     }
     [doc.managedObjectContext save:nil];
 }
@@ -933,10 +941,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
     
     MADocument *doc = self.document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        NSNumber *underline = [[NSNumber alloc] initWithBool: ControlStateIsOn(_controlStateUnderline)];
-        documentObject.underline = underline;
+    RptqDocumentElement *documentObject;
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
+        documentObject = [doc.managedObjectContext objectWithID:objectId];
+        documentObject.underline = ControlStateIsOn(_controlStateUnderline);
     }
     [doc.managedObjectContext save:nil];
 }
@@ -949,158 +957,145 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     attributedString = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: pointSize
                                                                              withFontSize: labelFontSize.font.pointSize];
     labelFontSize.attributedText = attributedString;
-    NSNumber *value = [[NSNumber alloc] initWithDouble: pointSize];
     MADocument *document = _document;
     RptqDocumentElement *documentObject;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.fontsize = value.copy;
+        documentObject.fontsize = pointSize;
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updateLabelSizeHeight:(double)height {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: height];
-    NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:value];
+    NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:height];
     self.labelSizeHeight.attributedText = displayHeight;
     MADocument *document = _document;
     RptqDocumentElement *documentObject;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.sizeheight = value.copy;
+        [documentObject setSizeHeight: height];
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updateLabelSizeWidth:(double)width {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: width];
-    NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:value];
+    NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:width];
     self.labelSizeWidth.attributedText = displayWidth;
     RptqDocumentElement *documentObject;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.sizewidth = value.copy;
+        [documentObject setSizeWidth: width];
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
-    NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlHorizontalAlignment setBackgroundImage: nil forState: UIControlStateNormal
                                                       barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.horizontalAlignment = value.copy;
+        [documentObject setHorizontalAlignment: (MADHorizontalAlignment)index];
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
-    NSNumber *value = [[NSNumber alloc] initWithInteger: index];
     [self.segmentedControlVerticalAlignment setBackgroundImage: nil forState: UIControlStateNormal
                                                     barMetrics: UIBarMetricsDefault];
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.verticalAlignment = value.copy;
+        [documentObject setVerticalAlignment: (MADVerticalAlignment)index];
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingTop:(double)padding {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:value];
+    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:padding];
     self.labelPaddingTop.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingTop = value.copy;
+        documentObject.paddingTop = padding;
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingBottom:(double)padding {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
+    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:padding];
     self.labelPaddingBottom.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingBottom = value.copy;
+        documentObject.paddingBottom = padding;
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingLeft:(double)padding {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:value];
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:padding];
     self.labelPaddingLeft.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingLeft = value;
+        documentObject.paddingLeft = padding;
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updatePaddingRight:(double)padding {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: padding];
-    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:value];
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:padding];
     self.labelPaddingRight.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingRight = value.copy;
+        documentObject.paddingRight = padding;
     }
     [document.managedObjectContext save:nil];
 }
 
 - (void)updateMarginTop:(double)margin {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: value];
+    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: margin];
     self.labelMarginTop.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginTop = value.copy;
+        documentObject.marginTop = margin;
         [document.managedObjectContext save:nil];
     }
 }
 
 - (void)updateMarginBottom:(double)margin {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
+    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:margin];
     self.labelMarginBottom.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginBottom = value.copy;
+        documentObject.marginBottom = margin;
         [document.managedObjectContext save:nil];
     }
 }
 
 - (void)updateMarginLeft:(double)margin {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: value];
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: margin];
     self.labelMarginLeft.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginLeft = value.copy;
+        documentObject.marginLeft = margin;
         [document.managedObjectContext save:nil];
     }
 }
 
 - (void)updateMarginRight:(double)margin {
-    NSNumber *value = [[NSNumber alloc] initWithDouble: margin];
-    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: value];
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: margin];
     self.labelMarginRight.attributedText = display;
     MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginRight = value.copy;
+        documentObject.marginRight = margin;
         [document.managedObjectContext save:nil];
     }
 }
@@ -1181,7 +1176,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         destination.delegate = self;
         destination.clearsBackground = self.clearsBackground;
         NSString *fontname = nil;
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
             RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             fontname = documentObject.fontname.copy;
             break;

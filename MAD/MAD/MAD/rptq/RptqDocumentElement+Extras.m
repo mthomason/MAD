@@ -223,12 +223,125 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     }
 }
 
+- (void)setPaddingTop:(double)v {
+    MADPadding p;
+    [(NSValue *)self.padding getValue:&p];
+    p.top = v;
+    [NSValue value:&p withObjCType:@encode(MADPadding)];
+}
+
+- (void)setPaddingBottom:(double)v {
+    MADPadding p;
+    [(NSValue *)self.padding getValue:&p];
+    p.bottom = v;
+    [NSValue value:&p withObjCType:@encode(MADPadding)];
+}
+
+
+- (void)setPaddingLeft:(double)v {
+    MADPadding p;
+    [(NSValue *)self.padding getValue:&p];
+    p.left = v;
+    [NSValue value:&p withObjCType:@encode(MADPadding)];
+}
+
+- (void)setPaddingRight:(double)v {
+    MADPadding p;
+    [(NSValue *)self.padding getValue:&p];
+    p.right = v;
+    [NSValue value:&p withObjCType:@encode(MADPadding)];
+}
+
+- (void)setMarginTop:(double)v {
+    MADLayoutMargin m;
+    [(NSValue *)self.margin getValue:&m];
+    m.top = v;
+    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+}
+
+- (void)setMarginBottom:(double)v {
+    MADLayoutMargin m;
+    [(NSValue *)self.margin getValue:&m];
+    m.bottom = v;
+    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+}
+
+- (void)setMarginRight:(double)v {
+    MADLayoutMargin m;
+    [(NSValue *)self.margin getValue:&m];
+    m.right = v;
+    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+}
+
+- (void)setMarginLeft:(double)v {
+    MADLayoutMargin m;
+    [(NSValue *)self.margin getValue:&m];
+    m.left = v;
+    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+}
+
+- (void)setBold:(BOOL)bold {
+    MADTextStyle textStyle;
+    [(NSValue *)self.style getValue:&textStyle];
+    textStyle.bold = bold;
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+}
+
+- (void)setItalic:(BOOL)italic {
+    MADTextStyle textStyle;
+    [(NSValue *)self.style getValue:&textStyle];
+    textStyle.italic = italic;
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+}
+
+- (void)setStrikethrough:(BOOL)strikethrough {
+    MADTextStyle textStyle;
+    [(NSValue *)self.style getValue:&textStyle];
+    textStyle.strikethrough = strikethrough;
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+}
+
+- (void)setUnderline:(BOOL)underline {
+    MADTextStyle textStyle;
+    [(NSValue *)self.style getValue:&textStyle];
+    textStyle.underline = underline;
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+}
+
+- (void)setSizeWidth:(double)width {
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    s.width = width;
+    [NSValue value:&s withObjCType:@encode(CGSize)];
+}
+
+- (void)setSizeHeight:(double)height {
+    CGSize s;
+    [(NSValue *)self.size getValue:&s];
+    s.height = height;
+    [NSValue value:&s withObjCType:@encode(CGSize)];
+}
+
+- (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment {
+    MADAlignment a;
+    [(NSValue *)self.alignment getValue:&a];
+    a.horizontal = alignment;
+    [NSValue value:&a withObjCType:@encode(MADAlignment)];
+}
+
+- (void)setVerticalAlignment:(MADVerticalAlignment)alignment {
+    MADAlignment a;
+    [(NSValue *)self.alignment getValue:&a];
+    a.vertical = alignment;
+    [NSValue value:&a withObjCType:@encode(MADAlignment)];
+}
+
 - (CGPoint)placementPoint {
     CGPoint placementPoint = [(NSValue *)self.dropPoint CGPointValue];
     return placementPoint;
 }
 
-- (void)setSizeWidth:(float)w height:(float)h {
+- (void)setSizeWidth:(double)w height:(double)h {
     CGSize s = CGSizeMake(w, h);
     self.size = [NSValue valueWithCGSize:s];
 }

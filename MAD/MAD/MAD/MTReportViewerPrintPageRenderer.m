@@ -100,10 +100,10 @@ static inline CGRect sectionBounds(CGRect pageRect,
                                  NSUInteger pageIndex,
                                  CGFloat originY);
 
-static inline NSRange MADRangeToGroup(NSNumber *groupNumber);
+static inline NSRange MADRangeToGroup(int64_t);
 
-static inline NSRange MADRangeToGroup(NSNumber *groupNumber) {
-    return NSMakeRange(0, groupNumber.unsignedIntegerValue + 1);
+static inline NSRange MADRangeToGroup(int64_t groupNumber) {
+    return NSMakeRange(0, (NSUInteger)groupNumber + 1);
 }
 
 typedef MTDataTableFast MADDataTableAggregate;

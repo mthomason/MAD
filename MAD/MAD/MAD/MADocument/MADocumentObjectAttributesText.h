@@ -10,7 +10,7 @@
 #define Reports_MAD_MADocumentObjectAttributesText_h
 
 #import <Foundation/NSObject.h>
-#import <UIKit/NSText.h>
+#import <MAD/MTAlignment.h>
 
 @class UIFontDescriptor;
 @class RptqDocumentElement;
@@ -25,7 +25,7 @@
                                        italic:(BOOL)italic
                                     underline:(BOOL)underline
                                        strike:(BOOL)strike
-                          horizontalAlignment:(NSTextAlignment)horizontalAlignment
+                          horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment
                                                                     NS_DESIGNATED_INITIALIZER;
 
     @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;

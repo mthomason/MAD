@@ -90,6 +90,9 @@
 #import "RptqDatabaseCredentals.h"
 #import "RptqDatabaseCredentals+Extras.h"
 
+#import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
+#import "RptqDocumentElementAggregate+CoreDataProperties.h"
+
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
@@ -1183,32 +1186,56 @@ READFROMURL_END:;
 
 }
 
-- (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
+- (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
                                  inContent: (NSManagedObjectContext *)managedObjectContext {
     NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
-    fetchReqest.predicate = documentObjectsPredicate;
+    NSString *keyInQueryTable;
+    keyInQueryTable = [NSStringFromSelector(@selector(aggregateField)) stringByAppendingString:@"."];
+    keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
+    NSExpression *e1 = [NSExpression expressionForKeyPath:keyInQueryTable];
+    NSExpression *e2 = [NSExpression expressionForConstantValue:deleatedTableObjectID];
+    NSPredicate *predicate;
+    predicate =[NSComparisonPredicate predicateWithLeftExpression: e1
+                                                  rightExpression: e2
+                                                         modifier: NSDirectPredicateModifier
+                                                             type: NSEqualToPredicateOperatorType
+                                                          options: 0];
+
+    fetchReqest.predicate = predicate;
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
-        for (RptqDocumentElement *documentObject in objectsToDelete) {
-        
-            RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
-            MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-            [RptqDocumentElement removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
-            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:managedObjectContext];
+        RptqDocumentElement *documentObject; RptqDocumentSection *parentSection;
+        MADSectionLayoutManager *layoutManager;
+        for (documentObject in objectsToDelete) {
+            parentSection = documentObject.inSectionRow.inSection;
+            layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+            [RptqDocumentElement removeDocumentObject:documentObject
+                                    fromParentSection:parentSection
+                                    withLayoutManager:layoutManager];
+            [RptqDocument removeDocumentObject:documentObject
+                      fromManagedObjectContext:managedObjectContext];
         }
     }
 }
 
-- (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectId
+- (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
                              inContent: (NSManagedObjectContext *)managedObjectContext {
-    
-    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentElement class])];
-    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
-    fetchReqest.predicate = documentObjectsPredicate;
-    
+    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
+    NSFetchRequest *fetchReqest;
+    fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    NSString *keyInQueryTable = [NSStringFromSelector(@selector(referencesQueryField)) stringByAppendingString:@"."];
+    keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
+    NSExpression *e1 = [NSExpression expressionForKeyPath:keyInQueryTable];
+    NSExpression *e2 = [NSExpression expressionForConstantValue:deleatedTableObjectID];
+    NSPredicate *predicate;
+    predicate =[NSComparisonPredicate predicateWithLeftExpression: e1
+                                                  rightExpression: e2
+                                                         modifier: NSDirectPredicateModifier
+                                                             type: NSEqualToPredicateOperatorType
+                                                          options: 0];
+    fetchReqest.predicate = predicate;
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
@@ -1229,7 +1256,8 @@ READFROMURL_END:;
 - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
       fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    //NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    //NSManagedObjectContext *private;
+    // = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     //private.parentContext = managedObjectContext;
     
     //[private performBlockAndWait: ^{
@@ -1255,17 +1283,18 @@ READFROMURL_END:;
             
             //Reweight Groups
             SEL weightSelector = @selector(weight);
-            NSString *key = NSStringFromSelector(weightSelector);
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: key
-                                                                             ascending: YES];
+            NSSortDescriptor *sort;
+            sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(weightSelector)
+                                                 ascending: YES];
             
-            id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-            NSArray *sortedQueryGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+            NSArray <NSSortDescriptor *> *sortDescriptors;
+            sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
+            NSArray <RptqQueryGroup *> *sortedGroups;
+            sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
             
-            NSUInteger counter = 0;
-            for (RptqQueryGroup *sortedGroup in sortedQueryGroups) {
-                NSNumber *counterWrapper = [[NSNumber alloc] initWithUnsignedInteger:counter];
-                sortedGroup.weight = counterWrapper;
+            int64_t counter = 0;
+            for (RptqQueryGroup *sortedGroup in sortedGroups) {
+                sortedGroup.weight = counter;
                 counter++;
             }
             

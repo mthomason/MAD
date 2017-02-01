@@ -52,9 +52,10 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 
     NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    NSString *weight = NSStringFromSelector(@selector(weight));
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-    id sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    NSSortDescriptor *sort;
+    sort = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight))
+                                         ascending:YES];
+    NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
     request.sortDescriptors = sortDescriptors;
     
     NSFetchedResultsController *frc;

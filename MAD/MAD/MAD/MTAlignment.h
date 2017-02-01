@@ -10,17 +10,21 @@
 #define MAD_MTAlignment_h
 
 typedef NS_ENUM(short, MADVerticalAlignment) {
+    MADVerticalAlignmentUnknown = -1,
     MADVerticalAlignmentTop = 0,
     MADVerticalAlignmentCenter = 1,
     MADVerticalAlignmentBottom = 2
+
 };
 
 typedef NS_ENUM(short, MADHorizontalAlignment) {
+    MADHorizontalAlignmentUnknown = -1,
     MADHorizontalAlignmentLeft = 0,
     MADHorizontalAlignmentCenter = 1,
     MADHorizontalAlignmentRight = 2,
     MADHorizontalAlignmentJustified = 3,
-    MADHorizontalAlignmentNatrual = 4
+    MADHorizontalAlignmentNatrual = 4,
+    
 };
 
 struct MADAlignment {

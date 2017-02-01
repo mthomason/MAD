@@ -387,8 +387,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         }
     }
 
-    void (^handleProcessCompletion)(BOOL success, NSError *error);
-    handleProcessCompletion = ^(BOOL success, NSError *error) { };
+    //void (^handleProcessCompletion)(BOOL success, NSError *error);
+    //handleProcessCompletion = ^(BOOL success, NSError *error) { };
     
     [self processContentChangesWithInsertedMetaDatum: insertedMetaDatum
                                     removedMetaDatum: removedMetaDatum

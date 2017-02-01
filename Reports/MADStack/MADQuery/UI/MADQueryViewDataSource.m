@@ -365,8 +365,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
       toIndexPath:(NSIndexPath *)toIndexPath {
 
-    //NSLog(@"Move row at (%ld, %ld) to (%ld, %ld).", fromIndexPath.section, fromIndexPath.row, toIndexPath.section, toIndexPath.row);
-
     switch ([self sectionAtIndex:(short)toIndexPath.section]) {
         case MADIdentifierQueryViewSectionsGroups: {
             
@@ -378,8 +376,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqQueryGroup *fromGroup = [_queryGroupsController objectAtIndexPath: fromIndex],
                            *toGroup =   [_queryGroupsController objectAtIndexPath: toIndex];
             
-            id fromWeight   = [[NSNumber alloc] initWithInteger: toGroup.weight.integerValue],
-               toWeight     = [[NSNumber alloc] initWithInteger: fromGroup.weight.integerValue];
+            int64_t fromWeight   = toGroup.weight;
+            int64_t toWeight     = fromGroup.weight;
             
             fromGroup.weight = fromWeight;
             toGroup.weight = toWeight;
@@ -424,7 +422,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
             if (database.ownedByUser) {
                 
-                NSString *databaseType = database.ownedByUser.database_driver_type.copy;
+                NSString *databaseType = database.ownedByUser.driver_type.copy;
                 RptqDatabaseCredentals *user = database.ownedByUser;
                 id schemaName = [user copyDatabaseSchemaName];
                 

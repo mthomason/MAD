@@ -19,6 +19,7 @@
 
 #import <MAD/RptqDocumentElementFactory.h>
 #import <MAD/MADDocumentObjectType.h>
+#import <MAD/MTAlignment.h>
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;
@@ -54,12 +55,32 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)elementViewFrame;
     - (CGRect)elementViewFrameDesigner;
 
+    - (void)setBold:(BOOL)bold;
+    - (void)setItalic:(BOOL)italic;
+    - (void)setStrikethrough:(BOOL)strikethrough;
+    - (void)setUnderline:(BOOL)underline;
+
+    - (void)setSizeWidth:(double)width;
+    - (void)setSizeHeight:(double)height;
+
+    - (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment;
+    - (void)setVerticalAlignment:(MADVerticalAlignment)alignment;
+
+    - (void)setPaddingTop:(double)v;
+    - (void)setPaddingBottom:(double)v;
+    - (void)setPaddingLeft:(double)v;
+    - (void)setPaddingRight:(double)v;
+    - (void)setMarginTop:(double)v;
+    - (void)setMarginBottom:(double)v;
+    - (void)setMarginRight:(double)v;
+    - (void)setMarginLeft:(double)v;
+
     - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
     - (CGSize)sizeContentView;
     - (void)setOriginPoint:(CGPoint)origin;
     - (void)setSizeValue:(CGSize)size;
-    - (void)setSizeWidth:(float)w height:(float)h;
+    - (void)setSizeWidth:(double)w height:(double)h;
 
     - (void)dropAtRect:(CGRect)rect;
 

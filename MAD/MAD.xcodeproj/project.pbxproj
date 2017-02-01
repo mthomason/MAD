@@ -389,9 +389,9 @@
 		4C692B421E1EAF9500DC2CB0 /* madmalloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C692B401E1EAF9500DC2CB0 /* madmalloc.h */; };
 		4C6F35021E409DE900F4744F /* MADCurrencyFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35031E409DE900F4744F /* MADCurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */; };
-		4C6F351E1E40EB0200F4744F /* RptqDatabaseCredentals.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F351A1E40EB0200F4744F /* RptqDatabaseCredentals.h */; };
+		4C6F351E1E40EB0200F4744F /* RptqDatabaseCredentals.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F351A1E40EB0200F4744F /* RptqDatabaseCredentals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F351F1E40EB0200F4744F /* RptqDatabaseCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F351B1E40EB0200F4744F /* RptqDatabaseCredentals.m */; };
-		4C6F35201E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F351C1E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.h */; };
+		4C6F35201E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F351C1E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35211E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F351D1E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.m */; };
 		4C7044F61E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7044F41E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.h */; };
 		4C7044F71E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7044F51E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m */; };
@@ -481,7 +481,7 @@
 		4CC282461BADE81A00775B72 /* MADActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282091BADE81A00775B72 /* MADActivityIndicator.m */; };
 		4CC282471BADE81A00775B72 /* MTActivityItemProviderPdf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282481BADE81B00775B72 /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */; };
-		4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820D1BADE81A00775B72 /* MTAlignment.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820D1BADE81A00775B72 /* MTAlignment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282651BADE81E00775B72 /* MADDataFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282281BADE81A00775B72 /* MADDataFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MADDataFormatter.m */; };
 		4CC282711BADE82000775B72 /* MADErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282341BADE81A00775B72 /* MADErrorContainer.h */; settings = {ATTRIBUTES = (Private, ); }; };

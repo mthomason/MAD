@@ -135,8 +135,11 @@
 - (int64_t)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentElement class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO];
-    id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+    NSSortDescriptor *sort;
+    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex))
+                                         ascending: NO];
+    NSArray <NSSortDescriptor *> *sortDescriptors;
+    sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
 

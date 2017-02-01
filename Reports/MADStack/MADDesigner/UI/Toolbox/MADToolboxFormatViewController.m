@@ -7,7 +7,6 @@
 //
 
 #import "MADToolboxFormatViewController.h"
-#import "MTToolboxViewControllerProtocol.h"
 #import <UIKit/UIStepper.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIFont.h>
@@ -16,6 +15,11 @@
 
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSManagedObjectContext.h>
+
+#import <MADFoundation/MADDataType.h>
+
+#import <MAD/MADCurrencyFormatter.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
@@ -24,12 +28,13 @@
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqQueryField.h>
-#import <MADFoundation/MADDataType.h>
+
+#import "MTToolboxViewControllerProtocol.h"
 
 @interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
-@property (nonatomic, strong) NSSet *userSelectedObjectIds;
+@property (nonatomic, strong) NSSet *userSelectedObjectIDs;
 
 @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellDecimals;
 @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrency;
@@ -60,8 +65,14 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                   CGSizeZero.width,
+                                                   self.bottomLayoutGuide.length,
+                                                   CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                            CGSizeZero.width,
+                                                            self.bottomLayoutGuide.length,
+                                                            CGSizeZero.width);
     if (self.completedInitalLayout == NO) {
         [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length) animated:NO];
         self.completedInitalLayout = YES;
@@ -86,7 +97,7 @@
     for (NSManagedObjectID *objectId in objectIds) {
 
         RptqDocumentElementLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-        MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType.shortValue;
+        MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;
@@ -95,7 +106,7 @@
         }
     }
     
-    self.userSelectedObjectIds = keepers;
+    self.userSelectedObjectIDs = keepers;
     
     for (UIView *view in self.viewsToDisableNumeric) {
         view.userInteractionEnabled = numericTypeInSet;
@@ -110,7 +121,7 @@
 
 - (void)updateDisplay {
     
-    if (self.userSelectedObjectIds.count == 0) {
+    if (self.userSelectedObjectIDs.count == 0) {
 
         self.tableViewCellCurrency.selectionStyle = UITableViewCellSelectionStyleNone;
         self.tableViewCellCurrency.accessoryType = UITableViewCellAccessoryNone;
@@ -123,41 +134,41 @@
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 
         MADocument *document = _document;
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         
             RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-            
-            if (documentObject.formatNumericCurrency.boolValue) {
+            MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+            if (currencyFormatter.enabled) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
             }
         }
 
         (self.tableViewCellCurrency).accessoryType = accessoryType;
         
-        if ((self.userSelectedObjectIds).count == 1) {
+        if ((self.userSelectedObjectIDs).count == 1) {
 
-            NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
+            NSManagedObjectID *objectId = [self.userSelectedObjectIDs anyObject];
             RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-            NSInteger numberOfDec = documentObject.formatNumericDecimals.integerValue;
-            (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:numberOfDec];
-            (self.stepperNumberOfDecimals).value = numberOfDec;
+            MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+            (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:currencyFormatter.decimalCount];
+            (self.stepperNumberOfDecimals).value = currencyFormatter.decimalCount;
 
         } else {
             
             BOOL allTheSame = NO;
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
-            for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
+            for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
                 RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-                NSInteger currentInteger = documentObject.formatNumericDecimals.integerValue;
+                MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
                 if (counter > 0) {
-                    if (lastInteger == currentInteger && allTheSame) {
+                    if (lastInteger == currencyFormatter.decimalCount && allTheSame) {
                         allTheSame = YES;
                     } else {
                         allTheSame = NO;
                     }
                     
-                    lastInteger = currentInteger;
+                    lastInteger = currencyFormatter.decimalCount;
                 }
                 counter++;
             }
@@ -185,9 +196,14 @@
         (self.labelNumberOfDecimals).attributedText =
             [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
         
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            documentObject.formatNumericDecimals = valueThatChanged;
+        MADCurrencyFormatter *currencyFormatter;
+        RptqDocumentElement *documentObject;
+        NSManagedObjectID *objectID;
+        for (objectID in self.userSelectedObjectIDs) {
+            documentObject = [self.document.managedObjectContext objectWithID:objectID];
+            currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+            currencyFormatter.decimalCount = [valueThatChanged integerValue];
+            documentObject.numericFormat = currencyFormatter;
             [documentObject.managedObjectContext save:nil];
         }
     }
@@ -230,12 +246,15 @@
     
     if (indexPath.row == 1 && indexPath.section == 0) {
         
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            BOOL isCurrency = (documentObject.formatNumericCurrency).boolValue;
-            BOOL isCurrencyNow = !isCurrency;
-            documentObject.formatNumericCurrency = @(isCurrencyNow);
-            UITableViewCellAccessoryType newAccessory = isCurrencyNow ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        MADCurrencyFormatter *currencyFormatter;
+        NSManagedObjectID *objectID;
+        UITableViewCellAccessoryType newAccessory;
+        for (objectID in self.userSelectedObjectIDs) {
+            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectID];
+            currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+            currencyFormatter.enabled = !currencyFormatter.enabled;
+            documentObject.numericFormat = currencyFormatter;
+            newAccessory = currencyFormatter.enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             (self.tableViewCellCurrency).accessoryType = newAccessory;
             [documentObject.managedObjectContext save:nil];
         }

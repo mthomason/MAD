@@ -26,7 +26,8 @@
 - (NSValue *)migrateValueFromAlignmentHorizontal:(NSNumber *)horizontal
                                         vertical:(NSNumber *)vertical {
     int64_t h, v;
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt64Type, &v);
+    CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt64Type, &h);
+    CFNumberGetValue((__bridge CFNumberRef _Nonnull)vertical, kCFNumberSInt64Type, &v);
     MADAlignment alignment = MADAlignmentMake64(h, v);
     return [NSValue valueWithBytes:&alignment objCType:@encode(MADAlignment)];
 }
@@ -119,9 +120,11 @@
                                                               locale:(NSString *)locale
                                                         decimalCount:(NSNumber *)decimalCount {
     MADCurrencyFormatter *currency;
+    currency = [[MADCurrencyFormatter alloc] init];
     currency.enabled = [enabled boolValue];
     currency.decimalCount = [decimalCount integerValue];
-    currency = [[MADCurrencyFormatter alloc] init];
+    currency.locale = [NSLocale currentLocale];
+    return currency;
 }
 
 - (NSString *)migrateValueFromMySQLDatabaseName:(NSString *)mySQLDBName

@@ -166,6 +166,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
                                dropTolerance: tolerance];
 }
 
+// ???: I don't think these predicates are good.  Is objectID in that array allValues?
+
 - (void)positionItem:(MADSectionLayoutAttributes *)placedItem {
 
     NSArray <MADSectionLayoutAttributes *> *allValues = self.items.allValues;
@@ -173,23 +175,29 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     
     // If offscreen, move it onscreen.
     if (placedItem.frame.origin.x < CGPointZero.x) {
-        placedItem.frame = CGRectMake(CGPointZero.x, placedItem.frame.origin.y, placedItem.frame.size.width, placedItem.frame.size.height);
+        placedItem.frame = CGRectMake(CGPointZero.x,
+                                      placedItem.frame.origin.y,
+                                      placedItem.frame.size.width,
+                                      placedItem.frame.size.height);
     }
     if (placedItem.frame.origin.y < CGPointZero.y) {
-        placedItem.frame = CGRectMake(placedItem.frame.origin.x, CGPointZero.y, placedItem.frame.size.width, placedItem.frame.size.height);
+        placedItem.frame = CGRectMake(placedItem.frame.origin.x,
+                                      CGPointZero.y,
+                                      placedItem.frame.size.width,
+                                      placedItem.frame.size.height);
     }
     
     NSArray *allPotentalDropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: placedItem withAttributes: allValues];
     BOOL anchored = [self moveItem:placedItem toNearestPointInGroup:allPotentalDropPoints dropTolerance:24.0000f];
     if (!anchored) {
-        anchored = [placedItem moveOnScreen];
+        [placedItem moveOnScreen];
     }
     if ([placedItem intersectsAnItemInArray: allValues]) {
         [placedItem placeItemGivenAttributes: allValues];
     }
     [placedItems addObject:placedItem];
     
-    static NSString * const formatString = @"objectID != %@.objectID";
+    NSString *formatString = @"objectID != %@.objectID";
     NSPredicate *unplaced = [NSPredicate predicateWithFormat:formatString, placedItem];
     NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:unplaced];
     
@@ -200,18 +208,18 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         [placedItems setArray:placedNow];
         positionItems = NO;
         
-        static NSString * const format = @"NOT objectID IN %@.objectID";
+        NSString *format = @"NOT objectID IN %@.objectID";
         NSPredicate *filterPlacedItems = [NSPredicate predicateWithFormat:format, placedItems];
-        NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:filterPlacedItems];
-        for (MADSectionLayoutAttributes *item in placedItems) {
+        NSArray *items = [allValues filteredArrayUsingPredicate:filterPlacedItems];
+        for (MADSectionLayoutAttributes *item in items) {
             if ([item intersectsAnItemInArray:unplacedItems]) {
                 positionItems = YES;
                 break;
             }
         }
     }
-    placedItem.frame = CGRectMake(roundf(placedItem.frame.origin.x),
-                                  roundf(placedItem.frame.origin.y),
+    placedItem.frame = CGRectMake(round(placedItem.frame.origin.x),
+                                  round(placedItem.frame.origin.y),
                                   placedItem.frame.size.width, placedItem.frame.size.height);
 }
 

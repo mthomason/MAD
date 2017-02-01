@@ -343,9 +343,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)setAggregateObjectToEdit:(RptqDocumentElementAggregate *)aggregateDocumentObject {
-    self.aggregateFunctionType = aggregateDocumentObject.function.shortValue;
-    self.aggregateGroupByType = aggregateDocumentObject.groupType.shortValue;
-    self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber.integerValue;
+    self.aggregateFunctionType = aggregateDocumentObject.functionType;
+    self.aggregateGroupByType = aggregateDocumentObject.groupType;
+    self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber;
     self.fieldObjectId = aggregateDocumentObject.aggregateField.objectID;
     self.fieldObject = aggregateDocumentObject.aggregateField;
     self.editmode = YES;

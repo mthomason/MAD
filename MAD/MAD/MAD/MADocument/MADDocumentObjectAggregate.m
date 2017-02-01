@@ -36,11 +36,10 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
         
-        RptqDocumentElement *item;
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
         datasource = datasource;
-        item = item;
-        RptqDocumentElementAggregate *isAggregate = (RptqDocumentElementAggregate *)item;
+        RptqDocumentElementAggregate *isAggregate;
+        isAggregate = (RptqDocumentElementAggregate *)definition.item;
         RptqQueryField *aggregateField = isAggregate.aggregateField;
         RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
         
@@ -188,8 +187,8 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
             aggregateResult = dataOfInterest[fieldKey];
         }
         
-        NSString *formattedString = [item formattedString: aggregateType
-                                                 forValue: aggregateResult];
+        NSString *formattedString = [isAggregate formattedString: aggregateType
+                                                        forValue: aggregateResult];
         
         self.text = formattedString.copy;
         if ([self.text isEqualToString:MTNullIdentifier]) {
