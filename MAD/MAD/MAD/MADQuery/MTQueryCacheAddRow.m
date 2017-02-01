@@ -60,6 +60,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     NSUInteger columnKeysCount = columnKeys.count;
     char buf[(count_digits_ul(columnKeysCount) + 3) * columnKeysCount + 1];
     buf[0] = '?';
+    buf[1] = '\0';
     int buf_ptr = 1;
     for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
         if (columnCounter > 0) {

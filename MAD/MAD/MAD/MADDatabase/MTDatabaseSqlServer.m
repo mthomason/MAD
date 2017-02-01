@@ -339,7 +339,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
                 
                 int numberOfColumns = dbnumcols(dbconn);
-                NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
+                NSMutableArray <NSDictionary *> *colmunHolder;
+                colmunHolder = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
                 static int disregardedBind = -1023;
                 
                 NSNumber *keySYBDATETIMN = [[NSNumber alloc] initWithInt: SYBDATETIMN];
@@ -406,14 +407,24 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                                 keyDisregardedBind     : @0
                                                 
                                                 };
-                NSMutableDictionary *counters = [[NSMutableDictionary alloc] initWithDictionary:countersStart];
+                NSMutableDictionary <NSNumber *, NSNumber *> *counters;
+                counters = [[NSMutableDictionary alloc] initWithDictionary:countersStart];
                 
                 [datatable removeAllObjects];
-                
-                for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
+
+                NSNumber *n;
+                DBINT columnCtr, columnOffsetCtr, columnType, columnNumberBytes, columnLength;
+                NSNumber *columnNumberWrapper, *columnTypeNumber,
+                         *columnDataLen, *columTypeKey, *columnIndexOfTypeNumber,
+                *columnLen, *columPercision;
+                NSString *columnNameString;
+                NSDictionary *dictionary;
+                int index;
+                MADDataColumn *dataColumn;
+                for (columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                     
-                    DBINT columnOffsetCtr = columnCtr + 1;
-                    DBINT columnType = dbcoltype(dbconn, columnOffsetCtr);
+                    columnOffsetCtr = columnCtr + 1;
+                    columnType = dbcoltype(dbconn, columnOffsetCtr);
                     if (columnType == SYBDECIMAL) {
                         columnType = SYBNUMERIC;
                     } else if (columnType == SYBMONEY4) {
@@ -422,48 +433,45 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     if (columnType >= 0) {
                         
-                        DBINT columnNumberBytes = dbdatlen(dbconn, columnOffsetCtr);
-                        DBINT columnLength      = dbcollen(dbconn, columnOffsetCtr);
+                        columnNumberBytes = dbdatlen(dbconn, columnOffsetCtr);
+                        columnLength      = dbcollen(dbconn, columnOffsetCtr);
+                    
+                        columnNumberWrapper = [[NSNumber alloc] initWithInt: columnCtr];
+                        columnTypeNumber = [[NSNumber alloc] initWithInt: columnType];
                         
-                        NSString *fieldKey = fieldKeys[(NSUInteger)columnCtr];
+                        columnNameString = fieldKeys[(NSUInteger)columnCtr];
+                        columnDataLen = @(columnNumberBytes);
+                        columTypeKey = @(columnType);
+                        index = [counters[columTypeKey] intValue];
                         
-                        NSNumber *columnNumber = @(columnCtr);
+                        columnIndexOfTypeNumber = [[NSNumber alloc] initWithInt: index];
+                        columnLen = [[NSNumber alloc] initWithInt: columnLength];
+                        columPercision = [[NSNumber alloc] initWithInt: -1];
                         
-                        NSNumber *columnTypeNumber = @(columnType);
+                        dictionary = @{
+                                       MTDatabaseColumnTypeId : columnTypeNumber,             //Type
+                                       MTDatabaseColumnNameId : columnNameString,             //Name
+                                       MTDatabaseColumnNumberId : columnNumberWrapper,        //Index
+                                       MTDatabaseColumnDataLenId : columnDataLen,             //Data length
+                                       MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber, //Index of type
+                                       MTDatabaseColumnLenId : columnLen,                     //Column lenght
+                                       MTDatabaseColumnPrecision : columPercision             //Column percision
+                                       };
                         
-                        NSString *columnNameString = fieldKey;
-                        NSNumber *columnDataLen = @(columnNumberBytes);
-                        NSNumber *columTypeKey = @(columnType);
-                        NSInteger columnIndexOfType = [counters[columTypeKey] integerValue];
-                        
-                        NSNumber *columnIndexOfTypeNumber = @(columnIndexOfType);
-                        NSNumber *columnLen = @(columnLength);
-                        NSNumber *columPercision = @-1;
-                        
-                        NSDictionary *dictionary = @{
-                                                     MTDatabaseColumnTypeId : columnTypeNumber,          //Type
-                                                     MTDatabaseColumnNameId : columnNameString,          //Name
-                                                     MTDatabaseColumnNumberId : columnNumber,              //Index
-                                                     MTDatabaseColumnDataLenId : columnDataLen,             //Data length
-                                                     MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber,   //Index of type
-                                                     MTDatabaseColumnLenId : columnLen,                 //Column lenght
-                                                     MTDatabaseColumnPrecision : columPercision             //Column percision
-                                                     };
-                        
-                        MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:columnNameString];
-                        dataColumn.fieldName = columnNameString;
-                        dataColumn.nativeType = columnType;
-                        dataColumn.type = [MTDatabaseSqlServer dataTypeForNativeType:columnType];
-                        dataColumn.dataLength = columnLength;
-                        dataColumn.dataPercision = -1;
-                        
+                        dataColumn = [[MADDataColumn alloc] initWithType: [MTDatabaseSqlServer dataTypeForNativeType:columnType]
+                                                                    name: columnNameString
+                                                                  number: columnCtr
+                                                                 dataLen: columnNumberBytes
+                                                             indexOfType: index
+                                                                  length: columnLength
+                                                               percision: -1
+                                                              nativeType: (int16_t)columnType];
                         [datatable addColumn:dataColumn];
-                        
                         [colmunHolder addObject:dictionary];
 
-                        columnIndexOfType++;
+                        index++;
                         
-                        NSNumber *n = @(columnIndexOfType);
+                        n = [[NSNumber alloc] initWithInt: index];
                         counters[columTypeKey] = n;
                         
                     }
@@ -475,10 +483,9 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     //SYBREAL, SYBFLTN, and SYBFLT8
                     
-                    NSInteger resultCountForType = numberOfItemsOfType(SYBREAL, counters);
+                    NSUInteger resultCountForType = numberOfItemsOfType(SYBREAL, counters);
                     double sybRealBind[resultCountForType];
                     DBINT sybRealBindNull[resultCountForType];
-                    
                     
                     resultCountForType = numberOfItemsOfType(SYBFLTN, counters);
                     double sybFltNBind[resultCountForType];
@@ -597,55 +604,53 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     for (NSDictionary *columnMetaData in colmunHolder) {
                         
                         int columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
-                        int columnLength = [columnMetaData[MTDatabaseColumnLenId] intValue];
+                        unsigned long columnLength = [columnMetaData[MTDatabaseColumnLenId] unsignedLongValue];
                         //int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
                         int columnIndexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
                         int columnOffsetNumber = columnNumber + 1;
                         
                         switch ([columnMetaData[MTDatabaseColumnTypeId] integerValue]) {
                                 
-                            case SYBCHAR:
-                            {
-                                int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                            case SYBCHAR: {
+                                size_t size = sizeof(char) * ( columnLength + 1 );
                                 sybCharBind[columnIndexOfType] = malloc( size );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybCharBind[columnIndexOfType]);
+                                dbbind(dbconn,
+                                       columnOffsetNumber,
+                                       NTBSTRINGBIND,
+                                       (DBINT)columnLength + 1,
+                                       (BYTE *)sybCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
                                 break;
                             }
-                            case SYBVARCHAR:
-                            {
-                                int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
-                                sybVarCharBind[columnIndexOfType] = malloc( size );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybVarCharBind[columnIndexOfType]);
+                            case SYBVARCHAR: {
+                                sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybVarCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
                                 break;
                             }
-                            case SYBTEXT:
-                            {
-                                int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
-                                sybTextBind[columnIndexOfType] = malloc( size );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybTextBind[columnIndexOfType]);
+                            case SYBTEXT: {
+                                sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybTextBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
                                 break;
                             }
-                            case SYBNTEXT:
-                            {
-                                int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                            case SYBNTEXT: {
+                                size_t size = sizeof(char) * ( columnLength + 1 );
                                 sybnTextBind[columnIndexOfType] = malloc( size );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnTextBind[columnIndexOfType]);
-                                dbnullbind(dbconn, columnOffsetNumber, &sybnTextBindNull[columnIndexOfType]);
+                                dbbind(dbconn,
+                                       columnOffsetNumber,
+                                       NTBSTRINGBIND,
+                                       (DBINT)columnLength + 1,
+                                       (BYTE *)sybnTextBind[columnIndexOfType]);
+                                dbnullbind(dbconn,
+                                           columnOffsetNumber,
+                                           &sybnTextBindNull[columnIndexOfType]);
                                 break;
                             }
-                            case SYBNVARCHAR:
-                            {
-                                int columnLengthPlusOne = columnLength + 1;
-                                size_t size = sizeof(char) * ( columnLengthPlusOne );
+                            case SYBNVARCHAR: {
+                                size_t size = sizeof(char) * ( columnLength + 1 );
                                 sybnVarCharBind[columnIndexOfType] = malloc( size );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybnVarCharBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
                                 break;
                             }
@@ -685,16 +690,22 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                 break;
                                 
                             case SYBFLTN:
-                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybFltNBind[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybFltNBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybFltNBindNull[columnIndexOfType]);
                                 break;
                             case SYBFLT8:
-                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybFlt8BindNull[columnIndexOfType]);
                                 break;
                             case SYBREAL:
-                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybRealBind[columnIndexOfType]);
-                                dbnullbind(dbconn, columnOffsetNumber, &sybRealBindNull[columnIndexOfType]);
+                                dbbind(dbconn,
+                                       columnOffsetNumber,
+                                       FLT8BIND,
+                                       (DBINT)columnLength,
+                                       (BYTE *)&sybRealBind[columnIndexOfType]);
+                                dbnullbind(dbconn,
+                                           columnOffsetNumber,
+                                           &sybRealBindNull[columnIndexOfType]);
                                 break;
                             case SYBDECIMAL:
                             case SYBNUMERIC: {
@@ -710,16 +721,16 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                  */
                                 
                                 sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybNumericBindChar[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength, (BYTE *)sybNumericBindChar[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
                                 break;
                             }
                             case SYBMONEYN:
-                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybMoneyNBindNull[columnIndexOfType]);
                                 break;
                             case SYBMONEY:
-                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybMoneyBind[columnIndexOfType]);
+                                dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybMoneyBind[columnIndexOfType]);
                                 dbnullbind(dbconn, columnOffsetNumber, &sybMoneyBindNull[columnIndexOfType]);
                                 break;
                                 
@@ -1190,10 +1201,10 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return rsuccess;
 }
 
-static inline NSInteger numberOfItemsOfType(int type, NSMutableDictionary *counters);
-static inline NSInteger numberOfItemsOfType(int type, NSMutableDictionary *counters) {
+static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary *counters);
+static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary *counters) {
     NSNumber *key = @(type);
-    NSNumber * __autoreleasing counter = counters[key];
+    NSNumber *counter = counters[key];
     return counter ? counter.integerValue : 0;
 }
 

@@ -103,6 +103,30 @@
 }
 */
 
+- (instancetype)initWithType:(MADDataType)columnType
+                        name:(NSString *)name
+                      number:(int)columnNumber
+                     dataLen:(int)dataLength
+                 indexOfType:(int)indexOfType
+                      length:(NSInteger)length
+                   percision:(NSInteger)percision
+                  nativeType:(int16_t)nativeType {
+    if (self = [super init]) {
+
+        NSMutableArray *column = [[NSMutableArray alloc] init];
+        self.column = column;
+        self.type = columnType;
+        self.identifier = name.copy;
+        self.caption = name.copy;
+        self.fieldName = name.copy;
+        self.nativeType = nativeType;
+        self.dataLength = length;
+        self.dataPercision = percision;
+
+    }
+    return self;
+}
+
 - (instancetype)initWithIdentifier:(NSString *)identifier {
 
     if (self = [super init]) {

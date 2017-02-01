@@ -35,6 +35,14 @@
 
     - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
     - (instancetype)initWithPlist:(NSDictionary *)plist;
+    - (instancetype)initWithType:(MADDataType)columnType
+                            name:(NSString *)name
+                          number:(int)columnNumber
+                         dataLen:(int)dataLength
+                     indexOfType:(int)indexOfType
+                          length:(NSInteger)length
+                       percision:(NSInteger)percision
+                      nativeType:(int16_t)nativeType;
 
     - (NSDictionary *)copyPlist;
     - (void)removeAllObjects;
