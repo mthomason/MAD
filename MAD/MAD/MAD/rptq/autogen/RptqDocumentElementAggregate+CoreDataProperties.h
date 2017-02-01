@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElementAggregate *> *)fetchRequest;
 
-@property (nonatomic) int64_t groupNumber;
-@property (nonatomic) int64_t groupType;
-@property (nonatomic) int64_t functionType;
+@property (nonatomic) int32_t groupNumber;
+@property (nonatomic) int16_t groupType;
+@property (nonatomic) int16_t functionType;
 @property (nullable, nonatomic, retain) RptqQueryField *aggregateField;
 @property (nullable, nonatomic, retain) RptqDocumentElementFormula *aggregateFunction;
 

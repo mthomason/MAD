@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentElementGroupKey *> *)fetchRequest;
 
-@property (nonatomic) int64_t groupNumber;
+@property (nonatomic) int16_t groupNumber;
 
 @end
 

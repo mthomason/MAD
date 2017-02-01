@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentSectionRows *> *)fetchRequest;
 
-@property (nonatomic) float layoutHeight;
-@property (nonatomic) int64_t rowNumber;
+@property (nonatomic) double layoutHeight;
+@property (nonatomic) int32_t rowNumber;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentElement *> *hasObjects;
 @property (nullable, nonatomic, retain) RptqDocumentSection *inSection;
 

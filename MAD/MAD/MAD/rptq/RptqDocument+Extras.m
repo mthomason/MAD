@@ -589,7 +589,9 @@
     
 }
 
-- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables fieldsByTable:(NSDictionary *)fieldsByTable andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
+                                       fieldsByTable:(NSDictionary *)fieldsByTable
+                             andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     MADErrorContainer * __autoreleasing errorContainer = [[MADErrorContainer alloc] init];
     for (MTDatabaseTable *table in tables) {
@@ -602,7 +604,8 @@
             RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
             [self.defaultDatabase addHasTablesObject: rptqTable];
             
-            NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
+            NSMutableArray <MTDatabaseField *> *schemaFields;
+            schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
             for (MTDatabaseField *field in fields) {
                 RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
                 [schemaFields addObject:schemaField];

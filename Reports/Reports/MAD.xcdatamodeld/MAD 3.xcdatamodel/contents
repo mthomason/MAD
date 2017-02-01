@@ -70,7 +70,7 @@
         <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="dropPoint" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fontname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fontsize" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fontsize" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="foregroundColor" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="margin" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -83,9 +83,9 @@
         <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementAggregate" representedClassName="RptqDocumentElementAggregate" parentEntity="RptqDocumentElement" syncable="YES">
-        <attribute name="functionType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="groupType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="functionType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="groupType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inAggregateObject" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentElementFormula" syncable="YES"/>
     </entity>
@@ -102,9 +102,9 @@
         <attribute name="inputMode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="inputStatic1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="inputStatic2" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="option1" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="option2" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="option3" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="option1" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="option2" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="option3" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="scale" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="showErrorMessage" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="useStaticInput1" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
@@ -124,7 +124,7 @@
         <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentElementAggregate" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementGroupKey" representedClassName="RptqDocumentElementGroupKey" parentEntity="RptqDocumentElement" syncable="YES">
-        <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementImage" representedClassName="RptqDocumentElementImage" parentEntity="RptqDocumentElement" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="NSUnarchiveFromDataTransformerName" customClassName="UIImage" syncable="YES"/>
@@ -143,20 +143,20 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentSection" representedClassName="RptqDocumentSection" syncable="YES">
-        <attribute name="height" optional="YES" attributeType="Float" defaultValueString="44" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="height" optional="YES" attributeType="Double" defaultValueString="44" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
-        <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginBottom" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginLeft" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginRight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginTop" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="layoutHeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marginBottom" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marginLeft" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marginRight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marginTop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numberOfRows" attributeType="Integer 64" minValueString="0" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingBottom" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingLeft" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingRight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingTop" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="paddingBottom" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="paddingLeft" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="paddingRight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="paddingTop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="visibility" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="hasRows" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentSectionRows" inverseName="inSection" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
@@ -168,8 +168,8 @@
         <relationship name="inReportReportHeader" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasReportHeaderSection" inverseEntity="RptqDocument" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES">
-        <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="rowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <attribute name="layoutHeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="rowNumber" attributeType="Integer 32" minValueString="0" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentElement" inverseName="inSectionRow" inverseEntity="RptqDocumentElement" syncable="YES"/>
         <relationship name="inSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection" syncable="YES"/>
     </entity>
@@ -212,7 +212,7 @@
     <entity name="RptqQueryGroup" representedClassName="RptqQueryGroup" syncable="YES">
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="sort" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="hasField" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryGroup" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="hasSection" optional="YES" toMany="YES" minCount="1" maxCount="2" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inGroup" inverseEntity="RptqDocumentSection" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryGroups" inverseEntity="RptqQuery" syncable="YES"/>
@@ -254,29 +254,29 @@
     </entity>
     <elements>
         <element name="RptqDatabase" positionX="-1692" positionY="-1201" width="198" height="148"/>
+        <element name="RptqDatabaseCredentals" positionX="-1827" positionY="-1414" width="128" height="208"/>
         <element name="RptqDatabaseSchemaField" positionX="-405" positionY="324" width="171" height="223"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="163"/>
         <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="268"/>
-        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="298"/>
-        <element name="RptqDocumentElementAggregate" positionX="-1350" positionY="-1461" width="207" height="118"/>
-        <element name="RptqDocumentElementBarcode" positionX="-1260" positionY="-2241" width="189" height="373"/>
+        <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="300"/>
+        <element name="RptqDocumentElementAggregate" positionX="-1350" positionY="-1461" width="207" height="120"/>
+        <element name="RptqDocumentElementBarcode" positionX="-1260" positionY="-2241" width="189" height="375"/>
         <element name="RptqDocumentElementChart" positionX="-1719" positionY="-1854" width="128" height="45"/>
         <element name="RptqDocumentElementFormula" positionX="-1287" positionY="-1644" width="198" height="148"/>
-        <element name="RptqDocumentElementGroupKey" positionX="-1701" positionY="-1746" width="128" height="58"/>
+        <element name="RptqDocumentElementGroupKey" positionX="-1701" positionY="-1746" width="128" height="60"/>
         <element name="RptqDocumentElementImage" positionX="-1730" positionY="-1494" width="128" height="60"/>
         <element name="RptqDocumentElementLabel" positionX="-1737" positionY="-1575" width="128" height="60"/>
         <element name="RptqDocumentElementLabelDataField" positionX="-1181" positionY="-1773" width="128" height="105"/>
         <element name="RptqDocumentElementLabelLink" positionX="-1721" positionY="-1674" width="128" height="75"/>
-        <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="388"/>
-        <element name="RptqDocumentSectionRows" positionX="-1442" positionY="-681" width="191" height="103"/>
+        <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="390"/>
+        <element name="RptqDocumentSectionRows" positionX="-1442" positionY="-681" width="191" height="105"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="387" positionY="1176" width="128" height="118"/>
         <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="238"/>
-        <element name="RptqQueryGroup" positionX="-126" positionY="1152" width="128" height="133"/>
+        <element name="RptqQueryGroup" positionX="-126" positionY="1152" width="128" height="135"/>
         <element name="RptqQueryLinks" positionX="43" positionY="1854" width="128" height="178"/>
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="148"/>
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="118"/>
         <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="133"/>
-        <element name="RptqDatabaseCredentals" positionX="-1827" positionY="-1414" width="128" height="208"/>
     </elements>
 </model>

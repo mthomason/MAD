@@ -18,20 +18,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocumentSection *> *)fetchRequest;
 
-@property (nonatomic) float height;
+@property (nonatomic) double height;
 @property (nonatomic) int64_t identifier;
-@property (nonatomic) float layoutHeight;
-@property (nonatomic) float marginBottom;
-@property (nonatomic) float marginLeft;
-@property (nonatomic) float marginRight;
-@property (nonatomic) float marginTop;
+@property (nonatomic) double layoutHeight;
+@property (nonatomic) double marginBottom;
+@property (nonatomic) double marginLeft;
+@property (nonatomic) double marginRight;
+@property (nonatomic) double marginTop;
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nonatomic) int64_t numberOfRows;
-@property (nonatomic) float paddingBottom;
-@property (nonatomic) float paddingLeft;
-@property (nonatomic) float paddingRight;
-@property (nonatomic) float paddingTop;
-@property (nonatomic) int64_t type;
+@property (nonatomic) double paddingBottom;
+@property (nonatomic) double paddingLeft;
+@property (nonatomic) double paddingRight;
+@property (nonatomic) double paddingTop;
+@property (nonatomic) int16_t type;
 @property (nonatomic) BOOL visibility;
 @property (nonatomic) int16_t wrappingStyle;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentSectionRows *> *hasRows;

@@ -30,9 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t inputMode;
 @property (nullable, nonatomic, copy) NSString *inputStatic1;
 @property (nullable, nonatomic, copy) NSString *inputStatic2;
-@property (nonatomic) int64_t option1;
-@property (nonatomic) int64_t option2;
-@property (nonatomic) int64_t option3;
+@property (nonatomic) int16_t option1;
+@property (nonatomic) int16_t option2;
+@property (nonatomic) int16_t option3;
 @property (nonatomic) float scale;
 @property (nonatomic) BOOL showErrorMessage;
 @property (nonatomic) BOOL useStaticInput1;

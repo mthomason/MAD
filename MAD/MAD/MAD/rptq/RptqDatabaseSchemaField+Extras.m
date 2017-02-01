@@ -68,26 +68,13 @@
 
     RptqDatabaseSchemaField *rptqField = [[self alloc] initWithEntity: fieldEntity
                                        insertIntoManagedObjectContext: objectContext];
-    NSString *label = [[NSString alloc] initWithString: field.name];
-    rptqField.label = label;
-    
-    NSString *name = [[NSString alloc] initWithString: field.name];
-    rptqField.name = name;
-    
-    NSNumber *dataType = [[NSNumber alloc] initWithUnsignedInteger: field.fieldType];
-    rptqField.dataType = dataType;
-    
-    NSNumber *dataTypeNative = [[NSNumber alloc] initWithInteger: field.fieldTypeNative];
-    rptqField.dataTypeNative = dataTypeNative;
-    
-    NSNumber *decimals = [[NSNumber alloc] initWithUnsignedInteger: field.decimals];
-    rptqField.decimals = decimals;
-    
-    NSNumber *width = [[NSNumber alloc] initWithUnsignedInteger: field.width];
-    rptqField.width = width;
-    
-    NSNumber *primaryKey = [[NSNumber alloc] initWithBool: field.primaryKey];
-    rptqField.primaryKey = primaryKey;
+    rptqField.label = field.name.copy;
+    rptqField.name = field.name.copy;
+    rptqField.dataType = field.fieldType;
+    rptqField.dataTypeNative = field.fieldTypeNative;
+    rptqField.decimals = field.decimals;
+    rptqField.width = field.width;
+    rptqField.primaryKey = field.primaryKey;
 
     return rptqField;
 }
@@ -95,7 +82,7 @@
 - (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
     result.name = self.name;
-    result.fieldType = (MADDataType)self.dataType;
+    result.fieldType = self.dataType;
     result.fieldTypeNative = self.dataTypeNative;
     result.decimals = self.decimals;
     result.primaryKey = self.primaryKey;
@@ -108,7 +95,8 @@
 }
 
 - (NSString *)display {
-    NSString *display = [NSString stringWithFormat:@"%@.%@", self.inTable.name, self.name];
+    NSString *display = [[NSString alloc] initWithFormat:@"%@.%@",
+                                                         self.inTable.name, self.name];
     return display.lowercaseString;
 }
 
@@ -119,7 +107,9 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat:@"%@.%@", self.inTable.name, self.name];
+    NSString *result;
+    result = [[NSString alloc] initWithFormat:@"%@.%@", self.inTable.name, self.name];
+    return result;
 }
 
 - (NSString *)toString {
@@ -127,7 +117,9 @@
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", self];
+    NSString *result;
+    result = [[NSString alloc] initWithFormat:@"%@", self];
+    return result;
 }
 
 - (NSString *)fieldTypeDisplay {
@@ -223,7 +215,6 @@
     [document appendFormat:@"Label:             %@\n", self.label];
     [document appendFormat:@"Name:              %@\n", self.name];
     [document appendFormat:@"Primary key:       %@\n", self.primaryKey ? @"YES" : @"NO"];
-    [document appendFormat:@"Width:             %lld\n", self.width];
     [document appendFormat:@"********* RptqDatabaseSchemaField *********"];
     return document;
 }

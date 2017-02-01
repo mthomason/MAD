@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int64_t dropIndex;
 @property (nullable, nonatomic, copy) NSString *fontname;
-@property (nonatomic) float fontsize;
+@property (nonatomic) double fontsize;
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int64_t type;
 @property (nullable, nonatomic, retain) NSObject *origin;

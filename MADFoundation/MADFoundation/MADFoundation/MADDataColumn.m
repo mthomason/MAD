@@ -179,7 +179,7 @@
         _type = columnType.shortValue;
 
         NSNumber *nativeType = plist[[MADDataColumn keyNativeColumnType]];
-        _nativeType = nativeType.integerValue;
+        _nativeType = [nativeType shortValue];
 
         NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
         _dataLength = dataLength.integerValue;

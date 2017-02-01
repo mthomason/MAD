@@ -21,9 +21,9 @@
     @property (nonatomic, assign) NSUInteger calculatedWidth;
 
     @property (nonatomic, assign) MADDataType fieldType;
-    @property (nonatomic, assign) NSInteger fieldTypeNative;
-    @property (nonatomic, assign) NSUInteger width;
-    @property (nonatomic, assign) NSUInteger decimals;
+    @property (nonatomic, assign) int16_t fieldTypeNative;
+    @property (nonatomic, assign) int64_t width;
+    @property (nonatomic, assign) int16_t decimals;
     @property (nonatomic, assign) BOOL primaryKey;
 
     - (BOOL)isNumeric;
