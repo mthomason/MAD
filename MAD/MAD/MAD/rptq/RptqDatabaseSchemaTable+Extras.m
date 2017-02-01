@@ -72,8 +72,6 @@
 #pragma mark - Static
 
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                               label:(NSString *)label
-                                                         labelPlural:(NSString *)labelPlural
                                                                 name:(NSString *)name
                                                         andQueryable:(BOOL)queryable {
     
@@ -81,19 +79,9 @@
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
     RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:managedObjectContext];
-    
-    
-    NSString *rLabel = [[NSString alloc] initWithString:label];
-    rptqTable.label = rLabel;
-    
-    NSString *rLabelPlural = [[NSString alloc] initWithString:labelPlural];
-    rptqTable.label_plural = rLabelPlural;
-    
-    NSString *rName = [[NSString alloc] initWithString: name];
-    rptqTable.name = rName;
-    
-    NSNumber *rQueryable = [[NSNumber alloc] initWithBool: queryable];
-    rptqTable.queryable = rQueryable;
+
+    rptqTable.name = name.copy;
+    rptqTable.queryable = queryable;
     
     return rptqTable;
 }
@@ -105,18 +93,9 @@
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
-    
-    NSString *label = [[NSString alloc] initWithString:table.name];
-    rptqTable.label = label;
-    
-    NSString *labelPlural = [[NSString alloc] initWithString:table.name];
-    rptqTable.label_plural = labelPlural;
 
-    NSString *name = [[NSString alloc] initWithString: table.name];
-    rptqTable.name = name;
-    
-    NSNumber *queryable = [[NSNumber alloc] initWithBool: table.queryable];
-    rptqTable.queryable = queryable;
+    rptqTable.name = table.name.copy;
+    rptqTable.queryable = table.queryable;
     
     return rptqTable;
 }
@@ -152,7 +131,6 @@
     NSMutableString *document = [[NSMutableString alloc] init];
     [document appendFormat:@"*********\n"];
     [document appendFormat:@"Name:              %@\n", self.name];
-    [document appendFormat:@"Label:             %@\n", self.label];
     [document appendFormat:@"Queryable:         %@\n", self.queryable ? @"YES" : @"NO"];
     [document appendFormat:@"Fields:            %@\n", self.hasFields];
     [document appendFormat:@"*********"];

@@ -336,10 +336,6 @@
 		4C5939AC1E3EF7E400582271 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5939481E3EF7E300582271 /* RptqDatabase.m */; };
 		4C5939AD1E3EF7E400582271 /* RptqDatabase+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5939491E3EF7E300582271 /* RptqDatabase+CoreDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5939AE1E3EF7E400582271 /* RptqDatabase+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59394A1E3EF7E300582271 /* RptqDatabase+CoreDataProperties.m */; };
-		4C5939AF1E3EF7E400582271 /* RptqQueryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C59394B1E3EF7E300582271 /* RptqQueryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5939B01E3EF7E400582271 /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59394C1E3EF7E300582271 /* RptqQueryCache.m */; };
-		4C5939B11E3EF7E400582271 /* RptqQueryCache+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C59394D1E3EF7E300582271 /* RptqQueryCache+CoreDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5939B21E3EF7E400582271 /* RptqQueryCache+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59394E1E3EF7E300582271 /* RptqQueryCache+CoreDataProperties.m */; };
 		4C5939B31E3EF7E400582271 /* RptqDocumentSectionRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C59394F1E3EF7E300582271 /* RptqDocumentSectionRows.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5939B41E3EF7E400582271 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5939501E3EF7E300582271 /* RptqDocumentSectionRows.m */; };
 		4C5939B51E3EF7E400582271 /* RptqDocumentSectionRows+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5939511E3EF7E300582271 /* RptqDocumentSectionRows+CoreDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -534,8 +530,6 @@
 		4CC2848E1BADE9D300775B72 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284561BADE98F00775B72 /* RptqFieldSelectorManager.m */; };
 		4CC2848F1BADE9D400775B72 /* RptqQuery+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284571BADE98F00775B72 /* RptqQuery+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284901BADE9D800775B72 /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284581BADE98F00775B72 /* RptqQuery+Extras.m */; };
-		4CC284911BADE9D900775B72 /* RptqQueryCache+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284591BADE98F00775B72 /* RptqQueryCache+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC284921BADE9DC00775B72 /* RptqQueryCache+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2845A1BADE98F00775B72 /* RptqQueryCache+Extras.m */; };
 		4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2845B1BADE98F00775B72 /* RptqQueryField+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284941BADE9DF00775B72 /* RptqQueryField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2845C1BADE98F00775B72 /* RptqQueryField+Extras.m */; };
 		4CC284951BADE9E000775B72 /* RptqQueryGroup+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2845D1BADE98F00775B72 /* RptqQueryGroup+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2277,7 +2271,6 @@
 				4C401DB91BAE3BD600BAE5FC /* MTQueryCacheAddColumn.h in Headers */,
 				4C59399B1E3EF7E400582271 /* RptqQuery.h in Headers */,
 				4C5939AB1E3EF7E400582271 /* RptqDatabase.h in Headers */,
-				4C5939AF1E3EF7E400582271 /* RptqQueryCache.h in Headers */,
 				4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */,
 				4CC284A11BADE9F800775B72 /* RptqDatabaseCredentals+Extras.h in Headers */,
 				4CF46DD21CF2F98100D93406 /* MADDatabaseProtocol.h in Headers */,
@@ -2286,7 +2279,6 @@
 				4C5939A51E3EF7E400582271 /* RptqDocumentElementLabel+CoreDataProperties.h in Headers */,
 				4CEFDD061CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h in Headers */,
 				4C5939971E3EF7E400582271 /* RptqDatabaseSchemaField.h in Headers */,
-				4C5939B11E3EF7E400582271 /* RptqQueryCache+CoreDataProperties.h in Headers */,
 				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC2847C1BADE9AE00775B72 /* RptqDocumentElementFactory.h in Headers */,
 				4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */,
@@ -2338,7 +2330,6 @@
 				4CC283C71BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h in Headers */,
 				4C57674F1E1CD52C00611F37 /* MTDatabaseMySql+DataTable.h in Headers */,
 				4C401DE31BAE3BD800BAE5FC /* MTQueryDefinitionGroup.h in Headers */,
-				4CC284911BADE9D900775B72 /* RptqQueryCache+Extras.h in Headers */,
 				4C47543B1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h in Headers */,
 				4C401E2B1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.h in Headers */,
 				4CC284971BADE9E400775B72 /* RptqQueryLinks+Extras.h in Headers */,
@@ -2644,7 +2635,6 @@
 				4C5939DA1E3EF7E400582271 /* RptqQueryTable+CoreDataProperties.m in Sources */,
 				4C401D691BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m in Sources */,
 				4CEFDD121CF5B2050092C148 /* madsqlite3.c in Sources */,
-				4C5939B01E3EF7E400582271 /* RptqQueryCache.m in Sources */,
 				4CC282781BADE82100775B72 /* MADNotificationDidFormatPage.m in Sources */,
 				4C3080EA1D05507E00A7D597 /* MADDocumentObjectAggregate.m in Sources */,
 				4C1CFF091D050E8C009DBA4F /* MADDocumentObjectLabelStatic.m in Sources */,
@@ -2739,7 +2729,6 @@
 				4C994F511BE485F80058627A /* MADDocumentObjectType.m in Sources */,
 				4C6F35211E40EB0200F4744F /* RptqDatabaseCredentals+CoreDataProperties.m in Sources */,
 				4C401DF41BAE3BD900BAE5FC /* MTQuerySampleDataTable.m in Sources */,
-				4C5939B21E3EF7E400582271 /* RptqQueryCache+CoreDataProperties.m in Sources */,
 				4CA3549A1D228D8F0072BD38 /* MADReportSectionPageHeader.m in Sources */,
 				4C5939D41E3EF7E400582271 /* RptqQuerySort.m in Sources */,
 				4C401E581BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m in Sources */,
@@ -2791,7 +2780,6 @@
 				4C5767581E1CEB2300611F37 /* MTDataTable.m in Sources */,
 				4C5939881E3EF7E400582271 /* RptqQueryField.m in Sources */,
 				4C401E6F1BAE4F4000BAE5FC /* NSManagedObject+Extras.m in Sources */,
-				4CC284921BADE9DC00775B72 /* RptqQueryCache+Extras.m in Sources */,
 				4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */,
 				4CE295BF1E30F7BD009D0BC9 /* MADQueryParameters.m in Sources */,
 				4C5939BC1E3EF7E400582271 /* RptqDocumentElementBarcode.m in Sources */,

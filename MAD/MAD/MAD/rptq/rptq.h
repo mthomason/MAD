@@ -26,7 +26,6 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery.h"
-#import "RptqQueryCache.h"
 #import "RptqQueryField.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryLinks.h"

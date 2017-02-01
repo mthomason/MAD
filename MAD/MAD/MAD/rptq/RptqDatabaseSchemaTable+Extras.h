@@ -17,8 +17,6 @@
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolLog>
 
     + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                                   label:(NSString *)label
-                                                             labelPlural:(NSString *)labelPlural
                                                                     name:(NSString *)name
                                                             andQueryable:(BOOL)queryable;
 

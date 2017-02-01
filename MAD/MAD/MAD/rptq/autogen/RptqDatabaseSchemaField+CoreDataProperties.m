@@ -16,10 +16,8 @@
 
 @dynamic dataType;
 @dynamic dataTypeNative;
-@dynamic dataTypeNativeDescription;
 @dynamic decimals;
 @dynamic identifier;
-@dynamic label;
 @dynamic name;
 @dynamic primaryKey;
 @dynamic width;

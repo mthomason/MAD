@@ -20,10 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int16_t dataType;
 @property (nonatomic) int16_t dataTypeNative;
-@property (nullable, nonatomic, copy) NSString *dataTypeNativeDescription;
 @property (nonatomic) int16_t decimals;
 @property (nonatomic) int64_t identifier;
-@property (nullable, nonatomic, copy) NSString *label;
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nonatomic) BOOL primaryKey;
 @property (nonatomic) int64_t width;

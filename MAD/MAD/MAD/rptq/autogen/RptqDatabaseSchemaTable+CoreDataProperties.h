@@ -19,10 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
-@property (nullable, nonatomic, copy) NSString *label;
-@property (nullable, nonatomic, copy) NSString *label_plural;
-@property (nullable, nonatomic, copy) NSString *name;
 @property (nonatomic) BOOL queryable;
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDatabaseSchemaField *> *hasFields;
 @property (nullable, nonatomic, retain) RptqDatabase *inDatabase;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqQueryTable *> *inQueryTable;

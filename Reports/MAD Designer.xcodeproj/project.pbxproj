@@ -93,6 +93,7 @@
 		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C17AE1E1E4194E20056A0EA /* MADModel2-3a.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE1D1E4194E20056A0EA /* MADModel2-3a.xcmappingmodel */; };
+		4C17AE201E41B21F0056A0EA /* MADModel2-3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE1F1E41B21F0056A0EA /* MADModel2-3.xcmappingmodel */; };
 		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
@@ -695,7 +696,6 @@
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C6F34F91E4086AF00F4744F /* MADPointTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */; };
 		4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */; };
-		4C6F35191E40DFF200F4744F /* MADModel2-3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F35181E40DFF200F4744F /* MADModel2-3.xcmappingmodel */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
 		4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
@@ -1290,6 +1290,7 @@
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C17AE1D1E4194E20056A0EA /* MADModel2-3a.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "MADModel2-3a.xcmappingmodel"; sourceTree = "<group>"; };
+		4C17AE1F1E41B21F0056A0EA /* MADModel2-3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "MADModel2-3.xcmappingmodel"; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C18BC721C7E29BD000DF79C /* MADPageViewAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewAttributes.h; sourceTree = "<group>"; };
 		4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewAttributes.m; sourceTree = "<group>"; };
@@ -1870,7 +1871,6 @@
 		4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPointTransformer.m; sourceTree = "<group>"; };
 		4C6F34FB1E408D9D00F4744F /* MADElementMigrationPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementMigrationPolicy.h; sourceTree = "<group>"; };
 		4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementMigrationPolicy.m; sourceTree = "<group>"; };
-		4C6F35181E40DFF200F4744F /* MADModel2-3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "MADModel2-3.xcmappingmodel"; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageToolbarDatabase.png; path = Reports/UIImageToolbarDatabase.png; sourceTree = "<group>"; };
 		4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageToolbarDatabase@2x.png"; path = "Reports/UIImageToolbarDatabase@2x.png"; sourceTree = "<group>"; };
 		4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePictureFrame.png; path = Reports/UIImagePictureFrame.png; sourceTree = "<group>"; };
@@ -2672,8 +2672,8 @@
 				4C17AE1D1E4194E20056A0EA /* MADModel2-3a.xcmappingmodel */,
 				4C6F34FA1E408D7A00F4744F /* MigrationPolicies */,
 				4C6F34F61E40867F00F4744F /* Transformers */,
-				4C6F35181E40DFF200F4744F /* MADModel2-3.xcmappingmodel */,
 				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
+				4C17AE1F1E41B21F0056A0EA /* MADModel2-3.xcmappingmodel */,
 			);
 			name = Model;
 			path = Reports;
@@ -6092,6 +6092,7 @@
 				4C97CB8C1E3A263400587B16 /* MADFileExplorerAnimated.m in Sources */,
 				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */,
+				4C17AE201E41B21F0056A0EA /* MADModel2-3.xcmappingmodel in Sources */,
 				4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */,
 				4C5C0DBF1C9CF1D300826BC2 /* MADKeyChainOperationPut.m in Sources */,
 				4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */,
@@ -6222,7 +6223,6 @@
 				4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */,
 				4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C4021011BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m in Sources */,
-				4C6F35191E40DFF200F4744F /* MADModel2-3.xcmappingmodel in Sources */,
 				4C401F2A1BAE703200BAE5FC /* MADTableViewCellQueryLink.m in Sources */,
 				4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */,
 				4C59BDC01C9AA7C10031BC6C /* MADBlockOperation.m in Sources */,

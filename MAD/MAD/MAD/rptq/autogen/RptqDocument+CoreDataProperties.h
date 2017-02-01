@@ -18,15 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqDocument *> *)fetchRequest;
 
+@property (nonatomic) int64_t identifier;
+@property (nonatomic) int16_t papersize;
+@property (nonatomic) BOOL override;
+
 @property (nullable, nonatomic, copy) NSString *author_name;
 @property (nullable, nonatomic, copy) NSString *comment;
 @property (nullable, nonatomic, copy) NSString *copyright;
-@property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSString *organization;
-@property (nonatomic) BOOL override;
 @property (nullable, nonatomic, copy) NSString *overrideText;
-@property (nonatomic) int16_t papersize;
+
 @property (nullable, nonatomic, retain) NSSet<RptqDatabase *> *hasDatabaseSchemas;
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasDetailSection;
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasPageFooterSection;

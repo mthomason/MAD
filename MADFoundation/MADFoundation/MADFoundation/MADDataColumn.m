@@ -11,6 +11,7 @@
 #endif
 
 #import "MADDataColumn.h"
+#import <CoreFoundation/CFNumber.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSNull.h>
@@ -30,15 +31,15 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
     
-    [encoder encodeObject: self.fieldName                   forKey: [MADDataColumn keyFieldName]];
-    [encoder encodeObject: self.identifier                  forKey: [MADDataColumn keyIdentifier]];
-    [encoder encodeObject: self.column                      forKey: [MADDataColumn keyColumn]];
-    [encoder encodeObject: self.defaultValue                forKey: [MADDataColumn keyDefaultValue]];
-    [encoder encodeObject: self.caption                     forKey: [MADDataColumn keyCaption]];
-    [encoder encodeInt64:   self.type                       forKey: [MADDataColumn keyColumnType]];
-    [encoder encodeInt:     self.nativeType                 forKey: [MADDataColumn keyNativeColumnType]];
-    [encoder encodeInteger: self.dataLength                 forKey: [MADDataColumn keyDataLength]];
-    [encoder encodeInteger: self.dataPercision               forKey: [MADDataColumn keyDataPercision]];
+    [encoder encodeObject:  self.fieldName      forKey: [MADDataColumn keyFieldName]];
+    [encoder encodeObject:  self.identifier     forKey: [MADDataColumn keyIdentifier]];
+    [encoder encodeObject:  self.column         forKey: [MADDataColumn keyColumn]];
+    [encoder encodeObject:  self.defaultValue   forKey: [MADDataColumn keyDefaultValue]];
+    [encoder encodeObject:  self.caption        forKey: [MADDataColumn keyCaption]];
+    [encoder encodeInt64:   self.type           forKey: [MADDataColumn keyColumnType]];
+    [encoder encodeInt:     self.nativeType     forKey: [MADDataColumn keyNativeColumnType]];
+    [encoder encodeInt64:   self.dataLength     forKey: [MADDataColumn keyDataLength]];
+    [encoder encodeInteger: self.dataPercision  forKey: [MADDataColumn keyDataPercision]];
     
     
     [encoder encodeBool: _primaryKey       forKey: [MADDataColumn keyIsPrimaryKey]];
@@ -59,7 +60,7 @@
         self.type =                 (int16_t)[decoder decodeIntForKey:  [MADDataColumn keyColumnType]];
         self.nativeType =           (int16_t)[decoder decodeIntForKey: [MADDataColumn keyNativeColumnType]];
         self.dataLength =           [decoder decodeIntegerForKey: [MADDataColumn keyDataLength]];
-        self.dataPercision =        [decoder decodeIntegerForKey: [MADDataColumn keyDataPercision]];
+        self.dataPercision =        [decoder decodeIntForKey: [MADDataColumn keyDataPercision]];
         self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]];
 
     }
@@ -109,7 +110,7 @@
                      dataLen:(int)dataLength
                  indexOfType:(int)indexOfType
                       length:(NSInteger)length
-                   percision:(NSInteger)percision
+                   percision:(int32_t)percision
                   nativeType:(int16_t)nativeType {
     if (self = [super init]) {
 
@@ -178,14 +179,14 @@
         NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
         _type = columnType.shortValue;
 
-        NSNumber *nativeType = plist[[MADDataColumn keyNativeColumnType]];
-        _nativeType = [nativeType shortValue];
+        CFNumberRef nativeType = (__bridge CFNumberRef)(plist[[MADDataColumn keyNativeColumnType]]);
+        CFNumberGetValue(nativeType, kCFNumberSInt16Type, &_nativeType);
 
         NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
         _dataLength = dataLength.integerValue;
 
-        NSNumber *dataPercision = plist[[MADDataColumn keyDataPercision]];
-        _dataPercision = dataPercision.integerValue;
+        CFNumberRef dataPercision = (__bridge CFNumberRef)(plist[[MADDataColumn keyDataPercision]]);
+        CFNumberGetValue(dataPercision, kCFNumberSInt32Type, &_dataPercision);
         
         NSNumber *isPrimaryKey = plist[[MADDataColumn keyIsPrimaryKey]];
         _primaryKey = isPrimaryKey.boolValue;
@@ -260,12 +261,14 @@
     plist[key] = obj;
     
     key = [MADDataColumn keyDataLength];
-    obj = [[NSNumber alloc] initWithInteger:_dataLength];
-    plist[key] = obj;
-    
-    obj = [[NSNumber alloc] initWithInteger:_dataPercision];
+    CFNumberRef dataLen = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &_dataLength);
+    plist[key] = (__bridge id _Nullable)(dataLen);
+    CFRelease(dataLen);
+
     key = [MADDataColumn keyDataPercision];
-    plist[key] = obj;
+    CFNumberRef dataPer = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &_dataPercision);
+    plist[key] = (__bridge id _Nullable)(dataPer);
+    CFRelease(dataPer);
     
     obj = [[NSNumber alloc] initWithBool:_primaryKey];
     key = [MADDataColumn keyIsPrimaryKey];

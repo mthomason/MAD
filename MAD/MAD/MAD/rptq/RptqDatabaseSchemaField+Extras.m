@@ -68,7 +68,6 @@
 
     RptqDatabaseSchemaField *rptqField = [[self alloc] initWithEntity: fieldEntity
                                        insertIntoManagedObjectContext: objectContext];
-    rptqField.label = field.name.copy;
     rptqField.name = field.name.copy;
     rptqField.dataType = field.fieldType;
     rptqField.dataTypeNative = field.fieldTypeNative;
@@ -209,10 +208,8 @@
     [document appendFormat:@"Name:              %@\n", self.name];
     [document appendFormat:@"Data type:         %hd\n", self.dataType];
     [document appendFormat:@"Data type native:  %hd\n", self.dataTypeNative];
-    [document appendFormat:@"Data type desc:    %@\n", self.dataTypeNativeDescription];
     [document appendFormat:@"Decimals:          %hd\n", self.decimals];
     [document appendFormat:@"Identifier:        %lld\n", self.identifier];
-    [document appendFormat:@"Label:             %@\n", self.label];
     [document appendFormat:@"Name:              %@\n", self.name];
     [document appendFormat:@"Primary key:       %@\n", self.primaryKey ? @"YES" : @"NO"];
     [document appendFormat:@"********* RptqDatabaseSchemaField *********"];

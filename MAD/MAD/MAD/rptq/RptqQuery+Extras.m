@@ -126,7 +126,11 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     
     NSPredicate *predicate;
     NSFetchRequest *request;
-    predicate = [NSPredicate predicateWithFormat:@"@% == %@", NSStringFromSelector(@selector(inQuery)), queryObjectID];
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQuery))]
+                                                   rightExpression: [NSExpression expressionForConstantValue:queryObjectID]
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     request.predicate = predicate;
     request.includesSubentities = NO;
@@ -191,7 +195,6 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     [description appendFormat:@"Override:           %@\n", self.override ? @"YES" : @"NO"];
     [description appendFormat:@"Override text:      %@\n", self.overrideText];
     [description appendFormat:@"Fields:             %@\n", self.hasFields];
-    [description appendFormat:@"Query cache:        %@\n", self.hasQueryCache];
     [description appendFormat:@"Database:           %@\n", self.inDatabase];
     [description appendFormat:@"Query tables (%lu): %@\n", (unsigned long)self.hasQueryTables.count, self.hasQueryTables];
     [description appendFormat:@"Query groups (%lu): %@\n", (unsigned long)self.hasQueryGroups.count, self.hasQueryGroups];

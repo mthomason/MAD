@@ -11,7 +11,7 @@
 
 #import <CoreData/NSManagedObject.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 

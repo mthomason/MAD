@@ -77,9 +77,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqQuerySort.h>
 #import <MAD/RptqQuerySort+CoreDataProperties.h>
 
-#import <MAD/RptqQueryCache.h>
-#import <MAD/RptqQueryCache+CoreDataProperties.h>
-
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+CoreDataProperties.h>
 #import <MAD/RptqDocumentElement+Extras.h>

@@ -211,9 +211,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (NSPredicate *)predicateKindOfLongPressGestureRecognizer {
     
     if (_predicateKindOfLongPressGestureRecognizer == nil) {
-        
-        NSString *format = @"NOT (self isKindOfClass: %@)";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat: format, [UILongPressGestureRecognizer class]];
+        NSPredicate *predicate;;
+        predicate = [NSComparisonPredicate
+                     predicateWithLeftExpression:[NSExpression expressionForEvaluatedObject]
+                     rightExpression:[NSExpression expressionForConstantValue:[UILongPressGestureRecognizer class]]
+                     customSelector:@selector(isMemberOfClass:)];
         _predicateKindOfLongPressGestureRecognizer = predicate.copy;
         
     }

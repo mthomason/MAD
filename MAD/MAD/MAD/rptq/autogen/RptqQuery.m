@@ -9,7 +9,6 @@
 #import "RptqQuery.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
-#import "RptqQueryCache.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryPredicate.h"

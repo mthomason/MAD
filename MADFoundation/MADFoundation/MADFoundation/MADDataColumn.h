@@ -24,7 +24,7 @@
     @property (nonatomic, assign)   MADDataType  type;
     @property (nonatomic, assign)   int16_t     nativeType;
     @property (nonatomic, assign)   int64_t     dataLength;
-    @property (nonatomic, assign)   int16_t     dataPercision;
+    @property (nonatomic, assign)   int32_t     dataPercision;
     
     @property (nonatomic, copy)     NSString    *caption;
     @property (nonatomic, copy)     NSString    *fieldName;
@@ -41,7 +41,7 @@
                          dataLen:(int)dataLength
                      indexOfType:(int)indexOfType
                           length:(NSInteger)length
-                       percision:(NSInteger)percision
+                       percision:(int32_t)percision
                       nativeType:(int16_t)nativeType;
 
     - (NSDictionary *)copyPlist;

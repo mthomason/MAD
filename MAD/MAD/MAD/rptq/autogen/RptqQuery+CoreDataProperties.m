@@ -19,7 +19,6 @@
 @dynamic override;
 @dynamic overrideText;
 @dynamic hasFields;
-@dynamic hasQueryCache;
 @dynamic hasQueryGroups;
 @dynamic hasQueryLinks;
 @dynamic hasQueryPredicate;

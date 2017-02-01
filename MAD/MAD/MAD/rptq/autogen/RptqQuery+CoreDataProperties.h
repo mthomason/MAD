@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL override;
 @property (nullable, nonatomic, copy) NSString *overrideText;
 @property (nullable, nonatomic, retain) NSSet<RptqDatabaseSchemaField *> *hasFields;
-@property (nullable, nonatomic, retain) RptqQueryCache *hasQueryCache;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryGroup *> *hasQueryGroups;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryLinks *> *hasQueryLinks;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryPredicate *> *hasQueryPredicate;

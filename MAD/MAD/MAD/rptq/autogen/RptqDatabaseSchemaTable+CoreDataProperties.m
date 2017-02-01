@@ -15,8 +15,6 @@
 }
 
 @dynamic identifier;
-@dynamic label;
-@dynamic label_plural;
 @dynamic name;
 @dynamic queryable;
 @dynamic hasFields;

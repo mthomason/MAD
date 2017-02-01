@@ -795,11 +795,10 @@
     [document appendFormat:@"Number of sections %lu\n", (unsigned long)[((RptqQuery *)((RptqDatabase *)self.hasDatabaseSchemas.anyObject).hasQueries.anyObject) sectionCount]];
     [document appendFormat:@"Comment:           %@\n", self.comment];
     [document appendFormat:@"Copyright:         %@\n", self.copyright];
-    [document appendFormat:@"Identifier:        %@\n", self.identifier];
-    [document appendFormat:@"Organization:      %@\n", self.organization];
-    [document appendFormat:@"Override:          %@\n", self.override];
+    [document appendFormat:@"Identifier:        %lld\n", self.identifier];
+    [document appendFormat:@"Override:          %@\n", self.override ? @"YES" : @"NO"];
     [document appendFormat:@"Override text:     %@\n", self.overrideText];
-    [document appendFormat:@"Papersize:         %@\n", self.papersize];
+    [document appendFormat:@"Papersize:         %hd\n", self.papersize];
     [document appendFormat:@"Database schemas:  %@\n", self.hasDatabaseSchemas];
     [document appendFormat:@"Page header:       %@\n", self.hasPageHeaderSection];
     [document appendFormat:@"Page footer:       %@\n", self.hasPageFooterSection];
