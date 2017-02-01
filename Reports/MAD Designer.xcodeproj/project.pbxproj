@@ -742,7 +742,7 @@
 		4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C97CB8C1E3A263400587B16 /* MADFileExplorerAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */; };
 		4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */; };
-		4C994F111BDCA3A90058627A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
+		4C994F111BDCA3A90058627A /* MADReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */; };
 		4C994F391BE082730058627A /* MADLabelStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F381BE082730058627A /* MADLabelStatus.m */; };
 		4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F3B1BE28CF50058627A /* MADTextPosition.m */; };
 		4C994F421BE28E790058627A /* MADTextRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F411BE28E790058627A /* MADTextRange.m */; };
@@ -1381,8 +1381,8 @@
 		4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionBackgroundView.m; sourceTree = "<group>"; };
 		4C26B9F01BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionDecorationView.h; sourceTree = "<group>"; };
 		4C26B9F11BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionDecorationView.m; sourceTree = "<group>"; };
-		4C26B9F21BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
-		4C26B9F31BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
+		4C26B9F21BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
+		4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
 		4C26B9F41BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
 		4C26B9F61BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLiquid.h; sourceTree = "<group>"; };
@@ -2763,8 +2763,8 @@
 				4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */,
 				4C26B9F01BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.h */,
 				4C26B9F11BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m */,
-				4C26B9F21BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.h */,
-				4C26B9F31BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.m */,
+				4C26B9F21BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.h */,
+				4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */,
 				4C26B9F41BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.h */,
 				4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */,
 				4C26B9F61BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.h */,
@@ -6361,7 +6361,7 @@
 				4C26BA221BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m in Sources */,
 				4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
-				4C994F111BDCA3A90058627A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
+				4C994F111BDCA3A90058627A /* MADReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4CB074D41E22006700643F32 /* MADFileExplorerToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

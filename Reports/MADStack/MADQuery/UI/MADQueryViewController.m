@@ -71,9 +71,7 @@
 
 #import "MADTableViewHeader.h"
 
-#import "MTStoreKitController+NonRenewableLicensing.h"
-
-#import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "MADReportDesignerSectionLayoutSettingsViewController.h"
 
 #import "MADNavigationController.h"
 
@@ -85,13 +83,13 @@
 
 #import "MADQueryViewDataSource.h"
 
-#import "MADViewTableHeader+QueryViewSectionTypes.h"
-
 #import "MADQueryBuilderAddGroupDelegate.h"
-#import "NSAttributedString+QueryViewController.h"
 #import "MADQueryViewControllerTableLayout.h"
-
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
+
+#import "NSAttributedString+QueryViewController.h"
+#import "MADViewTableHeader+QueryViewSectionTypes.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
@@ -533,9 +531,9 @@ BOOL storeEnabled() {
             }
         }
     } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
-                if ([segue.destinationViewController isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
-                    MTReportDesignerSectionLayoutSettingsViewController *tvc;
-                    tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
+                if ([segue.destinationViewController isKindOfClass:[MADReportDesignerSectionLayoutSettingsViewController class]]) {
+                    MADReportDesignerSectionLayoutSettingsViewController *tvc;
+                    tvc = (MADReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
                         MADocument *document = self.document;
@@ -697,7 +695,7 @@ BOOL storeEnabled() {
 
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+- (void)layoutSettings:(MADReportDesignerSectionLayoutSettingsViewController *)layoutSettings
           newPageAfter:(BOOL)newPageAfter {
 
     MADocument *document = self.document;

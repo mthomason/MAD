@@ -83,7 +83,7 @@
 #import "MTCollectionReuseableViewDefault.h"
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "MADReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 
 #import "MTDocumentObjectNewAggregateViewController.h"
@@ -242,7 +242,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
     @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
-    @property (nonatomic, strong) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+    @property (nonatomic, strong) MADReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
 
     @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
     @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
@@ -521,8 +521,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     self.scroller.delegate = self;
     
 
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerLayoutSettings;
-    viewControllerLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
+    MADReportDesignerSectionLayoutSettingsViewController *viewControllerLayoutSettings;
+    viewControllerLayoutSettings = [MADReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
     viewControllerLayoutSettings.delegate = self;
     self.viewControllerSectionLayoutSettings = viewControllerLayoutSettings;
     
@@ -1205,11 +1205,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 #pragma mark -
 #pragma mark MTReportDesignerSectionLayoutSettingsDelegate
 
-- (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller {
+- (void)sectionLayoutSettingsDidFinish:(MADReportDesignerSectionLayoutSettingsViewController *)controller {
     [self hideToolbox];
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+- (void)layoutSettings:(MADReportDesignerSectionLayoutSettingsViewController *)layoutSettings
           newPageAfter:(BOOL)newPageAfter {
     
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
@@ -2497,7 +2497,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                 _viewControllerSectionLayoutSettings.initalHeightValue = section.height;
                 _viewControllerSectionLayoutSettings.initalVisibility = section.visibility;
                 _viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
-                _viewControllerSectionLayoutSettings.initalNumberOfRows = (NSUInteger)section.numberOfRows;
+                _viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows;
                 [_viewControllerSectionLayoutSettings updateDisplay];
                 
                 UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;

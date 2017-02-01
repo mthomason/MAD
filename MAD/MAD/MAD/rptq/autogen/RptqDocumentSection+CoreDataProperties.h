@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) double marginRight;
 @property (nonatomic) double marginTop;
 @property (nullable, nonatomic, copy) NSString *name;
-@property (nonatomic) int64_t numberOfRows;
+@property (nonatomic) int32_t numberOfRows;
 @property (nonatomic) double paddingBottom;
 @property (nonatomic) double paddingLeft;
 @property (nonatomic) double paddingRight;
