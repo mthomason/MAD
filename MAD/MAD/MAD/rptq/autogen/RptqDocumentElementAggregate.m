@@ -12,3 +12,17 @@
 @implementation RptqDocumentElementAggregate
 
 @end
+
+@implementation RptqDocumentElementAggregate (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementAggregate *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementAggregate"];
+}
+
+@dynamic groupNumber;
+@dynamic groupType;
+@dynamic functionType;
+@dynamic aggregateField;
+@dynamic aggregateFunction;
+
+@end

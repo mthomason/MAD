@@ -12,7 +12,6 @@
 
 #import "RptqDocumentElementLabel+Extras.h"
 #import "RptqDocumentElement.h"
-#import "RptqDocumentElement+CoreDataProperties.h"
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -60,10 +59,6 @@
     NSString *result = nil;
     result = ((RptqDocumentElementLabel *)self).text;
     return result;
-}
-
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [super formattedString:dataType forValue:value];
 }
 
 #pragma mark - RptqDocumentElementFactory

@@ -26,7 +26,6 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
     + (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType;
     + (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType;
 
-    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
     - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
                                           inputType:(MTAggregateFunctionInputType)inputType
                                           groupType:(MTAggregateGroupByType)groupType

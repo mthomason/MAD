@@ -10,6 +10,7 @@
 #define MAD_RptqDocumentElementAggregate_RptqDocumentElement_h
 
 #import "RptqDocumentElement.h"
+#import <CoreData/NSFetchRequest.h>
 
 @class RptqDocumentElementFormula, RptqQueryField;
 
@@ -19,8 +20,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface RptqDocumentElementAggregate (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementAggregate *> *)fetchRequest;
+
+@property (nonatomic) int32_t groupNumber;
+@property (nonatomic) int16_t groupType;
+@property (nonatomic) int16_t functionType;
+@property (nullable, nonatomic, retain) RptqQueryField *aggregateField;
+@property (nullable, nonatomic, retain) RptqDocumentElementFormula *aggregateFunction;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
-#import "RptqDocumentElementAggregate+CoreDataProperties.h"
 
 #endif

@@ -61,10 +61,6 @@
     }
 }
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self formattedString:dataType forValue:value];
-}
-
 #pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId

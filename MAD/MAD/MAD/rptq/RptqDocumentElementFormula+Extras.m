@@ -67,10 +67,6 @@
     return result;
 }
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [super formattedString:dataType forValue:value];
-}
-
 #pragma mark - RptqDocumentElementFactory
 
 + (RptqDocumentElement *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {

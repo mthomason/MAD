@@ -28,11 +28,8 @@
 
 @implementation RptqDocumentElementLabelLink (Extras)
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [self formattedString:dataType forValue:value];
-}
-
-#pragma mark - Overrides
+#pragma mark -
+#pragma mark Overrides
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];

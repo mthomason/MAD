@@ -63,10 +63,6 @@
     return result;
 }
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [super formattedString:dataType forValue:value];
-}
-
 - (NSString *)copyBarcodeTypeName {
     NSString *result = [MTBarcode newBarcodeNameForType:self.barcodeType];
     return result;

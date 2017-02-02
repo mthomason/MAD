@@ -91,7 +91,6 @@
 #import "RptqDatabaseCredentals+Extras.h"
 
 #import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
-#import "RptqDocumentElementAggregate+CoreDataProperties.h"
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"

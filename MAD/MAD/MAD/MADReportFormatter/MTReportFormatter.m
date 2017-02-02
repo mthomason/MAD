@@ -47,10 +47,6 @@
 
 #import "MADSectionRepresentation.h"
 
-
-
-NSString * const MTNullIdentifier = @"(null)";
-
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
     return UIEdgeInsetsMake(fCGPointsForInches(1.0/4.0),
@@ -65,20 +61,19 @@ static inline UIEdgeInsets MADEdgeInsetsEmpty() {
                             CGSizeZero.height, CGSizeZero.height);
 }
 
-static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize);
+static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect, CGSize);
 static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize) {
     return UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
                             layoutSize.height - printableRect.size.height - printableRect.origin.y,
                             layoutSize.width - printableRect.size.width - printableRect.origin.x);
 }
 
-static inline CGFloat PrintableHeightForPage(MADPageOptions *page);
+static inline CGFloat PrintableHeightForPage(MADPageOptions *);
 static inline CGFloat PrintableHeightForPage(MADPageOptions *page) {
     return page.layoutSize.height - page.margins.top - page.margins.bottom;
 }
 
-static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage,
-                                         CGFloat nextItemHeight, CGFloat pageFooterHeight);
+static inline CGFloat HeightWithNextItem(CGFloat, CGFloat, CGFloat);
 static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                                          nextItemHeight, CGFloat pageFooterHeight) {
     return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;

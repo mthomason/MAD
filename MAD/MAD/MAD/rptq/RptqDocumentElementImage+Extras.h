@@ -14,8 +14,6 @@
 
 @interface RptqDocumentElementImage (Extras)
 
-    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
-
 @end
 
 #endif

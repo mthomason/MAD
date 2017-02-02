@@ -80,10 +80,6 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     return result;
 }
 
-- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-    return [super formattedString:dataType forValue:value];
-}
-
 - (NSString *)functionName {
     return [RptqDocumentElementAggregate newStringDisplayForType: self.functionType];
 }

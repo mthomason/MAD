@@ -7,26 +7,33 @@
 //
 
 #import "MADDocumentObjectLabelDynamic.h"
+
 #import <Foundation/NSString.h>
-#import "MTDataTable.h"
+
+//#import "MTDataTable.h"
+
 #import "RptqDocumentElement.h"
+#import "RptqDocumentElement+Extras.h"
+
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
+
 #import "RptqQueryField.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "MTDatabase.h"
-#import "MTReportFormatter.h"
 
+#import "RptqDatabaseSchemaField.h"
+
+#import "MTDatabase.h"
 #import "MTDataTableFast.h"
+
+//#import "MTReportFormatter.h"
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
 #import "MADElementStylizedText.h"
-#import <UIKit/UIFontDescriptor.h>
-#import <UIKit/NSStringDrawing.h>
 
 @implementation MADDocumentObjectLabelDynamic
 

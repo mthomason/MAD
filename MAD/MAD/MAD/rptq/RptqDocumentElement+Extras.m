@@ -11,7 +11,6 @@
 #endif
 
 #import "RptqDocumentElement+Extras.h"
-#import "RptqDocumentElement+CoreDataProperties.h"
 
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>

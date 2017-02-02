@@ -55,25 +55,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)elementViewFrame;
     - (CGRect)elementViewFrameDesigner;
 
-    - (void)setBold:(BOOL)bold;
-    - (void)setItalic:(BOOL)italic;
-    - (void)setStrikethrough:(BOOL)strikethrough;
-    - (void)setUnderline:(BOOL)underline;
-
     - (void)setSizeWidth:(double)width;
     - (void)setSizeHeight:(double)height;
-
-    /*- (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment;
-    - (void)setVerticalAlignment:(MADVerticalAlignment)alignment;
-
-    - (void)setPaddingTop:(double)v;
-    - (void)setPaddingBottom:(double)v;
-    - (void)setPaddingLeft:(double)v;
-    - (void)setPaddingRight:(double)v;
-    - (void)setMarginTop:(double)v;
-    - (void)setMarginBottom:(double)v;
-    - (void)setMarginRight:(double)v;
-    - (void)setMarginLeft:(double)v;*/
 
     - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 

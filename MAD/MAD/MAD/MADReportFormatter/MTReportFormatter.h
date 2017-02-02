@@ -19,8 +19,6 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsMargin  = 1 << 0,
 };
 
-extern NSString * const MTNullIdentifier;
-
 @protocol MTReportFormatterDataSource;
 @protocol MADDataProtocol;
 @protocol MTCacheProtocol;

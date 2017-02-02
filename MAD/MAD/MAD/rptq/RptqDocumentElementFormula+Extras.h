@@ -17,8 +17,6 @@
 @interface RptqDocumentElementFormula (Extras)
         <RptqDocumentElementFactory, MTProtocolLog>
 
-    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
-
 @end
 
 #endif

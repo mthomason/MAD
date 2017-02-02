@@ -37,9 +37,9 @@
     @property (nonatomic, assign, readonly) BOOL has2dComponent;
     @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
 
-    @property (nonatomic, assign) int64_t option1;
-    @property (nonatomic, assign) int64_t option2;
-    @property (nonatomic, assign) int64_t option3;
+    @property (nonatomic, assign) int16_t option1;
+    @property (nonatomic, assign) int16_t option2;
+    @property (nonatomic, assign) int16_t option3;
 
     @property (nonatomic, assign) BOOL center;
 
