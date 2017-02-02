@@ -86,8 +86,8 @@ static inline MADAlignment_t MADAlignmentMake64(int64_t h, int64_t v) {
     - (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
                               vertical:(MADVerticalAlignment)vertical;
 
-    @property (nonatomic, assign, readonly) MADHorizontalAlignment horizontal;
-    @property (nonatomic, assign, readonly) MADVerticalAlignment vertical;
+    @property (nonatomic, assign, readwrite) MADHorizontalAlignment horizontal;
+    @property (nonatomic, assign, readwrite) MADVerticalAlignment vertical;
 
 @end
 

@@ -144,8 +144,6 @@ typedef NSMutableSet    <NSManagedObjectID *>               MADMutableSetManaged
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
-static NSString * const MADImageBarButtonItemMadDesigner8                   = @"UIBarButtonItemMadDesigner8";
-static NSString * const MADImageBarButtonItemMadDesigner                    = @"UIBarButtonItemMadDesigner";
 static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer    = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer   = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 static NSString * const MTSegueChooseWhitespaceSaveIdentifer                = @"MTSegueChooseWhitespaceSaveIdentifer";
@@ -294,7 +292,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 #pragma mark MTTabBarImageProtocol
 
 + (UIImage *)newTabBarImage {
-    return [UIImage imageNamed:MADImageBarButtonItemMadDesigner8];
+    return [UIImage imageNamed:@"UIBarButtonItemMadDesigner8"];
 }
 
 + (instancetype)newDesignerViewController:(MADocument *)document {
@@ -358,37 +356,17 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     if (self = [super initWithCoder:aDecoder]) {
         
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
-        self.numberFormatterPercentage = numberFormatter;
-        
         MADMutableSetElementViews *visibleElementViews;
         visibleElementViews = [[MADMutableSetElementViews alloc] init];
         self.visibleElementViews = visibleElementViews;
-
-        MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-        self.ruler = viewRuler;
         
         MADMutableMapNumbersByNumber *borderAppliedToView;
         borderAppliedToView = [[MADMutableMapNumbersByNumber alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
-        MADDesignerStatusLabel *detailDisplay;
-        detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
-        self.statusLabelZoomScale = detailDisplay;
-        
-        MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
-        toolboxTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-        self.toolboxTransitioningDelegate = toolboxTransitioningDelegate;
-        
         MADMutableMapElementViews *elementViewsDictionary;
         elementViewsDictionary = [[MADMutableMapElementViews alloc] init];
-        _elementViewsDictionary = elementViewsDictionary;
-        
-        UINavigationController *navigationControllerToolbox;
-        navigationControllerToolbox = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
-        self.navigationControllerToolbox = navigationControllerToolbox;
-
+        self.elementViewsDictionary = elementViewsDictionary;
 
     }
     return self;
@@ -458,16 +436,113 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         designer.sectionSettingsVisible = NO;
     };
 
-    void (^initalizeNavigationToolbox)(UINavigationController *) = ^(UINavigationController *nav) {
-        nav.transitioningDelegate = self.toolboxTransitioningDelegate;
-        nav.modalPresentationStyle = UIModalPresentationCustom;
-        nav.preferredContentSize = sizePopoverDefault();
-        
-    };
     initalizeScroller(self.scroller);
     initalizeSelf(self);
-    initalizeNavigationToolbox(self.navigationControllerToolbox);
 
+}
+
+- (MADDesignerStatusLabel *)statusLabelZoomScale {
+    if (_statusLabelZoomScale == nil) {
+        MADDesignerStatusLabel *detailDisplay;
+        detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
+        detailDisplay.frame = [self detailDisplayFrame];
+        _statusLabelZoomScale = detailDisplay;
+    }
+    return _statusLabelZoomScale;
+}
+
+- (NSNumberFormatter *)numberFormatterPercentage {
+    if (_numberFormatterPercentage == nil) {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
+        _numberFormatterPercentage = numberFormatter;
+    }
+    return _numberFormatterPercentage;
+}
+
+- (MTRulerView *)ruler {
+    if (_ruler == nil) {
+        MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+        _ruler = viewRuler;
+    }
+    return _ruler;
+}
+
+- (MADToolboxTransitioningDelegate *)toolboxTransitioningDelegate {
+    if (_toolboxTransitioningDelegate == nil) {
+        MADToolboxTransitioningDelegate *delegate;
+        delegate = [[MADToolboxTransitioningDelegate alloc] init];
+        _toolboxTransitioningDelegate = delegate;
+    }
+    return _toolboxTransitioningDelegate;
+}
+
+- (MADToolboxTransitioningDelegate *)settingsTransitioningDelegate {
+    if (_settingsTransitioningDelegate == nil) {
+        MADToolboxTransitioningDelegate *delegate;
+        delegate = [[MADToolboxTransitioningDelegate alloc] init];
+        _settingsTransitioningDelegate = delegate;
+    }
+    return _settingsTransitioningDelegate;
+}
+
+- (UINavigationController *)navigationControllerToolbox {
+    if (_navigationControllerToolbox == nil) {
+        UINavigationController *navigation;
+        navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
+        navigation.transitioningDelegate = self.toolboxTransitioningDelegate;
+        navigation.modalPresentationStyle = UIModalPresentationCustom;
+        navigation.preferredContentSize = sizePopoverDefault();
+        _navigationControllerToolbox = navigation;
+    }
+    return _navigationControllerToolbox;
+}
+
+- (UINavigationController *)navigationControllerSectionLayoutSettings {
+    if (_navigationControllerSectionLayoutSettings == nil) {
+        UINavigationController *navigationController;
+        navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
+        navigationController.transitioningDelegate = self.settingsTransitioningDelegate;
+        navigationController.modalPresentationStyle = UIModalPresentationCustom;
+        navigationController.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
+        _navigationControllerSectionLayoutSettings = navigationController;
+    }
+    return _navigationControllerSectionLayoutSettings;
+}
+
+- (MADToolboxViewController *)viewControllerToolbox {
+    if (_viewControllerToolbox == nil) {
+        MADToolboxViewController *viewControllerToolbox;
+        viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
+        viewControllerToolbox.clearsBackground = [self padLike];
+        viewControllerToolbox.document = _document;
+        viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+        
+        _toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
+        _toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+        
+        _viewControllerToolbox = viewControllerToolbox;
+    }
+    return _viewControllerToolbox;
+}
+
+- (MADReportDesignerSectionLayoutSettingsViewController *)viewControllerSectionLayoutSettings {
+    if (_viewControllerSectionLayoutSettings == nil) {
+        MADReportDesignerSectionLayoutSettingsViewController *controller;
+        controller = [MADReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
+        controller.delegate = self;
+        self.viewControllerSectionLayoutSettings = controller;
+    }
+    return _viewControllerSectionLayoutSettings;
+}
+
+- (MADPromptManager *)promptManager {
+    if (_promptManager == nil) {
+        MADPromptManager *promptManager;
+        promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:_document.fileURL.lastPathComponent];
+        _promptManager = promptManager;
+    }
+    return _promptManager;
 }
 
 - (void)viewDidLoad {
@@ -476,33 +551,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
-    
     self.hidesStatusBar = NO;
-    
-
-    self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
-
-    MADToolboxViewController *viewControllerToolbox;
-    viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
-    viewControllerToolbox.clearsBackground = [self padLike];
-    viewControllerToolbox.document = document;
-    viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
-    self.viewControllerToolbox = viewControllerToolbox;
-    
-    
-    MADPromptManager *promptManager;
-    NSString *lastPathComponent = document.fileURL.lastPathComponent.copy;
-    promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:lastPathComponent];
-    self.promptManager = promptManager;
-    
-    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        [UIView setAnimationsEnabled:NO];
-        [self displayPrompt];
-        [UIView setAnimationsEnabled:YES];
-    }
-    
-    self.statusLabelZoomScale.frame = [self detailDisplayFrame];
     
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];
@@ -521,22 +570,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     self.scroller.delegate = self;
     
 
-    MADReportDesignerSectionLayoutSettingsViewController *viewControllerLayoutSettings;
-    viewControllerLayoutSettings = [MADReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
-    viewControllerLayoutSettings.delegate = self;
-    self.viewControllerSectionLayoutSettings = viewControllerLayoutSettings;
-    
-    UINavigationController *navigationController;
-    navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
-    navigationController.transitioningDelegate = self.toolboxTransitioningDelegate;
-    navigationController.modalPresentationStyle = UIModalPresentationCustom;
-    
-    self.navigationControllerSectionLayoutSettings = navigationController;
-    self.navigationControllerSectionLayoutSettings.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
-    
-    self.settingsTransitioningDelegate = self.toolboxTransitioningDelegate;
-    
-
     MADMutableSetManagedObjectIDs *selectedObjectIds;
     selectedObjectIds = [[MADMutableSetManagedObjectIDs alloc] init];
     self.selectedObjectIds = selectedObjectIds;
@@ -544,8 +577,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     self.scroller.container.backgroundColor =   [UIColor greenColor];
     self.scroller.backgroundColor =             [UIColor blueColor];
 
-        NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
-    *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
+    NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
+                       *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
     
     constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
                                                            containerLeft: self.scroller.container];
@@ -581,7 +614,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        [UIView setAnimationsEnabled:NO];
+        [self displayPrompt];
+        [UIView setAnimationsEnabled:YES];
+    }
 
     [self addObservers];
     
@@ -3329,8 +3366,7 @@ END_deselectElementView:;
     NSIndexPath *path;
     NSMutableArray <MADDesignerElementView *> *elementViews;
     elementViews = [[NSMutableArray <MADDesignerElementView *> alloc] initWithCapacity:numberOfItemsInSection];
-    NSUInteger item;
-    for (item = 0; item < numberOfItemsInSection; item++) {
+    for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
         
         path = [NSIndexPath indexPathForItem:(NSInteger)item inSection:section];
         elementView = [self elementViewAtIndexPath: path

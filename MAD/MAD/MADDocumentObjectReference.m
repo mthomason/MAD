@@ -13,7 +13,7 @@
 @interface MADDocumentObjectDataReference ()
 
     @property (readwrite, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *> *fontDescriptors;
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
 
 @end
 
@@ -28,8 +28,8 @@
         
         self.datasource = datasource;
         
-        NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *> *fontDescriptors;
-        fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *>alloc] init];
+        NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
+        fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
         self.fontDescriptors = fontDescriptors;
     }
     return self;

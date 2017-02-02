@@ -10,6 +10,24 @@
 #import <Foundation/NSCoder.h>
 #import <string.h>
 
+struct MADTextStyle_t {
+    BOOL bold;
+    BOOL italic;
+    BOOL underline;
+    BOOL strikethrough;
+};
+typedef struct MADTextStyle_t MADTextStyle_t;
+
+static inline MADTextStyle_t MADLayoutTextStyleMake(BOOL, BOOL, BOOL, BOOL);
+static inline MADTextStyle_t MADLayoutTextStyleMake(BOOL b, BOOL i, BOOL u, BOOL s) {
+    MADTextStyle_t style;
+    style.bold = b;
+    style.italic = i;
+    style.underline = u;
+    style.strikethrough = s;
+    return style;
+}
+
 @implementation MADTextStyle {
     MADTextStyle_t _style;
 }
@@ -56,6 +74,22 @@
 
 - (BOOL)strikethrough {
     return _style.strikethrough;
+}
+
+- (void)setBold:(BOOL)bold {
+    _style.bold = bold;
+}
+
+- (void)setItalic:(BOOL)italic {
+    _style.italic = italic;
+}
+
+- (void)setUnderline:(BOOL)underline {
+    _style.underline = underline;
+}
+
+- (void)setStrikethrough:(BOOL)strikethrough {
+    _style.strikethrough = strikethrough;
 }
 
 @end

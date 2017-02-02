@@ -77,7 +77,7 @@
 
 #import "MADParameters+QueryCacheAggregate.h"
 
-#import "MADocumentObjectAttributesText.h"
+#import "MADElementStylizedText.h"
 
 #import "MADPrintPageRendererDataSource.h"
 

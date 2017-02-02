@@ -542,9 +542,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         NSString *fontDisplayName = nil;
         
-        MADMargin_t marginHolder = MADLayoutMarginMake(-1, -1, -1, -1);
-        MADLayoutPadding_t paddingHolder = MADLayoutPaddingMake(-1, -1, -1, -1);
-        MADAlignment_t alignmentHolder = MADAlignmentMake(MADHorizontalAlignmentUnknown, MADVerticalAlignmentUnknown);
+        MADMargin *marginHolder = [[MADMargin alloc] initWithLeft: -1
+                                                            right: -1
+                                                              top: -1
+                                                           bottom: -1];
+        MADPadding *paddingHolder = [[MADPadding alloc] initWithLeft: -1
+                                                               right: -1
+                                                                 top: -1
+                                                              bottom: -1];
+        
+        MADAlignment_t alignmentHolder = MADAlignmentMake(MADHorizontalAlignmentUnknown,
+                                                          MADVerticalAlignmentUnknown);
         CGSize sizeHolder = CGSizeZero;
         
         CGFloat fontSizeHolder = (CGFloat)[MADFont defaultSize];
@@ -575,9 +583,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
         RptqDocumentElement *documentObject;
         
-        MADMargin_t margin; MADLayoutPadding_t padding; CGSize size; MADAlignment_t alignment;
-        MADTextStyle_t textStyle;
-        
+        //MADMargin_t margin; MADLayoutPadding_t padding; CGSize size; MADAlignment_t alignment;
+        //MADTextStyle_t textStyle;
+        CGSize size;
         for (objectId in userSelectedObjectIDs) {
             
             documentObject = [self.document.managedObjectContext objectWithID:objectId];
@@ -594,49 +602,45 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                         
                 }
                 
-                [(NSValue *)documentObject.margin getValue:&margin];
-                [(NSValue *)documentObject.padding getValue:&padding];
                 [(NSValue *)documentObject.size getValue:&size];
-                [(NSValue *)documentObject.alignment getValue:&alignment];
-                [(NSValue *)documentObject.style getValue:&textStyle];
-
-                if (margin.top != marginHolder.top ) {
-                    marginHolder.top = margin.top;
+                
+                if (documentObject.margin.top != marginHolder.top ) {
+                    marginHolder.top = documentObject.margin.top;
                     numberOfMarginTop++;
                 }
 
-                if (margin.bottom != marginHolder.bottom ) {
-                    marginHolder.bottom = margin.bottom;
+                if (documentObject.margin.bottom != marginHolder.bottom ) {
+                    marginHolder.bottom = documentObject.margin.bottom;
                     numberOfMarginBottom++;
                 }
 
-                if (margin.left != marginHolder.left ) {
-                    marginHolder.left = margin.left;
+                if (documentObject.margin.left != marginHolder.left ) {
+                    marginHolder.left = documentObject.margin.left;
                     numberOfMarginLeft++;
                 }
                 
-                if (margin.right != marginHolder.right ) {
-                    marginHolder.right = margin.right;
+                if (documentObject.margin.right != marginHolder.right ) {
+                    marginHolder.right = documentObject.margin.right;
                     numberOfMarginRight++;
                 }
                 
-                if (padding.top != paddingHolder.top ) {
-                    paddingHolder.top = padding.top;
+                if (documentObject.padding.top != paddingHolder.top ) {
+                    paddingHolder.top = documentObject.padding.top;
                     numberOfPaddingTop++;
                 }
                 
-                if (padding.bottom != paddingHolder.bottom ) {
-                    paddingHolder.bottom = padding.bottom;
+                if (documentObject.padding.bottom != paddingHolder.bottom ) {
+                    paddingHolder.bottom = documentObject.padding.bottom;
                     numberOfPaddingBottom++;
                 }
                 
-                if (padding.left != paddingHolder.left ) {
-                    paddingHolder.left = padding.left;
+                if (documentObject.padding.left != paddingHolder.left ) {
+                    paddingHolder.left = documentObject.padding.left;
                     numberOfPaddingLeft++;
                 }
                 
-                if (padding.right != paddingHolder.right ) {
-                    paddingHolder.right = padding.right;
+                if (documentObject.padding.right != paddingHolder.right ) {
+                    paddingHolder.right = documentObject.padding.right;
                     numberOfPaddingRight++;
                 }
 
@@ -650,67 +654,67 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                     numberOfSizeHeights++;
                 }
 
-                if (alignment.vertical != alignmentHolder.vertical) {
-                    alignmentHolder.vertical = alignment.vertical;
+                if (documentObject.alignment.vertical != alignmentHolder.vertical) {
+                    alignmentHolder.vertical = documentObject.alignment.vertical;
                     numberOfVerticalAlignments++;
                 }
-                if (alignment.horizontal != alignmentHolder.horizontal) {
-                    alignmentHolder.horizontal = alignment.horizontal;
+                if (documentObject.alignment.horizontal != alignmentHolder.horizontal) {
+                    alignmentHolder.horizontal = documentObject.alignment.horizontal;
                     numberOfHorazontalAlignments++;
                 }
                 
-                textStyle.bold ? numberBold++ : numberNotBold++;
-                textStyle.underline ? numberUnderline++ : numberNotUnderline++;
-                textStyle.strikethrough ? numberStrike++ : numberNotStrike++;
-                textStyle.italic ? numberItalic++ : numberNotItalic++;
+                documentObject.style.bold ? numberBold++ : numberNotBold++;
+                documentObject.style.underline ? numberUnderline++ : numberNotUnderline++;
+                documentObject.style.strikethrough ? numberStrike++ : numberNotStrike++;
+                documentObject.style.italic ? numberItalic++ : numberNotItalic++;
                 
             }
             
         }
         
-        segmentedControlHorizontalAlignment.selectedSegmentIndex = alignment.horizontal;
-        [self updateSegmentedControlVerticalAlignmentWithChosenIndex:alignment.vertical];
+        segmentedControlHorizontalAlignment.selectedSegmentIndex = documentObject.alignment.horizontal;
+        [self updateSegmentedControlVerticalAlignmentWithChosenIndex:documentObject.alignment.vertical];
         
         double displayNumber = numberOfMarginTop >= 1 ? marginHolder.top : 0;
-        NSAttributedString *labelMarginTopAttributedText = [MADToolboxStrings newMarginTopForValue: displayNumber];
-        _labelMarginTop.attributedText = labelMarginTopAttributedText;
+        NSAttributedString *atext = [MADToolboxStrings newMarginTopForValue: displayNumber];
+        _labelMarginTop.attributedText = atext;
         _stepperMarginTop.value = marginHolder.top;
         
         displayNumber = numberOfMarginBottom == 1 ? marginHolder.bottom : 0;
         
-        NSAttributedString *labelMarginBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: displayNumber];
-        _labelMarginBottom.attributedText = labelMarginBottomAttributedText;
+        atext = [MADToolboxStrings newMarginBottomForValue: displayNumber];
+        _labelMarginBottom.attributedText = atext;
         _stepperMarginBottom.value = marginHolder.bottom;
         
         displayNumber = numberOfMarginLeft == 1 ? marginHolder.left : 0;
-        NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: displayNumber];
-        _labelMarginLeft.attributedText = labelMarginLeftAttributedText;
+        atext = [MADToolboxStrings newMarginLeftForValue: displayNumber];
+        _labelMarginLeft.attributedText = atext;
         _stepperMarginLeft.value = marginHolder.left;
         
         displayNumber = numberOfMarginRight == 1 ? marginHolder.right : 0;
-        NSAttributedString *labelMarginRightAttributedText = [MADToolboxStrings newMarginRightForValue: displayNumber];
-        _labelMarginRight.attributedText = labelMarginRightAttributedText;
+        atext = [MADToolboxStrings newMarginRightForValue: displayNumber];
+        _labelMarginRight.attributedText = atext;
         _stepperMarginRight.value = marginHolder.right;
         
         displayNumber = numberOfPaddingTop == 1 ? paddingHolder.top : 0;
-        NSAttributedString *labelPaddingTopAttributedText = [MADToolboxStrings newMarginTopForValue: displayNumber];
-        _labelPaddingTop.attributedText = labelPaddingTopAttributedText;
+        atext = [MADToolboxStrings newMarginTopForValue: displayNumber];
+        _labelPaddingTop.attributedText = atext;
         _stepperPaddingTop.value = paddingHolder.top;
         
         displayNumber = numberOfPaddingBottom == 1 ? paddingHolder.bottom : 0;
-        NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue: displayNumber];
-        _labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
+        atext = [MADToolboxStrings newMarginBottomForValue: displayNumber];
+        _labelPaddingBottom.attributedText = atext;
         _stepperPaddingBottom.value = paddingHolder.bottom;
         
         displayNumber = numberOfPaddingLeft == 1 ? paddingHolder.left : 0;
-        NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: displayNumber];
-        _labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
-        _stepperPaddingLeft.value = padding.left;
+        atext = [MADToolboxStrings newMarginLeftForValue: displayNumber];
+        _labelPaddingLeft.attributedText = atext;
+        _stepperPaddingLeft.value = paddingHolder.left;
         
         displayNumber = numberOfPaddingRight == 1 ? paddingHolder.right : 0;
-        NSAttributedString *labelPaddingRightAttributedText = [MADToolboxStrings newMarginRightForValue: displayNumber];
-        _labelPaddingRight.attributedText = labelPaddingRightAttributedText;
-        _stepperPaddingRight.value = padding.right;
+        atext = [MADToolboxStrings newMarginRightForValue: displayNumber];
+        _labelPaddingRight.attributedText = atext;
+        _stepperPaddingRight.value = paddingHolder.right;
         
         displayNumber = numberOfSizeHeights == 1 ? sizeHolder.height : 0;
         NSAttributedString *labelSizeHeightAttributedText = [MADToolboxStrings newSizeHeightForValue: displayNumber];
@@ -996,7 +1000,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        [documentObject setHorizontalAlignment: (MADHorizontalAlignment)index];
+        documentObject.alignment.horizontal = (MADHorizontalAlignment)index;
     }
     [document.managedObjectContext save:nil];
 }
@@ -1007,95 +1011,95 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        [documentObject setVerticalAlignment: (MADVerticalAlignment)index];
+        documentObject.alignment.vertical = (MADVerticalAlignment)index;
     }
     [document.managedObjectContext save:nil];
 }
 
-- (void)updatePaddingTop:(double)padding {
-    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:padding];
+- (void)updatePaddingTop:(double)top {
+    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:top];
     self.labelPaddingTop.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingTop = padding;
+        documentObject.padding.top = top;
     }
     [document.managedObjectContext save:nil];
 }
 
-- (void)updatePaddingBottom:(double)padding {
-    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:padding];
+- (void)updatePaddingBottom:(double)bottom {
+    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:bottom];
     self.labelPaddingBottom.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingBottom = padding;
+        documentObject.padding.bottom = bottom;
     }
     [document.managedObjectContext save:nil];
 }
 
-- (void)updatePaddingLeft:(double)padding {
-    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:padding];
+- (void)updatePaddingLeft:(double)left {
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:left];
     self.labelPaddingLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingLeft = padding;
+        documentObject.padding.left = left;
     }
     [document.managedObjectContext save:nil];
 }
 
-- (void)updatePaddingRight:(double)padding {
-    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:padding];
+- (void)updatePaddingRight:(double)right {
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:right];
     self.labelPaddingRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.paddingRight = padding;
+        documentObject.padding.right = right;
     }
     [document.managedObjectContext save:nil];
 }
 
-- (void)updateMarginTop:(double)margin {
-    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: margin];
+- (void)updateMarginTop:(double)top {
+    NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: top];
     self.labelMarginTop.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginTop = margin;
+        documentObject.margin.top = top;
         [document.managedObjectContext save:nil];
     }
 }
 
-- (void)updateMarginBottom:(double)margin {
-    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:margin];
+- (void)updateMarginBottom:(double)bottom {
+    NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:bottom];
     self.labelMarginBottom.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginBottom = margin;
+        documentObject.margin.bottom = bottom;
         [document.managedObjectContext save:nil];
     }
 }
 
-- (void)updateMarginLeft:(double)margin {
-    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: margin];
+- (void)updateMarginLeft:(double)left {
+    NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: left];
     self.labelMarginLeft.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginLeft = margin;
+        documentObject.margin.left = left;
         [document.managedObjectContext save:nil];
     }
 }
 
-- (void)updateMarginRight:(double)margin {
-    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: margin];
+- (void)updateMarginRight:(double)right {
+    NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: right];
     self.labelMarginRight.attributedText = display;
     MADocument *document = _document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
         RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.marginRight = margin;
+        documentObject.margin.right = right;
         [document.managedObjectContext save:nil];
     }
 }

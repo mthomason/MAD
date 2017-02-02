@@ -47,4 +47,12 @@
     return _alignment.vertical;
 }
 
+- (void)setHorizontal:(MADHorizontalAlignment)horizontal {
+    _alignment.horizontal = horizontal;
+}
+
+- (void)setVertical:(MADVerticalAlignment)vertical {
+    _alignment.vertical = vertical;
+}
+
 @end

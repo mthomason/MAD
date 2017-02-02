@@ -10,7 +10,7 @@
 #import <UIKit/NSStringDrawing.h>
 #import "RptqDocumentElement.h"
 #import "RptqDocumentElementLabel.h"
-#import "MADocumentObjectAttributesText.h"
+#import "MADElementStylizedText.h"
 #import "MADDocumentObjectReference.h"
 
 @implementation MADDocumentObjectLabelStatic

@@ -222,34 +222,22 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
             break;
     }
 }
-
+/*
 - (void)setPaddingTop:(double)v {
-    MADLayoutPadding_t p;
-    [(NSValue *)self.padding getValue:&p];
-    p.top = v;
-    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
+    self.padding.top = v;
 }
 
 - (void)setPaddingBottom:(double)v {
-    MADLayoutPadding_t p;
-    [(NSValue *)self.padding getValue:&p];
-    p.bottom = v;
-    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
+    self.padding.bottom = v;
 }
 
 
 - (void)setPaddingLeft:(double)v {
-    MADLayoutPadding_t p;
-    [(NSValue *)self.padding getValue:&p];
-    p.left = v;
-    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
+    self.padding.left = v;
 }
 
 - (void)setPaddingRight:(double)v {
-    MADLayoutPadding_t p;
-    [(NSValue *)self.padding getValue:&p];
-    p.right = v;
-    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
+    self.padding.right = v;
 }
 
 - (void)setMarginTop:(double)v {
@@ -306,7 +294,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     [(NSValue *)self.style getValue:&textStyle];
     textStyle.underline = underline;
     [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
-}
+}*/
 
 - (void)setSizeWidth:(double)width {
     CGSize s;
@@ -323,17 +311,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment {
-    MADAlignment_t a;
-    [(NSValue *)self.alignment getValue:&a];
-    a.horizontal = alignment;
-    [NSValue value:&a withObjCType:@encode(MADAlignment_t)];
+    self.alignment.horizontal = alignment;
 }
 
 - (void)setVerticalAlignment:(MADVerticalAlignment)alignment {
-    MADAlignment_t a;
-    [(NSValue *)self.alignment getValue:&a];
-    a.vertical = alignment;
-    [NSValue value:&a withObjCType:@encode(MADAlignment_t)];
+    self.alignment.vertical = alignment;
 }
 
 - (CGPoint)placementPoint {
@@ -354,80 +336,44 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     self.origin = [NSValue valueWithCGPoint:or];
 }
 
-- (MADMargin_t)layoutMargin {
-    MADMargin_t layoutMargin;
-    [(NSValue *)self.margin getValue:&layoutMargin];
-    return layoutMargin;
-}
-
-- (MADLayoutPadding_t)layoutPadding {
-    MADLayoutPadding_t padding;
-    [(NSValue *)self.padding getValue:&padding];
-    return padding;
-}
-
-- (MADBorderStyle_t)layoutBorderStyle {
-    MADBorderStyle_t borderStyle;
-    [(NSValue *)self.border getValue:&borderStyle];
-    return borderStyle;
-}
-
 - (double)spacingLeft {
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return margin.left + border.left + padding.left;
+    return self.margin.left + self.border.left + self.padding.left;
 }
 
 - (double)spacingRight {
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return margin.right + border.right + padding.right;
+    return self.margin.right + self.border.right + self.padding.right;
 }
 
 - (double)spacingTop {
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return margin.top + border.top + padding.top;
+    return self.margin.top + self.border.top + self.padding.top;
 }
 
 - (double)spacingBottom {
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return margin.bottom + border.bottom + padding.bottom;
+    return self.margin.bottom + self.border.bottom + self.padding.bottom;
 }
 
 - (CGFloat)sizeWidthCalculated {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return MADDocObjSizeWidthCalculated(padding.left,
-                                         border.left,
-                                         margin.left,
-                                         s.width,
-                                         margin.right,
-                                         border.right,
-                                         padding.right);
+    return MADDocObjSizeWidthCalculated(self.padding.left,
+                                        self.border.left,
+                                        self.margin.left,
+                                        s.width,
+                                        self.margin.right,
+                                        self.border.right,
+                                        self.padding.right);
 }
 
 - (CGFloat)sizeHeightCalculated {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADMargin_t margin = [self layoutMargin];
-    MADLayoutPadding_t padding = [self layoutPadding];
-    MADBorderStyle_t border = [self layoutBorderStyle];
-    return MADDocObjSizeHeightCalculated(padding.top,
-                                         border.top,
-                                         margin.top,
+    return MADDocObjSizeHeightCalculated(self.padding.top,
+                                         self.border.top,
+                                         self.margin.top,
                                          s.height,
-                                         margin.bottom,
-                                         border.bottom,
-                                         padding.bottom);
+                                         self.margin.bottom,
+                                         self.border.bottom,
+                                         self.padding.bottom);
 }
 
 - (CGSize)innerSize {
@@ -455,21 +401,19 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (CGRect)paddingViewBounds {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADLayoutPadding_t padding = [self layoutPadding];
     return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      paddingViewBoundsSizeWidth(padding.left,
-                                                 padding.right,
+                      paddingViewBoundsSizeWidth(self.padding.left,
+                                                 self.padding.right,
                                                  s.width),
-                      paddingViewBoundsSizeHeight(padding.top,
-                                                  padding.bottom,
+                      paddingViewBoundsSizeHeight(self.padding.top,
+                                                  self.padding.bottom,
                                                   s.height));
 }
 
 - (CGRect)paddingViewFrame {
     CGRect paddingViewBounds = [self paddingViewBounds];
-    MADMargin_t margin = [self layoutMargin];
-    return CGRectMake(CGPointZero.x + margin.left,
-                      CGPointZero.y + margin.top,
+    return CGRectMake(CGPointZero.x + self.margin.left,
+                      CGPointZero.y + self.margin.top,
                       paddingViewBounds.size.width, paddingViewBounds.size.height);
 }
 
@@ -488,9 +432,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (CGRect)elementViewFrame {
     CGRect elementViewBounds = [self elementViewBounds];
-    MADLayoutPadding_t p = [self layoutPadding];
-    return CGRectMake(CGPointZero.x + p.left,
-                      CGPointZero.y + p.top,
+    return CGRectMake(CGPointZero.x + self.padding.left,
+                      CGPointZero.y + self.padding.top,
                       elementViewBounds.size.width, elementViewBounds.size.height);
 }
 
@@ -721,13 +664,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (UIFontDescriptor *)fontDescriptor {
     
-    MADTextStyle_t textStyle;
-    [(NSValue *)self.style getValue:&textStyle];
     NSString *fontname;
     
     UIFontDescriptorSymbolicTraits traits = 0;
-    if (textStyle.italic) traits     |= UIFontDescriptorTraitItalic;
-    if (textStyle.bold)   traits     |= UIFontDescriptorTraitBold;
+    if (self.style.italic) traits     |= UIFontDescriptorTraitItalic;
+    if (self.style.bold)   traits     |= UIFontDescriptorTraitBold;
     
     NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
     
@@ -752,9 +693,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %lld (%@)\n", self.identifier, self.debugDescriptionType];
-    [description appendFormat:@"Section:                %@\n", [self.inSectionRow.inSection localizedDisplayName]];
-    [description appendFormat:@"Font:                   %@ (%f)\n", self.fontname, self.fontsize];
+    [description appendFormat:@"ID:  \t\t%lld (%@)\n", self.identifier, self.debugDescriptionType];
+    [description appendFormat:@"Sec: \t\t%@\n", [self.inSectionRow.inSection localizedDisplayName]];
+    [description appendFormat:@"Font:\t\t%@ (%f)\n", self.fontname, self.fontsize];
     [description appendFormat:@"*********"];
     return description;
 }

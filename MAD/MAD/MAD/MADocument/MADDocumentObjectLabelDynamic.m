@@ -24,7 +24,7 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-#import "MADocumentObjectAttributesText.h"
+#import "MADElementStylizedText.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
 

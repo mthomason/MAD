@@ -10,6 +10,39 @@
 #import <Foundation/NSCoder.h>
 #import <string.h>
 
+struct MADBorderStyle_t {
+    Float64 left;
+    Float64 right;
+    Float64 top;
+    Float64 bottom;
+    MADBorderType leftStyle;
+    MADBorderType rightStyle;
+    MADBorderType topStyle;
+    MADBorderType bottomStyle;
+};
+typedef struct MADBorderStyle_t MADBorderStyle_t;
+
+static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64, Float64,
+                                                        Float64, Float64,
+                                                        MADBorderType, MADBorderType,
+                                                        MADBorderType, MADBorderType);
+
+static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64 l, Float64 r,
+                                                        Float64 t, Float64 b,
+                                                        MADBorderType ls, MADBorderType rs,
+                                                        MADBorderType ts, MADBorderType bs) {
+    MADBorderStyle_t s;
+    s.left = l;
+    s.right = r;
+    s.top = t;
+    s.bottom = b;
+    s.leftStyle = ls;
+    s.rightStyle = rs;
+    s.topStyle = ts;
+    s.bottomStyle = bs;
+    return s;
+}
+
 @implementation MADBorderStyle {
     MADBorderStyle_t _style;
 }
@@ -71,6 +104,22 @@
     return _style.bottom;
 }
 
+- (void)setLeft:(Float64)left {
+    _style.left = left;
+}
+
+- (void)setRight:(Float64)right {
+    _style.right = right;
+}
+
+- (void)setTop:(Float64)top {
+    _style.top = top;
+}
+
+- (void)setBottom:(Float64)bottom {
+    _style.bottom = bottom;
+}
+
 - (MADBorderType)leftStyle {
     return _style.leftStyle;
 }
@@ -85,6 +134,22 @@
 
 - (MADBorderType)bottomStyle {
     return _style.bottomStyle;
+}
+
+- (void)setLeftStyle:(MADBorderType)leftStyle {
+    _style.leftStyle = leftStyle;
+}
+
+- (void)setRightStyle:(MADBorderType)rightStyle {
+    _style.rightStyle = rightStyle;
+}
+
+- (void)setTopStyle:(MADBorderType)topStyle {
+    _style.topStyle = topStyle;
+}
+
+- (void)setBottomStyle:(MADBorderType)bottomStyle {
+    _style.bottomStyle = bottomStyle;
 }
 
 @end

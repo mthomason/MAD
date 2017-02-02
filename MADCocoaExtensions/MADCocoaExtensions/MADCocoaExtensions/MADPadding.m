@@ -10,6 +10,20 @@
 #import <Foundation/NSCoder.h>
 #import <string.h>
 
+struct MADLayoutPadding_t {
+    Float64 left;
+    Float64 right;
+    Float64 top;
+    Float64 bottom;
+};
+typedef struct MADLayoutPadding_t MADLayoutPadding_t;
+
+static inline MADLayoutPadding_t MADLayoutPaddingMake(Float64, Float64, Float64, Float64);
+
+static inline MADLayoutPadding_t MADLayoutPaddingMake(Float64 l, Float64 r, Float64 t, Float64 b) {
+    MADLayoutPadding_t p; p.left = l; p.right = r; p.top = t; p.bottom = b; return p;
+}
+
 @implementation MADPadding {
     MADLayoutPadding_t _padding;
 }
@@ -59,6 +73,22 @@
 
 - (Float64)bottom {
     return _padding.bottom;
+}
+
+- (void)setLeft:(Float64)left {
+    _padding.left = left;
+}
+
+- (void)setRight:(Float64)right {
+    _padding.right = right;
+}
+
+- (void)setTop:(Float64)top {
+    _padding.top = top;
+}
+
+- (void)setBottom:(Float64)bottom {
+    _padding.bottom = bottom;
 }
 
 @end

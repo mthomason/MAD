@@ -10,6 +10,25 @@
 #import <Foundation/NSCoder.h>
 #import <string.h>
 
+struct MADMargin_t {
+    Float64 left;
+    Float64 right;
+    Float64 top;
+    Float64 bottom;
+};
+typedef struct MADMargin_t MADMargin_t;
+
+static inline MADMargin_t MADLayoutMarginMake(Float64, Float64, Float64, Float64);
+
+static inline MADMargin_t MADLayoutMarginMake(Float64 l, Float64 r, Float64 t, Float64 b) {
+    MADMargin_t m;
+    m.left = l;
+    m.right = r;
+    m.top = t;
+    m.bottom = b;
+    return m;
+}
+
 @implementation MADMargin {
     MADMargin_t _margin;
 }
@@ -59,6 +78,22 @@
 
 - (Float64)bottom {
     return _margin.bottom;
+}
+
+- (void)setLeft:(Float64)left {
+    _margin.left = left;
+}
+
+- (void)setRight:(Float64)right {
+    _margin.right = right;
+}
+
+- (void)setTop:(Float64)top {
+    _margin.top = top;
+}
+
+- (void)setBottom:(Float64)bottom {
+    _margin.bottom = bottom;
 }
 
 @end

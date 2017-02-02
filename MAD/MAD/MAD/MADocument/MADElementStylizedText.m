@@ -79,11 +79,15 @@
         }
         
         NSNumber *baselineOffset = @0.00000000f;
-        NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: underline ?
-                                              NSUnderlineStyleSingle: NSUnderlineStyleNone];
+        NSNumber *underlineStyle;
+        underlineStyle = [[NSNumber alloc] initWithInteger: underline ?
+                                              NSUnderlineStyleSingle :
+                                              NSUnderlineStyleNone];
         
-        NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: strike ?
-                                                  NSUnderlineStyleSingle: NSUnderlineStyleNone];
+        NSNumber *strikethroughStyle;
+        strikethroughStyle = [[NSNumber alloc] initWithInteger: strike ?
+                                                                        NSUnderlineStyleSingle :
+                                                                        NSUnderlineStyleNone];
         
         NSDictionary *fontAttributes;
         fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:

@@ -13,7 +13,7 @@
 #import "RptqDocumentElement.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "MADocumentObjectAttributesText.h"
+#import "MADElementStylizedText.h"
 #import "MADAlignment.h"
 
 @interface MADDocumentObjectText()
@@ -30,7 +30,7 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
-    MADocumentObjectAttributesText *attt;
+    MADElementStylizedText *attt;
     MADDocumentObjectDataReference *definition;
 
     RptqDocumentElement *item;
@@ -40,16 +40,13 @@
     attt = definition.fontDescriptors[item.objectID];
     
     if (attt == nil) {
-        MADTextStyle_t style; MADAlignment_t alignment;
-        [(NSValue *)item.style getValue:&style];
-        [(NSValue *)item.alignment getValue:&alignment];
-        attt = [[MADocumentObjectAttributesText alloc] initWithFontName: item.fontname
+        attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
                                                                fontSize: item.fontsize
-                                                                   bold: style.bold
-                                                                 italic: style.italic
-                                                              underline: style.underline
-                                                                 strike: style.strikethrough
-                                                    horizontalAlignment: alignment.horizontal];
+                                                                   bold: item.style.bold
+                                                                 italic: item.style.italic
+                                                              underline: item.style.underline
+                                                                 strike: item.style.strikethrough
+                                                    horizontalAlignment: item.alignment.horizontal];
         
         definition.fontDescriptors[item.objectID] = attt;
     }

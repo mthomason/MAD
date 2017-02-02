@@ -411,7 +411,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             // MARK: Display and identify the data source and data sources
         case MADIdentifierQueryViewSectionsDatasource: {
             
-            static NSString *MADIdentifierCellDataSource = @"MADIdentifierCellDataSource";
+            static NSString *MADIdentifierCellDataSource = @"MADIdentifierDataSource";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierCellDataSource];
             
             NSManagedObjectContext *managedObjectContext;
@@ -429,14 +429,17 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 
                 NSString *TextFormatConnection = @"You are connecting to %1$@"
                                                  @" datasource named %2$@.";
-                id localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-                id localizedMessage = [NSString stringWithFormat:localizedMessageFormat, databaseType, schemaName];
-                id message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                        databaseType: databaseType
-                                                                                          schemaName: schemaName];
+                NSString *localizedMessageFormat;
+                NSString *localizedMessage;
+                NSAttributedString *message;
+                localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
+                message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                     databaseType: databaseType
+                                                                                       schemaName: schemaName];
                 UILabel *textLabel = cell.textLabel;
-                textLabel.attributedText = message;
-                textLabel.text = localizedMessage;
+                cell.textLabel.attributedText = message;
+                cell.textLabel.text = localizedMessage;
             }
             
             break;
@@ -485,7 +488,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             // MARK: Display the groupings used in the query.
         case MADIdentifierQueryViewSectionsGroups: {
             
-            static NSString *MADIDCellInstruction = @"UITableViewCellQueryGroup";
+            static NSString *MADIDCellInstruction = @"MADIdentifierQueryGroup";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellInstruction];
             
             
@@ -506,7 +509,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             
             // MARK: Display the predicates or conditions on the query.
         case MADIdentifierQueryViewSectionsPredicate: {
-            static NSString *MADIDCellPredicate = @"UITableViewCellQueryPredicate";
+            static NSString *MADIDCellPredicate = @"MADIdentifierQueryPredicate";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellPredicate];
             NSIndexPath *indexPathPredicates = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryPredicate *predicate = [self.queryPredicatesController objectAtIndexPath: indexPathPredicates];
@@ -540,7 +543,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                     break;
                 }
                 default: {
-                    static NSString *MADIDCellQueryInput = @"UITableViewCellQueryInput";
+                    static NSString *MADIDCellQueryInput = @"MADIdentifierQueryInput";
                     cell = [tableView dequeueReusableCellWithIdentifier: MADIDCellQueryInput];
                     break;
                 }
@@ -550,7 +553,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             
         case MADIdentifierQueryViewSectionsNumberOfQueryResults: {
             
-            static NSString *idNumberOfQueryResults = @"UITableViewCellNumberOfQueryResultsIdentifier";
+            static NSString *idNumberOfQueryResults = @"MADIdentifierQueryCountID";
             cell = [tableView dequeueReusableCellWithIdentifier: idNumberOfQueryResults];
             break;
         }

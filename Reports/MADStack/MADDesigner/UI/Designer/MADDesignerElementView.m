@@ -24,7 +24,7 @@
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
-#import <MAD/MADocumentObjectAttributesText.h>
+#import <MAD/MADElementStylizedText.h>
 #import <MAD/MADAlignment.h>
 
 #import "MTElementCanvas.h"
@@ -326,18 +326,14 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 break;
         }
         
-        MADocumentObjectAttributesText *attributesText;
-        MADTextStyle_t style; MADAlignment_t alignment;
-        [(NSValue *)documentObject.style getValue:&style];
-        [(NSValue *)documentObject.alignment getValue:&alignment];
-        
-        attributesText = [[MADocumentObjectAttributesText alloc] initWithFontName:documentObject.fontname
+        MADElementStylizedText *attributesText;
+        attributesText = [[MADElementStylizedText alloc] initWithFontName:documentObject.fontname
                                                                          fontSize:documentObject.fontsize
-                                                                             bold:style.bold
-                                                                           italic:style.italic
-                                                                        underline:style.underline
-                                                                           strike:style.strikethrough
-                                                              horizontalAlignment:alignment.horizontal];
+                                                                             bold:documentObject.style.bold
+                                                                           italic:documentObject.style.italic
+                                                                        underline:documentObject.style.underline
+                                                                           strike:documentObject.style.strikethrough
+                                                              horizontalAlignment:documentObject.alignment.horizontal];
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
                                                                                 attributes: attributesText.fontAttributes];

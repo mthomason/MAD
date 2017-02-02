@@ -12,7 +12,7 @@
 @implementation MADFontDescriptor
 
 + (instancetype)newFontDescriptorForFontName:(NSString *) fontname
-                                    fontSize:(float) fontSize
+                                    fontSize:(double) fontSize
                                         bold:(BOOL)bold
                                       italic:(BOOL)italic {
 

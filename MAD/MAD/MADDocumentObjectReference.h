@@ -19,7 +19,7 @@
 @class MTReportFormatter;
 
 @class NSManagedObjectID;
-@class MADocumentObjectAttributesText;
+@class MADElementStylizedText;
 @class NSMutableDictionary<KeyType, ObjectType>;
 
 @interface MADDocumentObjectDataReference : NSObject
@@ -28,7 +28,7 @@
     - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 
     @property (readonly, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-    @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADocumentObjectAttributesText *> *fontDescriptors;
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
     @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
 
     @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
