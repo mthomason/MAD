@@ -426,20 +426,22 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 RptqDatabaseCredentals *user = database.ownedByUser;
                 id schemaName = [user copyDatabaseSchemaName];
                 
-                
-                NSString *TextFormatConnection = @"You are connecting to %1$@"
-                                                 @" datasource named %2$@.";
-                NSString *localizedMessageFormat;
-                NSString *localizedMessage;
-                NSAttributedString *message;
-                localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-                localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
-                message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                     databaseType: databaseType
-                                                                                       schemaName: schemaName];
-                UILabel *textLabel = cell.textLabel;
-                cell.textLabel.attributedText = message;
-                cell.textLabel.text = localizedMessage;
+                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                     NSString *TextFormatConnection = @"You are connecting to %1$@"
+                     @" datasource named %2$@.";
+                     NSString *localizedMessageFormat;
+                     NSString *localizedMessage;
+                     NSAttributedString *message;
+                     localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                     localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
+                     message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                          databaseType: databaseType
+                                                                                            schemaName: schemaName];
+                     dispatch_sync(dispatch_get_main_queue(), ^{
+                         cell.textLabel.attributedText = message;
+                         cell.textLabel.text = localizedMessage;
+                     });
+                 });
             }
             
             break;

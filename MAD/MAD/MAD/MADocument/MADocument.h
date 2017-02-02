@@ -65,8 +65,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
 
-    @property (nonatomic, readonly, strong)     MADModelDocument *documentObjectIDStore;
-    //@property (nonatomic, readwrite, copy)      NSManagedObjectID *documentObjectID;
+    @property (nonatomic, readonly, strong)     MADModelDocument *documentModel;
+
     @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
     @property (readonly)                        RptqDocument    *activeDocumentModel;
 

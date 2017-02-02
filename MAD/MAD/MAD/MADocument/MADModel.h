@@ -42,11 +42,13 @@ typedef NS_ENUM(short, MADModelType) {
 };
 
 @protocol MADModelIDProtocol <NSObject>
-    @property (nonatomic, readonly, copy)      NSManagedObjectID *objectID;
+    @property (nonatomic, readonly, copy)       NSManagedObjectID *objectID;
+    @property (nonatomic, readonly, assign)     int64_t identifier;
 @end
 
 @protocol MADModelDataProtocol <NSObject>
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
     - (void)update;
@@ -59,6 +61,16 @@ typedef NS_ENUM(short, MADModelType) {
 
     @property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
     @property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
+
+@end
+
+@interface MADTableFieldIdentifier : NSObject
+
+- (instancetype)initWithTableID:(int64_t)tableID
+                     andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
+
+    @property (readonly, nonatomic, assign) int64_t tableID;
+    @property (readonly, nonatomic, assign) int64_t fieldID;
 
 @end
 

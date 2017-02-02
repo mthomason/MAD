@@ -38,3 +38,8 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MADColorSocial.h>
 #import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADMailComposeViewController.h>
+
+#import <MADCocoaExtensions/MADMargin.h>
+#import <MADCocoaExtensions/MADPadding.h>
+#import <MADCocoaExtensions/MADBorderStyle.h>
+#import <MADCocoaExtensions/MADTextStyle.h>

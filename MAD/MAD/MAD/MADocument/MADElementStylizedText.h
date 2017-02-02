@@ -12,19 +12,18 @@
 #import <Foundation/NSObject.h>
 #import <MAD/MADAlignment.h>
 
-@class UIFontDescriptor;
-@class RptqDocumentElement;
-@class NSString;
+@class MADTextStyle;
 @class NSNumber;
+@class NSString;
+@class RptqDocumentElement;
+@class UIFontDescriptor;
+
 
 @interface MADElementStylizedText : NSObject
 
     - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
                                      fontSize:(double) fontsize
-                                         bold:(BOOL)bold
-                                       italic:(BOOL)italic
-                                    underline:(BOOL)underline
-                                       strike:(BOOL)strike
+                                    textStyle:(MADTextStyle  * _Nullable )textStyle
                           horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment
                                                                     NS_DESIGNATED_INITIALIZER;
 

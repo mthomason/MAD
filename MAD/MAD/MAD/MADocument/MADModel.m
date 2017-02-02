@@ -59,19 +59,63 @@ NSString * const MADNotificationQueryTableDelete = @"MADNotificationQueryTableDe
 NSString * const MADNotificationQueryLinkInsert = @"MADNotificationQueryLinkInsert";
 NSString * const MADNotificationQueryLinkDelete = @"MADNotificationQueryLinkDelete";
 
-static NSString * const MADKeyQueryTable = @"QT";
 static NSString * const MADKeyQueryLink = @"QL";
 static NSString * const MADKeyQueryLinkLeftField = @"LF";
 static NSString * const MADKeyQueryLinkRightField = @"RF";
 static NSString * const MADKeyQueryLinkLeftTable = @"LT";
 static NSString * const MADKeyQueryLinkRightTable = @"RT";
+static NSString * const MADKeyQueryTable = @"QT";
 static NSString * const MADKeyQueryField = @"QF";
 static NSString * const MADKeySchemaFieldName = @"SFN";
 static NSString * const MADKeySchemaTableName = @"STN";
 static NSString * const MADKeySchemaTable = @"ST";
 static NSString * const MADKeySchemaField = @"SF";
 
+static NSString * const MADKeyQueryLinkID = @"QLI";
+static NSString * const MADKeyQueryLinkLeftFieldID = @"LFI";
+static NSString * const MADKeyQueryLinkRightFieldID = @"RFI";
+static NSString * const MADKeyQueryLinkLeftTableID = @"LTI";
+static NSString * const MADKeyQueryLinkRightTableID = @"RTI";
+
+static NSString * const MADKeyQueryTableID = @"QTI";
+static NSString * const MADKeyQueryFieldID = @"QFI";
+static NSString * const MADKeySchemaTableID = @"STI";
+static NSString * const MADKeySchemaFieldID = @"SFI";
+
 NSString * const MADKeyQuery = @"MADKeyQuery";
+
+@implementation MADTableFieldIdentifier {
+    int64_t _tableID;
+    int64_t _fieldID;
+}
+
+@dynamic tableID;
+@dynamic fieldID;
+
+- (instancetype)init {
+    if (self = [self initWithTableID:-1 andFieldID:-1]) {
+    }
+    return self;
+}
+
+- (instancetype)initWithTableID:(int64_t)tableID
+                     andFieldID:(int64_t)fieldID {
+    if (self = [super init]) {
+        _tableID = tableID;
+        _fieldID = fieldID;
+    }
+    return self;
+}
+
+- (int64_t)tableID {
+    return _tableID;
+}
+
+- (int64_t)fieldID {
+    return _fieldID;
+}
+
+@end
 
 @implementation MADTableFieldReference
 
@@ -103,28 +147,35 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 @interface MADModelDatabase ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                              queryID:(NSManagedObjectID *)queryID
+                          queryIdentifier:(int64_t)queryIdentifier
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 @end
 
 @interface MADModelTable ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                                 name:(NSString *)name;
     - (void)addFieldWithID:(NSManagedObjectID *)objectID
+                identifier:(int64_t)identifier
                       name:(NSString *)name
       managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 @end
 
 @interface MADModelField ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                                 name:(NSString *)name;
 
 @end
 
 @interface MADModelQuery ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                             database:(MADModelDatabase *)database;
     @property (nonatomic, weak, readonly) MADModelDatabase *database;
     - (void)deleteQueryTableID:(NSManagedObjectID *)queryTable;
@@ -135,25 +186,35 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 @interface MADModelQueryTable ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                          schemaTable:(NSManagedObjectID *)schemaTable
+               schemaTableIdentifier:(int64_t)schemaTableIdentifier
                             capacity:(NSUInteger)capacity;
     + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
-    - (void)addField:(NSManagedObjectID *)fieldID schemaField:(NSManagedObjectID *)schemaField;
+    - (void)addField:(NSManagedObjectID *)fieldID fieldIdentifier:(int64_t)fieldIdentifier
+         schemaField:(NSManagedObjectID *)schemaField schemaFieldIdentifier:(int64_t) schemaFieldIdentifier;
 @end
 
 @interface MADModelQueryField ()
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                         schemaField:(NSManagedObjectID *)schemaField;
+                          identifier:(int64_t)identifier
+                         schemaField:(NSManagedObjectID *)schemaField
+               schemaFieldIdentifier:(int64_t)schemaFieldIdentifier;
 @end
 
 @interface MADModelQueryLink ()
 
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
                          leftFieldID:(NSManagedObjectID *)leftFieldID
+                        lfIdentifier:(int64_t)lfIdentifier
                          leftTableID:(NSManagedObjectID *)leftTableID
+                        ltIdentifier:(int64_t)ltIdentifier
                         rightFieldID:(NSManagedObjectID *)rightFieldID
-                        rightTableID:(NSManagedObjectID *)rightTableID;
-    + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
+                        rfIdentifier:(int64_t)rfIdentifier
+                        rightTableID:(NSManagedObjectID *)rightTableID
+                        rtIdentifier:(int64_t)rtIdentifier;
++ (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
     - (NSSet <MADTableFieldReference *> *)tableFieldReferences;
     - (NSSet <NSManagedObjectID *> *)tables;
 
@@ -164,20 +225,26 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 @implementation MADObjectID {
   @protected
+    int64_t _uid;
     NSManagedObjectID *_objectID;
 }
-
+    @dynamic identifier;
     @synthesize objectID = _objectID;
 
 - (instancetype)newObjectIDDocument:(NSManagedObjectContext *)managedObjectContext {
     return [[MADModelDocument alloc] initWithManagedObjectContext:managedObjectContext];
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
     if (self = [super init]) {
         _objectID = objectID.copy;
+        _uid = identifier;
     }
     return self;
+}
+
+- (int64_t)identifier {
+    return _uid;
 }
 
 - (NSUInteger)hash {
@@ -231,6 +298,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 - (instancetype)init {
     if (self = [self initWithObjectID: nil
+                           identifier:-1
                  managedObjectContext: nil]) {
         
     }
@@ -238,6 +306,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     if (self = [self initWithManagedObjectContext:managedObjectContext]) {
         _objectID = objectID.copy;
@@ -373,45 +442,61 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSArray <NSManagedObjectID *> *result;
     NSFetchRequest *request;
     
-    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *) =
-    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression) {
+    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
+    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
         expressionDescription.name = name.copy;
         expressionDescription.expression = expression;
-        expressionDescription.expressionResultType = NSManagedObjectIDResultType;
+        expressionDescription.expressionResultType = type;
     };
     
-    int expressionCount = 3;
+    NSUInteger expressionCount = 6;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSManagedObjectContext *managedObjectContext;
     managedObjectContext = _managedObjectContext;
     
-    for (int i=0; i<expressionCount; i++) {
+    for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = [[NSExpressionDescription alloc] init];
     }
     
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     
     NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO";
+    NSString *keyIDDatabase = @"ID", *keyIDQuery = @"IQ", *keyIDDocument = @"IO";
     
+    NSString *identifier = NSStringFromSelector(@selector(identifier));
     NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
-    NSString *inDocument = NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
-    NSString *inDatabaseInDocumentKeyPath = [NSString stringWithFormat:@"%@.%@", inDatabase, inDocument];
+    NSString *inDocument;
+
+    inDocument = [inDatabase stringByAppendingString:@"."];
+    inDocument = [inDocument stringByAppendingString: NSStringFromSelector(@selector(ownedByQueryAsStaticResource))];
+
+    NSString *inDBID = [inDatabase stringByAppendingString:@"."];
+    inDBID = [inDBID stringByAppendingString:identifier];
+
+    NSString *inDocID = [inDocument stringByAppendingString:@"."];
+    inDocID = [inDocID stringByAppendingString:identifier];
+
     
     NSExpression *databaseExpression = [NSExpression expressionForKeyPath:inDatabase];
-    NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDatabaseInDocumentKeyPath];
+    NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDocument];
     NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
+    NSExpression *dbIDExpression = [NSExpression expressionForKeyPath:inDBID];
+    NSExpression *queryIDExpression = [NSExpression expressionForKeyPath:identifier];
+    NSExpression *docIDExpression = [NSExpression expressionForKeyPath:inDocID];
+    setupExpression(expressionDescription[0], keyDatabase, databaseExpression, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[1], keyDocument, databaseInDocumentExpression, NSObjectIDAttributeType);
+    setupExpression(expressionDescription[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
     
-    setupExpression(expressionDescription[0], keyDatabase, databaseExpression);
-    setupExpression(expressionDescription[1], keyDocument, databaseInDocumentExpression);
-    setupExpression(expressionDescription[2], keyQuery, selfExpresssion);
-    
+    setupExpression(expressionDescription[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
+    setupExpression(expressionDescription[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
+    setupExpression(expressionDescription[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);
+
     request.resultType = NSDictionaryResultType;
     NSError * __autoreleasing *error = NULL;
     
-    NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:
-                                                            expressionDescription[0],
-                                                            expressionDescription[1],
-                                                            expressionDescription[2], nil];
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
+                                                   count:expressionCount];
     request.propertiesToFetch = propertiesToFetch;
     result = [managedObjectContext executeFetchRequest:request error:error];
     
@@ -422,20 +507,28 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     MADModelDatabase *database;
     NSUInteger resultCount = 0;
     
-    NSDictionary <NSString *, NSManagedObjectID *> *resultWrapper;
+    NSDictionary <NSString *, __kindof NSObject *> *resultWrapper;
+
+    int64_t docID, dbID, qID;
     for (resultWrapper in result) {
         if (resultCount == 0) {
             _objectID = resultWrapper[keyDocument].copy;
         }
+
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery], kCFNumberSInt64Type, &qID);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase], kCFNumberSInt64Type, &dbID);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument], kCFNumberSInt64Type, &docID);
         database = [[MADModelDatabase alloc] initWithObjectID: resultWrapper[keyDatabase]
+                                                   identifier: dbID
                                                       queryID: resultWrapper[keyQuery]
+                                              queryIdentifier: qID
                                          managedObjectContext: managedObjectContext];
         [databases addObject: database];
         database = nil;
         resultCount++;
     }
     
-    for (int i=0; i<expressionCount; i++) {
+    for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = nil;
     }
     
@@ -469,26 +562,30 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     @synthesize queries = _queries;
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [super initWithObjectID:objectID]) {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
         _managedObjectContext = managedObjectContext;
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                          queryID:(NSManagedObjectID *)queryID
+                 queryIdentifier:(int64_t)queryIdentifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    if (self = [super initWithObjectID:objectID]) {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
         _managedObjectContext = managedObjectContext;
         MADModelQuery *queryObjectID;
         
         NSMutableOrderedSet <MADModelQuery *> *queries;
         queries = [[NSMutableOrderedSet <MADModelQuery *> alloc] init];
 
-        queryObjectID = [[MADModelQuery alloc] initWithObjectID:queryID
-                                                       database:self];
+        queryObjectID = [[MADModelQuery alloc] initWithObjectID: queryID
+                                                     identifier: queryIdentifier
+                                                       database: self];
         [queries addObject: queryObjectID];
         _queries = queries;
     }
@@ -651,12 +748,14 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                                                                                 options: 0];
                     filteredResults = [results filteredArrayUsingPredicate: predicateTable];
                     table = [[MADModelTable alloc] initWithObjectID: tableObjectID
+                                                         identifier: -1
                                                                name: filteredResults.firstObject[keyTableName]];
                     [tables addObject:table];
                     for (attributes in filteredResults) {
-                        [table addFieldWithID:attributes[keyField]
-                                         name:attributes[keyFieldName]
-                         managedObjectContext:managedObjectContext];
+                        [table addFieldWithID: attributes[keyField]
+                                   identifier: -1
+                                         name: attributes[keyFieldName]
+                         managedObjectContext: managedObjectContext];
                     }
                 }
             }
@@ -700,6 +799,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSUInteger i = 0;
     for (NSManagedObjectID *objid in result) {
         queryObjectID = [[MADModelQuery alloc] initWithObjectID:objid
+                                                     identifier: -1
                                            managedObjectContext:managedObjectContext];
         [queries addObject: queryObjectID];
         queryObjectID = nil;
@@ -738,16 +838,17 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 @synthesize fields = _fields;
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
-    if (self = [super initWithObjectID:objectID]) {
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
 
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                             name:(NSString *)name {
-    if (self = [self initWithObjectID:objectID]) {
+    if (self = [self initWithObjectID:objectID identifier:identifier]) {
         _name = name.copy;
     }
     return self;
@@ -769,6 +870,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 }
 
 - (void)addFieldWithID:(NSManagedObjectID *)objectID
+            identifier:(int64_t)identifier
                   name:(NSString *)name
   managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
@@ -777,6 +879,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         _fields = fields;
     }
     id field = [[MADModelField alloc] initWithObjectID: objectID
+                                            identifier:identifier
                                                   name: name];
     [_fields addObject:field];
 }
@@ -803,16 +906,17 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSString *_name;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
-    if (self = [super initWithObjectID:objectID]) {
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [super initWithObjectID: objectID identifier: identifier]) {
 
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                             name:(NSString *)name {
-    if (self = [self initWithObjectID:objectID]) {
+    if (self = [self initWithObjectID:objectID identifier:identifier]) {
         _name = name.copy;
     }
     return self;
@@ -848,16 +952,19 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [super initWithObjectID:objectID]) {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
         _managedObjectContext = managedObjectContext;
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                         database:(MADModelDatabase *)database {
     if (self = [self initWithObjectID: objectID
+                           identifier: identifier
                  managedObjectContext: database.managedObjectContext]) {
         _database = database;
     }
@@ -988,21 +1095,21 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     
     NSUInteger expressionInQueryCount = 2;
 
-    NSExpression *expressionInQuery[expressionInQueryCount];
+    NSExpression *expressions[expressionInQueryCount];
     NSString *predicateKey = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
     
-    expressionInQuery[0] = [NSExpression expressionForKeyPath:predicateKey];
-    expressionInQuery[1] = [NSExpression expressionForConstantValue: _objectID];
+    expressions[0] = [NSExpression expressionForKeyPath:predicateKey];
+    expressions[1] = [NSExpression expressionForConstantValue: _objectID];
     
-    NSPredicate *predicateInQuery;
-    predicateInQuery = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-                                                          rightExpression: expressionInQuery[1]
-                                                                 modifier: NSDirectPredicateModifier
-                                                                     type: NSEqualToPredicateOperatorType
-                                                                  options: 0];
+    NSPredicate *predicate;
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
+                                                   rightExpression: expressions[1]
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
     
-    NSFetchRequest *fetchQueryTable = [MADModelQueryTable fetchRequest: predicateInQuery];
+    NSFetchRequest *fetchQueryTable = [MADModelQueryTable fetchRequest: predicate];
     
     fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable error:error];
     NSAssert(fetchQueryTableResults != nil && error == nil, @"What? %@", *error);
@@ -1010,7 +1117,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     [self insertTablesFromFetchRequestResults:fetchQueryTableResults];
 
     for (NSUInteger i=0; i<expressionInQueryCount; i++) {
-        expressionInQuery[i] = nil;
+        expressions[i] = nil;
     }
 
 }
@@ -1028,7 +1135,10 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSComparisonPredicate *predicateTable;
     NSExpression *tablePath = [NSExpression expressionForKeyPath: MADKeyQueryTable], *tableValue;
     NSArray *fresults;
+    int64_t stid = -1, qtid = -1, sfid = -1, qfid = -1;
     @autoreleasepool {
+        
+        NSDictionary *filteredResult;
         NSManagedObjectID *tableObjectID;
         for (tableObjectID in tableObjectIDs) {
             
@@ -1041,19 +1151,25 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                                                                                type: NSEqualToPredicateOperatorType
                                                                             options: 0];
                 fresults = [results filteredArrayUsingPredicate:predicateTable];
+                filteredResult = fresults.firstObject;
                 
-                //NSManagedObjectID *schemaTable;
-                NSDictionary *filteredResult = fresults.firstObject;
+                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaTableID], kCFNumberSInt64Type, &stid);
+                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaFieldID], kCFNumberSInt64Type, &sfid);
+                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryTableID], kCFNumberSInt64Type, &qtid);
+                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryFieldID], kCFNumberSInt64Type, &qfid);
                 
                 MADModelQueryTable *queryTable;
                 queryTable = [[MADModelQueryTable alloc] initWithObjectID: tableObjectID
+                                                               identifier: qtid
                                                               schemaTable: filteredResult[MADKeySchemaTable]
+                                                    schemaTableIdentifier: stid
                                                                  capacity: fresults.count];
                 
-//                id result
                 for (filteredResult in fresults) {
                     [queryTable addField: filteredResult[MADKeyQueryField]
-                             schemaField: filteredResult[MADKeySchemaField]];
+                         fieldIdentifier: qfid
+                             schemaField: filteredResult[MADKeySchemaField]
+                   schemaFieldIdentifier: sfid];
                 }
                 NSManagedObjectID *tableID = tableObjectID.copy;
                 [_queryTableIDs addObject:tableID];
@@ -1069,32 +1185,47 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
     NSArray <NSManagedObjectID *> *queryLinkIDsFiltered;
     queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLink];
-    
     [_queryLinkIDs addObjectsFromArray:queryLinkIDsFiltered];
+    
     NSManagedObjectID *queryLinkID;
     MADModelQueryLink *queryLink;
-    NSPredicate *predicateTable;
+    NSPredicate *predicate;
     NSExpression *queryLinkIDValue;
     NSExpression *queryLinkPathKey = [NSExpression expressionForKeyPath:MADKeyQueryLink];
     
     for (queryLinkID in _queryLinkIDs) {
         
         queryLinkIDValue = [NSExpression expressionForConstantValue: queryLinkID];
-        predicateTable = [NSComparisonPredicate predicateWithLeftExpression: queryLinkPathKey
-                                                            rightExpression: queryLinkIDValue
-                                                                   modifier: NSDirectPredicateModifier
-                                                                       type: NSEqualToPredicateOperatorType
-                                                                    options: 0];
+        predicate = [NSComparisonPredicate predicateWithLeftExpression: queryLinkPathKey
+                                                       rightExpression: queryLinkIDValue
+                                                              modifier: NSDirectPredicateModifier
+                                                                  type: NSEqualToPredicateOperatorType
+                                                               options: 0];
         
-        NSArray *fresults = [results filteredArrayUsingPredicate:predicateTable];
+        NSArray *fresults = [results filteredArrayUsingPredicate:predicate];
         
+        int64_t qlid = -1, ltid = -1, lfid = -1, rtid = -1, rfid = -1;
         for (NSDictionary *result in fresults) {
-            queryLink = [[MADModelQueryLink alloc] initWithObjectID:queryLinkID
-                                                        leftFieldID:result[MADKeyQueryLinkLeftField]
-                                                        leftTableID:result[MADKeyQueryLinkLeftTable]
-                                                       rightFieldID:result[MADKeyQueryLinkRightField]
-                                                       rightTableID:result[MADKeyQueryLinkRightTable]];
+            
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkID], kCFNumberSInt64Type, &qlid);
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkLeftTableID], kCFNumberSInt64Type, &ltid);
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkLeftFieldID], kCFNumberSInt64Type, &lfid);
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkRightTableID], kCFNumberSInt64Type, &rtid);
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkRightFieldID], kCFNumberSInt64Type, &rfid);
+            
+            queryLink = [[MADModelQueryLink alloc] initWithObjectID: queryLinkID
+                                                         identifier: qlid
+                                                        leftFieldID: result[MADKeyQueryLinkLeftField]
+                                                       lfIdentifier: lfid
+                                                        leftTableID: result[MADKeyQueryLinkLeftTable]
+                                                       ltIdentifier: ltid
+                                                       rightFieldID: result[MADKeyQueryLinkRightField]
+                                                       rfIdentifier: rfid
+                                                       rightTableID: result[MADKeyQueryLinkRightTable]
+                                                       rtIdentifier: rtid];
+            
             [_links setObject:queryLink forKey:queryLinkID];
+            
         }
     }
 
@@ -1105,28 +1236,30 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 - (void)updateLinks {
 
     NSArray <NSDictionary *> *fetchQueryLinksResults;
-    NSFetchRequest *fetchQueryLinks;
+    NSFetchRequest *fetch;
+    NSExpression *expressions[2];
+    NSPredicate *predicate;
 
-    fetchQueryLinks = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
-    NSExpression *expressionInQuery[2];
-    expressionInQuery[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQuery))];
-    expressionInQuery[1] = [NSExpression expressionForConstantValue: _objectID];
+    fetch = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
+    expressions[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQuery))];
+    expressions[1] = [NSExpression expressionForConstantValue: _objectID];
 
-    NSPredicate *predicateInQuery;
-    predicateInQuery = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-                                                          rightExpression: expressionInQuery[1]
-                                                                 modifier: NSDirectPredicateModifier
-                                                                     type: NSEqualToPredicateOperatorType
-                                                                  options: 0];
-    fetchQueryLinks = [MADModelQueryLink fetchRequest:predicateInQuery];
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
+                                                   rightExpression: expressions[1]
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
+ 
+    fetch = [MADModelQueryLink fetchRequest:predicate];
+    
     NSError * __autoreleasing * error = NULL;
-    fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetchQueryLinks error:error];
+    fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetch error:error];
     NSAssert(fetchQueryLinksResults != nil && error == nil, @"Need this to work! %@", *error);
 
     [self insertLinksFromFetchRequestResults:fetchQueryLinksResults];
     
-    expressionInQuery[0] = nil;
-    expressionInQuery[1] = nil;
+    expressions[0] = nil;
+    expressions[1] = nil;
 }
 
 - (void)update { }
@@ -1261,67 +1394,142 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 @implementation MADModelQueryLink {
     MADTableFieldReference *_leftFieldReference;
     MADTableFieldReference *_rightFieldReference;
+    MADTableFieldIdentifier *_leftFieldIdentifier;
+    MADTableFieldIdentifier *_rightFieldIdentifier;
 }
 
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
-    NSFetchRequest *fetchQueryLinks;
+    NSFetchRequest *fetchRequest;
     
-    NSUInteger expressionDescCount = 6;
+    NSUInteger expressionDescCount = 10;
+    NSString *pathIdentifier, *pathHasRightField, *pathHasLeftField, *pathInQueryTable;
+    
     NSExpressionDescription *expressionDescription[expressionDescCount];
+
+    pathIdentifier = NSStringFromClass([RptqQueryLinks class]);
     
-    fetchQueryLinks = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
+    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:pathIdentifier];
+
+    pathHasRightField = NSStringFromSelector(@selector(hasRightField));
+    pathHasLeftField = NSStringFromSelector(@selector(hasLeftField));
+    pathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
 
     expressionDescription[0] = [[NSExpressionDescription alloc] init];
     expressionDescription[0].name = MADKeyQueryLink;
     expressionDescription[0].expression = [NSExpression expressionForEvaluatedObject];
     expressionDescription[0].expressionResultType = NSManagedObjectIDResultType;
-    
+
+    NSString *pathRTID = [pathHasRightField stringByAppendingString:@"."];
+    pathRTID = [pathRTID stringByAppendingString:pathInQueryTable];
+
+    NSString *pathLTID = [pathHasLeftField stringByAppendingString:@"."];
+    pathLTID = [pathLTID stringByAppendingString:pathInQueryTable];
+
     expressionDescription[1] = [[NSExpressionDescription alloc] init];
     expressionDescription[1].name = MADKeyQueryLinkLeftTable;
-    expressionDescription[1].expression = [NSExpression expressionForKeyPath:@"hasLeftField.inQueryTable"];
-    expressionDescription[1].expressionResultType = NSManagedObjectIDResultType;
+    expressionDescription[1].expression = [NSExpression expressionForKeyPath:pathRTID];
+    expressionDescription[1].expressionResultType = NSObjectIDAttributeType;
     
     expressionDescription[2] = [[NSExpressionDescription alloc] init];
     expressionDescription[2].name = MADKeyQueryLinkLeftField;
-    expressionDescription[2].expression = [NSExpression expressionForKeyPath:@"hasLeftField"];
-    expressionDescription[2].expressionResultType = NSManagedObjectIDResultType;
+    expressionDescription[2].expression = [NSExpression expressionForKeyPath:pathHasLeftField];
+    expressionDescription[2].expressionResultType = NSObjectIDAttributeType;
     
     expressionDescription[3] = [[NSExpressionDescription alloc] init];
     expressionDescription[3].name = MADKeyQueryLinkRightTable;
-    expressionDescription[3].expression = [NSExpression expressionForKeyPath:@"hasRightField.inQueryTable"];
-    expressionDescription[3].expressionResultType = NSManagedObjectIDResultType;
+    expressionDescription[3].expression = [NSExpression expressionForKeyPath:pathLTID];
+    expressionDescription[3].expressionResultType = NSObjectIDAttributeType;
     
     expressionDescription[4] = [[NSExpressionDescription alloc] init];
     expressionDescription[4].name = MADKeyQueryLinkRightField;
-    expressionDescription[4].expression = [NSExpression expressionForKeyPath:@"hasRightField"];
-    expressionDescription[4].expressionResultType = NSManagedObjectIDResultType;
+    expressionDescription[4].expression = [NSExpression expressionForKeyPath:pathHasRightField];
+    expressionDescription[4].expressionResultType = NSObjectIDAttributeType;
     
-    
-    NSArray *propertiesToFetch2 = [[NSArray alloc] initWithObjects:expressionDescription count:5];
-    fetchQueryLinks.propertiesToFetch = propertiesToFetch2;
-    fetchQueryLinks.resultType = NSDictionaryResultType;
-    fetchQueryLinks.predicate = predicate;
+    pathIdentifier = NSStringFromSelector(@selector(identifier));
 
-    return fetchQueryLinks;
+    NSString *pathRFID = [pathHasRightField stringByAppendingString:@"."];
+    pathRFID = [pathRFID stringByAppendingString:pathIdentifier];
+    
+    NSString *pathLFID = [pathHasLeftField stringByAppendingString:@"."];
+    pathLFID = [pathLFID stringByAppendingString:pathIdentifier];
+    
+    pathRTID = [pathRTID stringByAppendingString:@"."];
+    pathRTID = [pathRTID stringByAppendingString:pathIdentifier];
+    
+    pathLTID = [pathLTID stringByAppendingString:@"."];
+    pathLTID = [pathLTID stringByAppendingString:pathIdentifier];
+    
+    expressionDescription[5] = [[NSExpressionDescription alloc] init];
+    expressionDescription[5].name = MADKeyQueryLinkRightFieldID;
+    expressionDescription[5].expression = [NSExpression expressionForKeyPath:pathRFID];
+    expressionDescription[5].expressionResultType = NSInteger64AttributeType;
+    
+    expressionDescription[6] = [[NSExpressionDescription alloc] init];
+    expressionDescription[6].name = MADKeyQueryLinkLeftFieldID;
+    expressionDescription[6].expression = [NSExpression expressionForKeyPath:pathLFID];
+    expressionDescription[6].expressionResultType = NSInteger64AttributeType;
+
+    expressionDescription[7] = [[NSExpressionDescription alloc] init];
+    expressionDescription[7].name = MADKeyQueryLinkRightTableID;
+    expressionDescription[7].expression = [NSExpression expressionForKeyPath:pathRTID];
+    expressionDescription[7].expressionResultType = NSInteger64AttributeType;
+    
+    expressionDescription[8] = [[NSExpressionDescription alloc] init];
+    expressionDescription[8].name = MADKeyQueryLinkLeftTableID;
+    expressionDescription[8].expression = [NSExpression expressionForKeyPath:pathLTID];
+    expressionDescription[8].expressionResultType = NSInteger64AttributeType;
+
+    expressionDescription[9] = [[NSExpressionDescription alloc] init];
+    expressionDescription[9].name = MADKeyQueryLinkID;
+    expressionDescription[9].expression = [NSExpression expressionForKeyPath:pathIdentifier];
+    expressionDescription[9].expressionResultType = NSInteger64AttributeType;
+
+    
+    NSArray <NSExpressionDescription *> *properties;
+    properties = [[NSArray alloc] initWithObjects: expressionDescription
+                                            count: expressionDescCount];
+    fetchRequest.propertiesToFetch = properties;
+    fetchRequest.resultType = NSDictionaryResultType;
+    fetchRequest.predicate = predicate;
+
+    for (NSUInteger i=0; i<expressionDescCount; i++) {
+        expressionDescription[i] = nil;
+    }
+    
+    return fetchRequest;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
-    if (self = [super initWithObjectID:objectID]) {
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
 
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                      leftFieldID:(NSManagedObjectID *)leftFieldID
+                    lfIdentifier:(int64_t)lfIdentifier
                      leftTableID:(NSManagedObjectID *)leftTableID
+                    ltIdentifier:(int64_t)ltIdentifier
                     rightFieldID:(NSManagedObjectID *)rightFieldID
-                    rightTableID:(NSManagedObjectID *)rightTableID {
+                    rfIdentifier:(int64_t)rfIdentifier
+                    rightTableID:(NSManagedObjectID *)rightTableID
+                    rtIdentifier:(int64_t)rtIdentifier {
     
-    if (self = [self initWithObjectID:objectID]) {
+    if (self = [self initWithObjectID:objectID identifier:identifier]) {
         
-        id leftFieldReference = [[MADTableFieldReference alloc] initWithTableID: leftTableID
-                                                                     andFieldID: leftFieldID];
+        MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
+        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rtIdentifier
+                                                                    andFieldID: rfIdentifier];
+        _leftFieldIdentifier = leftFieldIdentifier;
+        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: ltIdentifier
+                                                                     andFieldID: lfIdentifier];
+        _rightFieldIdentifier = rightFieldIdentifier;
+        
+        MADTableFieldReference *leftFieldReference;
+        leftFieldReference = [[MADTableFieldReference alloc] initWithTableID: leftTableID
+                                                                  andFieldID: leftFieldID];
         _leftFieldReference = leftFieldReference;
         
         id rightFieldReference = [[MADTableFieldReference alloc] initWithTableID: rightTableID
@@ -1365,16 +1573,18 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSMutableDictionary <NSManagedObjectID *, MADModelQueryField *> *_fields;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
-    if (self = [super initWithObjectID:objectID]) { }
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) { }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                      identifier:(int64_t)identifier
                      schemaTable:(NSManagedObjectID *)schemaTable
-                      capacity:(NSUInteger)capacity {
+           schemaTableIdentifier:(int64_t)schemaTableIdentifier
+                        capacity:(NSUInteger)capacity {
     
-    if (self = [self initWithObjectID:objectID]) {
+    if (self = [self initWithObjectID:objectID identifier:identifier]) {
         _schemaTable = schemaTable.copy;
         
         id fields;
@@ -1396,14 +1606,6 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
     
-    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *) =
-    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression) {
-        expressionDescription.name = name.copy;
-        expressionDescription.expression = expression;
-        expressionDescription.expressionResultType = NSManagedObjectIDResultType;
-        
-    };
-    
     NSFetchRequest *fetchQueryTable;
     NSString *entityName;
     entityName = NSStringFromClass([RptqQueryField class]);
@@ -1424,8 +1626,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSString *keyPathSchemaTable = [keyPathInQueryTable stringByAppendingString: @"."];
     keyPathSchemaTable = [keyPathSchemaTable stringByAppendingString: keyPathDatabaseSchemaTable];
     
-    NSUInteger expressionCount = 6;
-    //NSExpression *expressionInQuery[expressionCount];
+    NSUInteger expressionCount = 10;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSString *keys[] = {
         MADKeyQueryField,
@@ -1433,27 +1634,64 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
         MADKeySchemaFieldName,
         MADKeySchemaTableName,
         MADKeySchemaTable,
-        MADKeySchemaField
+        MADKeySchemaField,
+        
+        MADKeyQueryTableID,
+        MADKeyQueryFieldID,
+        MADKeySchemaTableID,
+        MADKeySchemaFieldID
     };
     
-    NSExpression *expressionInQuery[] = {
+    NSString *keyQueryTableID, *keyQueryFieldID, *keySchemaTableID, *keySchemaFieldID;
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+
+    keyQueryTableID = [keyPathInQueryTable stringByAppendingString:@"."];
+    keyQueryTableID = [keyQueryTableID stringByAppendingString:keyIdentifier];
+
+    keyQueryFieldID = keyIdentifier.copy;
+
+    keySchemaTableID = [keyPathSchemaTable stringByAppendingString:@"."];
+    keySchemaTableID = [keySchemaTableID stringByAppendingString:keyIdentifier];
+
+    keySchemaFieldID = [keyPathDatabaseSchemaField stringByAppendingString:@"."];
+    keySchemaFieldID = [keySchemaFieldID stringByAppendingString:keyIdentifier];
+
+    NSExpression *expressions[] = {
         [NSExpression expressionForEvaluatedObject],
         [NSExpression expressionForKeyPath: keyPathInQueryTable],
         [NSExpression expressionForKeyPath: keyPathFieldName],
         [NSExpression expressionForKeyPath: keyPathTableName],
         [NSExpression expressionForKeyPath: keyPathSchemaTable],
-        [NSExpression expressionForKeyPath: keyPathDatabaseSchemaField]
+        [NSExpression expressionForKeyPath: keyPathDatabaseSchemaField],
+        
+        [NSExpression expressionForKeyPath: keyQueryTableID],
+        [NSExpression expressionForKeyPath: keyQueryFieldID],
+        [NSExpression expressionForKeyPath: keySchemaTableID],
+        [NSExpression expressionForKeyPath: keySchemaFieldID]
     };
 
+    NSAttributeType types[] = {
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSInteger64AttributeType
+    };
+    
     for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        expressionDescription[i].name = keys[i].copy;
+        expressionDescription[i].expression = expressions[i];
+        expressionDescription[i].expressionResultType = types[i];
+
     }
-    
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        setupExpression(expressionDescription[i], keys[i], expressionInQuery[i]);
-    }
-    
-    
+
     NSArray *propertiesToFetch;
     propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
                                                    count:(NSUInteger)expressionCount];
@@ -1464,18 +1702,23 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = nil;
         keys[i] = nil;
-        expressionInQuery[i] = nil;
+        expressions[i] = nil;
     }
     return fetchQueryTable;
 }
 
 - (void)addField:(NSManagedObjectID *)fieldID
-     schemaField:(NSManagedObjectID *)schemaField {
+ fieldIdentifier:(int64_t)fieldIdentifier
+     schemaField:(NSManagedObjectID *)schemaField
+schemaFieldIdentifier:(int64_t) schemaFieldIdentifier {
     
     NSManagedObjectID *_fieldID = fieldID, *_schemaField = schemaField;
     
-    MADModelQueryField *queryField = [[MADModelQueryField alloc] initWithObjectID:_fieldID
-                                                                      schemaField:_schemaField];
+    MADModelQueryField *queryField;
+    queryField = [[MADModelQueryField alloc] initWithObjectID:_fieldID
+                                                   identifier: fieldIdentifier
+                                                  schemaField: _schemaField
+                                        schemaFieldIdentifier: schemaFieldIdentifier];
     [_fieldIDs addObject:_fieldID];
     [_fields setObject:queryField forKey:_fieldID];
 
@@ -1498,16 +1741,18 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     NSManagedObjectID *_schemaField;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID {
-    if (self = [super initWithObjectID:objectID]) {
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
         
     }
     return self;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                     schemaField:(NSManagedObjectID *)schemaField {
-    if (self = [self initWithObjectID: objectID]) {
+                      identifier:(int64_t)identifier
+                     schemaField:(NSManagedObjectID *)schemaField
+           schemaFieldIdentifier:(int64_t)schemaFieldIdentifier {
+    if (self = [self initWithObjectID: objectID identifier:identifier]) {
         _schemaField = schemaField.copy;
     }
     return self;

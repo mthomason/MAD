@@ -15,6 +15,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
+#import <MADCocoaExtensions/MADTextStyle.h>
 #import "RptqDocumentElement.h"
 #import "MADAlignment.h"
 
@@ -33,10 +34,7 @@
 
 - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
                                  fontSize:(double) fontsize
-                                     bold:(BOOL)bold
-                                   italic:(BOOL)italic
-                                underline:(BOOL)underline
-                                   strike:(BOOL)strike
+                                textStyle:(MADTextStyle *)textStyle
                       horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment {
     
     if (self = [super init]) {
@@ -44,8 +42,8 @@
         UIFontDescriptor *fontDescriptor;
         fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
                                                                 fontSize: fontsize
-                                                                    bold: bold
-                                                                  italic: italic];
+                                                                    bold: textStyle.bold
+                                                                  italic: textStyle.italic];
     
         
         UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
@@ -80,12 +78,12 @@
         
         NSNumber *baselineOffset = @0.00000000f;
         NSNumber *underlineStyle;
-        underlineStyle = [[NSNumber alloc] initWithInteger: underline ?
+        underlineStyle = [[NSNumber alloc] initWithInteger: textStyle.underline ?
                                               NSUnderlineStyleSingle :
                                               NSUnderlineStyleNone];
         
         NSNumber *strikethroughStyle;
-        strikethroughStyle = [[NSNumber alloc] initWithInteger: strike ?
+        strikethroughStyle = [[NSNumber alloc] initWithInteger: textStyle.strikethrough ?
                                                                         NSUnderlineStyleSingle :
                                                                         NSUnderlineStyleNone];
         

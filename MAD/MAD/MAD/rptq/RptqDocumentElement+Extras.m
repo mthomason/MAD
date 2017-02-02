@@ -576,10 +576,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
                     }
                     result = [currencyNumberFormatter stringFromNumber:value];
                 } else {
-                    NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
-                    [formatString appendFormat:@"%ld", ((MADCurrencyFormatter *)self.numericFormat).decimalCount];
-                    [formatString appendString:@"f"];
-                    result = [[NSString alloc] initWithFormat:formatString, [value floatValue]];
+                    NSMutableString *format;
+                    format = [[NSMutableString alloc] initWithString:@"%."];
+                    [format appendFormat:@"%ld", self.numericFormat.decimalCount];
+                    [format appendString:@"f"];
+                    result = [[NSString alloc] initWithFormat:format, [value floatValue]];
                 }
             } else {
                 result = [[NSString alloc] initWithFormat:@"%@", value];

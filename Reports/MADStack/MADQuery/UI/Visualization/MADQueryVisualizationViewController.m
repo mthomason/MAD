@@ -168,7 +168,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark NSObject
 
 - (void)dealloc {
-    MADModelQuery *firstQuery = _document.documentObjectIDStore.firstQuery;
+    MADModelQuery *firstQuery = _document.documentModel.firstQuery;
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationQueryLinkDelete
                                                   object: firstQuery];
@@ -346,8 +346,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     MADocument *document = self.document;
     NSManagedObjectContext *managedObjectContext;
-    managedObjectContext = document.documentObjectIDStore.managedObjectContext;
-    id firstQuery = document.documentObjectIDStore.firstQuery;
+    managedObjectContext = document.documentModel.managedObjectContext;
+    id firstQuery = document.documentModel.firstQuery;
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(deleteQueryLink:)
                                                  name: MADNotificationQueryLinkDelete
@@ -393,7 +393,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     MADocument *document = self.document;
     NSManagedObjectContext *managedObjectContext;
-    managedObjectContext = document.documentObjectIDStore.managedObjectContext;
+    managedObjectContext = document.documentModel.managedObjectContext;
 
     
     NSString *willSave = NSManagedObjectContextWillSaveNotification;
@@ -468,7 +468,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
-    queryLinkEnumerator = self.document.documentObjectIDStore.firstQuery.links.objectEnumerator;
+    queryLinkEnumerator = self.document.documentModel.firstQuery.links.objectEnumerator;
     for (MADModelQueryLink *link in queryLinkEnumerator) {
         [self layoutQueryLinkViewControllerWithModelObject:link];
     }
@@ -584,7 +584,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
         MTVertex *tableIDVertext;
         
-        queryDef= [[MADQueryVisualizationDefination alloc] initWithQuery:doc.documentObjectIDStore.firstQuery];
+        queryDef= [[MADQueryVisualizationDefination alloc] initWithQuery:doc.documentModel.firstQuery];
         topologicallySortedTables = queryDef.topologicallySortedTables;
 
         cacheData = [[MADHierarchicalDisplayModel alloc] initWithNumberOfTables:[topologicallySortedTables count]];
@@ -749,7 +749,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
     NSString *path;
 
-    document = _document.documentObjectIDStore;
+    document = _document.documentModel;
     query = document.databases.firstObject.queries.firstObject;
     
     path = self.localCacheFileURL.filePathURL.path;
@@ -1112,7 +1112,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         NSEnumerator <MADModelQueryLink *> *links; MADModelQueryLink *link;
         controller = (MADQueryVisualizationSchemaViewController *)sender;
         
-        links = self.document.documentObjectIDStore.firstQuery.links.objectEnumerator;
+        links = self.document.documentModel.firstQuery.links.objectEnumerator;
         
         for (link in links) {
             if ([link.leftFieldReference.tableID isEqual: controller.objectIdTag] ||

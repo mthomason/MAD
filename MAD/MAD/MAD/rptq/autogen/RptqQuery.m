@@ -14,6 +14,27 @@
 #import "RptqQueryPredicate.h"
 #import "RptqQuerySort.h"
 #import "RptqQueryTable.h"
+
 @implementation RptqQuery
+
+@end
+
+@implementation RptqQuery (CoreDataProperties)
+
++ (NSFetchRequest<RptqQuery *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQuery"];
+}
+
+@dynamic cachedText;
+@dynamic identifier;
+@dynamic override;
+@dynamic overrideText;
+@dynamic hasFields;
+@dynamic hasQueryGroups;
+@dynamic hasQueryLinks;
+@dynamic hasQueryPredicate;
+@dynamic hasQuerySort;
+@dynamic hasQueryTables;
+@dynamic inDatabase;
 
 @end

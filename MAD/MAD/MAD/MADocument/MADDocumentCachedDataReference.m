@@ -73,11 +73,4 @@
     return self;
 }
 
-- (NSString *)textForDatatable:(MTDataTableFast *)datatable andRowID:(NSUInteger)rowID {
-/*    NSDictionary *rowData = [datatable copyDataForCacheId:rowID];
-    NSString *text = [documentObject formattedString: _dataType
-                                            forValue: rowData[self.fieldName]];*/
-                                            return nil;
-}
-
 @end

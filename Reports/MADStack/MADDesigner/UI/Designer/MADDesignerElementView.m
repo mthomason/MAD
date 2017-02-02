@@ -297,27 +297,27 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
     
-    RptqDocumentElement *documentObject = (RptqDocumentElement *)[context objectWithID:self.objectIdTag];
-    if (documentObject != nil) {
+    RptqDocumentElement *element = (RptqDocumentElement *)[context objectWithID:self.objectIdTag];
+    if (element != nil) {
         
-        CGRect marginViewFrame = [documentObject boundsContentView];
+        CGRect marginViewFrame = [element boundsContentView];
         
         self.frame = marginViewFrame;
         self.displayBarcode = nil;
         self.displayImage = nil;
         
         
-        NSString *string = [documentObject copyDesignerRepresentationText];
+        NSString *string = [element copyDesignerRepresentationText];
         
-        switch (documentObject.documentObjectType) {
+        switch (element.documentObjectType) {
                 
             case MTDocumentObjectTypeImage:
-                self.displayImage = ((RptqDocumentElementImage *)documentObject).image;
+                self.displayImage = ((RptqDocumentElementImage *)element).image;
                 break;
                 
             case MTDocumentObjectTypeBarcode: {
                 MTBarcode *barcode;
-                barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject];
+                barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)element];
                 self.displayBarcode = barcode;
                 break;
             }
@@ -327,13 +327,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         }
         
         MADElementStylizedText *attributesText;
-        attributesText = [[MADElementStylizedText alloc] initWithFontName:documentObject.fontname
-                                                                         fontSize:documentObject.fontsize
-                                                                             bold:documentObject.style.bold
-                                                                           italic:documentObject.style.italic
-                                                                        underline:documentObject.style.underline
-                                                                           strike:documentObject.style.strikethrough
-                                                              horizontalAlignment:documentObject.alignment.horizontal];
+        attributesText = [[MADElementStylizedText alloc] initWithFontName:element.fontname
+                                                                 fontSize:element.fontsize
+                                                                textStyle:element.style
+                                                      horizontalAlignment:element.alignment.horizontal];
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
                                                                                 attributes: attributesText.fontAttributes];

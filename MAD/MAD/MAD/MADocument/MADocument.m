@@ -265,7 +265,7 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
-    @property (nonatomic, readwrite, strong) MADModelDocument *documentObjectIDStore;
+    @property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
 
 @end
 
@@ -496,13 +496,13 @@ void madwarn(char *err,  const char*err2) { }
 
 // Helpers
 
-- (MADModelDocument *)documentObjectIDStore {
-    if (!_documentObjectIDStore) {
-        MADModelDocument *documentObjectIDStore;
-        documentObjectIDStore = [[MADModelDocument alloc] initWithManagedObjectContext:self.managedObjectContext];
-        _documentObjectIDStore = documentObjectIDStore;
+- (MADModelDocument *)documentModel {
+    if (!_documentModel) {
+        MADModelDocument *documentModel;
+        documentModel = [[MADModelDocument alloc] initWithManagedObjectContext:self.managedObjectContext];
+        _documentModel = documentModel;
     }
-    return _documentObjectIDStore;
+    return _documentModel;
 }
 
 - (NSURL *)copyThumbnailURL {
@@ -1448,7 +1448,7 @@ READFROMURL_END:;
 }
 
 - (NSArray *)readCurrentSortDescriptors {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectIDStore.objectID];
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentModel.objectID];
     if (self.database == nil) {
         [self initializeMainDatabase:document];        // FIXME: I doubt this ever runs.
     }

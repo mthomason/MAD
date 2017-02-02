@@ -41,12 +41,9 @@
     
     if (attt == nil) {
         attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
-                                                               fontSize: item.fontsize
-                                                                   bold: item.style.bold
-                                                                 italic: item.style.italic
-                                                              underline: item.style.underline
-                                                                 strike: item.style.strikethrough
-                                                    horizontalAlignment: item.alignment.horizontal];
+                                                       fontSize: item.fontsize
+                                                      textStyle: item.style
+                                            horizontalAlignment: item.alignment.horizontal];
         
         definition.fontDescriptors[item.objectID] = attt;
     }

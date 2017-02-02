@@ -648,8 +648,8 @@ BOOL storeEnabled() {
         NSManagedObjectContext *managedObjectContext;
         NSManagedObjectID *objectID;
 
-        managedObjectContext = document.documentObjectIDStore.managedObjectContext;
-        objectID = document.documentObjectIDStore.databases.firstObject.queries.firstObject.objectID.copy;
+        managedObjectContext = document.documentModel.managedObjectContext;
+        objectID = document.documentModel.databases.firstObject.queries.firstObject.objectID.copy;
         
         
         BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
@@ -1155,13 +1155,13 @@ BOOL storeEnabled() {
             return frc;
         };
         NSManagedObjectContext *context;
-        context = reportDocument.documentObjectIDStore.managedObjectContext;
+        context = reportDocument.documentModel.managedObjectContext;
         MADQueryViewDataSource *queryViewDataSource = self.queryViewDataSource;
         
         {
-            //managedObjectContext = reportDocument.documentObjectIDStore.managedObjectContext;
+            //managedObjectContext = reportDocument.documentModel.managedObjectContext;
             NSManagedObjectID *objectID;
-            objectID = reportDocument.documentObjectIDStore.databases.firstObject.queries.firstObject.objectID.copy;
+            objectID = reportDocument.documentModel.databases.firstObject.queries.firstObject.objectID.copy;
             
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
