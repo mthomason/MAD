@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADocumentObjectAttributesText.h"
+#import "MADElementStylizedText.h"
 #import "UIFontDescriptor+DocumentObject.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIFont.h>
@@ -18,14 +18,14 @@
 #import "RptqDocumentElement.h"
 #import "MADAlignment.h"
 
-@interface MADocumentObjectAttributesText ()
+@interface MADElementStylizedText ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
     @property (nonatomic, strong, readwrite) NSDictionary *fontAttributes;
 
 @end
 
-@implementation MADocumentObjectAttributesText
+@implementation MADElementStylizedText
 
 - (instancetype)init {
     return (self = [super init]);

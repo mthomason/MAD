@@ -17,7 +17,7 @@
 @class NSString;
 @class NSNumber;
 
-@interface MADocumentObjectAttributesText : NSObject
+@interface MADElementStylizedText : NSObject
 
     - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
                                      fontSize:(double) fontsize
