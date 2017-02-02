@@ -1123,8 +1123,6 @@
 		4CC284561BADE98F00775B72 /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqFieldSelectorManager.m; path = MAD/rptq/RptqFieldSelectorManager.m; sourceTree = "<group>"; };
 		4CC284571BADE98F00775B72 /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQuery+Extras.h"; path = "MAD/rptq/RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4CC284581BADE98F00775B72 /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuery+Extras.m"; path = "MAD/rptq/RptqQuery+Extras.m"; sourceTree = "<group>"; };
-		4CC284591BADE98F00775B72 /* RptqQueryCache+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryCache+Extras.h"; path = "MAD/rptq/RptqQueryCache+Extras.h"; sourceTree = "<group>"; };
-		4CC2845A1BADE98F00775B72 /* RptqQueryCache+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryCache+Extras.m"; path = "MAD/rptq/RptqQueryCache+Extras.m"; sourceTree = "<group>"; };
 		4CC2845B1BADE98F00775B72 /* RptqQueryField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryField+Extras.h"; path = "MAD/rptq/RptqQueryField+Extras.h"; sourceTree = "<group>"; };
 		4CC2845C1BADE98F00775B72 /* RptqQueryField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryField+Extras.m"; path = "MAD/rptq/RptqQueryField+Extras.m"; sourceTree = "<group>"; };
 		4CC2845D1BADE98F00775B72 /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryGroup+Extras.h"; path = "MAD/rptq/RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
@@ -1664,8 +1662,6 @@
 			children = (
 				4CC284571BADE98F00775B72 /* RptqQuery+Extras.h */,
 				4CC284581BADE98F00775B72 /* RptqQuery+Extras.m */,
-				4CC284591BADE98F00775B72 /* RptqQueryCache+Extras.h */,
-				4CC2845A1BADE98F00775B72 /* RptqQueryCache+Extras.m */,
 				4CC2845B1BADE98F00775B72 /* RptqQueryField+Extras.h */,
 				4CC2845C1BADE98F00775B72 /* RptqQueryField+Extras.m */,
 				4CC2845D1BADE98F00775B72 /* RptqQueryGroup+Extras.h */,
