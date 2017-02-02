@@ -11,7 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 
-extern NSString * const MADReportDesignerSectionLayoutSettingsViewControllerIdentifier;
+extern NSString * const MADSectionLayoutSettingsID;
 
 @class MADReportDesignerSectionLayoutSettingsViewController;
 

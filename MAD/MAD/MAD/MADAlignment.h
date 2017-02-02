@@ -1,5 +1,5 @@
 //
-//  MTAlignment.h
+//  MADAlignment.h
 //  MAD
 //
 //  Created by Michael Thomason on 9/28/14.
@@ -9,7 +9,9 @@
 #ifndef MAD_MTAlignment_h
 #define MAD_MTAlignment_h
 
-typedef NS_ENUM(short, MADVerticalAlignment) {
+#import <Foundation/NSObject.h>
+
+typedef NS_ENUM(int16_t, MADVerticalAlignment) {
     MADVerticalAlignmentUnknown = -1,
     MADVerticalAlignmentTop = 0,
     MADVerticalAlignmentCenter = 1,
@@ -17,7 +19,7 @@ typedef NS_ENUM(short, MADVerticalAlignment) {
 
 };
 
-typedef NS_ENUM(short, MADHorizontalAlignment) {
+typedef NS_ENUM(int16_t, MADHorizontalAlignment) {
     MADHorizontalAlignmentUnknown = -1,
     MADHorizontalAlignmentLeft = 0,
     MADHorizontalAlignmentCenter = 1,
@@ -27,20 +29,20 @@ typedef NS_ENUM(short, MADHorizontalAlignment) {
     
 };
 
-struct MADAlignment {
+struct MADAlignment_t {
     MADHorizontalAlignment horizontal;
     MADVerticalAlignment vertical;
 };
-typedef struct MADAlignment MADAlignment;
+typedef struct MADAlignment_t MADAlignment_t;
 
-static inline MADAlignment MADAlignmentMake(MADHorizontalAlignment, MADVerticalAlignment);
-static inline MADAlignment MADAlignmentMake(MADHorizontalAlignment h, MADVerticalAlignment v) {
-    MADAlignment a; a.horizontal = h; a.vertical = v; return a;
+static inline MADAlignment_t MADAlignmentMake(MADHorizontalAlignment, MADVerticalAlignment);
+static inline MADAlignment_t MADAlignmentMake(MADHorizontalAlignment h, MADVerticalAlignment v) {
+    MADAlignment_t a; a.horizontal = h; a.vertical = v; return a;
 }
 
-static inline MADAlignment MADAlignmentMake64(int64_t, int64_t);
-static inline MADAlignment MADAlignmentMake64(int64_t h, int64_t v) {
-    MADAlignment a;
+static inline MADAlignment_t MADAlignmentMake64(int64_t, int64_t);
+static inline MADAlignment_t MADAlignmentMake64(int64_t h, int64_t v) {
+    MADAlignment_t a;
     switch (v) {
         case MADVerticalAlignmentTop:
             a.vertical = MADVerticalAlignmentTop;
@@ -77,5 +79,16 @@ static inline MADAlignment MADAlignmentMake64(int64_t h, int64_t v) {
     }
     return a;
 }
+
+@interface MADAlignment : NSObject
+    <NSCoding>
+
+    - (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
+                              vertical:(MADVerticalAlignment)vertical;
+
+    @property (nonatomic, assign, readonly) MADHorizontalAlignment horizontal;
+    @property (nonatomic, assign, readonly) MADVerticalAlignment vertical;
+
+@end
 
 #endif

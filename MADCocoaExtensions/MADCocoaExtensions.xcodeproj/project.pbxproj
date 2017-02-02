@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C17AE221E427CBA0056A0EA /* MADMargin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE211E427CBA0056A0EA /* MADMargin.m */; };
+		4C17AE241E427D6B0056A0EA /* MADPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE231E427D6B0056A0EA /* MADPadding.m */; };
+		4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */; };
+		4C17AE281E427ECB0056A0EA /* MADTextStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE271E427ECB0056A0EA /* MADTextStyle.m */; };
 		4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */; };
 		4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B81C8BFA340058E6B4 /* MADColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +76,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C17AE211E427CBA0056A0EA /* MADMargin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMargin.m; path = MADCocoaExtensions/MADMargin.m; sourceTree = "<group>"; };
+		4C17AE231E427D6B0056A0EA /* MADPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPadding.m; path = MADCocoaExtensions/MADPadding.m; sourceTree = "<group>"; };
+		4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBorderStyle.m; path = MADCocoaExtensions/MADBorderStyle.m; sourceTree = "<group>"; };
+		4C17AE271E427ECB0056A0EA /* MADTextStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTextStyle.m; path = MADCocoaExtensions/MADTextStyle.m; sourceTree = "<group>"; };
 		4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabel.h; path = MADCocoaExtensions/MADLabel.h; sourceTree = "<group>"; };
 		4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabel.m; path = MADCocoaExtensions/MADLabel.m; sourceTree = "<group>"; };
 		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
@@ -235,9 +243,13 @@
 				4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */,
 				4C3622C21CF351AB002B8649 /* MADLineSegment.h */,
 				4C6F35101E40C1C100F4744F /* MADBorderStyle.h */,
+				4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */,
 				4C6F35121E40D3AA00F4744F /* MADMargin.h */,
+				4C17AE211E427CBA0056A0EA /* MADMargin.m */,
 				4C6F35141E40D6D400F4744F /* MADPadding.h */,
+				4C17AE231E427D6B0056A0EA /* MADPadding.m */,
 				4C6F35161E40D8D200F4744F /* MADTextStyle.h */,
+				4C17AE271E427ECB0056A0EA /* MADTextStyle.m */,
 			);
 			name = MADCocoaExtensions;
 			sourceTree = "<group>";
@@ -396,6 +408,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C17AE241E427D6B0056A0EA /* MADPadding.m in Sources */,
+				4C17AE281E427ECB0056A0EA /* MADTextStyle.m in Sources */,
+				4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */,
 				4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */,
 				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
@@ -412,6 +427,7 @@
 				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
 				4C5205AF1BA7E2A2000E6A59 /* MADBarButtonItem.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
+				4C17AE221E427CBA0056A0EA /* MADMargin.m in Sources */,
 				4C5205B31BA7E2A2000E6A59 /* MADMailComposeViewController.m in Sources */,
 				4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */,
 			);

@@ -7,6 +7,9 @@
 //
 
 #import "MADCurrencyFormatter.h"
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSLocale.h>
+#import <string.h>
 
 @implementation MADCurrencyFormatter
 
@@ -19,7 +22,7 @@
 
         self.enabled = [aDecoder decodeBoolForKey:@"e"];;
         self.decimalCount = [aDecoder decodeIntegerForKey:@"d"];
-        self.locale = [aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"l"];
+        self.locale = [aDecoder decodeObjectOfClass:[NSLocale class] forKey:@"l"];
     
     }
     return self;

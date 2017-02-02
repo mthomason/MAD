@@ -14,7 +14,7 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADocumentObjectAttributesText.h"
-#import "MTAlignment.h"
+#import "MADAlignment.h"
 
 @interface MADDocumentObjectText()
     @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;
@@ -40,7 +40,7 @@
     attt = definition.fontDescriptors[item.objectID];
     
     if (attt == nil) {
-        MADTextStyle style; MADAlignment alignment;
+        MADTextStyle_t style; MADAlignment_t alignment;
         [(NSValue *)item.style getValue:&style];
         [(NSValue *)item.alignment getValue:&alignment];
         attt = [[MADocumentObjectAttributesText alloc] initWithFontName: item.fontname

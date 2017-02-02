@@ -29,8 +29,6 @@ static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
 static NSString * const MADTextFormFeed        = @"Form Feed";
 static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
-static NSString * const MADIdentifierLayoutSettingsViewController = @"MADReportDesignerSectionLayoutSettingsViewControllerIdentifier";
-
 @interface MADReportDesignerSectionLayoutSettingsViewController ()
 
     @property (nonatomic, weak) IBOutlet UILabel *labelVisible;
@@ -47,7 +45,7 @@ static NSString * const MADIdentifierLayoutSettingsViewController = @"MADReportD
 + (instancetype)newReportDesignerSectionLayoutSettingsViewController {
     id storyboard, controller;
     storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
-    controller = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierLayoutSettingsViewController];
+    controller = [storyboard instantiateViewControllerWithIdentifier:@"MADSectionLayoutSettingsID"];
     return controller;
 }
 

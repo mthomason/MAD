@@ -33,7 +33,7 @@
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
 
-#import "MTAlignment.h"
+#import "MADAlignment.h"
 #import "MADFont.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
@@ -224,88 +224,88 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (void)setPaddingTop:(double)v {
-    MADPadding p;
+    MADLayoutPadding_t p;
     [(NSValue *)self.padding getValue:&p];
     p.top = v;
-    [NSValue value:&p withObjCType:@encode(MADPadding)];
+    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
 }
 
 - (void)setPaddingBottom:(double)v {
-    MADPadding p;
+    MADLayoutPadding_t p;
     [(NSValue *)self.padding getValue:&p];
     p.bottom = v;
-    [NSValue value:&p withObjCType:@encode(MADPadding)];
+    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
 }
 
 
 - (void)setPaddingLeft:(double)v {
-    MADPadding p;
+    MADLayoutPadding_t p;
     [(NSValue *)self.padding getValue:&p];
     p.left = v;
-    [NSValue value:&p withObjCType:@encode(MADPadding)];
+    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
 }
 
 - (void)setPaddingRight:(double)v {
-    MADPadding p;
+    MADLayoutPadding_t p;
     [(NSValue *)self.padding getValue:&p];
     p.right = v;
-    [NSValue value:&p withObjCType:@encode(MADPadding)];
+    [NSValue value:&p withObjCType:@encode(MADLayoutPadding_t)];
 }
 
 - (void)setMarginTop:(double)v {
-    MADLayoutMargin m;
+    MADMargin_t m;
     [(NSValue *)self.margin getValue:&m];
     m.top = v;
-    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
 }
 
 - (void)setMarginBottom:(double)v {
-    MADLayoutMargin m;
+    MADMargin_t m;
     [(NSValue *)self.margin getValue:&m];
     m.bottom = v;
-    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
 }
 
 - (void)setMarginRight:(double)v {
-    MADLayoutMargin m;
+    MADMargin_t m;
     [(NSValue *)self.margin getValue:&m];
     m.right = v;
-    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
 }
 
 - (void)setMarginLeft:(double)v {
-    MADLayoutMargin m;
+    MADMargin_t m;
     [(NSValue *)self.margin getValue:&m];
     m.left = v;
-    [NSValue value:&m withObjCType:@encode(MADLayoutMargin)];
+    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
 }
 
 - (void)setBold:(BOOL)bold {
-    MADTextStyle textStyle;
+    MADTextStyle_t textStyle;
     [(NSValue *)self.style getValue:&textStyle];
     textStyle.bold = bold;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
 }
 
 - (void)setItalic:(BOOL)italic {
-    MADTextStyle textStyle;
+    MADTextStyle_t textStyle;
     [(NSValue *)self.style getValue:&textStyle];
     textStyle.italic = italic;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
 }
 
 - (void)setStrikethrough:(BOOL)strikethrough {
-    MADTextStyle textStyle;
+    MADTextStyle_t textStyle;
     [(NSValue *)self.style getValue:&textStyle];
     textStyle.strikethrough = strikethrough;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
 }
 
 - (void)setUnderline:(BOOL)underline {
-    MADTextStyle textStyle;
+    MADTextStyle_t textStyle;
     [(NSValue *)self.style getValue:&textStyle];
     textStyle.underline = underline;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle)];
+    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
 }
 
 - (void)setSizeWidth:(double)width {
@@ -323,17 +323,17 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment {
-    MADAlignment a;
+    MADAlignment_t a;
     [(NSValue *)self.alignment getValue:&a];
     a.horizontal = alignment;
-    [NSValue value:&a withObjCType:@encode(MADAlignment)];
+    [NSValue value:&a withObjCType:@encode(MADAlignment_t)];
 }
 
 - (void)setVerticalAlignment:(MADVerticalAlignment)alignment {
-    MADAlignment a;
+    MADAlignment_t a;
     [(NSValue *)self.alignment getValue:&a];
     a.vertical = alignment;
-    [NSValue value:&a withObjCType:@encode(MADAlignment)];
+    [NSValue value:&a withObjCType:@encode(MADAlignment_t)];
 }
 
 - (CGPoint)placementPoint {
@@ -354,58 +354,58 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     self.origin = [NSValue valueWithCGPoint:or];
 }
 
-- (MADLayoutMargin)layoutMargin {
-    MADLayoutMargin layoutMargin;
+- (MADMargin_t)layoutMargin {
+    MADMargin_t layoutMargin;
     [(NSValue *)self.margin getValue:&layoutMargin];
     return layoutMargin;
 }
 
-- (MADPadding)layoutPadding {
-    MADPadding padding;
+- (MADLayoutPadding_t)layoutPadding {
+    MADLayoutPadding_t padding;
     [(NSValue *)self.padding getValue:&padding];
     return padding;
 }
 
-- (MADLayoutBorderStyle)layoutBorderStyle {
-    MADLayoutBorderStyle borderStyle;
+- (MADBorderStyle_t)layoutBorderStyle {
+    MADBorderStyle_t borderStyle;
     [(NSValue *)self.border getValue:&borderStyle];
     return borderStyle;
 }
 
 - (double)spacingLeft {
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return margin.left + border.left + padding.left;
 }
 
 - (double)spacingRight {
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return margin.right + border.right + padding.right;
 }
 
 - (double)spacingTop {
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return margin.top + border.top + padding.top;
 }
 
 - (double)spacingBottom {
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return margin.bottom + border.bottom + padding.bottom;
 }
 
 - (CGFloat)sizeWidthCalculated {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return MADDocObjSizeWidthCalculated(padding.left,
                                          border.left,
                                          margin.left,
@@ -418,9 +418,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (CGFloat)sizeHeightCalculated {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADLayoutMargin margin = [self layoutMargin];
-    MADPadding padding = [self layoutPadding];
-    MADLayoutBorderStyle border = [self layoutBorderStyle];
+    MADMargin_t margin = [self layoutMargin];
+    MADLayoutPadding_t padding = [self layoutPadding];
+    MADBorderStyle_t border = [self layoutBorderStyle];
     return MADDocObjSizeHeightCalculated(padding.top,
                                          border.top,
                                          margin.top,
@@ -455,7 +455,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (CGRect)paddingViewBounds {
     CGSize s;
     [(NSValue *)self.size getValue:&s];
-    MADPadding padding = [self layoutPadding];
+    MADLayoutPadding_t padding = [self layoutPadding];
     return CGRectMake(CGPointZero.x, CGPointZero.y,
                       paddingViewBoundsSizeWidth(padding.left,
                                                  padding.right,
@@ -467,7 +467,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (CGRect)paddingViewFrame {
     CGRect paddingViewBounds = [self paddingViewBounds];
-    MADLayoutMargin margin = [self layoutMargin];
+    MADMargin_t margin = [self layoutMargin];
     return CGRectMake(CGPointZero.x + margin.left,
                       CGPointZero.y + margin.top,
                       paddingViewBounds.size.width, paddingViewBounds.size.height);
@@ -488,7 +488,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (CGRect)elementViewFrame {
     CGRect elementViewBounds = [self elementViewBounds];
-    MADPadding p = [self layoutPadding];
+    MADLayoutPadding_t p = [self layoutPadding];
     return CGRectMake(CGPointZero.x + p.left,
                       CGPointZero.y + p.top,
                       elementViewBounds.size.width, elementViewBounds.size.height);
@@ -721,7 +721,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (UIFontDescriptor *)fontDescriptor {
     
-    MADTextStyle textStyle;
+    MADTextStyle_t textStyle;
     [(NSValue *)self.style getValue:&textStyle];
     NSString *fontname;
     

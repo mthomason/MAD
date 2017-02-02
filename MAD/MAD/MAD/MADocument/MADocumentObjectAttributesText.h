@@ -10,7 +10,7 @@
 #define Reports_MAD_MADocumentObjectAttributesText_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/MTAlignment.h>
+#import <MAD/MADAlignment.h>
 
 @class UIFontDescriptor;
 @class RptqDocumentElement;

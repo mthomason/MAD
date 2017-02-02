@@ -9,7 +9,7 @@
 #import "MADElementMigrationPolicy.h"
 #import <UIKit/UIGeometry.h>
 #import <UIKit/UIColor.h>
-#import <MAD/MTAlignment.h>
+#import <MAD/MADAlignment.h>
 #import <MAD/MADCurrencyFormatter.h>
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADMargin.h>
@@ -23,72 +23,66 @@
     return [NSValue valueWithCGPoint:origin];
 }
 
-- (NSValue *)migrateValueFromAlignmentHorizontal:(NSNumber *)horizontal
+- (MADAlignment *)migrateValueFromAlignmentHorizontal:(NSNumber *)horizontal
                                         vertical:(NSNumber *)vertical {
-    int64_t h, v;
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt64Type, &h);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)vertical, kCFNumberSInt64Type, &v);
-    MADAlignment alignment = MADAlignmentMake64(h, v);
-    return [NSValue valueWithBytes:&alignment objCType:@encode(MADAlignment)];
+    int16_t h, v;
+    CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt16Type, &h);
+    CFNumberGetValue((__bridge CFNumberRef _Nonnull)vertical, kCFNumberSInt16Type, &v);
+    MADAlignment *a = [[MADAlignment alloc] initWithHorizontal:h
+                                                      vertical:v];
+    return a;
 }
 
 - (UIColor *)migrateColorFromData:(NSData *)colorData {
     return [NSKeyedUnarchiver unarchiveObjectWithData:colorData];
 }
 
-- (NSValue *)migrateValueFromMarginLeft:(NSNumber *)left
-                                  right:(NSNumber *)right
-                                    top:(NSNumber *)top
-                                 bottom:(NSNumber *)bottom {
-    float l, r, t, b;
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)left, kCFNumberFloatType, &l);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)right, kCFNumberFloatType, &r);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)top, kCFNumberFloatType, &t);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)bottom, kCFNumberFloatType, &b);
-    MADLayoutMargin m;
-    m = MADLayoutMarginMake(l, r, t, b);
-    return [NSValue valueWithBytes:&m objCType:@encode(MADLayoutMargin)];
+- (MADMargin *)migrateValueFromMarginLeft:(NSNumber *)left
+                                    right:(NSNumber *)right
+                                      top:(NSNumber *)top
+                                   bottom:(NSNumber *)bottom {
+    id result = [[MADMargin alloc] initWithLeft: left.doubleValue
+                                          right: right.doubleValue
+                                            top: top.doubleValue
+                                         bottom: bottom.doubleValue];
+    return result;
 }
 
-- (NSValue *)migrateValueFromPaddingLeft:(NSNumber *)left
-                                   right:(NSNumber *)right
-                                     top:(NSNumber *)top
-                                  bottom:(NSNumber *)bottom {
-    float l, r, t, b;
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)left, kCFNumberFloatType, &l);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)right, kCFNumberFloatType, &r);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)top, kCFNumberFloatType, &t);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)bottom, kCFNumberFloatType, &b);
-    MADPadding p;
-    p = MADPaddingMake(l, r, t, b);
-    return [NSValue valueWithBytes:&p objCType:@encode(MADPadding)];
+- (MADPadding *)migrateValueFromPaddingLeft:(NSNumber *)left
+                                      right:(NSNumber *)right
+                                        top:(NSNumber *)top
+                                     bottom:(NSNumber *)bottom {
+    id padding = [[MADPadding alloc] initWithLeft: left.doubleValue
+                                            right: right.doubleValue
+                                              top: top.doubleValue
+                                           bottom: bottom.doubleValue];
+    return padding;
 }
 
-- (NSValue *)migrateTextStyleBold:(NSNumber *)bold
-                    strikethrough:(NSNumber *)strikethrough
-                           italic:(NSNumber *)italic
-                        underline:(NSNumber *)underline {
-    MADTextStyle s;
-    s = MADTextStyleMake(bold.boolValue,
-                         strikethrough.boolValue,
-                         italic.boolValue,
-                         underline.boolValue);
-    return [NSValue valueWithBytes:&s objCType:@encode(MADTextStyle)];
+- (MADTextStyle *)migrateTextStyleBold:(NSNumber *)bold
+                         strikethrough:(NSNumber *)strikethrough
+                                italic:(NSNumber *)italic
+                             underline:(NSNumber *)underline {
+    id textStyle = [[MADTextStyle alloc] initWithBold: bold.boolValue
+                                               italic: italic.boolValue
+                                            underline: underline.boolValue
+                                        strikethrough: strikethrough.boolValue];
+    return textStyle;
 }
 
 - (NSValue *)migrateValueFromSizeWidth:(NSNumber *)width height:(NSNumber *)height {
     CGSize s = CGSizeMake(width.floatValue, height.floatValue);
-    return [NSValue valueWithBytes:&s objCType:@encode(CGSize)];
+    return [NSValue valueWithCGSize:s];
 }
 
-- (NSValue *)migrateValueFromBorderHeightBottom:(NSNumber *)heightBottom
-                                      heightTop:(NSNumber *)heightTop
-                                      widthLeft:(NSNumber *)widthLeft
-                                     widthRight:(NSNumber *)widthRight
-                                    styleBottom:(NSNumber *)styleBottom
-                                       styleTop:(NSNumber *)styleTop
-                                      styleLeft:(NSNumber *)styleLeft
-                                     styleRight:(NSNumber *)styleRight {
+- (MADBorderStyle *)migrateValueFromBorderHeightBottom:(NSNumber *)heightBottom
+                                             heightTop:(NSNumber *)heightTop
+                                             widthLeft:(NSNumber *)widthLeft
+                                            widthRight:(NSNumber *)widthRight
+                                           styleBottom:(NSNumber *)styleBottom
+                                              styleTop:(NSNumber *)styleTop
+                                             styleLeft:(NSNumber *)styleLeft
+                                            styleRight:(NSNumber *)styleRight {
     if (heightBottom == nil ||
         heightTop == nil ||
         widthLeft == nil ||
@@ -97,23 +91,24 @@
         styleTop == nil ||
         styleRight == nil ||
         styleBottom == nil) return nil;
-
-    float l, r, t, b;
-    int16_t ls, rs, ts, bs;
     
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)widthLeft, kCFNumberFloatType, &l);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)widthRight, kCFNumberFloatType, &r);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)heightTop, kCFNumberFloatType, &t);
-    CFNumberGetValue((__bridge CFNumberRef _Nonnull)heightBottom, kCFNumberFloatType, &b);
+    int16_t ls, rs, ts, bs;
+
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleLeft, kCFNumberSInt16Type, &ls);
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleRight, kCFNumberSInt16Type, &rs);
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleTop, kCFNumberSInt16Type, &ts);
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleBottom, kCFNumberSInt16Type, &bs);
+
+    id style = [[MADBorderStyle alloc] initWithLeft: widthLeft.doubleValue
+                                              right: widthRight.doubleValue
+                                                top: heightTop.doubleValue
+                                             bottom: heightBottom.doubleValue
+                                          leftStyle: ls
+                                         rightStyle: rs
+                                           topStyle: ts
+                                        bottomStyle: bs];
     
-    MADLayoutBorderStyle borderStyle;
-    borderStyle = MADLayoutBorderStyleMake(l, r, t, b, ls, rs, ts, bs);
-    
-    return [NSValue valueWithBytes:&borderStyle objCType:@encode(MADLayoutBorderStyle)];
+    return style;
 }
 
 - (MADCurrencyFormatter *)migrateCurrencyFormatterForCurrencyEnabled:(NSNumber *)enabled

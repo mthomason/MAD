@@ -25,7 +25,7 @@
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MAD/MADocumentObjectAttributesText.h>
-#import <MAD/MTAlignment.h>
+#import <MAD/MADAlignment.h>
 
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
@@ -327,7 +327,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         }
         
         MADocumentObjectAttributesText *attributesText;
-        MADTextStyle style; MADAlignment alignment;
+        MADTextStyle_t style; MADAlignment_t alignment;
         [(NSValue *)documentObject.style getValue:&style];
         [(NSValue *)documentObject.alignment getValue:&alignment];
         

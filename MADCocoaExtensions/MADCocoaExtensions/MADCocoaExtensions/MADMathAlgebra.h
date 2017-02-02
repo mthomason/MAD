@@ -35,8 +35,8 @@ static inline CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
     return (y - b) / m;
 }
 
-static inline CGFloat CGLineSegmentSlope(CGLineSegment lineSegment);
-static inline CGFloat CGLineSegmentSlope(CGLineSegment lineSegment) {
+static inline CGFloat MADLineSegmentSlope(MADLineSegment lineSegment);
+static inline CGFloat MADLineSegmentSlope(MADLineSegment lineSegment) {
     return CGSlope(lineSegment.start, lineSegment.end);
 }
 

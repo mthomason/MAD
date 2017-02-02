@@ -206,15 +206,6 @@ CGLineMake(CGFloat m, CGFloat b) {
     return line;
 }
 
-CG_INLINE CGLineSegment CGLineSegmentMake(CGPoint p1, CGPoint p2);
-CG_INLINE CGLineSegment
-CGLineSegmentMake(CGPoint p1, CGPoint p2) {
-    CGLineSegment lineSegment;
-    lineSegment.start = p1;
-    lineSegment.end = p2;
-    return lineSegment;
-}
-
 CG_INLINE CGPoint CGPointContentOffsetTopOfRect(CGRect rect);
 CG_INLINE
 CGPoint CGPointContentOffsetTopOfRect(CGRect rect) {
@@ -526,9 +517,9 @@ static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGP
     
 }
 
-static inline BOOL CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
+static inline BOOL MADLineSegmentIntercept(MADLineSegment lineSegment1, MADLineSegment lineSegment2);
 static inline BOOL
-CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
+MADLineSegmentIntercept(MADLineSegment lineSegment1, MADLineSegment lineSegment2) {
     
     BOOL result =  NO;
     

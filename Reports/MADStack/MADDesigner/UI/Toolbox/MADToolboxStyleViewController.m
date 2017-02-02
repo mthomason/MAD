@@ -31,7 +31,7 @@
 #import <MAD/MADFont.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/MTAlignment.h>
+#import <MAD/MADAlignment.h>
 
 #import "MADControlState.h"
 
@@ -542,9 +542,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         NSString *fontDisplayName = nil;
         
-        MADLayoutMargin marginHolder = MADLayoutMarginMake(-1, -1, -1, -1);
-        MADPadding paddingHolder = MADPaddingMake(-1, -1, -1, -1);
-        MADAlignment alignmentHolder = MADAlignmentMake(MADHorizontalAlignmentUnknown, MADVerticalAlignmentUnknown);
+        MADMargin_t marginHolder = MADLayoutMarginMake(-1, -1, -1, -1);
+        MADLayoutPadding_t paddingHolder = MADLayoutPaddingMake(-1, -1, -1, -1);
+        MADAlignment_t alignmentHolder = MADAlignmentMake(MADHorizontalAlignmentUnknown, MADVerticalAlignmentUnknown);
         CGSize sizeHolder = CGSizeZero;
         
         CGFloat fontSizeHolder = (CGFloat)[MADFont defaultSize];
@@ -575,8 +575,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
         RptqDocumentElement *documentObject;
         
-        MADLayoutMargin margin; MADPadding padding; CGSize size; MADAlignment alignment;
-        MADTextStyle textStyle;
+        MADMargin_t margin; MADLayoutPadding_t padding; CGSize size; MADAlignment_t alignment;
+        MADTextStyle_t textStyle;
         
         for (objectId in userSelectedObjectIDs) {
             

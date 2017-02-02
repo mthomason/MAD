@@ -9,7 +9,7 @@
 #ifndef MAD_MADCurrencyFormatter_h
 #define MAD_MADCurrencyFormatter_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADCurrencyFormatter : NSObject
     <NSSecureCoding>
