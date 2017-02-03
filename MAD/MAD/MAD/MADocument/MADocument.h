@@ -47,10 +47,10 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
         MADPrintPageRendererDataSourceProtocol>
 
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
+    @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
 
     @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 
-    @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
     @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 
     @property (readwrite, nonatomic, strong)    MTReportFormatter *printingReportFormatter;

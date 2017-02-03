@@ -29,6 +29,9 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
 
+static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
+                *keyIDDatabase = @"ID", *keyIDQuery = @"IQ", *keyIDDocument = @"IO";
+
 @interface MADModelDocument ()
     - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
     @property (nonatomic, readwrite, copy)       NSManagedObjectID *objectID;
@@ -191,8 +194,7 @@
     }
 }
 
-//Load all the databases and queries for this document.  This is because current versions
-// of the software only use one database and query.
+// MARK: Fetch request <RptqDocument::ObjectID>.
 
 + (NSFetchRequest <NSManagedObjectID *> *)fetchRequestObjectID {
     NSFetchRequest *request;
@@ -204,12 +206,15 @@
     return request;
 }
 
-- (void)updateDocumentDatabaseQuery {
-    NSArray <NSManagedObjectID *> *result;
+// MARK: Fetch request <RptqDocument::ObjectID, RptqDatabase::ObjectID, RptqQuery::ObjectID>.
+
++ (NSFetchRequest <NSDictionary <NSString *, __kindof NSObject *> *> *)fetchRequestDocDBQueryIDs {
     NSFetchRequest *request;
     
-    void (^setupExpression)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
-    ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
+    void (^setupExpression)(NSExpressionDescription *, NSString *,
+                            NSExpression *, NSAttributeType) =
+    ^void(NSExpressionDescription *expressionDescription, NSString *name,
+          NSExpression *expression, NSAttributeType type) {
         expressionDescription.name = name.copy;
         expressionDescription.expression = expression;
         expressionDescription.expressionResultType = type;
@@ -217,8 +222,6 @@
     
     NSUInteger expressionCount = 6;
     NSExpressionDescription *expressionDescription[expressionCount];
-    NSManagedObjectContext *managedObjectContext;
-    managedObjectContext = _managedObjectContext;
     
     for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = [[NSExpressionDescription alloc] init];
@@ -226,22 +229,19 @@
     
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     
-    NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO";
-    NSString *keyIDDatabase = @"ID", *keyIDQuery = @"IQ", *keyIDDocument = @"IO";
-    
     NSString *identifier = NSStringFromSelector(@selector(identifier));
     NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
     NSString *inDocument;
-
+    
     inDocument = [inDatabase stringByAppendingString:@"."];
     inDocument = [inDocument stringByAppendingString: NSStringFromSelector(@selector(ownedByQueryAsStaticResource))];
-
+    
     NSString *inDBID = [inDatabase stringByAppendingString:@"."];
     inDBID = [inDBID stringByAppendingString:identifier];
-
+    
     NSString *inDocID = [inDocument stringByAppendingString:@"."];
     inDocID = [inDocID stringByAppendingString:identifier];
-
+    
     NSExpression *databaseExpression = [NSExpression expressionForKeyPath:inDatabase];
     NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDocument];
     NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
@@ -255,29 +255,53 @@
     setupExpression(expressionDescription[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
     setupExpression(expressionDescription[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
     setupExpression(expressionDescription[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);
-
+    
     request.resultType = NSDictionaryResultType;
-    NSError * __autoreleasing *error = NULL;
     
     NSArray *propertiesToFetch;
     propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
                                                    count:expressionCount];
     request.propertiesToFetch = propertiesToFetch;
-    result = [managedObjectContext executeFetchRequest:request error:error];
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = nil;
+    }
+    
+    inDatabase = nil;
+    inDocument = nil;
+    
+    return request;
+}
+
+//Load all the databases and queries for this document.  This is because current versions
+// of the software only use one database and query.
+
+- (void)updateDocumentDatabaseQuery {
+    
+    NSArray <NSDictionary *> *results;
+
+    NSManagedObjectContext *managedObjectContext;
+    managedObjectContext = _managedObjectContext;
+    
+    NSFetchRequest *request = [MADModelDocument fetchRequestDocDBQueryIDs];
+    
+    NSError * __autoreleasing *error = NULL;
+    results = [managedObjectContext executeFetchRequest:request error:error];
+    
+    NSAssert(results.count > 0, @"We expect results.");
+    if (results.count == 0) return;
     
     NSMutableOrderedSet <MADModelDatabase *> *databases;
-    databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:result.count];
+    databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:results.count];
     
     MADModelDatabase *database;
-    NSUInteger resultCount = 0;
-    
+
     NSDictionary <NSString *, __kindof NSObject *> *resultWrapper;
+    
+    self.objectID = [[results.firstObject objectForKey: keyDocument] copy];
 
     int64_t docID, dbID, qID;
-    for (resultWrapper in result) {
-        if (resultCount == 0) {
-            self.objectID = resultWrapper[keyDocument].copy;
-        }
+    for (resultWrapper in results) {
 
         CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery], kCFNumberSInt64Type, &qID);
         CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase], kCFNumberSInt64Type, &dbID);
@@ -289,15 +313,7 @@
                                          managedObjectContext: managedObjectContext];
         [databases addObject: database];
         database = nil;
-        resultCount++;
     }
-    
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = nil;
-    }
-    
-    inDatabase = nil;
-    inDocument = nil;
     
     _databases = databases;
 }

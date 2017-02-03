@@ -183,7 +183,7 @@
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasQueries" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <entity name="RptqQueryField" representedClassName="RptqQueryField" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="databaseSchemaField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaField" inverseName="inQueryField" inverseEntity="RptqDatabaseSchemaField" syncable="YES"/>
         <relationship name="inAggregateObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateField" inverseEntity="RptqDocumentElementAggregate" syncable="YES"/>
         <relationship name="inBarcodeField1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementBarcode" inverseName="referencesField1" inverseEntity="RptqDocumentElementBarcode" syncable="YES"/>
@@ -234,7 +234,7 @@
     <entity name="RptqQueryTable" representedClassName="RptqQueryTable" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="databaseSchemaTable" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inQueryTable" inverseEntity="RptqDatabaseSchemaTable" syncable="YES"/>
         <relationship name="hasQueryFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryTable" inverseEntity="RptqQueryField" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryTables" inverseEntity="RptqQuery" syncable="YES"/>
@@ -258,11 +258,11 @@
         <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="390"/>
         <element name="RptqDocumentSectionRows" positionX="-1442" positionY="-681" width="191" height="105"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="210"/>
-        <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="238"/>
+        <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="240"/>
         <element name="RptqQueryGroup" positionX="-126" positionY="1152" width="128" height="135"/>
         <element name="RptqQueryLinks" positionX="43" positionY="1854" width="128" height="180"/>
         <element name="RptqQueryPredicate" positionX="601" positionY="180" width="128" height="150"/>
         <element name="RptqQuerySort" positionX="189" positionY="1449" width="128" height="105"/>
-        <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="133"/>
+        <element name="RptqQueryTable" positionX="-65" positionY="1590" width="128" height="135"/>
     </elements>
 </model>
