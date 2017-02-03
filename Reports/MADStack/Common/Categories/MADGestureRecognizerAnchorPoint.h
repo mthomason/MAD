@@ -1,5 +1,5 @@
 //
-//  UIGestureRecognizer+AnchorPoint.h
+//  MADGestureRecognizerAnchorPoint.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/15/13.
@@ -11,10 +11,11 @@
 
 #import <UIKit/UIGestureRecognizer.h>
 
-@interface UIGestureRecognizer (AnchorPoint)
+@interface MADGestureRecognizerAnchorPoint : NSObject
 
     + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
-    + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer inView:(UIView *)containerView;
+    + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+                                              inView:(UIView *)containerView;
 
 @end
 

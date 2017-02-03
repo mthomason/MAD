@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIGestureRecognizer+AnchorPoint.h"
+#import "MADGestureRecognizerAnchorPoint.h"
 #import <CoreGraphics/CGBase.h>
 #import <UIKit/UIView.h>
 #import <QuartzCore/CALayer.h>
 
-@implementation UIGestureRecognizer (AnchorPoint)
+@implementation MADGestureRecognizerAnchorPoint
 
 + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
     CGPoint result = CGPointZero;
