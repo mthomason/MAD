@@ -43,14 +43,7 @@
         <relationship name="inQueryTable" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqQueryTable" inverseName="databaseSchemaTable" inverseEntity="RptqQueryTable" syncable="YES"/>
     </entity>
     <entity name="RptqDocument" representedClassName="RptqDocument" syncable="YES">
-        <attribute name="author_name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="copyright" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="override" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="papersize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="hasDatabaseSchemas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByQueryAsStaticResource" inverseEntity="RptqDatabase" syncable="YES"/>
         <relationship name="hasDetailSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReport" inverseEntity="RptqDocumentSection" syncable="YES"/>
@@ -235,7 +228,7 @@
         <element name="RptqDatabaseCredentals" positionX="-1827" positionY="-1414" width="128" height="210"/>
         <element name="RptqDatabaseSchemaField" positionX="-405" positionY="324" width="171" height="195"/>
         <element name="RptqDatabaseSchemaTable" positionX="-137" positionY="-1110" width="218" height="135"/>
-        <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="268"/>
+        <element name="RptqDocument" positionX="-1910" positionY="-1107" width="182" height="165"/>
         <element name="RptqDocumentElement" positionX="-1512" positionY="-2079" width="128" height="300"/>
         <element name="RptqDocumentElementAggregate" positionX="-1350" positionY="-1461" width="207" height="120"/>
         <element name="RptqDocumentElementBarcode" positionX="-1260" positionY="-2241" width="189" height="375"/>

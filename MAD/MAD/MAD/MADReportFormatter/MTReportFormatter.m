@@ -115,7 +115,9 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 @end
 
-@implementation MTReportFormatter
+@implementation MTReportFormatter {
+    NSString *_filename;
+}
 
 - (void)dealloc {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -129,6 +131,8 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         self.dataDelegate = layout;
         self.datasource = layout;
         self.layout = layout;
+        
+        _filename = layout.filename.copy;
         
         MADPageOptions *page = [[MADPageOptions alloc] init];
         self.page = page;
@@ -177,7 +181,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 - (NSUInteger)layoutIdentifier {
     return _overrideIdentifier == nil ?
-                    _layout.documentModel.objectID.URIRepresentation.absoluteString.hash :
+                    _filename.hash :
                     _overrideIdentifier.hash;
 }
 

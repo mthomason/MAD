@@ -557,18 +557,21 @@
     MADErrorContainer * __autoreleasing errorContainer = [[MADErrorContainer alloc] init];
     for (MTDatabaseTable *table in tables) {
         
-        NSString *tableName = table.name;
         NSArray *fields = fieldsByTable[table.name];
         
         if (fields.count) {
             
-            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
+            RptqDatabaseSchemaTable *rptqTable;
+            rptqTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
+                                                                                             andTable: table];
             [self.defaultDatabase addHasTablesObject: rptqTable];
             
             NSMutableArray <MTDatabaseField *> *schemaFields;
             schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
+            RptqDatabaseSchemaField *schemaField;
             for (MTDatabaseField *field in fields) {
-                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
+                schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
+                                                                                                   andField: field];
                 [schemaFields addObject:schemaField];
             }
             
@@ -582,7 +585,7 @@
             
             NSString *failureFormat = NSLocalizedString(@"Table %@ not Added.", @"Table %@ not Added.");
             NSString *description = NSLocalizedString(@"Fields not found.", @"Fields not found.");
-            NSString *failure = [[NSString alloc] initWithFormat:failureFormat, tableName];
+            NSString *failure = [[NSString alloc] initWithFormat:failureFormat, table.name];
             NSDictionary *userInfo = @{NSLocalizedDescriptionKey : description,
                                        NSLocalizedFailureReasonErrorKey : failure};
             NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
@@ -760,14 +763,8 @@
 - (id)debugQuickLookObject {
     NSMutableString *document = [[NSMutableString alloc] init];
     [document appendFormat:@"*********\n"];
-    [document appendFormat:@"Name:              %@\n", self.name];
-    [document appendFormat:@"URL:               %@\n", self.author_name];
     [document appendFormat:@"Number of sections %lu\n", (unsigned long)[((RptqQuery *)((RptqDatabase *)self.hasDatabaseSchemas.anyObject).hasQueries.anyObject) sectionCount]];
-    [document appendFormat:@"Comment:           %@\n", self.comment];
-    [document appendFormat:@"Copyright:         %@\n", self.copyright];
     [document appendFormat:@"Identifier:        %lld\n", self.identifier];
-    [document appendFormat:@"Override:          %@\n", self.override ? @"YES" : @"NO"];
-    [document appendFormat:@"Override text:     %@\n", self.overrideText];
     [document appendFormat:@"Papersize:         %hd\n", self.papersize];
     [document appendFormat:@"Database schemas:  %@\n", self.hasDatabaseSchemas];
     [document appendFormat:@"Page header:       %@\n", self.hasPageHeaderSection];

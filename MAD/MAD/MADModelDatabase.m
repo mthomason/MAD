@@ -139,7 +139,7 @@
     NSExpressionDescription *expressionDescription[expressionCount];
     NSExpression *expressionInQuery[2];
     NSString *inTable, *name, *inDatabase, *inTableInDB, *inTableName, *keyField, *keyFieldName, *keyTable, *keyTableName;
-    
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
     keyField = @"F";
     keyTable = @"T";
     keyFieldName = @"G";
@@ -150,8 +150,12 @@
     name = NSStringFromSelector(@selector(name));
     inTableInDB = [[NSString alloc] initWithFormat:@"%@.%@", inTable, inDatabase];
     inTableName = [[NSString alloc] initWithFormat:@"%@.%@", inTable, name];
-    expressionInQuery[0] = [NSExpression expressionForKeyPath:inTableInDB];
-    expressionInQuery[1] = [NSExpression expressionForConstantValue: self.objectID];
+    
+    NSString *inTableInDBIdentifier = [inTableInDB stringByAppendingString:@"."];
+    inTableInDBIdentifier = [inTableInDBIdentifier stringByAppendingString:keyIdentifier];
+    
+    expressionInQuery[0] = [NSExpression expressionForKeyPath:inTableInDBIdentifier];
+    expressionInQuery[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
     
     NSPredicate *predicate;
     predicate = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
@@ -264,9 +268,9 @@
     NSExpression *expression[2];
     expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
                      NSStringFromSelector(@selector(inDatabase)),
-                     NSStringFromSelector(@selector(objectID))];
+                     NSStringFromSelector(@selector(identifier))];
     
-    expression[1] = [NSExpression expressionForConstantValue:self.objectID];
+    expression[1] = [NSExpression expressionForConstantValue:@(self.identifier)];
     
     NSAssert(expression != nil, @"Need an expression");
     NSComparisonPredicate *predicate;
@@ -309,13 +313,13 @@
     return [NSString stringWithFormat:@"%@", self.debugDescription];
 }
 
-- (id)debugQuickLookObject {
+/*- (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendFormat:@"%@", NSStringFromClass([self class]).uppercaseString];
     [debug appendFormat:@"ID:\t%@\n", self.objectID];
     [debug appendFormat:@"Tables:\t%@", self.tables];
     [debug appendFormat:@"Queries:\t%@", self.queries];
     return debug;
-}
+}*/
 
 @end

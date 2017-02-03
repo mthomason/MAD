@@ -83,13 +83,13 @@
     
 }
 
-- (id)debugQuickLookObject {
+/*- (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendFormat:@"%@", NSStringFromClass([self class]).uppercaseString];
     [debug appendFormat:@"ID:\t%@\n", self.objectID];
     [debug appendFormat:@"Name:\t%@", _name];
     [debug appendFormat:@"Field:\t%@", self.fields];
     return debug;
-}
+}*/
 
 @end

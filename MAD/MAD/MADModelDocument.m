@@ -173,13 +173,6 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     return _databases;
 }
 
-- (NSManagedObjectID *)objectID {
-    if (![super objectID]) {
-        [self update];
-    }
-    return [super objectID];
-}
-
 - (MADModelDatabase *)firstDatabase {
     return self.databases.firstObject;
 }

@@ -189,7 +189,7 @@ schemaFieldIdentifier:(int64_t) schemaFieldIdentifier {
 
 }
 
-- (NSString *)debugDescription {
+/*- (NSString *)debugDescription {
     NSString *debugDescription;
     debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
     [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
@@ -198,6 +198,6 @@ schemaFieldIdentifier:(int64_t) schemaFieldIdentifier {
      self.objectID.URIRepresentation.pathComponents[2]] :
     self.debugDescription;
     return debugDescription;
-}
+}*/
 
 @end

@@ -1440,7 +1440,7 @@ READFROMURL_END:;
 }
 
 - (NSArray *)readCurrentSortDescriptors {
-    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentModel.objectID];
+    RptqDocument *document = self.activeDocumentModel;
     if (self.database == nil) {
         [self initializeMainDatabase:document];        // FIXME: I doubt this ever runs.
     }

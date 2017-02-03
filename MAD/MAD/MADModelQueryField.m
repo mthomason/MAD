@@ -36,7 +36,7 @@
     return self;
 }
 
-
+/*
 - (NSString *)debugDescription {
     NSString *debugDescription;
     debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
@@ -47,6 +47,6 @@
     self.debugDescription;
     return debugDescription;
 }
-
+*/
 @end
 

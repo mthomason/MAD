@@ -14,14 +14,7 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocument"];
 }
 
-@dynamic author_name;
-@dynamic comment;
-@dynamic copyright;
 @dynamic identifier;
-@dynamic name;
-@dynamic organization;
-@dynamic override;
-@dynamic overrideText;
 @dynamic papersize;
 @dynamic hasDatabaseSchemas;
 @dynamic hasDetailSection;

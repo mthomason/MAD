@@ -83,7 +83,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
     int64_t _uid;
 }
     @dynamic identifier;
-    @synthesize objectID = _objectID;
+    //@synthesize objectID = _objectID;
 
 + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext {
     return [[MADModelDocument alloc] initWithContext:managedObjectContext];
@@ -96,7 +96,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
                       identifier:(int64_t)identifier {
     if (self = [super init]) {
-        _objectID = objectID.copy;
+        //_objectID = objectID.copy;
         _uid = identifier;
     }
     return self;
@@ -117,7 +117,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
             ((typeof(self))object).identifier == _uid));
     
 }
-
+/*
 - (NSString *)debugDescription {
     NSString *debugDescription;
     debugDescription = _objectID.URIRepresentation.pathComponents.count == 3 ?
@@ -131,5 +131,5 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
                             self.debugDescription;
     return debugDescription;
 }
-
+*/
 @end

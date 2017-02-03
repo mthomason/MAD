@@ -173,18 +173,6 @@
     return self;
 }
 
-- (NSString *)debugDescription {
-    NSString *debugDescription;
-    debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
-    [[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@ JOIN %@]",
-     NSStringFromClass([self class]), self.objectID.URIRepresentation.pathComponents[1],
-                                      self.objectID.URIRepresentation.pathComponents[2],
-                                      _leftFieldReference.debugDescription,
-                                      _rightFieldReference.debugDescription] :
-                                      self.debugDescription;
-    return debugDescription;
-}
-
 - (NSSet <NSManagedObjectID *> *)tables {
     NSManagedObjectID *tableLeft = _leftFieldReference.tableID.copy,
                       *tableRight = _rightFieldReference.tableID.copy;
@@ -198,5 +186,17 @@
                                                    _rightFieldReference, nil];
     return tables;
 }
+
+/*- (NSString *)debugDescription {
+    NSString *debugDescription;
+    debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
+    [[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@ JOIN %@]",
+     NSStringFromClass([self class]), self.objectID.URIRepresentation.pathComponents[1],
+                                      self.objectID.URIRepresentation.pathComponents[2],
+                                      _leftFieldReference.debugDescription,
+                                      _rightFieldReference.debugDescription] :
+                                      self.debugDescription;
+    return debugDescription;
+}*/
 
 @end

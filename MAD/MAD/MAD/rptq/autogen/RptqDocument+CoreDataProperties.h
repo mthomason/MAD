@@ -20,14 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int16_t papersize;
-@property (nonatomic) BOOL override;
-
-@property (nullable, nonatomic, copy) NSString *author_name;
-@property (nullable, nonatomic, copy) NSString *comment;
-@property (nullable, nonatomic, copy) NSString *copyright;
-@property (nullable, nonatomic, copy) NSString *name;
-@property (nullable, nonatomic, copy) NSString *organization;
-@property (nullable, nonatomic, copy) NSString *overrideText;
 
 @property (nullable, nonatomic, retain) NSSet<RptqDatabase *> *hasDatabaseSchemas;
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasDetailSection;

@@ -213,9 +213,11 @@
     NSExpression *expressions[expressionInQueryCount];
     NSString *predicateKey = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
+    predicateKey = [predicateKey stringByAppendingString:@"."];
+    predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
     
     expressions[0] = [NSExpression expressionForKeyPath:predicateKey];
-    expressions[1] = [NSExpression expressionForConstantValue: self.objectID];
+    expressions[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
     
     NSPredicate *predicate;
     predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
@@ -356,8 +358,11 @@
     NSPredicate *predicate;
 
     fetch = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
-    expressions[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQuery))];
-    expressions[1] = [NSExpression expressionForConstantValue: self.objectID];
+    
+    NSString *inQueryTableID = [NSStringFromSelector(@selector(inQuery)) stringByAppendingString:@"."];
+    inQueryTableID = [inQueryTableID stringByAppendingString: NSStringFromSelector(@selector(identifier))];
+    expressions[0] = [NSExpression expressionForKeyPath: inQueryTableID];
+    expressions[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
 
     predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
                                                    rightExpression: expressions[1]
@@ -481,7 +486,7 @@
     [_tables removeObjectForKey:queryTable];
 }
 
-- (NSString *)debugDescription {
+/*- (NSString *)debugDescription {
     NSString *debugDescription;
     debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
                             [[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@, %@]",
@@ -502,6 +507,6 @@
     [debug appendFormat:@"Tables:\t%@", _tableSchemas];
     [debug appendFormat:@"Links:\t%@", _links];
     return debug;
-}
+}*/
 
 @end
