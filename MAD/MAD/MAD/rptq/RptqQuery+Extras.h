@@ -18,10 +18,8 @@
 
 @interface RptqQuery (Extras)
 
-    - (RptqQueryGroup *)firstQueryGroup;
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
     - (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
-    - (NSUInteger)numberOfTables;
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
     - (NSUInteger)sectionCount;
     + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID

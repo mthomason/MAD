@@ -59,67 +59,16 @@
 
 #import "RptqDataHelper.h"
 
-//#import "MAD"
-
-/*static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
-    return selectedIndex < (numberOfGroups * 2) + 5;
-}
-
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex);
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
-    return selectedIndex - 2;
-}
-
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
-static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
-    return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
-}*/
-
-@implementation RptqQuery (Extras)
-
-#pragma mark - Overrides
-
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-}
-
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
-+ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
-    return [key isEqualToString:NSStringFromSelector(@selector(hasQueryGroups))];
-}
-
 static inline unsigned long MADSectionCountWithGroupCount(unsigned long);
 static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCount) {
     return 5 + groupCount * 2;
 }
 
-- (NSUInteger)sectionCount { return MADSectionCountWithGroupCount(self.hasQueryGroups.count); }
+@implementation RptqQuery (Extras)
+
++ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
+    return [key isEqualToString:NSStringFromSelector(@selector(hasQueryGroups))];
+}
 
 + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -140,7 +89,19 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     return MADSectionCountWithGroupCount(count);
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Overrides
+
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
+}
+
+- (NSUInteger)sectionCount { return MADSectionCountWithGroupCount(self.hasQueryGroups.count); }
+
+#pragma mark -
+#pragma mark Actions
 
 - (RptqQueryGroup *)firstQueryGroup {
     NSArray *queryGroups = [self sortedQueryGroups];
@@ -160,28 +121,31 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     return sortedArray;
 }
 
-- (NSUInteger)numberOfTables { return self.hasQueryTables.count; }
-
 - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database {
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
+    MADSafeQueryField *safeQueryTable, *safeFieldName;
+    NSString *keyFirstPart, *key, *queryTable;
+    NSSortDescriptor *sort;
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
         @autoreleasepool {
             BOOL sortAscending = (queryGroup.sort == MNSSortOrderAccending);
             RptqQueryField *groupField = queryGroup.hasField;
             
-            NSString *queryTable = [groupField.inQueryTable copyQueryAlias];
+            queryTable = [groupField.inQueryTable queryAlias];
 
-            MADSafeQueryField *safeQueryTable = [database newSafeIdentifier: queryTable];
-            NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
+            safeQueryTable = [database newSafeIdentifier: queryTable];
+            keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
 
-            MADSafeQueryField *safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
-            NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
+            safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
+            key = [keyFirstPart stringByAppendingString: safeFieldName];
             
             SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: sortAscending selector: sel];
-            [sortedSortDescriptorsGroup addObject:sortDescriptor];
+            sort = [[NSSortDescriptor alloc] initWithKey: key
+                                               ascending: sortAscending
+                                                selector: sel];
+            [sortedSortDescriptorsGroup addObject:sort];
         }
     }
     return sortedSortDescriptorsGroup;
@@ -191,7 +155,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Identifier:         %lld\n", self.identifier];
-    [description appendFormat:@"Sort:               %@\n", self.cachedText];
+    [description appendFormat:@"Cached text:        %@\n", self.cachedText];
     [description appendFormat:@"Override:           %@\n", self.override ? @"YES" : @"NO"];
     [description appendFormat:@"Override text:      %@\n", self.overrideText];
     [description appendFormat:@"Fields:             %@\n", self.hasFields];

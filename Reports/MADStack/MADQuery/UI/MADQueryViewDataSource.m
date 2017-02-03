@@ -424,7 +424,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 
                 NSString *databaseType = database.ownedByUser.driverID.copy;
                 RptqDatabaseCredentals *user = database.ownedByUser;
-                id schemaName = [user copyDatabaseSchemaName];
+                NSString * schemaName = [user databaseSchemaName].copy;
                 
                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                      NSString *TextFormatConnection = @"You are connecting to %1$@"

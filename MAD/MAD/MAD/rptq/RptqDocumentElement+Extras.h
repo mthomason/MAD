@@ -49,7 +49,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
     @property (readonly) CGRect frame;
     
     - (CGSize)sizeCalculated;
-    - (NSString *)copyDesignerRepresentationText;
+    - (NSString *)designerRepresentationText;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;

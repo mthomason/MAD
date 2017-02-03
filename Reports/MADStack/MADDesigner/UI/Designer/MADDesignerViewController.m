@@ -1314,7 +1314,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
                                                           withNumberOfGroups: query.hasQueryGroups.count];
 
-    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: section];
+    UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.objectID];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [section setInterfaceHeight: collectionViewContentSize.height];
  
@@ -1344,7 +1344,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     BOOL insertNewSection = (int64_t)numberOfRows > section.numberOfRows;
     BOOL deleteLastSection =(int64_t) numberOfRows < section.numberOfRows;
     
-    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: section];
+    UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.objectID];
     
     if (section.numberOfRows == (int64_t)numberOfRows) {
         
@@ -1431,7 +1431,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                     [change isEqualToString: NSStringFromSelector(@selector(paddingTop))] ||
                     [change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
                     
-                    section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
+                    section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.objectID];
                     layoutManager = doc.sectionLayoutManagers[section.objectIdTag];
                     attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
@@ -1518,7 +1518,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     if (selectedImage != nil) {
         self.hidesStatusBar = NO;
         
-        MADDesignerViewController * __weak reportDesigner = self;
+        MADDesignerViewController * __weak wself = self;
         [self dismissViewControllerAnimated:YES completion:^{
         
             NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeImage];
@@ -1526,7 +1526,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             defination = [[NSDictionary alloc] initWithObjectsAndKeys:
                             type,           MTDocumentObjectDefinationType,
                             selectedImage,  MTDocumentObjectDefinationObject, nil];
-            [reportDesigner insertDocumentObjectWithDefination: defination];
+            [wself insertDocumentObjectWithDefination: defination];
             
         }];
     }
@@ -2861,20 +2861,23 @@ END_deselectElementView:;
     RptqDocument *rptqDocument = document.activeDocumentModel;
     RptqDocumentSection *section = rptqDocument.hasDetailSection;
     
-    MADDesignerSectionView *detailSection = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
-    MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[detailSection.objectIdTag];
+    MADDesignerSectionView *collectionView;
+    MADSectionLayoutManager *layoutManager;
+
+    collectionView = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
+    layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
     
     MADDesignerViewController * __weak weakself = self;
-    [detailSection performBatchUpdates:^{
+    [collectionView performBatchUpdates:^{
 
         MADDesignerViewController * sself = weakself;
         
         NSIndexPath *path;
         NSArray *indexPathsInserted;
-        MADSectionLayoutAttributes *la;
-        RptqDocumentElement *documentObject = [rptqDocument addDocumentObject:documentObjectDefination];
+        MADSectionLayoutAttributes *layoutAttribute;
+        RptqDocumentElement *element = [rptqDocument addDocumentObject:documentObjectDefination];
 
-        NSArray *objects = [[NSArray alloc] initWithObjects:documentObject, nil];
+        NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
 
         NSError * __autoreleasing *error = NULL;
         [rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
@@ -2883,20 +2886,20 @@ END_deselectElementView:;
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
         
-        la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-        la.objectID = documentObject.objectID.copy;
-        sself.objectIdJustDisplayed = documentObject.objectID.copy;
+        layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+        layoutAttribute.objectID = element.objectID.copy;
+        sself.objectIdJustDisplayed = element.objectID.copy;
         
-        la.frame = [documentObject elementViewFrameDesigner];
-        [layoutManager addItem:la];
+        layoutAttribute.frame = [element elementViewFrameDesigner];
+        [layoutManager addItem:layoutAttribute];
         [layoutManager layout];
         
         indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
-        [section addDocumentObject: documentObject
-                     withDropPoint: la.frame.origin
+        [section addDocumentObject: element
+                     withDropPoint: layoutAttribute.frame.origin
               managedObjectContext: section.managedObjectContext];
         
-        [detailSection insertItemsAtIndexPaths: indexPathsInserted];
+        [collectionView insertItemsAtIndexPaths: indexPathsInserted];
         [section.managedObjectContext save:nil];
         
     } completion:^(BOOL finished) {
@@ -3435,6 +3438,10 @@ END_deselectElementView:;
         }
     }
     return results;
+}
+
+- (MADDesignerSectionView *)getSectionViewForSectionID:(NSManagedObjectID *)sectionID {
+    return self.sectionViewsDictionary[sectionID];
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {

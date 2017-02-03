@@ -36,35 +36,11 @@
                                            managedObjectContext:self.managedObjectContext];
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
-+ (instancetype)newQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
++ (instancetype)newQueryField:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
     NSString *entityName = NSStringFromClass([RptqQueryField class]);
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName: entityName
-                                                         inManagedObjectContext: managedObjectContext];
-    RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity: entityDescription
+    NSEntityDescription *entity = [NSEntityDescription entityForName: entityName
+                                              inManagedObjectContext: managedObjectContext];
+    RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity: entity
                                          insertIntoManagedObjectContext: managedObjectContext];
     return queryField;
 }
@@ -93,7 +69,7 @@
 }
 
 - (NSString *)toString {
-    NSString *queryAlias = [self.inQueryTable copyQueryAlias];
+    NSString *queryAlias = [self.inQueryTable queryAlias];
     return [NSString stringWithFormat:@"%@.%@", queryAlias, self.databaseSchemaField.name];
 }
 

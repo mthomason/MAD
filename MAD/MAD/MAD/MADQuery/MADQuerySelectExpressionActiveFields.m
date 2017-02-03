@@ -49,7 +49,7 @@
             RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
             if (fieldCounter != 0)  [result appendString:@",\n"];
             
-            NSString *tableName = [queryField.inQueryTable copyQueryAlias];
+            NSString *tableName = [queryField.inQueryTable queryAlias];
             MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
             
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];

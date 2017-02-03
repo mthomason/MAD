@@ -862,7 +862,7 @@ READFROMURL_END:;
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
             @autoreleasepool {
                 
-                RptqQueryField *newQueryField = [RptqQueryField newQueryFieldForManagedObjectContext:private];
+                RptqQueryField *newQueryField = [RptqQueryField newQueryField:private];
                 newQueryField.inQueryTable = newQueryTable;
                 newQueryField.databaseSchemaField = field;
                 [newQueryFields addObject:newQueryField];

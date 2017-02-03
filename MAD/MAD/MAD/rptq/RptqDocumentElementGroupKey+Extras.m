@@ -14,7 +14,7 @@
 
 @implementation RptqDocumentElementGroupKey (Extras)
 
-- (NSString *)copyDesignerRepresentationText {
+- (NSString *)designerRepresentationText {
     NSString *result = nil;
     NSNumber *groupNumber = [NSNumber numberWithLongLong:self.groupNumber];
     NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber

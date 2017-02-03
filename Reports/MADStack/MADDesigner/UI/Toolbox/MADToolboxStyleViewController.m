@@ -868,9 +868,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
     MADocument *doc = self.document;
+    RptqDocumentElement *element;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        documentObject.bold = self.controlStateBold;
+        element = [doc.managedObjectContext objectWithID:objectId];
+        element.style.bold = self.controlStateBold;
     }
     [doc.managedObjectContext save:nil];
 }
@@ -893,9 +894,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
 
     MADocument *doc = self.document;
+    RptqDocumentElement *element;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectId];
-        documentObject.italic = self.controlStateItalic;
+        element = [doc.managedObjectContext objectWithID:objectId];
+        element.style.italic = self.controlStateItalic;
     }
     [doc.managedObjectContext save:nil];
 }
@@ -919,9 +921,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     MADocument *doc = self.document;
     NSManagedObjectID *objectID;
+    RptqDocumentElement *element;
     for (objectID in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [doc.managedObjectContext objectWithID:objectID];
-        [documentObject setStrikethrough: ControlStateIsOn(_controlStateStrike)];
+        element = [doc.managedObjectContext objectWithID:objectID];
+        element.style.strikethrough = ControlStateIsOn(_controlStateStrike);
     }
     [doc.managedObjectContext save:nil];
 }
@@ -945,10 +948,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
     
     MADocument *doc = self.document;
-    RptqDocumentElement *documentObject;
+    RptqDocumentElement *element;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        documentObject = [doc.managedObjectContext objectWithID:objectId];
-        documentObject.underline = ControlStateIsOn(_controlStateUnderline);
+        element = [doc.managedObjectContext objectWithID:objectId];
+        element.style.underline = ControlStateIsOn(_controlStateUnderline);
     }
     [doc.managedObjectContext save:nil];
 }

@@ -32,30 +32,6 @@
                                         managedObjectContext:self.managedObjectContext];
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQuerySort   ***********\n"];

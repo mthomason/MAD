@@ -307,7 +307,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         self.displayImage = nil;
         
         
-        NSString *string = [element copyDesignerRepresentationText];
+        NSString *string = [element designerRepresentationText];
         
         switch (element.documentObjectType) {
                 

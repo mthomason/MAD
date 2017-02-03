@@ -10,7 +10,6 @@
 #define Reports_RptqDocumentElementLabel_Extras_h
 
 #import "RptqDocumentElementLabel.h"
-#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentElementLabel (Extras)
 

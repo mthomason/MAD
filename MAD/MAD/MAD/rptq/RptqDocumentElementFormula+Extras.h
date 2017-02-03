@@ -12,7 +12,6 @@
 #import "RptqDocumentElementFormula.h"
 #import "RptqDocumentElementFactory.h"
 #import <MADDataStructures/MTProtocolLog.h>
-#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentElementFormula (Extras)
         <RptqDocumentElementFactory, MTProtocolLog>

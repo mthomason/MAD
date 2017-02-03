@@ -43,7 +43,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         RptqQueryField *aggregateField = isAggregate.aggregateField;
         RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
         
-        NSString *queryAlias = [inQueryTable copyQueryAlias];
+        NSString *queryAlias = [inQueryTable queryAlias];
         MADSafeQueryField *fieldKey;
         fieldKey = [datasource.database newSafeQueryField: aggregateField.databaseSchemaField.name
                                                  andTable: queryAlias];

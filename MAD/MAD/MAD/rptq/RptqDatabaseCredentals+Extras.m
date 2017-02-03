@@ -45,31 +45,7 @@
                                         managedObjectContext:self.managedObjectContext];
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
-- (NSString *)copyDatabaseSchemaName {
+- (NSString *)databaseSchemaName {
     NSString *result = @"";
     MADDatabaseType databaseType = [self.inDatabase databaseType];
     switch (databaseType) {
@@ -105,21 +81,19 @@
             result = @"unknown";
             break;
     }
-    NSString *resultNoPathExtension = result.stringByDeletingPathExtension;
-    NSString *capitalized = resultNoPathExtension.capitalizedString;
-    return capitalized;
+    return result.stringByDeletingPathExtension.capitalizedString;
 }
 
 #pragma mark - Static
 
-+ (instancetype)newUserCredentalForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext {
     NSString *entityName = NSStringFromClass([self class]);
     NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext: objectContext];
     id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;
 }
 
-+ (NSArray <RptqDatabaseCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
     NSSortDescriptor *sort;
     sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))

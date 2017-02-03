@@ -15,9 +15,10 @@
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>
 
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <Foundation/NSNumberFormatter.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -89,37 +90,57 @@ static NSNumberFormatter *currencyNumberFormatter;
 //
 //
 
-@implementation RptqDocumentElement (Extras)
-
-#pragma mark -
-#pragma mark Static Helpers
-
-
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
+                                                   CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
+                                                    CGFloat, CGFloat, CGFloat);
+static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
+                                              CGFloat, CGFloat, CGFloat, CGFloat);
 static inline double paddingViewBoundsSizeHeight(double, double, double);
 static inline double paddingViewBoundsSizeWidth(double, double, double);
 
-static inline double paddingViewBoundsSizeHeight(double paddingTop, double paddingBottom, double sizeHeight) {
+static inline double paddingViewBoundsSizeHeight(double paddingTop,
+                                                 double paddingBottom,
+                                                 double sizeHeight) {
     return paddingTop + paddingBottom + sizeHeight;
 }
 
-static inline double paddingViewBoundsSizeWidth(double paddingLeft, double paddingRight, double sizeWidth) {
+static inline double paddingViewBoundsSizeWidth(double paddingLeft,
+                                                double paddingRight,
+                                                double sizeWidth) {
     return paddingLeft + paddingRight + sizeWidth;
 }
 
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
-    return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight + paddingRight;
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft,
+                                                   CGFloat borderWidthLeft,
+                                                   CGFloat marginLeft,
+                                                   CGFloat sizewidth,
+                                                   CGFloat marginRight,
+                                                   CGFloat borderWidthRight,
+                                                   CGFloat paddingRight) {
+    return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight +
+                            paddingRight;
 }
 
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop, CGFloat borderHeightTop, CGFloat marginTop, CGFloat sizeheight, CGFloat marginBottom, CGFloat borderHeightBottom, CGFloat paddingBottom) {
-    return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom + borderHeightBottom + paddingBottom;
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop,
+                                                    CGFloat borderHeightTop,
+                                                    CGFloat marginTop,
+                                                    CGFloat sizeheight,
+                                                    CGFloat marginBottom,
+                                                    CGFloat borderHeightBottom,
+                                                    CGFloat paddingBottom) {
+    return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom +
+                            borderHeightBottom + paddingBottom;
 }
 
 static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
     return CGRectMake(x + sx, y + sy, w + sw, h + wh);
 }
+
+@implementation RptqDocumentElement (Extras)
+
+#pragma mark -
+#pragma mark Static Helpers
 
 + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
     RptqDocumentElement *result = nil;
@@ -182,118 +203,50 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
+    NSString *keyDropIndex = NSStringFromSelector(@selector(dropIndex));
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
     
+    NSExpressionDescription *edIdentifier, *edLastObject;
+    edIdentifier = [[NSExpressionDescription alloc] init];
+    edIdentifier.name = keyIdentifier;
+    edIdentifier.expression = [NSExpression expressionForKeyPath:keyIdentifier];
+    edIdentifier.expressionResultType = NSInteger64AttributeType;
+
+    edLastObject = [[NSExpressionDescription alloc] init];
+    edLastObject.name = keyDropIndex;
+    edLastObject.expression = [NSExpression expressionForKeyPath:keyDropIndex];
+    edLastObject.expressionResultType = NSInteger64AttributeType;
+
+    request.propertiesToFetch = @[edIdentifier, edLastObject];
+    request.resultType = NSDictionaryResultType;
     NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSArray <NSDictionary *> *fetchResults;
+    fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
     int64_t idNumber = 0;
     int64_t lastDropIndex = 0;
-    if (error == nil) {
-        RptqDocumentElement *lastObject = fetchResults.lastObject;
-        idNumber = lastObject.identifier + 1;
-        lastDropIndex = lastObject.dropIndex + 1;
+    if (fetchResults.count) {
+
+        NSDictionary <NSString *, NSNumber *> *lastObject = fetchResults.lastObject;
+
+        
+        CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyIdentifier]),
+                         kCFNumberSInt64Type,
+                         &idNumber);
+        CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyDropIndex]),
+                         kCFNumberSInt64Type,
+                         &lastDropIndex);
+
+        idNumber++;
+        lastDropIndex++;
     }
     
-    NSString *fontname = [[NSString alloc] initWithString:[MADFont defaultFamily]];
-    self.fontname = fontname;
-
+    self.fontname = [MADFont defaultFamily];
     self.fontsize = [MADFont defaultSize];
     self.identifier = idNumber;
     self.dropIndex = lastDropIndex;
     
 }
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-/*
-- (void)setPaddingTop:(double)v {
-    self.padding.top = v;
-}
-
-- (void)setPaddingBottom:(double)v {
-    self.padding.bottom = v;
-}
-
-
-- (void)setPaddingLeft:(double)v {
-    self.padding.left = v;
-}
-
-- (void)setPaddingRight:(double)v {
-    self.padding.right = v;
-}
-
-- (void)setMarginTop:(double)v {
-    MADMargin_t m;
-    [(NSValue *)self.margin getValue:&m];
-    m.top = v;
-    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
-}
-
-- (void)setMarginBottom:(double)v {
-    MADMargin_t m;
-    [(NSValue *)self.margin getValue:&m];
-    m.bottom = v;
-    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
-}
-
-- (void)setMarginRight:(double)v {
-    MADMargin_t m;
-    [(NSValue *)self.margin getValue:&m];
-    m.right = v;
-    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
-}
-
-- (void)setMarginLeft:(double)v {
-    MADMargin_t m;
-    [(NSValue *)self.margin getValue:&m];
-    m.left = v;
-    [NSValue value:&m withObjCType:@encode(MADMargin_t)];
-}
-
-- (void)setBold:(BOOL)bold {
-    MADTextStyle_t textStyle;
-    [(NSValue *)self.style getValue:&textStyle];
-    textStyle.bold = bold;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
-}
-
-- (void)setItalic:(BOOL)italic {
-    MADTextStyle_t textStyle;
-    [(NSValue *)self.style getValue:&textStyle];
-    textStyle.italic = italic;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
-}
-
-- (void)setStrikethrough:(BOOL)strikethrough {
-    MADTextStyle_t textStyle;
-    [(NSValue *)self.style getValue:&textStyle];
-    textStyle.strikethrough = strikethrough;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
-}
-
-- (void)setUnderline:(BOOL)underline {
-    MADTextStyle_t textStyle;
-    [(NSValue *)self.style getValue:&textStyle];
-    textStyle.underline = underline;
-    [NSValue value:&textStyle withObjCType:@encode(MADTextStyle_t)];
-}*/
 
 - (void)setSizeWidth:(double)width {
     CGSize s;
@@ -452,7 +405,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return self.type;
 }
 
-- (NSString *)copyDesignerRepresentationText {
+- (NSString *)designerRepresentationText {
     @throw NSInternalInconsistencyException;
 }
 
@@ -599,19 +552,20 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return result;
 }
 
-#pragma mark - MTProtocolLog
+#pragma mark -
+#pragma mark MTProtocolLog
 
 - (NSString *)toString {
     return [self toStringDebug];
 }
 
 - (NSString *)toStringDebug {
-    return [[NSString alloc] initWithFormat: @"%@-%@", self, [self copyDesignerRepresentationText]];
+    return [[NSString alloc] initWithFormat: @"%@-%@", self,
+                                    [self designerRepresentationText]];
 }
 
 - (NSString *)toStringHumanReadable {
-    NSString *result = [self copyDesignerRepresentationText];
-    return result;
+    return [self designerRepresentationText];
 }
 
 - (NSAttributedString *)toAttributedString {

@@ -1674,7 +1674,7 @@ BOOL storeEnabled() {
             
             NSString *selectorHasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
             BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
-            NSUInteger numberOfTables = query.numberOfTables;
+            NSUInteger numberOfTables = query.hasQueryTables.count;
             for (id change in changes) {
                 if ([change isEqualToString: selectorHasQueryTables]) {
                     

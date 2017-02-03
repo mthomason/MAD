@@ -18,7 +18,6 @@
 
     - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne
                      fieldTwo:(RptqQueryField *)fieldTwo;
-    - (NSString *)copyBarcodeTypeName;
     + (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
                            queryFieldOne:(RptqQueryField *)queryFieldOne
                            queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;

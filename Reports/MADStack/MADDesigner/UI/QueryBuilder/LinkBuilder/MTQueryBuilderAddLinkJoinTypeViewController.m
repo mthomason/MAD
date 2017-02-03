@@ -44,7 +44,7 @@
     [super viewDidLoad];
     
     NSArray <RptqDatabaseCredentals *> *connections;
-    connections = [RptqDatabaseCredentals newArrayOfUserCredentalsForManagedObjectContext:self.document.managedObjectContext];
+    connections = [RptqDatabaseCredentals newDatabaseCredentals:self.document.managedObjectContext];
     RptqDatabaseCredentals *userCredentals = connections[0];
     NSString *databaseDriverType = userCredentals.driverID;
 

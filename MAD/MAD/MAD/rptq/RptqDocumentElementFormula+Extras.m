@@ -31,69 +31,36 @@
 
 @implementation RptqDocumentElementFormula (Extras)
 
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-}
-
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
-- (NSString *)copyDesignerRepresentationText {
-    NSString *result = nil;
-    result = [(RptqDocumentElementFormula *)self source];
-    return result;
+- (NSString *)designerRepresentationText {
+    return self.source;
 }
 
 #pragma mark - RptqDocumentElementFactory
 
-+ (RptqDocumentElement *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
++ (RptqDocumentElement *)addDocumentObject:(NSDictionary *)documentObjectDefination
+                                toDocument:(RptqDocument *)document {
 
     NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
-    NSEntityDescription *entityDescriptionDocumentObject;
-    entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElement class])
-                                                  inManagedObjectContext: managedObjectContext];
     
-    NSEntityDescription *entityDescriptionDocumentObjectSubtype;
-    entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementFormula class])
-                                                         inManagedObjectContext: managedObjectContext];
+    NSEntityDescription *edFormula;
+    edFormula = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementFormula class])
+                            inManagedObjectContext: managedObjectContext];
     
     NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
-    RptqDocumentElementFormula *reportObject = [[RptqDocumentElementFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                 insertIntoManagedObjectContext: managedObjectContext];
+    RptqDocumentElementFormula *element;
+    element = [[RptqDocumentElementFormula alloc] initWithEntity: edFormula
+                                  insertIntoManagedObjectContext: managedObjectContext];
     
-    reportObject.source = formulaText;
-    reportObject.type = MTDocumentObjectTypeFormula;
+    element.source = formulaText;
+    element.type = MTDocumentObjectTypeFormula;
     
     NSMutableOrderedSet <RptqDocumentElement *> *hasObjects;
     hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
-    [hasObjects insertObject:reportObject atIndex:0];
+    [hasObjects insertObject:element atIndex:0];
     [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     
-    return reportObject;
+    return element;
 }
 
 #pragma mark - MTProtocolLog

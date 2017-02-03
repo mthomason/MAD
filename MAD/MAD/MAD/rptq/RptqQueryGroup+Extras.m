@@ -56,39 +56,17 @@
     return queryGroup;
 }
 
-#pragma mark - Overrides
+#pragma mark -
+#pragma mark Overrides
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
+                                        managedObjectContext:self.managedObjectContext];
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
-#pragma mark - Static
+#pragma mark -
+#pragma mark Static
 
 + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
@@ -99,7 +77,8 @@
     return (error) ? 0 : result;
 }
 
-#pragma mark - Member functions
+#pragma mark -
+#pragma mark Member functions
 
 - (int16_t)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
@@ -159,7 +138,8 @@
     return location;
 }
 
-#pragma mark - MTProtocolCompare
+#pragma mark -
+#pragma mark MTProtocolCompare
 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];

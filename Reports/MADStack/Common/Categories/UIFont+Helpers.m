@@ -13,10 +13,10 @@
 + (void)LogFonts {
 #if DEBUG
     for (NSString* family in [UIFont familyNames]) {
-        //NSLog(@"%@", family);
+        NSLog(@"%@", family);
         
         for (NSString* name in [UIFont fontNamesForFamilyName: family]) {
-            //NSLog(@"  %@", name);
+            NSLog(@"  %@", name);
         }
     }
 #endif

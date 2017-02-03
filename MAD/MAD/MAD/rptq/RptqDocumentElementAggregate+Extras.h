@@ -30,8 +30,8 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
                                           inputType:(MTAggregateFunctionInputType)inputType
                                           groupType:(MTAggregateGroupByType)groupType
                                     aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
-                                        groupNumber:(int64_t)groupNumber;
-    - (NSString *)copyDesignerRepresentationText;
+                                        groupNumber:(int32_t)groupNumber;
+    - (NSString *)designerRepresentationText;
 
 @end
 

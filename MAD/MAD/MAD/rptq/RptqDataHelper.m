@@ -56,9 +56,8 @@
     fetchResults = [managedObjectContext executeFetchRequest:request error:error];
     
     NSNumber *identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"];
-    CFNumberRef identifier = (__bridge CFNumberRef)(identifierNumber);
     int64_t identifier64;
-    CFNumberGetValue(identifier, kCFNumberSInt64Type, &identifier64);
+    CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
     identifier64++;
     return identifier64;
 }

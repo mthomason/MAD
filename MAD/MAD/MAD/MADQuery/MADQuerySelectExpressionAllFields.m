@@ -39,7 +39,7 @@
             if (table != nil) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
-                NSString *tableName = [table copyQueryAlias];
+                NSString *tableName = [table queryAlias];
                 MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
                 NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 

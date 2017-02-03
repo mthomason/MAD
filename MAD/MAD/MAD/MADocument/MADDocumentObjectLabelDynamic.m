@@ -44,7 +44,7 @@
         
         datasource = definition.datasource;
         item = definition.item;
-        NSString *qa = [item.referencesQueryField.inQueryTable copyQueryAlias];
+        NSString *qa = [item.referencesQueryField.inQueryTable queryAlias];
         NSString *tableFieldKey = [datasource.database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                                 andTable: qa];
 

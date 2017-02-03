@@ -82,17 +82,15 @@
 }
 
 - (NSString *)tableAlias {
-    return self.dropIndex == 0 ? self.databaseSchemaTable.name : [self copyQueryAlias];
+    return self.dropIndex == 0 ? self.databaseSchemaTable.name : [self queryAlias];
 }
 
-- (NSString *)copyQueryAlias {
+- (NSString *)queryAlias {
     char buf[12]; char *ptr;
     ltoa(self.dropIndex, buf);
     ptr = buf;
     NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    NSString *databaseName = self.databaseSchemaTable.name.copy;
-    NSString *alias = [databaseName stringByAppendingString:indexString];
-    return alias;
+    return [self.databaseSchemaTable.name stringByAppendingString:indexString];
 }
 
 - (BOOL)isEqualTo:(RptqQueryTable *)sender {

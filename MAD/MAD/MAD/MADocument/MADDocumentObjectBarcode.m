@@ -38,8 +38,8 @@
         database = datasource.database;
         NSDictionary *rowData = [datasource.dataTable copyDataForCacheId:definition.detailRowId];
         
-        NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable copyQueryAlias];
-        NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable copyQueryAlias];
+        NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable queryAlias];
+        NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable queryAlias];
         
         MADSafeQueryField *tableFieldKey1, *tableFieldKey2;
         tableFieldKey1 = [database newSafeQueryField: item.referencesField1.databaseSchemaField.name

@@ -59,7 +59,7 @@
         
         inQueryTable = databaseSchemaField.inQueryField;
         
-        tableName = [inQueryTable copyQueryAlias];
+        tableName = [inQueryTable queryAlias];
         
         NSString *fieldNameRaw;
         fieldName = [database newSafeQueryField: isLabelDataField.referencesQueryField.databaseSchemaField.name

@@ -36,43 +36,13 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 #pragma mark - Overrides
 
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
-}
-
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
 + (instancetype)getElementForObjectID: (NSManagedObjectID *)objectId
                     fromObjectContext: (NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectWithID:objectId];
     return (RptqDocumentElementAggregate *)result;
 }
 
-- (NSString *)copyDesignerRepresentationText {
+- (NSString *)designerRepresentationText {
     NSString *toStringHumanReadable = [self.aggregateField toStringHumanReadable];
     NSString *functionNameShort = [self functionNameShort];
     id result = [[NSString alloc] initWithFormat:@"%@(%@)",
@@ -188,7 +158,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                       inputType:(MTAggregateFunctionInputType)inputType
                                       groupType:(MTAggregateGroupByType)groupType
                                 aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
-                                    groupNumber:(int64_t)groupNumber {
+                                    groupNumber:(int32_t)groupNumber {
     
     self.functionType = functionType;
     self.groupNumber = groupNumber;

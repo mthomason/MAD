@@ -14,12 +14,12 @@
 
 @interface RptqDatabaseCredentals (Extras)
 
-    + (instancetype)newUserCredentalForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+    + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
+    + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;
 
     + (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
 
-    + (NSArray <RptqDatabaseCredentals *> *)newArrayOfUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
-    - (NSString *)copyDatabaseSchemaName;
+    - (NSString *)databaseSchemaName;
 
 @end
 

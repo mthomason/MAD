@@ -82,30 +82,6 @@
                                            managedObjectContext:self.managedObjectContext];
 }
 
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
-}
-
 - (RptqQuery *)mainQuery {
     RptqDatabase *defaultDatabase = [self defaultDatabase];
     RptqQuery *mainQuery = [defaultDatabase defaultQuery];
@@ -407,17 +383,19 @@
     return [section producesFormFeed];
 }
 
-- (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (void)storeDatabaseConnectionDefination:(MTDatabase *)database
+                  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     int64_t cid = (int64_t)self.hasDatabaseSchemas.count + 1;
-    RptqDatabase *rptqDatabase = [RptqDatabase newDatabaseFactoryForManagedObjectContext: managedObjectContext
+    RptqDatabase *rptqDB = [RptqDatabase newDatabaseFactoryForManagedObjectContext: managedObjectContext
                                                                               driverType: database.identifier
                                                                             connectionId: cid];
     
-    RptqDatabaseCredentals *userCredentals = [RptqDatabaseCredentals newUserCredentalForManagedObjectContext: managedObjectContext];
+    RptqDatabaseCredentals *credentals;
+    credentals = [RptqDatabaseCredentals newDatabaseCredental: managedObjectContext];
     
     NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
-    userCredentals.driverID = databaseIdentifier;
+    credentals.driverID = databaseIdentifier;
 
     if (database.databaseConnection != nil) {
         
@@ -425,29 +403,29 @@
             case MADDatabaseTypeMySQL: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
-                userCredentals.port = databaseConnection.port;
-                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
-                userCredentals.host = databaseConnection.server.copy;
-                userCredentals.dbname = databaseConnection.database.copy;
+                credentals.port = databaseConnection.port;
+                credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
+                credentals.host = databaseConnection.server.copy;
+                credentals.dbname = databaseConnection.database.copy;
                 break;
             }
 
             case MADDatabaseTypeSqlite3: {
                 MADDatabaseConnection *databaseConnection;
                 databaseConnection = database.databaseConnection;
-                userCredentals.dbname = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
-                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
+                credentals.dbname = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
+                credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
                 break;
             }
 
             case MADDatabaseTypeTDS: {
                 MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
                 databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
-                userCredentals.port = databaseConnection.port;
-                userCredentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
-                userCredentals.server = databaseConnection.server.copy;
-                userCredentals.host = databaseConnection.server.copy;
-                userCredentals.dbname = databaseConnection.database.copy;
+                credentals.port = databaseConnection.port;
+                credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
+                credentals.server = databaseConnection.server.copy;
+                credentals.host = databaseConnection.server.copy;
+                credentals.dbname = databaseConnection.database.copy;
                 break;
             }
                 
@@ -456,20 +434,21 @@
         }
     }
     
-    rptqDatabase.ownedByUser = userCredentals;
+    rptqDB.ownedByUser = credentals;
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
     RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId
                                                         inManagedObjectContext: managedObjectContext];
-    [rptqDatabase addHasQueriesObject:newQuery];
+    [rptqDB addHasQueriesObject:newQuery];
     
     
-    NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDatabase];
+    NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDB];
     NSSet *dbs = [[NSSet alloc] initWithSet:databaseSchemas];
     self.hasDatabaseSchemas = dbs;
 
 }
 
-- (void)addDatabase:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)addDatabase:(MTDatabase *)database
+                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
              status:(void (^)(NSString *status, float progress))status
          completion:(void (^)(BOOL success, MADErrorContainer *error))completion {
 
