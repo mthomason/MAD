@@ -78,12 +78,9 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 #pragma mark -
 #pragma mark MAD Object ID
 
-@implementation MADModel {
-  @protected
-    int64_t _uid;
-}
+@implementation MADModel
     @dynamic identifier;
-    //@synthesize objectID = _objectID;
+    @dynamic objectID;
 
 + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext {
     return [[MADModelDocument alloc] initWithContext:managedObjectContext];
@@ -96,7 +93,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
                       identifier:(int64_t)identifier {
     if (self = [super init]) {
-        //_objectID = objectID.copy;
+        _objectID = objectID.copy;
         _uid = identifier;
     }
     return self;

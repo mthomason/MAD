@@ -34,7 +34,6 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 
 @interface MADModelDocument ()
     - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
-    @property (nonatomic, readwrite, copy)       NSManagedObjectID *objectID;
     @property (nonatomic, readwrite, strong) NSMutableOrderedSet <MADModelDatabase *> *databases;
 @end
 
@@ -49,7 +48,6 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     id <NSObject> _observeWillSaveNotification;
     id <NSObject> _observeDidSaveNotification;
 }
-    @dynamic objectID;
     @synthesize managedObjectContext = _managedObjectContext;
 
 - (void)dealloc {
@@ -204,7 +202,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 + (NSFetchRequest <NSDictionary <NSString *, __kindof NSObject *> *> *)fetchRequestDocDBQueryIDs {
     NSFetchRequest *request;
     
-    void (^setupExpression)(NSExpressionDescription *, NSString *,
+    void (^initExpression)(NSExpressionDescription *, NSString *,
                             NSExpression *, NSAttributeType) =
     ^void(NSExpressionDescription *expressionDescription, NSString *name,
           NSExpression *expression, NSAttributeType type) {
@@ -214,10 +212,10 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     };
     
     NSUInteger expressionCount = 6;
-    NSExpressionDescription *expressionDescription[expressionCount];
+    NSExpressionDescription *description[expressionCount];
     
     for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        description[i] = [[NSExpressionDescription alloc] init];
     }
     
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
@@ -225,9 +223,9 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     NSString *identifier = NSStringFromSelector(@selector(identifier));
     NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
     NSString *inDocument;
-    
+    NSString *keyOwnedByQuery =NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
     inDocument = [inDatabase stringByAppendingString:@"."];
-    inDocument = [inDocument stringByAppendingString: NSStringFromSelector(@selector(ownedByQueryAsStaticResource))];
+    inDocument = [inDocument stringByAppendingString: keyOwnedByQuery];
     
     NSString *inDBID = [inDatabase stringByAppendingString:@"."];
     inDBID = [inDBID stringByAppendingString:identifier];
@@ -235,29 +233,29 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     NSString *inDocID = [inDocument stringByAppendingString:@"."];
     inDocID = [inDocID stringByAppendingString:identifier];
     
-    NSExpression *databaseExpression = [NSExpression expressionForKeyPath:inDatabase];
-    NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDocument];
+    NSExpression *dbExpression = [NSExpression expressionForKeyPath:inDatabase];
+    NSExpression *dbInDocExpression = [NSExpression expressionForKeyPath:inDocument];
     NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
     NSExpression *dbIDExpression = [NSExpression expressionForKeyPath:inDBID];
     NSExpression *queryIDExpression = [NSExpression expressionForKeyPath:identifier];
     NSExpression *docIDExpression = [NSExpression expressionForKeyPath:inDocID];
-    setupExpression(expressionDescription[0], keyDatabase, databaseExpression, NSObjectIDAttributeType);
-    setupExpression(expressionDescription[1], keyDocument, databaseInDocumentExpression, NSObjectIDAttributeType);
-    setupExpression(expressionDescription[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
+    initExpression(description[0], keyDatabase, dbExpression, NSObjectIDAttributeType);
+    initExpression(description[1], keyDocument, dbInDocExpression, NSObjectIDAttributeType);
+    initExpression(description[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
     
-    setupExpression(expressionDescription[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
-    setupExpression(expressionDescription[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
-    setupExpression(expressionDescription[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);
+    initExpression(description[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
+    initExpression(description[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
+    initExpression(description[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);
     
     request.resultType = NSDictionaryResultType;
     
     NSArray *propertiesToFetch;
-    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
+    propertiesToFetch = [[NSArray alloc] initWithObjects:description
                                                    count:expressionCount];
     request.propertiesToFetch = propertiesToFetch;
     
     for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = nil;
+        description[i] = nil;
     }
     
     inDatabase = nil;
@@ -291,14 +289,17 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 
     NSDictionary <NSString *, __kindof NSObject *> *resultWrapper;
     
-    self.objectID = [[results.firstObject objectForKey: keyDocument] copy];
+    _objectID = [[results.firstObject objectForKey: keyDocument] copy];
 
     int64_t docID, dbID, qID;
     for (resultWrapper in results) {
 
-        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery], kCFNumberSInt64Type, &qID);
-        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase], kCFNumberSInt64Type, &dbID);
-        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument], kCFNumberSInt64Type, &docID);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery],
+                         kCFNumberSInt64Type, &qID);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase],
+                         kCFNumberSInt64Type, &dbID);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument],
+                         kCFNumberSInt64Type, &docID);
         database = [[MADModelDatabase alloc] initWithObjectID: resultWrapper[keyDatabase]
                                                    identifier: dbID
                                                       queryID: resultWrapper[keyQuery]
