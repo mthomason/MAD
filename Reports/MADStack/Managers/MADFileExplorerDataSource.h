@@ -6,10 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADDocumentManager_h
-#define Reports_MADDocumentManager_h
+#ifndef Reports_MADFileExplorerDataSource_h
+#define Reports_MADFileExplorerDataSource_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <UIKit/UICollectionView.h>
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 

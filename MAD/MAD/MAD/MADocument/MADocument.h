@@ -25,26 +25,9 @@
 @protocol MADActivityProtocol;
 @protocol MADocumentDelegate;
 
-@class NSManagedObjectID;
-@class RptqDocument;
+@class NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState,
+        MADSectionLayoutManager, MTQueryFull, MTPaper;
 
-@class MADActivityIndicator;
-
-@class MADocumentState;
-@class MADSectionLayoutManager;
-@class MTQueryFull;
-@class MTDatabase;
-@class MTReportFormatter;
-@class MTDataTableFast;
-@class MTPaper;
-@class MADDatabaseConnection;
-
-@class MADModelDocument;
-@class MADModelDatabase;
-@class MADModelQuery;
-@class MADModelQueryTable;
-@class MADModelQueryLink;
-@class MADModelQueryField;
 
 typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
@@ -63,26 +46,27 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
         MTReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
 
-    @property (nonatomic, readwrite, weak)      id <MADActivityProtocol> activityDelegate;
+    @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
 
-    @property (nonatomic, readonly, strong)     MADModelDocument *documentModel;
+    @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 
-    @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
-    @property (readonly)                        RptqDocument    *activeDocumentModel;
+    @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
+    @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 
-    @property (nonatomic, readwrite, strong)    MTReportFormatter *printingReportFormatter;
+    @property (readwrite, nonatomic, strong)    MTReportFormatter *printingReportFormatter;
 
     @property (nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
-    @property (nonatomic, strong, readwrite)    MADocumentState         *documentStatus;
+    @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
     @property (nonatomic, readonly, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
-    @property (readonly)                        NSString        *filename;
-    @property (nonatomic, strong, readwrite)    MTQueryFull     *mainQuery;
+    @property (readonly, nonatomic, copy)       NSString *filename;
+    @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;
 
-    @property (nonatomic, strong)               MTPaper         *paper;
-    @property (nonatomic, readonly, copy)       NSURL           *urlDataTableCache;
-    @property (nonatomic, assign)               BOOL            limitResultsDesignMode;
+    @property (readonly, nonatomic, strong)     MTPaper *paper;
+    @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
+
+    @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;

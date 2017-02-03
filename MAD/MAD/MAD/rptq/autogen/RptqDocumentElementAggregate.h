@@ -10,9 +10,8 @@
 #define MAD_RptqDocumentElementAggregate_RptqDocumentElement_h
 
 #import "RptqDocumentElement.h"
-#import <CoreData/NSFetchRequest.h>
 
-@class RptqDocumentElementFormula, RptqQueryField;
+@class RptqDocumentElementFormula, RptqQueryField, NSFetchRequest;
 
 NS_ASSUME_NONNULL_BEGIN
 

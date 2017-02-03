@@ -276,20 +276,11 @@
     [document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
     [document.hasDetailSection          setInterfaceHeight: 88.0000f];
 
-    NSNumber *hasReportHeaderSectionVisibility = @YES;
-    document.hasReportHeaderSection.visibility = hasReportHeaderSectionVisibility;
-    
-    NSNumber *hasReportFooterSectionVisibility = @YES;
-    document.hasReportFooterSection.visibility = hasReportFooterSectionVisibility;
-
-    NSNumber *hasPageHeaderSectionVisibility = @YES;
-    document.hasPageHeaderSection.visibility = hasPageHeaderSectionVisibility;
-
-    NSNumber *hasPageFooterSectionVisibility = @YES;
-    document.hasPageFooterSection.visibility = hasPageFooterSectionVisibility;
-
-    NSNumber *hasDetailSectionVisibility = @YES;
-    document.hasDetailSection.visibility = hasDetailSectionVisibility;
+    document.hasReportHeaderSection.visibility = @YES;
+    document.hasReportFooterSection.visibility = @YES;
+    document.hasPageHeaderSection.visibility = @YES;
+    document.hasPageFooterSection.visibility = @YES;
+    document.hasDetailSection.visibility = @YES;
     
 
     return document;

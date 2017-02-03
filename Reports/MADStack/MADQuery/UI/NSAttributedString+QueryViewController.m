@@ -12,7 +12,7 @@
 #import <UIKit/NSParagraphStyle.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-@implementation NSAttributedString (QueryViewController)
+@implementation MADAttributedStringQueryController
 
 + (instancetype)newAttributedStringQueryPredicate:(NSString *)leftText
                                            symbol:(NSString *)symbol
@@ -28,7 +28,7 @@
     NSDictionary *attributesCaption = [[NSDictionary alloc] initWithObjectsAndKeys:
                                        color, NSForegroundColorAttributeName, nil];
     
-    NSMutableAttributedString *message;
+    id message;
     message = [[NSMutableAttributedString alloc] initWithString: messageText
                                                      attributes: attributes];
     NSRange rangeMiddle = [messageText rangeOfString:symbol];
@@ -40,7 +40,7 @@
 
 + (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
                                                       andSort:(NSString *)sort {
-    NSMutableAttributedString *message;
+    id message;
     UIFont *font =          [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     UIFont *fontCaption =   [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     
@@ -98,7 +98,7 @@
                                             color,       NSForegroundColorAttributeName, nil];
     
     NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
-    NSMutableAttributedString *message;
+    id message;
     message = [[NSMutableAttributedString alloc] initWithString: messageText
                                                      attributes: attributes];
     [message addAttributes:attributesAlt range:rangeLinkDesc];
@@ -119,14 +119,14 @@
     NSDictionary *attributeStroke = [[NSDictionary alloc] initWithObjectsAndKeys:
                                      fontItalic, NSFontAttributeName, nil];
     
-    NSMutableAttributedString *message;
+    id message;
     message = [[NSMutableAttributedString alloc] initWithString: text
                                                      attributes: attributes];
-    NSRange range = [message.string rangeOfString:databaseType];
+    NSRange range = [[message string] rangeOfString:databaseType];
     [message removeAttribute: NSFontAttributeName range: range];
     [message addAttributes: attributeStroke range: range];
     
-    range = [message.string rangeOfString:schemaName];
+    range = [[message string] rangeOfString:schemaName];
     [message removeAttribute: NSFontAttributeName range: range];
     [message addAttributes: attributeStroke range: range];
     return message;
@@ -134,11 +134,12 @@
 
 @end
 
-@implementation NSString (QueryField)
+@implementation MADStringQueryController
 
 + (instancetype)newStringFieldDisplayWithTable:(NSString *)table andField:(NSString *)field {
-    NSString *result = [table.capitalizedString stringByAppendingString:@"."];
-    return [result stringByAppendingString:field.capitalizedString];
+    id result = [table.capitalizedString stringByAppendingString:@"."];
+    result = [result stringByAppendingString:field.capitalizedString];
+    return result;
 }
 
 @end

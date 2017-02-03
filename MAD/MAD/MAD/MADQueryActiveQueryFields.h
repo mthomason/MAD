@@ -23,7 +23,7 @@
 
 @interface MADQueryActiveQueryFields : NSObject
 
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context;
+    - (instancetype)initWithContext:(NSManagedObjectContext *)context;
 
     @property (nonatomic, strong) NSSet <RptqQueryField *> *queryFields;
 

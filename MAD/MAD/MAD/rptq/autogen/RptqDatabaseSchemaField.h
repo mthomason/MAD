@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDatabaseSchemaField_NSManagedObject_h
 #define MAD_RptqDatabaseSchemaField_NSManagedObject_h
 
-#import <CoreData/CoreData.h>
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabaseSchemaTable, RptqQuery, RptqQueryField;
 

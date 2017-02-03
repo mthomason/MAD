@@ -11,10 +11,12 @@
 
 #import <MAD/MADModel.h>
 
-@interface MADModelDocument : MADObjectID
+@class MADModelDatabase, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
+
+@interface MADModelDocument : MADModel
     <MADModelIDProtocol, MADModelDataProtocol>
 
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
 
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
     @property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;

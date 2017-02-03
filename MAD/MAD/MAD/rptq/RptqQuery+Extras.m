@@ -12,10 +12,12 @@
 
 #import "RptqQuery+Extras.h"
 
+#import <Foundation/NSComparisonPredicate.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSPredicate.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSPredicate.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>

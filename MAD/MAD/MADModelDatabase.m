@@ -8,14 +8,21 @@
 
 #import "MADModelDatabase.h"
 
+#import <Foundation/NSException.h>
+#import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSExpression.h>
+#import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSOrderedSet.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSSortDescriptor.h>
 
+#import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSExpressionDescription.h>
 
 #import "MADModel.h"
+#import "MADModelTable.h"
+#import "MADModelQuery.h"
 
 #import "RptqQuery.h"
 #import "RptqDatabaseSchemaField.h"
@@ -41,7 +48,6 @@
     NSOrderedSet <MADModelQuery *> *_queries;
 }
 
-@synthesize objectID = _objectID;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize tables = _tables;
 @synthesize queries = _queries;
@@ -145,7 +151,7 @@
     inTableInDB = [[NSString alloc] initWithFormat:@"%@.%@", inTable, inDatabase];
     inTableName = [[NSString alloc] initWithFormat:@"%@.%@", inTable, name];
     expressionInQuery[0] = [NSExpression expressionForKeyPath:inTableInDB];
-    expressionInQuery[1] = [NSExpression expressionForConstantValue: _objectID];
+    expressionInQuery[1] = [NSExpression expressionForConstantValue: self.objectID];
     
     NSPredicate *predicate;
     predicate = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
@@ -215,7 +221,8 @@
     @autoreleasepool {
         
         NSArray *tableValues = [results valueForKey:keyTable];
-        NSOrderedSet *tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
+        NSOrderedSet *tableObjectIDs;
+        tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
         
         MADModelTable *table;
         NSManagedObjectID *tableObjectID;
@@ -259,7 +266,7 @@
                      NSStringFromSelector(@selector(inDatabase)),
                      NSStringFromSelector(@selector(objectID))];
     
-    expression[1] = [NSExpression expressionForConstantValue:_objectID];
+    expression[1] = [NSExpression expressionForConstantValue:self.objectID];
     
     NSAssert(expression != nil, @"Need an expression");
     NSComparisonPredicate *predicate;

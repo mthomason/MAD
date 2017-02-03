@@ -7,19 +7,27 @@
 //
 
 #import "MADQueryVisualizationDefination.h"
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchRequest.h>
+
 #import <Foundation/NSURL.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSMapTable.h>
+
+#import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSFetchRequest.h>
+
 #import <MAD/MADModel.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryLink.h>
+#import <MAD/MADTableFieldIdentifier.h>
+
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTLinkedList.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTGraph.h>
+
 #import "MTGraph+RptqQuery.h"
 
 @interface MADQueryVisualizationDefination()

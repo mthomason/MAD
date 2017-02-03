@@ -434,9 +434,9 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                      NSAttributedString *message;
                      localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
                      localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
-                     message = [NSAttributedString newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                          databaseType: databaseType
-                                                                                            schemaName: schemaName];
+                     message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                                          databaseType: databaseType
+                                                                                                            schemaName: schemaName];
                      dispatch_sync(dispatch_get_main_queue(), ^{
                          cell.textLabel.attributedText = message;
                          cell.textLabel.text = localizedMessage;
@@ -470,17 +470,17 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryLinks *links = [self.queryLinksController objectAtIndexPath: indexPathLinks];
             
-            NSString *leftString = [NSString newStringFieldDisplayWithTable: links.tableLeftID
-                                                                   andField: links.fieldLeftID];
+            NSString *leftString = [MADStringQueryController newStringFieldDisplayWithTable: links.tableLeftID
+                                                                                   andField: links.fieldLeftID];
             
-            NSString *rightString = [NSString newStringFieldDisplayWithTable: links.tableRightID
-                                                                    andField: links.fieldRightID];
+            NSString *rightString = [MADStringQueryController newStringFieldDisplayWithTable: links.tableRightID
+                                                                                    andField: links.fieldRightID];
             
             NSString *linksDescription = [links copyLinkDescription];
             NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQuerySectionLinks: leftString
-                                                                   rightString: rightString
-                                                              linksDescription: linksDescription];
+            message = [MADAttributedStringQueryController newAttributedStringQuerySectionLinks: leftString
+                                                                                   rightString: rightString
+                                                                              linksDescription: linksDescription];
             ((MADTableViewCellQueryLink *)cell).tableID = links.objectID.copy;
             cell.textLabel.attributedText = message;
 
@@ -501,8 +501,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSString *field = [group fieldNameNice].copy,
             *sort  = [group sortDisplayNice].copy;
             NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQuerySectionGroupWithField: field
-                                                                                andSort: sort];
+            message = [MADAttributedStringQueryController newAttributedStringQuerySectionGroupWithField: field
+                                                                                                andSort: sort];
             cell.textLabel.attributedText = message;
             ((MADTableViewCellQueryGroup *)cell).tableID = group.objectID.copy;
 
@@ -529,9 +529,9 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 rightFieldDisplay = [predicate.hasRightField toString];
             }
             NSAttributedString *message;
-            message = [NSAttributedString newAttributedStringQueryPredicate: leftFieldDisplay
-                                                                     symbol: symbol
-                                                                  rightText: rightFieldDisplay];
+            message = [MADAttributedStringQueryController newAttributedStringQueryPredicate: leftFieldDisplay
+                                                                                     symbol: symbol
+                                                                                  rightText: rightFieldDisplay];
             ((MADTableViewCellQueryPredicate *)cell).tableID = predicate.objectID.copy;
             cell.textLabel.attributedText = message;
             break;

@@ -23,7 +23,7 @@
 
 @implementation MADQueryActiveQueryFields
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context {
+- (instancetype)initWithContext:(NSManagedObjectContext *)context {
     
     if (self = [super init]) {
 

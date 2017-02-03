@@ -8,7 +8,7 @@
 
 #import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
 #import <UIKit/UIPresentationController.h>
-#import "CGAffineTransform+Common.h"
+#import "MADAffineTransformSwing.h"
 #import "MADQueryVisualizationSchemaPresentationController.h"
 
 @implementation MADQueryVisualizationSchemaAnimatedTransitioningDelegate

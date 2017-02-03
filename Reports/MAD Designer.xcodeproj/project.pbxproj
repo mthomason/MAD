@@ -358,7 +358,7 @@
 		4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */; };
 		4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */; };
 		4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */; };
-		4C4020371BAE92F200BAE5FC /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD71BAE92F200BAE5FC /* CGAffineTransform+Common.m */; };
+		4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */; };
 		4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */; };
 		4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE11BAE92F200BAE5FC /* MTGraph+RptqQuery.m */; };
 		4C40203F1BAE92F200BAE5FC /* MADAttributedStringCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE71BAE92F200BAE5FC /* MADAttributedStringCommon.m */; };
@@ -377,7 +377,7 @@
 		4C40204E1BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020051BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m */; };
 		4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020071BAE92F200BAE5FC /* UIColor+Gradients.m */; };
 		4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */; };
-		4C4020511BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200B1BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m */; };
+		4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */; };
 		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
 		4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */; };
@@ -1673,8 +1673,8 @@
 		4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MTStoryboardLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
 		4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+Social.h"; sourceTree = "<group>"; };
 		4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+Social.m"; sourceTree = "<group>"; };
-		4C401FD61BAE92F200BAE5FC /* CGAffineTransform+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGAffineTransform+Common.h"; sourceTree = "<group>"; };
-		4C401FD71BAE92F200BAE5FC /* CGAffineTransform+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGAffineTransform+Common.m"; sourceTree = "<group>"; };
+		4C401FD61BAE92F200BAE5FC /* MADAffineTransformSwing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAffineTransformSwing.h; sourceTree = "<group>"; };
+		4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAffineTransformSwing.m; sourceTree = "<group>"; };
 		4C401FDE1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+FileManager.h"; sourceTree = "<group>"; };
 		4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+FileManager.m"; sourceTree = "<group>"; };
 		4C401FE01BAE92F200BAE5FC /* MTGraph+RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTGraph+RptqQuery.h"; sourceTree = "<group>"; };
@@ -1715,8 +1715,8 @@
 		4C4020071BAE92F200BAE5FC /* UIColor+Gradients.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Gradients.m"; sourceTree = "<group>"; };
 		4C4020081BAE92F200BAE5FC /* UIColor+PaperPatterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PaperPatterns.h"; sourceTree = "<group>"; };
 		4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PaperPatterns.m"; sourceTree = "<group>"; };
-		4C40200A1BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+AnchorPoint.h"; sourceTree = "<group>"; };
-		4C40200B1BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+AnchorPoint.m"; sourceTree = "<group>"; };
+		4C40200A1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGestureRecognizerAnchorPoint.h; sourceTree = "<group>"; };
+		4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGestureRecognizerAnchorPoint.m; sourceTree = "<group>"; };
 		4C40200C1BAE92F200BAE5FC /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4C40200D1BAE92F200BAE5FC /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4C40200E1BAE92F200BAE5FC /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -3380,8 +3380,8 @@
 				4C4020681BAE938500BAE5FC /* NSData+Base64.m */,
 				4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */,
 				4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */,
-				4C401FD61BAE92F200BAE5FC /* CGAffineTransform+Common.h */,
-				4C401FD71BAE92F200BAE5FC /* CGAffineTransform+Common.m */,
+				4C401FD61BAE92F200BAE5FC /* MADAffineTransformSwing.h */,
+				4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */,
 				4C401FDE1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.h */,
 				4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */,
 				4C401FE01BAE92F200BAE5FC /* MTGraph+RptqQuery.h */,
@@ -3424,8 +3424,8 @@
 				4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */,
 				4C401F001BAE64AF00BAE5FC /* UIFont+Helpers.h */,
 				4C401F011BAE64AF00BAE5FC /* UIFont+Helpers.m */,
-				4C40200A1BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.h */,
-				4C40200B1BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m */,
+				4C40200A1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.h */,
+				4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */,
 				4C40200C1BAE92F200BAE5FC /* UIImage+Alpha.h */,
 				4C40200D1BAE92F200BAE5FC /* UIImage+Alpha.m */,
 				4C40200E1BAE92F200BAE5FC /* UIImage+ImageEffects.h */,
@@ -6207,7 +6207,7 @@
 				4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */,
 				4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */,
 				4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */,
-				4C4020371BAE92F200BAE5FC /* CGAffineTransform+Common.m in Sources */,
+				4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */,
 				4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */,
 				4CFEE8211BB7A3A300AFAA0A /* MTCellEnterText.m in Sources */,
 				4C26B96A1BAF11C800456DC8 /* MADOperationInstallSampleDocument.m in Sources */,
@@ -6326,7 +6326,7 @@
 				4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,
-				4C4020511BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m in Sources */,
+				4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */,
 				4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */,
 				4C26B9921BAF11FA00456DC8 /* MADVibrantTableViewCellImage.m in Sources */,
 				4C994F421BE28E790058627A /* MADTextRange.m in Sources */,

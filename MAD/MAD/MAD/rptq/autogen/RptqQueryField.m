@@ -19,3 +19,25 @@
 @implementation RptqQueryField
 
 @end
+
+@implementation RptqQueryField (CoreDataProperties)
+
++ (NSFetchRequest<RptqQueryField *> *)fetchRequest {
+	return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryField"];
+}
+
+@dynamic identifier;
+@dynamic databaseSchemaField;
+@dynamic inAggregateObject;
+@dynamic inBarcodeField1;
+@dynamic inBarcodeField2;
+@dynamic inDataObject;
+@dynamic inQueryGroup;
+@dynamic inQueryLinkLeft;
+@dynamic inQueryLinkRight;
+@dynamic inQueryPredicateLeft;
+@dynamic inQueryPredicateRight;
+@dynamic inQuerySort;
+@dynamic inQueryTable;
+
+@end

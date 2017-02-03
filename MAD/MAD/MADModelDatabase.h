@@ -11,7 +11,9 @@
 
 #import <MAD/MADModel.h>
 
-@interface MADModelDatabase : MADObjectID
+@class MADModelTable, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
+
+@interface MADModelDatabase : MADModel
     <MADModelIDProtocol, MADModelDataProtocol>
 
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID

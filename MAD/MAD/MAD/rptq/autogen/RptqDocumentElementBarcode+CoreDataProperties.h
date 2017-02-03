@@ -19,25 +19,25 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RptqDocumentElementBarcode *> *)fetchRequest;
 
 @property (nonatomic) BOOL add2dComponent;
+@property (nonatomic) BOOL humanReadable;
+@property (nonatomic) BOOL showErrorMessage;
+@property (nonatomic) BOOL useStaticInput1;
+@property (nonatomic) BOOL useStaticInput2;
+@property (nonatomic) float scale;
 @property (nonatomic) int16_t barcodeType;
 @property (nonatomic) int16_t barcodeBorderStyle;
 @property (nonatomic) int16_t barcodeBorderType;
 @property (nonatomic) int16_t barcodeBorderWidth;
 @property (nonatomic) int16_t barcodeHeight;
-@property (nonatomic) BOOL humanReadable;
-@property (nullable, nonatomic, copy) NSString *inputField1;
-@property (nullable, nonatomic, copy) NSString *inputField2;
-@property (nonatomic) int16_t inputMode;
-@property (nullable, nonatomic, copy) NSString *inputStatic1;
-@property (nullable, nonatomic, copy) NSString *inputStatic2;
 @property (nonatomic) int16_t option1;
 @property (nonatomic) int16_t option2;
 @property (nonatomic) int16_t option3;
-@property (nonatomic) float scale;
-@property (nonatomic) BOOL showErrorMessage;
-@property (nonatomic) BOOL useStaticInput1;
-@property (nonatomic) BOOL useStaticInput2;
 @property (nonatomic) int16_t whitespaceWidth;
+@property (nonatomic) int16_t inputMode;
+@property (nullable, nonatomic, copy) NSString *inputField1;
+@property (nullable, nonatomic, copy) NSString *inputField2;
+@property (nullable, nonatomic, copy) NSString *inputStatic1;
+@property (nullable, nonatomic, copy) NSString *inputStatic2;
 @property (nullable, nonatomic, retain) RptqQueryField *referencesField1;
 @property (nullable, nonatomic, retain) RptqQueryField *referencesField2;
 

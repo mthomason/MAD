@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDocumentManagerProtocol_h
-#define MADDocumentManagerProtocol_h
+#ifndef MAD_MADDocumentManagerProtocol_h
+#define MAD_MADDocumentManagerProtocol_h
 
 @protocol MADDocumentManagerProtocol <NSObject>
 

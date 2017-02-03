@@ -245,10 +245,9 @@ void madwarn(char *err,  const char*err2) { }
         MTCacheProtocol,
         MTDatabaseProtocol>
 
-    @property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
-
+    //@property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
+    @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
     @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
-    @property (nonatomic, readwrite, strong) NSPersistentStoreCoordinator *madPersistentStoreCoordinator;
     @property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;
 
     @property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
@@ -256,8 +255,6 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
     @property (nonatomic, readwrite, copy) NSURL *urlGuts;
     @property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
-
-    @property (nonatomic, readwrite, assign) BOOL didRefresh;
 
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
@@ -267,15 +264,22 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
     @property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
+    @property (nonatomic, readwrite, strong) MTPaper *paper;
+    @property (nonatomic, readwrite, strong) MTQueryFull     *mainQuery;
+
 
 @end
 
-@implementation MADocument
+@implementation MADocument {
+    BOOL _didRefresh;
+}
 
 @synthesize sectionLayoutManagers = _sectionLayoutManagers;
 
 #pragma mark -
 #pragma mark MADPrintPageRendererDataSourceProtocol
+
+@dynamic filename;
 
 @synthesize database = _database;
 @synthesize dataTable = _dataTable;
@@ -500,7 +504,7 @@ void madwarn(char *err,  const char*err2) { }
 - (MADModelDocument *)documentModel {
     if (!_documentModel) {
         MADModelDocument *documentModel;
-        documentModel = [[MADModelDocument alloc] initWithManagedObjectContext:self.managedObjectContext];
+        documentModel = [[MADModelDocument alloc] initWithContext:self.managedObjectContext];
         _documentModel = documentModel;
     }
     return _documentModel;
@@ -553,10 +557,11 @@ void madwarn(char *err,  const char*err2) { }
 
 - (NSDictionary *)persistentStoreOptions {
     if (_madPersistentStoreOptions == nil) {
-    
-        _madPersistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+        NSDictionary *persistentStoreOptions;
+        persistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
                                       @YES, NSInferMappingModelAutomaticallyOption,
                                       @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
+        _madPersistentStoreOptions = persistentStoreOptions;
     }
     return _madPersistentStoreOptions;
 }
@@ -1124,40 +1129,31 @@ READFROMURL_END:;
 
 - (RptqDocument *)activeDocumentModel {
 
-    if (self.reportDocument == nil) {
+    if (_activeDocumentModel == nil) {
         
         RptqDocument *document = nil;
         
-        //if (self.documentObjectID == nil) {
-            
-            document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
-            
-            //self.documentObjectID = document.objectID.copy;
-            
-            [self resetPaper];
-            [self resetMainQuery];
-            [self resetSectionLayoutManagers];
-            [self resetReportFormatter];
-            
-            self.reportDocument = document;
-            
-        //} else {
-        //    document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-        //    self.reportDocument = document;
-        //}
+        document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
+        
+        [self resetPaper];
+        [self resetMainQuery];
+        [self resetSectionLayoutManagers];
+        [self resetReportFormatter];
+        
+        _activeDocumentModel = document;
+        
     }
-    return self.reportDocument;
+    return _activeDocumentModel;
 }
 
 - (MADSectionLayoutManagerMutableMap *)sectionLayoutManagers {
     if (!_sectionLayoutManagers || _sectionLayoutManagers.count == 0) {
         NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-        RptqDocument *document = [self activeDocumentModel];
         RptqDocumentSectionEnumerator *sections;
-        sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
+        MADSectionLayoutManager *layoutManager;
+        sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.activeDocumentModel];
         for (RptqDocumentSection *reportSection in sections) {
-            
-            MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
+            layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
             sectionLayoutManagers[reportSection.objectID] = layoutManager;
         }
         
@@ -1293,7 +1289,7 @@ READFROMURL_END:;
             NSArray <RptqQueryGroup *> *sortedGroups;
             sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
             
-            int64_t counter = 0;
+            int16_t counter = 0;
             for (RptqQueryGroup *sortedGroup in sortedGroups) {
                 sortedGroup.weight = counter;
                 counter++;
@@ -1315,20 +1311,15 @@ READFROMURL_END:;
         if (database) {
             
             RptqQuery *rquery = database.defaultQuery;
-            MADQueryDefinition *parameters = [MTQuery newQueryDefinitionFull:rquery];
-            NSMutableDictionary *extraParameters = parameters.mutableCopy;
-            
-            NSNumber *queryLimit;
-            queryLimit = [[NSNumber alloc] initWithUnsignedInteger: self.limitResultsDesignMode ?
-                                                                        50 : NSUIntegerMax];
-            extraParameters[@"MADQueryLimit"] = queryLimit;
-            
-            MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
+            MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithQuery: rquery
+                                                         andQueryLimit: self.limitResultsDesignMode ?
+                                                                                    50 : NSUIntegerMax];
             defaultQuery.dataDelegate = self;
             
             NSArray *sortDescriptors = [self readCurrentSortDescriptors];
             [self.dataTable sortUsingDescriptors:sortDescriptors];
-            self.mainQuery = defaultQuery;
+            
+            _mainQuery = defaultQuery;
         }
     }
     return _mainQuery;

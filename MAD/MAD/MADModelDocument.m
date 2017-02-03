@@ -21,14 +21,17 @@
 #import <CoreData/NSExpressionDescription.h>
 
 #import "MADModelDatabase.h"
+#import "MADModelQuery.h"
 
 #import "RptqDocument.h"
+#import "RptqDatabase.h"
 #import "RptqQuery.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
 
 @interface MADModelDocument ()
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readwrite, copy)       NSManagedObjectID *objectID;
     @property (nonatomic, readwrite, strong) NSMutableOrderedSet <MADModelDatabase *> *databases;
 @end
 
@@ -43,7 +46,7 @@
     id <NSObject> _observeWillSaveNotification;
     id <NSObject> _observeDidSaveNotification;
 }
-    @synthesize objectID = _objectID;
+    @dynamic objectID;
     @synthesize managedObjectContext = _managedObjectContext;
 
 - (void)dealloc {
@@ -55,8 +58,23 @@
 
 - (instancetype)init {
     if (self = [self initWithObjectID: nil
-                           identifier:-1
+                           identifier: -1
                  managedObjectContext: nil]) {
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
+    if (self = [self initWithObjectID:objectID identifier:identifier managedObjectContext:nil]) {
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [self initWithObjectID:nil identifier: -1
+                 managedObjectContext:managedObjectContext]) {
         
     }
     return self;
@@ -65,14 +83,8 @@
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
                       identifier:(int64_t)identifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [self initWithManagedObjectContext:managedObjectContext]) {
-        _objectID = objectID.copy;
-    }
-    return self;
-}
-
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [super init]) {
+    if (self = [super initWithObjectID:objectID identifier:identifier]) {
+        _managedObjectContext = managedObjectContext;
         
         NSOperationQueue *objectContextQueue;
         objectContextQueue = [[NSOperationQueue alloc] init];
@@ -131,7 +143,7 @@
                                                                      invalidatedObjects = [note.userInfo objectForKey:NSInvalidatedObjectsKey];
                                                                      
                                                                  }];
-
+        
         _observeWillSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextWillSaveNotification
                                                                        object:managedObjectContext
                                                                         queue:_objectContextQueue
@@ -159,10 +171,10 @@
 }
 
 - (NSManagedObjectID *)objectID {
-    if (!_objectID) {
+    if (![super objectID]) {
         [self update];
     }
-    return _objectID;
+    return [super objectID];
 }
 
 - (MADModelDatabase *)firstDatabase {
@@ -182,17 +194,14 @@
 //Load all the databases and queries for this document.  This is because current versions
 // of the software only use one database and query.
 
-- (void)updateDocument {
++ (NSFetchRequest <NSManagedObjectID *> *)fetchRequestObjectID {
     NSFetchRequest *request;
-    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+    request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
     request.fetchLimit = 1;
     request.resultType = NSManagedObjectIDResultType;
     request.includesSubentities = NO;
     request.includesPropertyValues = NO;
-    NSError * __autoreleasing *error = NULL;
-    NSArray <NSManagedObjectID *> *result;
-    result = [_managedObjectContext executeFetchRequest:request error:error];
-    _objectID = result.firstObject.copy;
+    return request;
 }
 
 - (void)updateDocumentDatabaseQuery {
@@ -233,7 +242,6 @@
     NSString *inDocID = [inDocument stringByAppendingString:@"."];
     inDocID = [inDocID stringByAppendingString:identifier];
 
-    
     NSExpression *databaseExpression = [NSExpression expressionForKeyPath:inDatabase];
     NSExpression *databaseInDocumentExpression = [NSExpression expressionForKeyPath:inDocument];
     NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
@@ -257,7 +265,6 @@
     request.propertiesToFetch = propertiesToFetch;
     result = [managedObjectContext executeFetchRequest:request error:error];
     
-    
     NSMutableOrderedSet <MADModelDatabase *> *databases;
     databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:result.count];
     
@@ -269,7 +276,7 @@
     int64_t docID, dbID, qID;
     for (resultWrapper in result) {
         if (resultCount == 0) {
-            _objectID = resultWrapper[keyDocument].copy;
+            self.objectID = resultWrapper[keyDocument].copy;
         }
 
         CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery], kCFNumberSInt64Type, &qID);

@@ -40,7 +40,8 @@
         CGPoint locationInView = [gestureRecognizer locationInView:containerView];
         CGPoint locationInSuperview = [gestureRecognizer locationInView:containerView.superview];
         
-        CGPoint anchorPoint = CGPointMake(locationInView.x / containerView.bounds.size.width, locationInView.y / containerView.bounds.size.height);
+        CGPoint anchorPoint = CGPointMake(locationInView.x / containerView.bounds.size.width,
+                                          locationInView.y / containerView.bounds.size.height);
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
             containerView.layer.anchorPoint = anchorPoint;
             containerView.center = locationInSuperview;

@@ -83,9 +83,6 @@
             rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
         }
         
-        MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
-        document.paper = paper;
-        
         RptqDatabase *rptqDatabase;;
         RptqQuery *rptqQuery;
         
@@ -107,11 +104,6 @@
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
         }
-        
-        MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQuery: rptqQuery
-                                                     andQueryLimit: NSUIntegerMax];
-        madQuery.dataDelegate = document;
-        document.mainQuery = madQuery;
         
         NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:document.database];
         [document.dataTable sortUsingDescriptors:sortDescriptors];

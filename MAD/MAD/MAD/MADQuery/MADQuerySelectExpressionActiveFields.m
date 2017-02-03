@@ -35,11 +35,14 @@
         
         NSMutableString *result = [[NSMutableString alloc] init];
         MADQueryActiveQueryFields *queryFields;
-        queryFields = [[MADQueryActiveQueryFields alloc] initWithManagedObjectContext:context];
+        queryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context];
 
         NSSet <RptqQueryField *> *rptqQueryFields = queryFields.queryFields;
-        NSMutableDictionary *fields = [[NSMutableDictionary alloc] initWithCapacity:rptqQueryFields.count];
-        NSMutableArray *fieldKeys = [[NSMutableArray alloc] initWithCapacity:rptqQueryFields.count];
+        NSMutableDictionary *fields;
+        NSMutableArray *fieldKeys;
+
+        fields = [[NSMutableDictionary alloc] initWithCapacity:rptqQueryFields.count];
+        fieldKeys = [[NSMutableArray alloc] initWithCapacity:rptqQueryFields.count];
         
         
         NSUInteger fieldCounter = 0;

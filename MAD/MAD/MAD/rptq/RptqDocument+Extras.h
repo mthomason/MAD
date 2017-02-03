@@ -46,7 +46,7 @@
                                  andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     
     - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
+    - (void)setNumberOfRows:(int64_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
     - (void)addDatabase:(MTDatabase *)database

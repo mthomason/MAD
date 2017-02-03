@@ -36,6 +36,9 @@
 #import <MADDataStructures/MTVertex.h>
 
 #import <MAD/MADModel.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryLink.h>
+#import <MAD/MADTableFieldIdentifier.h>
 
 @implementation MTGraph (RptqQuery)
 

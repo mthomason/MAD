@@ -8,19 +8,19 @@
 
 #import "MADFileExplorerDataSource.h"
 
+#import <UIKit/UIViewController.h>
+
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 #import <MADFileManager/MADFilesControllerDelegate.h>
-#import <UIKit/UICollectionViewController.h>
+#import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 
 #import <MADExplorer/MADFileLocationManager.h>
-#import <MADFileManager/MADFilesController.h>
 
 #import <MAD/MADConstants.h>
-#import "Constants.h"
 
 #import "MADDocumentManagerProtocol.h"
 

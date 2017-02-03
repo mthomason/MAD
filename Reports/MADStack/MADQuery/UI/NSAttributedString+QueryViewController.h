@@ -6,28 +6,33 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADAttributedStringQueryController_h
+#define Reports_MADAttributedStringQueryController_h
 
-@interface NSAttributedString (QueryViewController)
+#import <Foundation/NSAttributedString.h>
 
-+ (instancetype)newAttributedStringQueryPredicate:(NSString *)leftText
-                                           symbol:(NSString *)symbol
-                                        rightText:(NSString *)rightText;
-+ (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
-                                                      andSort:(NSString *)sort;
+@interface MADAttributedStringQueryController : NSAttributedString
 
-+ (instancetype)newAttributedStringQuerySectionLinks:(NSString *)leftString
-                                         rightString:(NSString *)rightString
-                                    linksDescription:(NSString *)linksDescription;
+    + (instancetype)newAttributedStringQueryPredicate:(NSString *)leftText
+                                               symbol:(NSString *)symbol
+                                            rightText:(NSString *)rightText;
+    + (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
+                                                          andSort:(NSString *)sort;
 
-+ (instancetype)newAttributedStringQuerySectionDatasourceForMessage:(NSString *)localizedMessage
-                                                       databaseType:(NSString *)databaseType
-                                                         schemaName:(NSString *)schemaName;
+    + (instancetype)newAttributedStringQuerySectionLinks:(NSString *)leftString
+                                             rightString:(NSString *)rightString
+                                        linksDescription:(NSString *)linksDescription;
+
+    + (instancetype)newAttributedStringQuerySectionDatasourceForMessage:(NSString *)localizedMessage
+                                                           databaseType:(NSString *)databaseType
+                                                             schemaName:(NSString *)schemaName;
 
 @end
 
-@interface NSString (QueryField)
+@interface MADStringQueryController : NSString
 
 + (instancetype)newStringFieldDisplayWithTable:(NSString *)table andField:(NSString *)field;
 
 @end
+
+#endif

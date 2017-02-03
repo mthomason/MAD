@@ -13,17 +13,6 @@
 
 @class NSManagedObjectID;
 @class NSManagedObjectContext;
-@class NSMapTable <KeyType, ObjectType>;
-@class NSOrderedSet <__covariant ObjectType>;
-@class NSMutableDictionary <KeyType, ObjectType>;
-@class MADModelDocument;
-@class MADModelDatabase;
-@class MADModelTable;
-@class MADModelField;
-@class MADModelQuery;
-@class MADModelQueryTable;
-@class MADModelQueryLink;
-@class MADModelQueryField;
 
 extern NSString * const MADNotificationQueryTableInsert;
 extern NSString * const MADNotificationQueryTableDelete;
@@ -32,8 +21,29 @@ extern NSString * const MADNotificationQueryLinkInsert;
 extern NSString * const MADNotificationQueryLinkDelete;
 
 extern NSString * const MADKeyQuery;
-//extern NSString * const MADKeyQueryLink;
 
+extern NSString * const MADKeyQueryLink;
+extern NSString * const MADKeyQueryLinkLeftField;
+extern NSString * const MADKeyQueryLinkRightField;
+extern NSString * const MADKeyQueryLinkLeftTable;
+extern NSString * const MADKeyQueryLinkRightTable;
+extern NSString * const MADKeyQueryTable;
+extern NSString * const MADKeyQueryField;
+extern NSString * const MADKeySchemaFieldName;
+extern NSString * const MADKeySchemaTableName;
+extern NSString * const MADKeySchemaTable;
+extern NSString * const MADKeySchemaField;
+
+extern NSString * const MADKeyQueryLinkID;
+extern NSString * const MADKeyQueryLinkLeftFieldID;
+extern NSString * const MADKeyQueryLinkRightFieldID;
+extern NSString * const MADKeyQueryLinkLeftTableID;
+extern NSString * const MADKeyQueryLinkRightTableID;
+
+extern NSString * const MADKeyQueryTableID;
+extern NSString * const MADKeyQueryFieldID;
+extern NSString * const MADKeySchemaTableID;
+extern NSString * const MADKeySchemaFieldID;
 
 typedef NS_ENUM(short, MADModelType) {
     MADModelTypeDocument,
@@ -54,80 +64,12 @@ typedef NS_ENUM(short, MADModelType) {
     - (void)update;
 @end
 
-@interface MADTableFieldReference : NSObject
-
-- (instancetype)initWithTableID:(NSManagedObjectID *)tableID
-                     andFieldID:(NSManagedObjectID *)fieldID NS_DESIGNATED_INITIALIZER;
-
-    @property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
-    @property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
-
-@end
-
-@interface MADTableFieldIdentifier : NSObject
-
-- (instancetype)initWithTableID:(int64_t)tableID
-                     andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
-
-    @property (readonly, nonatomic, assign) int64_t tableID;
-    @property (readonly, nonatomic, assign) int64_t fieldID;
-
-@end
-
-@interface MADObjectID : NSObject
+@interface MADModel : NSObject
     <MADModelIDProtocol>
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier;
-@end
 
-@interface MADModelTable : MADObjectID
+    + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;
     - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                                name:(NSString *)name;
-    @property (nonatomic, readonly, strong)     NSString *name;
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelField *> *fields;
-    - (void)addFieldWithID:(NSManagedObjectID *)objectID
-                identifier:(int64_t)identifier
-                      name:(NSString *)name
-      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-@end
-
-@interface MADModelField : MADObjectID
-@end
-
-@interface MADModelQuery : MADObjectID
-    <MADModelDataProtocol>
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                            database:(MADModelDatabase *)database;
-    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryTableIDs;
-    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryLinkIDs;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelTable *> *tableSchemas;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
-    - (NSSet <NSManagedObjectID *> *)tablesInLinks;
-    - (NSSet <NSManagedObjectID *> *)orphanedQueryTables;
-    - (void)deleteQueryLinkID:(NSManagedObjectID *)queryLink;
-    - (void)deleteQueryTableID:(NSManagedObjectID *)queryTable;
-    - (void)insertQueryTableID:(NSManagedObjectID *)queryTableID;
-    - (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID;
-    - (void)addFieldWithID:(NSManagedObjectID *)objectID
-                identifier:(int64_t)identifier
-                      name:(NSString *)name
-      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
-@end
-
-@interface MADModelQueryTable : MADObjectID
-    @property (nonatomic, readonly, strong)     NSMutableDictionary <NSManagedObjectID *, MADModelQueryField *> *fields;
-@end
-
-@interface MADModelQueryField : MADObjectID
-
-@end
-
-@interface MADModelQueryLink : MADObjectID
-    @property (nonatomic, readonly, strong)      MADTableFieldReference *leftFieldReference;
-    @property (nonatomic, readonly, strong)      MADTableFieldReference *rightFieldReference;
+                          identifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
 @end
 
 #endif

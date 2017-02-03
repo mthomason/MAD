@@ -51,6 +51,7 @@
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelQuery.h>
 
 #import "MADQueryViewSectionDelegate.h"
 #import "MADLabelTitle.h"
@@ -1325,7 +1326,7 @@ BOOL storeEnabled() {
         
         if (tableViewCellPredicate) {
             object = [context existingObjectWithID: tableViewCellPredicate.tableID
-                                                          error: &error];
+                                             error: &error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row
                                                                      inSection: 0];

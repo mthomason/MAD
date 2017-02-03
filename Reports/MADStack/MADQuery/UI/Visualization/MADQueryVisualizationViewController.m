@@ -69,6 +69,10 @@
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryTable.h>
+#import <MAD/MADModelQueryLink.h>
+#import <MAD/MADTableFieldIdentifier.h>
 
 #import "MUIViewControllerDelegate.h"
 
@@ -77,7 +81,7 @@
 
 #import "MADQueryVisualizationSchemaViewController.h"
 
-#import "CGAffineTransform+Common.h"
+#import "MADAffineTransformSwing.h"
 
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADHierarchicalChildViewDefination.h"
@@ -87,7 +91,7 @@
 
 #import "MADOperationArchiveData.h"
 
-#import "UIGestureRecognizer+AnchorPoint.h"
+#import "MADGestureRecognizerAnchorPoint.h"
 
 #import "MADQueryVisualizationSchemaPresentationController.h"
 
@@ -693,7 +697,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     NSAssert(tableID != nil, @"We expect an ID");
     if (!tableID) return;
     
-    [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    [MADGestureRecognizerAnchorPoint adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     UIWindow *window = [UIApplication sharedApplication].windows[0];
     NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
