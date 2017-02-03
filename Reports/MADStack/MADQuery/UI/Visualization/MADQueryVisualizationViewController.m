@@ -67,6 +67,8 @@
 #import <MAD/RptqQueryTable+Extras.h>
 
 #import <MAD/MADModel.h>
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
 
 #import "MUIViewControllerDelegate.h"
 

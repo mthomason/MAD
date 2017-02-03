@@ -140,7 +140,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *c = [[MADCredential alloc] initWithUsername: ((UITextField *)alertController.textFields.firstObject).text
                                                        andPassword: ((UITextField *)[alertController.textFields objectAtIndex:1]).text];
         self.credential = c;
-        self.source = credential_prompt;
+        self.source = MADCredentialSourceCredentialPrompt;
         [self finish];
     };
     
@@ -196,7 +196,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *c = [[MADCredential alloc] initWithUsername: username
                                                        andPassword: ((UITextField *)alertController.textFields.firstObject).text];
         self.credential = c;
-        self.source = password_prompt;
+        self.source = MADCredentialSourcePasswordPrompt;
         [self finish];
     };
     

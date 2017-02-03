@@ -55,7 +55,7 @@ const short errUserCancel = 1;
     
     
     switch (source) {
-        case credential_prompt: {
+        case MADCredentialSourceCredentialPrompt: {
             [self promptToSave:^(UIAlertAction *action) {
                 OSStatus status = [MTKeyChain saveUsername: self.credential.username
                                                andPassword: self.credential.password
@@ -69,7 +69,7 @@ const short errUserCancel = 1;
             }];
             break;
         }
-        case password_prompt: {
+        case MADCredentialSourcePasswordPrompt: {
             
             
             [self promptToSave:^(UIAlertAction *action) {

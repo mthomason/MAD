@@ -1,5 +1,5 @@
 //
-//  MTDatabaseSqlite3.h
+//  MADDatabaseCacheProtocol.h
 //  MAD
 //
 //  Created by Michael Thomason on 7/6/14.
@@ -9,7 +9,7 @@
 #ifndef Reports_MADDatabaseCacheProtocol_h
 #define Reports_MADDatabaseCacheProtocol_h
 
-#import "MTDatabase.h"
+#import <Foundation/NSObject.h>
 
 @protocol MADDatabaseProtocol;
 

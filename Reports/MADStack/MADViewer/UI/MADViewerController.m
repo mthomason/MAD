@@ -41,7 +41,7 @@
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/MTReportViewerPrintPageRenderer.h>
+#import <MAD/MADPrintPageRenderer.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
@@ -121,7 +121,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @interface MADOperationLoadPrintPageRender : NSOperation
     - (instancetype)initWithDocument:(MADocument *)document;
     @property (readonly, nonatomic, weak) MADocument *document;
-    @property (readonly, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+    @property (readonly, nonatomic, weak) MADPrintPageRenderer *printPageRenderer;
 @end
 
 @interface MADViewerController ()
@@ -162,7 +162,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     @property (nonatomic, strong) NSMutableArray *toolbarItemsActive;
 
-    @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
+    @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
     @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 #pragma mark Controllers
@@ -665,7 +665,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTPrintingProtocol
 
-- (MTReportViewerPrintPageRenderer *)printPageRenderer {
+- (MADPrintPageRenderer *)printPageRenderer {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.printPageRendererReport;
 }
@@ -950,8 +950,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     if (sharedController) {
                         
                         id document = sself.document;
-                        MTReportViewerPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
+                        MADPrintPageRenderer *printPageRenderer;
+                        printPageRenderer = [MADPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
                         
                         sharedController.delegate = document;
                         sharedController.printPageRenderer = printPageRenderer;
@@ -1104,7 +1104,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = self->_startedRefresh;
     [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
     
-    MTReportViewerPrintPageRenderer *printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+    MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
     self.printPageRendererReport = printPageRenderer;
     
     [self ignoreFormatter: document.reportFormatter];
@@ -1384,7 +1384,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         document.activityDelegate = sself;
                         
                         UIPrintPageRenderer *printPageRenderer;
-                        printPageRenderer = [MTReportViewerPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
+                        printPageRenderer = [MADPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
                         sharedController.printPageRenderer = printPageRenderer;
                         sharedController.delegate = document;
                         
@@ -1583,7 +1583,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 /*
 @interface MADOperationRenderOnViewert ()
     @property (readwrite, nonatomic, weak) MADocument *document;
-    @property (readwrite, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+    @property (readwrite, nonatomic, weak) MADPrintPageRenderer *printPageRenderer;
 @end
 
 @implementation MADOperationLoadDocument {
@@ -1664,7 +1664,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADOperationLoadPrintPageRender ()
     @property (readwrite, nonatomic, weak) MADocument *document;
-    @property (readwrite, nonatomic, weak) MTReportViewerPrintPageRenderer *printPageRenderer;
+    @property (readwrite, nonatomic, weak) MADPrintPageRenderer *printPageRenderer;
 @end
 
 @implementation MADOperationLoadPrintPageRender
@@ -1678,14 +1678,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)main {
 
-    MTReportViewerPrintPageRenderer *printPageRenderer;
+    MADPrintPageRenderer *printPageRenderer;
     MADocument *document;
 
     if (!self.isCancelled) {
     
         document = self.document;
         printPageRenderer =
-        [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+        [[MADPrintPageRenderer alloc] initWithDataSource:document];
     
         self.printPageRenderer = printPageRenderer;
     }
@@ -1694,7 +1694,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         [document activeDocumentModel];
         printPageRenderer =
-        [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+        [[MADPrintPageRenderer alloc] initWithDataSource:document];
         self.printPageRenderer = printPageRenderer;
     }
     

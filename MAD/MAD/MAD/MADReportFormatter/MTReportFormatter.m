@@ -22,7 +22,10 @@
 
 #import "MTReportFormatterState.h"
 #import "MADocument.h"
+
 #import "MADModel.h"
+#import "MADModelDocument.h"
+#import "MADModelDatabase.h"
 
 #import "MTQueryFull.h"
 

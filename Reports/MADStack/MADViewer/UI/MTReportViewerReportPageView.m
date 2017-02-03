@@ -18,7 +18,7 @@
 
 #import <MADDataStructures/MTPair.h>
 
-#import <MAD/MTReportViewerPrintPageRenderer.h>
+#import <MAD/MADPrintPageRenderer.h>
 
 #import "NSDate+Extras.h"
 #import "MADTextPosition.h"
@@ -93,7 +93,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     [super drawRect: rect];
     if (!self.drawBlankPage) {
         id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-        MTReportViewerPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
+        MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
         [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
     }
 }

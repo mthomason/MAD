@@ -59,7 +59,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _usernameKey = usernameKey.copy;
         _passwordKey = passwordKey.copy;
         _viewController = viewController;
-        _source = none;
+        _source = MADCredentialSourceNone;
         _result = NO;
         _displayingPrompt = NO;
         _bypass = NO;
@@ -114,7 +114,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         if (username != nil && password != nil) {
             credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
             strongself.gotCredentials = YES;
-            strongself.source = credential_prompt;
+            strongself.source = MADCredentialSourceCredentialPrompt;
         }
         [strongself finish:YES credentials:credentials];
         strongself.alertDisplayed = YES;

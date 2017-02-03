@@ -24,7 +24,7 @@
 
 #import "MADocument.h"
 #import "MTReportFormatter.h"
-#import "MTReportViewerPrintPageRenderer.h"
+#import "MADPrintPageRenderer.h"
 
 #import "MADActivityIndicator.h"
 #import "MTPaper.h"
@@ -169,8 +169,8 @@ static inline CGRect PdfTrimBox(CGRect rect) {
                                                         name: MADNotificationDidFormatPagesName
                                                       object: reportFormatter];
         
-        MTReportViewerPrintPageRenderer *printPageRenderer;
-        printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+        MADPrintPageRenderer *printPageRenderer;
+        printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
         
         NSString *filePath = fileURL.path.copy;
         UIGraphicsBeginPDFContextToFile(filePath, letterRect, options);

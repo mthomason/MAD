@@ -47,7 +47,10 @@
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+
 #import <MAD/MADModel.h>
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
 
 #import "MADQueryViewSectionDelegate.h"
 #import "MADLabelTitle.h"

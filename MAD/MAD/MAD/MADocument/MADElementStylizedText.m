@@ -7,7 +7,6 @@
 //
 
 #import "MADElementStylizedText.h"
-#import "UIFontDescriptor+DocumentObject.h"
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIFont.h>
 #import <UIKit/NSParagraphStyle.h>
@@ -16,6 +15,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
+#import "MADFontDescriptor.h"
 #import "RptqDocumentElement.h"
 #import "MADAlignment.h"
 

@@ -6,8 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFontDescriptor"
-#import "RptqDocumentElement.h"
+#import "MADFontDescriptor.h"
 
 @implementation MADFontDescriptor
 

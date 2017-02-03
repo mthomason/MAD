@@ -329,7 +329,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 #pragma mark - MTPrintingProtocol
 
-- (MTReportViewerPrintPageRenderer *)printPageRenderer {
+- (MADPrintPageRenderer *)printPageRenderer {
     return [self.delegate printPageRenderer];
 }
 

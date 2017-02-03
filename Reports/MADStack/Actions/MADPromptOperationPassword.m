@@ -67,7 +67,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     if (self = [super init]) {
         MADMutualExclusiveCondition *condition;
         _passwordKey = passwordKey.copy;
-        _source = none;
+        _source = MADCredentialSourceNone;
         _alertDisplayed = NO;
         _bypass = NO;
         _userContinue = NO;
@@ -141,7 +141,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)finish:(BOOL)success password:(NSString *)password {
     self.alertDisplayed = YES;
-    self.source = password_prompt;
+    self.source = MADCredentialSourcePasswordPrompt;
     self.userContinue = YES;
     self.password = password;
     self.gotPassword = YES;

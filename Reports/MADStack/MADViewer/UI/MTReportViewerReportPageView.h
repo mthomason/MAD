@@ -11,14 +11,14 @@
 
 #import <UIKit/UIView.h>
 
-@class MTReportViewerPrintPageRenderer;
+@class MADPrintPageRenderer;
 
 @protocol MADReportPageViewProtocol <NSObject>
 
     @required
     - (NSUInteger)pageNumber;
     - (NSDate * _Nullable)lastCacheDate;
-    - (MTReportViewerPrintPageRenderer * _Nullable)printPageRenderer;
+    - (MADPrintPageRenderer * _Nullable)printPageRenderer;
 
     @optional
     - (NSUInteger)numberOfPages;

@@ -11,11 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class MTReportViewerPrintPageRenderer;
+@class MADPrintPageRenderer;
 
 @protocol MTPrintingProtocol <NSObject>
 @required
-    - (MTReportViewerPrintPageRenderer *)printPageRenderer;
+    - (MADPrintPageRenderer *)printPageRenderer;
 @end
 
 #endif

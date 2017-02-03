@@ -120,8 +120,10 @@
 #import "MTDatabase.h"
 
 #import "MADModel.h"
+#import "MADModelDocument.h"
+#import "MADModelDatabase.h"
 
-#import "MTReportViewerPrintPageRenderer.h"
+#import "MADPrintPageRenderer.h"
 
 #import "NSString+RelativePath.h"
 
@@ -135,7 +137,7 @@
 
 #import <mach/machine/vm_param.h>
 
-#import <MAD/MADNotificationFileUpdate.h>
+#import "MADNotificationFileUpdate.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

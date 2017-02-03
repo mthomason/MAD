@@ -8,7 +8,7 @@
 
 #import "UIImage+MADDocument.h"
 #import "MADocument.h"
-#import "MTReportViewerPrintPageRenderer.h"
+#import "MADPrintPageRenderer.h"
 #import "MTReportFormatter.h"
 #import "MTDataTableFast.h"
 #import "MTPaper.h"
@@ -32,8 +32,8 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
 
-    MTReportViewerPrintPageRenderer *printPageRenderer =
-    [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:document];
+    MADPrintPageRenderer *printPageRenderer =
+    [[MADPrintPageRenderer alloc] initWithDataSource:document];
     
     id thumbnail;
     
@@ -50,7 +50,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 }
 
 + (instancetype)newImageThumbnailWithTraits:(UITraitCollection *)traits
-                       andPrintPageRenderer:(MTReportViewerPrintPageRenderer *)printPageRenderer {
+                       andPrintPageRenderer:(MADPrintPageRenderer *)printPageRenderer {
     return [self newImageThumbnailWithRect: [MTPaper rectLetter]
                                       size: MADFloat_1024
                                 edgeEffect: YES
@@ -68,7 +68,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                              squareEffect: (BOOL)squareEffect
                                cornerSize: (CGFloat)cornerSize
                                     scale: (CGFloat)scale
-                    andPrintPageRenderer: (MTReportViewerPrintPageRenderer *)printPageRenderer {
+                    andPrintPageRenderer: (MADPrintPageRenderer *)printPageRenderer {
     
     size = size * scale;
     cornerSize = cornerSize * scale;

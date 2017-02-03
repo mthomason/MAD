@@ -19,7 +19,7 @@
 
         self.font = font;
         self.textColor = [UIColor lightTextColor];
-        self.text = @"Formatting report.";
+        self.text = NSLocalizedString(@"Formatting report.", @"Formatting report.");
         self.autoresizingMask = maskLabelView;
         self.textAlignment = NSTextAlignmentCenter;
     }

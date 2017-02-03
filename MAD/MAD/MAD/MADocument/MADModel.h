@@ -76,26 +76,19 @@ typedef NS_ENUM(short, MADModelType) {
 
 @interface MADObjectID : NSObject
     <MADModelIDProtocol>
-@end
-
-@interface MADModelDocument : MADObjectID
-    <MADModelDataProtocol>
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
-    @property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
-    @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
-@end
-
-@interface MADModelDatabase : MADObjectID
-    <MADModelDataProtocol>
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelQuery *> *queries;
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelTable *> *tables;
-    @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier;
 @end
 
 @interface MADModelTable : MADObjectID
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
+                                name:(NSString *)name;
     @property (nonatomic, readonly, strong)     NSString *name;
     @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelField *> *fields;
+    - (void)addFieldWithID:(NSManagedObjectID *)objectID
+                identifier:(int64_t)identifier
+                      name:(NSString *)name
+      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 @end
 
 @interface MADModelField : MADObjectID
@@ -103,6 +96,9 @@ typedef NS_ENUM(short, MADModelType) {
 
 @interface MADModelQuery : MADObjectID
     <MADModelDataProtocol>
+    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+                          identifier:(int64_t)identifier
+                            database:(MADModelDatabase *)database;
     @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryTableIDs;
     @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryLinkIDs;
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
@@ -110,6 +106,15 @@ typedef NS_ENUM(short, MADModelType) {
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
     - (NSSet <NSManagedObjectID *> *)tablesInLinks;
     - (NSSet <NSManagedObjectID *> *)orphanedQueryTables;
+    - (void)deleteQueryLinkID:(NSManagedObjectID *)queryLink;
+    - (void)deleteQueryTableID:(NSManagedObjectID *)queryTable;
+    - (void)insertQueryTableID:(NSManagedObjectID *)queryTableID;
+    - (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID;
+    - (void)addFieldWithID:(NSManagedObjectID *)objectID
+                identifier:(int64_t)identifier
+                      name:(NSString *)name
+      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 @end
 
 @interface MADModelQueryTable : MADObjectID
