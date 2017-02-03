@@ -14,20 +14,11 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentSection"];
 }
 
-@dynamic height;
 @dynamic identifier;
-@dynamic layoutHeight;
-@dynamic marginBottom;
-@dynamic marginLeft;
-@dynamic marginRight;
-@dynamic marginTop;
-@dynamic name;
-@dynamic numberOfRows;
-@dynamic paddingBottom;
-@dynamic paddingLeft;
-@dynamic paddingRight;
-@dynamic paddingTop;
 @dynamic type;
+@dynamic height;
+@dynamic layoutHeight;
+@dynamic numberOfRows;
 @dynamic visibility;
 @dynamic wrappingStyle;
 @dynamic hasRows;

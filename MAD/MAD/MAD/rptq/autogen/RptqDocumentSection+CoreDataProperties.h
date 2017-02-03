@@ -25,15 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL visibility;
 @property (nonatomic) double height;
 @property (nonatomic) double layoutHeight;
-@property (nonatomic) double marginLeft;
-@property (nonatomic) double marginRight;
-@property (nonatomic) double marginTop;
-@property (nonatomic) double marginBottom;
-@property (nonatomic) double paddingLeft;
-@property (nonatomic) double paddingRight;
-@property (nonatomic) double paddingTop;
-@property (nonatomic) double paddingBottom;
-@property (nullable, nonatomic, copy) NSString *name;
+//@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, retain) NSOrderedSet<RptqDocumentSectionRows *> *hasRows;
 @property (nullable, nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nullable, nonatomic, retain) RptqDocument *inReport;

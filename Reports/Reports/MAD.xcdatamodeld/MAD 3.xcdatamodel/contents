@@ -142,16 +142,7 @@
         <attribute name="height" optional="YES" attributeType="Double" defaultValueString="44" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="layoutHeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginBottom" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginLeft" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginRight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="marginTop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numberOfRows" attributeType="Integer 32" minValueString="0" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingBottom" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingLeft" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingRight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="paddingTop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="visibility" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
@@ -255,7 +246,7 @@
         <element name="RptqDocumentElementLabel" positionX="-1737" positionY="-1575" width="128" height="60"/>
         <element name="RptqDocumentElementLabelDataField" positionX="-1181" positionY="-1773" width="128" height="105"/>
         <element name="RptqDocumentElementLabelLink" positionX="-1721" positionY="-1674" width="128" height="75"/>
-        <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="390"/>
+        <element name="RptqDocumentSection" positionX="-1683" positionY="-801" width="182" height="255"/>
         <element name="RptqDocumentSectionRows" positionX="-1442" positionY="-681" width="191" height="105"/>
         <element name="RptqQuery" positionX="-153" positionY="-1458" width="128" height="210"/>
         <element name="RptqQueryField" positionX="-677" positionY="855" width="128" height="240"/>
