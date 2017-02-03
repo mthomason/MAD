@@ -10,37 +10,42 @@
 
 @implementation MADAnimatedTransitionControllerPush
 
-- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)context {
     return 0.35;
 }
 
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)context {
     
-    UIViewController *toViewController = [transitionContext viewControllerForKey: UITransitionContextToViewControllerKey];
-    UIViewController *fromViewController = [transitionContext viewControllerForKey: UITransitionContextFromViewControllerKey];
-    CGRect toFrameFinal = [transitionContext finalFrameForViewController:toViewController];
-    CGRect fromFrameFinal = [transitionContext finalFrameForViewController:fromViewController];
-    CGRect toFrameInital = [transitionContext initialFrameForViewController:toViewController];
-    CGRect fromFrameInital = [transitionContext initialFrameForViewController:fromViewController];
+    UIViewController *toViewController, *fromViewController;
+    toViewController = [context viewControllerForKey: UITransitionContextToViewControllerKey];
+    fromViewController = [context viewControllerForKey: UITransitionContextFromViewControllerKey];
+    CGRect toFrameFinal = [context finalFrameForViewController:toViewController];
+    CGRect fromFrameFinal = [context finalFrameForViewController:fromViewController];
+    CGRect toFrameInital = [context initialFrameForViewController:toViewController];
+    CGRect fromFrameInital = [context initialFrameForViewController:fromViewController];
     
-    toFrameInital = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width, toFrameFinal.origin.y, toFrameFinal.size.width, toFrameFinal.size.height);
-    fromFrameFinal = CGRectMake(fromFrameInital.origin.x - fromFrameInital.size.width, fromFrameInital.origin.y, fromFrameInital.size.width, fromFrameInital.size.height);
+    toFrameInital = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width,
+                               toFrameFinal.origin.y,
+                               toFrameFinal.size.width, toFrameFinal.size.height);
+    fromFrameFinal = CGRectMake(fromFrameInital.origin.x - fromFrameInital.size.width,
+                                fromFrameInital.origin.y,
+                                fromFrameInital.size.width, fromFrameInital.size.height);
 
-    [[transitionContext containerView] addSubview:toViewController.view];
+    [[context containerView] addSubview:toViewController.view];
     toViewController.view.frame = toFrameInital;
 
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+    [UIView animateWithDuration:[self transitionDuration:context] animations:^{
         fromViewController.view.frame = fromFrameFinal;
-        toViewController.view.frame = [transitionContext containerView].frame;
+        toViewController.view.frame = [context containerView].frame;
     } completion:^(BOOL finished) {
         
-        BOOL wasCancelled = [transitionContext transitionWasCancelled];
+        BOOL wasCancelled = [context transitionWasCancelled];
         if (!wasCancelled) {
             [fromViewController.view removeFromSuperview];
         }
         [toViewController viewDidAppear:!wasCancelled];
 
-        [transitionContext completeTransition:!wasCancelled];
+        [context completeTransition:!wasCancelled];
     }];
 }
 

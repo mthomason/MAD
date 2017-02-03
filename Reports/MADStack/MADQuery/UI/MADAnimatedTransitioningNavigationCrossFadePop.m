@@ -10,22 +10,23 @@
 
 @implementation MADAnimatedTransitioningNavigationCrossFadePop
 
-- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)context {
     return 0.5000;
 }
 
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    UIViewController* fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)context {
+    UIViewController *fromViewController;
+    fromViewController = [context viewControllerForKey:UITransitionContextFromViewControllerKey];
     
-    UIView *toView = [transitionContext viewForKey: UITransitionContextToViewKey];
-    UIView *fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
-    [[transitionContext containerView] addSubview:toView];
-    [[transitionContext containerView] insertSubview:toView belowSubview:fromView];
+    UIView *toView = [context viewForKey: UITransitionContextToViewKey];
+    UIView *fromView = [context viewForKey: UITransitionContextFromViewKey];
+    [[context containerView] addSubview:toView];
+    [[context containerView] insertSubview:toView belowSubview:fromView];
 
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+    [UIView animateWithDuration:[self transitionDuration:context] animations:^{
         fromViewController.view.alpha = 0.0000f;
     } completion:^(BOOL finished) {
-        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        [context completeTransition:![context transitionWasCancelled]];
     }];
 }
 
