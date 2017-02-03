@@ -19,7 +19,7 @@
 
 @protocol MADPrintPageRendererDataSourceProtocol;
 
-@interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
+@interface MADPrintPageRenderer : UIPrintPageRenderer
 
     - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 

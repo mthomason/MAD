@@ -1,5 +1,5 @@
 //
-//  UIFontDescriptor+DocumentObject.h
+//  MADFontDescriptor
 //  MAD
 //
 //  Created by Michael Thomason on 6/6/16.

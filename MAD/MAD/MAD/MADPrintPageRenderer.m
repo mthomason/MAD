@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportViewerPrintPageRenderer.h"
+#import "MADPrintPageRenderer.h"
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
@@ -100,16 +100,10 @@ static inline CGRect sectionBounds(CGRect pageRect,
                                  NSUInteger pageIndex,
                                  CGFloat originY);
 
-static inline NSRange MADRangeToGroup(int64_t);
-
-static inline NSRange MADRangeToGroup(int64_t groupNumber) {
-    return NSMakeRange(0, (NSUInteger)groupNumber + 1);
-}
-
 typedef MTDataTableFast MADDataTableAggregate;
 typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutableFontDescriptorMap;
 
-@interface MTReportViewerPrintPageRenderer ()
+@interface MADPrintPageRenderer ()
 
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
     @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
@@ -127,7 +121,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
 @end
 
-@implementation MTReportViewerPrintPageRenderer {
+@implementation MADPrintPageRenderer {
     BOOL _showWaterMark;
     BOOL _accessibilityCacheNeedsUpdate;
     NSUInteger _accessibilityCurrentPageIndex;
@@ -136,7 +130,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 + (void)initialize {
     [super initialize];
     
-    if (self == [MTReportViewerPrintPageRenderer self]) {
+    if (self == [MADPrintPageRenderer self]) {
         
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
         if ([standardUserDefaults valueForKey:MTCachedSizeHorizontal] == nil) {
@@ -158,7 +152,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
     [datasource updatePrintingReportFormatter];
     
     id printPageRenderer;
-    printPageRenderer = [[MTReportViewerPrintPageRenderer alloc] initWithDataSource:datasource];
+    printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:datasource];
     return printPageRenderer;
 }
 
@@ -359,12 +353,12 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
                        withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [MTReportViewerPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
+    [MADPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
     
     [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 
     if (_showWaterMark) {
-        [MTReportViewerPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
+        [MADPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
     }
 
 }
