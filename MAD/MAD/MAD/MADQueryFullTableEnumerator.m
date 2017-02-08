@@ -14,7 +14,7 @@
 @interface MADQueryFullTableEnumerator ()
 
     @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, copy) NSManagedObjectID *documentObjectID;
+    @property (nonatomic, assign) int64_t documentObjectIdentifier;
 
 @end
 
@@ -22,7 +22,7 @@
 
 - (instancetype)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
-        _documentObjectID = document.objectID.copy;
+        _documentObjectIdentifier = document.identifier;
         self.managedObjectContext = document.managedObjectContext;
 
     }

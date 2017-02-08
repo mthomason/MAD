@@ -158,7 +158,7 @@
 		4C26BA371BAF99BE00456DC8 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA331BAF99BE00456DC8 /* Constants.m */; };
 		4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA361BAF99BE00456DC8 /* MADPromptManager.m */; };
 		4C26BA581BAF99F000456DC8 /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA3B1BAF99F000456DC8 /* MADResizeHandles.m */; };
-		4C26BA591BAF99F000456DC8 /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA3D1BAF99F000456DC8 /* MTElementCanvas.m */; };
+		4C26BA591BAF99F000456DC8 /* MADElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA3D1BAF99F000456DC8 /* MADElementCanvas.m */; };
 		4C26BA5A1BAF99F000456DC8 /* MADFileExplorerViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA3F1BAF99F000456DC8 /* MADFileExplorerViewLayout.m */; };
 		4C26BA5B1BAF99F000456DC8 /* MADPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA411BAF99F000456DC8 /* MADPopoverBackgroundView.m */; };
 		4C26BA5C1BAF99F000456DC8 /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA431BAF99F000456DC8 /* MTAggregateFunctionsViewController.m */; };
@@ -713,8 +713,8 @@
 		4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2461BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2481BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m */; };
-		4C8DE24E1BAFA88400AD1111 /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE24C1BAFA88400AD1111 /* MTCollectionViewCellElement.m */; };
-		4C8DE24F1BAFA88400AD1111 /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE24D1BAFA88400AD1111 /* MTCollectionViewCellElement.xib */; };
+		4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */; };
+		4C8DE24F1BAFA88400AD1111 /* MADCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */; };
 		4C8DE2521BAFA92C00AD1111 /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2511BAFA92C00AD1111 /* MADNavigationBarFixedSize.m */; };
 		4C8DE2621BAFA96300AD1111 /* MADSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE25D1BAFA96300AD1111 /* MADSearchBar.m */; };
 		4C8DE2631BAFA96300AD1111 /* MTBarButtonItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE25F1BAFA96300AD1111 /* MTBarButtonItemTitle.m */; };
@@ -1424,8 +1424,8 @@
 		4C26BA361BAF99BE00456DC8 /* MADPromptManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPromptManager.m; path = MADStack/MADDesigner/Managers/MADPromptManager.m; sourceTree = "<group>"; };
 		4C26BA3A1BAF99F000456DC8 /* MADResizeHandles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandles.h; sourceTree = "<group>"; };
 		4C26BA3B1BAF99F000456DC8 /* MADResizeHandles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADResizeHandles.m; sourceTree = "<group>"; };
-		4C26BA3C1BAF99F000456DC8 /* MTElementCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTElementCanvas.h; sourceTree = "<group>"; };
-		4C26BA3D1BAF99F000456DC8 /* MTElementCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTElementCanvas.m; sourceTree = "<group>"; };
+		4C26BA3C1BAF99F000456DC8 /* MADElementCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementCanvas.h; sourceTree = "<group>"; };
+		4C26BA3D1BAF99F000456DC8 /* MADElementCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementCanvas.m; sourceTree = "<group>"; };
 		4C26BA3E1BAF99F000456DC8 /* MADFileExplorerViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerViewLayout.h; path = MADStack/MADDesigner/UI/MADFileExplorerViewLayout.h; sourceTree = "<group>"; };
 		4C26BA3F1BAF99F000456DC8 /* MADFileExplorerViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerViewLayout.m; path = MADStack/MADDesigner/UI/MADFileExplorerViewLayout.m; sourceTree = "<group>"; };
 		4C26BA401BAF99F000456DC8 /* MADPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPopoverBackgroundView.h; path = MADStack/MADDesigner/UI/MADPopoverBackgroundView.h; sourceTree = "<group>"; };
@@ -1890,9 +1890,9 @@
 		4C8DE2461BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReusableViewFloatingLabel.m; sourceTree = "<group>"; };
 		4C8DE2471BAFA66100AD1111 /* MTCollectionReuseableViewDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReuseableViewDefault.h; sourceTree = "<group>"; };
 		4C8DE2481BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReuseableViewDefault.m; sourceTree = "<group>"; };
-		4C8DE24B1BAFA88400AD1111 /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
-		4C8DE24C1BAFA88400AD1111 /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
-		4C8DE24D1BAFA88400AD1111 /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
+		4C8DE24B1BAFA88400AD1111 /* MADCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCellElement.h; sourceTree = "<group>"; };
+		4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCellElement.m; sourceTree = "<group>"; };
+		4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MADCellElement.xib; sourceTree = "<group>"; };
 		4C8DE2501BAFA92C00AD1111 /* MADNavigationBarFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationBarFixedSize.h; path = UI/MADNavigationBarFixedSize.h; sourceTree = "<group>"; };
 		4C8DE2511BAFA92C00AD1111 /* MADNavigationBarFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationBarFixedSize.m; path = UI/MADNavigationBarFixedSize.m; sourceTree = "<group>"; };
 		4C8DE25C1BAFA96300AD1111 /* MADSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSearchBar.h; sourceTree = "<group>"; };
@@ -2961,13 +2961,13 @@
 		4C26BA391BAF99F000456DC8 /* ElementView */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DE24B1BAFA88400AD1111 /* MTCollectionViewCellElement.h */,
-				4C8DE24C1BAFA88400AD1111 /* MTCollectionViewCellElement.m */,
-				4C8DE24D1BAFA88400AD1111 /* MTCollectionViewCellElement.xib */,
+				4C8DE24B1BAFA88400AD1111 /* MADCellElement.h */,
+				4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */,
+				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
 				4C26BA3A1BAF99F000456DC8 /* MADResizeHandles.h */,
 				4C26BA3B1BAF99F000456DC8 /* MADResizeHandles.m */,
-				4C26BA3C1BAF99F000456DC8 /* MTElementCanvas.h */,
-				4C26BA3D1BAF99F000456DC8 /* MTElementCanvas.m */,
+				4C26BA3C1BAF99F000456DC8 /* MADElementCanvas.h */,
+				4C26BA3D1BAF99F000456DC8 /* MADElementCanvas.m */,
 			);
 			name = ElementView;
 			path = MADStack/MADDesigner/UI/ElementView;
@@ -5495,7 +5495,7 @@
 				4CC3D75E1BCB6D9500BDA5D3 /* MADInfinity64.png in Resources */,
 				4CC3D7891BCB6D9500BDA5D3 /* UIImagePatternAqua.png in Resources */,
 				4CC3D7C81BCB6D9500BDA5D3 /* UIImagePatternMarbled2.png in Resources */,
-				4C8DE24F1BAFA88400AD1111 /* MTCollectionViewCellElement.xib in Resources */,
+				4C8DE24F1BAFA88400AD1111 /* MADCellElement.xib in Resources */,
 				4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */,
 				4CC3D7A71BCB6D9500BDA5D3 /* UIImagePatternGoldParchment.png in Resources */,
 				4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */,
@@ -6148,7 +6148,7 @@
 				4C4754491CF362E900BC9E02 /* MADPageViewController.m in Sources */,
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
-				4C8DE24E1BAFA88400AD1111 /* MTCollectionViewCellElement.m in Sources */,
+				4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */,
 				4C4020401BAE92F200BAE5FC /* NSAttributedString+Logo.m in Sources */,
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
@@ -6296,7 +6296,7 @@
 				4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */,
 				4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */,
 				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */,
-				4C26BA591BAF99F000456DC8 /* MTElementCanvas.m in Sources */,
+				4C26BA591BAF99F000456DC8 /* MADElementCanvas.m in Sources */,
 				4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */,
 				4C401F7E1BAE7EB500BAE5FC /* MTGradientView.m in Sources */,
 				4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */,

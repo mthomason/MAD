@@ -26,7 +26,7 @@
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
-#import "MTCollectionViewCellElement.h"
+#import "MADCellElement.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
@@ -90,9 +90,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
         backgroundView.backgroundColor = clearColor;
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
-        NSString *documentElementReuseIdentifier = [MTCollectionViewCellElement reuseIdentifier];
+        NSString *documentElementReuseIdentifier = [MADCellElement reuseIdentifier];
         
-        [self registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
+        [self registerClass: [MADCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
         
         [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionHeader withReuseIdentifier: supplmentaryViewReuseIdHeader];
         

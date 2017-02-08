@@ -58,8 +58,8 @@
     //MADocument * __weak wdoc = document;
     [private performBlockAndWait:^{
         //MADocument *doc = wdoc;
-        RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
-        NSManagedObjectID *objectID = rptqDocument.objectID;
+        //RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
+        //doc = rptqDocument.identifier;
 
         NSError *error = nil;
         [private save:&error];

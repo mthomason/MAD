@@ -912,7 +912,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     NSExpression *expressionMinusSet;
     NSExpression *evaluatedObject = [NSExpression expressionForEvaluatedObject];
     NSExpression *evaluatedJoinedTables;
-    NSSet <NSManagedObjectID *> *orphaned;
+    NSSet <NSNumber *> *orphaned;
     
     NSEnumerator *deletedLinks = note.userInfo.objectEnumerator;
     
@@ -923,13 +923,13 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
                                                             with: evaluatedJoinedTables];
         //NSLog(@"%@", orphaned);
-        NSManagedObjectID *objectID;
-        for (NSManagedObjectID *orphanedTableIDs in orphaned) {
+        NSNumber *objectID;
+        for (NSNumber *orphanedTableIDs in orphaned) {
             
             @autoreleasepool {
                 objectID = orphanedTableIDs.copy;
                 MADHierarchicalChildViewDefination *tableDefination;
-                tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
+                tableDefination = [self.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
                 if (tableDefination == nil) {
                     NSLog(@"Break\n\n");
                 }
@@ -1062,7 +1062,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
     MADConnectorView *connectorView = [[MADConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
-    connectorView.identifier = link.objectID.copy;
+    connectorView.identifier = link.identifier;
     connectorView.autoresizesSubviews = NO;
     connectorView.translatesAutoresizingMaskIntoConstraints = NO;
     

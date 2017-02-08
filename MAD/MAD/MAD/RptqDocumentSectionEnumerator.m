@@ -67,7 +67,7 @@
 
     @property (nonatomic, assign)   NSUInteger numberOfGroups;
     @property (nonatomic, assign)   NSUInteger total;
-    @property (nonatomic, strong)   RptqDocument *document;
+    @property (nonatomic, weak)     RptqDocument *document;
 
 @end
 

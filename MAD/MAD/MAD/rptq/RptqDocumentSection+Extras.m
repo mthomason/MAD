@@ -95,7 +95,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 #pragma mark -
 #pragma mark Static
 
-+ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestSectionWithIdentifier:(int64_t)identifier {
++ (NSFetchRequest <RptqDocumentSection *> *)fetchRequestSectionWithIdentifier:(int64_t)identifier {
     NSFetchRequest *request;
     NSPredicate *predicate;
     NSExpression *left, *right;
@@ -118,7 +118,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 
 + (instancetype)newDocumentSectionWithIdentifier:(int64_t)identifier
                                fromObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
+    NSFetchRequest <RptqDocumentSection *> *fetchRequet;
     fetchRequet = [self fetchRequestSectionWithIdentifier: identifier];
     return [context executeFetchRequest:fetchRequet error:nil].firstObject;
 }

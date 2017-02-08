@@ -90,7 +90,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
         objectContextQueue = [[NSOperationQueue alloc] init];
         objectContextQueue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
         
-        __typeof(self) __weak wself = self;
+        //__typeof(self) __weak wself = self;
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         _observeChangeNotification = [notificationCenter addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
                                                                      object:managedObjectContext
@@ -98,8 +98,8 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                                                                  usingBlock:^(NSNotification * _Nonnull note) {
                                                                      
                                                                      //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-                                                                     id keys = note.userInfo.keyEnumerator;
-                                                                     id objects = note.userInfo.objectEnumerator;
+                                                                     //id keys = note.userInfo.keyEnumerator;
+                                                                     //id objects = note.userInfo.objectEnumerator;
                                                                      
                                                                      NSSet *deletedObjects;
                                                                      NSSet *updatedObjects;
@@ -110,15 +110,15 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                                                                      [deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
                                                                          
                                                                          if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-                                                                             typeof(self) sself = wself;
-                                                                             MADModelQuery *query = sself.firstQuery;
-                                                                             [query deleteQueryLinkID:((NSManagedObject *)obj).objectID];
+                                                                             //typeof(self) sself = wself;
+                                                                             //MADModelQuery *query = sself.firstQuery;
+                                                                             //[query deleteQueryLinkID:((NSManagedObject *)obj).objectID];
                                                                          }
                                                                          
                                                                          if ([obj isKindOfClass:[RptqQueryTable class]]) {
-                                                                             typeof(self) sself = wself;
-                                                                             MADModelQuery *query = sself.firstQuery;
-                                                                             [query deleteQueryTableID:((NSManagedObject *)obj).objectID];
+                                                                             //typeof(self) sself = wself;
+                                                                             //MADModelQuery *query = sself.firstQuery;
+                                                                             //[query deleteQueryTableID:((NSManagedObject *)obj).objectID];
                                                                          }
                                                                          
                                                                      }];
@@ -127,15 +127,15 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                                                                      [insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
                                                                          
                                                                          if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-                                                                             typeof(self) sself = wself;
-                                                                             MADModelQuery *query = sself.firstQuery;
-                                                                             [query insertQueryLinkID:((NSManagedObject *)obj).objectID];
+                                                                             //typeof(self) sself = wself;
+                                                                             //MADModelQuery *query = sself.firstQuery;
+                                                                             //[query insertQueryLinkID:((NSManagedObject *)obj).objectID];
                                                                          }
                                                                          
                                                                          if ([obj isKindOfClass:[RptqQueryTable class]]) {
-                                                                             typeof(self) sself = wself;
-                                                                             MADModelQuery *query = sself.firstQuery;
-                                                                             [query insertQueryTableID:((NSManagedObject *)obj).objectID];
+                                                                             //typeof(self) sself = wself;
+                                                                             //MADModelQuery *query = sself.firstQuery;
+                                                                             //[query insertQueryTableID:((NSManagedObject *)obj).objectID];
                                                                          }
                                                                          
                                                                      }];
@@ -290,7 +290,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 
     NSDictionary <NSString *, __kindof NSObject *> *resultWrapper;
     
-    _objectID = [[results.firstObject objectForKey: keyDocument] copy];
+    //_objectID = [[results.firstObject objectForKey: keyDocument] copy];
 
     int64_t docID, dbID, qID;
     for (resultWrapper in results) {
@@ -314,7 +314,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendFormat:@"%@", NSStringFromClass([self class]).uppercaseString];
-    [debug appendFormat:@"ID:\t%@\n", _objectID];
+    [debug appendFormat:@"ID:\t%lld\n", self.identifier];
     if (_databases.count > 0) {
         [debug appendFormat:@"Databases:\t%@", _databases];
     }

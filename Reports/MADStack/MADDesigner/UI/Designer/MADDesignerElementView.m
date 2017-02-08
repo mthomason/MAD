@@ -27,7 +27,7 @@
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/MADAlignment.h>
 
-#import "MTElementCanvas.h"
+#import "MADElementCanvas.h"
 #import "MADResizeHandles.h"
 #import "MTResizeHandleView.h"
 #import "UITapGestureRecognizer+Designer.h"
@@ -45,9 +45,9 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 #pragma mark - MTElementView
 
 @interface MADDesignerElementView ()
-    <MTElementCanvasDelegate, UIGestureRecognizerDelegate>
+    <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-    @property (nonatomic, weak)     MTElementCanvas *canvasView;
+    @property (nonatomic, weak)     MADElementCanvas *canvasView;
     @property (nonatomic, strong)   MADResizeHandles *resizeHandles;
 
     @property (nonatomic, weak)     NSManagedObjectContext *managedObjectContext;
@@ -71,7 +71,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
-                                     tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                                     tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                                             tapSelector:(SEL)selector {
     id elementView = [[self alloc] initWithDocumentObject: documentObject
                                        tapGestureDelegate: tapGestureDelegate
@@ -80,7 +80,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
-                    tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                    tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                            tapSelector:(SEL)selector {
     
     CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
@@ -89,8 +89,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         self.identifier = documentObject.identifier;
         self.objectID = documentObject.objectID.copy;
         
-        MTElementCanvas *canvasView;
-        canvasView = [[MTElementCanvas alloc] initWithFrame:rect];
+        MADElementCanvas *canvasView;
+        canvasView = [[MADElementCanvas alloc] initWithFrame:rect];
         canvasView.autoresizingMask = MADViewAutoresizingFlexable();
         canvasView.backgroundColor = [UIColor clearColor];
         canvasView.canvasDelegate = self;

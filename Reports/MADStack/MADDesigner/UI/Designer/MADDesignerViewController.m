@@ -79,7 +79,7 @@
 
 #import "MADDesignerElementPickerViewController.h"
 
-#import "MTCollectionViewCellElement.h"
+#import "MADCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 
@@ -123,20 +123,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeSection = 3,
     MTToolboxTypeNone = 4,
 };
-
-typedef NSMutableDictionary <NSNumber *, MADDesignerSectionView *> MADMutableMapSectionViews;
-typedef NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> MADMutableMapSectionLabels;
-typedef NSMutableDictionary <NSNumber *, MADDesignerElementView *> MADMutableMapElementViews;
-
-typedef NSMutableDictionary <NSNumber *, NSNumber *> MADMutableMapNumbersByNumber;
-
-typedef NSMutableArray  <MADDesignerSectionView *> MADMutableSectionViews;
-typedef NSMutableSet    <MADDesignerSectionView *> MADMutableSetSectionViews;
-
-typedef NSMutableSet    <MADDesignerElementView *> MADMutableSetElementViews;
-
-typedef NSMutableArray  <NSLayoutConstraint *>              MADMutableLayoutConstraints;
-typedef NSArray         <NSLayoutConstraint *>              MADLayoutConstraints;
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -191,7 +177,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
     MTViewControllerAggregateDelegate,
-    MTCollectionViewCellElementDelegate,
+    MADCellElementDelegate,
     MTReportDesignerSectionViewLayoutLiquidDelegate,
     MADDesignerElementPickerDelegate,
     MADViewControllerStandardProtocol,
@@ -209,25 +195,25 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     @property (nonatomic, strong) IBOutlet MADBackgroundScrollView *scroller;
 
 
-    @property (nonatomic, strong) MADMutableSetElementViews         *visibleElementViews;
-    @property (nonatomic, strong) MADMutableSetSectionViews         *passthroughContainers;
-    @property (nonatomic, strong) NSMutableSet <NSNumber *>         *selectedObjectIds;
+    @property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
+    @property (nonatomic, strong) NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
+    @property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedObjectIds;
 
-    @property (nonatomic, strong) MADMutableSectionViews            *sectionViewsArray;
+    @property (nonatomic, strong) NSMutableArray <MADDesignerSectionView *> *sectionViewsArray;
 
-    @property (nonatomic, strong) MADMutableMapSectionViews         *sectionViewsDictionary;
-    @property (nonatomic, strong) MADMutableMapSectionLabels        *sectionControlViewsDictionary;
-    @property (nonatomic, strong) MADMutableMapElementViews         *elementViewsDictionary;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
 
-    @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerScrollViewConstraints;
-    @property (nonatomic, strong) MADMutableLayoutConstraints *viewDidAppearDesignerContentViewConstraints;
-    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintSectionLabelHeightContainer;
-    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsSidesBorder;
-    @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsVerticalBuffer;
+    @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
+    @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
+    @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
+    @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
+    @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
 
     @property (nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
 
-    @property (nonatomic, strong) MADMutableMapNumbersByNumber *borderAppliedToView;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
 
     @property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
@@ -360,16 +346,16 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
     if (self = [super initWithCoder:aDecoder]) {
         
-        MADMutableSetElementViews *visibleElementViews;
-        visibleElementViews = [[MADMutableSetElementViews alloc] init];
+        NSMutableSet <MADDesignerElementView *> *visibleElementViews;
+        visibleElementViews = [[NSMutableSet alloc] init];
         self.visibleElementViews = visibleElementViews;
         
-        MADMutableMapNumbersByNumber *borderAppliedToView;
-        borderAppliedToView = [[MADMutableMapNumbersByNumber alloc] init];
+        NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
+        borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
-        MADMutableMapElementViews *elementViewsDictionary;
-        elementViewsDictionary = [[MADMutableMapElementViews alloc] init];
+        NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
+        elementViewsDictionary = [[NSMutableDictionary alloc] init];
         self.elementViewsDictionary = elementViewsDictionary;
 
     }
@@ -644,7 +630,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
     
-    MADLayoutConstraints *rulerConstraints, *rulerSideConstraints;
+    NSArray <NSLayoutConstraint *> *rulerConstraints, *rulerSideConstraints;
     rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
                                                      designer: scroller.container
                                                     marginTop: MTReportDesignerBorderPaddingVertical
@@ -656,35 +642,35 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
     NSMutableArray <NSNumber *> *reportSectionKeyTracker;
     
-    MADMutableLayoutConstraints *scrollerLayoutConstraints,
-                                *viewDidAppearDesignerContentViewConstraints,
-                                *constraintsSectionsSidesBorder,
-                                *constraintSectionLabelHeightContainer,
-                                *constraintsSectionsVerticalBuffer;
+    NSMutableArray <NSLayoutConstraint *> *scrollerLayoutConstraints,
+                                          *viewDidAppearDesignerContentViewConstraints,
+                                          *constraintsSectionsSidesBorder,
+                                          *constraintSectionLabelHeightContainer,
+                                          *constraintsSectionsVerticalBuffer;
     
-    MADMutableSectionViews *sectionViewsArray;
-    NSMutableDictionary <NSNumber *, __kindof NSLayoutConstraint *> *constraintsReportSectionHeight;
+    NSMutableArray <MADDesignerSectionView *> *sectionViewsArray;
+    NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *constraintsReportSectionHeight;
 
     reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
-    scrollerLayoutConstraints = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 2 + 6];
-    viewDidAppearDesignerContentViewConstraints = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 5];
-    constraintsSectionsSidesBorder = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections * 2 + 2];
-    constraintSectionLabelHeightContainer = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections];
-    constraintsSectionsVerticalBuffer = [[MADMutableLayoutConstraints alloc] initWithCapacity:numberOfSections];
+    scrollerLayoutConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 6];
+    viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 5];
+    constraintsSectionsSidesBorder = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 2];
+    constraintSectionLabelHeightContainer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    constraintsSectionsVerticalBuffer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
-    sectionViewsArray = [[MADMutableSectionViews alloc] initWithCapacity:numberOfSections];
+    sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
     constraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     
-    MADMutableMapSectionViews *sectionViewsDictionary;
-    MADMutableMapSectionLabels *sectionControlViewsDictionary;
+    NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
+    NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
 
-    sectionViewsDictionary          = [[MADMutableMapSectionViews alloc] initWithCapacity:numberOfSections];
-    sectionControlViewsDictionary   = [[MADMutableMapSectionLabels alloc] initWithCapacity:numberOfSections];
+    sectionViewsDictionary          = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+    sectionControlViewsDictionary   = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
 
-    MADMutableSetSectionViews *passthroughContainers;
-    passthroughContainers = [[MADMutableSetSectionViews alloc] initWithCapacity:numberOfSections];
+    NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
+    passthroughContainers = [[NSMutableSet alloc] initWithCapacity:numberOfSections];
 
     [constraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
@@ -1281,7 +1267,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
-    MADMutableMapSectionViews *sectionViewsDictionary = self.sectionViewsDictionary;
+    NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
+    sectionViewsDictionary = self.sectionViewsDictionary;
     [private performBlock:^{
     
         RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -1638,16 +1625,16 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 #pragma mark -
-#pragma mark MTCollectionViewCellElement Delegate
+#pragma mark MADCellElement Delegate
 
-- (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
+- (MTDocumentObjectType)objectTypeRepresentedByCell:(MADCellElement *)cell {
     RptqDocumentElement *element;
     element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
                                                   fromObjectContext: _document.managedObjectContext];
     return element.type;
 }
 
-- (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
+- (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell {
     id elementView;
     
     [self deselectAllElementsAnimated:YES];
@@ -1658,7 +1645,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
 }
 
-- (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
+- (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell {
     
     NSManagedObjectContext *private;
     int64_t elementID;
@@ -1743,7 +1730,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
 }
 
-#pragma mark MTCollectionViewCellElement Helpers
+#pragma mark MADCellElement Helpers
 
 - (void)editDocumentObjectAggregateWithID:(NSNumber *)identifier {
     
@@ -1888,10 +1875,6 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
     newText = ((RptqDocumentElementLabel *)object).text.copy;
     
-    NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-    //RptqDocumentElement *documentObject;
-    //documentObject = (RptqDocumentElement *)[managedObjectContext objectWithID:object.objectID];
-
     void (^configureLabel)(UITextField *);
     configureLabel = ^(UITextField *textField) {
         textField.text = newText;
@@ -1961,7 +1944,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                                       withField: (RptqQueryField *)field {
 
     RptqDocumentElementLabelDataField *documentObject;
-    documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
+    documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
+                                                                       fromObjectContext: field.managedObjectContext];
     documentObject.referencesQueryField = field;
     [field.managedObjectContext save:nil];
     
@@ -1995,11 +1979,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
 
     RptqDocumentElement *documentObject;
-    documentObject = [document.managedObjectContext objectWithID:attributes.objectID];
+    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID.longLongValue
+                                                         fromObjectContext: document.managedObjectContext];
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
-    NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
+    NSString *resuseId = [MADCellElement reuseIdentifier];
     
-    MTCollectionViewCellElement *cell;
+    MADCellElement *cell;
     cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
     cell.delegate = self;
     
@@ -2059,20 +2044,20 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                 
             }
             
-            MTCollectionViewCellElement * __weak weakcell = cell;
+            MADCellElement * __weak weakcell = cell;
             MADDesignerElementView * __weak weakElementView = elementView;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-                MTCollectionViewCellElement * strongcell = weakcell;
+                MADCellElement * strongcell = weakcell;
                 MADDesignerElementView *strongElementView = weakElementView;
                 
                 if (strongcell) {
-                    MTCollectionViewCellElement * __weak weakcell1 = strongcell;
+                    MADCellElement * __weak weakcell1 = strongcell;
                     MADDesignerElementView * __weak weakElementView1 = strongElementView;
                     
                     dispatch_sync(dispatch_get_main_queue(), ^{
                     
-                        MTCollectionViewCellElement *strongcell1 = weakcell1;
+                        MADCellElement *strongcell1 = weakcell1;
                         if (strongcell1) {
                             strongcell1.contentScaleFactor = contextScale;
                             (strongcell1.contentView).contentScaleFactor = contextScale;
@@ -2371,8 +2356,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     RptqDocumentElement *documentObject;
     
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
-
-        documentObject = (RptqDocumentElement *)[objectContext objectWithID:attributes.objectID];
+        documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID.longLongValue
+                                                             fromObjectContext: objectContext];
         [documentObject setOriginPoint:attributes.frame.origin];
 
         //documentObject.sizewidth = @(attributes.frame.size.width);
@@ -2660,7 +2645,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                                                                 inputType: MTAggregateFunctionInputTypeField
                                                                 groupType: viewController.aggregateGroupByType
                                                           aggregateObject: viewController.fieldObject
-                                                              groupNumber: (NSUInteger)viewController.groupTypeSectionNumber];
+                                                              groupNumber: viewController.groupTypeSectionNumber];
         }
         
     } else {
@@ -2688,7 +2673,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         
         NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
         RptqDocumentElementBarcode *object;
-        object = (RptqDocumentElementBarcode *)[managedObjectContext objectWithID:_objectIdEditBarcode];
+        object = [RptqDocumentElementBarcode newDocumentElementWithIdentifier: _objectIdEditBarcode.longLongValue
+                                                            fromObjectContext: managedObjectContext];
+
         [object updateWithBarcode: barcode
                          fieldOne: viewController.queryField1
                          fieldTwo: viewController.queryField2];
@@ -2924,8 +2911,9 @@ END_deselectElementView:;
     }];
 }
 
-- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    NSNumber *objectId = @(cell.identifier);
+- (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell {
+    int64_t cellIdentifier = cell.identifier;
+    NSNumber *objectId = @(cellIdentifier);
     
     MADocument *document;
     NSArray *elements;
@@ -2937,9 +2925,9 @@ END_deselectElementView:;
     document = _document;
     NSFetchRequest <__kindof RptqDocumentElement *> *fetchElement;
     fetchElement = [RptqDocumentElement fetchRequestElement:cell.identifier];
-    NSError * __autoreleasing *error;
+    NSError * __autoreleasing error = NULL;
     elements = [self.document.managedObjectContext executeFetchRequest: fetchElement
-                                                                 error: error];
+                                                                 error: &error];
     element  = elements.firstObject;
     sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
     layoutManager = document.sectionLayoutManagers[@(sectionView.identifier)];
@@ -2948,7 +2936,7 @@ END_deselectElementView:;
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
         MADocument *maDocument = self.document;
-        [maDocument removeDocumentObjectWithObjectID: objectId];
+        [maDocument removeDocumentObjectWithObjectID: cellIdentifier];
     
     } animationComplete:^() {
 
@@ -2958,9 +2946,10 @@ END_deselectElementView:;
     } completion:^() {
 
         [self redrawAllElementViewsInCollectionView:sectionView];
-        RptqDocumentElement *documentObjectFinished;
-        documentObjectFinished = [document.managedObjectContext objectWithID:objectId];
-        [document.managedObjectContext deleteObject:documentObjectFinished];
+        RptqDocumentElement *elementB;
+        elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
+                                                       fromObjectContext:document.managedObjectContext];
+        [document.managedObjectContext deleteObject:elementB];
         [document.managedObjectContext save:nil];
 
     }];
@@ -3110,7 +3099,7 @@ END_deselectElementView:;
             MADDesignerViewController __weak *weakself2 = strongself1;
             [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
             
-                [wdocument removeDocumentObjectWithObjectID: pieceObjectIDTag];
+                [wdocument removeDocumentObjectWithObjectID: pieceID];
                 
             } animationComplete:^() {
 
@@ -3184,8 +3173,10 @@ END_deselectElementView:;
         private.parentContext = self.document.managedObjectContext;
         [private performBlockAndWait:^{
 
-            RptqDocumentSection *documentSection = [private objectWithID:sectionViewObjectIdTag];
-            NSManagedObjectID *documentSectionKey = documentSection.objectID.copy;
+            RptqDocumentSection *documentSection;
+            documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+                                                                  fromObjectContext:private];
+            NSNumber *documentSectionKey = @(documentSection.identifier);
             CGFloat documentSectionHeight = documentSection.height;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -3206,8 +3197,15 @@ END_deselectElementView:;
                     la.objectID = pieceObjectIdTag;
                     
                     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-                    RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
-                    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:pieceObjectIdTag];
+
+                    RptqDocumentSection *documentSectionBlock;
+                    RptqDocumentElement *documentObject;
+
+                    documentSectionBlock = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+                                                                               fromObjectContext:managedObjectContext];
+                    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceObjectIdTag.longLongValue
+                                                                         fromObjectContext: managedObjectContext];
+
                     
                     CGSize documentObjectSize = [documentObject sizeCalculated];
                     
@@ -3234,10 +3232,12 @@ END_deselectElementView:;
                     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
                     
 
-                    RptqDocumentSection *documentSectionBlock = [managedObjectContext objectWithID:sectionViewObjectIdTag];
+                    RptqDocumentSection *sectionBlock;
+                    sectionBlock = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+                                                                       fromObjectContext:managedObjectContext];
 
                     CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
-                    documentSectionBlock.height = sectionViewIntrinsicContentSizeHeight;
+                    sectionBlock.height = sectionViewIntrinsicContentSizeHeight;
                     
                     NSError * __autoreleasing *error = nil;
                     [managedObjectContext save:error];
@@ -3422,7 +3422,7 @@ END_deselectElementView:;
         
         //Try quick hash method...
         BOOL quickHashWorks = YES;
-        for (NSManagedObjectID *selectedObjectId in self.selectedObjectIds) {
+        for (NSNumber *selectedObjectId in self.selectedObjectIds) {
             UIView *selectedView = [self viewForObjectID:selectedObjectId];
             if (selectedView != nil) {
                 [results addObject:selectedView];
@@ -3612,14 +3612,14 @@ END_deselectElementView:;
 
 - (void)contentViewRemoveAllConstraints {
 
-    MADLayoutConstraints *constraints = self.scroller.container.constraints;
+    NSArray <NSLayoutConstraint *> *constraints = self.scroller.container.constraints;
     if (constraints.count > 0) {
         [self.scroller.container removeConstraints:constraints];
     }
 }
 
 - (void)scrollerRemoveAllConstraints {
-    MADLayoutConstraints *constraints = self.scroller.constraints;
+    NSArray <NSLayoutConstraint *> *constraints = self.scroller.constraints;
     if (constraints.count > 0) {
         [self.scroller removeConstraints:constraints];
     }

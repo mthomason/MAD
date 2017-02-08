@@ -67,7 +67,6 @@ typedef NS_ENUM(short, MADModelType) {
 <MADModelIDProtocol> {
   @protected
     int64_t _uid;
-    NSManagedObjectID *_objectID;
 }
 
     + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;

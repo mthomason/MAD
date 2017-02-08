@@ -14,14 +14,8 @@
 
 @protocol UIGestureRecognizerDelegate;
 
-@class UIPanGestureRecognizer;
-@class NSManagedObjectID;
-@class NSManagedObjectContext;
-@class MADDesignerElementView;
-@class MTBarcode;
-@class RptqDocumentElement;
-
-typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
+@class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView,
+       MTBarcode, RptqDocumentElement;
 
 @interface MADDesignerElementView : UIView
     <MADManagedObjectViewProtocol>
@@ -36,10 +30,10 @@ typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
 
 
     - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
-                        tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                        tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                                tapSelector:(SEL)selector;
     + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
-                                         tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                                         tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                                                 tapSelector:(SEL)selector;
 
     - (void)setWobbleRunning:(BOOL)running;

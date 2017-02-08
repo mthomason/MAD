@@ -1,12 +1,12 @@
 //
-//  MTElementCanvas.m
+//  MADElementCanvas.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/10/15.
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTElementCanvas.h"
+#import "MADElementCanvas.h"
 #import <UIKit/UIGraphics.h>
 
 #import <MADCocoaExtensions/MADColor.h>

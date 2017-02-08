@@ -1,5 +1,5 @@
 //
-//  MTElementCanvas.h
+//  MADElementCanvas.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/10/15.
