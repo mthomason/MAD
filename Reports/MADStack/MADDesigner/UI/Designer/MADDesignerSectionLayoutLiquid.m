@@ -7,8 +7,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "MTReportDesignerSectionDecorationView.h"
+#import "MADDesignerSectionLayoutLiquid.h"
+#import "MADDesignerSectionControl.h"
 //#import "MTCollectionViewLayoutLiquidAttributes.h"
 
 static inline CGRect rectAvailablePosition1(CGRect rect, CGRect centerRect);
@@ -27,7 +27,7 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
                       rect.size.height);
 }
 
-@interface MTReportDesignerSectionViewLayoutLiquid ()
+@interface MADDesignerSectionLayoutLiquid ()
 
 @property (nonatomic, assign) NSUInteger numberOfSections;
 @property (nonatomic, assign) NSUInteger numberOfItems;
@@ -35,7 +35,7 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
 
 @end
 
-@implementation MTReportDesignerSectionViewLayoutLiquid
+@implementation MADDesignerSectionLayoutLiquid
 
 - (instancetype)init {
     self = [super init];
@@ -44,8 +44,8 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
     self.itemAttributesBySection = itemAttributesBySection;
     
-    NSString *decorationViewKind = NSStringFromClass([MTReportDesignerSectionDecorationView class]);
-    [self registerClass: [MTReportDesignerSectionDecorationView class]
+    NSString *decorationViewKind = NSStringFromClass([MADDesignerSectionControl class]);
+    [self registerClass: [MADDesignerSectionControl class]
 forDecorationViewOfKind: decorationViewKind];
 
 

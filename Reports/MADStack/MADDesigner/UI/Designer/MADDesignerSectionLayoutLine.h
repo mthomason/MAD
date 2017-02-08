@@ -12,7 +12,7 @@
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UICollectionViewLayout.h>
 
-@class MTReportDesignerSectionViewLayoutLine;
+@class MADDesignerSectionLayoutLine;
 
 @protocol MTReportDesignerSectionViewLayoutDelegate
     - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
@@ -20,7 +20,7 @@
     - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
 @end
 
-@interface MTReportDesignerSectionViewLayoutLine : UICollectionViewLayout
+@interface MADDesignerSectionLayoutLine : UICollectionViewLayout
 
     @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
 

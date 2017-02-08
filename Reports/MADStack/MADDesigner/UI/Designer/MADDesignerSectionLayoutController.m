@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADReportDesignerSectionLayoutSettingsViewController.h"
+#import "MADDesignerSectionLayoutController.h"
 
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIAccessibility.h>
@@ -29,7 +29,7 @@ static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
 static NSString * const MADTextFormFeed        = @"Form Feed";
 static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
-@interface MADReportDesignerSectionLayoutSettingsViewController ()
+@interface MADDesignerSectionLayoutController ()
 
     @property (nonatomic, weak) IBOutlet UILabel *labelVisible;
     @property (nonatomic, weak) IBOutlet UILabel *labelFormFeed;

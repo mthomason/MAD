@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerSectionBackgroundView.h"
+#import "MADDesignerSectionBackground.h"
 #import <UIKit/UIGraphics.h>
 
-@implementation MTReportDesignerSectionBackgroundView {
+@implementation MADDesignerSectionBackground {
     int32_t _numberOfRowsInBackground;
 };
 

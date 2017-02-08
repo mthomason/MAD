@@ -13,20 +13,20 @@
 
 extern NSString * const MADSectionLayoutSettingsID;
 
-@class MADReportDesignerSectionLayoutSettingsViewController;
+@class MADDesignerSectionLayoutController;
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
 
     - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-    - (void)layoutSettings:(MADReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+    - (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings
               newPageAfter:(BOOL)newPageAfter;
 @optional
     - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
     - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows;
-    - (void)sectionLayoutSettingsDidFinish:(MADReportDesignerSectionLayoutSettingsViewController *)controller;
+    - (void)sectionLayoutSettingsDidFinish:(MADDesignerSectionLayoutController *)controller;
 @end
 
-@interface MADReportDesignerSectionLayoutSettingsViewController : UITableViewController
+@interface MADDesignerSectionLayoutController : UITableViewController
     <UITableViewDelegate>
 
     + (instancetype)newReportDesignerSectionLayoutSettingsViewController;

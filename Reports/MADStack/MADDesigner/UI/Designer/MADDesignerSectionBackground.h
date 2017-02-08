@@ -11,7 +11,7 @@
 
 #import <UIKit/UIView.h>
 
-@interface MTReportDesignerSectionBackgroundView : UIView
+@interface MADDesignerSectionBackground : UIView
 
 - (void)setNumberOfRowsInBackground:(int32_t)numberOfRowsInBackground;
 

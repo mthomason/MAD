@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionViewCell.h>
 
-@interface MTReportDesignerSectionDecorationView : UICollectionReusableView
+@interface MADDesignerSectionControl : UICollectionReusableView
 
 @end
 

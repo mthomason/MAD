@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerSectionViewLayoutLine.h"
-#import "MTReportDesignerSectionDecorationView.h"
+#import "MADDesignerSectionLayoutLine.h"
+#import "MADDesignerSectionControl.h"
 #import <UIKit/UITableView.h>
 
-@interface MTReportDesignerSectionViewLayoutLine ()
+@interface MADDesignerSectionLayoutLine ()
 
     @property (assign) CGSize contentSize;
     @property (assign) NSUInteger numberOfSections;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation MTReportDesignerSectionViewLayoutLine
+@implementation MADDesignerSectionLayoutLine
 
 
 - (instancetype)init {
@@ -31,8 +31,8 @@
         NSMutableArray *rectArray = [[NSMutableArray alloc] init];
         self.itemAttributesBySection = rectArray;
 
-        [self registerClass: [MTReportDesignerSectionDecorationView class]
-    forDecorationViewOfKind: NSStringFromClass([MTReportDesignerSectionDecorationView class])];
+        [self registerClass: [MADDesignerSectionControl class]
+    forDecorationViewOfKind: NSStringFromClass([MADDesignerSectionControl class])];
 
     }
     return self;

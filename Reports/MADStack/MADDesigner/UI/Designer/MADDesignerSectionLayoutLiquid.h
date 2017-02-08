@@ -12,9 +12,7 @@
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UICollectionViewLayout.h>
 
-@class MTReportDesignerSectionViewLayoutLiquid;
-//@class MTCollectionViewLayoutLiquidAttributes;
-@class MADSectionLayoutAttributes;
+@class MADDesignerSectionLayoutLiquid, MADSectionLayoutAttributes;
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 
@@ -38,7 +36,7 @@
 
 @end
 
-@interface MTReportDesignerSectionViewLayoutLiquid : UICollectionViewLayout
+@interface MADDesignerSectionLayoutLiquid : UICollectionViewLayout
 
     @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 

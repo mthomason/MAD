@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerSectionDecorationView.h"
+#import "MADDesignerSectionControl.h"
 #import <UIKit/UIGraphics.h>
 
-@implementation MTReportDesignerSectionDecorationView
+@implementation MADDesignerSectionControl
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
