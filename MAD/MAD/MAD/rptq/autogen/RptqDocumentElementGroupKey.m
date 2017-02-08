@@ -11,3 +11,13 @@
 @implementation RptqDocumentElementGroupKey
 
 @end
+
+@implementation RptqDocumentElementGroupKey (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementGroupKey *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementGroupKey"];
+}
+
+@dynamic groupNumber;
+
+@end

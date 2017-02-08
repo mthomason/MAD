@@ -138,8 +138,6 @@ typedef NSMutableSet    <MADDesignerElementView *> MADMutableSetElementViews;
 typedef NSMutableArray  <NSLayoutConstraint *>              MADMutableLayoutConstraints;
 typedef NSArray         <NSLayoutConstraint *>              MADLayoutConstraints;
 
-typedef NSMutableArray  <NSNumber *>                        MADMutableManagedObjectIDs;
-
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -656,7 +654,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                                                          designer: scroller.container
                                                        sideMargin: MTReportDesignerBorderPaddingSides].copy;
     
-    MADMutableManagedObjectIDs *reportSectionKeyTracker;
+    NSMutableArray <NSNumber *> *reportSectionKeyTracker;
     
     MADMutableLayoutConstraints *scrollerLayoutConstraints,
                                 *viewDidAppearDesignerContentViewConstraints,
@@ -1296,7 +1294,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible];
         section.visibility = visibility;
         
-        NSManagedObjectID *key = section.objectID.copy;
+        NSNumber *key = @(section.identifier);
 
         void (^updateVisibility)(void);
         updateVisibility = ^{
@@ -1325,7 +1323,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
  
     [section.managedObjectContext save:nil];
     
-    NSManagedObjectID *key = section.objectID.copy;
+    NSNumber *key = @(section.identifier);
     UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
@@ -1437,7 +1435,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                     [change isEqualToString: NSStringFromSelector(@selector(paddingTop))] ||
                     [change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
                     
-                    section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.objectID];
+                    section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
                     layoutManager = doc.sectionLayoutManagers[@(section.identifier)];
                     attributes = layoutManager.items[@(documentObject.identifier)];
                     if (attributes != nil) {
@@ -1706,13 +1704,13 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                 switch (objectToEdit.type) {
                         
                     case MTDocumentObjectTypeAggregate: {
-                        NSManagedObjectID *objectID  = objectToEdit.objectID.copy;
+                        NSNumber *objectID  = @(objectToEdit.identifier);
                         [self editDocumentObjectAggregateWithID: objectID];
                         break;
                     }
                     
                     case MTDocumentObjectTypeBarcode: {
-                        NSManagedObjectID *objectID  = objectToEdit.objectID.copy;
+                        NSNumber *objectID  = @(objectToEdit.identifier);
                         [self editDocumentObjectBarcodeWithID: objectID];
                         break;
                     }
@@ -1747,9 +1745,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 #pragma mark MTCollectionViewCellElement Helpers
 
-- (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
+- (void)editDocumentObjectAggregateWithID:(NSNumber *)identifier {
     
-    self.aggregateToEditObjectID = objectID.copy;
+    self.aggregateToEditObjectID = identifier.copy;
     _editAggregate = YES;
 
     MADDesignerViewController * __weak weakself = self;
@@ -1760,7 +1758,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        UIView *viewToEdit = [strongself viewForObjectID: objectID];
+        UIView *viewToEdit = [strongself viewForObjectID: identifier];
         UINavigationController *navigation;
         navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
         
@@ -1799,9 +1797,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
 }
 
-- (void)editDocumentObjectBarcodeWithID:(NSManagedObjectID *)objectID {
+- (void)editDocumentObjectBarcodeWithID:(NSNumber *)identifier {
     
-    self.barcodeToEditObjectID = objectID.copy;
+    self.barcodeToEditObjectID = identifier.copy;
     
     MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -1809,7 +1807,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        UIView *viewToEdit = [strongself viewForObjectID:objectID];
+        UIView *viewToEdit = [strongself viewForObjectID:identifier];
 
         MTViewControllerBarcode *barcodeViewController;
         barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
@@ -1817,7 +1815,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         barcodeViewController.delegate = strongself;
         barcodeViewController.preferredContentSize = sizePopoverFonts();
         barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
-        barcodeViewController.bartcodeToEditObjectID = objectID.copy;
+        barcodeViewController.bartcodeToEditObjectID = identifier.copy;
 
         UIPopoverPresentationController *popoverController;
         popoverController = barcodeViewController.popoverPresentationController;
@@ -1860,9 +1858,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 - (void)editDocumentObjectLabelDynamic:(RptqDocumentElement *)object {
     
-    self.objectIdEditDynamicLabel = object.objectID.copy;
+    self.objectIdEditDynamicLabel = @(object.identifier);
     
-    UIView *viewToEdit = [self viewForObjectID:object.objectID];
+    UIView *viewToEdit = [self viewForObjectID:@(object.identifier)];
     
     MTQueryBuilderChooseFieldViewController *chooseFieldViewController;
     chooseFieldViewController = [MTQueryBuilderChooseFieldViewController newQueryBuilderChooseFieldViewController];

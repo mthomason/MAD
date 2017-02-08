@@ -88,7 +88,7 @@
 #import "RptqDatabaseCredentals.h"
 #import "RptqDatabaseCredentals+Extras.h"
 
-#import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
+#import "RptqDocumentElementLabelDataField.h"
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"

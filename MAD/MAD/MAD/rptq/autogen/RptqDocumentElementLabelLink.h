@@ -17,8 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface RptqDocumentElementLabelLink (CoreDataProperties)
 
-#import "RptqDocumentElementLabelLink+CoreDataProperties.h"
++ (NSFetchRequest<RptqDocumentElementLabelLink *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSString *text;
+@property (nullable, nonatomic, copy) NSString *url;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

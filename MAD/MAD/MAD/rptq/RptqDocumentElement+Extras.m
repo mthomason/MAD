@@ -38,7 +38,6 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDocumentElementGroupKey.h"
-#import "RptqDocumentElementGroupKey+CoreDataProperties.h"
 #import "RptqDocumentElementAggregate.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementFormula.h"

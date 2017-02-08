@@ -11,3 +11,13 @@
 @implementation RptqDocumentElementImage
 
 @end
+
+@implementation RptqDocumentElementImage (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementImage *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementImage"];
+}
+
+@dynamic image;
+
+@end

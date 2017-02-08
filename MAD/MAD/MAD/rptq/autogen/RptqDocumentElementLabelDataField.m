@@ -11,3 +11,16 @@
 @implementation RptqDocumentElementLabelDataField
 
 @end
+
+@implementation RptqDocumentElementLabelDataField (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementLabelDataField *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementLabelDataField"];
+}
+
+@dynamic fieldID;
+@dynamic tableID;
+@dynamic text;
+@dynamic referencesQueryField;
+
+@end

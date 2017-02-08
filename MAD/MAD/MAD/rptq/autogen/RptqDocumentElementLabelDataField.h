@@ -10,6 +10,7 @@
 #define MAD_RptqDocumentElementLabelDataField_h
 
 #import "RptqDocumentElement.h"
+#import <CoreData/NSFetchRequest.h>
 
 @class RptqQueryField;
 
@@ -19,8 +20,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface RptqDocumentElementLabelDataField (CoreDataProperties)
 
-#import "RptqDocumentElementLabelDataField+CoreDataProperties.h"
++ (NSFetchRequest<RptqDocumentElementLabelDataField *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSString *fieldID;
+@property (nullable, nonatomic, copy) NSString *tableID;
+@property (nullable, nonatomic, copy) NSString *text;
+@property (nullable, nonatomic, retain) RptqQueryField *referencesQueryField;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

@@ -19,8 +19,6 @@
 #import <CoreData/NSManagedObjectContext.h>
 
 #import "RptqDocumentSection.h"
-//#import "RptqDocumentSection+CoreDataProperties.h"
-//#import "RptqDocumentSectionRows+CoreDataProperties.h"
 
 #import "MADReportSectionRepresentation.h"
 #import "RptqDataHelper.h"

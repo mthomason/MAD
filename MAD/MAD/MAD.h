@@ -34,7 +34,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDocument+Extras.h>
 
 #import <MAD/RptqDatabase.h>
-#import <MAD/RptqDatabase+CoreDataProperties.h>
 #import <MAD/RptqDatabase+Extras.h>
 
 #import <MAD/MADReportSectionRepresentation.h>
@@ -43,7 +42,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqDatabaseSchemaTable+CoreDataProperties.h>
 #import <MAD/RptqDatabaseSchemaTable+Extras.h>
 
 #import <MAD/RptqDocumentElementFactory.h>
@@ -83,30 +81,23 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDocumentElementFormula+Extras.h>
 
 #import <MAD/RptqDocumentElementGroupKey.h>
-#import <MAD/RptqDocumentElementGroupKey+CoreDataProperties.h>
 
 #import <MAD/RptqDocumentElementImage.h>
-#import <MAD/RptqDocumentElementImage+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementImage+Extras.h>
 
 #import <MAD/RptqDocumentElementLabel.h>
-#import <MAD/RptqDocumentElementLabel+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementLabel+Extras.h>
 
 #import <MAD/RptqDocumentElementLabelDataField.h>
-#import <MAD/RptqDocumentElementLabelDataField+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementLabelDataField+Extras.h>
 
 #import <MAD/RptqDocumentElementLabelLink.h>
-#import <MAD/RptqDocumentElementLabelLink+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementLabelLink+Extras.h>
 
 #import <MAD/RptqDocumentSection.h>
-#import <MAD/RptqDocumentSection+CoreDataProperties.h>
 #import <MAD/RptqDocumentSection+Extras.h>
 
 #import <MAD/RptqDocumentSectionRows.h>
-#import <MAD/RptqDocumentSectionRows+CoreDataProperties.h>
 #import <MAD/RptqDocumentSectionRows+Extras.h>
 
 #import <MAD/RptqDatabaseCredentals.h>
