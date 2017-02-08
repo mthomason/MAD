@@ -11,7 +11,7 @@
 
 #import <MADCocoaExtensions/MADColor.h>
 
-@implementation MTElementCanvas
+@implementation MADElementCanvas
 
 static const CGFloat kDashedBorderWidth     = (0.5f);
 static const CGFloat kDashedPhase           = (0.0f);

@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTCollectionViewCellElement.h"
+#import "MADCellElement.h"
 #import <UIKit/UIMenuController.h>
 #import "MADDesignerElementView.h"
 
-@interface MTCollectionViewCellElement ()
+@interface MADCellElement ()
 
 @property (nonatomic, weak) MADDesignerElementView *elementView;
 
 @end
 
-@implementation MTCollectionViewCellElement
+@implementation MADCellElement
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -42,8 +42,12 @@
         if (menuItems == nil) {
             menuItems = [NSMutableArray new];
         }
-        UIMenuItem *menuItemEdit = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Edit", @"Edit") action: @selector(edit:)];
-        UIMenuItem *menuItemFormat = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Format", @"Format") action: @selector(format:)];
+        UIMenuItem *menuItemEdit;
+        UIMenuItem *menuItemFormat;
+        NSString *edit = NSLocalizedString(@"Edit", @"Edit");
+        NSString *format = NSLocalizedString(@"Format", @"Format");
+        menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
+        menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
         [menuItems addObject:menuItemEdit];
         [menuItems addObject:menuItemFormat];
         menu.menuItems = menuItems;
@@ -92,7 +96,8 @@
             break;
         }
         case MTDocumentObjectTypeBarcode: {
-            result = deleteAction || formatAction; // FIXME: Edit action broke on barcodes... datasource is lost... || editAction;
+            result = deleteAction || formatAction; // FIXME: Edit action broke on barcodes...
+                                                   //   datasource is lost... || editAction;
             break;
         }
         default:

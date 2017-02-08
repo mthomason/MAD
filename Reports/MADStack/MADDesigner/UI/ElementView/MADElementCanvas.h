@@ -12,15 +12,15 @@
 #import <MADBarcodes/MADBarcodes.h>
 #import <UIKit/NSStringDrawing.h>
 
-@protocol MTElementCanvasDelegate <NSObject>
+@protocol MADElementCanvasDelegate <NSObject>
     - (id)displayObject;
 @end
 
 @class NSParagraphStyle;
 
-@interface MTElementCanvas : UIView
+@interface MADElementCanvas : UIView
 
-    @property (nonatomic, weak) id <MTElementCanvasDelegate>canvasDelegate;
+    @property (nonatomic, weak) id <MADElementCanvasDelegate>canvasDelegate;
     @property (nonatomic, strong) UIFont *displayFont;
     @property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
     @property (nonatomic, strong) NSNumber *underlineStyle;
