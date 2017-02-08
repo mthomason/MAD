@@ -27,7 +27,7 @@
 
     - (nullable ObjectType)objectAtIndex:(NSUInteger)index;
     - (void)addObject:(id _Nonnull)object;
-    - (void)removeAllObjects;
+    - (BOOL)removeAllObjects;
 
     - (void)beginBulkInserts;
     - (void)endBulkInserts;

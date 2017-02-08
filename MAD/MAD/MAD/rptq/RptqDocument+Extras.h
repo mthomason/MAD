@@ -31,9 +31,6 @@
     + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
     + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-    + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
-        fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
     - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
                                            andLevel:(NSUInteger)level;
     - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
@@ -46,8 +43,8 @@
                                  andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     
     - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setNumberOfRows:(int64_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
+    - (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
+    - (void)setHeight:(double)height forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
     - (void)addDatabase:(MTDatabase *)database
                         forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

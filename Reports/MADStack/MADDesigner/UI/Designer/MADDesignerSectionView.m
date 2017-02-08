@@ -69,7 +69,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
     layout.delegate = layoutDelegate;
     collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    ((MADDesignerSectionView *)collectionView).objectIdTag  = section.objectID.copy;
+    ((MADDesignerSectionView *)collectionView).identifier   = section.identifier;
     ((MADDesignerSectionView *)collectionView).tag          = section.identifier;
     ((MADDesignerSectionView *)collectionView).visible      = section.isVisible;
     return collectionView;

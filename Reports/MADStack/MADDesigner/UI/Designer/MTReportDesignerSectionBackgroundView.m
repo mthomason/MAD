@@ -9,13 +9,9 @@
 #import "MTReportDesignerSectionBackgroundView.h"
 #import <UIKit/UIGraphics.h>
 
-@interface MTReportDesignerSectionBackgroundView ()
-
-@property (nonatomic, assign, readonly) NSUInteger numberOfRowsInBackground;
-
-@end
-
-@implementation MTReportDesignerSectionBackgroundView
+@implementation MTReportDesignerSectionBackgroundView {
+    int32_t _numberOfRowsInBackground;
+};
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -25,7 +21,7 @@
     return self;
 }
 
-- (void)setNumberOfRowsInBackground:(NSUInteger)numberOfRowsInBackground {
+- (void)setNumberOfRowsInBackground:(int32_t)numberOfRowsInBackground {
     _numberOfRowsInBackground = numberOfRowsInBackground;
     [self setNeedsDisplay];
 }
@@ -33,14 +29,14 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
 
-    if (self.numberOfRowsInBackground >= 2) {
+    if (_numberOfRowsInBackground >= 2) {
         [[UIColor groupTableViewBackgroundColor] setStroke];
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         
-        CGFloat sectionHeight = rect.size.height / self.numberOfRowsInBackground;
+        CGFloat sectionHeight = rect.size.height / _numberOfRowsInBackground;
         CGFloat lineOriginY = CGPointZero.y;
-        for (NSUInteger row = 0; row < self.numberOfRowsInBackground; row++) {
+        for (int32_t row = 0; row < _numberOfRowsInBackground; row++) {
             
             
             

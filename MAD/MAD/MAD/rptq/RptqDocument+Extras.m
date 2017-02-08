@@ -62,6 +62,126 @@
 
 @implementation RptqDocument (Extras)
 
+#pragma mark - Static
+
++ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)context {
+    
+    NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
+    
+    NSError *error = nil;
+    NSArray *documents = [context executeFetchRequest:request error:&error];
+    
+    if (!error) {
+        //Delete any contents of the existing object modal.
+        if (documents && documents.count > 0) {
+            for (RptqDocument *document in documents) {
+                [context deleteObject:document];
+            }
+        }
+    }
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
+                                                         inManagedObjectContext: context];
+    
+    RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription
+                                   insertIntoManagedObjectContext: context];
+
+    NSString *docSection = NSStringFromClass([RptqDocumentSection class]);
+    NSString *rptqDocumentSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
+
+    id hasReportHeaderSection;
+    hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
+                                                           inManagedObjectContext: context];
+    document.hasReportHeaderSection = hasReportHeaderSection;
+
+    id hasReportFooterSection;
+    hasReportFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
+                                                           inManagedObjectContext: context];
+    document.hasReportFooterSection = hasReportFooterSection;
+    
+    id hasPageHeaderSection;
+    hasPageHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
+                                                         inManagedObjectContext: context];
+    document.hasPageHeaderSection = hasPageHeaderSection;
+    
+    id hasPageFooterSection;
+    hasPageFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
+                                                         inManagedObjectContext: context];
+    document.hasPageFooterSection = hasPageFooterSection;
+    
+    id hasDetailSection;
+    hasDetailSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
+                                                     inManagedObjectContext: context];
+    document.hasDetailSection = hasDetailSection;
+    
+    RptqDocumentSectionRows *headerRow;
+    headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+                                              inManagedObjectContext: context];
+    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
+    document.hasReportHeaderSection.hasRows = hasRows1;
+    headerRow.inSection = document.hasReportHeaderSection;
+
+    RptqDocumentSectionRows *footerRow;
+    footerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+                                              inManagedObjectContext: context];
+    NSOrderedSet *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
+    document.hasReportFooterSection.hasRows = hasRows2;
+    footerRow.inSection = document.hasReportFooterSection;
+
+    RptqDocumentSectionRows *pageHeaderRow;
+    pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+                                                  inManagedObjectContext: context];
+    NSOrderedSet *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
+    document.hasPageHeaderSection.hasRows = hasRows3;
+    pageHeaderRow.inSection = document.hasPageHeaderSection;
+    
+    RptqDocumentSectionRows *pageFooterRow;
+    pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+                                                  inManagedObjectContext: context];
+    NSOrderedSet *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
+    document.hasPageFooterSection.hasRows = hasRows4;
+    pageFooterRow.inSection = document.hasPageFooterSection;
+    
+    RptqDocumentSectionRows *detailSectionRow;
+    detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+                                                     inManagedObjectContext: context];
+    NSOrderedSet *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
+    document.hasDetailSection.hasRows = hasRows5;
+    detailSectionRow.inSection = document.hasDetailSection;
+    
+    document.hasReportHeaderSection.type = MADDocumentSectionTypeReportHeader;
+    document.hasReportFooterSection.type = MADDocumentSectionTypeReportFooter;
+    document.hasPageHeaderSection.type = MADDocumentSectionTypePageHeader;
+    document.hasPageFooterSection.type = MADDocumentSectionTypePageFooter;
+    document.hasDetailSection.type = MADDocumentSectionTypeBody;
+
+    [document.hasReportHeaderSection    setInterfaceHeight: 44.0000f];
+    [document.hasReportFooterSection    setInterfaceHeight: 44.0000f];
+    [document.hasPageHeaderSection      setInterfaceHeight: 44.0000f];
+    [document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
+    [document.hasDetailSection          setInterfaceHeight: 88.0000f];
+
+    document.hasReportHeaderSection.visibility = @YES;
+    document.hasReportFooterSection.visibility = @YES;
+    document.hasPageHeaderSection.visibility = @YES;
+    document.hasPageFooterSection.visibility = @YES;
+    document.hasDetailSection.visibility = @YES;
+    
+
+    return document;
+}
+
++ (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSString *entityName = NSStringFromClass([RptqDocument class]);
+    NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    docFetchRequest.fetchLimit = 1;
+    NSError *error = nil;
+    NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
+    NSAssert(error == nil, @"Got error on new document fetch: %@", error);
+    id document = documents.lastObject;
+    return document;
+}
+
 #pragma mark - Overrides
 
 - (void)willTurnIntoFault {
@@ -72,14 +192,18 @@
     [super didTurnIntoFault];
 }
 
-- (void)willChangeValueForKey:(NSString *)inKey withSetMutation:(NSKeyValueSetMutationKind)inMutationKind usingObjects:(NSSet *)inObjects {
-    [super willChangeValueForKey:inKey withSetMutation:inMutationKind usingObjects:inObjects];
+- (void)willChangeValueForKey:(NSString *)inKey
+              withSetMutation:(NSKeyValueSetMutationKind)inMutationKind
+                 usingObjects:(NSSet *)inObjects {
+    [super willChangeValueForKey: inKey
+                 withSetMutation: inMutationKind
+                    usingObjects: inObjects];
 }
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
+    self.identifier = [RptqDataHelper nextIdentifierForClass: [self class]
+                                        managedObjectContext: self.managedObjectContext];
 }
 
 - (RptqQuery *)mainQuery {
@@ -150,7 +274,8 @@
     return resultSection;
 }
 
-- (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type andLevel:(NSUInteger)level {
+- (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
+                                       andLevel:(NSUInteger)level {
     
     switch (type) {
             
@@ -175,126 +300,18 @@
             break;
             
         case MADDocumentSectionTypeGroupHeader:
-            return [RptqDocumentSection groupHeaderForLevel: level query: self.defaultDatabase.defaultQuery];
+            return [RptqDocumentSection groupHeaderForLevel: level
+                                                      query: self.defaultDatabase.defaultQuery];
             break;
         case MADDocumentSectionTypeGroupFooter:
-            return [RptqDocumentSection groupFooterForLevel: level query: self.defaultDatabase.defaultQuery];
+            return [RptqDocumentSection groupFooterForLevel: level
+                                                      query: self.defaultDatabase.defaultQuery];
             break;
         default:
             NSAssert(NO, @"Unknown type");
             return nil;
             break;
     }
-}
-
-#pragma mark - Static
-
-+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    
-    NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
-    
-    NSError *error = nil;
-    NSArray *documents = [objectContext executeFetchRequest:request error:&error];
-    
-    if (!error) {
-        //Delete any contents of the existing object modal.
-        if (documents && documents.count > 0) {
-            for (RptqDocument *document in documents) {
-                [objectContext deleteObject:document];
-            }
-        }
-    }
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
-                                                         inManagedObjectContext: objectContext];
-    
-    RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription
-                                   insertIntoManagedObjectContext: objectContext];
-
-    NSString *rptqDocumentSection = NSStringFromClass([RptqDocumentSection class]);
-    NSString *rptqDocumentSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
-
-    id hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection
-                                                              inManagedObjectContext: objectContext];
-    document.hasReportHeaderSection = hasReportHeaderSection;
-
-    id hasReportFooterSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection
-                                                              inManagedObjectContext: objectContext];
-    document.hasReportFooterSection = hasReportFooterSection;
-    
-    id hasPageHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection
-                                                            inManagedObjectContext: objectContext];
-    document.hasPageHeaderSection = hasPageHeaderSection;
-    
-    id hasPageFooterSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection
-                                                            inManagedObjectContext: objectContext];
-    document.hasPageFooterSection = hasPageFooterSection;
-    
-    id hasDetailSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection
-                                                        inManagedObjectContext: objectContext];
-    document.hasDetailSection = hasDetailSection;
-    
-    RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-                                                                       inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
-    document.hasReportHeaderSection.hasRows = hasRows1;
-    headerRow.inSection = document.hasReportHeaderSection;
-
-    RptqDocumentSectionRows *footerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-                                                                       inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
-    document.hasReportFooterSection.hasRows = hasRows2;
-    footerRow.inSection = document.hasReportFooterSection;
-
-    RptqDocumentSectionRows *pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-                                                                           inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
-    document.hasPageHeaderSection.hasRows = hasRows3;
-    pageHeaderRow.inSection = document.hasPageHeaderSection;
-    
-    RptqDocumentSectionRows *pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-                                                                           inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
-    document.hasPageFooterSection.hasRows = hasRows4;
-    pageFooterRow.inSection = document.hasPageFooterSection;
-    
-    RptqDocumentSectionRows *detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-                                                                              inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
-    document.hasDetailSection.hasRows = hasRows5;
-    detailSectionRow.inSection = document.hasDetailSection;
-    
-    document.hasReportHeaderSection.type = MADDocumentSectionTypeReportHeader;
-    document.hasReportFooterSection.type = MADDocumentSectionTypeReportFooter;
-    document.hasPageHeaderSection.type = MADDocumentSectionTypePageHeader;
-    document.hasPageFooterSection.type = MADDocumentSectionTypePageFooter;
-    document.hasDetailSection.type = MADDocumentSectionTypeBody;
-
-    [document.hasReportHeaderSection    setInterfaceHeight: 44.0000f];
-    [document.hasReportFooterSection    setInterfaceHeight: 44.0000f];
-    [document.hasPageHeaderSection      setInterfaceHeight: 44.0000f];
-    [document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
-    [document.hasDetailSection          setInterfaceHeight: 88.0000f];
-
-    document.hasReportHeaderSection.visibility = @YES;
-    document.hasReportFooterSection.visibility = @YES;
-    document.hasPageHeaderSection.visibility = @YES;
-    document.hasPageFooterSection.visibility = @YES;
-    document.hasDetailSection.visibility = @YES;
-    
-
-    return document;
-}
-
-+ (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSString *entityName = NSStringFromClass([RptqDocument class]);
-    NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
-    docFetchRequest.fetchLimit = 1;
-    NSError *error = nil;
-    NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-    NSAssert(error == nil, @"Got error on new document fetch: %@", error);
-    id document = documents.lastObject;
-    return document;
 }
 
 - (void)setLayoutHeight:(float)height forSectionAtRow:(NSUInteger)sectionRow {
@@ -304,7 +321,7 @@
     section.layoutHeight = height;
 }
 
-- (void)setNumberOfRows:(int64_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
+- (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
@@ -317,8 +334,11 @@
         
         //Add row
         NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        NSString *entityNameSectionRows;
         RptqDocumentSectionRows *newRowToAppend;
-        newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+
+        entityNameSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
+        newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: entityNameSectionRows
                                                        inManagedObjectContext: managedObjectContext];
         NSArray *hasRowsArray = section.hasRows.array;
         NSMutableOrderedSet *hasRows;
@@ -345,7 +365,7 @@
     section.numberOfRows = numberOfRows;
 }
 
-- (void)setHeight:(float)height forSectionAtRow:(NSUInteger)sectionRow {
+- (void)setHeight:(double)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = self.defaultDatabase.defaultQuery;
     RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
                                                       withNumberOfGroups: query.hasQueryGroups.count];
@@ -566,7 +586,7 @@
                                                                                              andTable: table];
             [self.defaultDatabase addHasTablesObject: rptqTable];
             
-            NSMutableArray <MTDatabaseField *> *schemaFields;
+            NSMutableArray <RptqDatabaseSchemaField *> *schemaFields;
             schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
             RptqDatabaseSchemaField *schemaField;
             for (MTDatabaseField *field in fields) {
@@ -615,7 +635,7 @@
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
     MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;
     
-    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
+    NSString *entityName;
     
     RptqDocumentElement *reportObject;
     
@@ -674,9 +694,9 @@
                                                                              insertIntoManagedObjectContext: self.managedObjectContext];
             
             NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
-            ((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] integerValue];
-            ((RptqDocumentElementAggregate *)reportObject).groupType = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotType] integerValue];
-            ((RptqDocumentElementAggregate *)reportObject).functionType = [aggregateOptions[MTDocumentObjectDefinationAggregateType] integerValue];
+            ((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] intValue];
+            ((RptqDocumentElementAggregate *)reportObject).groupType = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotType] shortValue];
+            ((RptqDocumentElementAggregate *)reportObject).functionType = [aggregateOptions[MTDocumentObjectDefinationAggregateType] shortValue];
             
             NSManagedObjectID *objectId = aggregateOptions[MTDocumentObjectDefinationAggregateObjectId];
             
@@ -752,12 +772,6 @@
     [hasObjects insertObject:reportObject atIndex:0];
     [self.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     return reportObject;
-}
-
-+ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
-    fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-
-    [managedObjectContext deleteObject: documentObject];
 }
 
 - (id)debugQuickLookObject {

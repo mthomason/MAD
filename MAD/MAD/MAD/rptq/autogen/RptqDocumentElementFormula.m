@@ -11,3 +11,19 @@
 @implementation RptqDocumentElementFormula
 
 @end
+
+@implementation RptqDocumentElementFormula (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementFormula *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementFormula"];
+}
+
+@dynamic functionScope;
+@dynamic functionType;
+@dynamic inputType;
+@dynamic name;
+@dynamic resultType;
+@dynamic source;
+@dynamic includedInAggregateObject;
+
+@end

@@ -32,7 +32,7 @@
                                     inputType:(MTAggregateFunctionInputType)inputType
                                   inputObject:(NSManagedObject *)inputObject
                                     groupType:(MTAggregateGroupByType)groupType
-                                  groupNumber:(NSNumber *)groupNumber;
+                                  groupNumber:(int32_t)groupNumber;
 
 @end
 
@@ -48,7 +48,7 @@
 
     @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
     @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-    @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
+    @property (nonatomic, assign) int32_t groupTypeSectionNumber;
     @property (nonatomic, copy) NSManagedObjectID *fieldObjectId;
     @property (nonatomic, strong) RptqQueryField *fieldObject;
 

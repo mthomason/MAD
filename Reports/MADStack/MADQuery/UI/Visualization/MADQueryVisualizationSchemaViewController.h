@@ -21,8 +21,8 @@
 
 @protocol MADHierarchicalGroupingNodeProtocol <NSObject>
     @property (nonatomic, assign) BOOL root;
-    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
-                                inView:(UIView *)containerView;
+    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
+                                        inView:(UIView *)containerView;
     - (CGRect)frame;
 @end
 
@@ -39,7 +39,7 @@
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
     @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-    - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID;
 
 @end
 

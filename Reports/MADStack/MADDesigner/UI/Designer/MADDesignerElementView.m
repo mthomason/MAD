@@ -52,11 +52,13 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
     @property (nonatomic, weak)     NSManagedObjectContext *managedObjectContext;
 
+    @property (nonatomic, copy)     NSManagedObjectID *objectID;
+
 @end
 
 @implementation MADDesignerElementView
 
-@synthesize objectIdTag = _objectIdTag;
+@synthesize identifier = _identifier;
 
 - (void)dealloc {
     [_canvasView removeFromSuperview];
@@ -71,17 +73,58 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                      tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                             tapSelector:(SEL)selector {
-
-    id elementView = [[self alloc] initWithDocumentObject: documentObject];
-    [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
-    
-    UIGestureRecognizer *tapGestureRecognizer;
-    tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerElementTouchWithTarget: tapGestureDelegate
-                                                                                           action: selector
-                                                                                         delegate: tapGestureDelegate];
-    [elementView addGestureRecognizer:tapGestureRecognizer];
-    elementView = elementView;
+    id elementView = [[self alloc] initWithDocumentObject: documentObject
+                                       tapGestureDelegate: tapGestureDelegate
+                                              tapSelector: selector];
     return elementView;
+}
+
+- (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
+                    tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                           tapSelector:(SEL)selector {
+    
+    CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
+    if (self = [self initWithFrame: rect]) {
+        
+        self.identifier = documentObject.identifier;
+        self.objectID = documentObject.objectID.copy;
+        
+        MTElementCanvas *canvasView;
+        canvasView = [[MTElementCanvas alloc] initWithFrame:rect];
+        canvasView.autoresizingMask = MADViewAutoresizingFlexable();
+        canvasView.backgroundColor = [UIColor clearColor];
+        canvasView.canvasDelegate = self;
+        [self addSubview:canvasView];
+        self.canvasView = canvasView;
+        
+
+        self.translatesAutoresizingMaskIntoConstraints = YES;
+        self.displayWobbling = NO;
+        self.displayHighlighted = NO;
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+        
+        MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
+        for (UIView *view in resizeHandles.resizeHandles) {
+            [self addSubview:view];
+        }
+        self.resizeHandles = resizeHandles;
+        
+        self.clipsToBounds = NO;
+        
+        self.autoresizingMask = MADViewAutoresizingFlexable();
+        
+        [self updateWithElement:documentObject];
+        
+        self.managedObjectContext = documentObject.managedObjectContext;
+        UIGestureRecognizer *tap;
+        tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
+                                                                     action: selector
+                                                                   delegate: tapGestureDelegate];
+        [self addGestureRecognizer:tap];
+    }
+    return self;
 }
 
 #pragma mark - NSObject
@@ -140,46 +183,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     self.backgroundColor = labelBackgroundColor;
 }
 
-- (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject {
-    
-    CGSize sizeCalculated = [documentObject sizeCalculated];
-    if (self = [self initWithFrame: MADRectOfSize(sizeCalculated)]) {
-        
-        MTElementCanvas *canvasView;
-        canvasView = [[MTElementCanvas alloc] initWithFrame:MADRectOfSize(sizeCalculated)];
-        canvasView.autoresizingMask = MADViewAutoresizingFlexable();
-        canvasView.backgroundColor = [UIColor clearColor];
-        canvasView.canvasDelegate = self;
-        [self addSubview:canvasView];
-        self.canvasView = canvasView;
-        
-        NSManagedObjectID *objectIdTag = documentObject.objectID.copy;
-        self.objectIdTag = objectIdTag;
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.displayWobbling = NO;
-        self.displayHighlighted = NO;
-        
-        self.backgroundColor = [UIColor clearColor];
-        
-
-        MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
-        for (UIView *view in resizeHandles.resizeHandles) {
-            [self addSubview:view];
-        }
-        self.resizeHandles = resizeHandles;
-        
-        self.clipsToBounds = NO;
-        
-        self.autoresizingMask = MADViewAutoresizingFlexable();
-        
-        [self updateForManagedObjectContent:documentObject.managedObjectContext];
-        
-        self.managedObjectContext = documentObject.managedObjectContext;
-
-    }
-    return self;
-}
-
 - (void)setEnableResizing:(BOOL)enableResizing {
     if (_enableResizing != enableResizing) {
         _enableResizing = enableResizing;
@@ -203,7 +206,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
         CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
         
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width,
+                                              locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
 }
@@ -212,23 +216,27 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     UIView *piece = nil;
     if ([piece isKindOfClass:[MTResizeHandleView class]]) {
         [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-        if (gestureRecognizer.state == UIGestureRecognizerStateBegan || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan
+                                || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
             CGPoint translation = [gestureRecognizer translationInView:piece.superview];
             switch (((MTResizeHandleView *)piece).type) {
                 case north:
                 case south:
-                    [self resize:CGSizeMake(self.frame.size.width, self.frame.size.width + translation.y)];
+                    [self resize:CGSizeMake(self.frame.size.width,
+                                            self.frame.size.width + translation.y)];
                     break;
                 case east:
                 case west:
-                    [self resize:CGSizeMake(self.frame.size.width + translation.x, self.frame.size.width)];
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
+                                            self.frame.size.width)];
                     break;
                 case northWest:
                 case northEast:
                 case southEast:
                 case southWest:
                 default:
-                    [self resize:CGSizeMake(self.frame.size.width + translation.x, self.frame.size.width + translation.y)];
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
+                                            self.frame.size.width + translation.y)];
                     break;
             }
             [gestureRecognizer setTranslation:CGPointZero inView:piece.superview];
@@ -239,7 +247,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 - (void)resize:(CGSize)size {
 
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectIdTag];
+    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectID];
     [documentObject setSizeValue:size];
 
     NSError * __autoreleasing *error = NULL;
@@ -296,8 +304,12 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
-    
-    RptqDocumentElement *element = (RptqDocumentElement *)[context objectWithID:self.objectIdTag];
+    RptqDocumentElement *element = (RptqDocumentElement *)[context objectWithID:self.objectID];
+    [self updateWithElement:element];
+    self.managedObjectContext = context;
+}
+
+- (void)updateWithElement:(RptqDocumentElement *)element {
     if (element != nil) {
         
         CGRect marginViewFrame = [element boundsContentView];
@@ -338,7 +350,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         [self setNeedsLayout];
         [self setNeedsDisplay];
     }
-    self.managedObjectContext = context;
 }
 
 @end

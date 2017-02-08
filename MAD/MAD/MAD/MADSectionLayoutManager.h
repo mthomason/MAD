@@ -11,14 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSMutableDictionary <KeyType, ObjectType>;
-@class NSManagedObjectID;
-@class MADSectionLayoutManager;
-@class MADSectionLayoutAttributes;
-@class RptqDocumentSection;
+@class NSMutableDictionary <KeyType, ObjectType>, MADSectionLayoutManager,
+        MADSectionLayoutAttributes, RptqDocumentSection;
 
 typedef struct CGSize CGSize;
-typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutAttributes *>
+typedef NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *>
                                                             MADSectionLayoutAttributesMutableMap;
 
 @interface MADSectionLayoutManager : NSObject
@@ -29,7 +26,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutAttributes *>
     @property (readonly) CGSize size;
 
     - (void)addItem:(MADSectionLayoutAttributes *)item;
-    - (void)removeItemWithID:(NSManagedObjectID *)objectID;
+    - (void)removeItemWithID:(NSNumber *)identifier;
     - (void)layout;
     - (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
 

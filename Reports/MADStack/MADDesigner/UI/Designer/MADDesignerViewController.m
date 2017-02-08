@@ -66,6 +66,7 @@
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
+#import <MAD/madmath.h>
 
 #import "MADTabBarController.h"
 
@@ -123,9 +124,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeNone = 4,
 };
 
-typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionView *> MADMutableMapSectionViews;
-typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerSectionLabel *> MADMutableMapSectionLabels;
-typedef NSMutableDictionary <NSManagedObjectID *, MADDesignerElementView *> MADMutableMapElementViews;
+typedef NSMutableDictionary <NSNumber *, MADDesignerSectionView *> MADMutableMapSectionViews;
+typedef NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> MADMutableMapSectionLabels;
+typedef NSMutableDictionary <NSNumber *, MADDesignerElementView *> MADMutableMapElementViews;
 
 typedef NSMutableDictionary <NSNumber *, NSNumber *> MADMutableMapNumbersByNumber;
 
@@ -137,9 +138,7 @@ typedef NSMutableSet    <MADDesignerElementView *> MADMutableSetElementViews;
 typedef NSMutableArray  <NSLayoutConstraint *>              MADMutableLayoutConstraints;
 typedef NSArray         <NSLayoutConstraint *>              MADLayoutConstraints;
 
-typedef NSMutableArray  <NSManagedObjectID *>               MADMutableManagedObjectIDs;
-typedef NSMutableSet    <NSManagedObjectID *>               MADMutableSetManagedObjectIDs;
-
+typedef NSMutableArray  <NSNumber *>                        MADMutableManagedObjectIDs;
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -184,6 +183,13 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
 }
 
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
+    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width,
+                            CGSizeZero.height,
+                            presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+}
+
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
     MTViewControllerAggregateDelegate,
@@ -207,7 +213,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     @property (nonatomic, strong) MADMutableSetElementViews         *visibleElementViews;
     @property (nonatomic, strong) MADMutableSetSectionViews         *passthroughContainers;
-    @property (nonatomic, strong) MADMutableSetManagedObjectIDs     *selectedObjectIds;
+    @property (nonatomic, strong) NSMutableSet <NSNumber *>         *selectedObjectIds;
 
     @property (nonatomic, strong) MADMutableSectionViews            *sectionViewsArray;
 
@@ -221,7 +227,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsSidesBorder;
     @property (nonatomic, strong) MADMutableLayoutConstraints *layoutConstraintsSectionsVerticalBuffer;
 
-    @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+    @property (nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
 
     @property (nonatomic, strong) MADMutableMapNumbersByNumber *borderAppliedToView;
 
@@ -252,19 +258,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
-    @property (nonatomic, assign) BOOL editAggregate;
-    @property (nonatomic, assign) BOOL toolboxVisible;
-    @property (nonatomic, assign) BOOL sectionSettingsVisible;
-    @property (nonatomic, assign) BOOL insetsSetup;
-    @property (nonatomic, assign) BOOL shownAndHidden;
-    @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
-
-    @property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
-    @property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
-    @property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
-    @property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
-    @property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
-    @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
+    @property (nonatomic, copy) NSNumber *objectIdEditDynamicLabel;
+    @property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
+    @property (nonatomic, copy) NSNumber *objectIdEditImage;
+    @property (nonatomic, copy) NSNumber *objectIdJustDisplayed;
+    @property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
+    @property (nonatomic, copy) NSNumber *aggregateToEditObjectID;
 
     @property (nonatomic, strong) RptqDocumentElementAggregate *aggregateToEdit;
 
@@ -276,7 +275,14 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 @end
 
-@implementation MADDesignerViewController
+@implementation MADDesignerViewController {
+    BOOL _editAggregate;
+    BOOL _toolboxVisible;
+    BOOL _sectionSettingsVisible;
+    BOOL _insetsSetup;
+    BOOL _shownAndHidden;
+    BOOL _lastMenuItemSelectRequiresElementView;
+}
 
 @synthesize document = _document;
 @synthesize title = _title;
@@ -428,14 +434,13 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     void (^initalizeSelf)(MADDesignerViewController *) = ^(MADDesignerViewController *designer) {
         designer.boundsOnDisappear = CGRectZero;
         designer.zoomScaleRestore = -1.0000f;
-        designer.shownAndHidden = NO;
-        designer.editAggregate = NO;
-        
-        designer.insetsSetup = NO;
-        designer.toolboxVisible = NO;
-        designer.sectionSettingsVisible = NO;
     };
-
+    _shownAndHidden = NO;
+    _editAggregate = NO;
+    
+    _insetsSetup = NO;
+    _toolboxVisible = NO;
+    _sectionSettingsVisible = NO;
     initalizeScroller(self.scroller);
     initalizeSelf(self);
 
@@ -570,8 +575,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     self.scroller.delegate = self;
     
 
-    MADMutableSetManagedObjectIDs *selectedObjectIds;
-    selectedObjectIds = [[MADMutableSetManagedObjectIDs alloc] init];
+    NSMutableSet <NSNumber *> *selectedObjectIds;
+    selectedObjectIds = [[NSMutableSet alloc] init];
     self.selectedObjectIds = selectedObjectIds;
     
     self.scroller.container.backgroundColor =   [UIColor greenColor];
@@ -660,7 +665,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                                 *constraintsSectionsVerticalBuffer;
     
     MADMutableSectionViews *sectionViewsArray;
-    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof NSLayoutConstraint *> *constraintsReportSectionHeight;
+    NSMutableDictionary <NSNumber *, __kindof NSLayoutConstraint *> *constraintsReportSectionHeight;
 
     reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
@@ -703,16 +708,17 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     UIGestureRecognizer *strayTouchGesture = self.strayTouchGesture;
 
     for (MADReportSection *reportSection in reportSectionsEnumerator) {
-        NSManagedObjectID *reportSectionKey;
+        NSNumber *reportSectionKey;
         MADDesignerSectionView *sectionView;
         MADDesignerSectionLabel *sectionViewLabel;
         UIGestureRecognizer *tapGestureRecognizer;
         
-        reportSectionKey = reportSection.objectID.copy;
+        reportSectionKey = @(reportSection.identifier);
         
         sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height);
         
-        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection delegate: self];
+        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection
+                                                            delegate: self];
         sectionView.delegate = self;
         sectionView.dataSource = self;
         sectionView.layer.borderWidth = borderWidthThin;
@@ -731,13 +737,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         
         sectionViewLabel.tag = sectionCounter;
         
-        NSManagedObjectID *key;
+        NSNumber *key;
         UIView *constraintItem;
         
         key = reportSectionKeyTracker.lastObject;
         constraintItem = sectionCounter == 0 ?
         self.ruler : sectionViewsDictionary[key];
-        
         
         constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: constraintItem
                                                                 viewBottom: sectionView
@@ -783,7 +788,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         
         [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
         
-        constraintsReportSectionHeight[sectionView.objectIdTag] = constraintView;
+        constraintsReportSectionHeight[@(sectionView.identifier)] = constraintView;
         
         sectionViewsDictionary[reportSectionKey] = sectionView;
         sectionControlViewsDictionary[reportSectionKey] = sectionViewLabel;
@@ -852,11 +857,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.insetsSetup == NO) self.insetsSetup = YES;
+    if (_insetsSetup == NO) _insetsSetup = YES;
     
     [self setScrollersEnabled:YES];
     
-    if (self.shownAndHidden && self.zoomScaleRestore > 1.0001) {
+    if (_shownAndHidden && _zoomScaleRestore > 1.0001) {
         [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
         [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
@@ -873,8 +878,6 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
-    [self removeObservers];
     
     NSArray *subviews = self.scroller.container.subviews;
     for (id view in subviews) {
@@ -895,8 +898,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     [self.layoutConstraintsReportSectionHeight removeAllObjects];
     
-    self.shownAndHidden = YES;
+    _shownAndHidden = YES;
     [self.document saveContext];
+    [self removeObservers];
+
 }
 
 - (void)viewWillLayoutSubviews {
@@ -1291,7 +1296,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         NSNumber * visibility = [[NSNumber alloc] initWithBool:isVisible];
         section.visibility = visibility;
         
-        id key = [section copySectionKey];
+        NSManagedObjectID *key = section.objectID.copy;
 
         void (^updateVisibility)(void);
         updateVisibility = ^{
@@ -1314,13 +1319,13 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
                                                           withNumberOfGroups: query.hasQueryGroups.count];
 
-    UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.objectID];
+    UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.identifier];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [section setInterfaceHeight: collectionViewContentSize.height];
  
     [section.managedObjectContext save:nil];
     
-    id key = [section copySectionKey];
+    NSManagedObjectID *key = section.objectID.copy;
     UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
@@ -1332,7 +1337,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 }
 
 // FIXME: Unused... Used for multiple rows in the document section... currently unused
-- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
+- (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows {
     
     MADocument *doc = self.document;
     RptqDocument *document = doc.activeDocumentModel;
@@ -1341,10 +1346,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel
                                                           withNumberOfGroups: query.hasQueryGroups.count];
     
-    BOOL insertNewSection = (int64_t)numberOfRows > section.numberOfRows;
-    BOOL deleteLastSection =(int64_t) numberOfRows < section.numberOfRows;
+    BOOL insertNewSection = numberOfRows > section.numberOfRows;
+    BOOL deleteLastSection = numberOfRows < section.numberOfRows;
     
-    UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.objectID];
+    UICollectionView *documentSectionView;
+    documentSectionView = [self getSectionViewForSectionID: section.identifier];
     
     if (section.numberOfRows == (int64_t)numberOfRows) {
         
@@ -1382,7 +1388,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     section.numberOfRows = numberOfRows;
     
-    id sectionKey = [section copySectionKey];
+    id sectionKey = section.objectID.copy;
     UICollectionView *collectionView = self.sectionViewsDictionary[sectionKey];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
@@ -1392,10 +1398,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                
         if (insertNewSection) {
-            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:numberOfRows - 1];
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:(NSUInteger)numberOfRows - 1];
             [documentSectionView insertSections:indexSet];
         } else if (deleteLastSection) {
-            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:numberOfRows];
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:(NSUInteger)numberOfRows];
             [documentSectionView deleteSections:indexSet];
         }
 
@@ -1432,8 +1438,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                     [change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.objectID];
-                    layoutManager = doc.sectionLayoutManagers[section.objectIdTag];
-                    attributes = layoutManager.items[documentObject.objectID];
+                    layoutManager = doc.sectionLayoutManagers[@(section.identifier)];
+                    attributes = layoutManager.items[@(documentObject.identifier)];
                     if (attributes != nil) {
                         attributes.frame = [documentObject elementViewFrameDesigner];
                         self.objectIdJustDisplayed = documentObject.objectID.copy;
@@ -1466,12 +1472,15 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     
-    NSSet *managedObjectsUpdated = notification.userInfo[NSUpdatedObjectsKey];
+    NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
 
-    NSManagedObject *managedObject;
-    for (managedObject in managedObjectsUpdated) {
-        MADDesignerElementView *elementView = [self elementViewForManagedObject:managedObject];
-        [elementView updateForManagedObjectContent:managedObject.managedObjectContext];
+    NSManagedObject *object;
+    for (object in updatedObjects) {
+        if ([object isKindOfClass:[RptqDocumentElement class]]) {
+            MADDesignerElementView *elementView;
+            elementView = [self elementViewForManagedObject:(RptqDocumentElement *)object];
+            [elementView updateForManagedObjectContent:object.managedObjectContext];
+        }
     }
     
 }
@@ -1481,16 +1490,16 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    if (self.lastMenuItemSelectRequiresElementView == NO) {
+    if (_lastMenuItemSelectRequiresElementView == NO) {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
-            [self.selectedObjectIds removeObject: lastElementViewToShowMenu.objectIdTag];
+            [self.selectedObjectIds removeObject: @(lastElementViewToShowMenu.identifier)];
             (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
         }
         self.lastElementViewToShowMenu = nil;
     }
-    self.lastMenuItemSelectRequiresElementView = NO;
+    _lastMenuItemSelectRequiresElementView = NO;
 }
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
@@ -1634,9 +1643,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 #pragma mark MTCollectionViewCellElement Delegate
 
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    RptqDocumentElement *documentObject;
-    documentObject = [self.document.managedObjectContext objectWithID:cell.objectIdTag];
-    return documentObject.type;
+    RptqDocumentElement *element;
+    element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
+                                                  fromObjectContext: _document.managedObjectContext];
+    return element.type;
 }
 
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
@@ -1645,7 +1655,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     [self deselectAllElementsAnimated:YES];
     _lastMenuItemSelectRequiresElementView = YES;
     
-    elementView = [self viewForObjectID:cell.objectIdTag];
+    elementView = [self viewForObjectID:@(cell.identifier)];
     [self selectElementView: elementView];
     
 }
@@ -1653,9 +1663,9 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     
     NSManagedObjectContext *private;
-    NSManagedObjectID *elementViewId;
+    int64_t elementID;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    elementViewId = cell.objectIdTag.copy;
+    elementID = cell.identifier;
     private.parentContext = self.document.managedObjectContext;
     
     [private performBlock:^{
@@ -1663,14 +1673,15 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         RptqDocumentElement *documentObject;
         RptqDocumentSection *section;
         MADDesignerSectionView *designerSectionView;
-        NSManagedObjectID *designerSectionViewTag;
+        int64_t designerSectionViewID;
         
-        documentObject = [private objectWithID:elementViewId];
+        documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: elementID
+                                                             fromObjectContext: private];
         section = documentObject.inSectionRow.inSection;
         designerSectionView = [self getSectionViewForDocumentSection:section];
-        designerSectionViewTag = designerSectionView.objectIdTag.copy;
-        section = [RptqDocumentSection documentSectionForObjectID: designerSectionViewTag
-                                           inManagedObjectContext: private];
+        designerSectionViewID = designerSectionView.identifier;
+        section = [RptqDocumentSection newDocumentSectionWithIdentifier: designerSectionViewID
+                                                      fromObjectContext: private];
         BOOL found = NO;
         
         NSOrderedSet *documentSectionHasRows = section.hasRows;
@@ -1681,7 +1692,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             NSUInteger i = 0;
             
             for (RptqDocumentElement *object in hasObjects) {
-                if ([object.objectID isEqual: elementViewId]) {
+                if (object.identifier == elementID) {
                     found = YES;
                     break;
                 }
@@ -1739,7 +1750,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
     
     self.aggregateToEditObjectID = objectID.copy;
-    self.editAggregate = YES;
+    _editAggregate = YES;
 
     MADDesignerViewController * __weak weakself = self;
     
@@ -1750,11 +1761,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         if (!strongself) return;
         
         UIView *viewToEdit = [strongself viewForObjectID: objectID];
-        UINavigationController *navigationController;
-        navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
+        UINavigationController *navigation;
+        navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController;
-        aggregateViewController = navigationController.viewControllers.firstObject;
+        aggregateViewController = navigation.viewControllers.firstObject;
         aggregateViewController.document = strongself.document;
         aggregateViewController.aggregateDelegate = strongself;
         [aggregateViewController setAggregateObjectToEdit:strongself.aggregateToEdit];
@@ -1767,18 +1778,18 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         [aggregateViewController.navigationItem setRightBarButtonItem:dismiss animated:NO];
         [aggregateViewController.navigationItem setLeftBarButtonItem:nil animated:NO];
         
-        navigationController.modalPresentationStyle = UIModalPresentationPopover;
-        navigationController.preferredContentSize = sizePopoverFonts();
+        navigation.modalPresentationStyle = UIModalPresentationPopover;
+        navigation.preferredContentSize = sizePopoverFonts();
         
         UIPopoverPresentationController *popoverController;
-        popoverController = navigationController.popoverPresentationController;
+        popoverController = navigation.popoverPresentationController;
         popoverController.delegate = strongself;
         popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
                                                         toView: strongself.scroller.container];
         
         popoverController.sourceView = strongself.scroller.container;
         popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-        [strongself presentViewController:navigationController animated:YES completion:nil];
+        [strongself presentViewController:navigation animated:YES completion:nil];
         [strongself setDisplayInactive];
         
     };
@@ -1823,7 +1834,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (void)editDocumentObjectBarcode:(RptqDocumentElement *)object {
     
-    UIView *viewToEdit = [self viewForObjectID:object.objectID];
+    UIView *viewToEdit = [self viewForObjectID:@(object.identifier)];
     
     MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
     barcodeViewController.document = self.document;
@@ -1936,13 +1947,13 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
                                 inputType: (MTAggregateFunctionInputType)inputType
                               inputObject: (NSManagedObject *)inputObject
                                 groupType: (MTAggregateGroupByType)groupType
-                              groupNumber: (NSNumber *)groupNumber {
+                              groupNumber: (int32_t)groupNumber {
     
     [self.aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
                                                         inputType: MTAggregateFunctionInputTypeField
                                                         groupType: groupType
                                                   aggregateObject: (RptqQueryField *)inputObject
-                                                      groupNumber: (int64_t)labs(groupNumber.longValue)];
+                                                      groupNumber: i32abs(groupNumber)];
 }
 
 #pragma mark -
@@ -1971,7 +1982,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     MADocument *document = self.document;
     MADSectionLayoutManager *layoutManager;
-    layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
+    layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
     
     __block MADSectionLayoutAttributes *attributes;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key,
@@ -2031,11 +2042,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             [elementView addGestureRecognizer:pinchGesture];
             
             elementView.frame = cellFrame;
-            cell.objectIdTag = documentObject.objectID;
+            cell.identifier = documentObject.identifier;
             
             cell.userInteractionEnabled = YES;
             
-            if ([self.selectedObjectIds containsObject:documentObject.objectID]) {
+            if ([self.selectedObjectIds containsObject: @(documentObject.identifier)]) {
                 [self applyBorderToElementView: elementView];
             }
             
@@ -2043,7 +2054,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             
             if (self.objectIdJustDisplayed != nil) {
                 
-                if ([self.objectIdJustDisplayed isEqual: documentObject.objectID]) {
+                if ([self.objectIdJustDisplayed isEqualToNumber: @(documentObject.identifier)]) {
                     [elementView flash:^(BOOL finished) { if (finished) self.objectIdJustDisplayed = nil; }];
                     
                 }
@@ -2081,8 +2092,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     return cell;
 }
 
-- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView
+     numberOfItemsInSection: (NSInteger)section {
+    MADSectionLayoutManager *layoutManager;
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
     return (NSInteger)layoutManager.items.count;
 }
 
@@ -2147,7 +2160,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     
     BOOL (^predicate)(id obj, BOOL *stop);
     predicate = ^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([obj.objectIdTag isEqual:cell.objectIdTag]) {
+        if (obj.identifier == cell.identifier) {
             *stop = YES;
             return YES;
         } else {
@@ -2187,8 +2200,8 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     NSInteger row = indexPath.row;
     
     RptqDocumentSection *section;
-    section = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
-                                       inManagedObjectContext: self.document.managedObjectContext];
+    section = [RptqDocumentSection newDocumentSectionWithIdentifier: collectionView.identifier
+                                                  fromObjectContext: _document.managedObjectContext];
     NSOrderedSet *objects = [section.hasRows[(NSUInteger)indexPath.section] hasObjects];
     
     if ((NSInteger)objects.count > row) {
@@ -2355,7 +2368,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
          prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADocument *document = self.document;
     MADSectionLayoutManager *layoutManager;
-    layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
+    layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
     NSManagedObjectContext *objectContext = document.managedObjectContext;
     RptqDocumentElement *documentObject;
     
@@ -2377,7 +2390,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
             layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
     __block MADSectionLayoutAttributes *item;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key,
                                                              MADSectionLayoutAttributes *object,
@@ -2394,19 +2407,22 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
 - (NSUInteger)numberOfItemsInSection: (NSUInteger)section
                     ofCollectionView: (MADDesignerSectionView *)collectionView {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager;
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
     return layoutManager.items.count;
 }
 
 - (NSArray *)collectionView: (MADDesignerSectionView *)collectionView
         attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager;
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
     return layoutManager.items.allValues;
 }
 
 - (CGSize)collectionView: (MADDesignerSectionView *)collectionView
            sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager;
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
     return layoutManager.size;
 }
 
@@ -2416,10 +2432,11 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     
     MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
-    RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:piece.objectIdTag];
-
+    RptqDocumentElement *element;
+    element = [RptqDocumentElement newDocumentElementWithIdentifier: piece.identifier
+                                                  fromObjectContext: _document.managedObjectContext];
+    
     if (gestureRecognizer.numberOfTouches > 1) {
-        NSNumber *length;
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
         MADCompassDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
@@ -2428,17 +2445,19 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         switch (resizeAspect.direction) {
 
             case horizontal:
-                [documentObject setSizeWidth:documentObject.sizeContentView.width * gestureRecognizer.scale];
+                [element setSizeWidth:element.sizeContentView.width *
+                                      gestureRecognizer.scale];
                 break;
 
             case vertical:
-                [documentObject setSizeHeight:documentObject.sizeContentView.height * gestureRecognizer.scale];
+                [element setSizeHeight:element.sizeContentView.height *
+                                       gestureRecognizer.scale];
                 break;
                 
             default: {
-                CGSize s = documentObject.sizeContentView;
-                [documentObject setSizeWidth:s.width * gestureRecognizer.scale
-                                      height:s.height * gestureRecognizer.scale];
+                CGSize s = element.sizeContentView;
+                [element setSizeWidth:s.width * gestureRecognizer.scale
+                               height:s.height * gestureRecognizer.scale];
                 break;
             }
         
@@ -2446,7 +2465,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 
     }
     gestureRecognizer.scale = 1.0000f;
-    [documentObject.managedObjectContext save:nil];
+    [element.managedObjectContext save:nil];
     
 }
 
@@ -2579,7 +2598,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
         } else {
             
             [self deselectElementView: elementView animated: YES];
-            [self.selectedObjectIds removeObject: elementView.objectIdTag];
+            [self.selectedObjectIds removeObject: @(elementView.identifier)];
             (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
             
             [self.promptManager removeString: elementView.displayStringAttributed.string];
@@ -2703,7 +2722,7 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
 #pragma mark General
 
 - (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
-    return [self.selectedObjectIds containsObject:elementView.objectIdTag];
+    return [self.selectedObjectIds containsObject:@(elementView.identifier)];
 }
 
 - (NSUInteger)removeBorderFromAllSectionViews {
@@ -2733,8 +2752,10 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     if (_toolboxTransitioningDelegate.presentationController.presentedViewController != nil &&
         [_toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
         
-        CGRect frame = ((MADToolboxTransitioningDelegate *)_toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
-        CGRect bounds = [self.scroller positionForRectOfInterest: [self rectForSelectedElements]
+        CGRect frame, bounds;
+        frame = ((MADToolboxTransitioningDelegate *)_toolboxTransitioningDelegate).
+                                        presentationController.presentedViewController.view.frame;
+        bounds = [self.scroller positionForRectOfInterest: [self rectForSelectedElements]
                                                withPresentedRect: frame
                                                    containerSize: self.view.frame.size
                                                       adjustment: self.topLayoutGuide.length];
@@ -2753,18 +2774,15 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
         [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
-        CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).presentationController.presentedViewController.view.frame;
-        CGRect position = [self.scroller positionForRectOfInterest: selectedSectionView.frame
-                                                 withPresentedRect: presentedRect
-                                                     containerSize: self.view.frame.size
-                                                        adjustment: self.topLayoutGuide.length];
+        CGRect presentedRect, position;
+        presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).
+                                        presentationController.presentedViewController.view.frame;
+        position = [self.scroller positionForRectOfInterest: selectedSectionView.frame
+                                          withPresentedRect: presentedRect
+                                              containerSize: self.view.frame.size
+                                                 adjustment: self.topLayoutGuide.length];
         [self repositionSectionViews:position];
     }
-}
-
-static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
-static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
-    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
 }
 
 - (void)repositionSectionViews:(CGRect)presentedRect {
@@ -2783,8 +2801,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     NSUInteger numberOfViewsDeselected = [self removeBorderFromAllSectionViews];
     
     if (numberOfViewsDeselected == 0) {
-        NSManagedObjectID *objectID = elementView.objectIdTag.copy;
-        [self.selectedObjectIds addObject: objectID];
+        [self.selectedObjectIds addObject: @(elementView.identifier)];
         [self applyBorderToElementView: elementView];
         
         self.viewControllerToolbox.document = self.document;
@@ -2865,7 +2882,7 @@ END_deselectElementView:;
     MADSectionLayoutManager *layoutManager;
 
     collectionView = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
-    layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
+    layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
     
     MADDesignerViewController * __weak weakself = self;
     [collectionView performBatchUpdates:^{
@@ -2910,18 +2927,24 @@ END_deselectElementView:;
 }
 
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    NSManagedObjectID *objectId = cell.objectIdTag;
+    NSNumber *objectId = @(cell.identifier);
     
     MADocument *document;
-    RptqDocumentElement *documentObject;
+    NSArray *elements;
+    __kindof RptqDocumentElement *element;
     MADDesignerSectionView *sectionView;
     MADSectionLayoutManager *layoutManager;
     MADSectionLayoutAttributes *itemToRemove;
     
     document = _document;
-    documentObject  = [document.managedObjectContext objectWithID:objectId];
-    sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
+    NSFetchRequest <__kindof RptqDocumentElement *> *fetchElement;
+    fetchElement = [RptqDocumentElement fetchRequestElement:cell.identifier];
+    NSError * __autoreleasing *error;
+    elements = [self.document.managedObjectContext executeFetchRequest: fetchElement
+                                                                 error: error];
+    element  = elements.firstObject;
+    sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
+    layoutManager = document.sectionLayoutManagers[@(sectionView.identifier)];
     itemToRemove = (layoutManager.items)[objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
@@ -2939,8 +2962,7 @@ END_deselectElementView:;
         [self redrawAllElementViewsInCollectionView:sectionView];
         RptqDocumentElement *documentObjectFinished;
         documentObjectFinished = [document.managedObjectContext objectWithID:objectId];
-        [RptqDocument removeDocumentObject: documentObjectFinished
-                  fromManagedObjectContext: document.managedObjectContext];
+        [document.managedObjectContext deleteObject:documentObjectFinished];
         [document.managedObjectContext save:nil];
 
     }];
@@ -2951,7 +2973,7 @@ END_deselectElementView:;
     return [self.scroller.container popoverRectForSelectedViews:views];
 }
 
-- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
+- (UIView *)viewForObjectID:(NSNumber *)objectID {
 
     id result = [self.elementViewsDictionary objectForKey:objectID];
     if (result != nil) return result;
@@ -2967,12 +2989,12 @@ END_deselectElementView:;
 
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
-        if (self.sectionSettingsVisible &&
+        if (_sectionSettingsVisible &&
             self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
             
             [self adjustSettingsLocation];
             
-        } else if (self.toolboxVisible &&
+        } else if (_toolboxVisible &&
                    self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
             
             [self adjustToolboxLocation];
@@ -2983,11 +3005,11 @@ END_deselectElementView:;
 
 - (void)adjustPassthroughViews {
     
-    if (self.sectionSettingsVisible) {
+    if (_sectionSettingsVisible) {
         self.settingsTransitioningDelegate.passthroughContainers =  self.passthroughContainers;
         self.settingsTransitioningDelegate.passthroughViews =       [self passthroughViews];
         self.settingsTransitioningDelegate.passthroughContainer =   self.scroller;
-    } else if (self.toolboxVisible) {
+    } else if (_toolboxVisible) {
         self.toolboxTransitioningDelegate.passthroughContainers =   self.passthroughContainers;
         self.toolboxTransitioningDelegate.passthroughViews =        [self passthroughViews];
         self.toolboxTransitioningDelegate.passthroughContainer =    self.scroller;
@@ -2997,10 +3019,10 @@ END_deselectElementView:;
 
 - (void)dismissSectionPresentationIfOpen {
     
-    if (self.sectionSettingsVisible &&
+    if (_sectionSettingsVisible &&
         self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.sectionSettingsVisible = NO;
+        _sectionSettingsVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self removeBorderFromAllSectionViews];
         [self.document.managedObjectContext save:nil];
@@ -3011,10 +3033,10 @@ END_deselectElementView:;
 
 - (void)dismissToolboxPresentationIfOpen {
     
-    if (self.toolboxVisible &&
+    if (_toolboxVisible &&
         self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.toolboxVisible = NO;
+        _toolboxVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
@@ -3048,7 +3070,8 @@ END_deselectElementView:;
     }];
     [self.scroller.container bringSubviewToFront: piece];
 
-    NSManagedObjectID *pieceObjectIDTag = piece.objectIdTag;
+    int64_t pieceID = piece.identifier;
+    NSNumber *pieceObjectIDTag = @(pieceID);
     
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -3059,16 +3082,18 @@ END_deselectElementView:;
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        RptqDocumentElement *documentObject = [private objectWithID:pieceObjectIDTag];
-        NSManagedObjectID *documentObjectSectionKey;
-        documentObjectSectionKey = [documentObject.inSectionRow.inSection copySectionKey];
+        RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceID
+                                                                                  fromObjectContext: private];
+        NSNumber *sectionIdentifier;
+        sectionIdentifier = @(documentObject.inSectionRow.inSection.identifier);
 
         MADDesignerViewController __weak *weakself1 = strongself;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
            
             MADDesignerViewController *strongself1 = weakself1;
             
-            MADDesignerSectionView *sectionView = strongself1->_sectionViewsDictionary[documentObjectSectionKey];
+            MADDesignerSectionView *sectionView;
+            sectionView = strongself1.sectionViewsDictionary[sectionIdentifier];
             CGRect b = [strongself1.view convertRect:piece.frame fromView:sectionView];
             piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
             [strongself1.view addSubview: piece];
@@ -3080,7 +3105,7 @@ END_deselectElementView:;
             transition();
             
             MADocument *document = strongself1.document;
-            MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
+            MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[@(sectionView.identifier)];
             MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[pieceObjectIDTag];
             
             MADocument * __weak wdocument = document;
@@ -3109,7 +3134,7 @@ END_deselectElementView:;
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
 
     MADDesignerElementView *piece = (MADDesignerElementView *)gesture.view;
-    NSManagedObjectID *pieceObjectIdTag = piece.objectIdTag.copy;
+    NSNumber *pieceObjectIdTag = @(piece.identifier);
     
     MADDesignerSectionView *sectionView = nil;
 
@@ -3149,11 +3174,12 @@ END_deselectElementView:;
         }
     }
     
-    CGPoint locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:sectionView];
+    CGPoint locationInSection = [self.view convertPoint: gesture.view.frame.origin
+                                                 toView: sectionView];
 
     if (sectionView != nil) {
         
-        NSManagedObjectID *sectionViewObjectIdTag = sectionView.objectIdTag;
+        NSNumber *sectionViewObjectIdTag = @(sectionView.identifier);
         NSManagedObjectContext *private;
         
         private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -3161,7 +3187,7 @@ END_deselectElementView:;
         [private performBlockAndWait:^{
 
             RptqDocumentSection *documentSection = [private objectWithID:sectionViewObjectIdTag];
-            NSManagedObjectID *documentSectionKey = [documentSection copySectionKey];
+            NSManagedObjectID *documentSectionKey = documentSection.objectID.copy;
             CGFloat documentSectionHeight = documentSection.height;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -3250,26 +3276,25 @@ END_deselectElementView:;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
-    NSManagedObjectID *objectId = documentSectionView.objectIdTag;
-    __block NSManagedObjectID *key = nil;
+    int64_t objectId = documentSectionView.identifier;
     __block CGFloat height;
 
     [private performBlockAndWait:^{
         RptqDocumentSection *documentSection;
-        documentSection = [private objectWithID:objectId];
-        key = [documentSection copySectionKey];
+        documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier: objectId
+                                                              fromObjectContext: private];
         height = documentSection.height;
     }];
     
-    NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
+    NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[@(objectId)];
     layoutConstraint.constant = height;
     [self.view setNeedsUpdateConstraints];
 }
 
 - (void)setDisplayActive {
     [self setHidesStatusBar: NO];
-    self.sectionSettingsVisible = NO;
-    self.toolboxVisible = NO;
+    _sectionSettingsVisible = NO;
+    _toolboxVisible = NO;
     
 /*    MADTabBarController *tabBarController = self.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
@@ -3429,7 +3454,7 @@ END_deselectElementView:;
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
                                                                           inCollectionView:documentSectionView];
-                        if (elementView != nil && [self.selectedObjectIds containsObject: elementView.objectIdTag]) {
+                        if (elementView != nil && [self.selectedObjectIds containsObject: @(elementView.identifier)]) {
                             [results addObject:elementView];
                         }
                     }
@@ -3440,18 +3465,16 @@ END_deselectElementView:;
     return results;
 }
 
-- (MADDesignerSectionView *)getSectionViewForSectionID:(NSManagedObjectID *)sectionID {
-    return self.sectionViewsDictionary[sectionID];
+- (MADDesignerSectionView *)getSectionViewForSectionID:(int64_t)sectionID {
+    return self.sectionViewsDictionary[@(sectionID)];
 }
 
-- (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    NSManagedObjectID *sectionKey = [documentSection copySectionKey];
-    return self.sectionViewsDictionary[sectionKey];
+- (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)section {
+    return self.sectionViewsDictionary[@(section.identifier)];
 }
 
-- (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    NSManagedObjectID *sectionKey = [documentSection copySectionKey];
-    return self.sectionControlViewsDictionary[sectionKey];
+- (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)section {
+    return self.sectionControlViewsDictionary[@(section.identifier)];
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
@@ -3511,7 +3534,7 @@ END_deselectElementView:;
     
     view.enableResizing = YES;
     
-    NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
+    NSNumber *key = @(view.identifier);
     self.borderAppliedToView[key] = @YES;
     
     UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
@@ -3540,7 +3563,7 @@ END_deselectElementView:;
     BOOL result;
     if ([self isBorderAppliedToElementView:view]) {
 
-        NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
+        NSNumber *key = @(view.identifier);
         self.borderAppliedToView[key] = @NO;
         result = YES;
         UIColor *color = [UIColor blackColor];
@@ -3560,24 +3583,21 @@ END_deselectElementView:;
 }
 
 - (BOOL)isBorderAppliedToElementView:(MADDesignerElementView *)view {
-    NSNumber *key = [[NSNumber alloc] initWithUnsignedInteger: view.objectIdTag.hash];
+    NSNumber *key = @(view.identifier);
     NSNumber *borderAppliedToView = _borderAppliedToView[key];
     return borderAppliedToView == nil ? NO : borderAppliedToView.boolValue;
 }
 
-- (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
+- (MADDesignerElementView *)elementViewForManagedObject:(__kindof RptqDocumentElement *)managedObject {
 
     id elementView;
 
     RptqDocumentElement *documentObject;
 
-    elementView = [self viewForObjectID:managedObject.objectID];
+    elementView = [self viewForObjectID:@(managedObject.identifier)];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
-    
-    documentObject = [RptqDocumentElement documentObjectForObject:managedObject];
-    if (!documentObject) goto ElementViewForManagedObjectShortCircut;
 
-    elementView = [self viewForObjectID:documentObject.objectID];
+    elementView = [self viewForObjectID:@(documentObject.identifier)];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
 
     SEL handleTap = @selector(handleToggleElementView:);
@@ -3648,7 +3668,7 @@ END_deselectElementView:;
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)_sectionControlViewsDictionary[_document.activeDocumentModel.hasDetailSection.objectID];
+    return (UIView *)_sectionControlViewsDictionary[@(_document.activeDocumentModel.hasDetailSection.identifier)];
 }
 
 - (void)adjustSettingsLocation {
@@ -3813,8 +3833,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)showToolbox {
     
-    self.toolboxVisible = YES;
-    self.sectionSettingsVisible = NO;
+    _toolboxVisible = YES;
+    _sectionSettingsVisible = NO;
     
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3842,7 +3862,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    self.toolboxVisible = NO;
+    _toolboxVisible = NO;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3852,8 +3872,8 @@ static const inline CGSize sizePopoverFonts() {
     self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
-    if (self.sectionSettingsVisible == NO) {
-        self.sectionSettingsVisible = YES;
+    if (_sectionSettingsVisible == NO) {
+        _sectionSettingsVisible = YES;
         [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
             [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
         }];

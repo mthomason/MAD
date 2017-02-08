@@ -13,7 +13,7 @@
 
 @protocol MADManagedObjectViewProtocol <NSObject>
 @required;
-    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
+    @property (nonatomic, assign) int64_t identifier;
 @end
 
 #endif /* MADManagedObjectViewProtocol_h */

@@ -10,6 +10,7 @@
 #define MAD_RptqQueryPredicate_NSManagedObject_h
 
 #import <CoreData/NSManagedObject.h>
+#import <CoreData/NSFetchRequest.h>
 
 @class RptqQuery, RptqQueryField;
 
@@ -19,8 +20,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface RptqQueryPredicate (CoreDataProperties)
 
-#import "RptqQueryPredicate+CoreDataProperties.h"
++ (NSFetchRequest<RptqQueryPredicate *> *)fetchRequest;
+
+@property (nonatomic) int16_t comparson;
+@property (nonatomic) int64_t identifier;
+@property (nullable, nonatomic, copy) NSString *leftFieldID;
+@property (nullable, nonatomic, copy) NSString *rightFieldID;
+@property (nullable, nonatomic, retain) RptqQuery *inQuery;
+@property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
+@property (nullable, nonatomic, retain) RptqQueryField *hasRightField;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

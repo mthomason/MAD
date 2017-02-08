@@ -38,6 +38,15 @@
 
 #import <MAD/MADocument.h>
 
+#import <MAD/MADModel.h>
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryTable.h>
+#import <MAD/MADModelQueryField.h>
+#import <MAD/MADModelTable.h>
+#import <MAD/MADModelField.h>
+
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
 
@@ -63,18 +72,15 @@
     @property (nonatomic, weak) IBOutlet UIView *containerView;
     @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 
-    @property (nonatomic, strong) NSMutableArray <NSManagedObjectID *> *hasFieldsObjectIds;
-    @property (nonatomic, copy) NSManagedObjectID *cachedTableObjectId;
-
-    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptorsFields;
-
-
 @end
 
-@implementation MADQueryVisualizationSchemaViewController
+@implementation MADQueryVisualizationSchemaViewController {
+    int64_t _identifierQueryTable;
+    int64_t _identifierSchemaTable;
+}
 
 @synthesize document = _document;
-@synthesize objectIdTag = _objectIdTag;
+@synthesize identifier = _identifier;
 @synthesize root = _root;
 
 static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"MADIdentifierViewControllerQueryVisualizationSchema";
@@ -106,24 +112,7 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 - (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        NSMutableArray *hasFieldsObjectIds;
-        NSSortDescriptor *namesAccending;
-        NSArray <NSSortDescriptor *> *fieldsSortDescriptors;
-        NSString *key;
-        
-        hasFieldsObjectIds = [[NSMutableArray alloc] init];
-        self.hasFieldsObjectIds = hasFieldsObjectIds;
-        
-        key = [NSStringFromSelector(@selector(databaseSchemaField)) stringByAppendingString: @"."];
-        key = [key stringByAppendingString:NSStringFromSelector(@selector(name))];
-        
-        namesAccending = [[NSSortDescriptor alloc] initWithKey: key
-                                                     ascending: YES];
-        
-        fieldsSortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
-        self.sortDescriptorsFields = fieldsSortDescriptors;
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
@@ -148,34 +137,31 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self.tableView reloadData];
 }
 
 #pragma mark -
 #pragma mark MADManagedObjectViewProtocol
 
-- (void)setObjectIdTag:(NSManagedObjectID *)objectIdTag {
+- (void)setIdentifier:(int64_t)identifier {
 
-    if (_objectIdTag != objectIdTag) {
+    if (_identifier != identifier) {
         
-        ((MADQueryVisualizationSchemaView *)self.view).objectIdTag = objectIdTag.copy;
-        self.cachedTableObjectId = objectIdTag.copy;
+        ((MADQueryVisualizationSchemaView *)self.view).identifier = identifier;
+        _identifierQueryTable = identifier;
         
-        RptqQueryTable *table = [self.document.managedObjectContext objectWithID: objectIdTag];
+        MADModelQueryTable *queryTable;
+        MADocument *doc = self.document;
+        queryTable = [doc.documentModel.firstQuery.tables objectForKey: @(identifier)];
+        _identifierSchemaTable = queryTable.schemaTable;
+
+        self.titleView.label.text = [queryTable alias].copy;
         
-        NSString *tableAlias = table.alias.copy;
-        self.titleView.label.text = tableAlias;
-        
-        [self.hasFieldsObjectIds removeAllObjects];
-        
-        NSArray <RptqQueryField *> *fields;
-        fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
-        
-        for (RptqQueryField *field in fields) {
-            NSManagedObjectID *fieldObjectID = field.objectID.copy;
-            [self.hasFieldsObjectIds addObject:fieldObjectID];
-        }
-        _objectIdTag = objectIdTag.copy;
+        _identifier = identifier;
     }
 }
 
@@ -191,9 +177,10 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     return self.tableView.frame;
 }
 
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID
-                            inView:(UIView *)containerView {
-    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
+- (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
+                                    inView:(UIView *)containerView {
+    MADModelTable *table = [_document.documentModel.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    NSUInteger row = [table.fieldIDs indexOfObject:@(managedObjectID)];
     CGRect rectForRow;
     if (row == NSNotFound) {
         rectForRow = CGRectZero;
@@ -251,14 +238,13 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     
-    MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
-    
-    NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[(NSUInteger)indexPath.row];
-    
-    RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
-                                             managedObjectContext: self.document.managedObjectContext];
-    result.detailLabel.text = field.databaseSchemaField.name.copy;
-    return result;
+    MADModelDocument *doc = _document.documentModel;
+    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    NSNumber *schemaFieldID = [table.fieldIDs objectAtIndex:(NSUInteger)indexPath.row];
+    MADModelField *field = [table.fields objectForKey:schemaFieldID];
+    MTSchemaFieldCell *cell = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
+    cell.detailLabel.text = field.name.copy;
+    return cell;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -266,13 +252,17 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.hasFieldsObjectIds.count;
+    MADModelDocument *doc = _document.documentModel;
+    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    return (NSInteger)table.fieldIDs.count;
 }
 
 #pragma mark - Methods
 
-- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
-    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
+- (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID {
+    MADModelDocument *doc = _document.documentModel;
+    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    NSUInteger row = [table.fieldIDs indexOfObject:@(managedObjectID)];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
     CGRect rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
     return [self.tableView convertRect:rectForRow toView:self.view];

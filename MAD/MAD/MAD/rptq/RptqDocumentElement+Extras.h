@@ -32,15 +32,14 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 extern NSString * const MTDocumentObjectDefinationField1;
 extern NSString * const MTDocumentObjectDefinationField2;
 
-@class MADSectionLayoutManager;
-@class UIFontDescriptor;
-@class RptqDocumentSection;
+@class MADSectionLayoutManager, UIFontDescriptor, RptqDocumentSection;
 
 @interface RptqDocumentElement (Extras)
     <MTProtocolLog, RptqDocumentElementFactory>
 
-    + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
-
+    + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
+                                   fromObjectContext:(NSManagedObjectContext *)context;
+    + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
     + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
                fromParentSection:(RptqDocumentSection *)section
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;

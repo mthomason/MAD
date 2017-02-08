@@ -31,7 +31,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MTReportFormatter.h>
 
 #import <MAD/RptqDocument.h>
-#import <MAD/RptqDocument+CoreDataProperties.h>
 #import <MAD/RptqDocument+Extras.h>
 
 #import <MAD/RptqDatabase.h>
@@ -41,7 +40,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADReportSectionRepresentation.h>
 
 #import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+CoreDataProperties.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/RptqDatabaseSchemaTable.h>
@@ -57,23 +55,18 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqQueryField+Extras.h>
 
 #import <MAD/RptqQueryGroup.h>
-#import <MAD/RptqQueryGroup+CoreDataProperties.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 
 #import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryLinks+CoreDataProperties.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 
 #import <MAD/RptqQueryPredicate.h>
-#import <MAD/RptqQueryPredicate+CoreDataProperties.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
 
 #import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryTable+CoreDataProperties.h>
 #import <MAD/RptqQueryTable+Extras.h>
 
 #import <MAD/RptqQuerySort.h>
-#import <MAD/RptqQuerySort+CoreDataProperties.h>
 
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
@@ -82,14 +75,11 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 #import <MAD/RptqDocumentElementBarcode.h>
-#import <MAD/RptqDocumentElementBarcode+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
 #import <MAD/RptqDocumentElementChart.h>
-#import <MAD/RptqDocumentElementChart+CoreDataProperties.h>
 
 #import <MAD/RptqDocumentElementFormula.h>
-#import <MAD/RptqDocumentElementFormula+CoreDataProperties.h>
 #import <MAD/RptqDocumentElementFormula+Extras.h>
 
 #import <MAD/RptqDocumentElementGroupKey.h>
@@ -125,4 +115,3 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqFieldSelectorManager.h>
 
 #import <MAD/MADActivityItemProviderDelegate.h>
-

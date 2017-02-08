@@ -11,12 +11,15 @@
 
 #import <MAD/MADModel.h>
 
+@class MADModelDatabase, MADModelField;
+
 @interface MADModelQueryField : MADModel
     <MADModelIDProtocol>
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                         schemaField:(NSManagedObjectID *)schemaField
-               schemaFieldIdentifier:(int64_t)schemaFieldIdentifier;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                           schemaTable:(int64_t)schemaTable
+                           schemaField:(int64_t)schemaField
+                              database:(MADModelDatabase *)database;
+    - (MADModelField *)schemaField;
 
 @end
 

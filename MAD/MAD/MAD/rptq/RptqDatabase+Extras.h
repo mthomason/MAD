@@ -23,7 +23,7 @@
 
     + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                    driverType:(NSString *)driverIdentifier
-                                                 connectionId:(int64_t)connectionId NS_RETURNS_RETAINED;
+                                                 connectionId:(int64_t)connectionId;
 
     @property (readonly) RptqQuery *defaultQuery;
 

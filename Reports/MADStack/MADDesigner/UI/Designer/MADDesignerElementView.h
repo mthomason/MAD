@@ -35,8 +35,9 @@ typedef id <UIGestureRecognizerDelegate> MADGestureDelegate;
     @property (nonatomic, readwrite, strong) MTBarcode *displayBarcode;
 
 
-    - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject;
-
+    - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
+                        tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
+                               tapSelector:(SEL)selector;
     + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                          tapGestureDelegate:(MADGestureDelegate)tapGestureDelegate
                                                 tapSelector:(SEL)selector;

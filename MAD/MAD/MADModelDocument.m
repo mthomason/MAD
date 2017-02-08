@@ -58,33 +58,32 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 }
 
 - (instancetype)init {
-    if (self = [self initWithObjectID: nil
-                           identifier: -1
+    if (self = [self initWithIdentifier: -1
                  managedObjectContext: nil]) {
         
     }
     return self;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
-    if (self = [self initWithObjectID:objectID identifier:identifier managedObjectContext:nil]) {
+- (instancetype)initWithIdentifier:(int64_t)identifier {
+    if (self = [self initWithIdentifier:identifier
+                   managedObjectContext:nil]) {
         
     }
     return self;
 }
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [self initWithObjectID:nil identifier: -1
-                 managedObjectContext:managedObjectContext]) {
+    if (self = [self initWithIdentifier: -1
+                   managedObjectContext:managedObjectContext]) {
         
     }
     return self;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier
-            managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [super initWithObjectID:objectID identifier:identifier]) {
+- (instancetype)initWithIdentifier:(int64_t)identifier
+              managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super initWithIdentifier:identifier]) {
         _managedObjectContext = managedObjectContext;
         
         NSOperationQueue *objectContextQueue;
@@ -157,7 +156,9 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                                                                   usingBlock:^(NSNotification * _Nonnull note) {
                                                                       //NSLog(@"%@: %@", NSStringFromClass(note.class), note);
                                                                   }];
-        
+
+        [self updateDocumentDatabaseQuery];
+
         _objectContextQueue = objectContextQueue;
         _managedObjectContext = managedObjectContext;
     }
@@ -300,11 +301,9 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                          kCFNumberSInt64Type, &dbID);
         CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument],
                          kCFNumberSInt64Type, &docID);
-        database = [[MADModelDatabase alloc] initWithObjectID: resultWrapper[keyDatabase]
-                                                   identifier: dbID
-                                                      queryID: resultWrapper[keyQuery]
-                                              queryIdentifier: qID
-                                         managedObjectContext: managedObjectContext];
+        database = [[MADModelDatabase alloc] initWithIdentifier: dbID
+                                                queryIdentifier: qID
+                                           managedObjectContext: managedObjectContext];
         [databases addObject: database];
         database = nil;
     }
@@ -315,8 +314,10 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendFormat:@"%@", NSStringFromClass([self class]).uppercaseString];
-    [debug appendFormat:@"ID:\t%@\n", self.objectID];
-    [debug appendFormat:@"Databases:\t%@", self.databases];
+    [debug appendFormat:@"ID:\t%@\n", _objectID];
+    if (_databases.count > 0) {
+        [debug appendFormat:@"Databases:\t%@", _databases];
+    }
     return debug;
 }
 

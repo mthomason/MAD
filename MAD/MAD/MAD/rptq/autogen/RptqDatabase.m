@@ -14,3 +14,19 @@
 @implementation RptqDatabase
 
 @end
+
+@implementation RptqDatabase (CoreDataProperties)
+
++ (NSFetchRequest<RptqDatabase *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabase"];
+}
+
+@dynamic databaseDriverType;
+@dynamic databaseDriverTypeEnum;
+@dynamic identifier;
+@dynamic hasQueries;
+@dynamic hasTables;
+@dynamic ownedByQueryAsStaticResource;
+@dynamic ownedByUser;
+
+@end

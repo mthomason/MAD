@@ -11,25 +11,23 @@
 
 #import "MADModel.h"
 
-@class MADTableFieldReference, NSPredicate, NSFetchRequest;
+@class MADTableFieldReference, MADTableFieldIdentifier, NSPredicate, NSFetchRequest;
 
 @interface MADModelQueryLink : MADModel
     <MADModelIDProtocol>
     + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                         leftFieldID:(NSManagedObjectID *)leftFieldID
-                        lfIdentifier:(int64_t)lfIdentifier
-                         leftTableID:(NSManagedObjectID *)leftTableID
-                        ltIdentifier:(int64_t)ltIdentifier
-                        rightFieldID:(NSManagedObjectID *)rightFieldID
-                        rfIdentifier:(int64_t)rfIdentifier
-                        rightTableID:(NSManagedObjectID *)rightTableID
-                        rtIdentifier:(int64_t)rtIdentifier;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                           leftFieldID:(int64_t)leftFieldID
+                           leftTableID:(int64_t)leftTableID
+                          rightFieldID:(int64_t)rightFieldID
+                          rightTableID:(int64_t)rightTableID;
+
     @property (nonatomic, readonly, strong)      MADTableFieldReference *leftFieldReference;
     @property (nonatomic, readonly, strong)      MADTableFieldReference *rightFieldReference;
+    @property (nonatomic, readonly, strong)      MADTableFieldIdentifier *leftFieldIdentifier;
+    @property (nonatomic, readonly, strong)      MADTableFieldIdentifier *rightFieldIdentifier;
     - (NSSet <MADTableFieldReference *> *)tableFieldReferences;
-    - (NSSet <NSManagedObjectID *> *)tables;
+    - (NSSet <NSNumber *> *)tables;
 @end
 
 #endif /* MADModelQueryLink_h */

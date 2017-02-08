@@ -51,6 +51,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
     @property (nonatomic, strong, readwrite) MADIndex *lastObjectSelected;
 
+    @property (nonatomic, copy, readonly) NSURL *url;
+
 @end
 
 @interface MADArrayCachingEnumerator : NSEnumerator
@@ -62,12 +64,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @end
 
 @implementation MADArrayCaching {
-    
     int _numberOfRows;
+    NSURL *_url;
     sqlite3_stmt *_statementInsert;
     sqlite3_stmt *_statementSelect;
     sqlite3_stmt *_statementCount;
 }
+
+@dynamic url;
 
 - (void)dealloc {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -127,12 +131,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)initializeDatabase {
     
     NSURL *url = [self url];
-    NSString *path = url.path.copy;
-    BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath: path];
     [self reopenDatabaseAtUrl:url];
-    if (!createDatabase) {
-        createDatabase = ![self.database tableExist:MTArrayCachedTableName];
-    }
     if (![self.database tableExist:MTArrayCachedTableName]) {
 
         MADDataColumn *columnKey;
@@ -252,11 +251,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSURL *)url {
-    NSURL *result = nil;
-    NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory].copy;
-    NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
-    result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
-    return result;
+    if (_url == nil) {
+        NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory].copy;
+        NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
+        _url = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
+    }
+    return _url;
 }
 
 - (void)addColumn:(MADDataColumn *)column
@@ -277,8 +277,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     BOOL success = NO;
     NSError * __autoreleasing *error = NULL;
     success = [self.database executeQuery:queryCacheAddColumn withError:error];
-    //NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
-    //         __PRETTY_FUNCTION__);
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
+             __PRETTY_FUNCTION__);
 }
 
 + (id)newObjectForData:(NSData *)data {
@@ -392,7 +392,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                 NSData *queryResult = [[NSData alloc] initWithBytes: blob
                                                              length: (NSUInteger)bytes];
                 result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-                id result2 = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+                //id result2 = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
                 //NSLog(@"%@-%@", NSStringFromClass([result class]), result);
                 //NSLog(@"%@-%@", NSStringFromClass([result2 class]), result2);
                 
@@ -408,7 +408,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
-- (void)removeAllObjects {
+- (BOOL)removeAllObjects {
     _lastObjectSelected = nil;
     _numberOfRows = 0;
     NSDictionary *queryDefination;
@@ -418,8 +418,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                                    object: queryDefination];
     
     NSError * __autoreleasing *error = NULL;
-    BOOL success = NO;
-    success = [self.database executeQuery:queryDeleteAllFromTable withError:error];
+    return [self.database executeQuery:queryDeleteAllFromTable withError:error];
 
 }
 

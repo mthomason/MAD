@@ -12,3 +12,16 @@
 @implementation RptqQuerySort
 
 @end
+
+@implementation RptqQuerySort (CoreDataProperties)
+
++ (NSFetchRequest<RptqQuerySort *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQuerySort"];
+}
+
+@dynamic ascending;
+@dynamic identifier;
+@dynamic hasField;
+@dynamic inQuery;
+
+@end

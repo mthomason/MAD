@@ -12,3 +12,20 @@
 @implementation RptqDocument
 
 @end
+
+@implementation RptqDocument (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocument *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocument"];
+}
+
+@dynamic identifier;
+@dynamic papersize;
+@dynamic hasDatabaseSchemas;
+@dynamic hasDetailSection;
+@dynamic hasPageFooterSection;
+@dynamic hasPageHeaderSection;
+@dynamic hasReportFooterSection;
+@dynamic hasReportHeaderSection;
+
+@end

@@ -17,8 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface RptqDocumentElementChart (CoreDataProperties)
 
-#import "RptqDocumentElementChart+CoreDataProperties.h"
++ (NSFetchRequest<RptqDocumentElementChart *> *)fetchRequest;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

@@ -42,45 +42,6 @@
 
 #import "MADQueryViewSectionDelegate.h"
 
-@interface MADQueryViewDataSource ()
-    <NSFetchedResultsControllerDelegate>
-
-    @property (nonatomic, readwrite, assign) short count;
-
-    @property (nonatomic, readwrite, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
-
-    @property (nonatomic, readwrite, weak) MADQueryViewCellConfigureHandler handleConfigureCell;
-
-@end
-
-@implementation MADQueryViewDataSource {
-    BOOL _reportingEnabled;
-    NSUInteger _numberOfTables;
-}
-
-- (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    //_sections = nil;
-    _handleConfigureCell = nil;
-    _datasoruce = nil;
-    if (_queryLinksController) {
-        _queryLinksController.delegate = nil;
-//        _queryLinksController = nil;
-    }
-    if (_queryTablesController) {
-        _queryTablesController.delegate = nil;
-//        _queryTablesController = nil;
-    }
-    if (_queryGroupsController) {
-        _queryGroupsController.delegate = nil;
-//        _queryGroupsController = nil;
-    }
-    if (_queryPredicatesController) {
-        _queryPredicatesController.delegate = nil;
-//        _queryPredicatesController = nil;
-    }
-}
-
 short numberOfSectionsForQueryTableCount(NSUInteger, BOOL);
 short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL reportingEnabled) {
     switch (queryTableCount) {
@@ -96,7 +57,46 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     }
 }
 
-- (instancetype)initWithQueryID: (NSManagedObjectID *)queryID
+@interface MADQueryViewDataSource ()
+    <NSFetchedResultsControllerDelegate>
+
+    @property (nonatomic, readwrite, assign) short count;
+
+    @property (nonatomic, readwrite, strong) NSArray <MADQueryViewSectionDelegate *> *sections;
+
+    @property (nonatomic, readwrite, weak) MADQueryViewCellConfigureHandler handleConfigureCell;
+
+@end
+
+@implementation MADQueryViewDataSource {
+    BOOL _reportingEnabled;
+    NSUInteger _numberOfTables;
+}
+
+- (void)dealloc {
+    //NSLog(@"%s", __PRETTY_FUNCTION__);
+    //_sections = nil;
+    _handleConfigureCell = nil;
+    //_datasoruce = nil;
+    //if (_queryLinksController) {
+    //    _queryLinksController.delegate = nil;
+//        _queryLinksController = nil;
+    //}
+    //if (_queryTablesController) {
+    //    _queryTablesController.delegate = nil;
+//        _queryTablesController = nil;
+    //}
+    //if (_queryGroupsController) {
+    //    _queryGroupsController.delegate = nil;
+//        _queryGroupsController = nil;
+    //}
+    //if (_queryPredicatesController) {
+    //    _queryPredicatesController.delegate = nil;
+//        _queryPredicatesController = nil;
+    //}
+}
+
+- (instancetype)initWithQueryID: (NSNumber *)queryID
            managedObjectContext: (NSManagedObjectContext *)managedObjectContext
                reportingEnabled: (BOOL)reportingEnabled
             handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
@@ -104,7 +104,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     
         NSString *keyHasQueryTables = @"madQTC";
         
-        id result;
+        NSArray <NSDictionary <NSString *, NSNumber *> *> *result;
         NSError * __autoreleasing *error = NULL;
         NSFetchRequest *request;
         NSComparisonPredicate *predicate;
@@ -124,13 +124,15 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         expressionDescriptionQueryTableCount.name = keyHasQueryTables.copy;
         expressionDescriptionQueryTableCount.expressionResultType = NSInteger32AttributeType;
         
-        keyPathHasQueryTables = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(hasQueryTables))];
+        NSString *hasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
+        keyPathHasQueryTables = [NSExpression expressionForKeyPath:hasQueryTables];
         keyPathQueryTables = [[NSArray alloc] initWithObjects:keyPathHasQueryTables, nil];
+        
         
         expressionDescriptionQueryTableCount.expression = [NSExpression expressionForFunction: @"count:"
                                                                                     arguments: keyPathQueryTables];
         
-        expression[0] = [NSExpression expressionForEvaluatedObject];
+        expression[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
         expression[1] = [NSExpression expressionForConstantValue: queryID];
         predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
                                                       rightExpression: expression[1]
@@ -146,7 +148,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         request = [[NSFetchRequest alloc] init];
 
         propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescriptionQueryTableCount,
-                                                             expressionDescriptionQueryObjectID, nil];
+                                                             //expressionDescriptionQueryObjectID, nil];
+                                                             nil];
         request.propertiesToFetch = propertiesToFetch;
         request.entity = entityDescription;
         request.fetchLimit = 1;
@@ -157,16 +160,11 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         NSUInteger numberOfTables = 0;
 
         result = [managedObjectContext executeFetchRequest:request error:error];
-        if (result == nil) {
+        if (((NSArray *)result).count > 0) {
+            numberOfTables = (NSUInteger)[result[0][keyHasQueryTables] integerValue];
+        } else {
             if (error) NSLog(@"Fetch error: %@", *error);
             numberOfTables = 0;
-            
-        } else {
-            if (((NSArray *)result).count > 0) {
-                id tableCount = result[0][keyHasQueryTables];
-                numberOfTables = (NSUInteger)[tableCount integerValue];
-                tableCount = nil;
-            }
         }
         
         _count = numberOfSectionsForQueryTableCount(numberOfTables, reportingEnabled);

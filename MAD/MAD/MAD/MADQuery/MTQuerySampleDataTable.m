@@ -94,9 +94,6 @@
     BOOL success = [queryMaxFieldLenght.database executeQuery: queryMaxFieldLenght
                                                 withDataTable: self.dataTableMaxFieldLength
                                                      andError: blockError];
-    if (blockError && error != NULL) {
-        error = blockError;
-    }
     NSAssert(blockError == NULL, @"Error: %@", (*blockError).localizedDescription);
     if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
         

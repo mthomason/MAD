@@ -29,32 +29,8 @@
 
 @implementation RptqDatabase (Extras)
 
-#pragma mark - Overrides
-
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-}
-
-- (RptqQuery *)defaultQuery { return self.hasQueries.anyObject; }
-
-- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {
-    RptqDatabaseSchemaTable *result = nil;
-    for (RptqDatabaseSchemaTable *table in self.hasTables) {
-        if ([table.name isEqualToString:name]) {
-            result = table;
-            break;
-        }
-    }
-    return result;
-}
-
-- (MADDatabaseType)databaseType {
-    return self.databaseDriverTypeEnum;
-}
-
-#pragma mark - Static
+#pragma mark -
+#pragma mark Static
 
 + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
                       andConnecitonId:(int64_t)connectionId {
@@ -87,6 +63,32 @@
     database.identifier = identifier;
     
     return database;
+}
+
+#pragma mark -
+#pragma mark Overrides
+
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
+}
+
+- (RptqQuery *)defaultQuery { return self.hasQueries.anyObject; }
+
+- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {
+    RptqDatabaseSchemaTable *result = nil;
+    for (RptqDatabaseSchemaTable *table in self.hasTables) {
+        if ([table.name isEqualToString:name]) {
+            result = table;
+            break;
+        }
+    }
+    return result;
+}
+
+- (MADDatabaseType)databaseType {
+    return self.databaseDriverTypeEnum;
 }
 
 - (id)debugQuickLookObject {

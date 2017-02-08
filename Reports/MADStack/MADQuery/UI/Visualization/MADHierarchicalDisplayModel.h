@@ -25,11 +25,11 @@
     - (instancetype)initWithNumberOfTables:(NSUInteger)countTables;
 
     - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
-                   forObjectID:(NSManagedObjectID *)objectID;
+                   forObjectID:(int64_t)objectID;
 
     - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
 
-    - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+    - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID;
 
     + (NSString *)cacheFileNameForFileName:(NSString *)filename;
 

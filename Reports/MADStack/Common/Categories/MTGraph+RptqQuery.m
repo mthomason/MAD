@@ -45,7 +45,8 @@
 - (instancetype)initWtthQueryID:(MADModelQuery *)query {
     if (self = [self init]) {
         
-        [query.queryTableIDs  enumerateObjectsUsingBlock:^(NSManagedObjectID * _Nonnull tableID, NSUInteger idx, BOOL * _Nonnull stop) {
+        [query.queryTableIDs  enumerateObjectsUsingBlock:^(NSNumber * _Nonnull tableID,
+                                                           NSUInteger idx, BOOL * _Nonnull stop) {
             [self addVertexWithObject: tableID];
         }];
         
@@ -53,12 +54,12 @@
         
         NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
         for (MADModelQueryLink *link in queryLinkEnumerator) {
-            MTVertex *vertexOrigin =        [self vertexForObject:link.leftFieldReference.tableID];
-            MTVertex *vertexDestination =   [self vertexForObject:link.rightFieldReference.tableID];
+            MTVertex *vertexOrigin =        [self vertexForObject:@(link.leftFieldIdentifier.tableID)];
+            MTVertex *vertexDestination =   [self vertexForObject:@(link.leftFieldIdentifier.tableID)];
             
             [self addEdgeWithOrigin: vertexOrigin
                         destination: vertexDestination
-                             object: link.objectID
+                             object: @(link.identifier)
                           andWeight: weight];
         }
     }

@@ -434,7 +434,7 @@ void sqliteLog(void *foo, const char* statement) {
         
         int step_result = sqlite3_step(statement);
         NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (%s).", (char *)sqlite3_errmsg(_database));
-        step_result = sqlite3_clear_bindings(statement);
+        sqlite3_clear_bindings(statement);
         step_result = sqlite3_finalize(statement);
         NSAssert(step_result == SQLITE_OK, @"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
         statement = NULL;
@@ -547,7 +547,7 @@ void sqliteLog(void *foo, const char* statement) {
                             }
                             
                             dataColumn.fieldName = fieldName;
-                            dataColumn.nativeType = affentyType;
+                            dataColumn.nativeType = (int16_t)affentyType;
                             MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                             dataColumn.type = columnType;
                             
@@ -585,11 +585,10 @@ void sqliteLog(void *foo, const char* statement) {
         //NSLog(@"Failed to run query.");
         // FIXME: Handle failures.
         int step_result = sqlite3_step(statement);
-        success = Sqlite3StepResultOK(step_result);
         NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
     }
     if (partOfTransactionSet == NO) {
-        success = sqlite3_clear_bindings(statement)  == SQLITE_OK;
+        sqlite3_clear_bindings(statement);
         success = sqlite3_finalize(statement) == SQLITE_OK;
         NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
     } else {
@@ -642,31 +641,20 @@ void sqliteLog(void *foo, const char* statement) {
 
     if (queryString.length > 0) {
 
-        if (sqlError != NULL) {
-            if (sqlError && error != NULL) {
-                error = sqlError;
-            }
-            NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
-        } else {
-            
-            //NSAssert(dataTable != nil, @"Need a datatable");
-            
-            NSError * __autoreleasing *executeError = NULL;
-            status = [self executeSql: queryString
-                            fieldKeys: query.fieldKeys
-                         onConnection: nil
-                      intoResultTable: dataTable
-                       transactionSet: query.partOfTransactionSet
-                       returnsResults: query.returnsResults
-                       binaryBindings: query.binaryBindings
-                            withError: executeError];
-            
-            if (executeError && error != NULL) {
-                error = executeError;
-            }
-            NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);
-            
-        }
+        //NSAssert(dataTable != nil, @"Need a datatable");
+        
+        NSError * __autoreleasing *executeError = NULL;
+        status = [self executeSql: queryString
+                        fieldKeys: query.fieldKeys
+                     onConnection: nil
+                  intoResultTable: dataTable
+                   transactionSet: query.partOfTransactionSet
+                   returnsResults: query.returnsResults
+                   binaryBindings: query.binaryBindings
+                        withError: executeError];
+        
+        NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);
+        
 
     }
     
@@ -813,8 +801,8 @@ void sqliteLog(void *foo, const char* statement) {
             NSError * __autoreleasing *errorQuery = NULL;
             BOOL successQuery = NO;
             successQuery = [self executeQuery:dropTable withError:errorQuery];
-            //NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-            //         __PRETTY_FUNCTION__);
+            NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
+                     __PRETTY_FUNCTION__);
 
             NSAssert(errorQuery == NULL, (*errorQuery).localizedDescription);
         }
@@ -924,15 +912,14 @@ void sqliteLog(void *foo, const char* statement) {
     }];
 }
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn
+                                                   error:(NSError *__autoreleasing *)error {
     NSMutableArray *result = [[NSMutableArray alloc] init];
-    BOOL success = NO;
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
     
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-        success = YES;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             
             const char *resultString = (const char *)sqlite3_column_text(statement, 0);
@@ -950,15 +937,15 @@ void sqliteLog(void *foo, const char* statement) {
 
 #pragma mark - Reading Fields
 
-- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName
+                                     connection: (id)process
+                                          error: (NSError * __autoreleasing *)error {
     NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
-    BOOL success = NO;
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
     
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-        success = YES;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             
             const char *resultString = (const char *)sqlite3_column_text(statement, 0);

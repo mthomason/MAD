@@ -11,3 +11,12 @@
 @implementation RptqDocumentElementChart
 
 @end
+
+@implementation RptqDocumentElementChart (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentElementChart *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementChart"];
+}
+
+
+@end

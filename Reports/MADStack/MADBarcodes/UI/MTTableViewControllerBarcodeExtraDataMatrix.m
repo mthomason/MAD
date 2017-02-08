@@ -30,15 +30,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
+    delegate = self.delegate;
     
     NSInteger section = indexPath.section;
     switch (indexPath.section) {
         case 0: {
-            BOOL suppress = [self.delegate barcodeDataMatrixSuppressRectangularSymbols] == NO;
+            BOOL suppress = [delegate barcodeDataMatrixSuppressRectangularSymbols] == NO;
             UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];
             UITableViewCellAccessoryType accessory = suppress ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             c.accessoryType = accessory;
-            [self.delegate barcodeDataMatrixDidSuppressRectangularSymbols:suppress];
+            [delegate barcodeDataMatrixDidSuppressRectangularSymbols:suppress];
             break;
         }
         case 1: {
@@ -48,7 +50,7 @@
                 c.accessoryType = UITableViewCellAccessoryNone;
             }
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            [self.delegate barcodeDataMatrixDidSelectSize:cell.tag];
+            [delegate barcodeDataMatrixDidSelectSize:cell.tag];
 
             break;
         }

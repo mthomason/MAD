@@ -129,14 +129,19 @@
 }
 
 - (NSInteger)initalRow {
-    return self.displayingSize ? [self.delegate barcodeQrCodeInitalSize] : [self.delegate barcodeQrCodeInitalErrorCorrection];
+    id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
+    delegate = self.delegate;
+    return self.displayingSize ? [delegate barcodeQrCodeInitalSize] :
+                                 [delegate barcodeQrCodeInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
+    id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
+    delegate = self.delegate;
     if (self.displayingSize) {
-        [self.delegate barcodeQrCodeDidSetSize:tag];
+        [delegate barcodeQrCodeDidSetSize:tag];
     } else {
-        [self.delegate barcodeQrCodeDidSetErrorCorrection:tag];
+        [delegate barcodeQrCodeDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

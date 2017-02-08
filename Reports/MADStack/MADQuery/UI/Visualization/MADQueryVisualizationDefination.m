@@ -34,7 +34,7 @@
 
     @property (nonatomic, strong, readwrite) MTGraph *graphRepresentation;
     @property (nonatomic, strong, readwrite) MTLinkedList *topologicallySortedTables;
-    @property (nonatomic, strong, readwrite) NSArray <NSURL *> *startingPoints;
+    @property (nonatomic, strong, readwrite) NSArray <NSNumber *> *startingPoints;
     @property (nonatomic, assign, readwrite, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
 @end
@@ -48,7 +48,7 @@
         self.graphRepresentation = graph;
         
         NSError * __autoreleasing *error = NULL;
-        BOOL isDirectedAcyclicGraph;
+        BOOL isDirectedAcyclicGraph, topLevel;
         MTLinkedList *tableIds;
 
         tableIds = [graph topologicalSortWithError: error
@@ -56,18 +56,22 @@
         
         self.topologicallySortedTables = tableIds;
         
-        NSMutableArray *startingPoints = [[NSMutableArray alloc] init];
+        NSMutableArray <NSNumber *> *startingPoints = [[NSMutableArray alloc] init];
+        MTVertex *tableIdVertext;
+        NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
+
+        NSNumber *tableID;
+        MADModelQueryLink *link;
         for (MTPair *tableObjectIdContainer in tableIds) {
-            MTVertex *tableIdVertext = tableObjectIdContainer.former;
+            tableIdVertext = tableObjectIdContainer.former;
             
             if (tableIdVertext.object != nil) {
                 
-                NSManagedObjectID *tableID = tableIdVertext.object;
-                
-                BOOL topLevel = YES;
+                tableID = tableIdVertext.object;
+                topLevel = YES;
 
-                NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = queryID.links.objectEnumerator;
-                for (MADModelQueryLink *link in queryLinkEnumerator) {
+                queryLinkEnumerator = queryID.links.objectEnumerator;
+                for (link in queryLinkEnumerator) {
                     if ([link.rightFieldReference.tableID isEqual:tableID]) {
                         topLevel = NO;
                         break;
@@ -75,8 +79,7 @@
                 }
                 
                 if (topLevel) {
-                    NSURL *url = tableID.URIRepresentation.copy;
-                    [startingPoints addObject:url];
+                    [startingPoints addObject:tableID];
                 }
                 
             }

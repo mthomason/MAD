@@ -189,16 +189,16 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     
     
     // MARK: Sort the vectors topologically.
-    if (error != NULL) *error = nil;
     BOOL  isDirectedAcyclicGraph;
     NSAssert(graph != nil, @"Where's the graph?");
     
-    MTLinkedList *topologicalSort = [graph topologicalSortWithError:error
+    NSError * __autoreleasing sortError = NULL;
+    MTLinkedList *topologicalSort = [graph topologicalSortWithError:&sortError
                                              isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
     
     // MARK: Error on circuts or other bad query.
-    NSAssert(*error == nil, @"Got an error %@", *error);
-    if (*error != nil) {
+    if (*error != NULL) {
+        NSAssert(YES, @"Error: Bad conditions.");
         [result setString:@""];
     } else {
         

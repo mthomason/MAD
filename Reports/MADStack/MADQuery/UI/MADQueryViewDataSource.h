@@ -44,7 +44,7 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 @interface MADQueryViewDataSource : NSObject
     <UITableViewDataSource>
 
-    - (instancetype)initWithQueryID: (NSManagedObjectID *)queryID
+    - (instancetype)initWithQueryID: (NSNumber *)queryID
                managedObjectContext: (NSManagedObjectContext *)managedObjectContext
                    reportingEnabled: (BOOL)reportingEnabled
                 handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCel;

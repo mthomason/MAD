@@ -30,7 +30,7 @@
 
     @property (nonatomic, readwrite, strong)                            MADSectionLayoutManager *layoutManager;
 
-    @property (nonatomic, readwrite, strong)                            NSManagedObjectID *objectID;
+    @property (nonatomic, readwrite, strong)                            NSNumber *objectID;
     @property (nonatomic, readwrite, assign)                            NSManagedObjectContext *managedObjectContext;
 
     @property (nonatomic, readwrite, strong, getter=hasReportRows)      MADReportRows *reportRows;
@@ -96,7 +96,8 @@
 
 - (RptqDocumentSection *)documentSection {
     if (_documentSection == nil) {
-        _documentSection = [_managedObjectContext objectWithID: _objectID];
+        _documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:self.identifier
+                                                               fromObjectContext:_managedObjectContext];
     }
     return _documentSection;
 }

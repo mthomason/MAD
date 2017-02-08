@@ -31,6 +31,9 @@
     @property (readonly, nonatomic, assign) int64_t tableID;
     @property (readonly, nonatomic, assign) int64_t fieldID;
 
+    - (NSNumber *)tableObjectID;
+    - (NSNumber *)fieldObjectID;
+
 @end
 
 #endif /* MADTableFieldIdentifier_h */

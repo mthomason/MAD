@@ -10,6 +10,6 @@
 
 @implementation MADManagedObjectCollectionViewCell
 
-@synthesize objectIdTag = _objectIdTag;
+@synthesize identifier = _identifier;
 
 @end

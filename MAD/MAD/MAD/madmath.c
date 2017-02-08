@@ -48,3 +48,11 @@ short digit_count_iterative_uint (unsigned int n) {
     }
     return r;
 }
+
+int32_t i32abs(int32_t i) {
+    return i > 0 ? i : i * -1;
+}
+
+int64_t i64abs(int64_t i) {
+    return i > 0 ? i : i * -1;
+}

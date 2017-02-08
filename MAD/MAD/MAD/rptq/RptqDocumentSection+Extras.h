@@ -25,13 +25,14 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
 
 @interface RptqDocumentSection (Extras)
 
+    + (instancetype)newDocumentSectionWithIdentifier:(int64_t)identifier
+                                   fromObjectContext:(NSManagedObjectContext *)context;
+
     + (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
                         inManagedObjectContext:(NSManagedObjectContext *)moc;
-
-    - (NSManagedObjectID *)copySectionKey;
 
     + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
                                 withNumberOfGroups:(NSUInteger)numberOfGroups;
@@ -55,7 +56,7 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     - (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (void)setInterfaceHeight:(float)height;
+    - (void)setInterfaceHeight:(double)height;
     - (void)setProducesFormFeed:(BOOL)producesFormFeed;
 
 @end

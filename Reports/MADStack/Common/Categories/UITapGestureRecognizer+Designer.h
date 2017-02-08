@@ -20,9 +20,9 @@
                                                             action:(SEL)action
                                                           delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
-    + (instancetype)newTapGestureRecognizerElementTouchWithTarget:(id)target
-                                                           action:(SEL)action
-                                                         delegate:(id<UIGestureRecognizerDelegate>)delegate;
+    + (instancetype)newTapGestureRecognizerTapWithTarget:(id)target
+                                                  action:(SEL)action
+                                                delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
     + (instancetype)newTapGestureRecognizerStrayTouchWithTarget:(id)target
                                                          action:(SEL)action

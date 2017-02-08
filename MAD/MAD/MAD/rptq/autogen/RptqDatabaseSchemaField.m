@@ -13,3 +13,22 @@
 @implementation RptqDatabaseSchemaField
 
 @end
+
+@implementation RptqDatabaseSchemaField (CoreDataProperties)
+
++ (NSFetchRequest<RptqDatabaseSchemaField *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseSchemaField"];
+}
+
+@dynamic dataType;
+@dynamic dataTypeNative;
+@dynamic decimals;
+@dynamic identifier;
+@dynamic name;
+@dynamic primaryKey;
+@dynamic width;
+@dynamic inQuery;
+@dynamic inQueryField;
+@dynamic inTable;
+
+@end

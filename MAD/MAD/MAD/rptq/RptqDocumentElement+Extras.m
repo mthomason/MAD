@@ -142,26 +142,32 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
-    RptqDocumentElement *result = nil;
++ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier {
+    NSFetchRequest *request;
+    NSPredicate *predicate;
+    NSExpression *left, *right;
+    left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
+    right = [NSExpression expressionForConstantValue:@(identifier)];
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
+                                                   rightExpression: right
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
+    request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
+    request.predicate = predicate;
     
-    if ([managedObject isKindOfClass:[RptqDocumentElement class]]) {
-        result = (RptqDocumentElement *)managedObject;
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentElementGroupKey class]]) {
-        result = ((RptqDocumentElementGroupKey *)managedObject);
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentElementLabel class]]) {
-        result = ((RptqDocumentElementLabel *)managedObject);
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentElementBarcode class]]) {
-        result = ((RptqDocumentElementBarcode *)managedObject);
-        
-    } else if ([managedObject isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
-        result = ((RptqDocumentElementLabelDataField *)managedObject);
-        
-    }
-    return result;
+    request.fetchLimit = 1;
+    request.resultType = NSManagedObjectResultType;
+    request.includesSubentities = YES;
+    request.includesPropertyValues = YES;
+    return request;
+}
+
++ (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
+                               fromObjectContext:(NSManagedObjectContext *)context {
+    NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
+    fetchRequet = [self fetchRequestElement: identifier];
+    return [context executeFetchRequest:fetchRequet error:nil].firstObject;
 }
 
 + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
@@ -176,7 +182,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSMutableOrderedSet *hasObjects = documentObject.inSectionRow.hasObjects.mutableCopy;
     [hasObjects removeObjectAtIndex:deleteIndex];
     
-    [layoutManager removeItemWithID:documentObject.objectID];
+    [layoutManager removeItemWithID:@(documentObject.identifier)];
     [layoutManager layout];
     
     sectionRow.hasObjects = hasObjects;
@@ -633,9 +639,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
     NSDictionary *fontAttributes;
     fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                      fontname,       UIFontDescriptorFamilyAttribute,
-                      self.fontsize,  UIFontDescriptorSizeAttribute,
-                      symbolicTraits, UIFontDescriptorTraitsAttribute, nil];
+                      fontname,         UIFontDescriptorFamilyAttribute,
+                      @(self.fontsize), UIFontDescriptorSizeAttribute,
+                      symbolicTraits,   UIFontDescriptorTraitsAttribute, nil];
     
     UIFontDescriptor *fontDescriptor;
     fontDescriptor = [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];

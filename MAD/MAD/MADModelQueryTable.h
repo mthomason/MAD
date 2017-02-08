@@ -11,21 +11,27 @@
 
 #import "MADModel.h"
 
-@class MADModelQueryField, NSFetchRequest, NSPredicate, NSMutableDictionary<KeyType, ObjectType>;
+@class MADModelDatabase, MADModelQueryField, NSFetchRequest, NSPredicate,
+        NSMutableDictionary<KeyType, ObjectType>, NSOrderedSet<__covariant ObjectType>;
 
 @interface MADModelQueryTable : MADModel
     <MADModelIDProtocol>
     + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                         schemaTable:(NSManagedObjectID *)schemaTable
-               schemaTableIdentifier:(int64_t)schemaTableIdentifier
-                            capacity:(NSUInteger)capacity;
-    @property (nonatomic, readonly, strong)     NSMutableDictionary <NSManagedObjectID *, MADModelQueryField *> *fields;
-    - (void)addField:(NSManagedObjectID *)fieldID
-     fieldIdentifier:(int64_t)fieldIdentifier
-         schemaField:(NSManagedObjectID *)schemaField
-    schemaFieldIdentifier:(int64_t) schemaFieldIdentifier;
+    + (NSFetchRequest *)fetchRequestQueryTables:(NSPredicate *)predicate;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                             dropIndex:(int64_t)dropIndex
+                           schemaTable:(int64_t)schemaTableIdentifier
+                            inDatabase:(MADModelDatabase *)inDatabase;
+
+    @property (nonatomic, readonly) int64_t schemaTable;
+    @property (nonatomic, readonly, strong) NSDictionary <NSNumber *, MADModelQueryField *> *fields;
+    @property (nonatomic, readonly, strong) NSOrderedSet <NSNumber *> *fieldIDs;
+
+    - (void)addField:(int64_t)fieldIdentifier
+         schemaField:(int64_t)schemaField;
+
+    - (NSString *)alias;
+
 @end
 
 #endif /* MADModelQueryTable_h */

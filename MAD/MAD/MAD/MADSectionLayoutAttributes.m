@@ -17,8 +17,10 @@
 
 + (NSArray <NSValue *> *)newArrayOfDropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
     MADCorners corners = MTCornersMake(item.frame);
-    NSValue *bottomRight = [[NSValue alloc] initWithBytes:&corners.bottomRight objCType:@encode(CGPoint)];
-    NSValue *topRight = [[NSValue alloc] initWithBytes:&corners.topRight objCType:@encode(CGPoint)];
+    NSValue *bottomRight = [[NSValue alloc] initWithBytes: &corners.bottomRight
+                                                 objCType: @encode(CGPoint)];
+    NSValue *topRight = [[NSValue alloc] initWithBytes: &corners.topRight
+                                              objCType: @encode(CGPoint)];
     NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
     return cornersArray;
 }
@@ -34,11 +36,13 @@
                                                 objCType: @encode(CGPoint)],
             *bottomRight = [[NSValue alloc] initWithBytes: &corners.bottomRight
                                                  objCType: @encode(CGPoint)];
-    NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight, bottomLeft, bottomRight, nil];
+    NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight,
+                                                       bottomLeft, bottomRight, nil];
     return result;
 }
 
-+ (BOOL)item:(MADSectionLayoutAttributes *)item intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
++ (BOOL)item:(MADSectionLayoutAttributes *)item
+        intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
     BOOL intersects = NO;
     for (MADSectionLayoutAttributes *existingItem in items) {
         if (item.objectID != existingItem.objectID) {
@@ -102,11 +106,10 @@
 #pragma mark Convience Constructor
 
 + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                           objectID:(NSManagedObjectID *)objectID
+                                           objectID:(NSNumber *)objectID
                                             andRect:(CGRect)rect {
     MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
-    NSManagedObjectID *managedObjectID = objectID.copy;
-    instance.objectID = managedObjectID;
+    instance.objectID = objectID.copy;
     instance.frame = rect;
     return instance;
 }

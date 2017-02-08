@@ -11,3 +11,23 @@
 @implementation RptqDatabaseCredentals
 
 @end
+
+@implementation RptqDatabaseCredentals (CoreDataProperties)
+
++ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseCredentals"];
+}
+
+@dynamic driverID;
+@dynamic identifier;
+@dynamic inUse;
+@dynamic dbname;
+@dynamic host;
+@dynamic port;
+@dynamic server;
+@dynamic domain;
+@dynamic key;
+@dynamic url;
+@dynamic inDatabase;
+
+@end

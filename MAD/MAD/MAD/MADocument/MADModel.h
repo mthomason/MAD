@@ -52,14 +52,13 @@ typedef NS_ENUM(short, MADModelType) {
 };
 
 @protocol MADModelIDProtocol <NSObject>
-    @property (nonatomic, readonly, copy)       NSManagedObjectID *objectID;
+    //@property (nonatomic, readonly, copy)       NSManagedObjectID *objectID;
     @property (nonatomic, readonly, assign)     int64_t identifier;
 @end
 
 @protocol MADModelDataProtocol <NSObject>
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
     - (void)update;
 @end
@@ -72,8 +71,9 @@ typedef NS_ENUM(short, MADModelType) {
 }
 
     + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithIdentifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
+
+    - (NSNumber *)objectID;
 @end
 
 #endif

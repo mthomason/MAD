@@ -21,7 +21,7 @@
 
 @implementation MADConnectorView
 
-@synthesize objectIdTag = _objectIdTag;
+@synthesize identifier = _identifier;
 
 - (instancetype)init {
     return [self initWithFrame:CGRectZero];

@@ -17,20 +17,21 @@
 
 @interface MADModelQuery : MADModel
     <MADModelIDProtocol, MADModelDataProtocol>
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                            database:(MADModelDatabase *)database;
-    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryTableIDs;
-    @property (nonatomic, readonly, strong) NSOrderedSet <NSManagedObjectID *> *queryLinkIDs;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelTable *> *tableSchemas;
-    @property (nonatomic, readonly, strong) NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
-    - (NSSet <NSManagedObjectID *> *)tablesInLinks;
-    - (NSSet <NSManagedObjectID *> *)orphanedQueryTables;
-    - (void)deleteQueryLinkID:(NSManagedObjectID *)queryLink;
-    - (void)deleteQueryTableID:(NSManagedObjectID *)queryTable;
-    - (void)insertQueryTableID:(NSManagedObjectID *)queryTableID;
-    - (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                              database:(MADModelDatabase *)database;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    @property (nonatomic, readonly, strong) NSOrderedSet <NSNumber *> *queryTableIDs;
+    @property (nonatomic, readonly, strong) NSOrderedSet <NSNumber *> *queryLinkIDs;
+    @property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelQueryTable *> *tables;
+    //@property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelTable *> *tableSchemas;
+    @property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelQueryLink *> *links;
+    - (NSSet <NSNumber *> *)tablesInLinks;
+    - (NSSet <NSNumber *> *)orphanedQueryTables;
+    - (void)deleteQueryLinkID:(NSNumber *)queryLink;
+    - (void)deleteQueryTableID:(NSNumber *)queryTable;
+    - (void)insertQueryTableID:(NSNumber *)queryTableID;
+    - (void)insertQueryLinkID:(NSNumber *)queryLinkID;
 
 @end
 

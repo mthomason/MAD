@@ -10,6 +10,30 @@
 #import "RptqDocument.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqQueryGroup.h"
+
 @implementation RptqDocumentSection
+
+@end
+
+@implementation RptqDocumentSection (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentSection *> *)fetchRequest {
+	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentSection"];
+}
+
+@dynamic identifier;
+@dynamic type;
+@dynamic height;
+@dynamic layoutHeight;
+@dynamic numberOfRows;
+@dynamic visibility;
+@dynamic wrappingStyle;
+@dynamic hasRows;
+@dynamic inGroup;
+@dynamic inReport;
+@dynamic inReportPageFooter;
+@dynamic inReportPageHeader;
+@dynamic inReportReportFooter;
+@dynamic inReportReportHeader;
 
 @end

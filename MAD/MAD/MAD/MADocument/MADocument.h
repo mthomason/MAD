@@ -29,7 +29,7 @@
         MADSectionLayoutManager, MTQueryFull, MTPaper;
 
 
-typedef NSMutableDictionary <NSManagedObjectID *, MADSectionLayoutManager *>
+typedef NSMutableDictionary <NSNumber *, MADSectionLayoutManager *>
                                                         MADSectionLayoutManagerMutableMap;
 
 extern NSString * const MADMimeType;
@@ -80,7 +80,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 
-    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID;
+    - (void)removeDocumentObjectWithObjectID:(int64_t)objectID;
 
     - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
                                  inContent:(NSManagedObjectContext *)context;
@@ -91,7 +91,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
           fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSDictionary *)copyLayoutHeightsBySectionKey;
+    - (NSDictionary *)layoutHeightsBySectionKey;
 
     + (void)close:(MADocument *)document
        completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion;

@@ -9,6 +9,7 @@
 #import "MADTableFieldIdentifier.h"
 
 #import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSValue.h>
 
 @implementation MADTableFieldIdentifier {
     int64_t _tableID;
@@ -39,6 +40,15 @@
 
 - (int64_t)fieldID {
     return _fieldID;
+}
+
+
+- (NSNumber *)tableObjectID {
+    return @(_tableID);
+}
+
+- (NSNumber *)fieldObjectID {
+    return @(_fieldID);
 }
 
 @end

@@ -14,8 +14,6 @@
 
 @interface MADQuery : NSObject
 
-    + (instancetype)newQuery:(MADQueryType)type object:(id)object;
-
 @end
 
 #endif

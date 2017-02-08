@@ -31,20 +31,17 @@
 #import "MADModelQueryLink.h"
 
 #import "RptqQueryLinks.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 
 @interface MADModelQuery ()
 
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                          identifier:(int64_t)identifier
-                            database:(MADModelDatabase *)database;
-
     @property (nonatomic, weak, readonly) MADModelDatabase *database;
 
-    - (void)deleteQueryTableID:(NSManagedObjectID *)queryTable;
-    - (void)deleteQueryLinkID:(NSManagedObjectID *)queryLink;
-    - (void)insertQueryTableID:(NSManagedObjectID *)queryTableID;
-    - (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID;
+    - (void)deleteQueryTableID:(NSNumber *)queryTable;
+    - (void)deleteQueryLinkID:(NSNumber *)queryLink;
+    - (void)insertQueryTableID:(NSNumber *)queryTableID;
+    - (void)insertQueryLinkID:(NSNumber *)queryLinkID;
 @end
 
 #pragma mark -
@@ -52,11 +49,11 @@
 
 @implementation MADModelQuery {
   @protected
-    NSMutableOrderedSet <NSManagedObjectID *> *_queryTableIDs;
-    NSMutableOrderedSet <NSManagedObjectID *> *_queryLinkIDs;
-    NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *_tables;
-    NSMutableDictionary <NSManagedObjectID *, MADModelTable *> *_tableSchemas;
-    NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *_links;
+    NSMutableOrderedSet <NSNumber *> *_queryTableIDs;
+    NSMutableOrderedSet <NSNumber *> *_queryLinkIDs;
+    NSMutableDictionary <NSNumber *, MADModelQueryTable *> *_tables;
+    //NSMutableDictionary <NSNumber *, MADModelTable *> *_tableSchemas;
+    NSMutableDictionary <NSNumber *, MADModelQueryLink *> *_links;
     MADModelDatabase __weak *_database;
     NSManagedObjectContext * __weak _managedObjectContext;
 }
@@ -66,37 +63,34 @@
     _database = nil;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier
+- (instancetype)initWithIdentifier:(int64_t)identifier
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (self = [super initWithObjectID:objectID identifier:identifier]) {
+    if (self = [super initWithIdentifier:identifier]) {
         _managedObjectContext = managedObjectContext;
     }
     return self;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier
-                        database:(MADModelDatabase *)database {
-    if (self = [self initWithObjectID: objectID
-                           identifier: identifier
+- (instancetype)initWithIdentifier:(int64_t)identifier
+                          database:(MADModelDatabase *)database {
+    if (self = [self initWithIdentifier: identifier
                  managedObjectContext: database.managedObjectContext]) {
         _database = database;
     }
     return self;
 }
 
-- (NSOrderedSet <NSManagedObjectID *> *)queryTableIDs {
+- (NSOrderedSet <NSNumber *> *)queryTableIDs {
     if (_queryTableIDs == nil) {
         @autoreleasepool {
 
             if (_tables == nil) {
-                NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
+                NSMutableDictionary <NSNumber *, MADModelQueryTable *> *tables;
                 tables = [[NSMutableDictionary alloc] init];
                 _tables = tables;
             }
             
-            NSMutableOrderedSet <NSManagedObjectID *> *tableIDs;
+            NSMutableOrderedSet <NSNumber *> *tableIDs;
             tableIDs = [[NSMutableOrderedSet alloc] init];
             _queryTableIDs = tableIDs;
             
@@ -106,15 +100,15 @@
     return _queryTableIDs;
 }
 
-- (NSOrderedSet <NSManagedObjectID *> *)queryLinkIDs {
+- (NSOrderedSet <NSNumber *> *)queryLinkIDs {
     if (_queryLinkIDs == nil) {
         @autoreleasepool {
             
-            NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
+            NSMutableDictionary <NSNumber *, MADModelQueryLink *> *links;
             links = [[NSMutableDictionary alloc] init];
             _links = links;
             
-            NSMutableOrderedSet <NSManagedObjectID *> *queryLinkIDs;
+            NSMutableOrderedSet <NSNumber *> *queryLinkIDs;
             queryLinkIDs = [[NSMutableOrderedSet alloc] init];
             _queryLinkIDs = queryLinkIDs;
 
@@ -124,15 +118,15 @@
     return _queryLinkIDs;
 }
 
-- (NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *)tables {
+- (NSMutableDictionary <NSNumber *, MADModelQueryTable *> *)tables {
     if (_tables == nil) {
         @autoreleasepool {
-            NSMutableDictionary <NSManagedObjectID *, MADModelQueryTable *> *tables;
+            NSMutableDictionary <NSNumber *, MADModelQueryTable *> *tables;
             tables = [[NSMutableDictionary alloc] init];
             _tables = tables;
             
             if (_queryTableIDs == nil) {
-                NSMutableOrderedSet <NSManagedObjectID *> *tableIDs;
+                NSMutableOrderedSet <NSNumber *> *tableIDs;
                 tableIDs = [[NSMutableOrderedSet alloc] init];
                 _queryTableIDs = tableIDs;
             }
@@ -142,15 +136,15 @@
     return _tables;
 }
 
-- (NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *)links {
+- (NSMutableDictionary <NSNumber *, MADModelQueryLink *> *)links {
     if (_links == nil) {
         @autoreleasepool {
             
-            NSMutableDictionary <NSManagedObjectID *, MADModelQueryLink *> *links;
+            NSMutableDictionary <NSNumber *, MADModelQueryLink *> *links;
             links = [[NSMutableDictionary alloc] init];
             _links = links;
 
-            NSMutableOrderedSet <NSManagedObjectID *> *queryLinkIDs;
+            NSMutableOrderedSet <NSNumber *> *queryLinkIDs;
             queryLinkIDs = [[NSMutableOrderedSet alloc] init];
             _queryLinkIDs = queryLinkIDs;
             
@@ -172,10 +166,10 @@
     return tablesInLinks;
 }
 
-- (NSSet <NSManagedObjectID *> *)tablesInLinks {
+- (NSSet <NSNumber *> *)tablesInLinks {
     NSEnumerator <MADModelQueryLink *> *links = _links.objectEnumerator;
     MADModelQueryLink *link;
-    NSSet *tablesInLinks;
+    NSSet <NSNumber *> *tablesInLinks;
     tablesInLinks = [[NSMutableSet alloc] initWithCapacity:_links.count * 2];
     for (link in links) {
         tablesInLinks = [tablesInLinks setByAddingObjectsFromSet: link.tables];
@@ -185,10 +179,10 @@
 }
 
 
-- (NSSet <NSManagedObjectID *> *)orphanedQueryTables {
-    NSSet <NSManagedObjectID *> *orphanedQueryTables;
+- (NSSet <NSNumber *> *)orphanedQueryTables {
+    NSSet <NSNumber *> *orphanedQueryTables;
     NSExpression *expressionMinusSet;
-    NSSet <NSManagedObjectID *> * joinedTables = [self tablesInLinks];
+    NSSet <NSNumber *> * joinedTables = [self tablesInLinks];
     NSExpression *evaluatedObject = [NSExpression expressionForEvaluatedObject];
     NSExpression *evaluatedJoinedTables = [NSExpression expressionForConstantValue:joinedTables];
     expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
@@ -205,13 +199,14 @@
 - (void)updateTables {
     NSManagedObjectContext *managedObjectContext = _managedObjectContext;
     
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSArray <NSDictionary *> *fetchQueryTableResults;
     
     NSUInteger expressionInQueryCount = 2;
 
     NSExpression *expressions[expressionInQueryCount];
-    NSString *predicateKey = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
+    NSString *predicateKey;
+    predicateKey = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
     predicateKey = [predicateKey stringByAppendingString:@"."];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
@@ -228,8 +223,9 @@
     
     NSFetchRequest *fetchQueryTable = [MADModelQueryTable fetchRequest: predicate];
     
-    fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable error:error];
-    NSAssert(fetchQueryTableResults != nil && error == nil, @"What? %@", *error);
+    fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable
+                                                                 error:&error];
+    NSAssert(fetchQueryTableResults != nil && error == NULL, @"What? %@", error);
 
     [self insertTablesFromFetchRequestResults:fetchQueryTableResults];
 
@@ -248,11 +244,13 @@
     NSOrderedSet <NSManagedObjectID *> *tableObjectIDs;
     tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
     
+    NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
+    dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
     
     NSComparisonPredicate *predicateTable;
     NSExpression *tablePath = [NSExpression expressionForKeyPath: MADKeyQueryTable], *tableValue;
     NSArray *fresults;
-    int64_t stid = -1, qtid = -1, sfid = -1, qfid = -1;
+    int64_t stid = -1, qtid = -1, sfid = -1, qfid = -1, di = -1;
     @autoreleasepool {
         
         NSDictionary *filteredResult;
@@ -274,24 +272,19 @@
                 CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaFieldID], kCFNumberSInt64Type, &sfid);
                 CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryTableID], kCFNumberSInt64Type, &qtid);
                 CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryFieldID], kCFNumberSInt64Type, &qfid);
-                
+                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[dropIndex], kCFNumberSInt64Type, &di);
                 MADModelQueryTable *queryTable;
-                queryTable = [[MADModelQueryTable alloc] initWithObjectID: tableObjectID
-                                                               identifier: qtid
-                                                              schemaTable: filteredResult[MADKeySchemaTable]
-                                                    schemaTableIdentifier: stid
-                                                                 capacity: fresults.count];
+                queryTable = [[MADModelQueryTable alloc] initWithIdentifier: qtid
+                                                                  dropIndex: di
+                                                                schemaTable: stid
+                                                                 inDatabase: _database];
                 
                 for (filteredResult in fresults) {
-                    [queryTable addField: filteredResult[MADKeyQueryField]
-                         fieldIdentifier: qfid
-                             schemaField: filteredResult[MADKeySchemaField]
-                   schemaFieldIdentifier: sfid];
+                    [queryTable addField: qfid
+                             schemaField: sfid];
                 }
-                NSManagedObjectID *tableID = tableObjectID.copy;
-                [_queryTableIDs addObject:tableID];
-                [_tables setObject:queryTable forKey:tableID];
-                tableID = nil;
+                [_queryTableIDs addObject:@(qtid)];
+                [_tables setObject:queryTable forKey:@(qtid)];
             }
         }
     }
@@ -300,8 +293,8 @@
 - (void)insertLinksFromFetchRequestResults:(NSArray <NSDictionary *> *)results {
     if (!results.count) return;
 
-    NSArray <NSManagedObjectID *> *queryLinkIDsFiltered;
-    queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLink];
+    NSArray <NSNumber *> *queryLinkIDsFiltered;
+    queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLinkID];
     [_queryLinkIDs addObjectsFromArray:queryLinkIDsFiltered];
     
     NSManagedObjectID *queryLinkID;
@@ -330,18 +323,13 @@
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkRightTableID], kCFNumberSInt64Type, &rtid);
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkRightFieldID], kCFNumberSInt64Type, &rfid);
             
-            queryLink = [[MADModelQueryLink alloc] initWithObjectID: queryLinkID
-                                                         identifier: qlid
-                                                        leftFieldID: result[MADKeyQueryLinkLeftField]
-                                                       lfIdentifier: lfid
-                                                        leftTableID: result[MADKeyQueryLinkLeftTable]
-                                                       ltIdentifier: ltid
-                                                       rightFieldID: result[MADKeyQueryLinkRightField]
-                                                       rfIdentifier: rfid
-                                                       rightTableID: result[MADKeyQueryLinkRightTable]
-                                                       rtIdentifier: rtid];
+            queryLink = [[MADModelQueryLink alloc] initWithIdentifier: qlid
+                                                          leftFieldID: lfid
+                                                          leftTableID: ltid
+                                                         rightFieldID: rfid
+                                                         rightTableID: rtid];
             
-            [_links setObject:queryLink forKey:queryLinkID];
+            [_links setObject:queryLink forKey:@(qlid)];
             
         }
     }
@@ -357,8 +345,6 @@
     NSExpression *expressions[2];
     NSPredicate *predicate;
 
-    fetch = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryLinks class])];
-    
     NSString *inQueryTableID = [NSStringFromSelector(@selector(inQuery)) stringByAppendingString:@"."];
     inQueryTableID = [inQueryTableID stringByAppendingString: NSStringFromSelector(@selector(identifier))];
     expressions[0] = [NSExpression expressionForKeyPath: inQueryTableID];
@@ -372,9 +358,9 @@
  
     fetch = [MADModelQueryLink fetchRequest:predicate];
     
-    NSError * __autoreleasing * error = NULL;
-    fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetch error:error];
-    NSAssert(fetchQueryLinksResults != nil && error == nil, @"Need this to work! %@", *error);
+    NSError * __autoreleasing error = NULL;
+    fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetch error:&error];
+    NSAssert(fetchQueryLinksResults != nil && error == nil, @"Need this to work! %@", error);
 
     [self insertLinksFromFetchRequestResults:fetchQueryLinksResults];
     
@@ -386,13 +372,14 @@
 
 // #MARK: Insert
 
-- (void)insertQueryTableID:(NSManagedObjectID *)queryTableID {
+- (void)insertQueryTableID:(NSNumber *)queryTableID {
     MADModelQueryTable *table;
     if ((table = [_tables objectForKey:queryTableID])) return;
 
     NSExpression *expressionInQuery[2];
     NSArray <NSDictionary *> *results;
-    expressionInQuery[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQueryTable))];
+    NSString *keyInQueryTable = NSStringFromSelector(@selector(inQueryTable));
+    expressionInQuery[0] = [NSExpression expressionForKeyPath:keyInQueryTable];
     expressionInQuery[1] = [NSExpression expressionForConstantValue: queryTableID];
     
     NSPredicate *isQueryTable;
@@ -401,11 +388,11 @@
                                                              modifier: NSDirectPredicateModifier
                                                                  type: NSEqualToPredicateOperatorType
                                                               options: 0];
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSFetchRequest *fetchRequest = [MADModelQueryTable fetchRequest:isQueryTable];
-    results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+    results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
     
-    NSAssert(results != nil && error == nil, @"What? %@", *error);
+    NSAssert(results != nil && error == nil, @"What? %@", error);
     [self insertTablesFromFetchRequestResults:results];
     
     expressionInQuery[0] = nil;
@@ -420,7 +407,7 @@
     }];
 }
 
-- (void)insertQueryLinkID:(NSManagedObjectID *)queryLinkID {
+- (void)insertQueryLinkID:(NSNumber *)queryLinkID {
     MADModelQueryLink *link;
     if ((link = [_links objectForKey:queryLinkID])) return;
     
@@ -435,10 +422,10 @@
                                                             modifier: NSDirectPredicateModifier
                                                                 type: NSEqualToPredicateOperatorType
                                                              options: 0];
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
-    results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
-    NSAssert(results != nil && error == nil, @"What? %@", *error);
+    results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSAssert(results != nil && error == nil, @"What? %@", error);
     [self insertLinksFromFetchRequestResults:results];
 
     expressionInQuery[0] = nil;
@@ -456,7 +443,7 @@
 
 // #MARK: Delete
 
-- (void)deleteQueryLinkID:(NSManagedObjectID *)queryLink {
+- (void)deleteQueryLinkID:(NSNumber *)queryLink {
     MADModelQueryLink *link;
     if (!(link = [_links objectForKey:queryLink])) return;
 
@@ -471,8 +458,8 @@
     [_links removeObjectForKey:queryLink];
 }
 
-- (void)deleteQueryTableID:(NSManagedObjectID *)queryTable {
-    MADModelQueryTable *table = [_tables objectForKey:queryTable];
+- (void)deleteQueryTableID:(NSNumber *)queryTable {
+    MADModelQueryTable *table;
     if (!(table = [_tables objectForKey:queryTable])) return;
 
     NSDictionary *userInfo;

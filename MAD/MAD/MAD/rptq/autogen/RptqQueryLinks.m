@@ -12,3 +12,22 @@
 @implementation RptqQueryLinks
 
 @end
+
+@implementation RptqQueryLinks (CoreDataProperties)
+
++ (NSFetchRequest<RptqQueryLinks *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryLinks"];
+}
+
+@dynamic identifier;
+@dynamic type;
+@dynamic fieldLeftID;
+@dynamic tableLeftID;
+@dynamic fieldRightID;
+@dynamic tableRightID;
+@dynamic hasLeftField;
+@dynamic hasRightField;
+@dynamic inQuery;
+
+@end
+

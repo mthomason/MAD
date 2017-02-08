@@ -12,3 +12,16 @@
 @implementation RptqDocumentSectionRows
 
 @end
+
+@implementation RptqDocumentSectionRows (CoreDataProperties)
+
++ (NSFetchRequest<RptqDocumentSectionRows *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentSectionRows"];
+}
+
+@dynamic layoutHeight;
+@dynamic rowNumber;
+@dynamic hasObjects;
+@dynamic inSection;
+
+@end

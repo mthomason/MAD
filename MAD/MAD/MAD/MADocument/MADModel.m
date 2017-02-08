@@ -80,20 +80,17 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
 @implementation MADModel
     @dynamic identifier;
-    @dynamic objectID;
 
 + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext {
     return [[MADModelDocument alloc] initWithContext:managedObjectContext];
 }
 
 - (instancetype)init {
-    return self = [self initWithObjectID:nil identifier:-1];
+    return self = [self initWithIdentifier:-1];
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier {
+- (instancetype)initWithIdentifier:(int64_t)identifier {
     if (self = [super init]) {
-        _objectID = objectID.copy;
         _uid = identifier;
     }
     return self;
@@ -111,9 +108,14 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 
     return (self == object || (object != nil &&
             [object isKindOfClass:[self class]] &&
-            ((typeof(self))object).identifier == _uid));
+            ((typeof(self))object)->_uid == _uid));
     
 }
+
+- (NSNumber *)objectID {
+    return @(_uid);
+}
+
 /*
 - (NSString *)debugDescription {
     NSString *debugDescription;

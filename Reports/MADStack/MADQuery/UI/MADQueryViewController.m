@@ -380,9 +380,8 @@ BOOL storeEnabled() {
     [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
                                                   animated: NO];
   
-    UITableView *tableView = self.tableView;
-    tableView.delegate = _queryViewDelegate;
-    tableView.dataSource = self.queryViewDataSource;
+    self.tableView.delegate = _queryViewDelegate;
+    self.tableView.dataSource = self.queryViewDataSource;
     [self reloadMainDocumentAnimated:YES];
 }
 
@@ -650,7 +649,7 @@ BOOL storeEnabled() {
 
         MADocument *document = _document;
         NSManagedObjectContext *managedObjectContext;
-        NSManagedObjectID *objectID;
+        NSNumber *objectID;
 
         managedObjectContext = document.documentModel.managedObjectContext;
         objectID = document.documentModel.databases.firstObject.queries.firstObject.objectID.copy;

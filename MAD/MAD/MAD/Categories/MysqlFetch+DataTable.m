@@ -163,10 +163,12 @@
             
             if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
                 errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
+                NSLog(@"%@", errorFetch);
             } else {
                 
                 if (mysql_stmt_execute(myStatement)) {
                     errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
+                    NSLog(@"%@", errorFetch);
                 } else {
                     
                     [self fetchResultsFromConnection:connection
@@ -436,8 +438,8 @@
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     dataColumn.fieldName = fieldName;
     dataColumn.nativeType = myField.type;
-    dataColumn.dataLength = (NSInteger)myField.length;
-    dataColumn.dataPercision = (NSInteger)myField.decimals;
+    dataColumn.dataLength = (int64_t)myField.length;
+    dataColumn.dataPercision = (int32_t)myField.decimals;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags);
     dataColumn.type = [MADDataTypeMySQL dataTypeForNativeType:myField.type];
     

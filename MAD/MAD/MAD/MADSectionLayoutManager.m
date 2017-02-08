@@ -100,7 +100,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     self.lastOpperationWasAdditon = NO;
 }
 
-- (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
+- (void)addItemWithObjectID:(NSNumber *)objectID andFrame:(CGRect)frame {
 
     NSUInteger ips[2];
     NSIndexPath *path;
@@ -117,7 +117,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
     (self.items)[objectID] = layout;
 }
 
-- (void)removeItemWithID:(NSManagedObjectID *)objectID {
+- (void)removeItemWithID:(NSNumber *)objectID {
     
     MADSectionLayoutAttributes *item = (self.items)[objectID];
     NSIndexPath *pathToRemvoe = item.indexPath;

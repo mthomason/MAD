@@ -7,35 +7,46 @@
 //
 
 #import "MADModelQueryField.h"
+
 #import <CoreData/NSManagedObjectID.h>
+
 #import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSURL.h>
+
+#import "MADModelDatabase.h"
+#import "MADModelTable.h"
 
 @interface MADModelQueryField ()
 
 @end
 
 @implementation MADModelQueryField {
-    NSManagedObjectID *_schemaField;
+    MADModelDatabase *_database;
+    int64_t _schemaTable;
+    int64_t _schemaField;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
-    if (self = [super initWithObjectID:objectID identifier:identifier]) {
-        
+- (instancetype)initWithIdentifier:(int64_t)identifier {
+    if (self = [super initWithIdentifier:identifier]) { }
+    return self;
+}
+
+- (instancetype)initWithIdentifier:(int64_t)identifier
+                       schemaTable:(int64_t)schemaTable
+                       schemaField:(int64_t)schemaField
+                          database:(MADModelDatabase *)database {
+    if (self = [self initWithIdentifier:identifier]) {
+        _database = database;
+        _schemaTable = schemaTable;
+        _schemaField = schemaField;
     }
     return self;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier
-                     schemaField:(NSManagedObjectID *)schemaField
-           schemaFieldIdentifier:(int64_t)schemaFieldIdentifier {
-    if (self = [self initWithObjectID: objectID identifier:identifier]) {
-        _schemaField = schemaField.copy;
-    }
-    return self;
+- (MADModelField *)schemaField {
+    return [[_database.tableDictionary objectForKey:@(_schemaTable)].fields objectForKey:@(_schemaField)];
 }
-
 /*
 - (NSString *)debugDescription {
     NSString *debugDescription;

@@ -13,3 +13,18 @@
 @implementation RptqQueryGroup
 
 @end
+
+@implementation RptqQueryGroup (CoreDataProperties)
+
++ (NSFetchRequest<RptqQueryGroup *> *)fetchRequest {
+    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryGroup"];
+}
+
+@dynamic identifier;
+@dynamic sort;
+@dynamic weight;
+@dynamic hasField;
+@dynamic hasSection;
+@dynamic inQuery;
+
+@end

@@ -22,7 +22,7 @@ extern NSString * const MADSectionLayoutSettingsID;
               newPageAfter:(BOOL)newPageAfter;
 @optional
     - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
-    - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
+    - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows;
     - (void)sectionLayoutSettingsDidFinish:(MADReportDesignerSectionLayoutSettingsViewController *)controller;
 @end
 

@@ -12,8 +12,6 @@
 
 #import "MADocument.h"
 
-#import "MADReportSectionsEnumerator.h"
-
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -103,6 +101,8 @@
 
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+
+#import "RptqDocumentElementAggregate.h"
 
 #import "RptqDocumentSectionRows.h"
 
@@ -540,11 +540,11 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark UIDocument
 
-- (NSDictionary *)copyLayoutHeightsBySectionKey {
+- (NSDictionary *)layoutHeightsBySectionKey {
     NSMutableDictionary *dictionary;
     dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
 
-    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key,
+    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSNumber *key,
                                                                     MADSectionLayoutManager *sectionLayoutManager,
                                                                     BOOL *stop) {
         
@@ -589,20 +589,18 @@ READFROMURL_END:;
 #pragma mark Error handling
 
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
-    //NSLog(@"Auto-Saving Document");
     return [super contentsForType:typeName error:outError];
 }
 
-- (void)handleError:(NSError *)documentError userInteractionPermitted:(BOOL)userInteractionPermitted {
-    [super handleError:documentError userInteractionPermitted:userInteractionPermitted];
-    //NSLog(@"UIManagedDocument error: %@", documentError.localizedDescription);
-    NSArray *errors = [[documentError userInfo] objectForKey:NSDetailedErrorsKey];
-    if(errors != nil && errors.count > 0) {
-        for (NSError *error in errors) {
-            //NSLog(@"  Error: %@", error.userInfo);
+- (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
+    [super handleError:error userInteractionPermitted:userInteractionPermitted];
+    NSLog(@"  Error: %@", error.userInfo);
+    NSLog(@"  UI Permitted: %@", userInteractionPermitted ? @"YES" : @"NO");
+    NSArray *detailErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+    if(detailErrors.count > 0) {
+        for (NSError *detailError in detailErrors) {
+            NSLog(@"  Error: %@", detailError.userInfo);
         }
-    } else {
-        //NSLog(@"  %@", documentError.userInfo);
     }
 }
 
@@ -1058,7 +1056,9 @@ READFROMURL_END:;
     NSDictionary *parameters = sender.userInfo;
     NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
     
-    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *decimalString;
+    decimalString = [NSNumberFormatter localizedStringFromNumber: pageNumber
+                                                     numberStyle: NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
     [self.documentStatusProtocol performSelectorOnMainThread: @selector(setStatusText:)
@@ -1166,16 +1166,22 @@ READFROMURL_END:;
     [_sectionLayoutManagers removeAllObjects];
 }
 
-- (void)removeDocumentObjectWithObjectID: (NSManagedObjectID *)objectID {
+- (void)removeDocumentObjectWithObjectID:(int64_t)objectID {
 
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
     [private performBlockAndWait: ^{
 
-        RptqDocumentElement *documentObject = [private objectWithID:objectID];
-        RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
-        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
-        [RptqDocumentElement removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
+        RptqDocumentElement *element;
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:objectID
+                                                      fromObjectContext:private];
+        RptqDocumentSection *parentSection = element.inSectionRow.inSection;
+        MADSectionLayoutManager *layoutManager;
+        layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+        [RptqDocumentElement removeDocumentObject: element
+                                fromParentSection: parentSection
+                                withLayoutManager: layoutManager];
 
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -1187,9 +1193,13 @@ READFROMURL_END:;
                                  inContent: (NSManagedObjectContext *)managedObjectContext {
     NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    NSString *keyInQueryTable;
+    NSString *keyInQueryTable, *keyInQueryTableRel;
+    
+    keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
+    
     keyInQueryTable = [NSStringFromSelector(@selector(aggregateField)) stringByAppendingString:@"."];
-    keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
+    keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
+    
     NSExpression *e1 = [NSExpression expressionForKeyPath:keyInQueryTable];
     NSExpression *e2 = [NSExpression expressionForConstantValue:deleatedTableObjectID];
     NSPredicate *predicate;
@@ -1207,12 +1217,11 @@ READFROMURL_END:;
         MADSectionLayoutManager *layoutManager;
         for (documentObject in objectsToDelete) {
             parentSection = documentObject.inSectionRow.inSection;
-            layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+            layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
             [RptqDocumentElement removeDocumentObject:documentObject
                                     fromParentSection:parentSection
                                     withLayoutManager:layoutManager];
-            [RptqDocument removeDocumentObject:documentObject
-                      fromManagedObjectContext:managedObjectContext];
+            [managedObjectContext deleteObject:documentObject];
         }
     }
 }
@@ -1234,18 +1243,20 @@ READFROMURL_END:;
                                                           options: 0];
     fetchReqest.predicate = predicate;
     NSError *fetchError = nil;
-    NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
+    NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest
+                                                                   error:&fetchError];
     if (fetchError == nil) {
         
+        RptqDocumentSection *parentSection;
+        MADSectionLayoutManager *layoutManager;
         for (RptqDocumentElement *documentObject in objectsToDelete) {
-            RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+            parentSection = documentObject.inSectionRow.inSection;
             
-            MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+            layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
             [RptqDocumentElement removeDocumentObject: documentObject
                                    fromParentSection: parentSection
                                    withLayoutManager: layoutManager];
-            [RptqDocument removeDocumentObject: documentObject
-                      fromManagedObjectContext: managedObjectContext];
+            [managedObjectContext deleteObject:documentObject];
         }
     }
 }
@@ -1269,8 +1280,8 @@ READFROMURL_END:;
             RptqDocumentSection *section0 = sections[0];
             RptqDocumentSection *section1 = sections[1];
             
-            [self.sectionLayoutManagers removeObjectForKey:section0.objectID];
-            [self.sectionLayoutManagers removeObjectForKey:section1.objectID];
+            [self.sectionLayoutManagers removeObjectForKey:@(section0.identifier)];
+            [self.sectionLayoutManagers removeObjectForKey:@(section1.identifier)];
             
             [group removeHasSectionObject: section0];
             [group removeHasSectionObject: section1];

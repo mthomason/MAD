@@ -12,25 +12,25 @@
 
 @interface MADQueryVisualizationSchemaPresentationController ()
 
-    @property (readwrite, nonatomic, copy) NSManagedObjectID *objectID;
-
 @end
 
-@implementation MADQueryVisualizationSchemaPresentationController
+@implementation MADQueryVisualizationSchemaPresentationController {
+    int64_t _objectID;
+}
 
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+- (instancetype)initWithObjectID:(int64_t)objectID
          presentedViewController:(UIViewController *)presentedViewController
         presentingViewController:(UIViewController *)presentingViewController {
     if (self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
-        self.objectID = objectID.copy;
+        _objectID = objectID;
     }
     return self;
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, self.objectID);
-    return [self.delegatePresentation frameOfItemWithObjectID: self.objectID];
+    NSLog(@"%s [%lld]", __PRETTY_FUNCTION__, _objectID);
+    return [self.delegatePresentation frameOfItemWithObjectID: _objectID];
 }
 
 - (BOOL)shouldPresentInFullscreen {

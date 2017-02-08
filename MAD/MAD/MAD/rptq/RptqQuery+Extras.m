@@ -57,8 +57,6 @@
 
 #import "MADSortOrder.h"
 
-#import "MADReportSectionsEnumerator.h"
-
 #import "RptqDataHelper.h"
 
 static inline unsigned long MADSectionCountWithGroupCount(unsigned long);

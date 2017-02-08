@@ -10,7 +10,7 @@
 
 @implementation MADQueryVisualizationSchemaView
 
-@synthesize objectIdTag = _objectIdIag;
+@synthesize identifier = _identifier;
 
 - (instancetype)init {
     if (self = [super init]) {

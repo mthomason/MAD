@@ -16,13 +16,13 @@
 
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
 
-    - (CGRect)frameOfItemWithObjectID:(NSManagedObjectID *)objectID;
+    - (CGRect)frameOfItemWithObjectID:(int64_t)objectID;
 
 @end
 
 @interface MADQueryVisualizationSchemaPresentationController : UIPresentationController
 
-    - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
+    - (instancetype)initWithObjectID:(int64_t)objectID
              presentedViewController:(UIViewController *)presentedViewController
             presentingViewController:(UIViewController *)presentingViewController;
 

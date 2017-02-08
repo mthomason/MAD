@@ -24,7 +24,7 @@
     - (instancetype)initWithReportSection:(RptqDocumentSection *)reportSection;
 
     @property (nonatomic, readonly, strong)                         RptqDocumentSection *documentSection;
-    @property (nonatomic, readonly, strong)                         NSManagedObjectID *objectID;
+    @property (nonatomic, readonly, strong)                         NSNumber *objectID;
 
     @property (nonatomic, readonly)                                 NSInteger identifier;
 

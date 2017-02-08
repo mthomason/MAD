@@ -154,7 +154,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
         self.pageIndexesTemporary = temporaryDataForPage;
         
-        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
+        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout layoutHeightsBySectionKey];
         self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     
         self.options = options;
@@ -279,7 +279,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
     MADNumberMapByObjectID *layoutHeightsBySectionKeys;
-    layoutHeightsBySectionKeys = [layout copyLayoutHeightsBySectionKey];
+    layoutHeightsBySectionKeys = [layout layoutHeightsBySectionKey];
     
     self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     [self cleanupTemporaryIndexes];

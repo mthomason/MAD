@@ -23,7 +23,7 @@
 
     @property (nonatomic, strong, readonly) MTGraph *graphRepresentation;
     @property (nonatomic, strong, readonly) MTLinkedList *topologicallySortedTables;
-    @property (nonatomic, strong, readonly) NSArray <NSURL *> *startingPoints;
+    @property (nonatomic, strong, readonly) NSArray <NSNumber *> *startingPoints;
     @property (nonatomic, assign, readonly, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
 @end

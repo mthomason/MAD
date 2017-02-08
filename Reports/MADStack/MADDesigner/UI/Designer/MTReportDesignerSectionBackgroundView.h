@@ -13,7 +13,7 @@
 
 @interface MTReportDesignerSectionBackgroundView : UIView
 
-- (void)setNumberOfRowsInBackground:(NSUInteger)numberOfRowsInBackground;
+- (void)setNumberOfRowsInBackground:(int32_t)numberOfRowsInBackground;
 
 @end
 

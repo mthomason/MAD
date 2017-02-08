@@ -26,8 +26,6 @@
 @end
 
 @implementation MADModelQueryLink {
-    MADTableFieldReference *_leftFieldReference;
-    MADTableFieldReference *_rightFieldReference;
     MADTableFieldIdentifier *_leftFieldIdentifier;
     MADTableFieldIdentifier *_rightFieldIdentifier;
 }
@@ -134,48 +132,35 @@
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
-    if (self = [super initWithObjectID:objectID identifier:identifier]) {
+    if (self = [super initWithIdentifier:identifier]) {
 
     }
     return self;
 }
 
-- (instancetype)initWithObjectID:(NSManagedObjectID *)objectID
-                      identifier:(int64_t)identifier
-                     leftFieldID:(NSManagedObjectID *)leftFieldID
-                    lfIdentifier:(int64_t)lfIdentifier
-                     leftTableID:(NSManagedObjectID *)leftTableID
-                    ltIdentifier:(int64_t)ltIdentifier
-                    rightFieldID:(NSManagedObjectID *)rightFieldID
-                    rfIdentifier:(int64_t)rfIdentifier
-                    rightTableID:(NSManagedObjectID *)rightTableID
-                    rtIdentifier:(int64_t)rtIdentifier {
+- (instancetype)initWithIdentifier:(int64_t)identifier
+                       leftFieldID:(int64_t)leftFieldID
+                       leftTableID:(int64_t)leftTableID
+                      rightFieldID:(int64_t)rightFieldID
+                      rightTableID:(int64_t)rightTableID {
     
-    if (self = [self initWithObjectID:objectID identifier:identifier]) {
+    if (self = [self initWithIdentifier:identifier]) {
         
         MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
-        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rtIdentifier
-                                                                    andFieldID: rfIdentifier];
+        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
+                                                                    andFieldID: rightFieldID];
         _leftFieldIdentifier = leftFieldIdentifier;
-        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: ltIdentifier
-                                                                     andFieldID: lfIdentifier];
+        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
+                                                                     andFieldID: leftFieldID];
         _rightFieldIdentifier = rightFieldIdentifier;
         
-        MADTableFieldReference *leftFieldReference;
-        leftFieldReference = [[MADTableFieldReference alloc] initWithTableID: leftTableID
-                                                                  andFieldID: leftFieldID];
-        _leftFieldReference = leftFieldReference;
-        
-        id rightFieldReference = [[MADTableFieldReference alloc] initWithTableID: rightTableID
-                                                                      andFieldID: rightFieldID];
-        _rightFieldReference = rightFieldReference;
     }
     return self;
 }
 
-- (NSSet <NSManagedObjectID *> *)tables {
-    NSManagedObjectID *tableLeft = _leftFieldReference.tableID.copy,
-                      *tableRight = _rightFieldReference.tableID.copy;
+- (NSSet <NSNumber *> *)tables {
+    NSNumber *tableLeft = @(_leftFieldIdentifier.tableID),
+             *tableRight = @(_rightFieldIdentifier.tableID);
     NSSet *tables = [[NSSet alloc] initWithObjects: tableLeft,
                                                     tableRight, nil];
     return tables;

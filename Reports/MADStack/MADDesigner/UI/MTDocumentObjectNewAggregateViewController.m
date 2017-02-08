@@ -245,12 +245,11 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     aggregateDelegate = _aggregateDelegate;
     if (aggregateDelegate) {
 
-        NSNumber *groupNumber = [[NSNumber alloc] initWithInteger: self.groupTypeSectionNumber];
         [aggregateDelegate didUpdateggregateFunctionWithType: self.aggregateFunctionType
                                                    inputType: MTAggregateFunctionInputTypeField
                                                  inputObject: self.fieldObject
                                                    groupType: self.aggregateGroupByType
-                                                 groupNumber: groupNumber];
+                                                 groupNumber: self.groupTypeSectionNumber];
     }
     self.navigationItem.rightBarButtonItem.enabled = self.fieldObject != nil;
 }

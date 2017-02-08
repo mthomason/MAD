@@ -22,9 +22,9 @@
     return tap;
 }
 
-+ (instancetype)newTapGestureRecognizerElementTouchWithTarget:(id)target
-                                                       action:(SEL)action
-                                                     delegate:(id<UIGestureRecognizerDelegate>)delegate {
++ (instancetype)newTapGestureRecognizerTapWithTarget:(id)target
+                                              action:(SEL)action
+                                            delegate:(id<UIGestureRecognizerDelegate>)delegate {
     MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;

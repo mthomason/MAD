@@ -18,15 +18,16 @@
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
     <NSCopying>
 
-    @property (nonatomic, copy) NSManagedObjectID *objectID;
+    @property (nonatomic, copy) NSNumber *objectID;
 
     + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
                                                objectID:(NSManagedObjectID *)objectID
                                                 andRect:(CGRect)rect;
 
-    - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes;
+    - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)attributes;
     - (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items;
-    - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
+    - (BOOL)validDropPoint:(CGPoint)dropPoint
+          givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
     - (BOOL)moveOnScreen;
     - (NSArray <NSValue *> *)copyDropPointsHorizontal;
     - (NSArray <NSValue *> *)copyDropPoints;
