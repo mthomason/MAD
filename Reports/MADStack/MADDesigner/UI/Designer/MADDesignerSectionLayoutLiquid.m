@@ -94,7 +94,7 @@ forDecorationViewOfKind: decorationViewKind];
 - (void)prepareLayout {
     [super prepareLayout];
     
-    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
     delegate = self.delegate;
     [delegate collectionView:self.collectionView prepareLayout:self];
     
@@ -125,7 +125,7 @@ forDecorationViewOfKind: decorationViewKind];
 
 - (MADSectionLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
     delegate = self.delegate;
     id attributes = [delegate collectionView: self.collectionView
                                       layout: self
@@ -137,7 +137,7 @@ forDecorationViewOfKind: decorationViewKind];
 - (MADSectionLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:
                                                                         (NSIndexPath *)indexPath {
 
-    id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
     delegate = self.delegate;
     id attributes = [delegate collectionView: self.collectionView
                                       layout: self

@@ -1,5 +1,5 @@
 //
-//  MTReportDesignerSectionDecorationView.m
+//  MADDesignerSectionControl.m
 //  Reports
 //
 //  Created by Michael Thomason on 4/30/13.

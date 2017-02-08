@@ -138,10 +138,10 @@
 		4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */; };
 		4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */; };
 		4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */; };
-		4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */; };
-		4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F11BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m */; };
-		4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */; };
-		4C26BA011BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F71BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m */; };
+		4C26B9FD1BAF14A500456DC8 /* MADDesignerSectionBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */; };
+		4C26B9FE1BAF14A500456DC8 /* MADDesignerSectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */; };
+		4C26BA001BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */; };
+		4C26BA011BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */; };
 		4C26BA031BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */; };
 		4C26BA0A1BAF14F200456DC8 /* MADGettingStartedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA061BAF14F200456DC8 /* MADGettingStartedTableViewController.m */; };
 		4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA081BAF14F200456DC8 /* MADInformationTableViewController.m */; };
@@ -742,7 +742,7 @@
 		4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C97CB8C1E3A263400587B16 /* MADFileExplorerAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */; };
 		4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */; };
-		4C994F111BDCA3A90058627A /* MADReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */; };
+		4C994F111BDCA3A90058627A /* MADDesignerSectionLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MADDesignerSectionLayoutController.m */; };
 		4C994F391BE082730058627A /* MADLabelStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F381BE082730058627A /* MADLabelStatus.m */; };
 		4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F3B1BE28CF50058627A /* MADTextPosition.m */; };
 		4C994F421BE28E790058627A /* MADTextRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F411BE28E790058627A /* MADTextRange.m */; };
@@ -1378,16 +1378,16 @@
 		4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionView.m; sourceTree = "<group>"; };
 		4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerViewController.h; sourceTree = "<group>"; };
 		4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerViewController.m; sourceTree = "<group>"; };
-		4C26B9EE1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionBackgroundView.h; sourceTree = "<group>"; };
-		4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionBackgroundView.m; sourceTree = "<group>"; };
-		4C26B9F01BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionDecorationView.h; sourceTree = "<group>"; };
-		4C26B9F11BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionDecorationView.m; sourceTree = "<group>"; };
-		4C26B9F21BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
-		4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
-		4C26B9F41BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
-		4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
-		4C26B9F61BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLiquid.h; sourceTree = "<group>"; };
-		4C26B9F71BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLiquid.m; sourceTree = "<group>"; };
+		4C26B9EE1BAF14A500456DC8 /* MADDesignerSectionBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionBackground.h; sourceTree = "<group>"; };
+		4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionBackground.m; sourceTree = "<group>"; };
+		4C26B9F01BAF14A500456DC8 /* MADDesignerSectionControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionControl.h; sourceTree = "<group>"; };
+		4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionControl.m; sourceTree = "<group>"; };
+		4C26B9F21BAF14A500456DC8 /* MADDesignerSectionLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionLayoutController.h; sourceTree = "<group>"; };
+		4C26B9F31BAF14A500456DC8 /* MADDesignerSectionLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionLayoutController.m; sourceTree = "<group>"; };
+		4C26B9F41BAF14A500456DC8 /* MADDesignerSectionLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionLayoutLine.h; sourceTree = "<group>"; };
+		4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionLayoutLine.m; sourceTree = "<group>"; };
+		4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionLayoutLiquid.h; sourceTree = "<group>"; };
+		4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionLayoutLiquid.m; sourceTree = "<group>"; };
 		4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardDocumentInformation.storyboard; sourceTree = "<group>"; };
 		4C26BA051BAF14F200456DC8 /* MADGettingStartedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGettingStartedTableViewController.h; sourceTree = "<group>"; };
 		4C26BA061BAF14F200456DC8 /* MADGettingStartedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGettingStartedTableViewController.m; sourceTree = "<group>"; };
@@ -2759,16 +2759,16 @@
 				4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */,
 				4C26B9EA1BAF14A500456DC8 /* MADDesignerSectionView.h */,
 				4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */,
-				4C26B9EE1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.h */,
-				4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */,
-				4C26B9F01BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.h */,
-				4C26B9F11BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m */,
-				4C26B9F21BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.h */,
-				4C26B9F31BAF14A500456DC8 /* MADReportDesignerSectionLayoutSettingsViewController.m */,
-				4C26B9F41BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.h */,
-				4C26B9F51BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m */,
-				4C26B9F61BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.h */,
-				4C26B9F71BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m */,
+				4C26B9EE1BAF14A500456DC8 /* MADDesignerSectionBackground.h */,
+				4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */,
+				4C26B9F01BAF14A500456DC8 /* MADDesignerSectionControl.h */,
+				4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */,
+				4C26B9F21BAF14A500456DC8 /* MADDesignerSectionLayoutController.h */,
+				4C26B9F31BAF14A500456DC8 /* MADDesignerSectionLayoutController.m */,
+				4C26B9F41BAF14A500456DC8 /* MADDesignerSectionLayoutLine.h */,
+				4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */,
+				4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */,
+				4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;
@@ -6216,12 +6216,12 @@
 				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
 				4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */,
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
-				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
+				4C26BA001BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m in Sources */,
 				4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */,
 				4C59BDC11C9AA7C10031BC6C /* MADGroupOperation.m in Sources */,
 				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
 				4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */,
-				4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */,
+				4C26B9FD1BAF14A500456DC8 /* MADDesignerSectionBackground.m in Sources */,
 				4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */,
 				4CE7EC381D128B300072DF34 /* MADFileExplorerDataSource.m in Sources */,
 				4C401F2B1BAE703200BAE5FC /* MADTableViewCellQueryTableName.m in Sources */,
@@ -6339,7 +6339,7 @@
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C539C371CB65634002E4CD5 /* MADViewTableHeader+QueryViewSectionTypes.m in Sources */,
-				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
+				4C26B9FE1BAF14A500456DC8 /* MADDesignerSectionControl.m in Sources */,
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */,
 				4C59BDAD1C9A88900031BC6C /* MADBackgroundObserver.m in Sources */,
@@ -6370,7 +6370,7 @@
 				4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */,
 				4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */,
 				4CE4EFB01CD08C58006CA2B0 /* MADCacheManager.m in Sources */,
-				4C26BA011BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
+				4C26BA011BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m in Sources */,
 				4C5B55DD1C97C5FA005C19D9 /* MADOperationRefresh.m in Sources */,
 				4C401F251BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m in Sources */,
 				4C401F771BAE7EB500BAE5FC /* MADBackgroundView.m in Sources */,
@@ -6396,7 +6396,7 @@
 				4C26BA221BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m in Sources */,
 				4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
-				4C994F111BDCA3A90058627A /* MADReportDesignerSectionLayoutSettingsViewController.m in Sources */,
+				4C994F111BDCA3A90058627A /* MADDesignerSectionLayoutController.m in Sources */,
 				4CB074D41E22006700643F32 /* MADFileExplorerToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

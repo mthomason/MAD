@@ -15,7 +15,7 @@ extern NSString * const MADSectionLayoutSettingsID;
 
 @class MADDesignerSectionLayoutController;
 
-@protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
+@protocol MADDesignerSectionLayoutDelegate <NSObject>
 
     - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
     - (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings
@@ -31,7 +31,7 @@ extern NSString * const MADSectionLayoutSettingsID;
 
     + (instancetype)newReportDesignerSectionLayoutSettingsViewController;
 
-    @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
+    @property (weak) IBOutlet id <MADDesignerSectionLayoutDelegate> delegate;
 
     @property (nonatomic, assign) double initalHeightValue;
     @property (nonatomic, assign) BOOL initalVisibility;

@@ -1,5 +1,5 @@
 //
-//  MTReportDesignerSectionBackgroundView.h
+//  MADDesignerSectionBackground.h
 //  Reports
 //
 //  Created by Michael Thomason on 5/1/13.

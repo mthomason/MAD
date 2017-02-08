@@ -46,7 +46,7 @@
 - (void)prepareLayout {
     [super prepareLayout];
     
-    id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
+    id <MADDesignerSectionLayoutLineDelegate, UICollectionViewDataSource> delegate;
     UICollectionView *collectionView;
     NSUInteger numberOfSections;
     delegate = _delegate;

@@ -83,9 +83,9 @@
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 
-#import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "MADReportDesignerSectionLayoutSettingsViewController.h"
-#import "MTReportDesignerSectionBackgroundView.h"
+#import "MADDesignerSectionLayoutLiquid.h"
+#import "MADDesignerSectionLayoutController.h"
+#import "MADDesignerSectionBackground.h"
 
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
@@ -106,7 +106,7 @@
 
 #import "MADNavigationControllerToolbox.h"
 
-#import "MTReportDesignerSectionViewLayoutLiquid.h"
+#import "MADDesignerSectionLayoutLiquid.h"
 
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
@@ -178,10 +178,10 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 <MTViewControllerBarcodeDelegate,
     MTViewControllerAggregateDelegate,
     MADCellElementDelegate,
-    MTReportDesignerSectionViewLayoutLiquidDelegate,
+    MADDesignerSectionLayoutLiquidDelegate,
     MADDesignerElementPickerDelegate,
     MADViewControllerStandardProtocol,
-    MTReportDesignerSectionLayoutSettingsDelegate,
+    MADDesignerSectionLayoutDelegate,
     MTQueryBuilderChooseFieldDelegate,
     UIPopoverPresentationControllerDelegate,
     UICollectionViewDataSource,
@@ -230,7 +230,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
     @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
-    @property (nonatomic, strong) MADReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+    @property (nonatomic, strong) MADDesignerSectionLayoutController *viewControllerSectionLayoutSettings;
 
     @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
     @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
@@ -515,10 +515,10 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     return _viewControllerToolbox;
 }
 
-- (MADReportDesignerSectionLayoutSettingsViewController *)viewControllerSectionLayoutSettings {
+- (MADDesignerSectionLayoutController *)viewControllerSectionLayoutSettings {
     if (_viewControllerSectionLayoutSettings == nil) {
-        MADReportDesignerSectionLayoutSettingsViewController *controller;
-        controller = [MADReportDesignerSectionLayoutSettingsViewController newReportDesignerSectionLayoutSettingsViewController];
+        MADDesignerSectionLayoutController *controller;
+        controller = [MADDesignerSectionLayoutController newReportDesignerSectionLayoutSettingsViewController];
         controller.delegate = self;
         self.viewControllerSectionLayoutSettings = controller;
     }
@@ -708,7 +708,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         sectionView.layer.borderWidth = borderWidthThin;
         sectionView.showsVerticalScrollIndicator = YES;
         
-        ((MTReportDesignerSectionViewLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
+        ((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
         
         sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
         
@@ -1229,13 +1229,13 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 #pragma mark -
-#pragma mark MTReportDesignerSectionLayoutSettingsDelegate
+#pragma mark MADDesignerSectionLayoutDelegate
 
-- (void)sectionLayoutSettingsDidFinish:(MADReportDesignerSectionLayoutSettingsViewController *)controller {
+- (void)sectionLayoutSettingsDidFinish:(MADDesignerSectionLayoutController *)controller {
     [self hideToolbox];
 }
 
-- (void)layoutSettings:(MADReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+- (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings
           newPageAfter:(BOOL)newPageAfter {
     
     NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
@@ -1375,7 +1375,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
     id sectionKey = section.objectID.copy;
     UICollectionView *collectionView = self.sectionViewsDictionary[sectionKey];
-    MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
+    MADDesignerSectionBackground *backgroundView = (MADDesignerSectionBackground *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError *error = nil;
@@ -1952,7 +1952,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 #pragma mark -
-#pragma mark MTReportDesignerSectionViewLayoutLiquidDelegate
+#pragma mark MADDesignerSectionLayoutLiquidDelegate
 
 - (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
 
@@ -2345,7 +2345,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 - (void)edit:(id)sender { }
 
-#pragma mark - MTReportDesignerSectionViewLayoutLiquidDelegate
+#pragma mark - MADDesignerSectionLayoutLiquidDelegate
 
 - (void)collectionView: (MADDesignerSectionView *)collectionView
          prepareLayout: (UICollectionViewLayout *)collectionViewLayout {

@@ -23,11 +23,11 @@
 
 #import <MAD/MADReportSection.h>
 
-#import "MTReportDesignerSectionViewLayoutLiquid.h"
+#import "MADDesignerSectionLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MADCellElement.h"
-#import "MTReportDesignerSectionBackgroundView.h"
+#import "MADDesignerSectionBackground.h"
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
@@ -64,9 +64,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 @implementation MADDesignerSectionView
 
 + (instancetype)newDesignerSectionView:(MADReportSection *)section
-                              delegate:(id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate {
+                              delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate {
     id collectionView;
-    MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
+    MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
     layout.delegate = layoutDelegate;
     collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     ((MADDesignerSectionView *)collectionView).identifier   = section.identifier;
@@ -84,8 +84,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
         
         self.accessibile = YES;
         
-        MTReportDesignerSectionBackgroundView *backgroundView;
-        backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+        MADDesignerSectionBackground *backgroundView;
+        backgroundView = [[MADDesignerSectionBackground alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:1];
         backgroundView.backgroundColor = clearColor;
 

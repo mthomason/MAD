@@ -14,7 +14,7 @@
 
 @class MADDesignerSectionLayoutLiquid, MADSectionLayoutAttributes;
 
-@protocol MTReportDesignerSectionViewLayoutLiquidDelegate
+@protocol MADDesignerSectionLayoutLiquidDelegate
 
     - (void)collectionView: (UICollectionView *)collectionView
              prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
@@ -38,7 +38,7 @@
 
 @interface MADDesignerSectionLayoutLiquid : UICollectionViewLayout
 
-    @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    @property (nonatomic, weak) id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
     @property (nonatomic, assign) CGSize contentSize;
     @property (nonatomic, assign) NSInteger tag;

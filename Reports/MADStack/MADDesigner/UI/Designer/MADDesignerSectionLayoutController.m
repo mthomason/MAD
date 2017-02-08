@@ -40,7 +40,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 @end
 
-@implementation MADReportDesignerSectionLayoutSettingsViewController
+@implementation MADDesignerSectionLayoutController
 
 + (instancetype)newReportDesignerSectionLayoutSettingsViewController {
     id storyboard, controller;
