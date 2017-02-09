@@ -138,16 +138,14 @@
         MADocument *document = _document;
         NSNumber *identifier;
         NSSet <NSNumber *> *userSelectedObjectIDs;
-        RptqDocumentElement *documentObject;
-        MADCurrencyFormatter *currencyFormatter;
+        RptqDocumentElement *element;
         
         userSelectedObjectIDs = self.userSelectedObjectIDs;
         for (identifier in userSelectedObjectIDs) {
         
-            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-                                                                 fromObjectContext: document.managedObjectContext];
-            currencyFormatter = documentObject.numericFormat;
-            if (currencyFormatter.enabled) {
+            element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                          fromObjectContext: document.managedObjectContext];
+            if (element.numericFormat.enabled) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
             }
         }
@@ -155,10 +153,11 @@
         (self.tableViewCellCurrency).accessoryType = accessoryType;
         
         if ((self.userSelectedObjectIDs).count == 1) {
-            NSAssert(documentObject != nil, @"We expect an element here.");
-
-            (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:currencyFormatter.decimalCount];
-            (self.stepperNumberOfDecimals).value = currencyFormatter.decimalCount;
+            identifier = userSelectedObjectIDs.anyObject;
+            element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                          fromObjectContext: document.managedObjectContext];
+            (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:element.numericFormat.decimalCount];
+            (self.stepperNumberOfDecimals).value = element.numericFormat.decimalCount;
 
         } else {
             
@@ -166,18 +165,17 @@
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
             for (identifier in self.userSelectedObjectIDs) {
-                documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-                                                                     fromObjectContext: document.managedObjectContext];
-                currencyFormatter = documentObject.numericFormat;
+                element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                              fromObjectContext: document.managedObjectContext];
                 if (counter > 0) {
 #warning Don't think BOOL allTheSame ever becomes "YES"
-                    if (lastInteger == currencyFormatter.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
+                    if (lastInteger == element.numericFormat.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
                         allTheSame = YES;
                     } else {
                         allTheSame = NO;
                     }
                     
-                    lastInteger = currencyFormatter.decimalCount;
+                    lastInteger = element.numericFormat.decimalCount;
                 }
                 counter++;
             }

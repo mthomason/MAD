@@ -312,8 +312,8 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     self.currentViewController = viewControllerToShow;
     
     options = UIViewAnimationOptionTransitionCrossDissolve;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
     viewControllerToUpdate.document = self.document;
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
     
@@ -333,8 +333,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
                                options: options
                             animations:^{
                                 
-                            }
-                            completion:^(BOOL finished) {
+                            } completion:^(BOOL finished) {
                                 if (finished) {
                                     [viewControllerToHide removeFromParentViewController];
                                     [viewControllerToShow didMoveToParentViewController:weakself];
