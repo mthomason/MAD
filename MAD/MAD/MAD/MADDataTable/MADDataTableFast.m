@@ -80,8 +80,6 @@
 #import "MADDataTablePlist.h"
 #import "MTDatabaseDataBinding.h"
 
-typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
-
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol,
@@ -861,7 +859,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName].copy;
     NSArray *sortDescriptors = self.sortDescriptors;
-    MADMapDataColumns *columns = self.columns;
+    NSDictionary <NSString *, MADDataColumn *> *columns = self.columns;
     NSArray *columnKeys = self.columnKeys;
     
     NSNumber *selectFieldKeys = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
@@ -1238,7 +1236,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     NSString *tableName = [NSString stringWithString:[self tableName]];
     NSArray *sortDescs = [NSArray arrayWithArray:self.sortDescriptors];
-    MADMapDataColumns *columns = [MADMapDataColumns dictionaryWithDictionary:self.columns];
+    NSDictionary <NSString *, MADDataColumn *> *columns = [NSDictionary dictionaryWithDictionary:self.columns];
     
     
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:

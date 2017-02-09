@@ -7,14 +7,10 @@
 //
 
 #import "MADNotificationFileUpdate.h"
-#import "MADProgress.h"
-#import <Foundation/NSNotification.h>
-#import <Foundation/NSOperation.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
-#import <dispatch/once.h>
-#import <math.h>
+#import <Foundation/NSNotification.h>
+#import <Foundation/NSURL.h>
+#import "MADProgress.h"
 
 NSString * const MADNotificationIdentifierFileUpdate = @"MADProgressNotification";
 

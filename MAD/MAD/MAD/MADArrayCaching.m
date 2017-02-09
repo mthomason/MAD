@@ -422,25 +422,25 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 }
 
-- (MADQueryDefinition *)queryDefinatinSelect {
+- (NSDictionary *)queryDefinatinSelect {
     NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey, nil];
     NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
                                                             ascending: NO
                                                              selector: @selector(compare:)];
     NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
-    MADQueryDefinition *definition = [MTQuery newQueryDefinitionSelect: columnNameIndex
-                                                             tableName: MTArrayCachedTableName
-                                                       sortDescriptors: sortdesc];
+    NSDictionary *definition = [MTQuery newQueryDefinitionSelect: columnNameIndex
+                                                       tableName: MTArrayCachedTableName
+                                                 sortDescriptors: sortdesc];
     return definition;
 }
 
-- (MADQueryDefinition *)queryDefinationLastObject {
+- (NSDictionary *)queryDefinationLastObject {
     NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey, nil];
     NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
                                                             ascending: NO
                                                              selector: @selector(compare:)];
     NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
-    MADQueryDefinition *queryDefinition = [MTQuery newQueryDefinitionSelect: columnNameIndex
+    NSDictionary *queryDefinition = [MTQuery newQueryDefinitionSelect: columnNameIndex
                                                                   tableName: MTArrayCachedTableName
                                                             sortDescriptors: sortdesc];
     NSMutableDictionary *queryDefinationSelect = queryDefinition.mutableCopy;
@@ -449,9 +449,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
     queryDefinationSelect[key] = yes;
     
-    MADQueryDefinition *result = [MTQuery newQueryDefinitionSelect:queryDefinationSelect
-                                                         withLimit:1
-                                                         andOffset:0];
+    NSDictionary *result = [MTQuery newQueryDefinitionSelect:queryDefinationSelect
+                                                   withLimit:1
+                                                   andOffset:0];
     return result;
 }
 

@@ -57,7 +57,7 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
     return self;
 }
 
-- (NSDictionary *)parametersWithNumberOfPages:(NSUInteger)pages {
+- (NSDictionary <NSString *, NSNumber *> *)parametersWithNumberOfPages:(NSUInteger)pages {
     NSNumber *pageCounterWrapper = [[NSNumber alloc] initWithUnsignedInteger: pages];
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 pageCounterWrapper, MTDatabaseNumberOfPagesFormattedKey, nil];
@@ -68,7 +68,8 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 - (void)reportFormatter:(MADReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
     if (page % _pageInterval == 0) {
         if (page == 0) _pageInterval = _pageIntervalInital;
-        NSDictionary *parameters = [self parametersWithNumberOfPages:page];
+        NSDictionary <NSString *, NSNumber *> *parameters;
+        parameters = [self parametersWithNumberOfPages:page];
         NSNotification *notification;
         notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
                                                      object:reportFormatter userInfo:parameters];

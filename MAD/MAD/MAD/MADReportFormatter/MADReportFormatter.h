@@ -24,13 +24,6 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 @class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
        NSManagedObjectID, MADArrayCaching <ObjectType>;
 
-typedef NSArray         <id>                                            MADObjectArray;
-typedef NSArray         <MADSectionRepresentation *>                    MADSectionArray;
-typedef NSArray         <NSNumber *>                                    MADIndexArray;
-
-typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
-typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
-
 @interface MADReportFormatter : MADTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
@@ -45,7 +38,7 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
 
     //  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
     //      which represents a page.  The array contains dictionaries for each object on that page.
-    @property (nonatomic, strong, readonly) MADCachingLayout *reportLayout;
+    @property (nonatomic, strong, readonly) MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
 
     @property (nonatomic, weak)             id <MADReportFormatterDataSource> datasource;
     @property (nonatomic, weak)             id <MADCacheProtocol> cachedDelegate;
@@ -65,16 +58,16 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
     - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-    - (MADSectionArray *)layoutForPage:(NSUInteger)page;
+    - (NSArray <MADSectionRepresentation *> *)layoutForPage:(NSUInteger)page;
 
     - (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID;
 
-    - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
+    - (NSArray <NSNumber *> *)rowidsForPage:(NSUInteger)pageIndex;
 
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 
-    - (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
+    - (NSArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
 
 @end
 

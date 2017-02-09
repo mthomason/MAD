@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADReportSections_h
-#define MAD_MADReportSections_h
+#ifndef MAD_MADReportSectionsEnumerator_h
+#define MAD_MADReportSectionsEnumerator_h
 
 #import <Foundation/NSEnumerator.h>
 

@@ -7,14 +7,13 @@
 //
 
 #import "MADNotificationProgress.h"
-#import "MADProgress.h"
+#import <Foundation/NSDate.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSOperation.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSDate.h>
-#import <Foundation/NSException.h>
-#import <dispatch/once.h>
 #import <math.h>
+#import "MADProgress.h"
 
 NSString * const MADNotificationProgressIdentifier = @"MADProgressNotification";
 NSString * const MADNotificationProgressKey = @"p";
