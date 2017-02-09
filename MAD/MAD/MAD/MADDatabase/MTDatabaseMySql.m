@@ -48,7 +48,7 @@
 #import "MTKeyChain.h"
 
 #import "MTDataTable.h"
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 
 #import <mysql.h>
 
@@ -185,7 +185,7 @@
             for (NSUInteger i=0; i<[dataTable count]; i++) {
                 @autoreleasepool {
                     NSString *tableName = [dataTable objectAtRow:i column:0];
-                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                     [results addObject:table];
                 }
             }
@@ -227,7 +227,7 @@
 #pragma mark - Reading Tables
 
 - (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     NSError *error = nil;
     MysqlConnection *connection = dbconn;
@@ -251,7 +251,7 @@
             @autoreleasepool {
 
                 NSString *tableName = [dataTable objectAtRow:i column:0];
-                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
 
                 [results addObject:table];
 
@@ -283,7 +283,7 @@
         for (NSUInteger i=0; i<[dataTable count]; i++) {
             @autoreleasepool {
                 NSString *tableName = [dataTable objectAtRow:i column:0];
-                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                 [results addObject:table];
             }
         }
@@ -292,7 +292,7 @@
 }
 
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
+- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
     
     NSError *errorFetch = nil;
     MysqlConnection *conn = dbconn;
@@ -315,7 +315,7 @@
         for (NSUInteger i=0; i<resultsCount; i++) {
             @autoreleasepool {
                 NSString *tableName = [dataTable objectAtRow:i column:0];
-                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                 [results addObject:table];
             }
         }

@@ -31,7 +31,7 @@
 #import "RptqQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 
 #import "RptqDataHelper.h"
 
@@ -87,7 +87,7 @@
 }
 
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                            andTable:(MTDatabaseTable *)table {
+                                                            andTable:(MADDatabaseTable *)table {
     
     NSString *entityName = NSStringFromClass([self class]);
     

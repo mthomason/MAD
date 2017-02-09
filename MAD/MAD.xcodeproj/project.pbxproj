@@ -222,8 +222,8 @@
 		4C401E381BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */; };
 		4C401E391BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */; };
 		4C401E3A1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */; };
-		4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C401E3C1BAE3DCB00BAE5FC /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */; };
+		4C401E3B1BAE3DCB00BAE5FC /* MADDatabaseTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E211BAE3DCB00BAE5FC /* MADDatabaseTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C401E3C1BAE3DCB00BAE5FC /* MADDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E221BAE3DCB00BAE5FC /* MADDatabaseTable.m */; };
 		4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E441BAE4D8C00BAE5FC /* MADocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E451BAE4D8C00BAE5FC /* MADocument.m */; };
 		4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */; };
@@ -786,8 +786,8 @@
 		4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseSqlite3.m; path = MAD/MADDatabase/MTDatabaseSqlite3.m; sourceTree = "<group>"; };
 		4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseSqlServer.h; path = MAD/MADDatabase/MTDatabaseSqlServer.h; sourceTree = "<group>"; };
 		4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseSqlServer.m; path = MAD/MADDatabase/MTDatabaseSqlServer.m; sourceTree = "<group>"; };
-		4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseTable.h; path = MAD/MADDatabase/MTDatabaseTable.h; sourceTree = "<group>"; };
-		4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseTable.m; path = MAD/MADDatabase/MTDatabaseTable.m; sourceTree = "<group>"; };
+		4C401E211BAE3DCB00BAE5FC /* MADDatabaseTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseTable.h; path = MAD/MADDatabase/MADDatabaseTable.h; sourceTree = "<group>"; };
+		4C401E221BAE3DCB00BAE5FC /* MADDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseTable.m; path = MAD/MADDatabase/MADDatabaseTable.m; sourceTree = "<group>"; };
 		4C401E441BAE4D8C00BAE5FC /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocument.h; path = MAD/MADocument/MADocument.h; sourceTree = "<group>"; };
 		4C401E451BAE4D8C00BAE5FC /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocument.m; path = MAD/MADocument/MADocument.m; sourceTree = "<group>"; };
 		4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocumentState.h; path = MAD/MADocument/MADocumentState.h; sourceTree = "<group>"; };
@@ -1427,8 +1427,8 @@
 				4C7281CF1E274CA300C58DBE /* MADDatabaseConnection.m */,
 				4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */,
 				4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */,
-				4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */,
-				4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */,
+				4C401E211BAE3DCB00BAE5FC /* MADDatabaseTable.h */,
+				4C401E221BAE3DCB00BAE5FC /* MADDatabaseTable.m */,
 				4C401E171BAE3DCB00BAE5FC /* MTDatabaseField.h */,
 				4C401E181BAE3DCB00BAE5FC /* MTDatabaseField.m */,
 				4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */,
@@ -2339,7 +2339,7 @@
 				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
 				4CEFDD081CF5AC7C0092C148 /* MADQueryCacheDeleteAllFromTableParameters.h in Headers */,
 				4C401DE71BAE3BD800BAE5FC /* MTQueryDefinitionPredicate.h in Headers */,
-				4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */,
+				4C401E3B1BAE3DCB00BAE5FC /* MADDatabaseTable.h in Headers */,
 				4CEFDCF91CF5AA390092C148 /* MADQueryCacheAggregateFunctionParamaters.h in Headers */,
 				4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
@@ -2447,7 +2447,7 @@
 			files = (
 				4C401D551BAE3AF800BAE5FC /* MTPaperC1.m in Sources */,
 				4C401DEE1BAE3BD900BAE5FC /* MTQueryFull.m in Sources */,
-				4C401E3C1BAE3DCB00BAE5FC /* MTDatabaseTable.m in Sources */,
+				4C401E3C1BAE3DCB00BAE5FC /* MADDatabaseTable.m in Sources */,
 				4C401D6B1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m in Sources */,
 				4C401E5C1BAE4E9400BAE5FC /* MTDataTableVirtual.m in Sources */,
 				4C7044F71E2ED880001F2C7A /* MTQueryCacheIndexCreateTemplate.m in Sources */,

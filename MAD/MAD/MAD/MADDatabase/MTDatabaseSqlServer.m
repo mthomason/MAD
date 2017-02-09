@@ -38,7 +38,7 @@
 
 #import "MADDatabaseConnection.h"
 
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 #import "MTDatabaseField.h"
 
 #import "MTQuery.h"
@@ -161,7 +161,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                             if (sybVarCharBind != nil) {
                                 NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                                encoding: NSStringEncodingConversionAllowLossy];
-                                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                                MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                                 [results addObject:table];
                             }
                         }
@@ -1400,7 +1400,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 #pragma mark - Reading Tables
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
+- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
     id results = nil;
 //    NSError *error = nil;
     DBPROCESS *dbconn = [process process];
@@ -1440,7 +1440,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     if (sybVarCharBind != nil) {
                         NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                        encoding: NSStringEncodingConversionAllowLossy];
-                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                         [results addObject:table];
                     }
                 }
@@ -1455,7 +1455,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (void)enumerateTablesFromConnection:(id)process
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
     id results = nil;
     NSError *error = nil;
@@ -1498,7 +1498,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                    encoding: NSStringEncodingConversionAllowLossy];
                     
-                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                     [results addObject:table];
                     
                     block(table, counter, &stop);
@@ -1552,7 +1552,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     if (sybVarCharBind != nil) {
                         NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                        encoding: NSStringEncodingConversionAllowLossy];
-                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        MADDatabaseTable *table = [[MADDatabaseTable alloc] initWithTableName:tableName];
                         [results addObject:table];
                     }
                 }

@@ -12,7 +12,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import <MADDataStructures/MTProtocolLog.h>
 
-@class MTDatabaseTable;
+@class MADDatabaseTable;
 
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolLog>
 
@@ -21,7 +21,7 @@
                                                             andQueryable:(BOOL)queryable;
 
     + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                                andTable:(MTDatabaseTable *)table;
+                                                                andTable:(MADDatabaseTable *)table;
 
     + (RptqDatabaseSchemaTable *)databaseSchemaTableForDatabase:(RptqDatabase *)database andTableName:(NSString *)name;
 
