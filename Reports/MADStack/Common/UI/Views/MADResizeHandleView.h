@@ -6,27 +6,27 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTResizeHandleView_h
-#define Reports_MTResizeHandleView_h
+#ifndef Reports_MADResizeHandleView_h
+#define Reports_MADResizeHandleView_h
 
 #import <UIKit/UIView.h>
 #import <MADCocoaExtensions/MADCompassDirection.h>
 
-@class MTResizeHandleView;
+@protocol MADResizeHandleViewDelegate;
 
-@protocol MTResizeHandleViewDelegate
-    - (void)resizeHandle:(MTResizeHandleView *)handle translate:(CGPoint)distance;
-@end
+@interface MADResizeHandleView : UIView
 
-@interface MTResizeHandleView : UIView
-
-    @property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;
+    @property (weak) IBOutlet id <MADResizeHandleViewDelegate> delegate;
     @property (assign) MADCompassDirection type;
     @property (assign) CGPoint initalPoint;
     @property (assign, getter = isHighlighted) BOOL highlighted;
 
     - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompassDirection)position;
 
+@end
+
+@protocol MADResizeHandleViewDelegate
+    - (void)resizeHandle:(MADResizeHandleView *)handle translate:(CGPoint)distance;
 @end
 
 #endif

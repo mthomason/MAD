@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTResizeHandleView.h"
+#import "MADResizeHandleView.h"
 #import <UIKit/UIGraphics.h>
 
-@interface MTResizeHandleView()
+@interface MADResizeHandleView()
 
 @end
 
-@implementation MTResizeHandleView
+@implementation MADResizeHandleView
 
 static const CGFloat colors[] = {
     204.0000f / 255.0000f, 224.0000f / 255.0000f, 244.0000f / 255.0000f, 1.00000f,
