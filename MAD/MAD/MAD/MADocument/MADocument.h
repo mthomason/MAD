@@ -17,13 +17,12 @@
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 
-#import <MAD/MADSortOrder.h>
 #import <MAD/MADPrintPageRendererDataSource.h>
+#import <MAD/MADSortOrder.h>
 
 #import "MADReportFormatterDataSourceProtocol.h"
 
-@protocol MADActivityProtocol;
-@protocol MADocumentDelegate;
+@protocol MADActivityProtocol, MADocumentDelegate;
 
 @class NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState,
         MADSectionLayoutManager, MTQueryFull, MTPaper;
@@ -48,6 +47,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
     @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
+    @property (readwrite, nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
 
     @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 
@@ -55,10 +55,9 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readwrite, nonatomic, strong)    MADReportFormatter *printingReportFormatter;
 
-    @property (nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
     @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
-    @property (nonatomic, readonly, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (readonly, nonatomic, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
 
     @property (readonly, nonatomic, copy)       NSString *filename;
     @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;
@@ -66,12 +65,12 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readonly, nonatomic, strong)     MTPaper *paper;
     @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
 
-    @property (nonatomic, assign)               BOOL limitResultsDesignMode;
-
+    @property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
     - (instancetype)initWithFileURL:(NSURL *)url;
-    - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
+    - (instancetype)initWithFileURL:(NSURL *)url
+              andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
