@@ -39,7 +39,7 @@
 
 #import "MTDatabaseField.h"
 
-#import "MTReportFormatterCache.h"
+#import "MADReportFormatterCache.h"
 
 #import "MADArrayCaching.h"
 
@@ -104,7 +104,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
 
     @property (nonatomic, readwrite, strong)    MTReportFormatterState *machineState;
-    @property (nonatomic, readwrite, strong)    MTReportFormatterCache *reportFormatterCache;
+    @property (nonatomic, readwrite, strong)    MADReportFormatterCache *reportFormatterCache;
 
     @property (nonatomic, readwrite, strong)    MADMutableSectionArray *pageLayoutTemporary;
     @property (nonatomic, readwrite, strong)    MADMutableIndexArray *pageIndexesTemporary;
@@ -145,7 +145,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         
         [self initializeStateMachine];
         
-        MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
+        MADReportFormatterCache *reportFormatterCache = [[MADReportFormatterCache alloc] init];
         self.reportFormatterCache = reportFormatterCache;
         
         MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];

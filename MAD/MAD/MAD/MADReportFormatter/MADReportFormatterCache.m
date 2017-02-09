@@ -1,5 +1,5 @@
 //
-//  MTReportFormatterCache.m
+//  MADReportFormatterCache.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/29/14.
