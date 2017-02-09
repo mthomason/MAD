@@ -1,5 +1,5 @@
 //
-//  MTPrintPageRendererReport.m
+//  MADPrintPageRendererReport.m
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.

@@ -58,7 +58,7 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTPaper.h>
 
-#import "MTPrintingProtocol.h"
+#import "MADPrintingProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
 #import "MADTabBarController.h"
@@ -135,7 +135,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         UIViewControllerAnimatedTransitioning,
         MADOperationObserver,
         MADPageSliderProtocol,
-        MTPrintingProtocol,
+        MADPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
         MADActivityItemProviderDelegate>
 
@@ -663,7 +663,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }];
 }
 
-#pragma mark - MTPrintingProtocol
+#pragma mark - MADPrintingProtocol
 
 - (MADPrintPageRenderer *)printPageRenderer {
     //NSLog(@"%s", __PRETTY_FUNCTION__);

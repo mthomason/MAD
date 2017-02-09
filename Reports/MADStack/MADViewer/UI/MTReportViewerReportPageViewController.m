@@ -21,7 +21,7 @@
 #import <MAD/MADocument.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import "MTPrintingProtocol.h"
+#import "MADPrintingProtocol.h"
 
 #import "MADTabBarController.h"
 
@@ -327,7 +327,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     return self.pageViewAttributes.reportLastCacheDate;
 }
 
-#pragma mark - MTPrintingProtocol
+#pragma mark - MADPrintingProtocol
 
 - (MADPrintPageRenderer *)printPageRenderer {
     return [self.delegate printPageRenderer];

@@ -11,11 +11,9 @@
 
 #import <UIKit/UIViewController.h>
 
-@protocol MTPrintingProtocol;
+@protocol MADPrintingProtocol;
 
-@class MADocument;
-@class MADPageViewAttributes;
-@class MADDocumentScroller;
+@class MADocument, MADPageViewAttributes, MADDocumentScroller;
 
 @interface MADDocumentPageController : UIViewController
 
@@ -25,7 +23,7 @@
     - (instancetype)initWithDocument:(MADocument *)document
                   andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
 
-    @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
+    @property (nonatomic, weak) id <MADPrintingProtocol> delegate;
 
     @property (readonly, nonatomic, weak) MADDocumentScroller *documentScroller;
     @property (readonly, nonatomic, weak) UIView *documentView;

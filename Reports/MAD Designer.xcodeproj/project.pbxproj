@@ -1412,7 +1412,7 @@
 		4C26BA1D1BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryVisualizationLinkDefination.m; sourceTree = "<group>"; };
 		4C26BA271BAF999800456DC8 /* MADViewControllerDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerDocumentProtocol.h; sourceTree = "<group>"; };
 		4C26BA281BAF999800456DC8 /* MADViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerProtocol.h; sourceTree = "<group>"; };
-		4C26BA291BAF999800456DC8 /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPrintingProtocol.h; sourceTree = "<group>"; };
+		4C26BA291BAF999800456DC8 /* MADPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPrintingProtocol.h; sourceTree = "<group>"; };
 		4C26BA2A1BAF999800456DC8 /* MTUnwindProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUnwindProtocol.h; sourceTree = "<group>"; };
 		4C26BA2B1BAF999800456DC8 /* MUIViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDelegate.h; sourceTree = "<group>"; };
 		4C26BA2D1BAF999800456DC8 /* MADControlState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADControlState.h; sourceTree = "<group>"; };
@@ -2933,7 +2933,7 @@
 			children = (
 				4C26BA271BAF999800456DC8 /* MADViewControllerDocumentProtocol.h */,
 				4C26BA281BAF999800456DC8 /* MADViewControllerProtocol.h */,
-				4C26BA291BAF999800456DC8 /* MTPrintingProtocol.h */,
+				4C26BA291BAF999800456DC8 /* MADPrintingProtocol.h */,
 				4C26BA2A1BAF999800456DC8 /* MTUnwindProtocol.h */,
 				4C26BA2B1BAF999800456DC8 /* MUIViewControllerDelegate.h */,
 			);
