@@ -114,6 +114,8 @@
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
 
+#import "MADManagedObjectViewProtocol.h"
+
 #import "MTViewControllerBarcode.h"
 
 #import "MADIdentifiersStoryboards.h"
@@ -265,6 +267,7 @@ static const inline CGSize sizePopoverFonts() {
     @property (nonatomic, assign) CGRect boundsOnDisappear;
 
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
+    @property (nonatomic, strong) NSSet <UIGestureRecognizer *> *tapSectionLabels;
     @property (nonatomic, weak) UILabel *lastSelectedLabel;
 
 @end
@@ -704,11 +707,12 @@ static const inline CGSize sizePopoverFonts() {
     NSArray *collectionViewConstraints, *sectionViewLabelConstraints;
     UIGestureRecognizer *strayTouchGesture = self.strayTouchGesture;
 
+    NSMutableSet *tapSectionLabels = [[NSMutableSet alloc] init];
+    NSNumber *reportSectionKey;
+    MADDesignerSectionView *sectionView;
+    MADDesignerSectionLabel *sectionViewLabel;
+    UIGestureRecognizer *tapGestureRecognizer;
     for (MADReportSection *reportSection in reportSectionsEnumerator) {
-        NSNumber *reportSectionKey;
-        MADDesignerSectionView *sectionView;
-        MADDesignerSectionLabel *sectionViewLabel;
-        UIGestureRecognizer *tapGestureRecognizer;
         
         reportSectionKey = @(reportSection.identifier);
         
@@ -728,7 +732,7 @@ static const inline CGSize sizePopoverFonts() {
         tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
                                                                                                 action:@selector(handleToggleSectionControlPanel:)
                                                                                               delegate:self];
-        
+        [tapSectionLabels addObject:tapGestureRecognizer];
         [strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
         [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
         
@@ -804,7 +808,7 @@ static const inline CGSize sizePopoverFonts() {
     }
     
     [reportSectionKeyTracker removeAllObjects];
-    
+    self.tapSectionLabels = tapSectionLabels;
     self.layoutConstraintsSectionsVerticalBuffer = constraintsSectionsVerticalBuffer;
 
     self.layoutConstraintsReportSectionHeight = constraintsReportSectionHeight;
@@ -911,7 +915,8 @@ static const inline CGSize sizePopoverFonts() {
     if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
         self.presentedViewController.childViewControllers.count > 0 &&
         self.toolboxTransitioningDelegate.presentationController != nil &&
-        ![self showOnSide]) {
+        !(self.presentingViewController.traitCollection.verticalSizeClass ==
+                                                            UIUserInterfaceSizeClassCompact)) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
@@ -921,7 +926,8 @@ static const inline CGSize sizePopoverFonts() {
     } else if (self.settingsTransitioningDelegate.presentationController.presentedView.superview != nil &&
                self.presentedViewController.childViewControllers.count > 0 &&
                self.settingsTransitioningDelegate.presentationController != nil &&
-               ![self showOnSide]) {
+               !(self.presentingViewController.traitCollection.verticalSizeClass ==
+                                                                UIUserInterfaceSizeClassCompact)) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
@@ -1133,7 +1139,8 @@ static const inline CGSize sizePopoverFonts() {
     viewController.view.frame = navigationController.view.frame;
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark -
+#pragma mark UIScrollViewDelegate
 
 - (void)scrollViewWillBeginZooming: (UIScrollView *)scrollView
                           withView: (UIView *)view {
@@ -2391,11 +2398,17 @@ static const inline CGSize sizePopoverFonts() {
         [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)]) {
         return YES;
     } else {
-        return  NO;
+        if (otherGestureRecognizer == _strayTouchGesture &&
+                                    [self.tapSectionLabels containsObject:gestureRecognizer]) {
+            return YES;
+        } else {
+            return  NO;
+        }
     }
 }
 
-- (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch: (UITouch *)touch {
+- (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
+       shouldReceiveTouch: (UITouch *)touch {
     return YES;
 }
 
@@ -2788,14 +2801,12 @@ static const inline CGSize sizePopoverFonts() {
     return [self.selectedObjectIDs containsObject:@(elementView.identifier)];
 }
 
-- (NSUInteger)removeBorderFromAllSectionViews {
-    NSUInteger deselectedSectionViewCounter = 0;
+- (void)removeBorderFromAllSectionViews {
     NSEnumerator <MADDesignerSectionLabel *> *labels;
     labels = self.sectionControlViewsDictionary.objectEnumerator;
     for (MADDesignerSectionLabel *label in labels) {
-        deselectedSectionViewCounter += [self removeBorderFromSectionLabel: label] ? 1 : 0;
+        [self removeBorderFromSectionLabel: label];
     }
-    return deselectedSectionViewCounter;
 }
 
 - (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
@@ -2849,7 +2860,6 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)repositionSectionViews:(CGRect)presentedRect {
-
     if (presentedRect.origin.x > CGPointZero.x) {
         for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
             sectionView.contentInset = ScrollIndicatorContentInsets(presentedRect);
@@ -2860,16 +2870,14 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)selectElementView:(MADDesignerElementView *)elementView {
-    
-    NSUInteger numberOfViewsDeselected = [self removeBorderFromAllSectionViews];
-    
-    if (numberOfViewsDeselected == 0) {
+    if (self.selectedSections.count > 0) {
+        [self removeBorderFromAllSectionViews];
+    } else {
         [self.selectedObjectIDs addObject: @(elementView.identifier)];
         [self applyBorderToElementView: elementView];
         
         self.viewControllerToolbox.document = self.document;
         self.viewControllerToolbox.selectedElementIDs = self.selectedObjectIDs;
-        
     }
 }
 
@@ -3407,6 +3415,7 @@ END_deselectElementView:;
 
 }
 
+#pragma mark -
 #pragma mark Element View helpers
 
 - (BOOL)dismissAllPopovers {
@@ -3589,7 +3598,7 @@ END_deselectElementView:;
 - (void)applyBorderToSectionLabel:(MADDesignerSectionLabel *)view {
     
     NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
-    self.borderAppliedToView[key] = @YES;
+    [self.selectedSections addObject:key];
     
     UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
@@ -3601,7 +3610,7 @@ END_deselectElementView:;
     view.enableResizing = YES;
     
     NSNumber *key = @(view.identifier);
-    self.borderAppliedToView[key] = @YES;
+    [self.selectedElements addObject:key];
     
     UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
@@ -3611,13 +3620,13 @@ END_deselectElementView:;
 
 - (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
     BOOL result;
-    if ([self isBorderAppliedToSectionLabel:label]) {
-        result = YES;
-        NSNumber *key = [[NSNumber alloc] initWithInteger: label.tag];
-        self.borderAppliedToView[key] = @NO;
+    NSNumber *key = [[NSNumber alloc] initWithInteger:label.tag];
+    if ([self.selectedSections containsObject:key]) {
+        [self.selectedSections removeObject:key];
         UIColor *color = [UIColor blackColor];
         label.layer.borderColor = color.CGColor;
         label.layer.borderWidth = 0;
+        result = YES;
     } else {
         result = NO;
     }
@@ -3626,10 +3635,9 @@ END_deselectElementView:;
 
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
-    if ([self isBorderAppliedToElementView:view]) {
-
-        NSNumber *key = @(view.identifier);
-        self.borderAppliedToView[key] = @NO;
+    NSNumber *key = @(view.identifier);
+    if ([self.selectedElements containsObject:key]) {
+        [self.selectedElements removeObject:key];
         result = YES;
         UIColor *color = [UIColor blackColor];
         view.layer.borderColor = color.CGColor;
@@ -3669,6 +3677,7 @@ END_deselectElementView:;
     return elementView;
 }
 
+#pragma mark -
 #pragma mark Constraints Helpers
 
 - (CGRect)detailDisplayFrame {
@@ -3687,16 +3696,10 @@ END_deselectElementView:;
     NSArray *sectionViews = self.sectionViewsArray;
     for (sectionView in sectionViews) {
         height += sectionView.frame.size.height <= CGSizeZero.height ?
-                                                ceil(sectionView.intrinsicContentSize.height) :
-                                                sectionView.frame.size.height;
+        ceil(sectionView.intrinsicContentSize.height) :
+        sectionView.frame.size.height;
     }
-    
     return CGSizeMake(self.view.bounds.size.width, height);
-}
-
-- (BOOL)showOnSide {
-    return self.presentingViewController.traitCollection.verticalSizeClass ==
-                                                            UIUserInterfaceSizeClassCompact;
 }
 
 - (void)scrollToDetailSectionView {

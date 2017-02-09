@@ -7,23 +7,27 @@
 //
 
 #import "MADQueryPredicate.h"
+#import <Foundation/NSString.h>
+
+#import <MADFoundation/MADDataType.h>
 
 #import "MTDatabase.h"
 #import "MADDatabaseField.h"
 
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
-#import "RptqQueryTable+Extras.h"
-#import "RptqQueryPredicate+Extras.h"
+
+#import "RptqQueryPredicate.h"
+
 #import "RptqDatabaseSchemaField.h"
 
-#import <MADFoundation/MADDataType.h>
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryPredicate+Extras.h"
 
-#import <Foundation/NSString.h>
 
 @interface MADQueryPredicate ()
 
-@property (nonatomic, readwrite, strong) NSString *sql;
+    @property (nonatomic, readwrite, strong) NSString *sql;
 
 @end
 

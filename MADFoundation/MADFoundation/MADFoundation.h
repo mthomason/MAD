@@ -16,7 +16,6 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADMutableMapDataColumns.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -24,7 +23,6 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/MADAssert.h>
-#import <MADFoundation/NSURL+Document.h>
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/NSData+Comparson.h>
 #import <MADFoundation/UIScreen+Properties.h>

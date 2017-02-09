@@ -1,26 +1,31 @@
+//
+//  MADVerificationController.m
+//  MAD
+//
+//  Created by Michael Thomason on 11/05/14.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTVerificationController.h"
+
 #include <CommonCrypto/CommonDigest.h>
 #include <Security/Security.h>
 #include <AssertMacros.h>
 
-#import "MTVerificationController.h"
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADApplication.h>
+
 #import <openssl/ossl_typ.h>
 #import <openssl/pkcs7.h>
 #import <openssl/bio.h>
 #import <openssl/x509.h>
 #import <openssl/x509_vfy.h>
 #import <openssl/evp.h>
+
 #import "ReceiptAttribute.h"
-//#import "asn_application.h"
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-
-#import <MADFoundation/MADApplication.h>
-
-
-//#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MTVerificationController() <SKRequestDelegate>
 

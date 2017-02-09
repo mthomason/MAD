@@ -101,7 +101,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 - (IBAction)heightChanged:(id)sender { }
 
 - (IBAction)numberOfRowsChanged:(UIStepper *)sender {
-    [self.delegate sectionLayoutDidUpdateNumberOfRows:(NSUInteger)sender.value];
+    [self.delegate sectionLayoutDidUpdateNumberOfRows:(int32_t)sender.value];
 }
 
 - (IBAction)valueChangedVisibility:(id)sender {

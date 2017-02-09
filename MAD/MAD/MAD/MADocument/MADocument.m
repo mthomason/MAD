@@ -32,8 +32,6 @@
 
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
-#import <MADFoundation/MADFilename.h>
-#import <MADFoundation/NSURL+Document.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 

@@ -99,8 +99,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
     NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
-    NSString *detail = [NSString stringWithFormat:format, groupNumber];
-    self.groupTypeSectionNumber = (NSInteger)groupNumber;
+    NSString *detail = [[NSString alloc] initWithFormat:format, groupNumber];
+    self.groupTypeSectionNumber = (int32_t)groupNumber;
     self.aggregateGroupByType = MTAggregateGroupByTypeSection;
     self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
 
@@ -167,7 +167,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         switch (self.aggregateGroupByType) {
             case MTAggregateGroupByTypeSection: {
                 
-                NSUInteger group = self.groupTypeSectionNumber;
+                int32_t group = self.groupTypeSectionNumber;
                 NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
                 self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
