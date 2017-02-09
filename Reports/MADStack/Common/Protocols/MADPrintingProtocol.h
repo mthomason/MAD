@@ -1,19 +1,19 @@
 //
-//  MTPrintingProtocol.h
+//  MADPrintingProtocol.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/12/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTPrintingProtocol_h
-#define Reports_MTPrintingProtocol_h
+#ifndef Reports_MADPrintingProtocol_h
+#define Reports_MADPrintingProtocol_h
 
 #import <Foundation/NSObject.h>
 
 @class MADPrintPageRenderer;
 
-@protocol MTPrintingProtocol <NSObject>
+@protocol MADPrintingProtocol <NSObject>
 @required
     - (MADPrintPageRenderer *)printPageRenderer;
 @end
