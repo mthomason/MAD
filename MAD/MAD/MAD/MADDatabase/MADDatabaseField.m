@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 #import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
 #import <MADFoundation/MADDataType.h>
@@ -49,11 +49,11 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
     }
 }
 
-@interface MTDatabaseField ()
+@interface MADDatabaseField ()
 
 @end
 
-@implementation MTDatabaseField
+@implementation MADDatabaseField
 
 - (instancetype)initWithName:(NSString *)name {
     if (self = [self init]) {
@@ -64,7 +64,7 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MTDatabaseField *copy = [[[self class] allocWithZone:zone] init];
+    MADDatabaseField *copy = [[[self class] allocWithZone:zone] init];
     NSString *name = _name.copy;
     copy.name = name;
     copy.fieldType = _fieldType;
