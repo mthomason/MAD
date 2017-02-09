@@ -10,9 +10,7 @@
 #define MAD_MADUnwindProtocol_h
 
 @protocol MADUnwindProtocol <NSObject>
-
     @property (nonatomic, weak) UIViewController *unwindViewController;
-
 @end
 
 #endif

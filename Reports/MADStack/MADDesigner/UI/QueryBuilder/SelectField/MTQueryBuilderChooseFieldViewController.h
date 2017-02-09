@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import "MTUnwindProtocol.h"
+#import "MADUnwindProtocol.h"
 #import "MADSectionHeaderViewDelegate.h"
 
 @protocol MTQueryBuilderChooseFieldDelegate;
@@ -23,7 +23,7 @@
     <UITableViewDataSource,
         UITableViewDelegate,
         MADSectionHeaderViewDelegate,
-        MTUnwindProtocol>
+        MADUnwindProtocol>
 
     + (instancetype)newQueryBuilderChooseFieldViewController;
 

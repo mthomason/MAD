@@ -14,7 +14,7 @@
 
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
-#import "MTUnwindProtocol.h"
+#import "MADUnwindProtocol.h"
 
 @protocol MADViewControllerBarcodeDelegate;
 
@@ -23,7 +23,7 @@
 
 @interface MTViewControllerBarcode : MADViewController
     <MTViewControllerBarcodeOptionsDelegate,
-        MTUnwindProtocol>
+        MADUnwindProtocol>
 
     + (instancetype)newViewControllerBarcode;
 

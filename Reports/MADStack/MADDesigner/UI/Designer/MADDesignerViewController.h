@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTReportDesignerViewController_h
-#define Reports_MTReportDesignerViewController_h
+#ifndef MAD_MADDesignerViewController_h
+#define MAD_MADDesignerViewController_h
 
 #import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADTabBarItemProtocol_h
-#define MADTabBarItemProtocol_h
+#ifndef MAD_MADTabBarItemProtocol_h
+#define MAD_MADTabBarItemProtocol_h
 
 @protocol MADTabBarImageProtocol <NSObject>
 

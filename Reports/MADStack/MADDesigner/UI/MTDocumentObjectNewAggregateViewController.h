@@ -16,7 +16,7 @@
 #import <MAD/MADAggregateFunctionInputType.h>
 #import <MAD/MADAggregateFunctionGroupByType.h>
 
-#import "MTUnwindProtocol.h"
+#import "MADUnwindProtocol.h"
 
 @class NSManagedObject, NSManagedObjectID, MADocument, RptqQueryField, RptqDocumentElementAggregate;
 
@@ -31,7 +31,7 @@
 @end
 
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
-    <MTUnwindProtocol, UITableViewDelegate>
+    <MADUnwindProtocol, UITableViewDelegate>
 
     @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;
     @property (nonatomic, weak) MADocument *document;

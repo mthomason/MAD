@@ -10,7 +10,7 @@
 #define Reports_MTDocumentObjectNewStaticLabelViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import "MTUnwindProtocol.h"
+#import "MADUnwindProtocol.h"
 #import <UIKit/UITableView.h>
 #import <UIKit/UITextField.h>
 
@@ -19,7 +19,7 @@ extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 @interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate,
-        MTUnwindProtocol>
+        MADUnwindProtocol>
 
     @property (nonatomic, weak) IBOutlet UITextField *textField;
 

@@ -6,13 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_UIViewController_tabBarItem_h
-#define Reports_UIViewController_tabBarItem_h
+#ifndef MAD_UIViewController_tabBarItem_h
+#define MAD_UIViewController_tabBarItem_h
 
 #import <UIKit/UIViewController.h>
-
-@class NSObject;
-@class UIImage;
 
 @interface UIViewController (tabBarItem)
 

@@ -10,12 +10,9 @@
 #define MADDesigner_MADViewControllerStandardProtocol_h
 
 @protocol MADViewControllerStandardProtocol
-
   @optional
-
     - (void)viewControllerDidFinish:(id)sender;
     - (void)viewControllerDidCancel:(id)sender;
-
 @end
 
 #endif
