@@ -11,9 +11,13 @@
 #endif
 
 #import "MTQueryCacheAddColumn.h"
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataType.h>
+
 #import "MADQueryCacheAddColumnParameters.h"
 #import "MADQueryParameters.h"
 

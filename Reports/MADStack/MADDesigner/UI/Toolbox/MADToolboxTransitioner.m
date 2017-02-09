@@ -44,7 +44,7 @@
     
     if (_passthroughContainers != passthroughContainers) {
         _passthroughContainers = passthroughContainers;
-        [self updatePassthroughViews];
+        //[self updatePassthroughViews];
     }
     
 }
@@ -53,7 +53,7 @@
     
     if (_passthroughContainer != passthroughContainer) {
         _passthroughContainer = passthroughContainer;
-        [self updatePassthroughViews];
+        //[self updatePassthroughViews];
     }
     
 }
@@ -73,14 +73,9 @@
 
     if (self.popoverStyle) {
         
-        NSArray *allElementViews =  _passthroughViews.allObjects;
-        NSArray *allContainerObjects = _passthroughContainers.allObjects;
-        
-        NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:passthroughContainer];
-        NSArray *passthroughViewsAll = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
-        ((UIPopoverPresentationController *)_presentationController).passthroughViews = passthroughViewsAll;
-        
+        NSSet *allElements = [_passthroughViews setByAddingObjectsFromSet:_passthroughContainers];
+        allElements = [allElements setByAddingObject:passthroughContainer];
+        ((UIPopoverPresentationController *)_presentationController).passthroughViews = allElements.allObjects;
         
     } else {
         
@@ -110,11 +105,12 @@
         ((UIPopoverPresentationController *)presentationController).sourceView = self.sourceView;
         ((UIPopoverPresentationController *)presentationController).sourceRect = self.sourceRect;
 
-        NSArray *allElementViews =  self.passthroughViews.allObjects;
-        NSArray *allContainerObjects = self.passthroughContainers.allObjects;
-        NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:passthroughContainer];
-        ((UIPopoverPresentationController *)presentationController).passthroughViews = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
+        NSArray <UIView *> *allElementViews =  self.passthroughViews.allObjects;
+        NSArray <UIView *> *allContainerObjects = self.passthroughContainers.allObjects;
+        NSArray <UIView *> *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
+        NSArray <UIView *> *passthroughViewsAll = [passthroughViews arrayByAddingObject:passthroughContainer];
+        
+        ((UIPopoverPresentationController *)presentationController).passthroughViews = passthroughViewsAll;
         ((UIPopoverPresentationController *)presentationController).permittedArrowDirections = self.permittedArrowDirections;
         ((UIPopoverPresentationController *)presentationController).delegate = popoverPresentationControllerDelegate;
 
