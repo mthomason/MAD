@@ -10,8 +10,10 @@
 #define Reports_MADFileExplorerViewController_h
 
 #import <UIKit/UICollectionViewController.h>
+#import <MADExplorer/MADDocumentCellProtocol.h>
 
 @interface MADFileExplorerViewController : UICollectionViewController
+    <MADDocumentCellProtocol>
 
     + (instancetype)newFileExplorerViewController;
     - (void)done:(id)sender;

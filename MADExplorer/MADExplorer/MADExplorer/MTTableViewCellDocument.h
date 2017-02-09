@@ -11,13 +11,13 @@
 
 #import <UIKit/UITableViewCell.h>
 
-@protocol MTDocumentCellProtocol;
+@protocol MADDocumentCellProtocol;
 
 @interface MTTableViewCellDocument : UITableViewCell
 
     @property (nonatomic, weak) IBOutlet UILabel *labelH1;
     @property (nonatomic, weak) IBOutlet UIImageView *imageThumbnail;
-    @property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
+    @property (nonatomic, weak) id <MADDocumentCellProtocol> delegate;
 
 @end
 
