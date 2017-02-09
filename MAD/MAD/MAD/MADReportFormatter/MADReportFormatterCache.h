@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@interface MTReportFormatterCache : NSObject
+@interface MADReportFormatterCache : NSObject
 
     - (instancetype)init;
     - (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size;
