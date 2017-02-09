@@ -9,5 +9,8 @@
 #ifndef MADQueryVisualizationSchemaDelegate_h
 #define MADQueryVisualizationSchemaDelegate_h
 
+@protocol MADQueryVisualizationSchemaDelegate
+    - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
+@end
 
 #endif /* MADQueryVisualizationSchemaDelegate_h */

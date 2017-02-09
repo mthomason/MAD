@@ -9,8 +9,7 @@
 #ifndef MAD_MADDocumentProtocol_h
 #define MAD_MADDocumentProtocol_h
 
-@class MADCredential;
-@class NSString;
+@class MADCredential, NSString;
 
 @protocol MADocumentDelegate
   @required

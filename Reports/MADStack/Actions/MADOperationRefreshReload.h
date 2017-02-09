@@ -11,8 +11,7 @@
 
 #import "MADGroupOperation.h"
 
-@class UIViewController;
-@class MADocument, MADDatabaseConnection;
+@class UIViewController, MADocument, MADDatabaseConnection;
 
 @interface MADOperationRefreshReload : MADGroupOperation
 

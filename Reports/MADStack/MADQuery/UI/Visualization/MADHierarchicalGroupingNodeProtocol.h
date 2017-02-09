@@ -1,13 +1,19 @@
 //
-//  Header.h
+//  MADHierarchicalGroupingNodeProtocol.h
 //  MAD Designer
 //
 //  Created by Michael on 2/9/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Header_h
-#define Header_h
+#ifndef MAD_MADHierarchicalGroupingNodeProtocol_h
+#define MAD_MADHierarchicalGroupingNodeProtocol_h
 
+@protocol MADHierarchicalGroupingNodeProtocol <NSObject>
+    @property (nonatomic, assign) BOOL root;
+    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
+                                        inView:(UIView *)containerView;
+    - (CGRect)frame;
+@end
 
-#endif /* Header_h */
+#endif /* MADHierarchicalGroupingNodeProtocol_h */

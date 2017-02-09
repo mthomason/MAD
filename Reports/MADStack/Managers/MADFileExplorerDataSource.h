@@ -15,8 +15,7 @@
 
 @protocol MADDocumentManagerProtocol;
 
-@class MADMetaData;
-@class MADCollectionViewCellDocument;
+@class MADMetaData, MADCollectionViewCellDocument;
 
 @interface MADFileExplorerDataSource : NSObject
     <UICollectionViewDataSource,
@@ -36,7 +35,6 @@
     - (void)rename:(NSString *)newName itemAtIndex:(NSUInteger)index;
     - (void)removeItemAtIndex:(NSUInteger)index;
     - (void)duplicateItemAtIndex:(NSUInteger)index;
-
 
     - (NSURL *)documentsDirectory;
 

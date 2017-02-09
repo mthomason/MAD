@@ -12,11 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MAD/MADAlignment.h>
 
-@class MADTextStyle;
-@class NSNumber;
-@class NSString;
-@class RptqDocumentElement;
-@class UIFontDescriptor;
+@class MADTextStyle, NSString;
 
 
 @interface MADElementStylizedText : NSObject

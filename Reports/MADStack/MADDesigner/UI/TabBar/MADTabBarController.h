@@ -17,10 +17,8 @@ extern const int8_t MADIndexQuery;
 extern const int8_t MADIndexDesigner;
 extern const int8_t MADIndexViewer;
 
-@class MADocument;
-@class MADQueryBuilderSplitViewController;
-@class MADDesignerViewController;
-@class MADViewerController;
+@class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController,
+       MADViewerController;
 
 @interface MADTabBarController : UITabBarController
     <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>

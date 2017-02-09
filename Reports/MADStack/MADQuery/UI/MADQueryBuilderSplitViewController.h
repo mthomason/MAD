@@ -14,11 +14,8 @@
 #import "MADViewControllerStandardProtocol.h"
 #import "MADTabBarItemProtocol.h"
 
-@class UINavigationController;
-@class MADQueryVisualizationViewController;
-@class MADNavigationControllerQueryBuilder;
-@class MADQueryViewController;
-@class MADocument;
+@class MADQueryVisualizationViewController, MADNavigationControllerQueryBuilder,
+       MADQueryViewController, MADocument;
 
 @interface MADQueryBuilderSplitViewController : UISplitViewController
     <MADViewControllerStandardProtocol,

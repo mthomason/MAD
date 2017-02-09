@@ -13,8 +13,7 @@
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
-@class MTEdge;
-@class MADAlgorithmElementProperties, MADBfsProperties, MADDfsProperties, MADSortProperties;
+@class MTEdge, MADAlgorithmElementProperties, MADBfsProperties, MADDfsProperties, MADSortProperties;
 
 typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
     MADAlgorithmPropertyClassesDfs,

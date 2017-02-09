@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderAddPredicateViewController_h
 
 #import <UIKit/UITableViewController.h>
+#import <MAD/MADPredicateOperator.h>
 
 #import "MADViewControllerStandardProtocol.h"
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
@@ -17,7 +18,6 @@
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"
-#import <MAD/MADPredicateOperator.h>
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -28,12 +28,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @protocol MADQueryAddPredicateDelegate;
 
-@class MTQueryBuilderAddPredicateViewController;
-@class RptqQueryPredicate;
 @class MADocument;
 
-typedef id <MADQueryAddPredicateDelegate,
-                MADViewControllerStandardProtocol> MADQueryBuilderPredicateDelegate;
 
 @interface MTQueryBuilderAddPredicateViewController : UITableViewController
     <UITableViewDelegate,
@@ -42,7 +38,8 @@ typedef id <MADQueryAddPredicateDelegate,
         MTViewControllerValueBasedOnFieldDelegate>
 
 
-    @property (nonatomic, weak)     IBOutlet MADQueryBuilderPredicateDelegate queryPredicateDelegate;
+    @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateDelegate,
+                                                    MADViewControllerStandardProtocol> queryPredicateDelegate;
     @property (nonatomic, weak)     MADocument *document;
 
     @property (nonatomic, assign)   MNSPredicatePart currentlyEditingPart;

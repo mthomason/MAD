@@ -10,7 +10,6 @@
 #define MAD_Designer_MADOperationCondition_h
 
 #import <Foundation/NSOperation.h>
-#import "MADOperationConditionResult.h"
 
 @class MADOperation, MADOperationConditionResult;
 

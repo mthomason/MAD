@@ -89,6 +89,7 @@
 #import "MADLabelTitle.h"
 #import "MADIdentifiersStoryboards.h"
 #import "MADDocumentScroller.h"
+#import "MADPageSliderProtocol.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";

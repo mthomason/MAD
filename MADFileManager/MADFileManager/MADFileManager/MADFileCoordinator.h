@@ -10,15 +10,8 @@
 #define MAD_Designer_MADFileCoordinator_h
 
 #import <Foundation/NSObject.h>
-#import "MADFileCoordinatorProtocol.h"
 #import <MADFileManager/MADAppStorageOption.h>
-
-@class MADFile;
-
-typedef NSArray <NSURL *> MADURLArray;
-
-@protocol MADFileCoordinatorDelegate;
-@protocol MADFileCoordinatorProtocol;
+#import "MADFileCoordinatorProtocol.h"
 
 @interface MADFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 

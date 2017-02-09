@@ -6,11 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADViewControllerDocumentProtocol_h
-#define MADViewControllerDocumentProtocol_h
+#ifndef MAD_MADViewControllerDocumentProtocol_h
+#define MAD_MADViewControllerDocumentProtocol_h
 
 @class MADocument;
-@class NSManagedObjectContext;
 
 @protocol MADViewControllerDocumentProtocol <NSObject>
 

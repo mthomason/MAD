@@ -12,11 +12,9 @@
 #import <UIKit/UITableViewController.h>
 #import "MADToolboxDisplayProtocol.h"
 
-@class MADocument;
-@class MADFontSelectorViewController;
-@class MADFont;
-
 @protocol MADReportDesignerFontSelectorDelegate;
+
+@class MADocument;
 
 @interface MADFontSelectorViewController : UITableViewController
     <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>

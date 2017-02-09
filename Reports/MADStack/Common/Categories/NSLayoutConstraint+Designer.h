@@ -11,9 +11,7 @@
 
 #import <UIKit/NSLayoutConstraint.h>
 
-@class UIView;
-@class MADRulerView;
-@class UIScrollView;
+@class UIView, MADRulerView, UIScrollView;
 
 @interface MADLayoutConstraint : NSLayoutConstraint
 

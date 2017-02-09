@@ -18,13 +18,7 @@
 
 #import "MTUnwindProtocol.h"
 
-@class NSManagedObject;
-@class NSManagedObjectID;
-
-@class MADocument;
-
-@class RptqQueryField;
-@class RptqDocumentElementAggregate;
+@class NSManagedObject, NSManagedObjectID, MADocument, RptqQueryField, RptqDocumentElementAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 

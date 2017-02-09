@@ -11,8 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class UIManagedDocument;
-@class NSURL;
+@class UIManagedDocument, NSURL;
 
 @interface MADOpenDocumentManager : NSObject
 

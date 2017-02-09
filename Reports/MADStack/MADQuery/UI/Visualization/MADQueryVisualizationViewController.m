@@ -103,6 +103,7 @@
 
 #import "MADCacheManager.h"
 #import "MADQueryVisualizationSchemaView.h"
+#import "MADQueryVisualizationSchemaDelegate.h"
 
 typedef void(^MTBlockResultVoid)(void);
 

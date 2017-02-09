@@ -13,8 +13,7 @@
 
 @protocol MADDesignerSectionLayoutLiquidDelegate;
 
-@class MADDesignerSectionLabel;
-@class MADReportSection;
+@class MADDesignerSectionLabel, MADReportSection;
 
 typedef NS_ENUM(NSUInteger, MADBorderState) {
     MADBorderStateNormal,

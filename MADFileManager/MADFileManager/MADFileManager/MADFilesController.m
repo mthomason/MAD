@@ -260,9 +260,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 #pragma mark - Subscripting
 
 - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
-
-    //NSLog(@"Requesting object at index: %d.", index);
-
     __block MADMetaData *fileInfo = nil;
     __weak typeof(self) weakSelf = self;
 
@@ -276,49 +273,29 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 #pragma mark - Inserting / Removing / Managing / Updating MADMetaData Objects
 
 - (void)removeFileInfo:(MADMetaData *)fileInfo {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [self.fileCoordinator removeFileAtURL: fileInfo.URL];
 }
 
 - (void)duplicateFileInfo:(MADMetaData *)fileInfo {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [self.fileCoordinator duplicateFileAtURL: fileInfo.URL];
 }
 
 - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSURL *url = fileInfo.URL.copy;
     [self.fileCoordinator renameFileAtURL: url toName: name];
 }
 
-- (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name
-                    extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    [self.fileCoordinator createURLForFile:list withName:name
-                                 extention:extention fileGroup:fileGroup];
-}
-
 - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
                         fileGroup:(NSString *)fileGroup {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     return [self.fileCoordinator canCreateFileWithName:name extention:extention
                                              fileGroup:fileGroup];
 }
 
 - (NSURL *)documentDirectory {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     return (self.fileCoordinator).documentsDirectory;
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo {
-
-    //NSLog(@"%s : %@", __PRETTY_FUNCTION__, fileInfo);
 
     dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
 
@@ -330,8 +307,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
         sself.fileMetaDatum[indexOfFileInfo] = fileInfo;
         
         [sself.delegateQueue addOperationWithBlock:^{
-
-            //NSLog(@"%s", __PRETTY_FUNCTION__);
 
             MADFilesController *sself = weakSelf;
             id <MADFilesControllerDelegate> delegate = sself.delegate;
@@ -356,13 +331,13 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     });
 }
 
-- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(MADURLArray *)insertedURLs
-                                             removedURLs:(MADURLArray *)removedURLs
-                                             updatedURLs:(MADURLArray *)updatedURLs {
+- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray <NSURL *> *)insertedURLs
+                                             removedURLs:(NSArray <NSURL *> *)removedURLs
+                                             updatedURLs:(NSArray <NSURL *> *)updatedURLs {
     
-    MADMutableMetaDatum *insertedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:insertedURLs.count],
-                        *removedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:removedURLs.count],
-                        *updatedMetaDatum = [[MADMutableMetaDatum alloc] initWithCapacity:updatedURLs.count];
+    NSMutableArray <MADMetaData *> *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count],
+                                   *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count],
+                                   *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
 
     NSURL *URL;
     MADMetaData *metadata;

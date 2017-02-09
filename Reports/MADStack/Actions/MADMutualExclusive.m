@@ -11,6 +11,8 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIAlert.h>
 
+#import "MADOperationConditionResult.h"
+
 @interface MADMutualExclusiveCondition()
 
     @property (nonatomic, strong) NSString *className;

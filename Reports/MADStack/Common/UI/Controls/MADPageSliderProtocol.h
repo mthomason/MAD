@@ -9,5 +9,8 @@
 #ifndef MADPageSliderProtocol_h
 #define MADPageSliderProtocol_h
 
+@protocol MADPageSliderProtocol <NSObject>
+    - (void)sliderDidChangeToPage:(NSUInteger)page;
+@end
 
 #endif /* MADPageSliderProtocol_h */

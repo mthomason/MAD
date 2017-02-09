@@ -13,8 +13,7 @@
 
 extern const CGFloat MNSTableViewCellHeightDefault;
 
-@class NSManagedObjectID;
-@class UILabel;
+@class NSManagedObjectID, UILabel;
 
 @interface MADTableViewCellQueryInstructions : MTAutoLayoutTableViewCell
 

@@ -97,6 +97,7 @@
 
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
+#import "MADQueryViewDatasourceProtocol.h"
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";

@@ -16,10 +16,11 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
+
 #import "MADSliderPageVertical.h"
+#import "MADPageSliderProtocol.h"
 
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
-static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 static NSString * const ConstTestStringValue = @"0";
 
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);

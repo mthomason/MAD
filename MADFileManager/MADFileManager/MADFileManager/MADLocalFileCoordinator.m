@@ -175,14 +175,15 @@
     }];
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention
-               fileGroup:(NSString *)fileGroup {
+- (void)createURLWithName:(NSString *)name
+                extention:(NSString *)extention
+                fileGroup:(NSString *)fileGroup {
 
     NSURL *documentURL = [MADURL newURLLocalDocumentWithName:name extention:extention
                                                    fileGroup:fileGroup];
     
     id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
-    [MADFileUtilities createFile:list atURL:documentURL completion:^(NSError *error) {
+    [MADFileUtilities createFileAtURL:documentURL completion:^(NSError *error) {
 
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {

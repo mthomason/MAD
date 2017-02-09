@@ -11,10 +11,7 @@
 
 #import "RptqQuery.h"
 
-@class RptqDocument;
-@class MTDatabase;
-@class RptqDocumentSection;
-@class RptqDatabaseSchemaTable;
+@class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
 @interface RptqQuery (Extras)
 

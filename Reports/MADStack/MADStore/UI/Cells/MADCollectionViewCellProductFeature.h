@@ -11,8 +11,7 @@
 
 #import <UIKit/UICollectionViewCell.h>
 
-@class UILabel;
-@class UITextView;
+@class UILabel, UITextView;
 
 @interface MADCollectionViewCellProductFeature : UICollectionViewCell
 

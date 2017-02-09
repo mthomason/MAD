@@ -12,8 +12,7 @@
 #import "MADOperation.h"
 #import "MADPromptOperationDisplayError.h"
 
-@class MADDatabaseConnection;
-@class MADCredential;
+@class MADDatabaseConnection, MADCredential;
 
 @protocol MADOperationDatabaseTestConnectionProtocol <NSObject>
 

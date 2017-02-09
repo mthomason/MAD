@@ -13,8 +13,7 @@
 
 @protocol MTViewControllerValueBasedOnFieldDelegate;
 
-@class NSManagedObjectID;
-@class MADocument;
+@class NSManagedObjectID, MADocument;
 
 @interface MADViewControllerValueBasedOnField : UIViewController
 

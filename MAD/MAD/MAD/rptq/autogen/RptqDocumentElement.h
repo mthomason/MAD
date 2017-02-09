@@ -12,14 +12,8 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class NSObject, RptqDocumentSectionRows;
-@class MADAlignment;
-@class MADBorderStyle;
-@class MADCurrencyFormatter;
-@class MADMargin;
-@class MADPadding;
-@class MADTextStyle;
-@class UIColor;
+@class RptqDocumentSectionRows, MADAlignment, MADBorderStyle, MADCurrencyFormatter,
+       MADMargin, MADPadding, MADTextStyle, UIColor;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,7 +38,7 @@ extern NSString * const MTNullIdentifier;
 @property (nullable, nonatomic, retain) MADPadding *padding;
 @property (nullable, nonatomic, retain) MADBorderStyle *border;
 @property (nullable, nonatomic, retain) MADAlignment *alignment;
-@property (nullable, nonatomic, retain) NSObject *size;
+@property (nullable, nonatomic, retain) NSValue *size;
 @property (nullable, nonatomic, retain) MADTextStyle *style;
 @property (nullable, nonatomic, retain) UIColor *backgroundColor;
 @property (nullable, nonatomic, retain) UIColor *foregroundColor;

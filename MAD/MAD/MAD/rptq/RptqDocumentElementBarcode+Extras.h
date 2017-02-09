@@ -11,7 +11,6 @@
 
 #import "RptqDocumentElementBarcode.h"
 
-@class RptqQueryField;
 @class MTBarcode;
 
 @interface RptqDocumentElementBarcode (Extras)

@@ -100,8 +100,9 @@
                                    reason: reason
                                  userInfo: nil];
 }
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name
-               extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+- (void)createURLWithName:(NSString *)name
+                extention:(NSString *)extention
+                fileGroup:(NSString *)fileGroup {
     NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason

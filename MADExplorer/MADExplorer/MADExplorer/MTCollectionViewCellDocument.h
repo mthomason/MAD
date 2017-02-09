@@ -15,13 +15,9 @@ extern NSString * const MADTextNotDownloaded;
 
 @protocol UIGestureRecognizerDelegate;
 
-@class MADMetaData;
-@class MADThumbnailView;
-@class MADLabelFileExplorerDocumentCellTitle;
-@class MADLabelFileExplorerDocumentCellSubtitle;
-@class UILabel;
-@class UIActivityIndicatorView;
-@class UIProgressView;
+@class MADMetaData, MADThumbnailView, MADLabelFileExplorerDocumentCellTitle,
+       MADLabelFileExplorerDocumentCellSubtitle, UIActivityIndicatorView,
+       UIProgressView;
 
 @interface MADStringFormatted : NSObject
     + (NSString *)newStringFormattedSubtitle:(NSString *)status fileSize:(unsigned long long)fileSize;

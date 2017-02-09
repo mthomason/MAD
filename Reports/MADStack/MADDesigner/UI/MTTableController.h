@@ -11,8 +11,7 @@
 
 #import "MADCollectionViewController.h"
 
-@class MADDataFormatter;
-@class MTQuery;
+@class MADDataFormatter, MTQuery;
 
 @interface MADTableController : MADCollectionViewController
 

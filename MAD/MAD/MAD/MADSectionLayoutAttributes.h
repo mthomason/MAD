@@ -11,9 +11,7 @@
 
 #import <UIKit/UICollectionViewLayout.h>
 
-@class NSArray <__covariant ObjectType>;
-@class MADSectionLayoutManager;
-@class NSManagedObjectID;
+@class NSArray <__covariant ObjectType>, MADSectionLayoutManager, NSManagedObjectID;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
     <NSCopying>

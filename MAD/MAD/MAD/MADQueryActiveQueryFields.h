@@ -11,9 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSManagedObjectContext;
-@class RptqQueryField;
-@class NSSet <__covariant ObjectType>;
+@class NSManagedObjectContext, RptqQueryField, NSSet <__covariant ObjectType>;
 
 // This class should return all query fields used inside the report and query.  That is to
 //      say, this class should get all RptqQueryField objects that are both inside

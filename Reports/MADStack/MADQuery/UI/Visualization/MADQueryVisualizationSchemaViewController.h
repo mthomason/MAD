@@ -12,21 +12,11 @@
 #import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADManagedObjectViewProtocol.h"
+#import "MADHierarchicalGroupingNodeProtocol.h"
 
-@class UITableView;
+@protocol MADQueryVisualizationSchemaDelegate;
 
-@protocol MADQueryVisualizationSchemaDelegate
-    - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
-@end
-
-@protocol MADHierarchicalGroupingNodeProtocol <NSObject>
-    @property (nonatomic, assign) BOOL root;
-    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
-                                        inView:(UIView *)containerView;
-    - (CGRect)frame;
-@end
-
-@class MADocument, MTSchemaFieldCell, NSManagedObjectID;
+@class UITableView, MADocument, MTSchemaFieldCell, NSManagedObjectID, UITableView;
 
 @interface MADQueryVisualizationSchemaViewController : UIViewController
     <MADViewControllerDocumentProtocol,

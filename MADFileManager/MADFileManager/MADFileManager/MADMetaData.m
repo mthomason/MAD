@@ -46,7 +46,7 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
     return metadata;
 }
 
-+ (MADMetaDatum *)newMetaDatumForMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
++ (NSArray <MADMetaData *> *)newMetaDatumForMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
     NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
     for (NSMetadataItem *metadataItem in metadataItems) {
         MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];

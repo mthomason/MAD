@@ -11,10 +11,7 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class MADReportSection;
-@class NSArray;
-@class RptqDocument;
-@class RptqQuery;
+@class MADReportSection, NSArray, RptqDocument, RptqQuery;
 
 static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
 static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {

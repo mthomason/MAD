@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADQueryViewDatasourceProtocol_h
-#define MADQueryViewDatasourceProtocol_h
+#ifndef MAD_MADQueryViewDatasourceProtocol_h
+#define MAD_MADQueryViewDatasourceProtocol_h
 
+@protocol MADQueryViewControllerDatasourceProtocol <NSObject>
+
+    - (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
+                         fromTableView:(UITableView *)tableView
+                           atIndexPath:(NSIndexPath *)indexPath;
+    - (void)reloadQueryViewData;
+
+    - (MADocument *)document;
+
+@end
 
 #endif /* MADQueryViewDatasourceProtocol_h */

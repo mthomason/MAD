@@ -27,7 +27,7 @@
     + (void)readFileAtURL:(NSURL *)url
                completion:(void (^)(MADFile *list, NSError *error))completion;
 
-    + (void)createFile:(MADFile *)list atURL:(NSURL *)url
+    + (void)createFileAtURL:(NSURL *)url
             completion:(void (^)(NSError *error))completion;
 
     + (void)duplicateFileAtURL:(NSURL *)url

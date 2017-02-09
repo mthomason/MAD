@@ -11,13 +11,8 @@
 
 #import <UIKit/UIPresentationController.h>
 
-@class NSManagedObjectID;
-@class MADHierarchicalChildViewDefination;
-
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
-
     - (CGRect)frameOfItemWithObjectID:(int64_t)objectID;
-
 @end
 
 @interface MADQueryVisualizationSchemaPresentationController : UIPresentationController

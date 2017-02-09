@@ -10,18 +10,13 @@
 #define MAD_MADMetaData_h
 
 #import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
 
 @class NSMetadataItem;
-@class MADMetaData;
-
-typedef NSArray <MADMetaData *> MADMetaDatum;
-typedef NSMutableArray <MADMetaData *> MADMutableMetaDatum;
 
 @interface MADMetaData : NSObject
     <NSCopying>
 
-    + (MADMetaDatum *)newMetaDatumForMetadataItems:(NSArray *)metadataItems;
+    + (NSArray <MADMetaData *> *)newMetaDatumForMetadataItems:(NSArray *)metadataItems;
 
     - (instancetype)initWithURL:(NSURL *)url;
     - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;

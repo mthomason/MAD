@@ -11,8 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQueryPredicate;
-@class MTDatabase;
+@class RptqQueryPredicate, MTDatabase, NSSet <__covariant ObjectType>, NSString;
 
 @interface MADQueryPredicate : NSObject
 

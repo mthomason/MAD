@@ -47,8 +47,7 @@ extern NSString * const MTStoreKitIdentifierReceiptExpirationDate;
 
 typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
-@class SKProduct;
-@class NSArray<ObjectType>;
+@class SKProduct, NSArray<ObjectType>;
 
 @interface MTStoreKitController : NSObject
 

@@ -35,12 +35,23 @@ struct MADAlignment_t {
 };
 typedef struct MADAlignment_t MADAlignment_t;
 
+@interface MADAlignment : NSObject
+    <NSCoding>
+
+    - (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
+                              vertical:(MADVerticalAlignment)vertical;
+
+    @property (nonatomic, assign, readwrite) MADHorizontalAlignment horizontal;
+    @property (nonatomic, assign, readwrite) MADVerticalAlignment vertical;
+
+@end
+
 static inline MADAlignment_t MADAlignmentMake(MADHorizontalAlignment, MADVerticalAlignment);
+static inline MADAlignment_t MADAlignmentMake64(int64_t, int64_t);
+
 static inline MADAlignment_t MADAlignmentMake(MADHorizontalAlignment h, MADVerticalAlignment v) {
     MADAlignment_t a; a.horizontal = h; a.vertical = v; return a;
 }
-
-static inline MADAlignment_t MADAlignmentMake64(int64_t, int64_t);
 static inline MADAlignment_t MADAlignmentMake64(int64_t h, int64_t v) {
     MADAlignment_t a;
     switch (v) {
@@ -79,16 +90,5 @@ static inline MADAlignment_t MADAlignmentMake64(int64_t h, int64_t v) {
     }
     return a;
 }
-
-@interface MADAlignment : NSObject
-    <NSCoding>
-
-    - (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
-                              vertical:(MADVerticalAlignment)vertical;
-
-    @property (nonatomic, assign, readwrite) MADHorizontalAlignment horizontal;
-    @property (nonatomic, assign, readwrite) MADVerticalAlignment vertical;
-
-@end
 
 #endif

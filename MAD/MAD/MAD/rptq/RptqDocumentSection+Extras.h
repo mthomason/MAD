@@ -18,10 +18,7 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleNewPageAfter = 2,
 };
 
-@class RptqQuery;
-@class RptqDocumentElement;
-@class RptqDocumentSectionRows;
-@class NSIndexPath;
+@class RptqQuery, RptqDocumentElement, NSIndexPath;
 
 @interface RptqDocumentSection (Extras)
 

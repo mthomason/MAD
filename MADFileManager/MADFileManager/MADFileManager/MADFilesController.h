@@ -12,13 +12,9 @@
 #import <Foundation/NSObject.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
-@protocol MADFileCoordinatorProtocol;
-@protocol MADFilesControllerDelegate;
+@protocol MADFileCoordinatorProtocol, MADFilesControllerDelegate;
 
-@class NSOperationQueue;
-@class MADFilesController;
-@class MADMetaData;
-@class MADFile;
+@class NSOperationQueue, MADFilesController, MADMetaData;
 
 typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
 
@@ -54,8 +50,6 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
     - (void)removeFileInfo:(MADMetaData *)fileInfo;
     - (void)duplicateFileInfo:(MADMetaData *)fileInfo;
     - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name;
-    - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name
-                        extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo;
 
     + (BOOL)isCloudReadilyAvailable;

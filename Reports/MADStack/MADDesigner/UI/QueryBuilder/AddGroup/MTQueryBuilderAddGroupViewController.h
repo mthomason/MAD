@@ -15,9 +15,7 @@
 
 @protocol MADQueryBuilderAddGroupDelegate;
 
-@class MTQueryBuilderAddGroupViewController;
-@class NSManagedObjectID;
-@class MADocument;
+@class MTQueryBuilderAddGroupViewController, NSManagedObjectID, MADocument;
 
 @interface MTQueryBuilderAddGroupViewController : UITableViewController
     <UITableViewDelegate,

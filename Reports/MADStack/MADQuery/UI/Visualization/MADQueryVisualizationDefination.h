@@ -11,11 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADModelQuery;
-@class MTGraph;
-@class MTLinkedList;
-@class NSArray<__covariant ObjectType>;
-@class NSURL;
+@class MADModelQuery, MTGraph, MTLinkedList, NSArray<__covariant ObjectType>;
 
 @interface MADQueryVisualizationDefination : NSObject
 

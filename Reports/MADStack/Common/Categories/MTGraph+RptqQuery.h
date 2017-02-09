@@ -11,10 +11,7 @@
 
 #import <MADDataStructures/MTGraph.h>
 
-@class RptqQuery;
-@class MADModelQuery;
-@class NSManagedObjectID;
-@class NSManagedObjectContext;
+@class RptqQuery, MADModelQuery, NSManagedObjectID, NSManagedObjectContext;
 
 @interface MTGraph (RptqQuery)
 

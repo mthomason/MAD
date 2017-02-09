@@ -11,11 +11,8 @@
 
 #import "MADQuerySelectExpression.h"
 
-@class MTDatabase;
-@class NSManagedObjectContext;
-@class RptqDatabaseSchemaField;
-@class NSMutableDictionary<KeyType, ObjectType>;
-@class NSMutableArray<ObjectType>;
+@class RptqDatabaseSchemaField, NSString,
+       NSMutableDictionary<KeyType, ObjectType>, NSMutableArray<ObjectType>;
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 

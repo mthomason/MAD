@@ -11,7 +11,6 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSManagedObjectID;
 @class NSManagedObjectContext;
 
 extern NSString * const MADNotificationQueryTableInsert;
@@ -52,7 +51,6 @@ typedef NS_ENUM(short, MADModelType) {
 };
 
 @protocol MADModelIDProtocol <NSObject>
-    //@property (nonatomic, readonly, copy)       NSManagedObjectID *objectID;
     @property (nonatomic, readonly, assign)     int64_t identifier;
 @end
 

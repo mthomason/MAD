@@ -11,9 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQuery;
-@class MTDatabase;
-@class NSManagedObjectContext;
+@class MTDatabase, NSManagedObjectContext;
 
 @interface MADQuerySelectExpression : NSObject
 

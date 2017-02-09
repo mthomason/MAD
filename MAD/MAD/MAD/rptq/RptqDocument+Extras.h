@@ -13,14 +13,8 @@
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext;
-@class MTDatabase;
-@class MADErrorContainer;
-@class RptqDocumentSection;
-@class RptqDocumentElement;
-@class RptqQuery;
-@class RptqQueryPredicate;
-@class RptqQueryLinks;
+@class NSManagedObjectContext, MTDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
+       RptqQueryPredicate, RptqQueryLinks;
 
 @interface RptqDocument (Extras)
 

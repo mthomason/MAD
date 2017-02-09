@@ -11,9 +11,6 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/NSAttributedString.h>
 
-@class UINavigationController;
-@class UIViewController;
-
 @implementation MADFileExplorerNavigationBar
 
 + (void)initialize {
@@ -25,7 +22,7 @@
             NSMutableDictionary *titleTextAttributes;
             
             classes = [[NSArray alloc] initWithObjects: [UINavigationController class],
-                                                         [UIViewController class], nil];
+                                                        [UIViewController class], nil];
             
             navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
             navigationBar.tintColor = [UIColor whiteColor];

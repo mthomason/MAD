@@ -11,8 +11,6 @@
 
 #import "MADQuerySelectExpression.h"
 
-@class MTDatabase;
-@class NSManagedObjectContext;
 @class MTPair;
 
 @interface MADQuerySelectExpressionAllFields : MADQuerySelectExpression

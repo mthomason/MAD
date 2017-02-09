@@ -11,8 +11,7 @@
 
 #import "MADOperation.h"
 
-@class MADocument;
-@class MADDatabaseConnection;
+@class MADocument, MADDatabaseConnection;
 
 @protocol MADOperationCreateDocumentProtocol <NSObject>
     @property (readonly) MADocument *document;

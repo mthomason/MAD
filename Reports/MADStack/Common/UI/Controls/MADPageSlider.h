@@ -11,9 +11,7 @@
 
 #import <UIKit/UIVisualEffectView.h>
 
-@protocol MADPageSliderProtocol <NSObject>
-    - (void)sliderDidChangeToPage:(NSUInteger)page;
-@end
+@protocol MADPageSliderProtocol;
 
 @class MADSliderPageVertical;
 

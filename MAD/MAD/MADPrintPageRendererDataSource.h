@@ -11,9 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class MTDatabase;
-@class MADDataTableFast;
-@class MADReportFormatter;
+@class MTDatabase, MADDataTableFast, MADReportFormatter;
 
 @protocol MADPrintPageRendererDataSourceProtocol <NSObject>
 

@@ -41,6 +41,7 @@
 #import "NSAttributedString+QueryViewController.h"
 
 #import "MADQueryViewSectionDelegate.h"
+#import "MADQueryViewDatasourceProtocol.h"
 
 short numberOfSectionsForQueryTableCount(NSUInteger, BOOL);
 short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL reportingEnabled) {

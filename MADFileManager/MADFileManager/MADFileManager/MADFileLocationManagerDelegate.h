@@ -9,12 +9,7 @@
 #ifndef MADFileLocationManagerDelegate_h
 #define MADFileLocationManagerDelegate_h
 
-@class UIAlertController;
-@class UIAlertAction;
-@class NSString;
-@class UIViewController;
-
-@class MADFilesController;
+@class UIViewController, MADFilesController;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 

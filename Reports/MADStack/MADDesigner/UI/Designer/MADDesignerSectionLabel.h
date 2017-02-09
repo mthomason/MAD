@@ -15,8 +15,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 
 @protocol MADDesignerSectionLabelDelegate;
 
-@class MADReportSection;
-@class UITapGestureRecognizer;
+@class MADReportSection, UITapGestureRecognizer;
 
 @interface MADDesignerSectionLabel : UILabel
 

@@ -189,7 +189,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     });
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention
+- (void)createURLWithName:(NSString *)name extention:(NSString *)extention
                fileGroup:(NSString *)fileGroup {
     NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
@@ -217,7 +217,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
             
         }
     };
-    [MADFileUtilities createFile:list atURL:documentURL completion:handleUrlCreated];
+    [MADFileUtilities createFileAtURL:documentURL completion:handleUrlCreated];
 }
 
 - (void)removeFileAtURL:(NSURL *)URL {

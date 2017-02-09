@@ -11,8 +11,7 @@
 
 #import <UIKit/UIView.h>
 
-@class UIButton;
-@class UILabel;
+@class UIButton, UILabel;
 
 @interface MADTableViewHeader : UIView
 

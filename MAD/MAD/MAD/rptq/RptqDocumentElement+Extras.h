@@ -19,7 +19,6 @@
 
 #import <MAD/RptqDocumentElementFactory.h>
 #import <MAD/MADDocumentObjectType.h>
-#import <MAD/MADAlignment.h>
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;

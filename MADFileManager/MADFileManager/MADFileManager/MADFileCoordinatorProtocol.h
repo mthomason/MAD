@@ -11,8 +11,6 @@
 
 @protocol MADFileCoordinatorDelegate;
 
-@class MADFile;
-
 @protocol MADFileCoordinatorProtocol <NSObject>
 
     @property (nonatomic, readwrite, weak) id <MADFileCoordinatorDelegate> delegate;
@@ -23,8 +21,6 @@
     - (void)removeFileAtURL:(NSURL *)URL;
     - (void)duplicateFileAtURL:(NSURL *)URL;
     - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
-    - (void)createURLForFile:(MADFile *)list withName:(NSString *)name
-                   extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
                         fileGroup:(NSString *)fileGroup;
 

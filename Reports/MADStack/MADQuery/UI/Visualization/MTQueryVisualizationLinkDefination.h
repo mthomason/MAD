@@ -12,8 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 
-@class NSURL;
-@class MTPair;
+@class NSURL, MTPair;
 
 @interface MTQueryVisualizationLinkDefination : NSObject
 

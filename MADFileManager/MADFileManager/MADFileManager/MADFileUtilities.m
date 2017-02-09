@@ -207,8 +207,9 @@ static NSString * const MADPathComponentData       = @"Data";
     }];
 }
 
-+ (void)createFile:(MADFile *)list atURL:(NSURL *)url
-                              completion:(void (^)(NSError *))completion {
+/// FIXME: Unused, maybe doesn't work... archiving nothing.
++ (void)createFileAtURL:(NSURL *)url
+             completion:(void (^)(NSError *))completion {
     
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
@@ -228,7 +229,8 @@ static NSString * const MADPathComponentData       = @"Data";
         
         NSError *error;
         
-        NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:list];
+        NSNumber *zero = @0;
+        NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero];
         
         BOOL success = [serializedListData writeToURL:writing.URL
                                               options:NSDataWritingAtomic error:&error];

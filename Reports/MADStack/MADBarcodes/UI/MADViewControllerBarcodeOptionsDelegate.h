@@ -12,8 +12,7 @@
 #import <MADBarcodes/MADBarcodeType.h>
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 
-@class MTBarcode;
-@class RptqQueryField;
+@class MTBarcode, RptqQueryField;
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 

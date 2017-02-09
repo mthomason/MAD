@@ -12,34 +12,15 @@
 #import <UIKit/UITableView.h>
 #import "MADIdentifierQueryViewSections.h"
 
-@class NSArray <__covariant ObjectType>;
-@class NSSet <__covariant ObjectType>;
-@class NSNumber;
-@class NSFetchedResultsController;
-@class NSIndexPath;
-@class NSIndexSet;
-@class NSManagedObjectID;
-@class NSManagedObjectContext;
-@class UITableViewCell;
-@class MADocument;
-@class MADQueryViewSectionDelegate;
+@class NSArray <__covariant ObjectType>, NSSet <__covariant ObjectType>,
+       NSNumber, NSFetchedResultsController, NSIndexPath, NSIndexSet, NSManagedObjectID,
+       NSManagedObjectContext, UITableViewCell, MADocument, MADQueryViewSectionDelegate;
 
 typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
                                                  MADIdentifierQueryViewSections,
                                                  NSInteger /* row */);
 
-@protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
-
-@protocol MADQueryViewControllerDatasourceProtocol <NSObject>
-
-    - (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
-                         fromTableView:(UITableView *)tableView
-                           atIndexPath:(NSIndexPath *)indexPath;
-    - (void)reloadQueryViewData;
-
-    - (MADocument *)document;
-
-@end
+@protocol MADQueryViewControllerDatasourceProtocol;
 
 @interface MADQueryViewDataSource : NSObject
     <UITableViewDataSource>

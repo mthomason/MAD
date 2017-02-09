@@ -13,9 +13,7 @@
 #import "MADOperationCondition.h"
 
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
-
     - (BOOL)alertDisplayed;
-
 @end
 
 @interface MADOperationConditionDisplayedAlert : NSObject

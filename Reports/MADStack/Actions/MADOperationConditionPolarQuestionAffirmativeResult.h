@@ -12,9 +12,7 @@
 #import "MADOperationConditionResult.h"
 
 @protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
-
     - (BOOL)result;
-
 @end
 
 @interface MADOperationConditionPolarQuestionAffirmativeResult : MADOperationConditionResult

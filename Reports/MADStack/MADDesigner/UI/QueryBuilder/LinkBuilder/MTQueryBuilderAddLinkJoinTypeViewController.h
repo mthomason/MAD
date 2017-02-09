@@ -14,7 +14,6 @@
 
 @protocol MADQueryBuilderAddLinkJoinTypeDelegate;
 
-@class MTQueryBuilderAddLinkJoinTypeViewController;
 @class MADocument;
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController

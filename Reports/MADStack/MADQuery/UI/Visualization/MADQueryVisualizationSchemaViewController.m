@@ -61,7 +61,7 @@
 #import "MADManagedObjectViewProtocol.h"
 
 #import "MADQueryVisualizationSchemaView.h"
-
+#import "MADQueryVisualizationSchemaDelegate.h"
 
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource,

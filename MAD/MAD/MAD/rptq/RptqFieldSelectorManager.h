@@ -11,9 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQueryTable;
-@class NSMutableArray, NSIndexSet;
-@class MADDatabaseTableSectionHeaderView;
+@class RptqQueryTable, NSMutableArray, NSIndexSet, MADDatabaseTableSectionHeaderView;
 
 @interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 

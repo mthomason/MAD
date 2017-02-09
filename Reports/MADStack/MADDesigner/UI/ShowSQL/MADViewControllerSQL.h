@@ -13,9 +13,7 @@
 
 @protocol MADViewControllerStandardProtocol;
 
-@class MADocument;
-@class MTQuery;
-@class UITextView;
+@class MADocument, MTQuery, UITextView;
 
 @interface MADViewControllerSQL : UIViewController
 

@@ -12,9 +12,6 @@
 #import <Foundation/NSObject.h>
 #import "MADOperationObserver.h"
 
-@class MADOperation;
-@class NSOperation;
-
 @interface MADBlockObserver : NSObject
                         <MADOperationObserver>
 

@@ -11,9 +11,7 @@
 
 #import "MTObject.h"
 
-@class MTVertex;
-@class MTEdge;
-@class MTLinkedList;
+@class MTVertex, MTEdge, MTLinkedList;
 
 @interface MTGraph : MTObject
 

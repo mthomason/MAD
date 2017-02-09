@@ -9,8 +9,7 @@
 #ifndef MADFilesControllerDelegate_h
 #define MADFilesControllerDelegate_h
 
-@class MADFilesController;
-@class MADMetaData;
+@class MADFilesController, MADMetaData;
 
 @protocol MADFilesControllerDelegate <NSObject>
 
