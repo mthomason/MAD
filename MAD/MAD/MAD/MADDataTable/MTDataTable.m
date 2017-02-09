@@ -9,7 +9,7 @@
 #import "MTDataTable.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
-#import "MTDataTableVirtual.h"
+#import "MADDataTableVirtual.h"
 #import "MTDataTableFast.h"
 
 @implementation MTDataTable
@@ -49,7 +49,7 @@
     id result = nil;
     switch (type) {
         case MADDataTableTypeVirtual: {
-            result = [[MTDataTableVirtual alloc] initWithId:objectID];
+            result = [[MADDataTableVirtual alloc] initWithId:objectID];
             break;
         }
         case MADDataTableTypePhysical: {
