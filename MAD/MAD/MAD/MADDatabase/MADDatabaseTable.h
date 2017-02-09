@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MTDatabaseTable : NSObject
+@interface MADDatabaseTable : NSObject
     <NSCopying>
 
     @property (nonatomic, copy) NSString *name;

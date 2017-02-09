@@ -38,7 +38,7 @@ typedef NSArray         <NSNumber *>                                    MADIndex
 typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
 typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
 
-@interface MTReportFormatter : MTTableFormatter
+@interface MADReportFormatter : MTTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
                              options: (MTReportFormatterOptions)options;

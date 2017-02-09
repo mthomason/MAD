@@ -1,13 +1,13 @@
 //
-//  MTReportFormatterState.h
+//  MADReportFormatterState.h
 //  MAD
 //
 //  Created by Michael Thomason on 2/22/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTReportFormatterState_h
-#define MAD_MTReportFormatterState_h
+#ifndef MAD_MADReportFormatterState_h
+#define MAD_MADReportFormatterState_h
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
@@ -16,7 +16,7 @@
 
 @class RptqDocument;
 
-@interface MTReportFormatterState : NSObject
+@interface MADReportFormatterState : NSObject
 
     - (instancetype)initWithDocument:(RptqDocument *)document
                      andDataDelegate:(id <MADDataProtocol>)dataDelegate;

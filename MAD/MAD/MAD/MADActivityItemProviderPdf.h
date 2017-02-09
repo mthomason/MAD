@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTActivityItemProviderPdf_h
-#define Reports_MTActivityItemProviderPdf_h
+#ifndef Reports_MADActivityItemProviderPdf_h
+#define Reports_MADActivityItemProviderPdf_h
 
 #import <UIKit/UIActivityItemProvider.h>
 
 @protocol MADActivityItemProviderDelegate;
 @class MADocument;
 
-@interface MTActivityItemProviderPdf : UIActivityItemProvider
+@interface MADActivityItemProviderPdf : UIActivityItemProvider
 
     @property (nonatomic, weak) id <MADActivityItemProviderDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;

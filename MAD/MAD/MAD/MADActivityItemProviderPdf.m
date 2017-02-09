@@ -1,5 +1,5 @@
 //
-//  MTActivityItemProviderPdf.m
+//  MADActivityItemProviderPdf.m
 //  MAD
 //
 //  Created by Michael Thomason on 2/21/14.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTActivityItemProviderPdf.h"
+#import "MADActivityItemProviderPdf.h"
 #import "MADActivityItemProviderDelegate.h"
 
 #import <UIKit/UIGraphics.h>
@@ -51,13 +51,13 @@ static inline CGRect PdfTrimBox(CGRect rect) {
     return UIEdgeInsetsInsetRect(rect, PdfBorder());
 }
 
-@interface  MTActivityItemProviderPdf ()
+@interface  MADActivityItemProviderPdf ()
     <MADDocumentStatusProtocol>
     @property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
     @property (nonatomic, weak, readwrite) MADActivityIndicator *activityIndicatorController;
 @end
 
-@implementation MTActivityItemProviderPdf
+@implementation MADActivityItemProviderPdf
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController
          itemForActivityType:(NSString *)activityType {

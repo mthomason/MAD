@@ -1,5 +1,5 @@
 //
-//  MTActivityReportPrintPreview.m
+//  MADActivityPrintPreview.m
 //  MAD
 //
 //  Created by Michael Thomason on 2/21/14.
@@ -10,14 +10,14 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTActivityReportPrintPreview.h"
+#import "MADActivityPrintPreview.h"
 #import <UIKit/UIDocumentInteractionController.h>
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIImage.h>
 
 typedef UIDocumentInteractionController MADocumentActivityController;
 
-@interface MTActivityReportPrintPreview()
+@interface MADActivityPrintPreview()
     <UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, strong) MADocumentActivityController *activityController;
@@ -25,10 +25,10 @@ typedef UIDocumentInteractionController MADocumentActivityController;
 
 @end
 
-@implementation MTActivityReportPrintPreview
+@implementation MADActivityPrintPreview
 
 - (NSString *)activityType {
-    return @"MTActivityReportPrintPreview";
+    return @"MADActivityPrintPreview";
 }
 
 - (NSString *)activityTitle {

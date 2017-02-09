@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import <UIKit/UIPrintInteractionController.h>
 #import <CoreData/NSManagedObjectID.h>
 
@@ -89,7 +89,7 @@ typedef NSDictionary    <NSManagedObjectID *, NSNumber *>     MADNumberMapByObje
 
 typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap;
 
-@interface MTReportFormatter ()
+@interface MADReportFormatter ()
 
     @property (nonatomic, readwrite, weak)      MADocument *layout;
     @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
@@ -166,7 +166,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
                                      options: (MTReportFormatterOptions)options {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument: layout
+    MADReportFormatter *result = [[MADReportFormatter alloc] initWithDocument: layout
                                                                     options: options];
     return result;
 }
@@ -778,7 +778,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
             if (keys.count > 1) {
                 NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, keys.count - 1)];
                 subKeys = [keys objectsAtIndexes:set];
-                resultData = [MTReportFormatter dataForGroupData:subData andKeys:subKeys];
+                resultData = [MADReportFormatter dataForGroupData:subData andKeys:subKeys];
             } else if (keys.count == 1) {
                 resultData = subData;
             } else {
