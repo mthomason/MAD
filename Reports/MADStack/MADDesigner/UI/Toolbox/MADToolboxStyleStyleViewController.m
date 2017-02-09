@@ -9,17 +9,12 @@
 #import "MADToolboxStyleStyleViewController.h"
 
 #import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
 
 @implementation MADToolboxStyleStyleViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
 }
 
 @end

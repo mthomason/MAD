@@ -198,12 +198,12 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 @interface MADToolboxStyleViewController()
     <UITableViewDelegate>
 
-    @property (assign) MTControlState controlStateBold;
-    @property (assign) MTControlState controlStateItalic;
-    @property (assign) MTControlState controlStateStrike;
-    @property (assign) MTControlState controlStateUnderline;
+    @property (nonatomic, assign) MTControlState controlStateBold;
+    @property (nonatomic, assign) MTControlState controlStateItalic;
+    @property (nonatomic, assign) MTControlState controlStateStrike;
+    @property (nonatomic, assign) MTControlState controlStateUnderline;
 
-    @property (nonatomic, strong) NSSet *userSelectedObjectIDs;
+    @property (nonatomic, strong) NSSet <NSNumber *> *userSelectedObjectIDs;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
     @property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
@@ -409,11 +409,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         }];
         
     });
-    
-    
 }
 
-- (void)setSelectedDocumentObjects:(NSSet *)objectIds {
+- (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds {
     self.userSelectedObjectIDs = objectIds;
     [self updateDisplay];
 
