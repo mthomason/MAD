@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataTablePlist.h"
+#import "MADDataTablePlist.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSCoder.h>
@@ -27,11 +27,7 @@
 
 static NSString * const StringEmpty = @"";
 
-@interface MTDataTablePlist ()
-
-@end
-
-@implementation MTDataTablePlist
+@implementation MADDataTablePlist
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -77,25 +73,25 @@ static NSString * const StringEmpty = @"";
     if (self = [super init]) {
     
         id key;
-        key = [MTDataTablePlist keyName];
+        key = [MADDataTablePlist keyName];
         NSString *name = [decoder decodeObjectForKey: key];
         self.name = name;
        
-        key = [MTDataTablePlist keyColumnKeys];
+        key = [MADDataTablePlist keyColumnKeys];
         NSMutableArray *columnKeys =    [decoder decodeObjectForKey: key];
         self.columnKeys = columnKeys;
         
         NSMutableDictionary <NSString *, MADDataColumn *> *columns;
-        key = [MTDataTablePlist keyColumns];
+        key = [MADDataTablePlist keyColumns];
         columns =  [decoder decodeObjectForKey: key];
         self.columns = columns;
         
-        key = [MTDataTablePlist keyRowCounter];
+        key = [MADDataTablePlist keyRowCounter];
         NSNumber *rowCounterObject = [decoder decodeObjectForKey: key];
         self.rowCounter = rowCounterObject.unsignedIntegerValue;
         
         NSMutableArray *sortDescriptors;
-        key = [MTDataTablePlist keySortDescriptors];
+        key = [MADDataTablePlist keySortDescriptors];
         sortDescriptors = [decoder decodeObjectForKey:key];
         self.sortDescriptors = sortDescriptors;
         
@@ -114,22 +110,22 @@ static NSString * const StringEmpty = @"";
     objid = [[NSNumber alloc] initWithUnsignedInteger: _tag];
     [encoder encodeObject:  objid forKey: @"objid"];
 
-    key = [MTDataTablePlist keySortDescriptors];
+    key = [MADDataTablePlist keySortDescriptors];
     objid = _sortDescriptors;
     [encoder encodeObject: objid forKey: key];
 
-    key = [MTDataTablePlist keyName];
+    key = [MADDataTablePlist keyName];
     [encoder encodeObject: _name forKey: key];
     
-    key = [MTDataTablePlist keyColumnKeys];
+    key = [MADDataTablePlist keyColumnKeys];
     objid = _columnKeys;
     [encoder encodeObject: objid forKey: key];
     
-    key = [MTDataTablePlist keyColumns];
+    key = [MADDataTablePlist keyColumns];
     objid = _columns;
     [encoder encodeObject: objid forKey: key];
     
-    key = [MTDataTablePlist keyRowCounter];
+    key = [MADDataTablePlist keyRowCounter];
     objid = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
     [encoder encodeObject: objid forKey: key];
     
@@ -238,12 +234,12 @@ static NSString * const StringEmpty = @"";
     return success;
 }
 
-- (MADDataTablePlist *)copyPlist {
+- (NSDictionary *)copyPlist {
     
-    NSString *keyName = [MTDataTablePlist keyName];
-    NSString *keyColumnKeys = [MTDataTablePlist keyColumnKeys];
-    NSString *keyColumns = [MTDataTablePlist keyColumns];
-    NSString *keyRowCounter = [MTDataTablePlist keyRowCounter];
+    NSString *keyName = [MADDataTablePlist keyName];
+    NSString *keyColumnKeys = [MADDataTablePlist keyColumnKeys];
+    NSString *keyColumns = [MADDataTablePlist keyColumns];
+    NSString *keyRowCounter = [MADDataTablePlist keyRowCounter];
     NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
     
     NSArray *ck = self.columnKeys;
@@ -260,15 +256,15 @@ static NSString * const StringEmpty = @"";
                     rowCounter, keyRowCounter, nil];
 }
 
-- (void)loadWithPlist:(MADDataTablePlist *)plist {
-    NSString *name = plist[[MTDataTablePlist keyName]];
+- (void)loadWithPlist:(NSDictionary *)plist {
+    NSString *name = plist[[MADDataTablePlist keyName]];
     if (name == nil) {
         name = @"";
     }
 
     _name = name.copy;
     
-    NSString * const keyColumnKeys = [MTDataTablePlist keyColumnKeys];
+    NSString * const keyColumnKeys = [MADDataTablePlist keyColumnKeys];
     
     id columnKeysArray = plist[keyColumnKeys];
     
@@ -276,13 +272,13 @@ static NSString * const StringEmpty = @"";
                 [[NSMutableArray <__kindof NSString *> alloc] initWithArray: columnKeysArray
                                                                   copyItems: YES];
     
-    NSString * const keySortDescriptors = [MTDataTablePlist keySortDescriptors];
+    NSString * const keySortDescriptors = [MADDataTablePlist keySortDescriptors];
     NSArray * __weak sortDescriptorsArray = plist[keySortDescriptors];
     NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray: sortDescriptorsArray
                                                                   copyItems: YES];
     self.sortDescriptors = sortDescriptors;
     
-    NSString *keyColumns = [MTDataTablePlist keyColumns];
+    NSString *keyColumns = [MADDataTablePlist keyColumns];
     NSDictionary * __weak plistDataColumn = plist[keyColumns];
     NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary: plistDataColumn
                                                                 copyItems: YES];
@@ -294,7 +290,7 @@ static NSString * const StringEmpty = @"";
     }
     self.columnKeys = columnKeys;
     
-    NSString * const keyRowCounter = [MTDataTablePlist keyRowCounter];
+    NSString * const keyRowCounter = [MADDataTablePlist keyRowCounter];
     NSNumber * __weak rowCounterObj = plist[keyRowCounter];
     self.rowCounter = rowCounterObj.unsignedIntegerValue;
     

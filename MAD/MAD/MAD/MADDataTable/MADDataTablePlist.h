@@ -6,17 +6,15 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTDataTablePlist_h
-#define MAD_MTDataTablePlist_h
+#ifndef MAD_MADDataTablePlist_h
+#define MAD_MADDataTablePlist_h
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSEnumerator.h>
 
-@class MADDataColumn;
-@class NSMutableArray<ObjectType>;
-@class NSDictionary<__covariant KeyType, __covariant ObjectType>;
-@class NSMutableDictionary<KeyType, ObjectType>;
-@class NSEnumerator;
+@class MADDataColumn, NSMutableArray<ObjectType>,
+       NSDictionary<__covariant KeyType, __covariant ObjectType>,
+       NSMutableDictionary<KeyType, ObjectType>;
 
 typedef NS_ENUM(short, MADDataTableParameters) {
     MTDataTableTypeOfTable,
@@ -24,10 +22,7 @@ typedef NS_ENUM(short, MADDataTableParameters) {
     MTDataTableNumberOfColumns,
 };
 
-typedef NSDictionary MADDataTablePlist;
-typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
-
-@interface MTDataTablePlist : NSObject
+@interface MADDataTablePlist : NSObject
   <NSCoding,
     NSFastEnumeration>
 
@@ -44,8 +39,8 @@ typedef NSMutableDictionary <NSString *, NSDictionary *> MADMutableMapPlist;
 
     - (BOOL)cacheWithUrl:(NSURL *)url;
 
-    - (MADDataTablePlist *)copyPlist;
-    - (void)loadWithPlist:(MADDataTablePlist *)plist;
+    - (NSDictionary *)copyPlist;
+    - (void)loadWithPlist:(NSDictionary *)plist;
     - (void)loadFromCacheWithUrl:(NSURL *)url;
 
     - (void)addColumn:(MADDataColumn *)column;
