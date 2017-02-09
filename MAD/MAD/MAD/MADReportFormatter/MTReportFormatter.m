@@ -20,7 +20,7 @@
 
 #import "MADSectionRepresentation.h"
 
-#import "MTReportFormatterState.h"
+#import "MADReportFormatterState.h"
 #import "MADocument.h"
 
 #import "MADModel.h"
@@ -103,7 +103,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     @property (nonatomic, readwrite, strong)    MADCachingIndexes *reportIndexes;
     @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
 
-    @property (nonatomic, readwrite, strong)    MTReportFormatterState *machineState;
+    @property (nonatomic, readwrite, strong)    MADReportFormatterState *machineState;
     @property (nonatomic, readwrite, strong)    MADReportFormatterCache *reportFormatterCache;
 
     @property (nonatomic, readwrite, strong)    MADMutableSectionArray *pageLayoutTemporary;
@@ -140,7 +140,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         self.page.margins = (options & MTReportFormatterOptionsMargin) ?
         MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
         
-        MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
+        MADReportFormatterState *machineState = [[MADReportFormatterState alloc] init];
         self.machineState = machineState;
         
         [self initializeStateMachine];

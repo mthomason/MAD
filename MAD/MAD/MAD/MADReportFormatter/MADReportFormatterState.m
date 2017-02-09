@@ -1,5 +1,5 @@
 //
-//  MTReportFormatterState.m
+//  MADReportFormatterState.m
 //  MAD
 //
 //  Created by Michael Thomason on 2/22/16.
@@ -11,7 +11,7 @@
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataProtocol.h>
 
-@implementation MTReportFormatterState
+@implementation MADReportFormatterState
 
 - (instancetype)initWithDocument:(RptqDocument *)document
                  andDataDelegate:(id <MADDataProtocol>)dataDelegate {
