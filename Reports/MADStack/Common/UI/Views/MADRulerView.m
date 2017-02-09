@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTRulerView.h"
+#import "MADRulerView.h"
 
 #import <QuartzCore/CALayer.h>
 
@@ -37,14 +37,14 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
     return i * offsetInPoints;
 }
 
-@interface MTRulerView ()
+@interface MADRulerView ()
 
     @property (readwrite, nonatomic, strong) NSParagraphStyle *paragraphStyle;
     @property (readwrite, nonatomic, strong) UIFontDescriptor *fontDescriptor;
 
 @end
 
-@implementation MTRulerView
+@implementation MADRulerView
 
 
 - (instancetype)init {

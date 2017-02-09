@@ -13,16 +13,17 @@
 
 @class UIDocumentInteractionController;
 
-@protocol MTActivityReportPrintPreviewDelegate <NSObject>
+@protocol MADActivityReportPrintPreviewDelegate <NSObject>
  @required
-    - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller completion:(void (^)(BOOL))completion;
+    - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
+                                 completion:(void (^)(BOOL))completion;
 
     - (UIViewController *)previewViewControllerForInteractionController:(UIDocumentInteractionController *)controller;
 @end
 
-@interface MTActivityReportPrintPreview : UIActivity
+@interface MADActivityReportPrintPreview : UIActivity
 
-    @property (nonatomic, weak) id <MTActivityReportPrintPreviewDelegate> delegate;
+    @property (nonatomic, weak) id <MADActivityReportPrintPreviewDelegate> delegate;
 
 @end
 

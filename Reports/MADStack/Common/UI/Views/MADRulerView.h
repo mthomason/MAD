@@ -13,7 +13,7 @@
 
 extern const CGFloat MTReportDesignerRulerHeight;
 
-@interface MTRulerView : UIView
+@interface MADRulerView : UIView
 
 @end
 
