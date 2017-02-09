@@ -100,9 +100,6 @@ static inline CGRect sectionBounds(CGRect pageRect,
                                  NSUInteger pageIndex,
                                  CGFloat originY);
 
-typedef MADDataTableFast MADDataTableAggregate;
-typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutableFontDescriptorMap;
-
 @interface MADPrintPageRenderer ()
 
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
