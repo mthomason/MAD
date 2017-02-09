@@ -14,7 +14,7 @@
 @protocol MADActivityItemProviderDelegate;
 @class MADocument;
 
-@interface MTActivityItemProviderPdf : UIActivityItemProvider
+@interface MADActivityItemProviderPdf : UIActivityItemProvider
 
     @property (nonatomic, weak) id <MADActivityItemProviderDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
