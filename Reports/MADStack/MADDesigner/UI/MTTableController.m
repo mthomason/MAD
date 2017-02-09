@@ -100,7 +100,7 @@
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
     NSNumber *typeKey = @(MADDataTableParametersType);
-    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *type = @(MADDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MADDataTableParametersIdentifier);
     NSNumber *objectIdV =  @(objectID.URIRepresentation.absoluteString.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};

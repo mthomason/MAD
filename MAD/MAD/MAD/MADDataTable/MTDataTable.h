@@ -11,16 +11,16 @@
 
 #import <MAD/MADDataTablePlist.h>
 
-typedef NS_ENUM(short, MTDataTableType) {
-    MTDataTableTypeVirtual,
-    MTDataTableTypePhysical,
+typedef NS_ENUM(short, MADDataTableType) {
+    MADDataTableTypeVirtual,
+    MADDataTableTypePhysical,
 };
 
 @interface MTDataTable : MADDataTablePlist
 
     + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
     + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
-    + (instancetype)newDataTableOfType:(MTDataTableType)type withObjectID:(NSUInteger)objectID;
+    + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID;
 
 @end
 

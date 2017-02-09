@@ -92,7 +92,7 @@
 + (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
     NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
     NSNumber *typeKey = @(MADDataTableParametersType);
-    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *type = @(MADDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MADDataTableParametersIdentifier);
     NSNumber *objectIdV =  @(hash);
     NSDictionary *options = @{typeKey : type,
