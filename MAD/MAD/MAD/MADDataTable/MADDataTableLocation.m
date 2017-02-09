@@ -1,5 +1,5 @@
 //
-//  MTDataTableLocation.m
+//  MADDataTableLocation.m
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 4/7/14.
