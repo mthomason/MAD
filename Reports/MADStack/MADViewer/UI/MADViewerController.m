@@ -63,7 +63,7 @@
 
 #import "MADTabBarController.h"
 
-#import "MTActivityReportPrintPreview.h"
+#import "MADActivityReportPrintPreview.h"
 
 #import "MADDocumentPageController.h"
 #import "MADReportPageView.h"
@@ -136,7 +136,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADOperationObserver,
         MADPageSliderProtocol,
         MADPrintingProtocol,
-        MTActivityReportPrintPreviewDelegate,
+        MADActivityReportPrintPreviewDelegate,
         MADActivityItemProviderDelegate>
 
     @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
@@ -918,7 +918,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSArray *activityItems = [[NSArray alloc] initWithObjects: activityItemProviderPdf, nil];
     self.activityItemProviderPdf = activityItemProviderPdf;
     
-    MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
+    MADActivityReportPrintPreview *printPreview = [[MADActivityReportPrintPreview alloc] init];
     printPreview.delegate = self;
     
     NSArray *applicationActivities = [[NSArray alloc] initWithObjects: printPreview, nil];

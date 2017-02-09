@@ -16,7 +16,7 @@
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"
 
-@protocol MTViewControllerBarcodeDelegate;
+@protocol MADViewControllerBarcodeDelegate;
 
 @class RptqDocumentElementBarcode;
 @class NSManagedObjectID;
@@ -27,7 +27,7 @@
 
     + (instancetype)newViewControllerBarcode;
 
-    @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;
+    @property (nonatomic, weak) id <MADViewControllerBarcodeDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, strong, readwrite) RptqQueryField *queryField1;

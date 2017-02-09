@@ -13,7 +13,7 @@
 @class MTBarcode;
 @class RptqQueryField;
 
-@protocol MTViewControllerBarcodeDelegate
+@protocol MADViewControllerBarcodeDelegate
 
     - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
                            barcodeObject:(MTBarcode *)barcode

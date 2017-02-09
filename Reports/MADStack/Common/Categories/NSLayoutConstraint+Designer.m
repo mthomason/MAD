@@ -10,7 +10,7 @@
 
 @implementation MADLayoutConstraint
 
-+ (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
++ (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
                       marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
     NSLayoutConstraint *constraint1,
                        *constraint2;
@@ -33,7 +33,7 @@
     return @[constraint1, constraint2];
 }
 
-+ (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
++ (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
                      sideMargin:(CGFloat)sideMargin {
 
     NSArray *constraints;

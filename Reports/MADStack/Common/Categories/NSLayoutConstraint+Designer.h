@@ -12,15 +12,15 @@
 #import <UIKit/NSLayoutConstraint.h>
 
 @class UIView;
-@class MTRulerView;
+@class MADRulerView;
 @class UIScrollView;
 
 @interface MADLayoutConstraint : NSLayoutConstraint
 
-    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
+    + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
                           marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
                           
-    + (NSArray *)constraintForRuler:(MTRulerView *)ruler designer:(UIView *)designer
+    + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
                          sideMargin:(CGFloat)sideMargin;
 
     + (instancetype)newLayoutConstraintViewScrollerTop:(id)item view:(id)item;

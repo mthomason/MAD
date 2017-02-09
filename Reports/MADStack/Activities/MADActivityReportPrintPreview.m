@@ -1,5 +1,5 @@
 //
-//  MTActivityReportPrintPreview.m
+//  MADActivityReportPrintPreview.m
 //  MAD
 //
 //  Created by Michael Thomason on 2/21/14.

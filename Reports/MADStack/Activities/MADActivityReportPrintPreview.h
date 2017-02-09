@@ -1,13 +1,13 @@
 //
-//  MTActivityReportPrintPreview.h
+//  MADActivityReportPrintPreview.h
 //  MAD
 //
 //  Created by Michael Thomason on 2/21/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTActivityReportPrintPreview_h
-#define Reports_MTActivityReportPrintPreview_h
+#ifndef Reports_MADActivityReportPrintPreview_h
+#define Reports_MADActivityReportPrintPreview_h
 
 #import <UIKit/UIActivity.h>
 

@@ -70,7 +70,7 @@
 
 #import "MADTabBarController.h"
 
-#import "MTRulerView.h"
+#import "MADRulerView.h"
 #import "MADNavigationBarTitleView.h"
 
 #import "MADDesignerElementView.h"
@@ -175,7 +175,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 @interface MADDesignerViewController()
-<MTViewControllerBarcodeDelegate,
+<MADViewControllerBarcodeDelegate,
     MTViewControllerAggregateDelegate,
     MADCellElementDelegate,
     MADDesignerSectionLayoutLiquidDelegate,
@@ -222,7 +222,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-    @property (nonatomic, strong) MTRulerView *ruler;
+    @property (nonatomic, strong) MADRulerView *ruler;
     @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
     @property (nonatomic, strong) MADPromptManager *promptManager;
 
@@ -449,9 +449,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     return _numberFormatterPercentage;
 }
 
-- (MTRulerView *)ruler {
+- (MADRulerView *)ruler {
     if (_ruler == nil) {
-        MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+        MADRulerView *viewRuler = [[MADRulerView alloc] initWithFrame:CGRectZero];
         _ruler = viewRuler;
     }
     return _ruler;
@@ -1897,7 +1897,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 #pragma mark -
-#pragma mark - MTViewControllerBarcodeDelegate
+#pragma mark - MADViewControllerBarcodeDelegate
 
 - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
                        barcodeObject:(MTBarcode *)barcode
