@@ -1,19 +1,19 @@
 //
-//  MTTableFormatter.h
+//  MADTableFormatter.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTTableFormatter_h
-#define MAD_MTTableFormatter_h
+#ifndef MAD_MADTableFormatter_h
+#define MAD_MADTableFormatter_h
 
 #import <MAD/MADDataFormatter.h>
 
 @class MTQuery;
 
-@interface MTTableFormatter : MADDataFormatter
+@interface MADTableFormatter : MADDataFormatter
 
     @property (nonatomic, assign) BOOL didRefresh;
 

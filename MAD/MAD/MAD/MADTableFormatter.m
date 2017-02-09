@@ -1,5 +1,5 @@
 //
-//  MTTableFormatter.m
+//  MADTableFormatter.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.
@@ -10,10 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTTableFormatter.h"
+#import "MADTableFormatter.h"
 #import "MTQuery.h"
 
-@implementation MTTableFormatter
+@implementation MADTableFormatter
 
 @dynamic didRefresh;
 

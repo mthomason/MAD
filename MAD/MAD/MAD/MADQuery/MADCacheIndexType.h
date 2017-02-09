@@ -9,7 +9,7 @@
 #ifndef MAD_MADQueryCacheIndexCreateTypes_h
 #define MAD_MADQueryCacheIndexCreateTypes_h
 
-typedef NS_ENUM(short, MTQueryCacheIndexCreateTypes) {
+typedef NS_ENUM(short, MADCacheIndexType) {
     MTQueryCacheIndexCreateIndexGroupCount,
     MTQueryCacheIndexCreateIndexName,
     MTQueryCacheIndexCreateTableName,
