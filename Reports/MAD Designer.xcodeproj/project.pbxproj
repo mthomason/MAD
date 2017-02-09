@@ -721,7 +721,7 @@
 		4C8DE2641BAFA96300AD1111 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2611BAFA96300AD1111 /* UILabelStrikethrough.m */; };
 		4C8DE26B1BAFA98B00AD1111 /* MADClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */; };
 		4C8DE26C1BAFA98B00AD1111 /* MADConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */; };
-		4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE26A1BAFA98B00AD1111 /* MTResizeHandleView.m */; };
+		4C8DE26D1BAFA98B00AD1111 /* MADResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE26A1BAFA98B00AD1111 /* MADResizeHandleView.m */; };
 		4C8DE26F1BAFA9A900AD1111 /* MADTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */; };
 		4C8DE2721BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2741BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m */; };
@@ -1905,8 +1905,8 @@
 		4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADClipboardView.m; sourceTree = "<group>"; };
 		4C8DE2671BAFA98B00AD1111 /* MADConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectorView.h; sourceTree = "<group>"; };
 		4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectorView.m; sourceTree = "<group>"; };
-		4C8DE2691BAFA98B00AD1111 /* MTResizeHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTResizeHandleView.h; sourceTree = "<group>"; };
-		4C8DE26A1BAFA98B00AD1111 /* MTResizeHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTResizeHandleView.m; sourceTree = "<group>"; };
+		4C8DE2691BAFA98B00AD1111 /* MADResizeHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandleView.h; sourceTree = "<group>"; };
+		4C8DE26A1BAFA98B00AD1111 /* MADResizeHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADResizeHandleView.m; sourceTree = "<group>"; };
 		4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADTableViewHeader.xib; path = MADStack/MADDesigner/UI/MADTableViewHeader.xib; sourceTree = "<group>"; };
 		4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTableSectionHeaderQueryBuilder.h; sourceTree = "<group>"; };
 		4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderQueryBuilder.m; sourceTree = "<group>"; };
@@ -3537,8 +3537,8 @@
 				4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */,
 				4C8DE2671BAFA98B00AD1111 /* MADConnectorView.h */,
 				4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */,
-				4C8DE2691BAFA98B00AD1111 /* MTResizeHandleView.h */,
-				4C8DE26A1BAFA98B00AD1111 /* MTResizeHandleView.m */,
+				4C8DE2691BAFA98B00AD1111 /* MADResizeHandleView.h */,
+				4C8DE26A1BAFA98B00AD1111 /* MADResizeHandleView.m */,
 				4C401F5A1BAE7EB500BAE5FC /* MADBackgroundScrollView.h */,
 				4C401F5B1BAE7EB500BAE5FC /* MADBackgroundScrollView.m */,
 				4C401F5C1BAE7EB500BAE5FC /* MADBackgroundView.h */,
@@ -6228,7 +6228,7 @@
 				4C26B9901BAF11FA00456DC8 /* MADVibrantTableViewCellBase.m in Sources */,
 				4C26B98F1BAF11FA00456DC8 /* MADVibrantTableView.m in Sources */,
 				4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */,
-				4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */,
+				4C8DE26D1BAFA98B00AD1111 /* MADResizeHandleView.m in Sources */,
 				4C4754461CF362DB00BC9E02 /* MADSplitViewController.m in Sources */,
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
 				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,

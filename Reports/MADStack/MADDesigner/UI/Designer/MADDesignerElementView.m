@@ -29,7 +29,7 @@
 
 #import "MADElementCanvas.h"
 #import "MADResizeHandles.h"
-#import "MTResizeHandleView.h"
+#import "MADResizeHandleView.h"
 #import "UITapGestureRecognizer+Designer.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
@@ -214,12 +214,12 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer {
     UIView *piece = nil;
-    if ([piece isKindOfClass:[MTResizeHandleView class]]) {
+    if ([piece isKindOfClass:[MADResizeHandleView class]]) {
         [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan
                                 || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
             CGPoint translation = [gestureRecognizer translationInView:piece.superview];
-            switch (((MTResizeHandleView *)piece).type) {
+            switch (((MADResizeHandleView *)piece).type) {
                 case north:
                 case south:
                     [self resize:CGSizeMake(self.frame.size.width,
