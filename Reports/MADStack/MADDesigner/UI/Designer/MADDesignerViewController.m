@@ -3426,7 +3426,7 @@ END_deselectElementView:;
     [self setDisplayActive];
     return result;
 }
-
+/*
 - (NSSet *)elementViews {
     
     RptqDocumentSectionEnumerator *sectionEnumerator;
@@ -3462,7 +3462,7 @@ END_deselectElementView:;
     }
     return results;
 }
-
+*/
 - (NSArray <MADDesignerElementView *> *)elementViewsInSection:(NSInteger)section
                                        numberOfItemsInSection:(NSUInteger)numberOfItemsInSection
                                              inCollectionView:(UICollectionView *)collectionView {
