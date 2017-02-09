@@ -23,9 +23,9 @@
 #import "MADDatabaseProtocol.h"
 
 @interface MTQuerySampleDataField ()
-    <MTDatabaseProtocol>
+    <MADDatabaseProtocol>
 
-@property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong) MTDataTable *datatable;
 
 @end
 

@@ -8,7 +8,7 @@
 
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADQueryCacheAggregateFunctionParamaters.h"
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
@@ -20,7 +20,7 @@
 
 + (instancetype)newParamatersAggregateWithFieldKey:(NSString *)fieldKey
                                    andFunctionType:(MTAggregateFunctionType)functionType
-                                      andDataTable:(MTDataTableFast *)dataTable
+                                      andDataTable:(MADDataTableFast *)dataTable
                                        groupByType:(MTAggregateGroupByType)groupByType
                                             rowIDs:(NSArray *)rowIDs
                                 predicateParamters:(NSArray *)predicateParamters {
@@ -74,7 +74,7 @@
 + (instancetype)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
                                                andRowIds:(NSArray *)rowids
                                          andFunctionType:(MTAggregateFunctionType)functionType
-                                            andDataTable:(MTDataTableFast *)dataTable {
+                                            andDataTable:(MADDataTableFast *)dataTable {
     
     id parameters;
     parameters = [self newParamatersAggregateWithFieldKey: fieldKey
@@ -90,7 +90,7 @@
 + (instancetype)newParamatersAggregateByGroupKeys:(NSArray *)groupKeys
                                       andFieldKey:(NSString *)fieldKey
                                   andFunctionType:(MTAggregateFunctionType)functionType
-                                     andDataTable:(MTDataTableFast *)dataTable {
+                                     andDataTable:(MADDataTableFast *)dataTable {
     
     NSArray *predicateParamters = [dataTable whereClauseForGroupKeys:groupKeys].copy;
     
@@ -108,7 +108,7 @@
 
 + (instancetype)newParametersAggregateByReportWithFieldKey:(NSString *)fieldKey
                                            andFunctionType:(MTAggregateFunctionType)functionType
-                                              andDataTable:(MTDataTableFast *)dataTable {
+                                              andDataTable:(MADDataTableFast *)dataTable {
     
     id paramaters;
     paramaters = [self newParamatersAggregateWithFieldKey: fieldKey

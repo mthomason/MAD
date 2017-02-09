@@ -11,7 +11,7 @@
 
 #import <UIKit/UIPrintPageRenderer.h>
 
-@class UIImage, MADReportTextRepresentation, MADReportFormatter, MTDataTableFast, MADocument;
+@class UIImage, MADReportTextRepresentation, MADReportFormatter, MADDataTableFast, MADocument;
 
 @protocol MADPrintPageRendererDataSourceProtocol;
 

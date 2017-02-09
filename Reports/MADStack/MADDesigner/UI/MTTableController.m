@@ -40,7 +40,7 @@
 #import "MTTableCellHeader.h"
 
 @interface MADTableController ()
-    <UICollectionViewDataSource, MADTableLayoutDelegate, MTDatabaseProtocol>
+    <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseProtocol>
 
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MTDataTable *datatable;

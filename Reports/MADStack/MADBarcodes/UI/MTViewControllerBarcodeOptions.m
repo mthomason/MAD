@@ -71,7 +71,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 }
 
 @interface MTViewControllerBarcodeOptions ()
-    <MTDatabaseProtocol,
+    <MADDatabaseProtocol,
         MTTableViewControllerStaticSelectRowDelegate>
 
     @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
@@ -889,7 +889,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     }
 }
 
-#pragma mark - MTDatabaseProtocol
+#pragma mark - MADDatabaseProtocol
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.sampleDataTable;

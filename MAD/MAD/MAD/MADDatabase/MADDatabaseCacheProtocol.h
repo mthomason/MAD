@@ -15,7 +15,7 @@
 
 @protocol MADDatabaseCacheProtocol <NSObject>
 
-    - (id <MTDatabaseProtocol>)delegate;
+    - (id <MADDatabaseProtocol>)delegate;
     - (BOOL)tableExist:(NSString *)tablename;
 
     - (void)beginBulkInsert;

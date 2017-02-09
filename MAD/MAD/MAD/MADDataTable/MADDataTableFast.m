@@ -1,5 +1,5 @@
 //
-//  MTDataTableFast.m
+//  MADDataTableFast.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.
@@ -107,7 +107,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @end
 
-@implementation MTDataTableFast {
+@implementation MADDataTableFast {
     BOOL _bulkInsertLoop;
     BOOL _sortDescriptorsSet;
     sqlite3_stmt *_statementInsert;
@@ -307,7 +307,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
     
     database = [[MTDatabaseSqlite3 alloc] init];
-    database.delegate = (id <MTDatabaseProtocol>)cacheDelegate;
+    database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
 
     connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
     database.databaseConnection = connection;
@@ -319,7 +319,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
     database = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
-    database.delegate = (id <MTDatabaseProtocol>)cacheDelegate;
+    database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
     self.databaseForSelects = database;
 }
 

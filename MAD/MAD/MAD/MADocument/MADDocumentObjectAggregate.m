@@ -15,7 +15,7 @@
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentElementAggregate.h"
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 #import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADArrayCaching.h"
@@ -222,7 +222,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                                fieldKey:(NSString *)fieldKey
                               groupKeys:(NSArray *)groupKeys
                                  rowids:(NSArray *)rowids
-                          fromDataTable:(MTDataTableFast *)dataTable {
+                          fromDataTable:(MADDataTableFast *)dataTable {
     
     id result = nil;
     NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
@@ -270,7 +270,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                         fieldKey:(NSString *)fieldKey
                        groupKeys:(NSArray *)groupKeys
                           rowids:(NSArray *)rowids
-                   fromDataTable:(MTDataTableFast *)dataTable {
+                   fromDataTable:(MADDataTableFast *)dataTable {
     
     id result = nil;
     NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];

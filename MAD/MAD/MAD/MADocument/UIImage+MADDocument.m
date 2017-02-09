@@ -10,7 +10,7 @@
 #import "MADocument.h"
 #import "MADPrintPageRenderer.h"
 #import "MADReportFormatter.h"
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 #import "MTPaper.h"
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/MTMath.h>

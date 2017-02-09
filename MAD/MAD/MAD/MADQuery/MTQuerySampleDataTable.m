@@ -31,9 +31,9 @@
 #import "MADDataTablePlist.h"
 
 @interface MTQuerySampleDataTable ()
-    <MTDatabaseProtocol>
+    <MADDatabaseProtocol>
 
-@property (nonatomic, strong) MTDataTable *dataTableMaxFieldLength;
+    @property (nonatomic, strong) MTDataTable *dataTableMaxFieldLength;
 
 @end
 

@@ -10,7 +10,7 @@
 
 #import <MAD/MTDataTable.h>
 
-#import <MAD/MTDataTableFast.h>
+#import <MAD/MADDataTableFast.h>
 
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
@@ -98,7 +98,7 @@
             [document updateDatabaseWithConnection:databaseConnection];
             database = [MTDatabase newDatabaseWithConnection:databaseConnection];
         }
-        document.database.delegate = (id <MTDatabaseProtocol>)document;
+        document.database.delegate = (id <MADDatabaseProtocol>)document;
         
         if (rptqDatabase == nil || rptqQuery == nil) {
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;

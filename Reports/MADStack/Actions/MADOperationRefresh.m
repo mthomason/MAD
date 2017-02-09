@@ -9,7 +9,7 @@
 #import "MADOperationRefresh.h"
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDataTableFast.h>
+#import <MAD/MADDataTableFast.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
@@ -50,7 +50,7 @@ static const short errCache = 2;
     MADocument *document = self.document;
     MADCredential *credientals = nil;
     if (document.database.delegate == nil) {
-        document.database.delegate = (id <MTDatabaseProtocol>)document;
+        document.database.delegate = (id <MADDatabaseProtocol>)document;
     }
     
     if ([document.database.databaseConnection requiresCredientals]) {

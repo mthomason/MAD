@@ -70,7 +70,7 @@ static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MADConnectionViewController()
-    <MADOperationObserver, MADocumentDelegate, MTDatabaseProtocol>
+    <MADOperationObserver, MADocumentDelegate, MADDatabaseProtocol>
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
@@ -352,7 +352,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 }
 
-#pragma mark - MTDatabaseProtocol
+#pragma mark - MADDatabaseProtocol
 
 - (void)resetAfterConnectionString:(NSString *)connectionString failedTest:(NSArray *)errors {
     [self resetForm];

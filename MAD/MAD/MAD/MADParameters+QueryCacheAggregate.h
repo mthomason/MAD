@@ -13,7 +13,7 @@
 #import "MADAggregateFunctionGroupByType.h"
 #import "MADAggregateFunctionType.h"
 
-@class MTDataTableFast;
+@class MADDataTableFast;
 
 typedef NS_ENUM(short, MADParametersType) {
     MADParametersTypeAggregateByPage,
@@ -26,16 +26,16 @@ typedef NS_ENUM(short, MADParametersType) {
     + (instancetype)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
                                                    andRowIds:(NSArray *)rowids
                                              andFunctionType:(MTAggregateFunctionType)functionType
-                                                andDataTable:(MTDataTableFast *)dataTable;
+                                                andDataTable:(MADDataTableFast *)dataTable;
 
     + (instancetype)newParamatersAggregateByGroupKeys:(NSArray *)groupKeys
                                           andFieldKey:(NSString *)fieldKey
                                       andFunctionType:(MTAggregateFunctionType)functionType
-                                         andDataTable:(MTDataTableFast *)dataTable;
+                                         andDataTable:(MADDataTableFast *)dataTable;
 
     + (instancetype)newParametersAggregateByReportWithFieldKey:(NSString *)fieldKey
                                                andFunctionType:(MTAggregateFunctionType)functionType
-                                                  andDataTable:(MTDataTableFast *)dataTable;
+                                                  andDataTable:(MADDataTableFast *)dataTable;
 
 @end
 

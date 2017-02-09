@@ -50,7 +50,7 @@
 
 #import <MAD/MADDatabaseConnection.h>
 
-#import <MAD/MTDataTableFast.h>
+#import <MAD/MADDataTableFast.h>
 
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>

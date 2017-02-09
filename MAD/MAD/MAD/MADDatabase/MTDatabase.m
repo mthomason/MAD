@@ -87,7 +87,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
-    id <MTDatabaseProtocol> delegate = _delegate;
+    id <MADDatabaseProtocol> delegate = _delegate;
     BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
     MADCredential *results = nil;
     if (responds) {

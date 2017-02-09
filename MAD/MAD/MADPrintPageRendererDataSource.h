@@ -12,13 +12,13 @@
 #import <Foundation/NSObject.h>
 
 @class MTDatabase;
-@class MTDataTableFast;
+@class MADDataTableFast;
 @class MADReportFormatter;
 
 @protocol MADPrintPageRendererDataSourceProtocol <NSObject>
 
     @property (readonly, nonatomic, strong) MTDatabase *database;
-    @property (readonly, nonatomic, strong) MTDataTableFast *dataTable;
+    @property (readonly, nonatomic, strong) MADDataTableFast *dataTable;
     @property (readwrite, nonatomic, strong) MADReportFormatter *reportFormatter;
 
     - (NSArray *)groupLevelKeys:(NSUInteger)rowID;

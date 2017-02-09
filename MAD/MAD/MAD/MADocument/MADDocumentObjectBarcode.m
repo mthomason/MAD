@@ -7,21 +7,29 @@
 //
 
 #import "MADDocumentObjectBarcode.h"
-#import "MTDatabase.h"
-#import "RptqDocumentElementBarcode+Extras.h"
-#import "MTDataTableFast.h"
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryTable+Extras.h"
-#import "RptqDocumentElement+Extras.h"
-#import "MADReportFormatter.h"
-#import <Foundation/NSString.h>
 
+#import <Foundation/NSString.h>
+#import <MADBarcodes/MTBarcode.h>
+
+#import "MTDatabase.h"
+
+#import "MADDataTableFast.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "RptqDocumentElement.h"
+#import "MADReportFormatter.h"
 
-#import <MADBarcodes/MTBarcode.h>
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementBarcode.h"
+
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqQueryTable.h"
+#import "RptqQueryField.h"
+
+#import "RptqDocumentElement+Extras.h"
+#import "RptqDocumentElementBarcode+Extras.h"
+
+#import "RptqQueryTable+Extras.h"
 
 @implementation MADDocumentObjectBarcode {
     MTBarcode *_drawingObject;

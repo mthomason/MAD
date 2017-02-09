@@ -116,7 +116,7 @@
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 #import "MTDatabase.h"
 
 #import "MADModel.h"
@@ -243,7 +243,7 @@ void madwarn(char *err,  const char*err2) { }
 @interface MADocument ()
     <MADReportFormatterDataSource,
         MADCacheProtocol,
-        MTDatabaseProtocol>
+        MADDatabaseProtocol>
 
     //@property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
     @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
@@ -258,7 +258,7 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
-    @property (nonatomic, readwrite, strong) MTDataTableFast *dataTable;
+    @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
     @property (nonatomic, readwrite, strong) MTDatabase *database;
 
     @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
@@ -319,7 +319,7 @@ void madwarn(char *err,  const char*err2) { }
     NSDictionary *parameters;
     parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
     
-    MTDataTableFast *datatable = [MTDataTableFast newDataTableWithDefinition:parameters];
+    MADDataTableFast *datatable = [MADDataTableFast newDataTableWithDefinition:parameters];
     datatable.cacheDelegate = self;
     [datatable loadFromCacheWithUrl:self.urlDataTableCache];
     self.dataTable = datatable;
@@ -374,7 +374,7 @@ void madwarn(char *err,  const char*err2) { }
         //Initialize the main data table.
         NSString *filename = self.filename;
 
-        MTDataTableFast *datatable = [[MTDataTableFast alloc] initWithId:filename.hash];
+        MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:filename.hash];
         datatable.cacheDelegate = self;
         
         NSString *cacheName = [datatable newFilenameMDCache];
@@ -1066,7 +1066,7 @@ READFROMURL_END:;
                                                waitUntilDone: NO];
 }
 
-#pragma mark - MTDatabaseProtocol
+#pragma mark - MADDatabaseProtocol
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     MADCredential *credentials = [self.documentDelegate getCredentialsForKey:key];

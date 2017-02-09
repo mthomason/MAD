@@ -10,7 +10,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import "MADDataTableVirtual.h"
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 
 @implementation MTDataTable
 
@@ -53,7 +53,7 @@
             break;
         }
         case MADDataTableTypePhysical: {
-            result = [[MTDataTableFast alloc] initWithId:objectID];
+            result = [[MADDataTableFast alloc] initWithId:objectID];
             break;
         }
         default:

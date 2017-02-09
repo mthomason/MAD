@@ -63,7 +63,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
-    <MTDatabaseProtocol, MTViewControllerBarcodePreviewDelegate>
+    <MADDatabaseProtocol, MTViewControllerBarcodePreviewDelegate>
 
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 

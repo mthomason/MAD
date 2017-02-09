@@ -25,8 +25,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeVerify
 };
 
-@protocol MTDatabaseProtocol;
-@protocol MADDatabaseConnectionsProperties;
+@protocol MADDatabaseProtocol, MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MTDatabase, MADDatabaseTable,
        MTDataTable, MTQuery, MADDatabaseField;
@@ -38,7 +37,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 @interface MTDatabase : NSObject
 
-    @property (nonatomic, weak) id <MTDatabaseProtocol> delegate;
+    @property (nonatomic, weak) id <MADDatabaseProtocol> delegate;
     @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 
     @property (nonatomic, strong) NSMutableArray *errors;

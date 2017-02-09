@@ -72,7 +72,7 @@
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
 #import "MADParameters+QueryCacheAggregate.h"
@@ -100,7 +100,7 @@ static inline CGRect sectionBounds(CGRect pageRect,
                                  NSUInteger pageIndex,
                                  CGFloat originY);
 
-typedef MTDataTableFast MADDataTableAggregate;
+typedef MADDataTableFast MADDataTableAggregate;
 typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutableFontDescriptorMap;
 
 @interface MADPrintPageRenderer ()

@@ -14,7 +14,7 @@
 @class NSString;
 @class MTQuery;
 
-@protocol MTDatabaseProtocol <NSObject>
+@protocol MADDatabaseProtocol <NSObject>
   @required
   @optional
     - (MADCredential *)getCredentialsForKey:(NSString *)key;

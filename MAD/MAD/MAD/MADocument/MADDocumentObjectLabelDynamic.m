@@ -26,7 +26,7 @@
 #import "RptqDatabaseSchemaField.h"
 
 #import "MTDatabase.h"
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 
 //#import "MADReportFormatter.h"
 

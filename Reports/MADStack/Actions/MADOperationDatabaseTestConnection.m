@@ -23,7 +23,7 @@
 #import "MADKeyChainOperationGet.h"
 
 @interface MADOperationDatabaseTestConnection ()
-    <MTDatabaseProtocol>
+    <MADDatabaseProtocol>
 
     //Parameters
     @property (nonatomic, weak) MADDatabaseConnection *databaseConnection;

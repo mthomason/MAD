@@ -11,14 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADDatabaseConnection;
-@class MADDataTable;
-@class MADQuery;
-
-@protocol MADDatabaseProtocol
-  @required
-    - (MADDataTable *)runQuery:(MADQuery *)query;
-@end
+@class MADDatabaseConnection, MADDataTable, MADQuery;
 
 @interface MADDatabase : NSObject
 
