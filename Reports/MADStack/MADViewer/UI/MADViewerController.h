@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTReportViewerController_h
-#define Reports_MTReportViewerController_h
+#ifndef Reports_MADViewerController_h
+#define Reports_MADViewerController_h
 
 #import <UIKit/UIPageViewController.h>
 

@@ -11,19 +11,7 @@
 
 #import <UIKit/UIView.h>
 
-@class MADPrintPageRenderer;
-
-@protocol MADReportPageViewProtocol <NSObject>
-
-    @required
-    - (NSUInteger)pageNumber;
-    - (NSDate * _Nullable)lastCacheDate;
-    - (MADPrintPageRenderer * _Nullable)printPageRenderer;
-
-    @optional
-    - (NSUInteger)numberOfPages;
-
-@end
+@protocol MADReportPageViewProtocol;
 
 @interface MADReportPageView : UIView
 

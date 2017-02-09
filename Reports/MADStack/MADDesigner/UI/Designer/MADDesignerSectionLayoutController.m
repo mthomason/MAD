@@ -22,7 +22,6 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
-#import "MADIdentifiersStoryboards.h"
 
 static NSString * const MADTextVisible         = @"Visible";
 static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
@@ -44,7 +43,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 + (instancetype)newDesignerSectionLayoutController {
     id storyboard, controller;
-    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier:@"MADSectionLayoutSettingsID"];
     return controller;
 }

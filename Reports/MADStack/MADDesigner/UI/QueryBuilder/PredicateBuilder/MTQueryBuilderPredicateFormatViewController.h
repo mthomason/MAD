@@ -23,10 +23,10 @@
     <MADViewControllerStandardProtocol,
         MADQueryAddPredicateDelegate>
 
-@property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MADViewControllerStandardProtocol> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MADViewControllerStandardProtocol> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 

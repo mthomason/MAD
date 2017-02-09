@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADAggregateFunctionsViewControllerDelegate_h
-#define MADAggregateFunctionsViewControllerDelegate_h
+#ifndef MAD_MADAggregateFunctionsViewControllerDelegate_h
+#define MAD_MADAggregateFunctionsViewControllerDelegate_h
 
 @protocol MADAggregateFunctionsViewControllerDelegate
     - (void)didSelectFunction:(MTAggregateFunctionType)functionType;

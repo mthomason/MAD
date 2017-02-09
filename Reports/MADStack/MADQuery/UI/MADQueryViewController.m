@@ -123,10 +123,12 @@ static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing
 static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
 
 static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
-    return pushing ? UITransitionContextFromViewControllerKey : UITransitionContextToViewControllerKey;
+    return pushing ? UITransitionContextFromViewControllerKey :
+                     UITransitionContextToViewControllerKey;
 }
 static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
-    return pushing ? UITransitionContextToViewControllerKey : UITransitionContextFromViewControllerKey;
+    return pushing ? UITransitionContextToViewControllerKey :
+                     UITransitionContextFromViewControllerKey;
 }
 
 #pragma mark - Private Category

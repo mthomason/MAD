@@ -8,28 +8,22 @@
 
 #import "MADTabBarController.h"
 
-#import <UIKit/UIStoryboard.h>
 #import <UIKit/UIBarButtonItem.h>
-#import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIResponder.h>
+#import <UIKit/UIStoryboard.h>
 #import <UIKit/UITabBarItem.h>
 
+#import "MADDesignerAnimatedTransitioning.h"
+#import "MADDesignerViewController.h"
+#import "MADLabelTitle.h"
 #import "MADNavigationController.h"
-#import "MADQueryBuilderSplitViewController.h"
 #import "MADNavigationBarTitleView.h"
-
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
-#import "MADDesignerViewController.h"
 #import "MADViewerController.h"
 
-#import "MADIdentifiersStoryboards.h"
-
-#import "MADLabelTitle.h"
-
-#import "MADDesignerAnimatedTransitioning.h"
-
-#import <UIKit/UIResponder.h>
 
 const int8_t MADIndexQuery = 0;
 const int8_t MADIndexDesigner = 1;
@@ -37,11 +31,8 @@ const int8_t MADIndexViewer = 2;
 
 @interface MADTabBarController ()
     <UITabBarControllerDelegate>
-    //    UIViewControllerAnimatedTransitioning>
 
     @property (nonatomic, strong) NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
-    @property (nonatomic, assign, getter=isNavigationItemInitialized) BOOL navigationItemInitialized;
-    @property (nonatomic, assign) NSUInteger lastSelectedIndex;
 
     @property (nonatomic, copy) NSString *promptNavigationItem;
 
@@ -51,7 +42,10 @@ const int8_t MADIndexViewer = 2;
 
 @end
 
-@implementation MADTabBarController
+@implementation MADTabBarController {
+    BOOL _navigationItemInitialized;
+    NSUInteger _lastSelectedIndex;
+}
 
 @synthesize document = _document;
 
@@ -61,7 +55,7 @@ const int8_t MADIndexViewer = 2;
     id bundle, tabBarController;
 
     bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: bundle];
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: bundle];
     tabBarController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
     
     if (tabBarController) {
@@ -89,7 +83,6 @@ const int8_t MADIndexViewer = 2;
 
 - (void)dealloc {
     _promptNavigationItem = nil;
-    //_viewControllerDelegate = nil;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -280,11 +273,11 @@ const int8_t MADIndexViewer = 2;
 - (void)tabBarController:(UITabBarController *)tabBarController
  didSelectViewController:(UIViewController *)viewController {
     
-    if (tabBarController.selectedIndex != self.lastSelectedIndex) {
+    if (tabBarController.selectedIndex != _lastSelectedIndex) {
         [self showTitleWithText: viewController.title];
     }
     
-    self.lastSelectedIndex = tabBarController.selectedIndex;
+    _lastSelectedIndex = tabBarController.selectedIndex;
     switch (tabBarController.selectedIndex) {
         case MADIndexQuery:
             tabBarController.edgesForExtendedLayout = UIRectEdgeAll;

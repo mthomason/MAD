@@ -118,10 +118,9 @@
 #import "UIView+Extras.h"
 
 #import "MADManagedObjectViewProtocol.h"
+#import "MADCellElementDelegate.h"
 
 #import "MTViewControllerBarcode.h"
-
-#import "MADIdentifiersStoryboards.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
@@ -306,7 +305,7 @@ static const inline CGSize sizePopoverFonts() {
     NSString *MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
     id bundle = [NSBundle mainBundle];
     UIStoryboard *storyboard;
-    storyboard = [UIStoryboard storyboardWithName:MADStoryboardDesigner bundle:bundle];
+    storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardDesigner" bundle:bundle];
     id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
     [((typeof(self))controller) setDocument: document];
     return controller;

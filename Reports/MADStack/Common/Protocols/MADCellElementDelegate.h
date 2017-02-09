@@ -9,5 +9,15 @@
 #ifndef MADCellElementDelegate_h
 #define MADCellElementDelegate_h
 
+#import <MAD/MADDocumentObjectType.h>
+
+@protocol MADCellElementDelegate
+
+    - (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+    - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+    - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+    - (MTDocumentObjectType)objectTypeRepresentedByCell:(MADCellElement *)cell;
+
+@end
 
 #endif /* MADCellElementDelegate_h */

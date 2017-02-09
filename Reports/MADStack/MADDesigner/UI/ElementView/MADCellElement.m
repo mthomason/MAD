@@ -9,51 +9,45 @@
 #import "MADCellElement.h"
 #import <UIKit/UIMenuController.h>
 #import "MADDesignerElementView.h"
+#import "MADCellElementDelegate.h"
 
 @interface MADCellElement ()
 
-@property (nonatomic, weak) MADDesignerElementView *elementView;
+    @property (nonatomic, weak) MADDesignerElementView *elementView;
 
 @end
 
 @implementation MADCellElement
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         [self commonInit];
     }
     return self;
 }
 
 - (void)commonInit {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        NSMutableArray <UIMenuItem *> *menuItems = menu.menuItems.mutableCopy;
-        if (menuItems == nil) {
-            menuItems = [NSMutableArray new];
-        }
-        UIMenuItem *menuItemEdit;
-        UIMenuItem *menuItemFormat;
-        NSString *edit = NSLocalizedString(@"Edit", @"Edit");
-        NSString *format = NSLocalizedString(@"Format", @"Format");
-        menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
-        menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
-        [menuItems addObject:menuItemEdit];
-        [menuItems addObject:menuItemFormat];
-        menu.menuItems = menuItems;
-    });
-    
-
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    NSMutableArray <UIMenuItem *> *menuItems = menu.menuItems.mutableCopy;
+    if (menuItems == nil) {
+        menuItems = [NSMutableArray new];
+    }
+    UIMenuItem *menuItemEdit;
+    UIMenuItem *menuItemFormat;
+    NSString *edit = NSLocalizedString(@"Edit", @"Edit");
+    NSString *format = NSLocalizedString(@"Format", @"Format");
+    menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
+    menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
+    [menuItems addObject:menuItemEdit];
+    [menuItems addObject:menuItemFormat];
+    menu.menuItems = menuItems;
 }
 
 - (BOOL)canBecomeFirstResponder {

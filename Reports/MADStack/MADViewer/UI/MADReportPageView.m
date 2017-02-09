@@ -20,6 +20,7 @@
 
 #import <MAD/MADPrintPageRenderer.h>
 
+#import "MADReportPageViewProtocol.h"
 #import "NSDate+Extras.h"
 #import "MADTextPosition.h"
 

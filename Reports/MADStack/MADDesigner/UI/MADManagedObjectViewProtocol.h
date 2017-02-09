@@ -10,7 +10,7 @@
 #define MAD_MADManagedObjectViewProtocol_h
 
 @protocol MADManagedObjectViewProtocol <NSObject>
-@required;
+  @required
     @property (nonatomic, assign) int64_t identifier;
 @end
 

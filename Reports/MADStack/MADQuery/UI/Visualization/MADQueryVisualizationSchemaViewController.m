@@ -12,6 +12,11 @@
 
 #import "MADQueryVisualizationSchemaViewController.h"
 
+#import <QuartzCore/CALayer.h>
+
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
+
 #import <UIKit/UIView.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIManagedDocument.h>
@@ -24,16 +29,6 @@
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UICollectionView.h>
 
-#import <QuartzCore/CALayer.h>
-
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-
-#import "MADConnectorView.h"
-#import "MTTitleView.h"
-#import "MTSchemaFieldCell.h"
-#import "NSLayoutConstraint+QueryVisualization.h"
-
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MAD/MADocument.h>
@@ -41,11 +36,11 @@
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelTable.h>
+#import <MAD/MADModelField.h>
 #import <MAD/MADModelQuery.h>
 #import <MAD/MADModelQueryTable.h>
 #import <MAD/MADModelQueryField.h>
-#import <MAD/MADModelTable.h>
-#import <MAD/MADModelField.h>
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -56,7 +51,10 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import "MADIdentifiersStoryboards.h"
+#import "MTTitleView.h"
+#import "MTSchemaFieldCell.h"
+#import "MADConnectorView.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
 
 #import "MADManagedObjectViewProtocol.h"
 
@@ -88,7 +86,7 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 + (instancetype)newQueryVisualizationSchemaViewController {
     UIStoryboard *storyboard;
     id controller;
-    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: NULL];
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierViewControllerQueryVisualizationSchema];
     return controller;
 }

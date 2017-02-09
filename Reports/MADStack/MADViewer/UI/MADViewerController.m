@@ -87,7 +87,6 @@
 
 #import "MADOperationObserver.h"
 #import "MADLabelTitle.h"
-#import "MADIdentifiersStoryboards.h"
 #import "MADDocumentScroller.h"
 #import "MADPageSliderProtocol.h"
 
@@ -227,7 +226,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     id bundle, controller;
     
     bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDesigner bundle: bundle];
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: bundle];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
     [((typeof(self))controller) setDocument: document];
     return controller;

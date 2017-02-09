@@ -20,7 +20,6 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
     @property (nonatomic, strong) NSMutableAttributedString *statusMessage1;
     @property (nonatomic, strong) NSMutableAttributedString *statusMessage2;
     @property (nonatomic, strong) NSMutableAttributedString *statusMessage3;
-
     @property (nonatomic, strong) NSMutableAttributedString *display;
 
 @end
@@ -30,12 +29,15 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.numberOfLines = 3;
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+                                UIViewAutoresizingFlexibleLeftMargin |
+                                UIViewAutoresizingFlexibleRightMargin;
         
         NSDictionary *attributes = [MADLabelStatus attributesStatusLabelBold];
 
-        NSMutableAttributedString *statusMessage = [[NSMutableAttributedString alloc] initWithString: @"M"
-                                                                                          attributes: attributes];
+        NSMutableAttributedString *statusMessage;
+        statusMessage = [[NSMutableAttributedString alloc] initWithString: @"M"
+                                                               attributes: attributes];
         self.statusMessage1 = statusMessage;
 
         attributes = [MADLabelStatus attributesStatusLabelLight];
@@ -71,14 +73,16 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
-    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber: numberOfRecs
+                                                               numberStyle: NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
-    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber: numberOfRecs
+                                                               numberStyle: NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
@@ -123,23 +127,26 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 + (NSDictionary *)attributesStatusLabelCentered {
     NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
     paragraphStyleCentered.alignment = NSTextAlignmentLeft;
-    NSDictionary * __autoreleasing attributesStatusLabelCentered = [[NSDictionary alloc] initWithObjectsAndKeys:paragraphStyleCentered, NSParagraphStyleAttributeName, nil];
+    NSDictionary *attributesStatusLabelCentered;
+    attributesStatusLabelCentered = [[NSDictionary alloc] initWithObjectsAndKeys:paragraphStyleCentered, NSParagraphStyleAttributeName, nil];
     return attributesStatusLabelCentered;
 }
 
 + (NSDictionary *)attributesStatusLabelBold {
     UIColor *textColor = [UIColor whiteColor];
     UIFont *fontBold = [UIFont boldSystemFontOfSize:ToolbarFontPointSize];
-    NSDictionary * __autoreleasing attributesStatusLabelBold = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-                                                                                                            fontBold, NSFontAttributeName, nil];
+    NSDictionary *attributesStatusLabelBold;
+    attributesStatusLabelBold = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                                             fontBold, NSFontAttributeName, nil];
     return attributesStatusLabelBold;
 }
 
 + (NSDictionary *)attributesStatusLabelLight {
     UIColor *textColor = [UIColor whiteColor];
     UIFont *font = [UIFont systemFontOfSize:ToolbarFontPointSize];
-    NSDictionary * __autoreleasing attributesStatusLabelLight = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-                                                                font, NSFontAttributeName, nil];
+    NSDictionary *attributesStatusLabelLight;
+    attributesStatusLabelLight = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                                              font, NSFontAttributeName, nil];
     return attributesStatusLabelLight;
 }
 

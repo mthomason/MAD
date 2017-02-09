@@ -22,6 +22,7 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADPrintingProtocol.h"
+#import "MADReportPageViewProtocol.h"
 
 #import "MADTabBarController.h"
 

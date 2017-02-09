@@ -10,24 +10,14 @@
 #define Reports_MADCellElement_h
 
 #import "MADManagedObjectCollectionViewCell.h"
-#import <MAD/MADDocumentObjectType.h>
+
+@protocol MADCellElementDelegate;
 
 @class MADCellElement, MADDesignerElementView;
 
-@protocol MADCellElementDelegate
-
-    - (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (MTDocumentObjectType)objectTypeRepresentedByCell:(MADCellElement *)cell;
-
-@end
-
 @interface MADCellElement : MADManagedObjectCollectionViewCell
-
     @property (nonatomic, weak) id <MADCellElementDelegate> delegate;
     - (void)addElementView:(MADDesignerElementView *)elementView;
-
 @end
 
 #endif
