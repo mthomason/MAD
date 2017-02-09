@@ -119,7 +119,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+    shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
     //[gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
     //      [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
@@ -204,21 +205,17 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 }
 
 - (void)setBorderState:(MADBorderState)borderState {
-    UIColor *color;
     switch (borderState) {
         case MADBorderStateDisabled:
-            color = [UIColor blackColor];
-            self.layer.borderColor = color.CGColor;
+            self.layer.borderColor = [UIColor blackColor].CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         case MADBorderStateNormal:
-            color = [UIColor blackColor];
-            self.layer.borderColor = color.CGColor;
+            self.layer.borderColor = [UIColor blackColor].CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         case MADBorderStateSelected:
-            color = [MADColorEverydayApps newColorAnalogous4];
-            self.layer.borderColor = color.CGColor;
+            self.layer.borderColor = [MADColorEverydayApps newColorAnalogous4].CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         default:

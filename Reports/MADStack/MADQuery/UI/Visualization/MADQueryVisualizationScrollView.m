@@ -69,7 +69,8 @@ static const CGFloat contentViewHeight = 1024.0000f;
     NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint newLayoutConstraintWidthForView:contentView
                                                                                                andWidth:contentViewWidth];
     
-    NSDictionary *viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:contentView, @"cv", nil];
+    NSDictionary *viewDictionary;
+    viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:contentView, @"cv", nil];
     NSArray <NSLayoutConstraint *> *layoutConstraintCenterX;
     layoutConstraintCenterX = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[cv]|"
                                                                       options: NSLayoutFormatAlignAllCenterX

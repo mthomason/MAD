@@ -712,7 +712,7 @@
 }
 
 + (NSString *)newBarcodeNameForType:(MTBarcodeType)type {
-    id t = [[NSNumber alloc] initWithUnsignedInteger: type];
+    NSNumber *t = [[NSNumber alloc] initWithUnsignedInteger: type];
     NSDictionary *names = [MTBarcode newDictionaryNames];
     NSString *name = names[t];
     return name.copy;

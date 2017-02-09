@@ -259,7 +259,10 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
+                       context:(void *)context {
     [self.tableView reloadData];
 }
 

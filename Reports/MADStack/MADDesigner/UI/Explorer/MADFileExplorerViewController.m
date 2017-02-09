@@ -702,8 +702,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark -
 #pragma mark NSKeyValueObserving
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
+                       context:(void *)context {
     
     if ([keyPath isEqualToString: NSStringFromSelector(@selector(subviews))]) {
         if ([object isKindOfClass:[UITextField class]]) {

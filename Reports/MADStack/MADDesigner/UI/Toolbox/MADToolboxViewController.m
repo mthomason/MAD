@@ -213,7 +213,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
-                        change:(NSDictionary *)change
+                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
                        context:(void *)context {
     
     if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {

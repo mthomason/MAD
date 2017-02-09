@@ -1724,7 +1724,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
                        context:(void *)context {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
