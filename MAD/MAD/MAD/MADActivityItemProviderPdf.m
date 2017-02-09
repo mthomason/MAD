@@ -23,7 +23,7 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADocument.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADPrintPageRenderer.h"
 
 #import "MADActivityIndicator.h"
@@ -148,9 +148,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         NSArray *sortDescriptors = sdocument.sortDescriptors;
         
         [sdocument.dataTable sortUsingDescriptors:sortDescriptors];
-        MTReportFormatter *reportFormatter;
-        reportFormatter = [[MTReportFormatter alloc] initWithDocument: sdocument
-                                                              options: MTReportFormatterOptionsMargin];
+        MADReportFormatter *reportFormatter;
+        reportFormatter = [[MADReportFormatter alloc] initWithDocument: sdocument
+                                                               options: MADReportFormatterOptionsMargin];
         reportFormatter.overrideIdentifier = @"madpreview";
         reportFormatter.didRefresh = YES;
         reportFormatter.layoutSize = letterRect.size;

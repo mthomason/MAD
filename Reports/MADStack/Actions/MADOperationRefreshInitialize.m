@@ -18,7 +18,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 
-#import <MAD/MTReportFormatter.h>
+#import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQueryFull.h>
@@ -111,9 +111,9 @@
         //Initialize the section layout manager... Not neede for creating the report.
         [document resetSectionLayoutManagers];
 
-        MTReportFormatter *formatter;
-        formatter = [MTReportFormatter newReportFormatterWithLayout: document
-                                                            options: MTReportFormatterOptionsNone];
+        MADReportFormatter *formatter;
+        formatter = [MADReportFormatter newReportFormatterWithLayout: document
+                                                             options: MADReportFormatterOptionsNone];
 
         document.reportFormatter = formatter;
         

@@ -1,27 +1,25 @@
 //
-//  MTReportFormatter.h
+//  MADReportFormatter.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/20/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTReportFormatter_h
-#define MAD_MTReportFormatter_h
+#ifndef MAD_MADReportFormatter_h
+#define MAD_MADReportFormatter_h
 
 #import <MAD/MTTableFormatter.h>
 
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADSectionRepresentation.h>
 
-typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
-    MTReportFormatterOptionsNone    = 0,
-    MTReportFormatterOptionsMargin  = 1 << 0,
+typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
+    MADReportFormatterOptionsNone    = 0,
+    MADReportFormatterOptionsMargin  = 1 << 0,
 };
 
-@protocol MTReportFormatterDataSource;
-@protocol MADDataProtocol;
-@protocol MTCacheProtocol;
+@protocol MADReportFormatterDataSource, MADDataProtocol, MTCacheProtocol;
 
 @class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
        NSManagedObjectID, MADArrayCaching <ObjectType>;
@@ -36,10 +34,10 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
 @interface MADReportFormatter : MTTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
-                             options: (MTReportFormatterOptions)options;
+                             options: (MADReportFormatterOptions)options;
                              
     + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-                                         options: (MTReportFormatterOptions)options;
+                                         options: (MADReportFormatterOptions)options;
 
 
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
@@ -49,7 +47,7 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     //      which represents a page.  The array contains dictionaries for each object on that page.
     @property (nonatomic, strong, readonly) MADCachingLayout *reportLayout;
 
-    @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
+    @property (nonatomic, weak)             id <MADReportFormatterDataSource> datasource;
     @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
 
     @property (nonatomic, strong, readonly) MADPageOptions *page;

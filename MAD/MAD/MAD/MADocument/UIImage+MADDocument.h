@@ -11,9 +11,7 @@
 
 #import <UIKit/UIImage.h>
 
-@class MADocument;
-@class MTReportFormatter;
-@class MTDataTableFast;
+@class MADocument, MADReportFormatter, MTDataTableFast;
 
 @interface MADImageThumbnail : UIImage
 

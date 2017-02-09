@@ -65,7 +65,7 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 }
 
 
-- (void)reportFormatter:(MTReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
+- (void)reportFormatter:(MADReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
     if (page % _pageInterval == 0) {
         if (page == 0) _pageInterval = _pageIntervalInital;
         NSDictionary *parameters = [self parametersWithNumberOfPages:page];

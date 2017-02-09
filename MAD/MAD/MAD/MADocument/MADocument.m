@@ -62,7 +62,7 @@
 #import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADDatabaseConnection.h"
 
 #import "MADNotificationDidFormatPage.h"
@@ -241,7 +241,7 @@ void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
 @interface MADocument ()
-    <MTReportFormatterDataSource,
+    <MADReportFormatterDataSource,
         MTCacheProtocol,
         MTDatabaseProtocol>
 
@@ -832,9 +832,9 @@ READFROMURL_END:;
 }
 
 - (void)updatePrintingReportFormatter {
-    MTReportFormatter *reportFormatter;
-    reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
-                                                              options: MTReportFormatterOptionsMargin];
+    MADReportFormatter *reportFormatter;
+    reportFormatter = [MADReportFormatter newReportFormatterWithLayout: self
+                                                               options: MADReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
     self.printingReportFormatter = reportFormatter;
 }
@@ -1088,7 +1088,7 @@ READFROMURL_END:;
     }
 }
 
-#pragma mark - MTReportFormatterDataSource Protocol
+#pragma mark - MADReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData {
     return [self.dataTable enumeratorForKeyObjectsSorted];
@@ -1340,11 +1340,11 @@ READFROMURL_END:;
     self.mainQuery = nil;
 }
 
-- (MTReportFormatter *)reportFormatter {
+- (MADReportFormatter *)reportFormatter {
     if (!_reportFormatter) {
-        MTReportFormatter *reportFormatter;
-        reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
-                                                              options: MTReportFormatterOptionsNone];
+        MADReportFormatter *reportFormatter;
+        reportFormatter = [[MADReportFormatter alloc] initWithDocument: self
+                                                              options: MADReportFormatterOptionsNone];
         _reportFormatter = reportFormatter;
     }
     return _reportFormatter;

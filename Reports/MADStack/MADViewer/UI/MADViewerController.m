@@ -46,7 +46,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 
-#import <MAD/MTReportFormatter.h>
+#import <MAD/MADReportFormatter.h>
 
 #import <MAD/MADDatabaseConnection.h>
 
@@ -1159,14 +1159,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Post Report Notifications
 
-- (void)watchFormatter:(MTReportFormatter *)formatter {
+- (void)watchFormatter:(MADReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportFormatterDidFormatPage:)
                                                  name: MADNotificationDidFormatPagesName
                                                object: formatter];
 }
 
-- (void)ignoreFormatter:(MTReportFormatter *)formatter {
+- (void)ignoreFormatter:(MADReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationDidFormatPagesName
                                                   object: formatter];

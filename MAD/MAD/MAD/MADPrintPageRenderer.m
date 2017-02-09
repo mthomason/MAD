@@ -53,11 +53,11 @@
 
 #import "MTPaper.h"
 
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MTQuery.h"
 #import "MTDatabase.h"
 
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADArrayCaching.h"
 
 #import "MADSectionRepresentation.h"
@@ -367,7 +367,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
             withContext:(CGContextRef)ctx
              inPageRect:(CGRect)pageRect {
 
-    MTReportFormatter *reportFormatter = self.datasource.reportFormatter;
+    MADReportFormatter *reportFormatter = self.datasource.reportFormatter;
     if (pageIndex >= reportFormatter.numberOfPages) {
         return;
     }

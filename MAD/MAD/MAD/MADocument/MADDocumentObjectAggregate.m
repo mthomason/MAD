@@ -16,7 +16,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentElementAggregate.h"
 #import "MTDataTableFast.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADArrayCaching.h"
 #import "MTQuery.h"

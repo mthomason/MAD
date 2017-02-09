@@ -28,7 +28,7 @@
 #import "MTDatabase.h"
 #import "MTDataTableFast.h"
 
-//#import "MTReportFormatter.h"
+//#import "MADReportFormatter.h"
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"

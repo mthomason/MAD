@@ -14,12 +14,12 @@
 extern NSString * const MADNotificationDidFormatPagesName;
 extern NSString * const MTDatabaseNumberOfPagesFormattedKey;
 
-@class MTReportFormatter;
+@class MADReportFormatter;
 
 @interface MADNotificationDidFormatPage : NSObject
 
     + (MADNotificationDidFormatPage *)sharedObject;
-    - (void)reportFormatter:(MTReportFormatter *)reportFormatter
+    - (void)reportFormatter:(MADReportFormatter *)reportFormatter
               formattedPage:(NSUInteger)page;
 
 @end

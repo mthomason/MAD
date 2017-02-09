@@ -13,13 +13,13 @@
 
 @class MTDatabase;
 @class MTDataTableFast;
-@class MTReportFormatter;
+@class MADReportFormatter;
 
 @protocol MADPrintPageRendererDataSourceProtocol <NSObject>
 
     @property (readonly, nonatomic, strong) MTDatabase *database;
     @property (readonly, nonatomic, strong) MTDataTableFast *dataTable;
-    @property (readwrite, nonatomic, strong) MTReportFormatter *reportFormatter;
+    @property (readwrite, nonatomic, strong) MADReportFormatter *reportFormatter;
 
     - (NSArray *)groupLevelKeys:(NSUInteger)rowID;
 

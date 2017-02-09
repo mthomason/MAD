@@ -1,5 +1,5 @@
 //
-//  MTReportFormatterPageDefinition.m
+//  MADReportFormatterPageDefinition.m
 //  MAD
 //
 //  Created by Michael Thomason on 7/20/14.

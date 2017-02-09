@@ -43,7 +43,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     <UIPrintInteractionControllerDelegate,
         MADDataProtocol,
         MTCacheProtocol,
-        MTReportFormatterDataSource,
+        MADReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
 
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
@@ -53,7 +53,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 
-    @property (readwrite, nonatomic, strong)    MTReportFormatter *printingReportFormatter;
+    @property (readwrite, nonatomic, strong)    MADReportFormatter *printingReportFormatter;
 
     @property (nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
     @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;

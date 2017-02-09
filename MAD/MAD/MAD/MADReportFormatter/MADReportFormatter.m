@@ -1,5 +1,5 @@
 //
-//  MTReportFormatter.m
+//  MADReportFormatter.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/20/14.
@@ -92,7 +92,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 @interface MADReportFormatter ()
 
     @property (nonatomic, readwrite, weak)      MADocument *layout;
-    @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
+    @property (nonatomic, readwrite, assign)    MADReportFormatterOptions options;
 
     @property (nonatomic, readwrite, strong)    MADPageOptions *page;
 
@@ -115,7 +115,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 @end
 
-@implementation MTReportFormatter {
+@implementation MADReportFormatter {
     NSString *_filename;
 }
 
@@ -124,7 +124,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 - (instancetype)initWithDocument: (MADocument *)layout
-                         options: (MTReportFormatterOptions)options  {
+                         options: (MADReportFormatterOptions)options  {
     if (self = [super init]) {
     
         self.cachedDelegate = layout;
@@ -137,7 +137,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         MADPageOptions *page = [[MADPageOptions alloc] init];
         self.page = page;
         
-        self.page.margins = (options & MTReportFormatterOptionsMargin) ?
+        self.page.margins = (options & MADReportFormatterOptionsMargin) ?
         MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
         
         MADReportFormatterState *machineState = [[MADReportFormatterState alloc] init];
@@ -165,7 +165,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-                                     options: (MTReportFormatterOptions)options {
+                                     options: (MADReportFormatterOptions)options {
     MADReportFormatter *result = [[MADReportFormatter alloc] initWithDocument: layout
                                                                     options: options];
     return result;
@@ -226,7 +226,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 - (BOOL)needsFormat {
-    id <MTReportFormatterDataSource> datasource = self.datasource;
+    id <MADReportFormatterDataSource> datasource = self.datasource;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
@@ -578,7 +578,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
             [self addHeightFromDocumentSectionToReportLayout: detailSection.objectID
                                             producesFormFeed: detailSection.producesFormFeed];
             
-            [MTReportFormatter addDetailForRowID:self.machineState.detailRowId
+            [MADReportFormatter addDetailForRowID:self.machineState.detailRowId
                                       pageLayout:self.pageLayoutTemporary
                                      pageIndexes:self.pageIndexesTemporary];
             

@@ -14,7 +14,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqDocumentElement+Extras.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import <Foundation/NSString.h>
 
 #import "MADDocumentObjectReference.h"
