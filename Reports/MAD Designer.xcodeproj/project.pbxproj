@@ -397,7 +397,7 @@
 		4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020E71BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m */; };
 		4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */; };
 		4C4021001BAE98C300BAE5FC /* MADReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */; };
-		4C4021011BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */; };
+		4C4021011BAE98C300BAE5FC /* MADDocumentPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */; };
 		4C4754401CF362AE00BC9E02 /* MADTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47543F1CF362AE00BC9E02 /* MADTableViewController.m */; };
 		4C4754431CF362CB00BC9E02 /* MADCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754421CF362CB00BC9E02 /* MADCollectionViewController.m */; };
 		4C4754461CF362DB00BC9E02 /* MADSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */; };
@@ -1763,8 +1763,8 @@
 		4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADViewerController.m; path = MADStack/MADViewer/UI/MADViewerController.m; sourceTree = "<group>"; };
 		4C4020FB1BAE98C300BAE5FC /* MADReportPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportPageView.h; path = MADStack/MADViewer/UI/MADReportPageView.h; sourceTree = "<group>"; };
 		4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportPageView.m; path = MADStack/MADViewer/UI/MADReportPageView.m; sourceTree = "<group>"; };
-		4C4020FD1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTReportViewerReportPageViewController.h; path = MADStack/MADViewer/UI/MTReportViewerReportPageViewController.h; sourceTree = "<group>"; };
-		4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTReportViewerReportPageViewController.m; path = MADStack/MADViewer/UI/MTReportViewerReportPageViewController.m; sourceTree = "<group>"; };
+		4C4020FD1BAE98C300BAE5FC /* MADDocumentPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentPageController.h; path = MADStack/MADViewer/UI/MADDocumentPageController.h; sourceTree = "<group>"; };
+		4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDocumentPageController.m; path = MADStack/MADViewer/UI/MADDocumentPageController.m; sourceTree = "<group>"; };
 		4C47543E1CF362AE00BC9E02 /* MADTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewController.h; sourceTree = "<group>"; };
 		4C47543F1CF362AE00BC9E02 /* MADTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewController.m; sourceTree = "<group>"; };
 		4C4754411CF362CB00BC9E02 /* MADCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewController.h; sourceTree = "<group>"; };
@@ -4630,8 +4630,8 @@
 			children = (
 				4C4020F91BAE98C300BAE5FC /* MADViewerController.h */,
 				4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */,
-				4C4020FD1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.h */,
-				4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */,
+				4C4020FD1BAE98C300BAE5FC /* MADDocumentPageController.h */,
+				4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */,
 				4C4020FB1BAE98C300BAE5FC /* MADReportPageView.h */,
 				4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */,
 				4C994F371BE082730058627A /* MADLabelStatus.h */,
@@ -6254,7 +6254,7 @@
 				4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */,
 				4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */,
 				4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */,
-				4C4021011BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m in Sources */,
+				4C4021011BAE98C300BAE5FC /* MADDocumentPageController.m in Sources */,
 				4C401F2A1BAE703200BAE5FC /* MADTableViewCellQueryLink.m in Sources */,
 				4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */,
 				4C59BDC01C9AA7C10031BC6C /* MADBlockOperation.m in Sources */,
