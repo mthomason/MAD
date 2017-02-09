@@ -15,7 +15,7 @@
 #import <UIKit/UIPrintInteractionController.h>
 
 #import <MADFoundation/MADDataProtocol.h>
-#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADCacheProtocol.h>
 
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADPrintPageRendererDataSource.h>
@@ -42,7 +42,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
         MADDataProtocol,
-        MTCacheProtocol,
+        MADCacheProtocol,
         MADReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
 

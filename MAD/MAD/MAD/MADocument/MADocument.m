@@ -242,7 +242,7 @@ void madwarn(char *err,  const char*err2) { }
 
 @interface MADocument ()
     <MADReportFormatterDataSource,
-        MTCacheProtocol,
+        MADCacheProtocol,
         MTDatabaseProtocol>
 
     //@property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
@@ -529,7 +529,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 #pragma mark -
-#pragma mark MTCacheProtocol
+#pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = self.filename;

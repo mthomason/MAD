@@ -11,19 +11,16 @@
 
 #import "MTDataTable.h"
 
-@protocol MTCacheProtocol;
-@protocol MADDataProtocol;
+@protocol MADCacheProtocol, MADDataProtocol;
 
-@class MTDatabaseSqlite3;
-@class MTQuery;
-@class MTDatabaseSqlite3;
+@class MTQuery, MTDatabaseSqlite3;
 
 @interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>
 
     @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;
 
-    @property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
+    @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
     @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
     - (NSString *)tableName;

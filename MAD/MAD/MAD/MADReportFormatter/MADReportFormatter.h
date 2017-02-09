@@ -19,7 +19,7 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
     MADReportFormatterOptionsMargin  = 1 << 0,
 };
 
-@protocol MADReportFormatterDataSource, MADDataProtocol, MTCacheProtocol;
+@protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol;
 
 @class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
        NSManagedObjectID, MADArrayCaching <ObjectType>;
@@ -48,7 +48,7 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     @property (nonatomic, strong, readonly) MADCachingLayout *reportLayout;
 
     @property (nonatomic, weak)             id <MADReportFormatterDataSource> datasource;
-    @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, weak)             id <MADCacheProtocol> cachedDelegate;
 
     @property (nonatomic, strong, readonly) MADPageOptions *page;
     @property (nonatomic, weak,   readonly) MADocument *layout;

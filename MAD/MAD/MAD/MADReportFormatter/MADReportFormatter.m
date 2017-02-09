@@ -332,7 +332,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     [self.reportIndexes finalizeDatabase];
     [self.reportLayout finalizeDatabase];
 
-    id <MTCacheProtocol> cachedDelegate = self.cachedDelegate;
+    id <MADCacheProtocol> cachedDelegate = self.cachedDelegate;
     
     NSString *nixarray;
     nixarray = [self newStringNameCurrentReportIndexes: _page.layoutSize

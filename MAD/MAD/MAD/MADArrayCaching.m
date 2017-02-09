@@ -20,7 +20,7 @@
 
 #import <MADDataStructures/MADIndex.h>
 
-#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
@@ -98,7 +98,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
-                    cachedDelegate:(id <MTCacheProtocol>)cachedDelegate {
+                    cachedDelegate:(id <MADCacheProtocol>)cachedDelegate {
     if (self = [super init]) {
         
         NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");

@@ -35,7 +35,7 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURL.h>
-#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -293,7 +293,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return nil;
 }
 
-- (void)setCacheDelegate:(id<MTCacheProtocol>)cacheDelegate {
+- (void)setCacheDelegate:(id<MADCacheProtocol>)cacheDelegate {
     _cacheDelegate = cacheDelegate;
     [self reopenDbConnection];
 }
@@ -304,7 +304,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     MTDatabaseSqlite3 *database; MADDatabaseConnection *connection;
     
-    id <MTCacheProtocol> cacheDelegate = _cacheDelegate;
+    id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
     
     database = [[MTDatabaseSqlite3 alloc] init];
     database.delegate = (id <MTDatabaseProtocol>)cacheDelegate;
