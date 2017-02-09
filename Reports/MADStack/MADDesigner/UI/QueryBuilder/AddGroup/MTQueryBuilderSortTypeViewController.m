@@ -33,7 +33,7 @@
     [super viewDidLoad];
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
-    if (_initalSortOrder == MNSSortOrderAccending) {
+    if (_initalSortOrder == MADSortOrderAccending) {
         _tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         _tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -51,12 +51,12 @@
     UITableViewCell *cellActive = [tableView cellForRowAtIndexPath:indexPath];
     NSString *reuseID = cellActive.reuseIdentifier;
     if ([reuseID isEqualToString: @"MTTableViewCellSortOrderAccending"]) {
-        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderAccending];
+        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MADSortOrderAccending];
         cellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
         cellDecending.accessoryType = UITableViewCellAccessoryNone;
         
     } else if ([reuseID isEqualToString: @"MTTableViewCellSortOrderDecending"]) {
-        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderDecending];
+        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MADSortOrderDecending];
         cellAccending.accessoryType = UITableViewCellAccessoryNone;
         cellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
 

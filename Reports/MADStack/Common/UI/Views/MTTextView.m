@@ -11,7 +11,7 @@
 
 @interface MTTextView ()
 
-@property (assign) CGRect initalFrame;
+    @property (nonatomic, assign) CGRect initalFrame;
 
 @end
 

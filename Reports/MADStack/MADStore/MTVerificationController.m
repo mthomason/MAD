@@ -24,9 +24,8 @@
 
 @interface MTVerificationController() <SKRequestDelegate>
 
-@property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
+@property (nonatomic, copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
 @property (nonatomic, copy) NSDictionary *receiptData;
-//@property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
 @property (nonatomic, strong, readwrite) MADSalesReceipt *receipt;
 

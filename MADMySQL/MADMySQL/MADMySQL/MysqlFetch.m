@@ -29,7 +29,7 @@
 
 @interface MysqlFetch ()
 
-@property(strong, readwrite) NSArray *results;
+@property(nonatomic, strong, readwrite) NSArray *results;
 
 @end
 

@@ -12,8 +12,8 @@
 
 @interface MADDesignerSectionLayoutLine ()
 
-    @property (assign) CGSize contentSize;
-    @property (assign) NSUInteger numberOfSections;
+    @property (nonatomic, assign) CGSize contentSize;
+    @property (nonatomic, assign) NSUInteger numberOfSections;
 
     @property (nonatomic, strong) NSMutableArray *itemAttributesBySection;
     @property (nonatomic, strong) NSMutableArray *decorationAttributesBySection;

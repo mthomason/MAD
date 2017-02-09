@@ -157,7 +157,7 @@ static NSString * const ViewControllerTitle = @"MAD Query";
 
     @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 
-    @property (readonly) MADTabBarController *tabBarController;
+    @property (nonatomic, readonly) MADTabBarController *tabBarController;
 
 @end
 
@@ -763,7 +763,7 @@ BOOL storeEnabled() {
 #pragma mark - MTQueryBuilderAddGroupDelegate
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
-                       andSortOrder:(MNSSortOrder)sortOrder {
+                       andSortOrder:(MADSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];

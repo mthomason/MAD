@@ -910,7 +910,7 @@ READFROMURL_END:;
 }
 
 - (void)addQueryGroupWithQueryField: (NSManagedObjectID *)queryFieldObjectID
-                       andSortOrder: (MNSSortOrder)sortOrder; {
+                       andSortOrder: (MADSortOrder)sortOrder; {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;

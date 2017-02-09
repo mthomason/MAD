@@ -16,7 +16,7 @@
 
 @interface RptqQueryGroup (Extras)
 
-    + (instancetype)newQueryGroupQueryWithSortOrder:(MNSSortOrder)sortOrder
+    + (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
                             andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;

@@ -16,10 +16,10 @@
 
 @interface MADResizeHandleView : UIView
 
-    @property (weak) IBOutlet id <MADResizeHandleViewDelegate> delegate;
-    @property (assign) MADCompassDirection type;
-    @property (assign) CGPoint initalPoint;
-    @property (assign, getter = isHighlighted) BOOL highlighted;
+    @property (nonatomic, weak) IBOutlet id <MADResizeHandleViewDelegate> delegate;
+    @property (nonatomic, assign) MADCompassDirection type;
+    @property (nonatomic, assign) CGPoint initalPoint;
+    @property (nonatomic, assign, getter = isHighlighted) BOOL highlighted;
 
     - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompassDirection)position;
 

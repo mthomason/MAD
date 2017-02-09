@@ -16,12 +16,12 @@
 @interface MADQueryViewSectionDelegate : NSObject
 
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position;
-    @property (nonatomic, assign, readonly) MADIdentifierQueryViewSections querySection;
-    @property (readonly) NSString   *name;
-    @property (readonly) NSUInteger count;
-    @property (readonly) NSInteger  numberOfRows;
-    @property (readonly) CGFloat    height;
-    @property (readonly) SEL        selector;
+    @property (readonly, nonatomic, assign) MADIdentifierQueryViewSections querySection;
+    @property (readonly, nonatomic, copy) NSString   *name;
+    @property (readonly, nonatomic, assign) NSUInteger count;
+    @property (readonly, nonatomic, assign) NSInteger  numberOfRows;
+    @property (readonly, nonatomic, assign) CGFloat    height;
+    @property (readonly, nonatomic, assign) SEL        selector;
 
 @end
 

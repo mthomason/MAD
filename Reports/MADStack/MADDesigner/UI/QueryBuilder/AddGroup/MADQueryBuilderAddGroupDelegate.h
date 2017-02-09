@@ -11,7 +11,7 @@
 
 @protocol MADQueryBuilderAddGroupDelegate
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField
-                           andSortOrder:(MNSSortOrder)sortOrder;
+                           andSortOrder:(MADSortOrder)sortOrder;
     - (void)viewControllerDidCancel:(id)sender;
 @end
 

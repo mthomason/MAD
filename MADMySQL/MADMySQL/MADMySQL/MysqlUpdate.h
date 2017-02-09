@@ -17,10 +17,10 @@
     MysqlConnection *connection;
 }
 
-    @property(strong) NSString *table;
-    @property(strong) NSDictionary *rowData;
-    @property(strong) NSDictionary *qualifier;
-    @property(readonly) NSNumber *affectedRows;
+    @property(nonatomic, strong) NSString *table;
+    @property(nonatomic, strong) NSDictionary *rowData;
+    @property(nonatomic, strong) NSDictionary *qualifier;
+    @property(nonatomic, readonly) NSNumber *affectedRows;
 
     + (MysqlUpdate *)updateWithConnection:(MysqlConnection *)aConnection;
     - (void)execute;

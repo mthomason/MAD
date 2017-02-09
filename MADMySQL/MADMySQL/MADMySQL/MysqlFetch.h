@@ -24,8 +24,8 @@
 
     @property(nonatomic, weak) id <MysqlFetchDelegate> delegate;
 
-    @property(strong, readwrite) NSArray *fieldNames;
-    @property(strong, readwrite) NSArray *fields;
+    @property(nonatomic, strong, readwrite) NSArray *fieldNames;
+    @property(nonatomic, strong, readwrite) NSArray *fields;
 
     + (int)fetchStatement:(MYSQL_STMT *)statement;
 

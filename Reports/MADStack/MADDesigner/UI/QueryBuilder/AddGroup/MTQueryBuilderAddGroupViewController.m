@@ -55,7 +55,7 @@ static NSString * const TextDefault = @"Default";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.barButtonItemSave.enabled = NO;
-    self.sortOrder = MNSSortOrderAccending;
+    self.sortOrder = MADSortOrderAccending;
     NSString *accending = NSLocalizedString(@"Accending", @"Accending");
     self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
 }
@@ -98,18 +98,18 @@ static NSString * const TextDefault = @"Default";
 
 #pragma mark Sort Type
 
-- (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType {
+- (void)uITableViewControllerSortTypeDidSelectSortType:(MADSortOrder)sortOrderType {
     self.sortOrder = sortOrderType;
     NSString *label = nil;
     switch (sortOrderType) {
 
-        case MNSSortOrderAccending:
+        case MADSortOrderAccending:
             label = NSLocalizedString(TextAccending, TextAccending);
             self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;;
             self.detailLabelSort.text = label;
             break;
 
-        case MNSSortOrderDecending:
+        case MADSortOrderDecending:
             label = NSLocalizedString(TextDecending, TextDecending);
             self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
             self.detailLabelSort.text = label;

@@ -130,7 +130,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     NSSortDescriptor *sort;
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
         @autoreleasepool {
-            BOOL sortAscending = (queryGroup.sort == MNSSortOrderAccending);
+            BOOL sortAscending = (queryGroup.sort == MADSortOrderAccending);
             RptqQueryField *groupField = queryGroup.hasField;
             
             queryTable = [groupField.inQueryTable queryAlias];

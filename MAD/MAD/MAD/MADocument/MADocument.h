@@ -76,7 +76,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
-                           andSortOrder:(MNSSortOrder)sortOrder;
+                           andSortOrder:(MADSortOrder)sortOrder;
 
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 

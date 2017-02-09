@@ -48,8 +48,8 @@
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator2;
 
-@property (copy) MTBlockCompletion standardCompletion;
-@property (copy) MTStoreKitNonRenewableLicensedUser licenseUserCompletion;
+@property (nonatomic, copy) MTBlockCompletion standardCompletion;
+@property (nonatomic, copy) MTStoreKitNonRenewableLicensedUser licenseUserCompletion;
 
 @end
 

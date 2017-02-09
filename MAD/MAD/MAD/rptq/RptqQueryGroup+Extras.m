@@ -40,7 +40,7 @@
 
 @implementation RptqQueryGroup (Extras)
 
-+ (instancetype)newQueryGroupQueryWithSortOrder:(MNSSortOrder)sortOrder
++ (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
                         andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSEntityDescription *entityDescriptionQueryGroup;
@@ -111,11 +111,11 @@
 - (NSString *)sortDisplayNice {
     switch (self.sort) {
 
-        case MNSSortOrderAccending:
+        case MADSortOrderAccending:
             return @"accending";
             break;
         
-        case MNSSortOrderDecending:
+        case MADSortOrderDecending:
             return @"decending";
             break;
         
