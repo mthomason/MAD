@@ -1,13 +1,13 @@
 //
-//  MTViewControllerReportPage.h
+//  MADDocumentPageController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTReportViewerReportPageViewController_h
-#define Reports_MTReportViewerReportPageViewController_h
+#ifndef Reports_MADDocumentPageController_h
+#define Reports_MADDocumentPageController_h
 
 #import <UIKit/UIViewController.h>
 

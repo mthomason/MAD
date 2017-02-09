@@ -1,5 +1,5 @@
 //
-//  MTViewControllerReportPage.m
+//  MADDocumentPageController.m
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportViewerReportPageViewController.h"
+#import "MADDocumentPageController.h"
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UITabBarController.h>
