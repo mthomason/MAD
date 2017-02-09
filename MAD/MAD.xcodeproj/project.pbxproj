@@ -421,8 +421,8 @@
 		4CC282441BADE81A00775B72 /* MADSortOrder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282071BADE81A00775B72 /* MADSortOrder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282451BADE81A00775B72 /* MADActivityIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282081BADE81A00775B72 /* MADActivityIndicator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282461BADE81A00775B72 /* MADActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282091BADE81A00775B72 /* MADActivityIndicator.m */; };
-		4CC282471BADE81A00775B72 /* MTActivityItemProviderPdf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC282481BADE81B00775B72 /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */; };
+		4CC282471BADE81A00775B72 /* MADActivityItemProviderPdf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820A1BADE81A00775B72 /* MADActivityItemProviderPdf.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC282481BADE81B00775B72 /* MADActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */; };
 		4CC2824A1BADE81B00775B72 /* MADAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820D1BADE81A00775B72 /* MADAlignment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282651BADE81E00775B72 /* MADDataFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282281BADE81A00775B72 /* MADDataFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MADDataFormatter.m */; };
@@ -988,8 +988,8 @@
 		4CC282071BADE81A00775B72 /* MADSortOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortOrder.h; path = MAD/MADSortOrder.h; sourceTree = "<group>"; };
 		4CC282081BADE81A00775B72 /* MADActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityIndicator.h; path = MAD/MADActivityIndicator.h; sourceTree = "<group>"; };
 		4CC282091BADE81A00775B72 /* MADActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADActivityIndicator.m; path = MAD/MADActivityIndicator.m; sourceTree = "<group>"; };
-		4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTActivityItemProviderPdf.h; path = MAD/MTActivityItemProviderPdf.h; sourceTree = "<group>"; };
-		4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTActivityItemProviderPdf.m; path = MAD/MTActivityItemProviderPdf.m; sourceTree = "<group>"; };
+		4CC2820A1BADE81A00775B72 /* MADActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityItemProviderPdf.h; path = MAD/MADActivityItemProviderPdf.h; sourceTree = "<group>"; };
+		4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADActivityItemProviderPdf.m; path = MAD/MADActivityItemProviderPdf.m; sourceTree = "<group>"; };
 		4CC2820D1BADE81A00775B72 /* MADAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlignment.h; path = MAD/MADAlignment.h; sourceTree = "<group>"; };
 		4CC282281BADE81A00775B72 /* MADDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataFormatter.h; path = MAD/MADDataFormatter.h; sourceTree = "<group>"; };
 		4CC282291BADE81A00775B72 /* MADDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataFormatter.m; path = MAD/MADDataFormatter.m; sourceTree = "<group>"; };
@@ -1642,8 +1642,8 @@
 				4CC282061BADE81A00775B72 /* MADSectionLayoutManager.m */,
 				4CC282081BADE81A00775B72 /* MADActivityIndicator.h */,
 				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
-				4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */,
-				4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */,
+				4CC2820A1BADE81A00775B72 /* MADActivityItemProviderPdf.h */,
+				4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */,
 				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
 				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
 				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
@@ -2221,7 +2221,7 @@
 				4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */,
 				4CC282791BADE82200775B72 /* MADNotificationDidReadRows.h in Headers */,
 				4CC282771BADE82100775B72 /* MADNotificationDidFormatPage.h in Headers */,
-				4CC282471BADE81A00775B72 /* MTActivityItemProviderPdf.h in Headers */,
+				4CC282471BADE81A00775B72 /* MADActivityItemProviderPdf.h in Headers */,
 				4C3639F81D03B84E0077A506 /* UIImage+MADDocument.h in Headers */,
 				4C401E371BAE3DCB00BAE5FC /* MTDatabaseSqlite3.h in Headers */,
 				4CA3548D1D20DB900072BD38 /* MADReportSectionEnumerator.h in Headers */,
@@ -2475,7 +2475,7 @@
 				4C401DEA1BAE3BD800BAE5FC /* MTQueryDefinitionSort.m in Sources */,
 				4C401E4B1BAE4D8C00BAE5FC /* MADocumentState.m in Sources */,
 				4C82C98A1CF21A3E00F244F6 /* madpng.c in Sources */,
-				4CC282481BADE81B00775B72 /* MTActivityItemProviderPdf.m in Sources */,
+				4CC282481BADE81B00775B72 /* MADActivityItemProviderPdf.m in Sources */,
 				4C401DC61BAE3BD600BAE5FC /* MTQueryCacheEndTransaction.m in Sources */,
 				4C1CFF041D050E21009DBA4F /* MADDocumentObject.m in Sources */,
 				4CC2846D1BADE99400775B72 /* RptqDatabase+Extras.m in Sources */,

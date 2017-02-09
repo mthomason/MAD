@@ -52,7 +52,7 @@
 
 #import <MAD/MTDataTableFast.h>
 
-#import <MAD/MTActivityItemProviderPdf.h>
+#import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MADNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
@@ -163,7 +163,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, strong) NSMutableArray *toolbarItemsActive;
 
     @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
-    @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
+    @property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
 
 #pragma mark Controllers
 
@@ -913,7 +913,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     _activityExporting = YES;
     self.pageSlider.enabled = NO;
     
-    MTActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
+    MADActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
     activityItemProviderPdf.delegate = self;
     NSArray *activityItems = [[NSArray alloc] initWithObjects: activityItemProviderPdf, nil];
     self.activityItemProviderPdf = activityItemProviderPdf;
@@ -1055,14 +1055,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Acivities
 
-- (MTActivityItemProviderPdf *)activityItemProviderPdf {
+- (MADActivityItemProviderPdf *)activityItemProviderPdf {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-    MTActivityItemProviderPdf *activityItemProviderPdf;
-    activityItemProviderPdf= [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
+    MADActivityItemProviderPdf *activityItemProviderPdf;
+    activityItemProviderPdf= [[MADActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
     activityItemProviderPdf.document = self.document;
     return activityItemProviderPdf;
 }
