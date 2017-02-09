@@ -31,7 +31,7 @@ extern NSString * const MADSectionLayoutSettingsID;
 
     + (instancetype)newDesignerSectionLayoutController;
 
-    @property (weak) IBOutlet id <MADDesignerSectionLayoutDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADDesignerSectionLayoutDelegate> delegate;
 
     @property (nonatomic, assign) double initalHeightValue;
     @property (nonatomic, assign) BOOL initalVisibility;

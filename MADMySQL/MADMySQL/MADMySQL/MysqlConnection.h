@@ -23,8 +23,8 @@
 
     - (void *)connection NS_RETURNS_INNER_POINTER;
 
-    @property(readonly) BOOL transactionsEnabled;
-    @property(readonly) MysqlServer *server;
+    @property(nonatomic, readonly) BOOL transactionsEnabled;
+    @property(nonatomic, readonly) MysqlServer *server;
 
     + (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
     + (MysqlConnection *)connectToServer:(MysqlServer *)server;

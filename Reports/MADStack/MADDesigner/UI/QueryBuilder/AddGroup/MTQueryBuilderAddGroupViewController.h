@@ -33,8 +33,8 @@
     @property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
 
 
-    @property (copy) NSString *fieldName;
-    @property (assign) MNSSortOrder sortOrder;
+    @property (nonatomic, copy) NSString *fieldName;
+    @property (nonatomic, assign) MNSSortOrder sortOrder;
 
     - (IBAction)cancel:(id)sender;
     - (IBAction)save:(id)sender;

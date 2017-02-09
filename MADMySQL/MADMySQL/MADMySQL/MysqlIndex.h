@@ -17,7 +17,7 @@
     MysqlConnection *connection;
 }
 
-    @property(readonly)MysqlConnection *connection;
+    @property(nonatomic, readonly)MysqlConnection *connection;
     + (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection;
 
 @end

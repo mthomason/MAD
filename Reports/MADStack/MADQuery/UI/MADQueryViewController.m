@@ -156,7 +156,7 @@ static NSString * const ViewControllerTitle = @"MAD Query";
 
     @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 
-    @property (readonly) MADTabBarController *tabBarController;
+    @property (nonatomic, readonly) MADTabBarController *tabBarController;
 
 @end
 

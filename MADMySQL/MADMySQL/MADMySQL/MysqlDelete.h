@@ -17,9 +17,9 @@
     MysqlConnection *connection;
 }
 
-    @property(copy) NSString *tableName;
-    @property(copy) NSString *qualifier;
-    @property(readonly) NSNumber *affectedRows;
+    @property(nonatomic, copy) NSString *tableName;
+    @property(nonatomic, copy) NSString *qualifier;
+    @property(nonatomic, readonly) NSNumber *affectedRows;
 
     + (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection;
     - (void)execute;

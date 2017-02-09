@@ -13,7 +13,7 @@
 
 @interface MysqlLiteral : NSObject
 
-@property (readonly) NSString *string;
+    @property (nonatomic, readonly) NSString *string;
 
     + (MysqlLiteral *)literalWithString:(NSString *)s;
 

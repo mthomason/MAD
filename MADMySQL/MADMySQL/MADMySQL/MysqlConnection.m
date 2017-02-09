@@ -31,7 +31,7 @@
 
 @interface MysqlConnection ()
 
-    @property (readonly) MYSQL *connection;
+    @property (nonatomic, readonly) MYSQL *connection;
 
 @end
 

@@ -35,8 +35,8 @@
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
 
-    @property (assign) MADLinkPart currentlyEditingPart;
-    @property (assign) MNSLinkType linkType;
+    @property (nonatomic, assign) MADLinkPart currentlyEditingPart;
+    @property (nonatomic, assign) MNSLinkType linkType;
 
     - (IBAction)save:(id)sender;
     - (IBAction)cancel:(id)sender;
