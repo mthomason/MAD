@@ -413,7 +413,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
 }
 
-- (void)setSelectedDocumentObjects:(NSSet *)objectIds {
+- (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds {
     self.userSelectedObjectIDs = objectIds;
     [self updateDisplay];
 
@@ -579,16 +579,18 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                   numberNotStrike               = 0,
                   numberNotUnderline            = 0;
         
-        NSManagedObjectID *objectId;
-        NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
+        NSNumber *objectId;
+        NSSet <NSNumber *> *userSelectedObjectIDs = _userSelectedObjectIDs;
         RptqDocumentElement *documentObject;
         
         //MADMargin_t margin; MADLayoutPadding_t padding; CGSize size; MADAlignment_t alignment;
         //MADTextStyle_t textStyle;
         CGSize size;
+        NSManagedObjectContext *context = self.document.managedObjectContext;
         for (objectId in userSelectedObjectIDs) {
             
-            documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier:objectId.longLongValue
+                                                                 fromObjectContext:context];
             
             if (documentObject != nil) {
                 

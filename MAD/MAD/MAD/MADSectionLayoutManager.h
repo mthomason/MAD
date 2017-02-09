@@ -10,19 +10,16 @@
 #define Reports_MADReportDesignerSectionLayoutAttributes_h
 
 #import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
 
 @class NSMutableDictionary <KeyType, ObjectType>, MADSectionLayoutManager,
         MADSectionLayoutAttributes, RptqDocumentSection;
-
-typedef struct CGSize CGSize;
-typedef NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *>
-                                                            MADSectionLayoutAttributesMutableMap;
 
 @interface MADSectionLayoutManager : NSObject
 
     - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
 
-    @property (nonatomic, strong, readonly) MADSectionLayoutAttributesMutableMap *items;
+    @property (nonatomic, strong, readonly) NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
     @property (readonly) CGSize size;
 
     - (void)addItem:(MADSectionLayoutAttributes *)item;

@@ -34,7 +34,7 @@
 @interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
-@property (nonatomic, strong) NSSet *userSelectedObjectIDs;
+@property (nonatomic, strong) NSSet <NSNumber *> *userSelectedObjectIDs;
 
 @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellDecimals;
 @property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrency;
@@ -89,19 +89,22 @@
     }
 }
 
-- (void)setSelectedDocumentObjects:(NSSet *)objectIds {
+- (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIDs {
     
     BOOL numericTypeInSet = NO;
-    NSMutableSet *keepers = [[NSMutableSet alloc] init];
+    NSMutableSet <NSNumber *> *keepers = [[NSMutableSet alloc] init];
     
-    for (NSManagedObjectID *objectId in objectIds) {
+    NSNumber *objectID;
+    RptqDocumentElementLabelDataField *documentObject;
+    for (objectID in objectIDs) {
 
-        RptqDocumentElementLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
+        documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: objectID.longLongValue
+                                                                           fromObjectContext: _document.managedObjectContext];
         MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;
-            [keepers addObject:objectId];
+            [keepers addObject:objectID];
             break;
         }
     }
@@ -134,10 +137,17 @@
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 
         MADocument *document = _document;
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
+        NSNumber *identifier;
+        NSSet <NSNumber *> *userSelectedObjectIDs;
+        RptqDocumentElement *documentObject;
+        MADCurrencyFormatter *currencyFormatter;
         
-            RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-            MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+        userSelectedObjectIDs = self.userSelectedObjectIDs;
+        for (identifier in userSelectedObjectIDs) {
+        
+            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                                 fromObjectContext: document.managedObjectContext];
+            currencyFormatter = documentObject.numericFormat;
             if (currencyFormatter.enabled) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
             }
@@ -146,10 +156,8 @@
         (self.tableViewCellCurrency).accessoryType = accessoryType;
         
         if ((self.userSelectedObjectIDs).count == 1) {
+            NSAssert(documentObject != nil, @"We expect an element here.");
 
-            NSManagedObjectID *objectId = [self.userSelectedObjectIDs anyObject];
-            RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-            MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
             (self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:currencyFormatter.decimalCount];
             (self.stepperNumberOfDecimals).value = currencyFormatter.decimalCount;
 
@@ -158,11 +166,13 @@
             BOOL allTheSame = NO;
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
-            for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-                RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-                MADCurrencyFormatter *currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
+            for (identifier in self.userSelectedObjectIDs) {
+                documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                                     fromObjectContext: document.managedObjectContext];
+                currencyFormatter = documentObject.numericFormat;
                 if (counter > 0) {
-                    if (lastInteger == currencyFormatter.decimalCount && allTheSame) {
+#warning Don't think BOOL allTheSame ever becomes "YES"
+                    if (lastInteger == currencyFormatter.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
                         allTheSame = YES;
                     } else {
                         allTheSame = NO;
@@ -198,9 +208,11 @@
         
         MADCurrencyFormatter *currencyFormatter;
         RptqDocumentElement *documentObject;
-        NSManagedObjectID *objectID;
-        for (objectID in self.userSelectedObjectIDs) {
-            documentObject = [self.document.managedObjectContext objectWithID:objectID];
+        NSNumber *identifier;
+        NSManagedObjectContext *context = self.document.managedObjectContext;
+        for (identifier in self.userSelectedObjectIDs) {
+            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                                 fromObjectContext: context];
             currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
             currencyFormatter.decimalCount = [valueThatChanged integerValue];
             documentObject.numericFormat = currencyFormatter;
@@ -247,10 +259,13 @@
     if (indexPath.row == 1 && indexPath.section == 0) {
         
         MADCurrencyFormatter *currencyFormatter;
-        NSManagedObjectID *objectID;
+        NSNumber *identifier;
         UITableViewCellAccessoryType newAccessory;
-        for (objectID in self.userSelectedObjectIDs) {
-            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectID];
+        RptqDocumentElement *documentObject;
+        NSManagedObjectContext *context = self.document.managedObjectContext;
+        for (identifier in self.userSelectedObjectIDs) {
+            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+                                                                 fromObjectContext: context];
             currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
             currencyFormatter.enabled = !currencyFormatter.enabled;
             documentObject.numericFormat = currencyFormatter;
