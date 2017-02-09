@@ -1,17 +1,17 @@
 //
-//  MTDataTableVirtual.h
+//  MADDataTableVirtual.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/25/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDataTableVirtual_h
-#define Reports_MTDataTableVirtual_h
+#ifndef Reports_MADDataTableVirtual_h
+#define Reports_MADDataTableVirtual_h
 
 #import "MADDataTablePlist.h"
 
-@interface MTDataTableVirtual : MADDataTablePlist
+@interface MADDataTableVirtual : MADDataTablePlist
 
 @end
 

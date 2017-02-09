@@ -1,12 +1,12 @@
 //
-//  MTDataTableVirtual.m
+//  MADDataTableVirtual.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/25/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDataTableVirtual.h"
+#import "MADDataTableVirtual.h"
 #import <Foundation/NSStream.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSException.h>
@@ -17,7 +17,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
-@interface MTDataTableVirtual ()
+@interface MADDataTableVirtual ()
 
     @property (nonatomic, strong) NSInputStream *inputStream;
     @property (nonatomic, strong) NSOutputStream *outputStream;
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation MTDataTableVirtual
+@implementation MADDataTableVirtual
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
@@ -55,7 +55,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
-    NSString *key = [MTDataTableVirtual keySortIndex];
+    NSString *key = [MADDataTableVirtual keySortIndex];
     [encoder encodeObject: _sortIndex forKey: key];
 }
 
@@ -70,7 +70,7 @@
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super initWithCoder:decoder];
     if(self) {
-        NSString *key = [MTDataTableVirtual keySortIndex];
+        NSString *key = [MADDataTableVirtual keySortIndex];
         NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
         self.sortIndex = sortIndex;
     }
@@ -106,7 +106,7 @@
 - (void)loadWithPlist:(NSDictionary *)plist {
     [super loadWithPlist:plist];
     
-    NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
+    NSString *keySortIndex = [MADDataTableVirtual keySortIndex];
     NSArray *sortIndexArray = plist[keySortIndex];
     
     NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
@@ -116,7 +116,7 @@
 - (NSDictionary *)copyPlist {
     NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
-    NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
+    NSString *keySortIndex = [MADDataTableVirtual keySortIndex];
     plist[keySortIndex] = self.sortIndex;
     return plist;
 }
