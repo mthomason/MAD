@@ -11,11 +11,11 @@
 
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
-//#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface ACAccountStore (Social)
 
-    + (void)twitterFollow:(NSString *)screenName completion:(void (^)(BOOL success, NSError *error))completion;
+    + (void)twitterFollow:(NSString *)screenName
+               completion:(void (^)(BOOL success, NSError *error))completion;
 
 @end
 

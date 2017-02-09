@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderAddTableViewController_h
 
 #import "MADTableViewControllerCoreDataResults.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 @class MTQueryBuilderAddTableViewController;
 @class RptqDatabaseSchemaTable;

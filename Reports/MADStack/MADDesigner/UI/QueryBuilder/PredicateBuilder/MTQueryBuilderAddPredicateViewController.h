@@ -11,7 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
 
 #import "MADTableViewControllerOpperatorsDelegate.h"

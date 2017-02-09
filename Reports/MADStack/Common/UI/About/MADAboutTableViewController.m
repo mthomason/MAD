@@ -11,7 +11,6 @@
 #endif
 
 #import "MADAboutTableViewController.h"
-#import "MUIViewControllerDelegate.h"
 
 #import <CoreText/CTStringAttributes.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -25,6 +24,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
+#import "MADViewControllerStandardProtocol.h"
 #import "MADTableViewCellBase.h"
 
 #import "MADButtonTwitter.h"

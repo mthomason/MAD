@@ -59,7 +59,7 @@
 #import <MAD/MTPaper.h>
 
 #import "MADPrintingProtocol.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import "MADTabBarController.h"
 

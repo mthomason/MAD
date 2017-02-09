@@ -60,7 +60,7 @@
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
 
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"

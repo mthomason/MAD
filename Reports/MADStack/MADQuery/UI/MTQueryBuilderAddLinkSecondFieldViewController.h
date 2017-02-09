@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderAddLinkSecondFieldViewController_h
 
 #import "MADTableViewControllerCoreDataResults.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 @class MTQueryBuilderAddLinkSecondFieldViewController, RptqQueryField;
 

@@ -11,7 +11,7 @@
 
 #import <UIKit/UITabBarController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 extern const int8_t MADIndexQuery;
 extern const int8_t MADIndexDesigner;

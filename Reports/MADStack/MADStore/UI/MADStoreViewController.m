@@ -16,7 +16,7 @@
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADWatermarkView.h"
 #import "MADNavigationBarTitleView.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "MADSalesReceipt.h"

@@ -6,10 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADManagedObjectViewProtocol_h
-#define MADManagedObjectViewProtocol_h
-
-@class NSManagedObjectID;
+#ifndef MAD_MADManagedObjectViewProtocol_h
+#define MAD_MADManagedObjectViewProtocol_h
 
 @protocol MADManagedObjectViewProtocol <NSObject>
 @required;

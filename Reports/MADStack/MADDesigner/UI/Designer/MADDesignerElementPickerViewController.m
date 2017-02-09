@@ -45,11 +45,11 @@
 
 #import "MADLabelTitle.h"
 
-const NSInteger MTViewTagAggregateFunctions             = 2003;
-const NSInteger MTViewTagGroupByOptions                 = 2011;
-const NSInteger MTViewTagDocumentObjectNewAggregate     = 2017;
-const NSInteger MTViewTagDocumentObjectNewLabelStatic   = 2027;
-const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
+static const NSInteger MADViewTagAggregateFunctions             = 2003;
+static const NSInteger MADViewTagGroupByOptions                 = 2011;
+static const NSInteger MADViewTagDocumentObjectNewAggregate     = 2017;
+static const NSInteger MADViewTagDocumentObjectNewLabelStatic   = 2027;
+static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 @interface MADDesignerElementPickerViewController ()
     <MTQueryBuilderChooseFieldDelegate,
@@ -285,7 +285,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             
             break;
             
-        case MTViewTagFieldOrFormulaSelector: {
+        case MADViewTagFieldOrFormulaSelector: {
             
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             id display = [field display];
@@ -386,7 +386,7 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     switch (tableView.tag) {
-        case MTViewTagFieldOrFormulaSelector:
+        case MADViewTagFieldOrFormulaSelector:
 
             switch (indexPath.row) {
                 
@@ -412,10 +412,10 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             
             break;
             
-        case MTViewTagAggregateFunctions:
+        case MADViewTagAggregateFunctions:
             break;
             
-        case MTViewTagDocumentObjectNewAggregate: {
+        case MADViewTagDocumentObjectNewAggregate: {
             
             switch (indexPath.row) {
 
@@ -447,10 +447,10 @@ const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
             break;
         }
             
-        case MTViewTagDocumentObjectNewLabelStatic:
+        case MADViewTagDocumentObjectNewLabelStatic:
             break;
             
-        case MTViewTagGroupByOptions:
+        case MADViewTagGroupByOptions:
             break;
             
         default:

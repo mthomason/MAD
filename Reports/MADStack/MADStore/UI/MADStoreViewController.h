@@ -10,7 +10,7 @@
 #define MAD_Designer_MADStoreViewController_h
 
 #import "MADCollectionViewController.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import <UIKit/UICollectionViewFlowLayout.h>
 
 @interface MADStoreViewController : MADCollectionViewController

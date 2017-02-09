@@ -11,7 +11,7 @@
 
 #import "MTQuery.h"
 
-@class MTDatabaseSqlite3;
+//@class MTDatabaseSqlite3;
 
 @interface MTQueryCache : MTQuery
 

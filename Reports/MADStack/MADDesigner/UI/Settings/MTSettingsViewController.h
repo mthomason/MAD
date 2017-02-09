@@ -10,7 +10,7 @@
 #define Reports_MTSettingsViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 @interface MTSettingsViewController : UITableViewController
     <UITableViewDelegate>

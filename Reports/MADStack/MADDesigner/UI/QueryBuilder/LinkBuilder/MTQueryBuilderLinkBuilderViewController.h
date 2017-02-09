@@ -12,7 +12,7 @@
 #import <UIKit/UITableViewController.h>
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 #import "MTQueryBuilderChooseFieldDelegate.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import "MADLinkPart.h"
 

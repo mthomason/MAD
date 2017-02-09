@@ -10,21 +10,13 @@
 #define Reports_MADDesignerElementPIckerViewController_h
 
 #import "MADCollectionViewController.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import <MAD/MADAggregateFunctionType.h>
 #import <MAD/MADAggregateFunctionInputType.h>
 #import <MAD/MADAggregateFunctionGroupByType.h>
 
-extern const NSInteger MTViewTagAggregateFunctions;
-extern const NSInteger MTViewTagGroupByOptions;
-extern const NSInteger MTViewTagDocumentObjectNewAggregate;
-extern const NSInteger MTViewTagDocumentObjectNewLabelStatic;
-extern const NSInteger MTViewTagFieldOrFormulaSelector;
-
-@class MADocument;
-@class NSManagedObjectID;
-@class RptqQueryField;
+@class MADocument, NSManagedObjectID, RptqQueryField;
 
 @protocol MADDesignerElementPickerDelegate
     <MADViewControllerStandardProtocol>

@@ -20,7 +20,7 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MTQueryFull.h>
 
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 @implementation MADViewControllerSQL
 

@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADManagedObjectCollectionView_h
-#define MADManagedObjectCollectionView_h
+#ifndef MAD_MADManagedObjectCollectionView_h
+#define MAD_MADManagedObjectCollectionView_h
 
 #import <UIKit/UICollectionView.h>
 #import "MADManagedObjectViewProtocol.h"

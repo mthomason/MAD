@@ -11,7 +11,7 @@
 
 #import <UIKit/UINavigationController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 @interface MADNavigationControllerQueryBuilder : UINavigationController
     <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>

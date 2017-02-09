@@ -9,7 +9,7 @@
 #ifndef MAD_MADReportFormatter_h
 #define MAD_MADReportFormatter_h
 
-#import <MAD/MTTableFormatter.h>
+#import <MAD/MADTableFormatter.h>
 
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADSectionRepresentation.h>
@@ -31,7 +31,7 @@ typedef NSArray         <NSNumber *>                                    MADIndex
 typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
 typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
 
-@interface MADReportFormatter : MTTableFormatter
+@interface MADReportFormatter : MADTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
                              options: (MADReportFormatterOptions)options;

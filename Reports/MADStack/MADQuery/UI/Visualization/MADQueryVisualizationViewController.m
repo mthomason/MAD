@@ -74,7 +74,7 @@
 #import <MAD/MADModelQueryLink.h>
 #import <MAD/MADTableFieldIdentifier.h>
 
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import "MADViewControllerSQL.h"
 #import "MADConnectorView.h"

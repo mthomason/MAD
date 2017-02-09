@@ -1,5 +1,5 @@
 //
-//  MUIViewControllerDelegate.h
+//  MADViewControllerStandardProtocol.h
 //  Reports
 //
 //  Created by Michael Thomason on 11/1/12.

@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderPredicateFormatViewController_h
 
 #import "MTQueryBuilderAddPredicateViewController.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import "MADQueryBuilderAddPredicateDelegate.h"
 
 @class MTQueryBuilderPredicateFormatViewController;

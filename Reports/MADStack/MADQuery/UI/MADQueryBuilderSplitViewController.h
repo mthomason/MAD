@@ -11,7 +11,7 @@
 
 #import <UIKit/UISplitViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 #import "MADTabBarItemProtocol.h"
 
 @class UINavigationController;

@@ -22,7 +22,7 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import "MADVibrantTableView.h"
 #import "MADNavigationBarTitleView.h"

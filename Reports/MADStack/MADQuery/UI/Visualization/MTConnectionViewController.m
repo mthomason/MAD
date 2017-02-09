@@ -11,7 +11,7 @@
 #endif
 
 #import "MTConnectionViewController.h"
-#import "MUIViewControllerDelegate.h"
+#import "MADViewControllerStandardProtocol.h"
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>

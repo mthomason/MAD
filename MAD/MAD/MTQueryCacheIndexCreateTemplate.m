@@ -10,7 +10,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 
-#import "MTQueryCacheIndexCreateTypes.h"
+#import "MADCacheIndexType.h"
 
 @implementation MTQueryCacheIndexCreateTemplate {
     NSUInteger _groupCount;
@@ -21,7 +21,7 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
         
-        NSNumber *keyGroupCount = [[NSNumber alloc] initWithShort:MTQueryCacheIndexCreateIndexGroupCount];
+        NSNumber *keyGroupCount = [[NSNumber alloc] initWithShort:MADCacheIndexTypeGroupCount];
         NSNumber *groupCount = object[keyGroupCount];
         _groupCount = groupCount.unsignedIntegerValue;
         
