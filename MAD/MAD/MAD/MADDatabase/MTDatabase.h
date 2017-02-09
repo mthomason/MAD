@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @protocol MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MTDatabase, MADDatabaseTable,
-       MTDataTable, MTQuery, MTDatabaseField;
+       MTDataTable, MTQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
   @required
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL,
                                                                     NSError *,
                                                                     NSArray *))completion;
-    - (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn
+    - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn
                           error:(NSError * __autoreleasing *)error;
 
     - (void)closeProcess:(id)process;

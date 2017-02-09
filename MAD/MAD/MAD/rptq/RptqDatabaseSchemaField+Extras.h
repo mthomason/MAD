@@ -12,14 +12,14 @@
 #import "RptqDatabaseSchemaField.h"
 #import <MADDataStructures/MTProtocolLog.h>
 
-@class MTDatabaseField;
+@class MADDatabaseField;
 
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolLog>
 
     + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                                andField:(MTDatabaseField *)field;
+                                                                andField:(MADDatabaseField *)field;
 
-    - (MTDatabaseField *)databaseFieldWrapper;
+    - (MADDatabaseField *)databaseFieldWrapper;
     + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
                      andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

@@ -30,7 +30,7 @@
 #import <MAD/RptqQuery.h>
 #import <MAD/MTDataTable.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseField.h>
+#import <MAD/MADDatabaseField.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
@@ -350,7 +350,7 @@
     
     NSUInteger column = (NSUInteger)section;
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
-    MTDatabaseField *field = self.query.fields[fieldKey];
+    MADDatabaseField *field = self.query.fields[fieldKey];
     NSUInteger maxNumberOfCharacters = field.calculatedWidth;
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;

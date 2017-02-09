@@ -22,7 +22,7 @@ SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
         case MADDataTypeTimeStamp:
         case MADDataTypeYear:
         case MADDataTypeUnknown:
-            //NSAssert(NO, @"Not implemented: selectorForSorted in MTDatabaseField.");
+            //NSAssert(NO, @"Not implemented: selectorForSorted in MADDatabaseField.");
         case MADDataTypeBit:
         case MADDataTypeFloat:
         case MADDataTypeInteger:

@@ -39,7 +39,7 @@
 #import "MADDatabaseConnection.h"
 
 #import "MADDatabaseTable.h"
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 
 #import "MTQuery.h"
 #import "MTKeyChain.h"
@@ -1568,7 +1568,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 #pragma mark - Reading Fields
 
-- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
     NSMutableArray *results = nil;
     RETCODE sqlReturnCode = FAIL;
     DBPROCESS *dbconn = [process process];
@@ -1646,7 +1646,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                         }
                     }
                     if (name != nil) {
-                        MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
+                        MADDatabaseField *databaseField = [[MADDatabaseField alloc] initWithName:name];
                         databaseField.fieldTypeNative = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
                         databaseField.fieldType = databaseField.fieldTypeNative;
                         databaseField.width = (int64_t)lengthBind;

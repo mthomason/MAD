@@ -23,7 +23,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 #import "MTDatabase.h"
 
 #import "RptqDocument.h"

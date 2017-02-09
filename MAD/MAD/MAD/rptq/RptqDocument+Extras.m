@@ -589,7 +589,7 @@
             NSMutableArray <RptqDatabaseSchemaField *> *schemaFields;
             schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
             RptqDatabaseSchemaField *schemaField;
-            for (MTDatabaseField *field in fields) {
+            for (MADDatabaseField *field in fields) {
                 schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
                                                                                                    andField: field];
                 [schemaFields addObject:schemaField];

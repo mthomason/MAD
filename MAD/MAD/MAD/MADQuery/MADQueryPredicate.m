@@ -9,7 +9,7 @@
 #import "MADQueryPredicate.h"
 
 #import "MTDatabase.h"
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
@@ -75,7 +75,7 @@
                 MADDataType dataType = leftField.databaseSchemaField.dataType;
                 
                 NSString *rightFieldID = queryPredicate.rightFieldID;
-                rightValue = [MTDatabaseField isNumeric:dataType] ? rightFieldID :
+                rightValue = [MADDatabaseField isNumeric:dataType] ? rightFieldID :
                 [[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID];
             }
             NSString *symbolForComparson = [queryPredicate symbolForComparson];

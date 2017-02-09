@@ -24,7 +24,7 @@
 #import "RptqDatabase.h"
 
 #import "MTDatabase.h"
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 #import "MADDatabaseConnection.h"
 
 #import "MTDataTable.h"
@@ -77,7 +77,7 @@
 
     if (self.fieldKeys.count <= 0) {
         for (RptqDatabaseSchemaField *field in table.hasFields) {
-            MTDatabaseField *dbField = [field databaseFieldWrapper];
+            MADDatabaseField *dbField = [field databaseFieldWrapper];
             NSString *fieldAlias = [self.database fieldAliasForField:field.name
                                                    withSafeTableName:safeTableName];
             self.fields[fieldAlias] = dbField;
@@ -106,7 +106,7 @@
             NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
             NSNumber *widthByField = widthsByField[ckey];
             NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
-            MTDatabaseField *f = self.fields[okey];
+            MADDatabaseField *f = self.fields[okey];
             f.calculatedWidth = maxSize;
         }
     }

@@ -11,7 +11,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseTable.h>
-#import <MAD/MTDatabaseField.h>
+#import <MAD/MADDatabaseField.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>

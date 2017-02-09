@@ -31,7 +31,7 @@
 
 #import "MTQuery.h"
 
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
@@ -325,7 +325,7 @@
 
 #pragma mark - Reading Fields
 
-- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
+- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
     
     MysqlConnection *conn = dbconn;
     NSMutableDictionary *resultsDictionary = nil;
@@ -346,7 +346,7 @@
         for (NSUInteger i=0; i<[dataTable numberOfRows]; i++) {
             NSString *name = [dataTable objectAtRow:i column:0];
             NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
-            MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
+            MADDatabaseField *field = [[MADDatabaseField alloc] initWithName:name];
             resultsDictionary[safeId] = field;
         }
         
@@ -358,7 +358,7 @@
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
             for (MADDataColumn *dataColumn in columnsEnumerator) {
-                MTDatabaseField *databaseField = resultsDictionary[dataColumn.fieldName];
+                MADDatabaseField *databaseField = resultsDictionary[dataColumn.fieldName];
                 
                 databaseField.fieldTypeNative = dataColumn.nativeType;
                 

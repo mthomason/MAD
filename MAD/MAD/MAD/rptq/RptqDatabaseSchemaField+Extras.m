@@ -18,7 +18,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import "MTDatabaseField.h"
+#import "MADDatabaseField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 
@@ -61,7 +61,7 @@
 #pragma mark - Static
 
 + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                            andField:(MTDatabaseField *)field {
+                                                            andField:(MADDatabaseField *)field {
     
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
@@ -78,8 +78,8 @@
     return rptqField;
 }
 
-- (MTDatabaseField *)databaseFieldWrapper {
-    MTDatabaseField *result = [[MTDatabaseField alloc] init];
+- (MADDatabaseField *)databaseFieldWrapper {
+    MADDatabaseField *result = [[MADDatabaseField alloc] init];
     result.name = self.name;
     result.fieldType = self.dataType;
     result.fieldTypeNative = self.dataTypeNative;

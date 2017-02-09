@@ -937,7 +937,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 #pragma mark - Reading Fields
 
-- (NSArray <MTDatabaseField *> *)fieldsForTable: (NSString *)tableName
+- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
                                      connection: (id)process
                                           error: (NSError * __autoreleasing *)error {
     NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];

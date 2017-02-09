@@ -22,7 +22,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseField.h>
+#import <MAD/MADDatabaseField.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
@@ -98,7 +98,7 @@
 
         RptqDocumentElementLabelDataField *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType;
-        BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
+        BOOL isNumeric = [MADDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;
             [keepers addObject:objectId];

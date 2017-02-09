@@ -166,7 +166,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (NSArray <MTDatabaseField *> *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MADDatabaseField *> *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
