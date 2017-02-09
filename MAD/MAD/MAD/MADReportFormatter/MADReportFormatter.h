@@ -23,13 +23,8 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
 @protocol MADDataProtocol;
 @protocol MTCacheProtocol;
 
-@class MADocument;
-@class RptqDocumentSection;
-@class RptqDocument;
-@class MADArrayCaching;
-@class MADPageOptions;
-@class NSManagedObjectID;
-@class MADArrayCaching <ObjectType>;
+@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
+       NSManagedObjectID, MADArrayCaching <ObjectType>;
 
 typedef NSArray         <id>                                            MADObjectArray;
 typedef NSArray         <MADSectionRepresentation *>                    MADSectionArray;
@@ -38,7 +33,7 @@ typedef NSArray         <NSNumber *>                                    MADIndex
 typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
 typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
 
-@interface MTReportFormatter : MTTableFormatter
+@interface MADReportFormatter : MTTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
                              options: (MTReportFormatterOptions)options;
