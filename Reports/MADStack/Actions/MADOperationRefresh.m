@@ -71,7 +71,6 @@ static const short errCache = 2;
         }
     }
     
-    
     NSError * __autoreleasing eerror = NULL;
     MADDatabaseConnection *connectionSettings = (document.database).databaseConnection;
     id dbconn = [document.database connectWithConnection:connectionSettings credentals:credientals];

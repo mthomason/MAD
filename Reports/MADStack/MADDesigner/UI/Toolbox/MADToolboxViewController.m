@@ -223,7 +223,8 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
     } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
         
-        id <MADToolboxControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
+        id <MADToolboxControllerProtocol> delegate;
+        delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setSelectedDocumentObjects:self.selectedElementIDs];
     
     }
