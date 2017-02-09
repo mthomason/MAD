@@ -312,8 +312,8 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     self.currentViewController = viewControllerToShow;
     
     options = UIViewAnimationOptionTransitionCrossDissolve;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToUpdate.document = self.document;
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
     
