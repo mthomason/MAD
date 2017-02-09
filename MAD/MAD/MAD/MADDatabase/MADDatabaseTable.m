@@ -10,33 +10,24 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 #import <Foundation/NSString.h>
 
-@interface MTDatabaseTable ()
-
-    - (instancetype)init NS_DESIGNATED_INITIALIZER;
-
-@end
-
-@implementation MTDatabaseTable
+@implementation MADDatabaseTable
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _name = nil;
-    }
-    return self;
+    return self = [self initWithTableName:nil];
 }
 
 - (instancetype)initWithTableName:(NSString *)tableName {
     if (self = [super init]) {
-        _name = tableName.copy;
+        _name = [tableName copyWithZone:nil];
     }
     return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MTDatabaseTable *copy = [[[self class] allocWithZone:zone] initWithTableName:_name];
+    MADDatabaseTable *copy = [[[self class] allocWithZone:zone] initWithTableName:_name];
     copy.queryable = _queryable;
     return copy;
 }
