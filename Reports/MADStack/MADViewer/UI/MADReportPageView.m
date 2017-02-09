@@ -1,5 +1,5 @@
 //
-//  MTViewPrintPageRenderReport.m
+//  MADReportPageView.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportViewerReportPageView.h"
+#import "MADReportPageView.h"
 
 #import <UIKit/UILabel.h>
 
