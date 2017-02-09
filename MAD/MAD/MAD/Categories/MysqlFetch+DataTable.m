@@ -25,7 +25,7 @@
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlFetchField.h>
-#import <MADMySQL/MTDataTypeMySQL.h>
+#import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MysqlException.h>
 
 #ifndef __OBJC_GC__

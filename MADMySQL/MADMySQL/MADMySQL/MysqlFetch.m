@@ -25,7 +25,7 @@
 #import "MysqlConnection.h"
 #import "MysqlException.h"
 
-#import "MTDataTypeMySQL.h"
+#import "MADDataTypeMySQL.h"
 
 @interface MysqlFetch ()
 

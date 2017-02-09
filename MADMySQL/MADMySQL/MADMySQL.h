@@ -16,7 +16,7 @@ FOUNDATION_EXPORT const unsigned char MADMySQLVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADMySQL/PublicHeader.h>
 
-#import <MADMySQL/MTDataTypeMySQL.h>
+#import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MysqlCommitException.h>
 #import <MADMySQL/MysqlException.h>
 //#import <MADMySQL/client_plugin.h>
