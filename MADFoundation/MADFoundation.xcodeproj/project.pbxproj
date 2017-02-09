@@ -34,7 +34,7 @@
 		4CE1CA481CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE1CA471CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF09A421BB23FA8007BCF7A /* MADCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MADCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A431BB25EDF007BCF7A /* MADAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A491BB2791D007BCF7A /* MADApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A471BB2791D007BCF7A /* MADApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A4A1BB2791D007BCF7A /* MADApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF09A481BB2791D007BCF7A /* MADApplication.m */; };
@@ -80,7 +80,7 @@
 		4CE1CA471CFAB7A0001BD2D5 /* MADMutableMapDataColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMutableMapDataColumns.h; sourceTree = "<group>"; };
 		4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplicationProtocol.h; sourceTree = "<group>"; };
 		4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
-		4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCacheProtocol.h; sourceTree = "<group>"; };
+		4CF09A3F1BB23FA8007BCF7A /* MADCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCacheProtocol.h; sourceTree = "<group>"; };
 		4CF09A431BB25EDF007BCF7A /* MADAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAppDelegate.h; sourceTree = "<group>"; };
 		4CF09A441BB25EDF007BCF7A /* MADAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAppDelegate.m; sourceTree = "<group>"; };
 		4CF09A471BB2791D007BCF7A /* MADApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplication.h; sourceTree = "<group>"; };
@@ -210,7 +210,7 @@
 			children = (
 				4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */,
 				4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */,
-				4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */,
+				4CF09A3F1BB23FA8007BCF7A /* MADCacheProtocol.h */,
 				4CF09A431BB25EDF007BCF7A /* MADAppDelegate.h */,
 				4CF09A441BB25EDF007BCF7A /* MADAppDelegate.m */,
 				4CF09A471BB2791D007BCF7A /* MADApplication.h */,
@@ -238,7 +238,7 @@
 				4CDA62CE1D08009300E95859 /* UIScreen+Properties.h in Headers */,
 				4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */,
 				4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */,
-				4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */,
+				4CF09A421BB23FA8007BCF7A /* MADCacheProtocol.h in Headers */,
 				4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */,
 				4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */,
 				4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */,

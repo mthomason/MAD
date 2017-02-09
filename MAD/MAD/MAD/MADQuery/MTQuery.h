@@ -17,8 +17,6 @@
 
 #pragma mark Types of specific paramamters accepted for each query
 
-typedef NSDictionary MADQueryDefinition;
-
 @protocol MADDataProtocol;
 
 extern NSString * const MTQueryKeyPredicateColumn;
@@ -74,16 +72,16 @@ extern NSString * const MADIdentifierROWID;
     @property (nonatomic, readonly) BOOL returnsResults;
     @property (nonatomic, readonly) BOOL partOfTransactionSet;
 
-    + (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query;
-    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+    + (NSDictionary *)newQueryDefinitionFull:(RptqQuery *)query;
+    + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
                                            withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
                                            dropRowid:(BOOL)droprowid;
-    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSArray *)columnKeys
+    + (NSDictionary *)newQueryDefinitionSelect:(NSArray *)columnKeys
                                            tableName:(NSString *)tableName
                                      sortDescriptors:(NSArray *)sortDescriptors;
-    + (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+    + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
                                            withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-    + (MADQueryDefinition *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
+    + (NSDictionary *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

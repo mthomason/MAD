@@ -54,7 +54,7 @@
 #import "RptqDocumentElementFormula+Extras.h"
 
 #import "MADErrorContainer.h"
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 
 #import "MADReportSectionsEnumerator.h"
 
@@ -482,7 +482,7 @@
 
         [tables setArray:resultTables];
         NSUInteger counter = 0, numberOfTables = tables.count;
-        for (MTDatabaseTable *databaseTable in tables) {
+        for (MADDatabaseTable *databaseTable in tables) {
             @autoreleasepool {
                 
                 NSString *name = databaseTable.name.copy;
@@ -511,7 +511,7 @@
         
         
         /*
-        [database enumerateTablesFromConnection:dbconnection usingBlock:^(MTDatabaseTable *databaseTable, NSUInteger index, BOOL *stop) {
+        [database enumerateTablesFromConnection:dbconnection usingBlock:^(MADDatabaseTable *databaseTable, NSUInteger index, BOOL *stop) {
             //NSString *name = databaseTable.name.copy;
             
             //status(name, (index + 1) / numberOfTables);
@@ -532,7 +532,7 @@
                 
                 [tables setArray:resultTables];
                 NSUInteger counter = 0, numberOfTables = tables.count;
-                for (MTDatabaseTable *databaseTable in tables) {
+                for (MADDatabaseTable *databaseTable in tables) {
                     @autoreleasepool {
                         
                         NSString *name = databaseTable.name.copy;
@@ -575,7 +575,7 @@
                              andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     MADErrorContainer * __autoreleasing errorContainer = [[MADErrorContainer alloc] init];
-    for (MTDatabaseTable *table in tables) {
+    for (MADDatabaseTable *table in tables) {
         
         NSArray *fields = fieldsByTable[table.name];
         

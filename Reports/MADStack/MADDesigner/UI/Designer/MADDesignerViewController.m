@@ -518,7 +518,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (MADDesignerSectionLayoutController *)viewControllerSectionLayoutSettings {
     if (_viewControllerSectionLayoutSettings == nil) {
         MADDesignerSectionLayoutController *controller;
-        controller = [MADDesignerSectionLayoutController newReportDesignerSectionLayoutSettingsViewController];
+        controller = [MADDesignerSectionLayoutController newDesignerSectionLayoutController];
         controller.delegate = self;
         self.viewControllerSectionLayoutSettings = controller;
     }

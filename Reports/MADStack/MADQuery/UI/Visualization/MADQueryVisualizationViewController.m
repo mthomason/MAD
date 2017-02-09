@@ -196,7 +196,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         controllersByObjectID = [[NSMutableDictionary alloc] init];
         _controllersByObjectID = controllersByObjectID;
         
-        NSMutableDictionary <NSNumber *, __kindof MADConnectorView *> *connectionViewsByObjectID;
+        NSMutableDictionary <NSNumber *, MADConnectorView *> *connectionViewsByObjectID;
         connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
         _connectionViewsByObjectID = connectionViewsByObjectID;
         
@@ -307,10 +307,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:scrollView, @"sv",
                                                                   _backgroundContainer, @"bg", nil];
     
-    NSMutableArray <__kindof NSLayoutConstraint *> *constraints;
+    NSMutableArray <NSLayoutConstraint *> *constraints;
     constraints = [[NSMutableArray alloc] init];
 
-    NSArray <__kindof NSLayoutConstraint *> * constraintGroup;
+    NSArray <NSLayoutConstraint *> * constraintGroup;
     constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|"
                                                               options:0
                                                               metrics:0

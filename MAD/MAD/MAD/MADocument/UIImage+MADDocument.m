@@ -9,7 +9,7 @@
 #import "UIImage+MADDocument.h"
 #import "MADocument.h"
 #import "MADPrintPageRenderer.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MTDataTableFast.h"
 #import "MTPaper.h"
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

@@ -16,7 +16,7 @@
 @class MTDatabase;
 @class MTDataTable;
 @class RptqDocumentElement;
-@class MTReportFormatter;
+@class MADReportFormatter;
 
 @class NSManagedObjectID;
 @class MADElementStylizedText;

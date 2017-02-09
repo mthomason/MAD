@@ -326,23 +326,25 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return column.type;
 }
 
-+ (MADQueryDefinition *)newQueryDefinitionSelect: (NSArray *)columnKeys
-                                       tableName: (NSString *)tableName
-                                 sortDescriptors: (NSArray *)sortDescriptors {
++ (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
+                                 tableName: (NSString *)tableName
+                           sortDescriptors: (NSArray *)sortDescriptors {
 
     NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
     NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
     NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
 
-    id definition = [[MADQueryDefinition alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
-                                                                tableName, keyTableName,
-                                                                sortDescriptors, keySortDescriptors,
-                                                                nil];
+    NSDictionary *definition;
+    definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
+                                                               tableName, keyTableName,
+                                                               sortDescriptors, keySortDescriptors,
+                                                               nil];
     return definition;
 }
 
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset
                                  dropRowid:(BOOL)droprowid {
     
     NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
@@ -360,21 +362,21 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return  queryDefination;
 
 }
-+ (MADQueryDefinition *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
                                  withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
     return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
                                 andOffset:offset dropRowid:NO];
 }
 
-+ (MADQueryDefinition *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table {
++ (NSDictionary *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table {
     NSNumber *tableNameKey = [[NSNumber alloc] initWithShort: MTQueryCacheDeleteAllFromTableTableName];
-    id result = [[MADQueryDefinition alloc] initWithObjectsAndKeys:table, tableNameKey, nil];
+    NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:table, tableNameKey, nil];
     return result;
 }
 
-+ (MADQueryDefinition *)newQueryDefinitionFull:(RptqQuery *)query {
++ (NSDictionary *)newQueryDefinitionFull:(RptqQuery *)query {
     NSNumber *key = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
-    id result = [[MADQueryDefinition alloc] initWithObjectsAndKeys:query, key, nil];
+    NSDictionary *result = [[NSDictionary alloc] initWithObjectsAndKeys:query, key, nil];
     return result;
 }
 

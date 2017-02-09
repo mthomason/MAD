@@ -1,5 +1,5 @@
 //
-//  MTReportFormatter.m
+//  MADReportFormatter.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/20/14.
@@ -20,7 +20,7 @@
 
 #import "MADSectionRepresentation.h"
 
-#import "MTReportFormatterState.h"
+#import "MADReportFormatterState.h"
 #import "MADocument.h"
 
 #import "MADModel.h"
@@ -39,7 +39,7 @@
 
 #import "MTDatabaseField.h"
 
-#import "MTReportFormatterCache.h"
+#import "MADReportFormatterCache.h"
 
 #import "MADArrayCaching.h"
 
@@ -82,17 +82,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;
 }
 
-typedef NSMutableArray  <__kindof MADSectionRepresentation *> MADMutableSectionArray;
-typedef NSMutableArray  <__kindof NSNumber *>                 MADMutableIndexArray;
-
-typedef NSDictionary    <NSManagedObjectID *, NSNumber *>     MADNumberMapByObjectID;
-
-typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap;
-
 @interface MADReportFormatter ()
 
     @property (nonatomic, readwrite, weak)      MADocument *layout;
-    @property (nonatomic, readwrite, assign)    MTReportFormatterOptions options;
+    @property (nonatomic, readwrite, assign)    MADReportFormatterOptions options;
 
     @property (nonatomic, readwrite, strong)    MADPageOptions *page;
 
@@ -100,22 +93,22 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     //      Once these arrays are populated, they are used by the print page render to
     //      draw the report.
     //
-    @property (nonatomic, readwrite, strong)    MADCachingIndexes *reportIndexes;
-    @property (nonatomic, readwrite, strong)    MADCachingLayout *reportLayout;
+    @property (nonatomic, readwrite, strong)    MADArrayCaching <NSArray <NSNumber *> *> *reportIndexes;
+    @property (nonatomic, readwrite, strong)    MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
 
-    @property (nonatomic, readwrite, strong)    MTReportFormatterState *machineState;
-    @property (nonatomic, readwrite, strong)    MTReportFormatterCache *reportFormatterCache;
+    @property (nonatomic, readwrite, strong)    MADReportFormatterState *machineState;
+    @property (nonatomic, readwrite, strong)    MADReportFormatterCache *reportFormatterCache;
 
-    @property (nonatomic, readwrite, strong)    MADMutableSectionArray *pageLayoutTemporary;
-    @property (nonatomic, readwrite, strong)    MADMutableIndexArray *pageIndexesTemporary;
+    @property (nonatomic, readwrite, strong)    NSMutableArray <MADSectionRepresentation *> *pageLayoutTemporary;
+    @property (nonatomic, readwrite, strong)    NSMutableArray <NSNumber *> *pageIndexesTemporary;
 
-    @property (nonatomic, readwrite, strong)    MADObjectArray      *lastComparsonValues;
-    @property (nonatomic, readwrite, strong)    MADNumberMapByObjectID  *layoutHeightsBySectionKey;
+    @property (nonatomic, readwrite, strong)    NSArray <id> *lastComparsonValues;
+    @property (nonatomic, readwrite, strong)    NSDictionary <NSManagedObjectID *, NSNumber *> *layoutHeightsBySectionKey;
     @property (nonatomic, readwrite, strong)    NSArray <RptqQueryGroup *> *sortedQueryGroups;
 
 @end
 
-@implementation MTReportFormatter {
+@implementation MADReportFormatter {
     NSString *_filename;
 }
 
@@ -124,7 +117,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 - (instancetype)initWithDocument: (MADocument *)layout
-                         options: (MTReportFormatterOptions)options  {
+                         options: (MADReportFormatterOptions)options  {
     if (self = [super init]) {
     
         self.cachedDelegate = layout;
@@ -137,24 +130,27 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
         MADPageOptions *page = [[MADPageOptions alloc] init];
         self.page = page;
         
-        self.page.margins = (options & MTReportFormatterOptionsMargin) ?
+        self.page.margins = (options & MADReportFormatterOptionsMargin) ?
         MADEdgeInsetsQuarterInch() : MADEdgeInsetsEmpty();
         
-        MTReportFormatterState *machineState = [[MTReportFormatterState alloc] init];
+        MADReportFormatterState *machineState = [[MADReportFormatterState alloc] init];
         self.machineState = machineState;
         
         [self initializeStateMachine];
         
-        MTReportFormatterCache *reportFormatterCache = [[MTReportFormatterCache alloc] init];
+        MADReportFormatterCache *reportFormatterCache = [[MADReportFormatterCache alloc] init];
         self.reportFormatterCache = reportFormatterCache;
         
-        MADMutableSectionArray *temporaryLayoutForPage = [[MADMutableSectionArray alloc] init];
+        NSMutableArray <MADSectionRepresentation *> *temporaryLayoutForPage;
+        temporaryLayoutForPage = [[NSMutableArray alloc] init];
         self.pageLayoutTemporary = temporaryLayoutForPage;
         
-        NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
+        NSMutableArray *temporaryDataForPage;
+        temporaryDataForPage = [[NSMutableArray alloc] init];
         self.pageIndexesTemporary = temporaryDataForPage;
         
-        MADNumberMapByObjectID *layoutHeightsBySectionKeys = [layout layoutHeightsBySectionKey];
+        NSDictionary <NSManagedObjectID *, NSNumber *> *layoutHeightsBySectionKeys;
+        layoutHeightsBySectionKeys = [layout layoutHeightsBySectionKey];
         self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
     
         self.options = options;
@@ -165,7 +161,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-                                     options: (MTReportFormatterOptions)options {
+                                     options: (MADReportFormatterOptions)options {
     MADReportFormatter *result = [[MADReportFormatter alloc] initWithDocument: layout
                                                                     options: options];
     return result;
@@ -173,9 +169,9 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 
 #pragma mark - Accessors
 
-- (MADSectionArray *)layoutForPage:(NSUInteger)page {
-    MADSectionArray *result = page < (NSUInteger)_reportLayout.count ?
-                                                _reportLayout[page] : nil;
+- (NSArray <MADSectionRepresentation *> *)layoutForPage:(NSUInteger)page {
+    NSArray <MADSectionRepresentation *> *result;
+    result = page < (NSUInteger)_reportLayout.count ? _reportLayout[page] : nil;
     return result;
 }
 
@@ -226,7 +222,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 - (BOOL)needsFormat {
-    id <MTReportFormatterDataSource> datasource = self.datasource;
+    id <MADReportFormatterDataSource> datasource = self.datasource;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
             (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO ||
@@ -278,7 +274,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
-    MADNumberMapByObjectID *layoutHeightsBySectionKeys;
+    NSDictionary <NSManagedObjectID *, NSNumber *> *layoutHeightsBySectionKeys;
     layoutHeightsBySectionKeys = [layout layoutHeightsBySectionKey];
     
     self.layoutHeightsBySectionKey = layoutHeightsBySectionKeys;
@@ -291,10 +287,12 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     [self addDetailToReportLayout];
     [self addReportFooterToReportLayout];
     
-    MADSectionArray *tlfp = [MADMutableSectionArray arrayWithArray:self.pageLayoutTemporary];
+    NSMutableArray <MADSectionRepresentation *> *tlfp;
+    tlfp = [NSMutableArray arrayWithArray:self.pageLayoutTemporary];
     [self.reportLayout addObject:tlfp];
     
-    MADIndexArray *tdfp = [MADIndexArray arrayWithArray:self.pageIndexesTemporary];
+    NSArray <NSNumber *> *tdfp;
+    tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];
     [self.reportIndexes addObject:tdfp];
     
     [self endBulkInserts];
@@ -332,7 +330,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     [self.reportIndexes finalizeDatabase];
     [self.reportLayout finalizeDatabase];
 
-    id <MTCacheProtocol> cachedDelegate = self.cachedDelegate;
+    id <MADCacheProtocol> cachedDelegate = self.cachedDelegate;
     
     NSString *nixarray;
     nixarray = [self newStringNameCurrentReportIndexes: _page.layoutSize
@@ -452,7 +450,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     return comparsonResult;
 }
 
-- (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex {
+- (NSArray <NSNumber *> *)rowidsForPage:(NSUInteger)pageIndex {
     return _reportIndexes[pageIndex];
 }
 
@@ -542,7 +540,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     id lastResultRow = nil;
 
     NSEnumerator *enumeratorForReportData = [self.datasource enumeratorForReportData];
-    MADObjectArray *keyValuesForComparson;
+    NSArray <id> *keyValuesForComparson;
     
     for (id resultRow in enumeratorForReportData) {
 
@@ -578,7 +576,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
             [self addHeightFromDocumentSectionToReportLayout: detailSection.objectID
                                             producesFormFeed: detailSection.producesFormFeed];
             
-            [MTReportFormatter addDetailForRowID:self.machineState.detailRowId
+            [MADReportFormatter addDetailForRowID:self.machineState.detailRowId
                                       pageLayout:self.pageLayoutTemporary
                                      pageIndexes:self.pageIndexesTemporary];
             
@@ -604,7 +602,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     }
 }
 
-- (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow {
+- (NSArray <id> *)newObjectArrayKeyValuesForResultRow:(id)resultRow {
 
 
     NSMutableArray *keyValues;
@@ -653,13 +651,13 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
     [self addPageFooter];
     
     id pageInfo = self.pageLayoutTemporary != nil ?
-                            [MADMutableSectionArray arrayWithArray: self.pageLayoutTemporary] :
+                            [NSMutableArray arrayWithArray: self.pageLayoutTemporary] :
                             [[NSArray alloc] init];
     
     [self.reportLayout addObject:pageInfo];
     
-    MADIndexArray *rowids = self.pageIndexesTemporary != nil ?
-                                [MADIndexArray arrayWithArray: self.pageIndexesTemporary] : @[];
+    NSArray <NSNumber *> *rowids = self.pageIndexesTemporary != nil ?
+                                [NSArray arrayWithArray: self.pageIndexesTemporary] : @[];
     [self.reportIndexes addObject:rowids];
     
     [self cleanupTemporaryIndexes];
@@ -736,8 +734,8 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 + (void)addDetailForRowID:(NSUInteger)rowID
-               pageLayout:(byref inout MADMutableSectionArray *)pageLayout
-              pageIndexes:(byref inout MADMutableIndexArray *)pageIndexes {
+               pageLayout:(byref inout NSMutableArray <MADSectionRepresentation *> *)pageLayout
+              pageIndexes:(byref inout NSMutableArray <NSNumber *> *)pageIndexes {
     MADSectionRepresentation *detail;
     detail = [MADSectionRepresentation newSectionRepresentation: MADDocumentSectionTypeBody
                                                             row: rowID];
@@ -792,7 +790,7 @@ typedef NSDictionary    <NSString *, NSNumber *>              MADStringNumberMap
 }
 
 - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex {
-    MADSectionArray *pageLayout = self.reportLayout[pageIndex];
+    NSArray <MADSectionRepresentation *> *pageLayout = self.reportLayout[pageIndex];
     return pageLayout.objectEnumerator;
 }
 

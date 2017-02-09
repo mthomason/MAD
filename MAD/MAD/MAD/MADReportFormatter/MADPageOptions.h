@@ -1,13 +1,13 @@
 //
-//  MTReportFormatterPageDefinition.h
+//  MADReportFormatterPageDefinition.h
 //  MAD
 //
 //  Created by Michael Thomason on 7/20/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTReportFormatterPageDefinition_h
-#define MAD_MTReportFormatterPageDefinition_h
+#ifndef MAD_MADReportFormatterPageDefinition_h
+#define MAD_MADReportFormatterPageDefinition_h
 
 #import <CoreGraphics/CGBase.h>
 #import <Foundation/NSObject.h>

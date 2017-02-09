@@ -39,7 +39,7 @@
 #import "MADDatabaseConnection.h"
 #import "MADErrorUserInfo.h"
 #import "MTQuery.h"
-#import "MTDatabaseTable.h"
+#import "MADDatabaseTable.h"
 
 #import "MTDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
@@ -195,8 +195,8 @@ void sqliteLog(void *foo, const char* statement) {
             const unsigned char *resultString = sqlite3_column_text(statement, 0);
             NSString *tableName = @((char *)resultString);
             
-            MTDatabaseTable *databaseTable;
-            databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            MADDatabaseTable *databaseTable;
+            databaseTable = [[MADDatabaseTable alloc] initWithTableName: tableName];
             [result addObject:databaseTable];
 		}
 	}
@@ -795,7 +795,7 @@ void sqliteLog(void *foo, const char* statement) {
     //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
-        for (MTDatabaseTable *table in tables) {
+        for (MADDatabaseTable *table in tables) {
             NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheDeleteAllFromTable object:queryDefination];
             NSError * __autoreleasing *errorQuery = NULL;
@@ -866,7 +866,7 @@ void sqliteLog(void *foo, const char* statement) {
 #pragma mark - Reading Tables
 
 - (void)enumerateTablesFromConnection:(id)process
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
     NSMutableArray *result = [[NSMutableArray alloc] init];
@@ -888,8 +888,8 @@ void sqliteLog(void *foo, const char* statement) {
                                                           encoding: NSUTF8StringEncoding];
             
             
-            MTDatabaseTable *databaseTable;
-            databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
+            MADDatabaseTable *databaseTable;
+            databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
             block(databaseTable, counter, &stop);
             if (stop) break;
@@ -912,7 +912,7 @@ void sqliteLog(void *foo, const char* statement) {
     }];
 }
 
-- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn
+- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn
                                                    error:(NSError *__autoreleasing *)error {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     sqlite3_stmt *statement;
@@ -926,7 +926,7 @@ void sqliteLog(void *foo, const char* statement) {
             NSString *readName = [[NSString alloc] initWithCString: resultString
                                                           encoding: NSUTF8StringEncoding];
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
+            MADDatabaseTable *databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
     }
@@ -952,7 +952,7 @@ void sqliteLog(void *foo, const char* statement) {
             NSString *readName = [[NSString alloc] initWithCString: resultString
                                                            encoding: NSUTF8StringEncoding];
             
-            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: readName];
+            MADDatabaseTable *databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
             [result addObject:databaseTable];
         }
     } else {

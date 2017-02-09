@@ -27,7 +27,7 @@
                           horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment
                                                                     NS_DESIGNATED_INITIALIZER;
 
-    @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
+    @property (nonnull, nonatomic, strong, readonly) NSDictionary *fontAttributes;
 
 @end
 

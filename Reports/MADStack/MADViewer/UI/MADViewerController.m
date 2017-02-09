@@ -12,8 +12,6 @@
 
 #import "MADViewerController.h"
 
-#import <MAD/MADActivityItemProviderDelegate.h>
-
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAccessibility.h>
@@ -30,29 +28,25 @@
 #import <UIKit/UIPopoverPresentationController.h>
 #import <UIKit/UIDocumentInteractionController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UIResponder.h>
 
 #import <CoreData/CoreData.h>
-
-#import <MADDataStructures/MTPair.h>
-
-#import <MAD/MTDataTable.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import <MAD/MADPrintPageRenderer.h>
+#import <MADDataStructures/MTPair.h>
 
+#import <MAD/MADActivityItemProviderDelegate.h>
+#import <MAD/MTDataTable.h>
+#import <MAD/MADPrintPageRenderer.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-
-#import <MAD/MTReportFormatter.h>
-
+#import <MAD/MADReportFormatter.h>
 #import <MAD/MADDatabaseConnection.h>
-
 #import <MAD/MTDataTableFast.h>
-
-#import <MAD/MTActivityItemProviderPdf.h>
+#import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MADNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
@@ -63,7 +57,7 @@
 
 #import "MADTabBarController.h"
 
-#import "MTActivityReportPrintPreview.h"
+#import "MADActivityPrintPreview.h"
 
 #import "MTReportViewerReportPageView.h"
 #import "MTReportViewerReportPageViewController.h"
@@ -89,8 +83,6 @@
 #import "MADLabelTitle.h"
 #import "MADIdentifiersStoryboards.h"
 #import "MADDocumentScroller.h"
-
-#import <UIKit/UIResponder.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
@@ -136,7 +128,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADOperationObserver,
         MADPageSliderProtocol,
         MTPrintingProtocol,
-        MTActivityReportPrintPreviewDelegate,
+        MADActivityPrintPreviewDelegate,
         MADActivityItemProviderDelegate>
 
     @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
@@ -163,7 +155,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, strong) NSMutableArray *toolbarItemsActive;
 
     @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
-    @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
+    @property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
 
 #pragma mark Controllers
 
@@ -913,12 +905,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     _activityExporting = YES;
     self.pageSlider.enabled = NO;
     
-    MTActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
+    MADActivityItemProviderPdf *activityItemProviderPdf = self.activityItemProviderPdf;
     activityItemProviderPdf.delegate = self;
     NSArray *activityItems = [[NSArray alloc] initWithObjects: activityItemProviderPdf, nil];
     self.activityItemProviderPdf = activityItemProviderPdf;
     
-    MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
+    MADActivityPrintPreview *printPreview = [[MADActivityPrintPreview alloc] init];
     printPreview.delegate = self;
     
     NSArray *applicationActivities = [[NSArray alloc] initWithObjects: printPreview, nil];
@@ -1055,14 +1047,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Acivities
 
-- (MTActivityItemProviderPdf *)activityItemProviderPdf {
+- (MADActivityItemProviderPdf *)activityItemProviderPdf {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-    MTActivityItemProviderPdf *activityItemProviderPdf;
-    activityItemProviderPdf= [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
+    MADActivityItemProviderPdf *activityItemProviderPdf;
+    activityItemProviderPdf= [[MADActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
     activityItemProviderPdf.document = self.document;
     return activityItemProviderPdf;
 }
@@ -1159,14 +1151,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Post Report Notifications
 
-- (void)watchFormatter:(MTReportFormatter *)formatter {
+- (void)watchFormatter:(MADReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportFormatterDidFormatPage:)
                                                  name: MADNotificationDidFormatPagesName
                                                object: formatter];
 }
 
-- (void)ignoreFormatter:(MTReportFormatter *)formatter {
+- (void)ignoreFormatter:(MADReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationDidFormatPagesName
                                                   object: formatter];
@@ -1725,7 +1717,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                        change:(NSDictionary<NSKeyValueChangeKey, id> *)change
                        context:(void *)context {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }

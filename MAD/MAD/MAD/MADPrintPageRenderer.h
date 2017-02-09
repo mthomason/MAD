@@ -13,7 +13,7 @@
 
 @class UIImage;
 @class MADReportTextRepresentation;
-@class MTReportFormatter;
+@class MADReportFormatter;
 @class MTDataTableFast;
 @class MADocument;
 

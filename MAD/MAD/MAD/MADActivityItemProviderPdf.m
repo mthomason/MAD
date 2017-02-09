@@ -23,7 +23,7 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADocument.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADPrintPageRenderer.h"
 
 #import "MADActivityIndicator.h"
@@ -141,16 +141,16 @@ static inline CGRect PdfTrimBox(CGRect rect) {
     dispatch_async(dipatchQueue, ^{
         
         MADocument *sdocument = weakdoc;
-        NSDictionary *options;
+        NSDictionary <NSString *, NSString *> *options;
         options = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     @"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
         CGRect letterRect = [MTPaper rectLetter];
         NSArray *sortDescriptors = sdocument.sortDescriptors;
         
         [sdocument.dataTable sortUsingDescriptors:sortDescriptors];
-        MTReportFormatter *reportFormatter;
-        reportFormatter = [[MTReportFormatter alloc] initWithDocument: sdocument
-                                                              options: MTReportFormatterOptionsMargin];
+        MADReportFormatter *reportFormatter;
+        reportFormatter = [[MADReportFormatter alloc] initWithDocument: sdocument
+                                                              options: MADReportFormatterOptionsMargin];
         reportFormatter.overrideIdentifier = @"madpreview";
         reportFormatter.didRefresh = YES;
         reportFormatter.layoutSize = letterRect.size;
@@ -176,8 +176,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         UIGraphicsBeginPDFContextToFile(filePath, letterRect, options);
         
         NSValue *trimBox = [NSValue valueWithCGRect:PdfTrimBox(letterRect)];
-        NSDictionary *boxInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        trimBox, (__bridge NSString *)kCGPDFContextTrimBox, nil];
+        NSDictionary <NSString *, NSValue *> *boxInfo;
+        boxInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                         trimBox, (__bridge NSString *)kCGPDFContextTrimBox, nil];
         
         id pagesWrapper = [[NSNumber alloc] initWithUnsignedInteger: reportFormatter.numberOfPages];
         

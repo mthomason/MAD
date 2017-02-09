@@ -1,50 +1,38 @@
 //
-//  MTReportFormatter.h
+//  MADReportFormatter.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/20/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTReportFormatter_h
-#define MAD_MTReportFormatter_h
+#ifndef MAD_MADReportFormatter_h
+#define MAD_MADReportFormatter_h
 
 #import <MAD/MTTableFormatter.h>
 
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADSectionRepresentation.h>
 
-typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
-    MTReportFormatterOptionsNone    = 0,
-    MTReportFormatterOptionsMargin  = 1 << 0,
+typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
+    MADReportFormatterOptionsNone    = 0,
+    MADReportFormatterOptionsMargin  = 1 << 0,
 };
 
-@protocol MTReportFormatterDataSource;
+@protocol MADReportFormatterDataSource;
 @protocol MADDataProtocol;
-@protocol MTCacheProtocol;
+@protocol MADCacheProtocol;
 
-@class MADocument;
-@class RptqDocumentSection;
-@class RptqDocument;
-@class MADArrayCaching;
-@class MADPageOptions;
-@class NSManagedObjectID;
-@class MADArrayCaching <ObjectType>;
-
-typedef NSArray         <id>                                            MADObjectArray;
-typedef NSArray         <MADSectionRepresentation *>                    MADSectionArray;
-typedef NSArray         <NSNumber *>                                    MADIndexArray;
-
-typedef MADArrayCaching <MADIndexArray *>                               MADCachingIndexes;
-typedef MADArrayCaching <MADSectionArray *>                             MADCachingLayout;
+@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
+       NSManagedObjectID, MADArrayCaching <ObjectType>;
 
 @interface MADReportFormatter : MTTableFormatter
 
     - (instancetype)initWithDocument: (MADocument *)layout
-                             options: (MTReportFormatterOptions)options;
+                             options: (MADReportFormatterOptions)options;
                              
     + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-                                         options: (MTReportFormatterOptions)options;
+                                         options: (MADReportFormatterOptions)options;
 
 
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
@@ -52,10 +40,10 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
 
     //  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
     //      which represents a page.  The array contains dictionaries for each object on that page.
-    @property (nonatomic, strong, readonly) MADCachingLayout *reportLayout;
+    @property (nonatomic, strong, readonly) MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
 
-    @property (nonatomic, weak)             id <MTReportFormatterDataSource> datasource;
-    @property (nonatomic, weak)             id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, weak) id <MADReportFormatterDataSource> datasource;
+    @property (nonatomic, weak) id <MADCacheProtocol> cachedDelegate;
 
     @property (nonatomic, strong, readonly) MADPageOptions *page;
     @property (nonatomic, weak,   readonly) MADocument *layout;
@@ -72,16 +60,16 @@ typedef MADArrayCaching <MADSectionArray *>                             MADCachi
     - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
     - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-    - (MADSectionArray *)layoutForPage:(NSUInteger)page;
+    - (NSArray <MADSectionRepresentation *> *)layoutForPage:(NSUInteger)page;
 
     - (CGFloat)heightForSectionWithObjectID:(NSManagedObjectID *)objectID;
 
-    - (MADIndexArray *)rowidsForPage:(NSUInteger)pageIndex;
+    - (NSArray <NSNumber *> *)rowidsForPage:(NSUInteger)pageIndex;
 
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 
-    - (MADObjectArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
+    - (NSArray <id> *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
 
 @end
 

@@ -11,7 +11,7 @@
 
 #import "MTDataTable.h"
 
-@protocol MTCacheProtocol;
+@protocol MADCacheProtocol;
 @protocol MADDataProtocol;
 
 @class MTDatabaseSqlite3;
@@ -23,12 +23,12 @@
 
     @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;
 
-    @property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
+    @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
     @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
     - (NSString *)tableName;
     - (NSString *)columnKeyForColumnName:(NSString *)columnName;
-    - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
+    - (NSArray <NSDictionary <NSString *, NSString *> *> *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
     - (id)runSelectQuery:(MTQuery *)query;
 

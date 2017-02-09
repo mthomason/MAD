@@ -62,7 +62,7 @@
 #import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADDatabaseConnection.h"
 
 #import "MADNotificationDidFormatPage.h"
@@ -241,8 +241,8 @@ void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
 @interface MADocument ()
-    <MTReportFormatterDataSource,
-        MTCacheProtocol,
+    <MADReportFormatterDataSource,
+        MADCacheProtocol,
         MTDatabaseProtocol>
 
     //@property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
@@ -261,7 +261,7 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, strong) MTDataTableFast *dataTable;
     @property (nonatomic, readwrite, strong) MTDatabase *database;
 
-    @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
     @property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
     @property (nonatomic, readwrite, strong) MTPaper *paper;
@@ -529,7 +529,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 #pragma mark -
-#pragma mark MTCacheProtocol
+#pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
     NSString *filename = self.filename;
@@ -832,9 +832,9 @@ READFROMURL_END:;
 }
 
 - (void)updatePrintingReportFormatter {
-    MTReportFormatter *reportFormatter;
-    reportFormatter = [MTReportFormatter newReportFormatterWithLayout: self
-                                                              options: MTReportFormatterOptionsMargin];
+    MADReportFormatter *reportFormatter;
+    reportFormatter = [MADReportFormatter newReportFormatterWithLayout: self
+                                                              options: MADReportFormatterOptionsMargin];
     reportFormatter.overrideIdentifier = @"madprinter";
     self.printingReportFormatter = reportFormatter;
 }
@@ -1088,7 +1088,7 @@ READFROMURL_END:;
     }
 }
 
-#pragma mark - MTReportFormatterDataSource Protocol
+#pragma mark - MADReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData {
     return [self.dataTable enumeratorForKeyObjectsSorted];
@@ -1146,15 +1146,19 @@ READFROMURL_END:;
     return _activeDocumentModel;
 }
 
-- (MADSectionLayoutManagerMutableMap *)sectionLayoutManagers {
-    if (!_sectionLayoutManagers || _sectionLayoutManagers.count == 0) {
-        NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
+- (NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *)sectionLayoutManagers {
+    if (_sectionLayoutManagers.count == 0) {
+        NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
         RptqDocumentSectionEnumerator *sections;
         MADSectionLayoutManager *layoutManager;
+        NSNumber *identifier;
+
+        sectionLayoutManagers = [[NSMutableDictionary alloc] init];
         sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.activeDocumentModel];
         for (RptqDocumentSection *reportSection in sections) {
             layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-            sectionLayoutManagers[reportSection.objectID] = layoutManager;
+            identifier = @(reportSection.identifier);
+            sectionLayoutManagers[identifier] = layoutManager;
         }
         
         _sectionLayoutManagers = sectionLayoutManagers;
@@ -1340,11 +1344,11 @@ READFROMURL_END:;
     self.mainQuery = nil;
 }
 
-- (MTReportFormatter *)reportFormatter {
+- (MADReportFormatter *)reportFormatter {
     if (!_reportFormatter) {
-        MTReportFormatter *reportFormatter;
-        reportFormatter = [[MTReportFormatter alloc] initWithDocument: self
-                                                              options: MTReportFormatterOptionsNone];
+        MADReportFormatter *reportFormatter;
+        reportFormatter = [[MADReportFormatter alloc] initWithDocument: self
+                                                              options: MADReportFormatterOptionsNone];
         _reportFormatter = reportFormatter;
     }
     return _reportFormatter;

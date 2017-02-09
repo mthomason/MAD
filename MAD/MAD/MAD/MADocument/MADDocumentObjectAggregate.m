@@ -16,7 +16,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentElementAggregate.h"
 #import "MTDataTableFast.h"
-#import "MTReportFormatter.h"
+#import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADArrayCaching.h"
 #import "MTQuery.h"
@@ -67,7 +67,8 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         if (calculateInMemory == NO) {
             
             int64_t groupType = isAggregate.groupType;
-            MADIndexArray *rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
+            NSArray <NSNumber *> *rowIdsForPage;
+            rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
             aggregateResult = [[self class] newResultsForAggregateType: groupType
                                                               function: isAggregate.functionType
                                                               fieldKey: fieldKey
@@ -77,7 +78,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
             
         } else {    //Handle first and last
             
-            NSArray <__kindof NSDictionary *> *dataForGroup = nil;
+            NSArray <NSDictionary *> *dataForGroup = nil;
             NSDictionary *dataOfInterest = nil;
             switch (isAggregate.groupType) {
                 case MTAggregateGroupByTypeSection: {
@@ -160,7 +161,8 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                         case MTAggregateFunctionTypeLast: {
                             
                             NSUInteger lastRowid = NSUIntegerMax;
-                            MADSectionArray *sectionArray = datasource.reportFormatter.reportLayout[(NSUInteger)datasource.reportFormatter.reportLayout.count - 1];
+                            NSArray <MADSectionRepresentation *> *sectionArray;
+                            sectionArray = datasource.reportFormatter.reportLayout[(NSUInteger)datasource.reportFormatter.reportLayout.count - 1];
                             NSEnumerator <__kindof MADSectionRepresentation *> *reverseObjectEnumerator = [sectionArray reverseObjectEnumerator];
                             MADDocumentSectionType section;
                             for (MADSectionRepresentation *pageSection in reverseObjectEnumerator) {

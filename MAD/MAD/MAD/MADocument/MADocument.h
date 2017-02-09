@@ -15,7 +15,7 @@
 #import <UIKit/UIPrintInteractionController.h>
 
 #import <MADFoundation/MADDataProtocol.h>
-#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADCacheProtocol.h>
 
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADPrintPageRendererDataSource.h>
@@ -28,10 +28,6 @@
 @class NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState,
         MADSectionLayoutManager, MTQueryFull, MTPaper;
 
-
-typedef NSMutableDictionary <NSNumber *, MADSectionLayoutManager *>
-                                                        MADSectionLayoutManagerMutableMap;
-
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
@@ -42,8 +38,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
         MADDataProtocol,
-        MTCacheProtocol,
-        MTReportFormatterDataSource,
+        MADCacheProtocol,
+        MADReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
 
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
@@ -53,12 +49,12 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 
-    @property (readwrite, nonatomic, strong)    MTReportFormatter *printingReportFormatter;
+    @property (readwrite, nonatomic, strong)    MADReportFormatter *printingReportFormatter;
 
     @property (nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
     @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
-    @property (nonatomic, readonly, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (nonatomic, readonly, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
     @property (readonly, nonatomic, copy)       NSString *filename;
     @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;

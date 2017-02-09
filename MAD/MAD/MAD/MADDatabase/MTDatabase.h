@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @class MADCredential;
 @class MADDatabaseConnection;
 @class MTDatabase;
-@class MTDatabaseTable;
+@class MADDatabaseTable;
 @class MTDataTable;
 @class MTQuery;
 @class MTDatabaseField;
@@ -95,9 +95,9 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
     - (void)readRow:(NSUInteger)row;
 
-    - (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
+    - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
     - (void)enumerateTablesFromConnection:(id)dbconn
-                               usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                               usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                                completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
     @property (nonatomic, assign, readonly) BOOL isLicensedUser;

@@ -234,10 +234,12 @@ static NSString * const MADPathComponentData       = @"Data";
                                               options:NSDataWritingAtomic error:&error];
         
         if (success) {
-            NSDictionary *fileAttributes = @{ NSFileExtensionHidden: @YES };
+            NSDictionary <NSString *, NSNumber *> *fileAttributes;
+            fileAttributes = @{ NSFileExtensionHidden : @YES };
             NSString *path = writing.URL.path;
             [[NSFileManager defaultManager] setAttributes: fileAttributes
-                                             ofItemAtPath: path error: nil];
+                                             ofItemAtPath: path
+                                                    error: nil];
         }
         
         if (completion) {

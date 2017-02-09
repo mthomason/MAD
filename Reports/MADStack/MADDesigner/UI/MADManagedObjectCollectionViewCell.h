@@ -12,8 +12,6 @@
 #import <UIKit/UICollectionViewCell.h>
 #import "MADManagedObjectViewProtocol.h"
 
-@class NSManagedObjectID;
-
 @interface MADManagedObjectCollectionViewCell : UICollectionViewCell
     <MADManagedObjectViewProtocol>
 

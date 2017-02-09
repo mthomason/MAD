@@ -28,27 +28,26 @@
 
 - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
                       reportingEnabled:(BOOL)enabled {
-    self = [super init];
-    if (!self) return nil;
     
-    id result;
-    switch (numberOfTables) {
-    
-        case 0:
-            result = [NSDictionary newDictionaryQueryLayoutTableZeroReportingEnabled: enabled];
-            break;
-            
-        case 1:
-            result = [NSDictionary newDictionaryQueryLayoutTableOneReportingEnabled: enabled];
-            break;
-            
-        default:
-            result = [NSDictionary newDictionaryQueryLayoutTableMoreThanOneReportingEnabled: enabled];
-            break;
-            
+    if (self = [super init]) {
+        id result;
+        switch (numberOfTables) {
+                
+            case 0:
+                result = [NSDictionary newDictionaryQueryLayoutTableZeroReportingEnabled: enabled];
+                break;
+                
+            case 1:
+                result = [NSDictionary newDictionaryQueryLayoutTableOneReportingEnabled: enabled];
+                break;
+                
+            default:
+                result = [NSDictionary newDictionaryQueryLayoutTableMoreThanOneReportingEnabled: enabled];
+                break;
+                
+        }
+        self.datamodel = result;
     }
-    self.datamodel = result;
-    
     return self;
 }
 

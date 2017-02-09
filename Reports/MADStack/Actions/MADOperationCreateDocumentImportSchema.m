@@ -10,7 +10,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MTDatabaseTable.h>
+#import <MAD/MADDatabaseTable.h>
 #import <MAD/MTDatabaseField.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
@@ -81,7 +81,7 @@
         [tables setArray:resultTables];
         
         NSUInteger counter = 0, numberOfTables = tables.count;
-        for (MTDatabaseTable *databaseTable in tables) {
+        for (MADDatabaseTable *databaseTable in tables) {
             @autoreleasepool {
                 
                 NSString *name = databaseTable.name.copy;

@@ -11,16 +11,16 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@protocol MTCacheProtocol;
+@protocol MADCacheProtocol;
 
 @interface MADArrayCaching<ObjectType> : NSEnumerator
 
-    @property (nonatomic, readwrite, weak, nullable) id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, readwrite, weak, nullable) id <MADCacheProtocol> cachedDelegate;
     @property (nonatomic, readonly, copy, nonnull) NSString * identifier;
     @property (readonly) long long int count;
 
     - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
-                                 cachedDelegate:(id <MTCacheProtocol> _Nullable)cachedDelegate;
+                                 cachedDelegate:(id <MADCacheProtocol> _Nullable)cachedDelegate;
 
     - (void)initializeDatabase;
     - (void)finalizeDatabase;

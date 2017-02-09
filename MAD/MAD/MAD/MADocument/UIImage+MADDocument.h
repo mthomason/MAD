@@ -12,7 +12,7 @@
 #import <UIKit/UIImage.h>
 
 @class MADocument;
-@class MTReportFormatter;
+@class MADReportFormatter;
 @class MTDataTableFast;
 
 @interface MADImageThumbnail : UIImage
